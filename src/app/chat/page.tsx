@@ -1,5 +1,5 @@
-import { Input } from '@nextui-org/react';
 import React from 'react';
+import ChatInput from './ChatInput';
 
 const ChatPage = () => {
   return (
@@ -33,9 +33,7 @@ const ChatPage = () => {
           })}
         </div>
 
-        <div className="p-5">
-          <Input placeholder="send message" />
-        </div>
+        <ChatInput />
       </div>
     </div>
   );
