@@ -1,4 +1,4 @@
-import { supabase } from '(@/utils/supabase)';
+import { clientSupabase } from '(@/utils/supabase/client)';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 
@@ -48,7 +48,7 @@ const JoinForm = () => {
     try {
       const {
         data: { session }
-      } = await supabase.auth.signUp({
+      } = await clientSupabase.auth.signUp({
         email: joinData.userId,
         password: joinData.password,
         options: {
