@@ -17,7 +17,7 @@ const ReviewModal = ({ children, isOpen, onClose }: Props) => {
     <>
       <Modal isOpen={isOpen} onClose={isOpen ? handleClose : undefined}>
         <div className="fixed top-0 left-0 flex justify-center items-center w-full h-full bg-neutral-900/70 z-50">
-          <div className="fixed top-0 left-0 bg-red-500 w-4 h-4">{children}</div>
+          <div>{children}</div>
         </div>
       </Modal>
     </>

@@ -2,12 +2,12 @@ import Image from 'next/image';
 import React from 'react';
 
 export type ReviewType = {
-  user_id: string;
-  review_id: string;
-  review_title: string;
-  review_contents: string;
-  created_at: string;
-  image_url: string;
+  user_id: string | null;
+  review_id: string | null;
+  review_title: string | null;
+  review_contents: string | null;
+  created_at: string | null;
+  image_url: string | null;
 };
 
 const reviewCard = ({ review }: { review: ReviewType }) => {
