@@ -1,10 +1,10 @@
-import { supabase } from '../supabase';
+import { clientSupabase } from '(@/utils/supabase/client)';
 
 export const getUserId = async () => {
   const {
     data: { user },
     error
-  } = await supabase.auth.getUser();
+  } = await clientSupabase.auth.getUser();
   if (error) {
     return { status: 'fail', result: error } as const;
   }
@@ -15,7 +15,7 @@ export const getUserNickname = async () => {
   const {
     data: { user },
     error
-  } = await supabase.auth.getUser();
+  } = await clientSupabase.auth.getUser();
   if (error) {
     return { status: 'fail', result: error } as const;
   }
