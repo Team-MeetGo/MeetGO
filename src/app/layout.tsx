@@ -1,7 +1,8 @@
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 import './globals.css';
-import QueryProvider from '(@/Provider)';
+import QueryProvider from '(@/app/provider/QueryProvider)';
+import { NextProvider } from './provider/NextUIProvider';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -18,7 +19,10 @@ export default function RootLayout({
   return (
     <html lang="ko">
       <body className={inter.className}>
-        <QueryProvider>{children}</QueryProvider>
+        <NextProvider>
+          <QueryProvider>{children}</QueryProvider>
+        </NextProvider>
+
         <div id="portal"></div>
       </body>
     </html>
