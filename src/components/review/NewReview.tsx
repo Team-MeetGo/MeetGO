@@ -1,17 +1,23 @@
 'use client';
 
-import { clientSupabase } from '(@/utils/supabase/client)';
-import { ModalContent, ModalBody } from '@nextui-org/react';
-import Image from 'next/image';
+import { Modal, ModalContent, ModalBody, Button, useDisclosure } from '@nextui-org/react';
 import { useRouter } from 'next/navigation';
-
+import { clientSupabase } from '(@/utils/supabase/client)';
 import React, { ChangeEvent, FormEvent, useState } from 'react';
+import Image from 'next/image';
 import { FaPhotoVideo } from 'react-icons/fa';
 
 const NewReview = () => {
+  const { isOpen, onOpen, onClose } = useDisclosure();
   const [dragging, setDragging] = useState(false);
   const [file, setFile] = useState<File>();
   const router = useRouter();
+
+  const handleClose = () => {
+    if (window.confirm('리뷰 등록을 취소하시겠습니까?')) {
+      onClose();
+    }
+  };
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
@@ -83,7 +89,6 @@ const NewReview = () => {
         user_id: userId
       }
     ]);
-    console.log('삽입된 데이터:', insertedData);
 
     if (insertError) {
       console.error('insert error', insertError);
@@ -93,72 +98,82 @@ const NewReview = () => {
     alert('리뷰가 등록되었습니다.');
     window.location.reload();
   };
+
   return (
-    <div className="fixed top-0 left-0 flex justify-center items-center">
-      <form className="w-full flex flex-col mt-2" onSubmit={handleSubmit}>
-        <ModalContent className="bg-white w-[800px] mb-[100px]  p-8 rounded-[30px]">
-          <ModalBody>
-            <div className="mt-[30px] mb-[30px]">
-              <input
-                className="hidden items-center justify-center"
-                name="input"
-                id="input-upload"
-                type="file"
-                accept="image/*"
-                onChange={handleChange}
-              />
-              <label
-                className={`w-full h-60 flex flex-col items-center justify-center rounded-[20px] ${
-                  !file && 'border-2 rounded-[20px] border-gray-500 border-dashed'
-                }`}
-                htmlFor="input-upload"
-                onDragEnter={handleDrag}
-                onDragLeave={handleDrag}
-                onDragOver={handleDragOver}
-                onDrop={handleDrop}
-              >
-                {dragging && <div className="absolute inset-0 z-10 bg-sky-500/20 pointer-events-none" />}
-                {!file && (
-                  <div className="flex flex-col items-center pointer-events-none">
-                    <FaPhotoVideo className="w-20 h-20 text-gray-300 mb-[10px]" />
-                    <p>클릭하여 이미지를 등록해 주세요.</p>
-                  </div>
-                )}
-                {file && (
-                  <div className="relative w-full aspect-square">
-                    <Image
-                      className="object-cover rounded-[20px]"
-                      src={URL.createObjectURL(file)}
-                      alt="local file"
-                      fill
+    <>
+      <Button onPress={onOpen} color="primary">
+        새 리뷰 등록
+      </Button>
+      <Modal isOpen={isOpen} onClose={handleClose} placement="top-center">
+        <ModalContent className="w-full flex justify-center items-center">
+          {(onClose) => (
+            <form className="w-full flex flex-col mt-2" onSubmit={handleSubmit}>
+              <div className="bg-white p-8 rounded-[30px]">
+                <ModalBody>
+                  <div className="mt-[10px] mb-[30px]">
+                    <input
+                      className="hidden items-center justify-center"
+                      name="input"
+                      id="input-upload"
+                      type="file"
+                      accept="image/*"
+                      onChange={handleChange}
                     />
+                    <label
+                      className={`w-full h-60 flex flex-col items-center justify-center rounded-[20px] ${
+                        !file && 'border-2 rounded-[20px] border-gray-500 border-dashed'
+                      }`}
+                      htmlFor="input-upload"
+                      onDragEnter={handleDrag}
+                      onDragLeave={handleDrag}
+                      onDragOver={handleDragOver}
+                      onDrop={handleDrop}
+                    >
+                      {dragging && <div className="absolute inset-0 z-10 bg-sky-500/20 pointer-events-none" />}
+                      {!file && (
+                        <div className="flex flex-col items-center pointer-events-none">
+                          <FaPhotoVideo className="w-20 h-20 text-gray-300 mb-[10px]" />
+                          <p>클릭하여 이미지를 등록해 주세요.</p>
+                        </div>
+                      )}
+                      {file && (
+                        <div className="relative w-full aspect-square">
+                          <Image
+                            className="object-cover rounded-[20px]"
+                            src={URL.createObjectURL(file)}
+                            alt="local file"
+                            fill
+                          />
+                        </div>
+                      )}
+                    </label>
                   </div>
-                )}
-              </label>
-            </div>
-            <textarea
-              autoFocus
-              id="review_title"
-              required
-              rows={1}
-              placeholder="제목을 입력해주세요."
-              className="outline-none text-lg border-2 rounded-[20px] resize-none p-[8px] pl-4 mb-2"
-            />
-            <textarea
-              id="review_contents"
-              required
-              placeholder="내용을 입력해주세요.(200자 이내)"
-              className="outline-none text-lg resize-none border-2 rounded-[30px] p-[15px]"
-              rows={6}
-              maxLength={200}
-            />
-            <button className="h-[50px] rounded-[15px] mt-[30px] flex justify-center items-center bg-purple-300">
-              할 일 등록
-            </button>
-          </ModalBody>
+                  <textarea
+                    autoFocus
+                    id="review_title"
+                    required
+                    rows={1}
+                    placeholder="제목을 입력해주세요."
+                    className="outline-none text-lg border-2 rounded-[20px] resize-none p-[8px] pl-4 mb-2"
+                  />
+                  <textarea
+                    id="review_contents"
+                    required
+                    placeholder="내용을 입력해주세요.(200자 이내)"
+                    className="outline-none text-lg resize-none border-2 rounded-[30px] p-[15px]"
+                    rows={6}
+                    maxLength={200}
+                  />
+                  <button className="h-[50px] rounded-[15px] mt-[30px] flex justify-center items-center bg-purple-300">
+                    할 일 등록
+                  </button>
+                </ModalBody>
+              </div>
+            </form>
+          )}
         </ModalContent>
-      </form>
-    </div>
+      </Modal>
+    </>
   );
 };
 

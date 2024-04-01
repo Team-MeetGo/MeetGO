@@ -1,7 +1,7 @@
-import React from "react";
+import MeetingRoomList from '(@/components/room/MeetingRoomList)';
 
 const LobbyPage = () => {
-  return <div>LobbyPage</div>;
+  return <MeetingRoomList />;
 };
 
 export default LobbyPage;
