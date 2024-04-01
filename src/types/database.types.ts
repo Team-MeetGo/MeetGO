@@ -44,21 +44,21 @@ export type Database = {
           is_edit: boolean;
           message: string;
           message_id: string;
-          send_from: string;
+          send_from: string | null;
         };
         Insert: {
           created_at?: string;
           is_edit?: boolean;
           message: string;
           message_id?: string;
-          send_from?: string;
+          send_from?: string | null;
         };
         Update: {
           created_at?: string;
           is_edit?: boolean;
           message?: string;
           message_id?: string;
-          send_from?: string;
+          send_from?: string | null;
         };
         Relationships: [
           {
@@ -66,7 +66,7 @@ export type Database = {
             columns: ['send_from'];
             isOneToOne: false;
             referencedRelation: 'users';
-            referencedColumns: ['user_id'];
+            referencedColumns: ['id'];
           }
         ];
       };
@@ -252,6 +252,30 @@ export type Database = {
           }
         ];
       };
+      test_review_comment: {
+        Row: {
+          comment_content: string | null;
+          comment_id: string;
+          created_at: string;
+          review_id: string | null;
+          user_id: string | null;
+        };
+        Insert: {
+          comment_content?: string | null;
+          comment_id?: string;
+          created_at?: string;
+          review_id?: string | null;
+          uesr_id?: string | null;
+        };
+        Update: {
+          comment_content?: string | null;
+          comment_id?: string;
+          created_at?: string;
+          review_id?: string | null;
+          uesr_id?: string | null;
+        };
+        Relationships: [];
+      };
       users: {
         Row: {
           avatar: string | null;
@@ -261,7 +285,7 @@ export type Database = {
           login_email: string;
           nickname: string | null;
           phone: string | null;
-          school_email: string;
+          school_email: string | null;
           school_name: string | null;
           user_id: string;
         };
@@ -273,7 +297,7 @@ export type Database = {
           login_email: string;
           nickname?: string | null;
           phone?: string | null;
-          school_email: string;
+          school_email?: string | null;
           school_name?: string | null;
           user_id: string;
         };
@@ -285,7 +309,7 @@ export type Database = {
           login_email?: string;
           nickname?: string | null;
           phone?: string | null;
-          school_email?: string;
+          school_email?: string | null;
           school_name?: string | null;
           user_id?: string;
         };
