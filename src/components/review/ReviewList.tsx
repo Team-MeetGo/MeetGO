@@ -1,18 +1,13 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import ModalPotal from './ModalPortal';
 import ReviewCard from './ReviewCard';
-import ReviewModal from './ReviewModal';
-import NewReview from './NewReview';
-import { Button } from '@nextui-org/react';
-import { useDisclosure } from '@nextui-org/react';
-import { useRouter } from 'next/navigation';
 import { clientSupabase } from '(@/utils/supabase/client)';
+import NewReview from './NewReview';
 
 export type reviewData = {
   user_id: string | null;
-  review_id: string | null;
+  review_id: string;
   review_title: string | null;
   review_contents: string | null;
   created_at: string | null;
@@ -21,8 +16,6 @@ export type reviewData = {
 
 const ReviewList = () => {
   const [reviewData, setReviewData] = useState<reviewData[]>([]);
-  const { isOpen, onOpen, onClose } = useDisclosure();
-  const router = useRouter();
 
   useEffect(() => {
     getRecentReview();
@@ -35,35 +28,20 @@ const ReviewList = () => {
       setReviewData(data);
     }
   }
-  const openNewReviewModal = async () => {
-    onOpen();
-  };
+
   return (
     <div>
-      <div className="flex justify-between gap-8">
+      <div className="flex justify-between">
         <div>dropdown</div>
         <div>
-          <Button onClick={openNewReviewModal} color="primary">
-            새 리뷰 등록
-          </Button>
-        </div>
-        <div>
-          {isOpen && (
-            <ModalPotal>
-              <div>
-                <ReviewModal onClose={onClose} isOpen={isOpen}>
-                  <NewReview />
-                </ReviewModal>
-              </div>
-            </ModalPotal>
-          )}
+          <NewReview />
         </div>
       </div>
-      <div>
+      <ul className="grid grid-cols-3 gap-2 gap-y-4">
         {reviewData.map((item, index) => (
           <ReviewCard key={index} review={item} />
         ))}
-      </div>
+      </ul>
     </div>
   );
 };
