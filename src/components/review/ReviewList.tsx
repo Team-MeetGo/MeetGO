@@ -7,8 +7,8 @@ import ReviewModal from './ReviewModal';
 import NewReview from './NewReview';
 import { Button } from '@nextui-org/react';
 import { useDisclosure } from '@nextui-org/react';
-import { supabase } from '(@/utils/supabase)';
 import { useRouter } from 'next/navigation';
+import { clientSupabase } from '(@/utils/supabase/client)';
 
 export type reviewData = {
   user_id: string | null;
@@ -23,23 +23,13 @@ const ReviewList = () => {
   const [reviewData, setReviewData] = useState<reviewData[]>([]);
   const { isOpen, onOpen, onClose } = useDisclosure();
   const router = useRouter();
-  // const openNewReviewModal = async () => {
-  //   const { data: user } = await supabase.auth.getUser();
-
-  //   if (!user) {
-  //     alert('로그인 후 이용해 주세요.');
-  //     router.push('/login');
-  //   } else {
-  //     onOpen();
-  //   }
-  // };
 
   useEffect(() => {
     getRecentReview();
   }, []);
 
   async function getRecentReview() {
-    let { data } = await supabase.from('review').select('*');
+    let { data } = await clientSupabase.from('review').select('*');
     if (data) {
       data.sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
       setReviewData(data);

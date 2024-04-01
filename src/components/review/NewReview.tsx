@@ -1,11 +1,11 @@
 'use client';
 
-import { supabase } from '(@/utils/supabase)';
-import { ModalContent, ModalHeader, ModalBody, Checkbox, Input, Link } from '@nextui-org/react';
+import { clientSupabase } from '(@/utils/supabase/client)';
+import { ModalContent, ModalBody } from '@nextui-org/react';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 
-import React, { ChangeEvent, FormEvent, useEffect, useState } from 'react';
+import React, { ChangeEvent, FormEvent, useState } from 'react';
 import { FaPhotoVideo } from 'react-icons/fa';
 
 const NewReview = () => {
@@ -54,16 +54,11 @@ const NewReview = () => {
     const uuid = crypto.randomUUID();
     const filePath = `reviewImage/${uuid}`;
 
-    // const formData = new FormData();
-    // formData.append('review_title', (document.getElementById('review_title') as HTMLInputElement).value);
-    // formData.append('review_contents', (document.getElementById('review_contents') as HTMLInputElement).value);
-    // formData.append('image_url', file);
-
     const reviewTitle = (document.getElementById('review_title') as HTMLInputElement)?.value;
     const reviewContents = (document.getElementById('review_contents') as HTMLInputElement)?.value;
 
     const uploadImage = async (filePath: string, file: File) => {
-      const { data, error } = await supabase.storage.from('reviewImage').upload(filePath, file, {
+      const { data, error } = await clientSupabase.storage.from('reviewImage').upload(filePath, file, {
         cacheControl: '3600',
         upsert: true
       });
@@ -76,20 +71,11 @@ const NewReview = () => {
       return data;
     };
     const data = await uploadImage(filePath, file);
-    const { data: imageUrl } = supabase.storage.from('reviewImage').getPublicUrl(data.path);
+    const { data: imageUrl } = clientSupabase.storage.from('reviewImage').getPublicUrl(data.path);
     const ImgDbUrl = imageUrl.publicUrl;
     console.log(ImgDbUrl);
 
-    // const { data: insertedData, error: insertError } = await supabase.from('review').insert([
-    //   {
-    //     review_title: formData.get('review_title'),
-    //     review_contents: formData.get('review_contents'),
-    //     image_url: ImgDbUrl,
-    //     user_id: userId
-    //   }
-    // ]);
-
-    const { data: insertedData, error: insertError } = await supabase.from('review').insert([
+    const { data: insertedData, error: insertError } = await clientSupabase.from('review').insert([
       {
         review_title: reviewTitle,
         review_contents: reviewContents,
