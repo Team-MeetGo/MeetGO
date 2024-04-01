@@ -1,3 +1,5 @@
+'use client';
+
 import { supabase } from '(@/utils/supabase)';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
@@ -38,7 +40,7 @@ const JoinForm = () => {
 
   const router = useRouter();
 
-  const onChangeInput = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const onChangeInput = (e: React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLSelectElement>) => {
     const { name, value } = e.target;
     setJoinData((prev) => ({ ...prev, [name]: value }));
   };
@@ -70,6 +72,13 @@ const JoinForm = () => {
           <input type={type} name={name} placeholder={placeholder} onChange={onChangeInput} />
         </label>
       ))}
+      <label>
+        <select name="gender" value={joinData.gender} onChange={onChangeInput}>
+          <option value="">성별</option>
+          <option value="male">남성</option>
+          <option value="female">여성</option>
+        </select>
+      </label>
       <button type="submit">회원가입</button>
     </form>
   );
