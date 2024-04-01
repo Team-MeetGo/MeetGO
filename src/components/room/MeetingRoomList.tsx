@@ -3,6 +3,7 @@ import meetingRoomHandler from '(@/hooks/custom/room)';
 import { useEffect, useState } from 'react';
 
 import type { Database } from '(@/types/database.types)';
+import MeetingRoom from './MeetingRoom';
 
 function MeetingRoomList() {
   type MeetingRoom = Database['public']['Tables']['room']['Row'];
@@ -26,28 +27,8 @@ function MeetingRoomList() {
     <>
       <article>
         {/* <MeetingRoomForm /> */}
-        {meetingRoomList.map((room) => (
-          <main key={room.room_id} className="w-full h-32 border-red-600 border-8">
-            <div> {room.room_title} </div>
-            <div> {room.feature} </div>
-            <div> {room.location} </div>
-            <div> {room.room_status} </div>
-            <div> {room.member_number}</div>
-            {/* <DeleteMeetingRoom id={room.room_id} />
-          <EditMeetingRoom /> */}
-          </main>
-        ))}
-        {chattingRoomList.map((room) => (
-          <main key={room.room_id} className="w-full h-32 border-red-600 border-8">
-            <div> {room.room_title} </div>
-            <div> {room.feature} </div>
-            <div> {room.location} </div>
-            <div> {room.room_status} </div>
-            <div> {room.member_number}</div>
-            {/* <DeleteMeetingRoom id={room.room_id} />
-          <EditMeetingRoom /> */}
-          </main>
-        ))}
+        <MeetingRoom list={meetingRoomList} />
+        <MeetingRoom list={chattingRoomList} />
       </article>
     </>
   );
