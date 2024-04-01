@@ -1,5 +1,5 @@
 const page = () => {
-  return <div>page</div>;
+  return <div>review id page</div>;
 };
 
 export default page;

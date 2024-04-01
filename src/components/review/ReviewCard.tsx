@@ -16,6 +16,7 @@ const reviewCard = ({ review }: { review: ReviewType }) => {
       <div>{review.image_url ? <Image src={review.image_url} alt="reviewImage" height={300} width={300} /> : null}</div>
       <div>{review.review_title}</div>
       <div>{review.user_id}</div>
+      <div>{review.review_id}</div>
       <div>{review.review_contents}</div>
       <div>{review.created_at}</div>
     </div>

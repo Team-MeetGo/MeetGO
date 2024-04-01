@@ -7,8 +7,8 @@ import ReviewModal from './ReviewModal';
 import NewReview from './NewReview';
 import { Button } from '@nextui-org/react';
 import { useDisclosure } from '@nextui-org/react';
-import { useRouter } from 'next/navigation';
 import { clientSupabase } from '(@/utils/supabase/client)';
+import Link from 'next/link';
 
 export type reviewData = {
   user_id: string | null;
@@ -22,7 +22,6 @@ export type reviewData = {
 const ReviewList = () => {
   const [reviewData, setReviewData] = useState<reviewData[]>([]);
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const router = useRouter();
 
   useEffect(() => {
     getRecentReview();
@@ -61,7 +60,11 @@ const ReviewList = () => {
       </div>
       <div>
         {reviewData.map((item, index) => (
-          <ReviewCard key={index} review={item} />
+          <div key={item.review_id}>
+            <Link href={`/review/${item.review_id}`}>
+              <ReviewCard key={index} review={item} />
+            </Link>
+          </div>
         ))}
       </div>
     </div>
