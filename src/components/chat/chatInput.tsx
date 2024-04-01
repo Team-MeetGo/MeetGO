@@ -1,12 +1,35 @@
+'use client';
+import { clientSupabase } from '(@/utils/supabase/client)';
 import { Input } from '@nextui-org/react';
-import React from 'react';
+import { useState } from 'react';
+import { FaRegArrowAltCircleUp } from 'react-icons/fa';
 
-const chatInput = () => {
+const ChatInput = () => {
+  const [message, setMessage] = useState('');
+
+  const handleSubmit = async () => {
+    const { error } = await clientSupabase.from('messages').insert({ message });
+    if (error) {
+      alert(error.message);
+    }
+  };
+
   return (
-    <div className="p-5">
-      <Input placeholder="send message" />
-    </div>
+    <form
+      className="p-5 flex gap-2"
+      onSubmit={(e) => {
+        e.preventDefault();
+        handleSubmit();
+        setMessage('');
+      }}
+    >
+      <Input value={message} placeholder="send message" onChange={(e) => setMessage(e.target.value)} />
+
+      <button>
+        <FaRegArrowAltCircleUp className="h-8 w-8 my-auto" />
+      </button>
+    </form>
   );
 };
 
-export default chatInput;
+export default ChatInput;
