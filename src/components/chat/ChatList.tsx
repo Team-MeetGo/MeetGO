@@ -3,10 +3,6 @@ import { Message } from '(@/types)';
 import { getformattedDate } from '(@/utils)';
 import { clientSupabase } from '(@/utils/supabase/client)';
 import { useEffect, useState } from 'react';
-import { AiOutlineMenu } from 'react-icons/ai';
-import { CiMenuKebab } from 'react-icons/ci';
-import { HiOutlineMenu } from 'react-icons/hi';
-import { TfiLayoutMenuSeparated } from 'react-icons/tfi';
 import ChatDropDownMenu from './ChatDropDownMenu';
 
 const ChatList = ({ serverMsg }: { serverMsg: Message[] }) => {
@@ -26,6 +22,9 @@ const ChatList = ({ serverMsg }: { serverMsg: Message[] }) => {
           setMessages([...messages, payload.new as Message]);
         }
       )
+      .on('postgres_changes', { event: 'DELETE', schema: 'public', table: 'messages' }, (payload) => {
+        setMessages(messages.filter((msg) => msg.message_id !== payload.old.message_id));
+      })
       .subscribe();
     return () => {
       clientSupabase.removeChannel(channle);
@@ -53,7 +52,7 @@ const OddChat = ({ msg }: { msg: Message }) => {
       <div className="w-80 h-24 flex flex-col gap-1">
         <div className="font-bold ml-auto">{msg.nickname}</div>
         <div className="flex gap-2 ml-auto">
-          <ChatDropDownMenu />
+          <ChatDropDownMenu msg={msg} />
           <div className="border rounded-md p-3 h-full">{msg.message}</div>
         </div>
         <div className="mt-auto text-slate-100 text-xs ml-auto">
@@ -74,7 +73,7 @@ const EvenChat = ({ msg }: { msg: Message }) => {
         <div className="font-bold">{msg.nickname}</div>
         <div className="flex gap-2">
           <div className="border rounded-md p-3 h-full">{msg.message}</div>
-          <ChatDropDownMenu />
+          <ChatDropDownMenu msg={msg} />
         </div>
 
         <div className="mt-auto text-slate-100 text-xs">
