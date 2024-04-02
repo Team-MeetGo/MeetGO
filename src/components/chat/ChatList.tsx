@@ -52,7 +52,7 @@ const OddChat = ({ msg }: { msg: Message }) => {
           <p>{getformattedDate(msg.created_at)}</p>
         </div>
       </div>
-      <div className="h-14 w-14 bg-indigo-600 rounded-full my-auto">avatar</div>
+      <div className="h-14 w-14 bg-indigo-600 rounded-full my-auto">{msg.avatar}</div>
     </div>
   );
 };
@@ -60,7 +60,7 @@ const OddChat = ({ msg }: { msg: Message }) => {
 const EvenChat = ({ msg }: { msg: Message }) => {
   return (
     <div className="flex gap-4" key={msg.message_id}>
-      <div className="h-14 w-14 bg-indigo-600 rounded-full my-auto">avatar</div>
+      <div className="h-14 w-14 bg-indigo-600 rounded-full my-auto">{msg.avatar}</div>
 
       <div className="w-80 h-24 flex flex-col gap-1">
         <div className="font-bold">{msg.nickname}</div>
