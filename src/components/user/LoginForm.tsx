@@ -5,9 +5,7 @@ import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { Button, Input } from '@nextui-org/react';
 
-type Gender = 'male' | 'female' | '';
-
-const JOIN_FORM_LIST = [
+const LOGIN_FORM_LIST = [
   {
     type: 'email',
     name: 'userId',
@@ -56,8 +54,8 @@ const LoginForm = () => {
   };
 
   return (
-    <form className="max-w-[450px] flex flex-col gap-[20px] w-full" onSubmit={onSubmitForm}>
-      {JOIN_FORM_LIST.map(({ type, name, placeholder, error }) => (
+    <form className="max-w-[450px] flex flex-col gap-[10px] w-full" onSubmit={onSubmitForm}>
+      {LOGIN_FORM_LIST.map(({ type, name, placeholder, error }) => (
         <label key={name}>
           <input
             className="p-5 border border-[#A1A1AA] placeholder:text-[#A1A1AA] placeholder:text-[14px] rounded-lg focus:outline-none focus:border-[#8F5DF4] w-full"
@@ -70,11 +68,21 @@ const LoginForm = () => {
       ))}
 
       <Button
-        className="duration-200 bg-[#8F5DF4] text-white p-5 mt-[10px] rounded-lg font-semibold w-full py-[20px] h-auto text-[16px]"
+        className="duration-200 bg-[#8F5DF4] text-white p-5 mt-[40px] rounded-lg font-semibold w-full py-[20px] h-auto text-[16px]"
         type="submit"
       >
         로그인
       </Button>
+      <Button
+        onClick={() => router.push('/users/join')}
+        className="duration-200 bg-white text-[#27272A] border border-[#A1A1AA] p-5 mt-[10px] rounded-lg w-full py-[20px] h-auto text-[16px]"
+        type="button"
+      >
+        아직 아이디가 없다면? 회원가입하기
+      </Button>
+      <p className="duration-200 bg-white text-[#27272A] p-5 mt-[40px] rounded-lg w-full py-[20px] h-auto text-[16px] text-center">
+        소셜 계정으로 로그인하기
+      </p>
     </form>
   );
 };
