@@ -40,25 +40,28 @@ export type Database = {
       };
       messages: {
         Row: {
+          avatar: string;
           created_at: string;
-          is_edit: boolean;
           message: string;
           message_id: string;
-          send_from: string | null;
+          nickname: string;
+          send_from: string;
         };
         Insert: {
+          avatar: string;
           created_at?: string;
-          is_edit?: boolean;
           message: string;
           message_id?: string;
-          send_from?: string | null;
+          nickname: string;
+          send_from?: string;
         };
         Update: {
+          avatar?: string;
           created_at?: string;
-          is_edit?: boolean;
           message?: string;
           message_id?: string;
-          send_from?: string | null;
+          nickname?: string;
+          send_from?: string;
         };
         Relationships: [
           {
@@ -211,14 +214,14 @@ export type Database = {
       room: {
         Row: {
           created_at: string;
-          feature: string;
+          feature: string | null;
           going_chat: boolean | null;
-          leader_id: string;
-          location: string;
-          member_number: string;
+          leader_id: string | null;
+          location: string | null;
+          member_number: string | null;
           room_id: string;
-          room_status: string;
-          room_title: string;
+          room_status: string | null;
+          room_title: string | null;
         };
         Insert: {
           created_at?: string;
@@ -265,14 +268,14 @@ export type Database = {
           comment_id?: string;
           created_at?: string;
           review_id?: string | null;
-          uesr_id?: string | null;
+          user_id?: string | null;
         };
         Update: {
           comment_content?: string | null;
           comment_id?: string;
           created_at?: string;
           review_id?: string | null;
-          uesr_id?: string | null;
+          user_id?: string | null;
         };
         Relationships: [];
       };
