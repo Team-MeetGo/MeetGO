@@ -7,11 +7,7 @@ import { clientSupabase } from '(@/utils/supabase/client)';
 import { useEffect, useState } from 'react';
 
 const ChatList = ({ serverMsg }: { serverMsg: Message[] }) => {
-  // const { data } = useChattingQuery();
-  // 쿼리(이전 채팅데이터 다시 요청 X, 캐시에서 데이터 가져옴 + 자동 업데이트의 장점)를 쓸 것인가 SSR(TTV를 위해서는..)을 쓸 것인가..
-
   const [messages, setMessages] = useState<Message[]>([...serverMsg]);
-  // const { messages, setMessages } = msgStore((state) => state);
 
   useEffect(() => {
     const channle = clientSupabase
@@ -33,17 +29,23 @@ const ChatList = ({ serverMsg }: { serverMsg: Message[] }) => {
     };
   }, [messages, setMessages]);
 
+  const { data } = useChattingQuery();
   useEffect(() => {
-    const refreshData = async () => {
-      const { data, error } = await clientSupabase.from('messages').select('*');
-      if (error) {
-        alert(error.message);
-      } else {
-        setMessages([...data]);
-      }
-    };
-    refreshData();
-  }, []);
+    // react-query를 사용하는 것과 그냥 다시 받아오는 것 둘 중에 뭐가 더 성능이 좋을까
+    // const refreshData = async () => {
+    //   const { data, error } = await clientSupabase.from('messages').select('*');
+    //   if (error) {
+    //     alert(error.message);
+    //   } else {
+    //     setMessages([...data]);
+    //   }
+    // };
+    // refreshData();
+
+    if (data) {
+      setMessages([...data]);
+    }
+  }, [data]);
 
   return (
     <div className=" w-full flex-1 bg-slate-500 p-5 flex flex-col gap-8 overflow-y-auto">
