@@ -16,7 +16,15 @@ const reviewCard = ({ review }: { review: ReviewType }) => {
     <div key={review.review_id} className="flex justify-center item-center bg-green-200 p-4">
       <Link href={`/review/${review.review_id}`}>
         <div>
-          {review.image_url ? <Image src={review.image_url} alt="reviewImage" height={400} width={400} /> : null}
+          {review.image_url ? (
+            <Image
+              src={review.image_url}
+              alt="reviewImage"
+              height={400}
+              width={400}
+              className="w-full h-[280px] object-cover"
+            />
+          ) : null}
         </div>
         <div>{review.review_title}</div>
         <div>{review.user_id}</div>
