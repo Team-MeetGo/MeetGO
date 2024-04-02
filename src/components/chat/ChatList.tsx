@@ -4,8 +4,9 @@ import { getformattedDate } from '(@/utils)';
 import { clientSupabase } from '(@/utils/supabase/client)';
 import { useEffect, useState } from 'react';
 import ChatDropDownMenu from './ChatDropDownMenu';
+import { User } from '@supabase/supabase-js';
 
-const ChatList = ({ serverMsg }: { serverMsg: Message[] }) => {
+const ChatList = ({ serverMsg, user }: { serverMsg: Message[]; user: User | null }) => {
   const [messages, setMessages] = useState<Message[]>([...serverMsg]);
 
   useEffect(() => {
@@ -34,10 +35,10 @@ const ChatList = ({ serverMsg }: { serverMsg: Message[] }) => {
   return (
     <div className=" w-full flex-1 bg-slate-500 p-5 flex flex-col gap-8 overflow-y-auto">
       {messages?.map((msg, idx) => {
-        if (!(idx % 2)) {
-          return <OddChat msg={msg} key={idx} />;
+        if (msg.send_from === user?.id) {
+          return <MyChat msg={msg} key={idx} />;
         } else {
-          return <EvenChat msg={msg} key={idx} />;
+          return <OthersChat msg={msg} key={idx} />;
         }
       })}
     </div>
@@ -46,7 +47,7 @@ const ChatList = ({ serverMsg }: { serverMsg: Message[] }) => {
 
 export default ChatList;
 
-const OddChat = ({ msg }: { msg: Message }) => {
+const MyChat = ({ msg }: { msg: Message }) => {
   return (
     <div className="flex gap-4 ml-auto">
       <div className="w-80 h-24 flex flex-col gap-1">
@@ -64,17 +65,14 @@ const OddChat = ({ msg }: { msg: Message }) => {
   );
 };
 
-const EvenChat = ({ msg }: { msg: Message }) => {
+const OthersChat = ({ msg }: { msg: Message }) => {
   return (
     <div className="flex gap-4" key={msg.message_id}>
       <div className="h-14 w-14 bg-indigo-600 rounded-full my-auto">{msg.avatar}</div>
 
       <div className="w-80 h-24 flex flex-col gap-1">
         <div className="font-bold">{msg.nickname}</div>
-        <div className="flex gap-2">
-          <div className="border rounded-md p-3 h-full">{msg.message}</div>
-          <ChatDropDownMenu msg={msg} />
-        </div>
+        <div className="border rounded-md p-3 h-full">{msg.message}</div>
 
         <div className="mt-auto text-slate-100 text-xs">
           <p>{getformattedDate(msg.created_at)}</p>

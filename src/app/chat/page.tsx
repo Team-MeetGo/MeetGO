@@ -7,12 +7,13 @@ import ChatHeader from '(@/components/chat/ChatHeader)';
 const ChatPage = async () => {
   const supabase = serverSupabase();
   const { data } = await supabase.auth.getUser();
-  // console.log('유저데이터 =>', data);
+  console.log('유저데이터 =>', data.user);
+  const user = data.user;
 
   const { data: userData } = await supabase
     .from('users')
     .select('user_id, avatar, nickname')
-    .eq('user_id', String(data.user?.id));
+    .eq('user_id', String(user?.id));
   console.log(userData);
 
   // const {data: leader_id} = await supabase.from("")
@@ -23,7 +24,7 @@ const ChatPage = async () => {
         <ChatHeader />
         {/* 메세지영역 */}
         <Suspense fallback="응애 나 애기 폴백">
-          <ChatListParent />
+          <ChatListParent user={user} />
         </Suspense>
         <ChatInput userData={userData} />
       </div>
