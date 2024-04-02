@@ -1,16 +1,10 @@
+import LoginForm from '(@/components/user/LoginForm)';
+
 const LoginPage = () => {
   return (
-    <div>
-      <h1>Login</h1>
-      <form>
-        <label>
-          <input type="email" id="userId" placeholder="ID" />
-        </label>
-        <label>
-          <input type="password" id="password" placeholder="Password" />
-        </label>
-        <button type="submit">Login</button>
-      </form>
+    <div className="max-w-[760px] m-auto min-h-screen flex flex-col justify-center items-center">
+      <h1 className="text-[40px] font-medium mb-[40px]">로그인</h1>
+      <LoginForm />
     </div>
   );
 };
