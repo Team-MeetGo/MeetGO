@@ -50,19 +50,6 @@ export const kakaoLogin = async () => {
   }
 };
 
-export const githubLogin = async () => {
-  const { data, error } = await clientSupabase.auth.signInWithOAuth({
-    provider: 'github',
-    options: { queryParams: { access_type: 'offline', prompt: 'consent' } }
-  });
-  if (data) {
-    return console.log('깃허브 로그인 성공');
-  }
-  if (error) {
-    return console.error('깃허브 로그인 에러: ', error);
-  }
-};
-
 export const signOut = async () => {
   await clientSupabase.auth.signOut();
   console.log('로그아웃 성공');

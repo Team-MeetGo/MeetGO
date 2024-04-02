@@ -3,7 +3,9 @@
 import { clientSupabase } from '(@/utils/supabase/client)';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
-import { Button, Input } from '@nextui-org/react';
+import { Button } from '@nextui-org/react';
+import { authValidation } from '(@/utils/authValidation)';
+import { IsValidateShow } from '(@/types/userTypes)';
 
 type Gender = 'male' | 'female' | '';
 
@@ -29,10 +31,10 @@ const JoinForm = () => {
     nickname: '',
     gender: ''
   });
-  const [isValidate, setIsValidate] = useState({
-    userId: false,
-    password: false,
-    nickname: false
+  const [isValidateShow, setIsValidateShow] = useState<IsValidateShow>({
+    userId: true,
+    password: true,
+    nickname: true
   });
   const [gender, setGender] = useState<Gender>('');
 
@@ -45,7 +47,9 @@ const JoinForm = () => {
 
   const onChangeInput = (e: React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLSelectElement>) => {
     const { name, value } = e.target;
-    setJoinData((prev) => ({ ...prev, [name]: value }));
+    if (value === '') return setIsValidateShow((prev) => ({ ...prev, [name]: true }));
+    const isValid = authValidation(name, value); // 유효성 검사 수행
+    setIsValidateShow((prev) => ({ ...prev, [name]: isValid })); // 결과 반영
   };
 
   const onSubmitForm = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -70,41 +74,46 @@ const JoinForm = () => {
 
   return (
     <form className="max-w-[450px] flex flex-col gap-[20px] w-full" onSubmit={onSubmitForm}>
-      <div className="flex gap-[10px] w-full">
-        <label className="w-full mr-[10px]">
-          <input
-            className="p-5 border border-[#A1A1AA] placeholder:text-[#A1A1AA] placeholder:text-[14px] rounded-lg focus:outline-none focus:border-[#8F5DF4] w-full"
-            type="text"
-            name="nickname"
-            placeholder="닉네임을 입력해주세요."
-            onChange={onChangeInput}
-          />
-        </label>
-        <Button
-          className={
-            gender === 'female'
-              ? 'p-[20px] h-auto border min-w-0 rounded-lg bg-[#8F5DF4] text-white'
-              : 'p-[20px] h-auto border min-w-0 rounded-lg border-[#A1A1AA]'
-          }
-          color={gender === 'female' ? 'secondary' : 'default'}
-          variant={gender === 'female' ? 'solid' : 'bordered'}
-          type="button"
-          onClick={() => onGenderSelect('female')}
-        >
-          여자
-        </Button>
-        <Button
-          className={
-            gender === 'male'
-              ? 'p-[20px] h-auto border min-w-0 rounded-lg bg-[#8F5DF4] text-white'
-              : 'p-[20px] h-auto border min-w-0 rounded-lg border-[#A1A1AA]'
-          }
-          variant={gender === 'male' ? 'solid' : 'bordered'}
-          type="button"
-          onClick={() => onGenderSelect('male')}
-        >
-          남자
-        </Button>
+      <div>
+        <div className="flex gap-[10px] w-full">
+          <label className="w-full mr-[10px]">
+            <input
+              className="p-5 border border-[#A1A1AA] placeholder:text-[#A1A1AA] placeholder:text-[14px] rounded-lg focus:outline-none focus:border-[#8F5DF4] w-full"
+              type="text"
+              name="nickname"
+              placeholder="닉네임을 입력해주세요."
+              onChange={onChangeInput}
+            />
+          </label>
+          <Button
+            className={
+              gender === 'female'
+                ? 'p-[20px] h-auto border min-w-0 rounded-lg bg-[#8F5DF4] text-white'
+                : 'p-[20px] h-auto border min-w-0 rounded-lg border-[#A1A1AA]'
+            }
+            color={gender === 'female' ? 'secondary' : 'default'}
+            variant={gender === 'female' ? 'solid' : 'bordered'}
+            type="button"
+            onClick={() => onGenderSelect('female')}
+          >
+            여자
+          </Button>
+          <Button
+            className={
+              gender === 'male'
+                ? 'p-[20px] h-auto border rounded-lg bg-[#8F5DF4] text-white'
+                : 'p-[20px] h-auto border rounded-lg border-[#A1A1AA]'
+            }
+            variant={gender === 'male' ? 'solid' : 'bordered'}
+            type="button"
+            onClick={() => onGenderSelect('male')}
+          >
+            남자
+          </Button>
+        </div>
+        {!isValidateShow.nickname && (
+          <p className="text-red-500 text-[13px] mt-2">닉네임은 2-12글자 이내로 작성해주세요. </p>
+        )}
       </div>
       {JOIN_FORM_LIST.map(({ type, name, placeholder, error }) => (
         <label key={name}>
@@ -115,6 +124,7 @@ const JoinForm = () => {
             placeholder={placeholder}
             onChange={onChangeInput}
           />
+          {!isValidateShow[name] && <p className="text-red-500 text-[13px] mt-2">{error}</p>}
         </label>
       ))}
 
