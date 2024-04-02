@@ -15,6 +15,8 @@ const ChatPage = async () => {
     .eq('user_id', String(data.user?.id));
   console.log(userData);
 
+  // const {data: leader_id} = await supabase.from("")
+
   return (
     <div className="max-w-3xl mx-auto md:py-10 h-screen">
       <div className="h-full border rounded-md flex flex-col border-indigo-600">

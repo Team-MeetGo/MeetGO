@@ -10,12 +10,16 @@ const ChatInput = ({ userData }: { userData: UserData }) => {
 
   const handleSubmit = async () => {
     if (userData) {
-      const { error } = await clientSupabase.from('messages').insert({
-        send_from: userData[0].user_id,
-        message: message,
-        nickname: String(userData[0].nickname),
-        avatar: String(userData[0].avatar)
-      });
+      const { data, error } = await clientSupabase
+        .from('messages')
+        .insert({
+          send_from: userData[0].user_id,
+          message: message,
+          nickname: String(userData[0].nickname),
+          avatar: String(userData[0].avatar)
+        })
+        .select();
+      console.log(data);
       if (error) {
         alert(error.message);
       }
