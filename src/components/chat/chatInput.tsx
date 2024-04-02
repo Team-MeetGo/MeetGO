@@ -13,8 +13,8 @@ const ChatInput = ({ userData }: { userData: UserData }) => {
       const { error } = await clientSupabase.from('messages').insert({
         send_from: userData[0].user_id,
         message: message,
-        nickname: userData[0].nickname,
-        avatar: userData[0].avatar
+        nickname: String(userData[0].nickname),
+        avatar: String(userData[0].avatar)
       });
       if (error) {
         alert(error.message);
