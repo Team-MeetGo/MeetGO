@@ -1,7 +1,8 @@
 import { clientSupabase } from '(@/utils/supabase/client)';
 import { useEffect, useState } from 'react';
+import CommentCard from './CommentCard';
 
-type CommentListType = {
+export type CommentListType = {
   user_id: string | null;
   comment_id: string | null;
   comment_content: string | null;
@@ -32,9 +33,7 @@ const CommentList = ({ review_id }: Props) => {
     <div>
       {commentData.map((comment, index) => (
         <div key={index}>
-          <p>{comment.user_id}</p>
-          <p>{comment.comment_content}</p>
-          <p>{comment.created_at}</p>
+          <CommentCard comment={comment} />
         </div>
       ))}
     </div>

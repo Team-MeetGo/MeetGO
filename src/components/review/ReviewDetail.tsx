@@ -3,8 +3,10 @@
 import { useEffect, useState } from 'react';
 import { clientSupabase } from '(@/utils/supabase/client)';
 import Image from 'next/image';
+import ReviewEditModal from './ReviewEditModal';
+import { useRouter } from 'next/navigation';
 
-type ReviewDetailType = {
+export type ReviewDetailType = {
   review_title: string | null;
   review_contents: string | null;
   created_at: string | null;
@@ -18,6 +20,7 @@ type Props = {
 
 const ReviewDetail = ({ review_id }: Props) => {
   const [reviewDetail, setReviewDetail] = useState<ReviewDetailType | null>(null);
+  const router = useRouter();
 
   useEffect(() => {
     getReviewDetail(review_id);
@@ -38,6 +41,23 @@ const ReviewDetail = ({ review_id }: Props) => {
     }
   }
 
+  const handleDeleteReview = async () => {
+    if (window.confirm('리뷰를 삭제하시겠습니까?')) {
+      const { error: reviewDeleteError } = await clientSupabase.from('review').delete().eq('review_id', review_id);
+      const { error: commentDeleteError } = await clientSupabase
+        .from('test_review_comment')
+        .delete()
+        .eq('review_id', review_id);
+      if (reviewDeleteError) {
+        console.log('리뷰 삭제 오류:', reviewDeleteError.message);
+      } else if (commentDeleteError) {
+        console.log('댓글 삭제 오류:', commentDeleteError.message);
+      } else {
+        router.push('/review');
+      }
+    }
+  };
+
   return (
     <div>
       <div>
@@ -53,8 +73,8 @@ const ReviewDetail = ({ review_id }: Props) => {
         <div>{reviewDetail?.review_contents}</div>
       </div>
       <div>
-        <button>수정</button>
-        <button>삭제</button>
+        <ReviewEditModal review_id={review_id} />
+        <button onClick={handleDeleteReview}>삭제</button>
       </div>
     </div>
   );
