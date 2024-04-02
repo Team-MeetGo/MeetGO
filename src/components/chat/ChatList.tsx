@@ -54,7 +54,7 @@ const MyChat = ({ msg }: { msg: Message }) => {
         <div className="font-bold ml-auto">{msg.nickname}</div>
         <div className="flex gap-2 ml-auto">
           <ChatDropDownMenu msg={msg} />
-          <div className="border rounded-md p-3 h-full">{msg.message}</div>
+          <div className="border rounded-md p-3 h-full text-right">{msg.message}</div>
         </div>
         <div className="mt-auto text-slate-100 text-xs ml-auto">
           <p>{getformattedDate(msg.created_at)}</p>
@@ -72,7 +72,9 @@ const OthersChat = ({ msg }: { msg: Message }) => {
 
       <div className="w-80 h-24 flex flex-col gap-1">
         <div className="font-bold">{msg.nickname}</div>
-        <div className="border rounded-md p-3 h-full">{msg.message}</div>
+        <div className="gap-2 mr-auto">
+          <div className="border rounded-md p-3 h-full">{msg.message}</div>
+        </div>
 
         <div className="mt-auto text-slate-100 text-xs">
           <p>{getformattedDate(msg.created_at)}</p>
