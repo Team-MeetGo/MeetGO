@@ -211,7 +211,7 @@ export type Database = {
       room: {
         Row: {
           created_at: string;
-          feature: string;
+          feature: string[];
           going_chat: boolean | null;
           leader_id: string;
           location: string;
@@ -222,18 +222,17 @@ export type Database = {
         };
         Insert: {
           created_at?: string;
-          feature?: string | null;
+          feature?: string[] | null;
           going_chat?: boolean | null;
           leader_id?: string | null;
           location?: string | null;
           member_number?: string | null;
-          room_id?: string;
           room_status?: string | null;
           room_title?: string | null;
         };
         Update: {
           created_at?: string;
-          feature?: string | null;
+          feature?: string[] | null;
           going_chat?: boolean | null;
           leader_id?: string | null;
           location?: string | null;
