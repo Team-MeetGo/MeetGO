@@ -3,8 +3,9 @@
 import { useEffect, useState } from 'react';
 import { clientSupabase } from '(@/utils/supabase/client)';
 import Image from 'next/image';
+import ReviewEditModal from './ReviewEditModal';
 
-type ReviewDetailType = {
+export type ReviewDetailType = {
   review_title: string | null;
   review_contents: string | null;
   created_at: string | null;
@@ -18,6 +19,7 @@ type Props = {
 
 const ReviewDetail = ({ review_id }: Props) => {
   const [reviewDetail, setReviewDetail] = useState<ReviewDetailType | null>(null);
+  const [isEditMode, setIsEditMode] = useState(false);
 
   useEffect(() => {
     getReviewDetail(review_id);
@@ -38,6 +40,8 @@ const ReviewDetail = ({ review_id }: Props) => {
     }
   }
 
+  const handleDeleteReview = async () => {};
+
   return (
     <div>
       <div>
@@ -53,8 +57,18 @@ const ReviewDetail = ({ review_id }: Props) => {
         <div>{reviewDetail?.review_contents}</div>
       </div>
       <div>
-        <button>수정</button>
-        <button>삭제</button>
+        {/* {!isEditMode ? (
+          <button onClick={() => setIsEditMode(true)}>수정</button>
+        ) : (
+          <button onClick={handleEditReview}>수정완료</button>
+        )}
+        {!isEditMode ? (
+          <button onClick={handleDeleteReview}>삭제</button>
+        ) : (
+          <button onClick={handleCancelEdit}>취소</button>
+        )} */}
+        <ReviewEditModal review_id={review_id} />
+        <button onClick={handleDeleteReview}>삭제</button>
       </div>
     </div>
   );

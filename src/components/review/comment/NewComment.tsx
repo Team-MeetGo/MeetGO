@@ -25,7 +25,7 @@ const NewComment = ({ review_id }: Props) => {
   return (
     <div>
       <form onSubmit={handleNewComment}>
-        <div>
+        <div className="flex">
           <textarea
             id="comment_content"
             required
@@ -35,8 +35,8 @@ const NewComment = ({ review_id }: Props) => {
             onChange={(e) => setComments(e.target.value)}
             className="outline-none border-2 rounded-[20px] resize-none p-[8px] pl-4 mb-2"
           />
+          <button>등록</button>
         </div>
-        <button>등록</button>
       </form>
     </div>
   );
