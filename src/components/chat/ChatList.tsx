@@ -29,24 +29,6 @@ const ChatList = ({ serverMsg }: { serverMsg: Message[] }) => {
     };
   }, [messages, setMessages]);
 
-  const { data } = useChattingQuery();
-  useEffect(() => {
-    // react-query를 사용하는 것과 그냥 다시 받아오는 것 둘 중에 뭐가 더 성능이 좋을까
-    // const refreshData = async () => {
-    //   const { data, error } = await clientSupabase.from('messages').select('*');
-    //   if (error) {
-    //     alert(error.message);
-    //   } else {
-    //     setMessages([...data]);
-    //   }
-    // };
-    // refreshData();
-
-    if (data) {
-      setMessages([...data]);
-    }
-  }, [data]);
-
   return (
     <div className=" w-full flex-1 bg-slate-500 p-5 flex flex-col gap-8 overflow-y-auto">
       {messages?.map((msg, idx) => {
