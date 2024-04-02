@@ -2,8 +2,8 @@ import JoinForm from '(@/components/user/JoinForm)';
 
 const JoinPage = () => {
   return (
-    <div>
-      <h1>회원가입</h1>
+    <div className="max-w-[760px] m-auto min-h-screen flex flex-col justify-center items-center">
+      <h1 className="text-[40px] font-medium mb-[40px]">회원가입</h1>
       <JoinForm />
     </div>
   );
