@@ -1,20 +1,8 @@
 'use client';
 
 import { clientSupabase } from '(@/utils/supabase/client)';
-import {
-  Modal,
-  ModalContent,
-  ModalHeader,
-  ModalBody,
-  ModalFooter,
-  Button,
-  useDisclosure,
-  Checkbox,
-  Input,
-  Link
-} from '@nextui-org/react';
+import { Modal, ModalContent, ModalBody, Button, useDisclosure } from '@nextui-org/react';
 import Image from 'next/image';
-import { useRouter } from 'next/navigation';
 import { ChangeEvent, FormEvent, useEffect, useState } from 'react';
 import { FaPhotoVideo } from 'react-icons/fa';
 import { ReviewDetailType } from './ReviewDetail';
@@ -30,11 +18,19 @@ export default function ReviewEditModal({ review_id }: Props) {
   const [reviewDetail, setReviewDetail] = useState<ReviewDetailType | null>(null);
   const [editedTitle, setEditedTitle] = useState(reviewDetail?.review_title);
   const [editedContent, setEditedContent] = useState(reviewDetail?.review_contents);
-  const router = useRouter();
 
   useEffect(() => {
-    getReviewDetail(review_id);
+    if (review_id) {
+      getReviewDetail(review_id);
+    }
   }, [review_id]);
+
+  useEffect(() => {
+    if (reviewDetail) {
+      setEditedTitle(reviewDetail.review_title);
+      setEditedContent(reviewDetail.review_contents);
+    }
+  }, [reviewDetail]);
 
   async function getReviewDetail(review_id: string) {
     let { data: reviewDetail, error } = await clientSupabase
@@ -53,6 +49,8 @@ export default function ReviewEditModal({ review_id }: Props) {
 
   const handleClose = () => {
     if (window.confirm('리뷰 수정을 취소하시겠습니까?')) {
+      setEditedTitle(reviewDetail?.review_title);
+      setEditedContent(reviewDetail?.review_contents);
       onClose();
     }
   };
@@ -89,53 +87,53 @@ export default function ReviewEditModal({ review_id }: Props) {
   const handleEditReview = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    if (editedTitle === reviewDetail?.review_title && editedContent === reviewDetail?.review_contents) {
+    const istitleChanged = editedTitle !== reviewDetail?.review_title;
+    const isContentChanged = editedContent !== reviewDetail?.review_contents;
+    const isImageChanged = file !== undefined;
+
+    if (!istitleChanged && !isContentChanged && !isImageChanged) {
       alert('수정 된 부분이 없습니다.');
       return;
     }
 
-    if (!file) {
-      alert('사진을 등록해 주세요.');
-      return;
-    }
     const userId = '8fe87c99-842a-4fde-a0e8-918a0171e9a6';
+    let ImgDbUrl = reviewDetail?.image_url;
 
-    const uuid = crypto.randomUUID();
-    const filePath = `reviewImage/${uuid}`;
+    if (file) {
+      const uuid = crypto.randomUUID();
+      const filePath = `reviewImage/${uuid}`;
 
-    const reviewTitle = (document.getElementById('review_title') as HTMLInputElement)?.value;
-    const reviewContents = (document.getElementById('review_contents') as HTMLInputElement)?.value;
+      const uploadImage = async (filePath: string, file: File) => {
+        const { data, error } = await clientSupabase.storage.from('reviewImage').upload(filePath, file, {
+          cacheControl: '3600',
+          upsert: true
+        });
 
-    const uploadImage = async (filePath: string, file: File) => {
-      const { data, error } = await clientSupabase.storage.from('reviewImage').upload(filePath, file, {
-        cacheControl: '3600',
-        upsert: true
-      });
+        if (error) {
+          console.error('업로드 오류', error.message);
+          throw error;
+        }
 
-      if (error) {
-        console.error('업로드 오류', error.message);
-        throw error;
-      }
+        return data;
+      };
+      const data = await uploadImage(filePath, file);
+      const { data: imageUrl } = clientSupabase.storage.from('reviewImage').getPublicUrl(data.path);
+      ImgDbUrl = imageUrl.publicUrl;
+    }
 
-      return data;
-    };
-    const data = await uploadImage(filePath, file);
-    const { data: imageUrl } = clientSupabase.storage.from('reviewImage').getPublicUrl(data.path);
-    const ImgDbUrl = imageUrl.publicUrl;
-    console.log(ImgDbUrl);
+    // console.log(ImgDbUrl);
 
-    const { data: insertedData, error: insertError } = await clientSupabase.from('review').insert([
-      {
-        review_title: reviewTitle,
-        review_contents: reviewContents,
-        image_url: ImgDbUrl,
-        user_id: userId
-      }
-    ]);
+    if (!file && !reviewDetail?.image_url) {
+      ImgDbUrl = '';
+    }
 
-    if (insertError) {
-      console.error('insert error', insertError);
-      return;
+    const { data: updateReview, error } = await clientSupabase
+      .from('review')
+      .update({ review_title: editedTitle, review_contents: editedContent, image_url: ImgDbUrl })
+      .eq('review_id', review_id);
+
+    if (error) {
+      console.log('리뷰 수정 오류', error.message);
     }
 
     alert('리뷰가 수정되었습니다.');
@@ -197,11 +195,7 @@ export default function ReviewEditModal({ review_id }: Props) {
                       )}
                     </label>
                   </div>
-                  {reviewDetail?.review_title}
-                  {reviewDetail?.review_contents}
                   <textarea
-                    autoFocus
-                    id="review_title"
                     required
                     rows={1}
                     value={editedTitle || ''}
@@ -210,7 +204,6 @@ export default function ReviewEditModal({ review_id }: Props) {
                     className="outline-none text-lg border-2 rounded-[20px] resize-none p-[8px] pl-4 mb-2"
                   />
                   <textarea
-                    id="review_contents"
                     required
                     value={editedContent || ''}
                     onChange={(e) => setEditedContent(e.target.value)}

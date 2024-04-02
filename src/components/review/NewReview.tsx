@@ -6,6 +6,7 @@ import { clientSupabase } from '(@/utils/supabase/client)';
 import React, { ChangeEvent, FormEvent, useState } from 'react';
 import Image from 'next/image';
 import { FaPhotoVideo } from 'react-icons/fa';
+import defaultImg from '../../../public/defaultImg.jpg';
 
 const NewReview = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -51,35 +52,34 @@ const NewReview = () => {
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    if (!file) {
-      alert('사진을 등록해 주세요.');
-      return;
-    }
     const userId = '8fe87c99-842a-4fde-a0e8-918a0171e9a6';
 
-    const uuid = crypto.randomUUID();
-    const filePath = `reviewImage/${uuid}`;
+    let ImgDbUrl: string | undefined = defaultImg.src;
 
     const reviewTitle = (document.getElementById('review_title') as HTMLInputElement)?.value;
     const reviewContents = (document.getElementById('review_contents') as HTMLInputElement)?.value;
 
-    const uploadImage = async (filePath: string, file: File) => {
-      const { data, error } = await clientSupabase.storage.from('reviewImage').upload(filePath, file, {
-        cacheControl: '3600',
-        upsert: true
-      });
+    if (file) {
+      const uuid = crypto.randomUUID();
+      const filePath = `reviewImage/${uuid}`;
 
-      if (error) {
-        console.error('업로드 오류', error.message);
-        throw error;
-      }
+      const uploadImage = async (filePath: string, file: File) => {
+        const { data, error } = await clientSupabase.storage.from('reviewImage').upload(filePath, file, {
+          cacheControl: '3600',
+          upsert: true
+        });
 
-      return data;
-    };
-    const data = await uploadImage(filePath, file);
-    const { data: imageUrl } = clientSupabase.storage.from('reviewImage').getPublicUrl(data.path);
-    const ImgDbUrl = imageUrl.publicUrl;
-    console.log(ImgDbUrl);
+        if (error) {
+          console.error('업로드 오류', error.message);
+          throw error;
+        }
+
+        return data;
+      };
+      const data = await uploadImage(filePath, file);
+      const { data: imageUrl } = clientSupabase.storage.from('reviewImage').getPublicUrl(data.path);
+      ImgDbUrl = imageUrl.publicUrl;
+    }
 
     const { data: insertedData, error: insertError } = await clientSupabase.from('review').insert([
       {

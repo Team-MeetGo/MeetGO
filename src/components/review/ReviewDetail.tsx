@@ -20,7 +20,6 @@ type Props = {
 
 const ReviewDetail = ({ review_id }: Props) => {
   const [reviewDetail, setReviewDetail] = useState<ReviewDetailType | null>(null);
-  const [isEditMode, setIsEditMode] = useState(false);
   const router = useRouter();
 
   useEffect(() => {
@@ -74,16 +73,6 @@ const ReviewDetail = ({ review_id }: Props) => {
         <div>{reviewDetail?.review_contents}</div>
       </div>
       <div>
-        {/* {!isEditMode ? (
-          <button onClick={() => setIsEditMode(true)}>수정</button>
-        ) : (
-          <button onClick={handleEditReview}>수정완료</button>
-        )}
-        {!isEditMode ? (
-          <button onClick={handleDeleteReview}>삭제</button>
-        ) : (
-          <button onClick={handleCancelEdit}>취소</button>
-        )} */}
         <ReviewEditModal review_id={review_id} />
         <button onClick={handleDeleteReview}>삭제</button>
       </div>
