@@ -2,10 +2,10 @@
 import { clientSupabase } from '(@/utils/supabase/client)';
 import { Button, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, useDisclosure } from '@nextui-org/react';
 import { useState } from 'react';
-
-import type { Database } from '(@/types/database.types)';
 import TagList from './MeetingRoomFeatureTags';
 import { useTagStore } from '(@/store/zustand)';
+
+import type { Database } from '(@/types/database.types)';
 type MeetingRoom = Database['public']['Tables']['room']['Row'];
 
 function EditMeetingRoom({ room }: { room: MeetingRoom }) {

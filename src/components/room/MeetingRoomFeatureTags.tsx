@@ -3,12 +3,8 @@
 import { useTagStore } from '(@/store/zustand)';
 import { useState } from 'react';
 
-type TagsType = {
-  state: () => string[];
-};
 const TagList = () => {
   const { addTags, deleteTags, tags } = useTagStore();
-  // const [tags, setTags] = useState<string[]>([]);
 
   const tagList = [`잘생김 보장`, `키커요`, `매너 좋음`, `유머`, `옷 잘입음`];
   return (
