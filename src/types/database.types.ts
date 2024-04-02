@@ -214,36 +214,35 @@ export type Database = {
       room: {
         Row: {
           created_at: string;
-          feature: string | null;
-          going_chat: boolean | null;
+          feature: string[];
+          going_chat: boolean;
           leader_id: string | null;
-          location: string | null;
-          member_number: string | null;
+          location: string;
+          member_number: string;
           room_id: string;
-          room_status: string | null;
-          room_title: string | null;
+          room_status: string;
+          room_title: string;
         };
         Insert: {
           created_at?: string;
-          feature?: string | null;
-          going_chat?: boolean | null;
+          feature?: string[];
+          going_chat?: boolean;
           leader_id?: string | null;
-          location?: string | null;
-          member_number?: string | null;
-          room_id?: string;
-          room_status?: string | null;
-          room_title?: string | null;
+          location?: string;
+          member_number?: string;
+          room_status?: string;
+          room_title?: string;
         };
         Update: {
           created_at?: string;
-          feature?: string | null;
-          going_chat?: boolean | null;
+          feature?: string[];
+          going_chat?: boolean;
           leader_id?: string | null;
-          location?: string | null;
-          member_number?: string | null;
+          location?: string;
+          member_number?: string;
           room_id?: string;
-          room_status?: string | null;
-          room_title?: string | null;
+          room_status?: string;
+          room_title?: string;
         };
         Relationships: [
           {

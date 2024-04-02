@@ -26,7 +26,6 @@ function MeetingRoomList() {
   return (
     <>
       <article>
-        {/* <MeetingRoomForm /> */}
         <MeetingRoom list={meetingRoomList} />
         <MeetingRoom list={chattingRoomList} />
       </article>
