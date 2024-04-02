@@ -7,7 +7,13 @@ import ChatHeader from '(@/components/chat/ChatHeader)';
 const ChatPage = async () => {
   const supabase = serverSupabase();
   const { data } = await supabase.auth.getUser();
-  console.log(data);
+  // console.log('유저데이터 =>', data);
+
+  const { data: userData } = await supabase
+    .from('users')
+    .select('user_id, avatar, nickname')
+    .eq('user_id', String(data.user?.id));
+  console.log(userData);
 
   return (
     <div className="max-w-3xl mx-auto md:py-10 h-screen">
@@ -17,7 +23,7 @@ const ChatPage = async () => {
         <Suspense fallback="응애 나 애기 폴백">
           <ChatListParent />
         </Suspense>
-        <ChatInput />
+        <ChatInput userData={userData} />
       </div>
     </div>
   );
