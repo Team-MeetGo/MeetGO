@@ -1,7 +1,6 @@
 import { Message } from '(@/types/chatTypes)';
 import { clientSupabase } from '(@/utils/supabase/client)';
 import { Dropdown, DropdownItem, DropdownMenu, DropdownTrigger } from '@nextui-org/react';
-import { Dispatch, SetStateAction } from 'react';
 import { CiMenuKebab } from 'react-icons/ci';
 
 const ChatDeleteDropDown = ({ msg }: { msg: Message }) => {

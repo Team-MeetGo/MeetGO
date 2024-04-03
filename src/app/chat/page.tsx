@@ -26,7 +26,10 @@ const ChatPage = async () => {
   return (
     <div className="max-w-3xl mx-auto md:py-10 h-screen">
       <div className="h-full border rounded-md flex flex-col border-indigo-600 relative">
-        <ChatHeader />
+        <Suspense fallback="애기 헤더">
+          <ChatHeader />
+        </Suspense>
+
         {/* <div>
           <LoadChatMore />
         </div> */}

@@ -1,9 +1,8 @@
 'use client';
-
-import { RoomData } from '(@/types/chatTypes)';
 import { clientSupabase } from '(@/utils/supabase/client)';
 import { useEffect, useState } from 'react';
 import ChatPresence from './ChatPresence';
+import { RoomData } from '(@/types/chatTypes)';
 
 const ChatHeader = () => {
   async function signOut() {
@@ -13,14 +12,16 @@ const ChatHeader = () => {
   // const roomId = window.location.pathname.substring(1);
   const roomId = 'c9c15e2c-eae0-40d4-ad33-9a05ad4792b5';
   const [roomData, setRoomData] = useState<RoomData[]>();
+  // store에 roomData 지울지? 다른 사람들 필요하면 냅두기
 
   useEffect(() => {
-    const fetchRoomData = async () => {
+    console.log(roomData);
+    const fetchRoomData = async (roomId: string) => {
       const { data } = await clientSupabase.from('room').select('*').eq('room_id', roomId);
-      if (data) setRoomData([...data]);
+      data && setRoomData([...data]);
     };
-    fetchRoomData();
-  }, [roomData]);
+    fetchRoomData(roomId);
+  }, []);
 
   return (
     <div className="h-20 border-b border-indigo-600 flex p-3 justify-between">
@@ -28,7 +29,7 @@ const ChatHeader = () => {
         {roomData && roomData[0]?.room_title}
         <div className="text-base font-normal">
           누가 들어와 있는지 들어갈 부분
-          <ChatPresence />
+          <ChatPresence roomId={roomData && roomData[0]?.room_id} />
         </div>
       </div>
       <div>몇 명 참여중인지</div>

@@ -8,6 +8,7 @@ import ChatScroll from './ChatScroll';
 import NewChatAlert from './NewChatAlert';
 import LoadChatMore from './LoadChatMore';
 import ChatDeleteDropDown from './ChatDeleteDropDown';
+import { chatStore } from '(@/store/chatStore)';
 
 const ChatList = ({ serverMsg, user }: { serverMsg: Message[]; user: User | null }) => {
   const [messages, setMessages] = useState<Message[]>([...serverMsg]);
@@ -16,10 +17,11 @@ const ChatList = ({ serverMsg, user }: { serverMsg: Message[]; user: User | null
   const [newAddedMsgNum, setNewAddedMsgNum] = useState(0);
   const [count, setCount] = useState(1);
   const [hasMore, setHasMore] = useState(messages.length >= ITEM_INTERVAL + 1);
+  const roomData = chatStore((state) => state.roomData);
 
   useEffect(() => {
     const channle = clientSupabase
-      .channel('realtime chat')
+      .channel(`${roomData && roomData[0]?.room_id}`)
       .on(
         'postgres_changes',
         {
@@ -59,10 +61,6 @@ const ChatList = ({ serverMsg, user }: { serverMsg: Message[]; user: User | null
     }
   }, [messages, isScrolling]);
 
-  // useEffect(() => {
-  //   if(messages.length)
-  // }, [])
-
   const handleScroll = () => {
     const scrollBox = scrollRef.current;
     if (scrollBox) {
@@ -92,7 +90,7 @@ const ChatList = ({ serverMsg, user }: { serverMsg: Message[]; user: User | null
     } else {
       setMessages([...(newMsgs ? newMsgs.reverse() : []), ...messages]);
 
-      if (newMsgs.length <= ITEM_INTERVAL + 1) {
+      if (newMsgs.length < ITEM_INTERVAL + 1) {
         setHasMore(false);
       } else {
         setCount((prev) => prev + 1);
