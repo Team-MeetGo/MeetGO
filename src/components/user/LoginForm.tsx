@@ -7,7 +7,7 @@ import { Button } from '@nextui-org/react';
 import { googleLogin, kakaoLogin } from '(@/utils/api/authAPI)';
 import { ValidationModal } from '../common/ValidationModal';
 import { useModalStore } from '(@/store/modalStore)';
-import { authValidation } from '(@/utils/authValidation)';
+import { authValidation } from '(@/utils/Validation)';
 import { IsValidateShow, LoginData } from '(@/types/userTypes)';
 
 const LOGIN_FORM_LIST = [
@@ -31,6 +31,7 @@ const LoginForm = () => {
     userId: true,
     password: true
   });
+  const [isError, setIsError] = useState(false);
   const { openModal } = useModalStore();
 
   const showModal = () => {
@@ -68,8 +69,12 @@ const LoginForm = () => {
         showModal();
         console.log('로그인 성공: ', session);
       } else if (error) throw error;
-    } catch (error) {
-      console.error('에러: ', error);
+    } catch (error: any) {
+      if (error.message.includes('Invalid login')) {
+        setIsError(true);
+      } else {
+        alert('로그인 중 오류가 발생했습니다.');
+      }
     }
   };
 
@@ -96,6 +101,7 @@ const LoginForm = () => {
             로그인
           </Button>
         </form>
+        {isError && <p className="text-red-500 text-[13px] mt-2">아이디 또는 비밀번호가 일치하지 않습니다.</p>}
         <Button
           onClick={() => router.push('/users/join')}
           className="duration-200 bg-white text-[#27272A] border border-[#A1A1AA] p-5 mt-[20px] rounded-lg w-full py-[20px] h-auto text-[16px]"
