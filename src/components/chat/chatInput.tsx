@@ -1,12 +1,15 @@
 'use client';
-import { UserData } from '(@/types)';
+
+import { userStore } from '(@/store/userStore)';
 import { clientSupabase } from '(@/utils/supabase/client)';
 import { Input } from '@nextui-org/react';
 import { useState } from 'react';
 import { FaRegArrowAltCircleUp } from 'react-icons/fa';
 
-const ChatInput = ({ userData }: { userData: UserData }) => {
+const ChatInput = () => {
   const [message, setMessage] = useState('');
+  const userData = userStore((state) => state.user);
+  console.log(userData);
 
   const handleSubmit = async () => {
     if (userData) {
