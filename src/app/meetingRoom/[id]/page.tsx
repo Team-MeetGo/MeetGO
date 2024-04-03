@@ -5,7 +5,6 @@ import { UUID } from 'crypto';
 
 const memberList = ({ params }: { params: { id: UUID } }) => {
   const roomId = params.id;
-  console.log(roomId);
   return (
     <>
       <div className="flex flex-col justify-center w-full align-middle">

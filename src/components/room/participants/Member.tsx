@@ -18,7 +18,6 @@ const Member = ({ params }: { params: { id: UUID } }) => {
     };
     participantsList();
   }, [params]);
-  console.log('memberparticipants', participants);
   return (
     <>
       <RealTimeSubscription participantInsert={participants} />
