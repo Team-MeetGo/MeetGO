@@ -9,6 +9,7 @@ import NewChatAlert from './NewChatAlert';
 import LoadChatMore from './LoadChatMore';
 import ChatDeleteDropDown from './ChatDeleteDropDown';
 import { chatStore } from '(@/store/chatStore)';
+import { Button, Tooltip } from '@nextui-org/react';
 
 const ChatList = ({ serverMsg, user }: { serverMsg: Message[]; user: User | null }) => {
   const [messages, setMessages] = useState<Message[]>([...serverMsg]);
@@ -150,15 +151,31 @@ const MyChat = ({ msg }: { msg: Message }) => {
           <p>{getformattedDate(msg.created_at)}</p>
         </div>
       </div>
-      <div className="h-14 w-14 bg-indigo-600 rounded-full my-auto">{msg.avatar}</div>
+      <Tooltip content="여기 컴포넌트">
+        <div className="h-14 w-14 bg-indigo-600 rounded-full my-auto">{msg.avatar}</div>
+      </Tooltip>
     </div>
   );
 };
 
 const OthersChat = ({ msg }: { msg: Message }) => {
+  const roomId = 'c9c15e2c-eae0-40d4-ad33-9a05ad4792b5';
+  useEffect(() => {
+    const fetchParticipants = async () => {
+      const { data: userIds, error } = await clientSupabase
+        .from('participants')
+        .select('user_id')
+        .eq('room_id', roomId);
+      console.log('채팅방 멤버들', userIds);
+    };
+    fetchParticipants();
+  });
+
   return (
     <div className="flex gap-4" key={msg.message_id}>
-      <div className="h-14 w-14 bg-indigo-600 rounded-full my-auto">{msg.avatar}</div>
+      <Tooltip content="I am a tooltip">
+        <div className="h-14 w-14 bg-indigo-600 rounded-full my-auto">{msg.avatar}</div>
+      </Tooltip>
 
       <div className="w-80 h-24 flex flex-col gap-1">
         <div className="font-bold">{msg.nickname}</div>

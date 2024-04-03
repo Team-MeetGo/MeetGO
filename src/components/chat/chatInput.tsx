@@ -9,8 +9,6 @@ import { FaRegArrowAltCircleUp } from 'react-icons/fa';
 const ChatInput = () => {
   const [message, setMessage] = useState('');
   const userData = userStore((state) => state.user);
-  console.log(userData);
-
   const handleSubmit = async () => {
     if (userData) {
       const { error } = await clientSupabase.from('messages').insert({

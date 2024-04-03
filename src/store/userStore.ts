@@ -1,5 +1,4 @@
 import { UserDataFromTable } from '(@/types/userTypes)';
-import { User } from '@supabase/supabase-js';
 import { create } from 'zustand';
 
 type UserState = {

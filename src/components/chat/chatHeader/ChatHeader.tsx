@@ -15,7 +15,6 @@ const ChatHeader = () => {
   // store에 roomData 지울지? 다른 사람들 필요하면 냅두기
 
   useEffect(() => {
-    console.log(roomData);
     const fetchRoomData = async (roomId: string) => {
       const { data } = await clientSupabase.from('room').select('*').eq('room_id', roomId);
       data && setRoomData([...data]);
@@ -32,7 +31,7 @@ const ChatHeader = () => {
           <ChatPresence roomId={roomId} />
         </div>
       </div>
-      <div>몇 명 참여중인지</div>
+      <div></div>
       <button onClick={signOut}>로그아웃</button>
     </div>
   );
