@@ -1,4 +1,4 @@
-import { Message } from '(@/types)';
+import { Message } from '(@/types/chatTypes)';
 import { clientSupabase } from '(@/utils/supabase/client)';
 import { Dropdown, DropdownItem, DropdownMenu, DropdownTrigger } from '@nextui-org/react';
 import { CiMenuKebab } from 'react-icons/ci';

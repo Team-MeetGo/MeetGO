@@ -1,5 +1,5 @@
 'use client';
-import { UserData } from '(@/types)';
+import { UserData } from '(@/types/chatTypes)';
 import { clientSupabase } from '(@/utils/supabase/client)';
 import { Input } from '@nextui-org/react';
 import { useState } from 'react';

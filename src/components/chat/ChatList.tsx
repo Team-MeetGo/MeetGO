@@ -1,14 +1,16 @@
 'use client';
-import { Message } from '(@/types)';
+import { Message } from '(@/types/chatTypes)';
 import { getformattedDate } from '(@/utils)';
 import { clientSupabase } from '(@/utils/supabase/client)';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import ChatDropDownMenu from './ChatDropDownMenu';
 import { User } from '@supabase/supabase-js';
+import ChatScroll from './ChatScroll';
 
 const ChatList = ({ serverMsg, user }: { serverMsg: Message[]; user: User | null }) => {
   const [messages, setMessages] = useState<Message[]>([...serverMsg]);
-
+  const scrollRef = useRef() as React.MutableRefObject<HTMLDivElement>;
+  const [isScrolling, setIsScrolling] = useState(false);
   useEffect(() => {
     const channle = clientSupabase
       .channel('realtime chat')
@@ -32,16 +34,42 @@ const ChatList = ({ serverMsg, user }: { serverMsg: Message[]; user: User | null
     };
   }, [messages, setMessages]);
 
+  useEffect(() => {
+    const scrollBox = scrollRef.current;
+    if (scrollBox) {
+      scrollBox.scrollTop = scrollBox.scrollHeight;
+    }
+  }, [messages]);
+
+  const handleScroll = () => {
+    const scrollBox = scrollRef.current;
+    if (scrollBox) {
+      const isScroll = scrollBox.scrollTop < scrollBox.scrollHeight - scrollBox.clientHeight - 10;
+      setIsScrolling(isScroll);
+    }
+  };
+
+  const handleScrollDown = () => {
+    scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
+  };
+
   return (
-    <div className=" w-full flex-1 bg-slate-500 p-5 flex flex-col gap-8 overflow-y-auto">
-      {messages?.map((msg, idx) => {
-        if (msg.send_from === user?.id) {
-          return <MyChat msg={msg} key={idx} />;
-        } else {
-          return <OthersChat msg={msg} key={idx} />;
-        }
-      })}
-    </div>
+    <>
+      <div
+        className="w-full h-full flex-1 bg-slate-500 p-5 flex flex-col gap-8 overflow-y-auto scroll-smooth"
+        ref={scrollRef}
+        onScroll={handleScroll}
+      >
+        {messages?.map((msg, idx) => {
+          if (msg.send_from === user?.id) {
+            return <MyChat msg={msg} key={idx} />;
+          } else {
+            return <OthersChat msg={msg} key={idx} />;
+          }
+        })}
+      </div>
+      {isScrolling ? <ChatScroll handleScrollDown={handleScrollDown} /> : <></>}
+    </>
   );
 };
 

@@ -3,6 +3,8 @@ import ChatInput from '../../components/chat/ChatInput';
 import { serverSupabase } from '(@/utils/supabase/server)';
 import ChatHeader from '(@/components/chat/ChatHeader)';
 import ChatList from '(@/components/chat/ChatList)';
+import { FaArrowCircleDown } from 'react-icons/fa';
+import ChatScroll from '(@/components/chat/ChatScroll)';
 
 const ChatPage = async () => {
   const supabase = serverSupabase();
@@ -20,7 +22,7 @@ const ChatPage = async () => {
 
   return (
     <div className="max-w-3xl mx-auto md:py-10 h-screen">
-      <div className="h-full border rounded-md flex flex-col border-indigo-600">
+      <div className="h-full border rounded-md flex flex-col border-indigo-600 relative">
         <ChatHeader />
         <Suspense fallback="응애 나 애기 폴백">
           <ChatList serverMsg={serverMsg ?? []} user={user} />
