@@ -7,11 +7,12 @@ import { useEffect, useState } from 'react';
 type ParticipantType = Database['public']['Tables']['participants']['Row'];
 
 const RealTimeSubscription = ({ participantInsert }: { participantInsert: ParticipantType[] }) => {
-  console.log('adad');
-  const [participants, setParticipants] = useState<ParticipantType[]>(participantInsert);
+  const [participants, setParticipants] = useState<ParticipantType[]>([]);
 
   useEffect(() => {
-    console.log('use');
+    setParticipants(participantInsert);
+  }, [participantInsert]);
+  useEffect(() => {
     const channels = clientSupabase
       .channel('custom-insert-channel')
       .on(
@@ -22,13 +23,10 @@ const RealTimeSubscription = ({ participantInsert }: { participantInsert: Partic
           table: 'participants'
         },
         (payload) => {
-          console.log('payload', payload);
           setParticipants([...participants, payload.new as ParticipantType]);
         }
       )
-      .subscribe((a) => {
-        console.log('a', a);
-      });
+      .subscribe();
 
     const deletechannels = clientSupabase
       .channel('custom-delete-channel')

@@ -22,8 +22,6 @@ export const getUserNickname = async () => {
   return { status: 'success', result: user?.user_metadata.nickname } as const;
 };
 
-// 캐싱처리 하고싶다 = 리액트 쿼리로 쿼리키를 만들어서 일정시간 보관?
-
 export const googleLogin = async () => {
   const { data, error } = await clientSupabase.auth.signInWithOAuth({
     provider: 'google',

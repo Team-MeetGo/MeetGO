@@ -5,7 +5,6 @@ import { UUID } from 'crypto';
 
 const memberList = ({ params }: { params: { id: UUID } }) => {
   const roomId = params.id;
-  console.log(roomId);
   return (
     <>
       <div className="flex flex-col justify-center w-full align-middle">
@@ -42,7 +41,7 @@ const memberList = ({ params }: { params: { id: UUID } }) => {
             <div className="h-28 w-28 bg-indigo-600 rounded-full my-auto"></div>
             <div className="h-28 w-28 bg-indigo-600 rounded-full my-auto"></div>
           </div>
-          <AcceptanceRoomButtons />
+          <AcceptanceRoomButtons roomId={roomId} />
         </div>
       </div>
     </>

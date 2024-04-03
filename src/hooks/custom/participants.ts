@@ -1,4 +1,5 @@
 import { clientSupabase } from '(@/utils/supabase/client)';
+import { UUID } from 'crypto';
 
 function participants() {
   const getFemale = async () => {
@@ -9,6 +10,14 @@ function participants() {
       .order('created_at', { ascending: false });
     if (error) return alert('error 발생!');
     return getFemale;
+  };
+
+  const totalMember = async (room_id: string) => {
+    let { data: totalParticipants, error } = await clientSupabase
+      .from('participants')
+      .select('*')
+      .eq('room_id', room_id);
+    return totalParticipants;
   };
 
   const deleteMember = async (user_id: string) => {
@@ -31,7 +40,7 @@ function participants() {
     return addNewMember();
   };
 
-  return { getFemale, deleteMember, addMemeber, addMemeberHandler };
+  return { getFemale, deleteMember, addMemeber, addMemeberHandler, totalMember };
 }
 
 export default participants;
