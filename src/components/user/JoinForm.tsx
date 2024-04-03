@@ -88,7 +88,7 @@ const JoinForm = () => {
       } else if (error) {
         throw error;
       }
-    } catch (error) {
+    } catch (error: any) {
       if (error.message.includes('already exists')) {
         alert('이미 존재하는 계정입니다.');
       } else {
