@@ -1,29 +1,28 @@
 'use client';
+import { useTagStore } from '(@/store/zustand)';
 import { clientSupabase } from '(@/utils/supabase/client)';
 import { Button, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, useDisclosure } from '@nextui-org/react';
 import { useState } from 'react';
 import TagList from './MeetingRoomFeatureTags';
-import { useTagStore } from '(@/store/zustand)';
 
 import type { Database } from '(@/types/database.types)';
-type MeetingRoom = Database['public']['Tables']['room']['Row'];
+type NextMeetingRoomType = Database['public']['Tables']['room']['Insert'];
 
-function EditMeetingRoom({ room }: { room: MeetingRoom }) {
-  const { isOpen, onOpen, onOpenChange } = useDisclosure();
-  const [title, setTitle] = useState(room.room_title);
-  const [location, setLocation] = useState(room.location);
-  const [memberNumber, setMemberNumber] = useState(room.member_number);
+function MeetingRoomForm() {
   const { tags, resetTags } = useTagStore();
+  const { isOpen, onOpen, onOpenChange } = useDisclosure();
+  const [title, setTitle] = useState('');
+  const [location, setLocation] = useState('');
+  const [memberNumber, setMemberNumber] = useState('');
 
-  const editMeetingRoom = async () => {
-    if (!title || !tags || !location || memberNumber === '인원수') {
-      return alert('모든 항목은 필수입니다.');
-    }
-    const { data, error } = await clientSupabase
-      .from('room')
-      .update({ room_title: title, feature: tags, location: location, member_number: memberNumber })
-      .eq('room_id', room.room_id)
-      .select();
+  const nextMeetingRoom: NextMeetingRoomType = {
+    feature: tags,
+    going_chat: false,
+    leader_id: '1a083af9-53f5-42b3-88e9-2f7d3a19a9b0', // 이후 로그인된 유저 아이디로 대체될 예정입니다.
+    location,
+    member_number: memberNumber,
+    room_status: '모집중',
+    room_title: title
   };
 
   const cancelMakingMeetingRoom = () => {
@@ -33,10 +32,27 @@ function EditMeetingRoom({ room }: { room: MeetingRoom }) {
     resetTags();
   };
 
+  const addMeetingRoom = async () => {
+    if (!title || !tags || !location || memberNumber === '인원수') {
+      return alert('모든 항목은 필수입니다.');
+    }
+
+    const { data: insertMeetingRoom, error: insertMeetingRoomError } = await clientSupabase
+      .from('room')
+      .insert([nextMeetingRoom])
+      .select();
+
+    if (insertMeetingRoomError) {
+      console.log(insertMeetingRoomError);
+      return;
+    }
+    alert('모임이 생성되었습니다.');
+  };
+  console.log(...tags);
   return (
     <>
-      <Button onPress={onOpen} className="bg-purple-400">
-        수정
+      <Button onPress={onOpen} className="bg-violet-300 m-4">
+        방 만들기
       </Button>
       <Modal
         backdrop="opaque"
@@ -66,8 +82,8 @@ function EditMeetingRoom({ room }: { room: MeetingRoom }) {
         <ModalContent>
           {(onClose) => (
             <>
-              <ModalHeader className="flex flex-col gap-1">방 내용 수정</ModalHeader>
-              <form onSubmit={() => editMeetingRoom()}>
+              <ModalHeader className="flex flex-col gap-1">방 만들기</ModalHeader>
+              <form onSubmit={() => addMeetingRoom()}>
                 <ModalBody>
                   <input value={title} onChange={(e) => setTitle(e.target.value)} placeholder="title" maxLength={15} />
                   <TagList />
@@ -90,7 +106,7 @@ function EditMeetingRoom({ room }: { room: MeetingRoom }) {
                     취소
                   </Button>
                   <Button type="submit" className="bg-violet-300" onPress={onClose}>
-                    수정
+                    등록
                   </Button>
                 </ModalFooter>
               </form>
@@ -102,4 +118,4 @@ function EditMeetingRoom({ room }: { room: MeetingRoom }) {
   );
 }
 
-export default EditMeetingRoom;
+export default MeetingRoomForm;

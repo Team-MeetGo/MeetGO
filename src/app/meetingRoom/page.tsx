@@ -1,7 +1,13 @@
+import MeetingRoomForm from '(@/components/room/MeetingRoomForm)';
 import MeetingRoomList from '(@/components/room/MeetingRoomList)';
 
 const LobbyPage = () => {
-  return <MeetingRoomList />;
+  return (
+    <>
+      <MeetingRoomForm />
+      <MeetingRoomList />
+    </>
+  );
 };
 
 export default LobbyPage;
