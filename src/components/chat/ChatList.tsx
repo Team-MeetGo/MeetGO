@@ -2,7 +2,7 @@
 import { Message } from '(@/types/chatTypes)';
 import { ITEM_INTERVAL, getFromTo, getformattedDate } from '(@/utils)';
 import { clientSupabase } from '(@/utils/supabase/client)';
-import { Dispatch, SetStateAction, useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { User } from '@supabase/supabase-js';
 import ChatScroll from './ChatScroll';
 import NewChatAlert from './NewChatAlert';
@@ -64,6 +64,7 @@ const ChatList = ({ serverMsg, user }: { serverMsg: Message[]; user: User | null
   const handleScrollDown = () => {
     scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
   };
+  // insert 할 때 없어졌으면 좋겠는데..
 
   const fetchMoreMsg = async () => {
     const { from, to } = getFromTo(count, ITEM_INTERVAL);
@@ -76,9 +77,13 @@ const ChatList = ({ serverMsg, user }: { serverMsg: Message[]; user: User | null
     if (error) {
       alert('이전 메세지를 불러오는 데에 오류가 발생했습니다.');
     } else {
-      console.log(newMsgs);
-      setCount((prev) => prev + 1);
       setMessages([...(newMsgs ? newMsgs.reverse() : []), ...messages]);
+      if (newMsgs.length < ITEM_INTERVAL + 1) {
+        setHasMore(false);
+      } else {
+        console.log(newMsgs);
+        setCount((prev) => prev + 1);
+      }
     }
   };
   // 더보기를 누르면 다시 렌더링이 되면서 useEffect가 실행되어 scrollTop이랑 scrollHeight가 같아져야 하는데(스크롤다운) 왜 스크롤이 안내려가지는지?
@@ -96,7 +101,7 @@ const ChatList = ({ serverMsg, user }: { serverMsg: Message[]; user: User | null
 
         {messages?.map((msg, idx) => {
           if (msg.send_from === user?.id) {
-            return <MyChat msg={msg} messages={messages} key={idx} setHasMore={setHasMore} />;
+            return <MyChat msg={msg} key={idx} />;
           } else {
             return <OthersChat msg={msg} key={idx} />;
           }
@@ -121,21 +126,13 @@ const ChatList = ({ serverMsg, user }: { serverMsg: Message[]; user: User | null
 
 export default ChatList;
 
-const MyChat = ({
-  msg,
-  messages,
-  setHasMore
-}: {
-  msg: Message;
-  messages: Message[];
-  setHasMore: Dispatch<SetStateAction<boolean>>;
-}) => {
+const MyChat = ({ msg }: { msg: Message }) => {
   return (
     <div className="flex gap-4 ml-auto">
       <div className="w-80 h-24 flex flex-col gap-1">
         <div className="font-bold ml-auto">{msg.nickname}</div>
         <div className="flex gap-2 ml-auto">
-          <ChatDeleteDropDown msg={msg} messages={messages} setHasMore={setHasMore} />
+          <ChatDeleteDropDown msg={msg} />
           <div className="border rounded-md py-3 px-5 h-full text-right">{msg.message}</div>
         </div>
         <div className="mt-auto text-slate-100 text-xs ml-auto">

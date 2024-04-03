@@ -4,21 +4,10 @@ import { Dropdown, DropdownItem, DropdownMenu, DropdownTrigger } from '@nextui-o
 import { Dispatch, SetStateAction } from 'react';
 import { CiMenuKebab } from 'react-icons/ci';
 
-const ChatDeleteDropDown = ({
-  msg,
-  messages,
-  setHasMore
-}: {
-  msg: Message;
-  messages: Message[];
-  setHasMore: Dispatch<SetStateAction<boolean>>;
-}) => {
+const ChatDeleteDropDown = ({ msg }: { msg: Message }) => {
   const handleDeleteMessage = async () => {
     const { error } = await clientSupabase.from('messages').delete().eq('message_id', msg.message_id);
     if (error) alert('채팅 삭제 중 오류가 발생하였습니다.');
-    if (messages.length === 0) {
-      setHasMore(false);
-    }
   };
   return (
     <Dropdown>
