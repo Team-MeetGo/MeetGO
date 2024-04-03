@@ -1,17 +1,60 @@
 'use client';
-
 import participants from '(@/hooks/custom/participants)';
+import meetingRoomHandler from '(@/hooks/custom/room)';
 import { clientSupabase } from '(@/utils/supabase/client)';
-import { UUID } from 'crypto';
 import { useRouter } from 'next/navigation';
+import { useEffect, useState } from 'react';
 
-function AcceptanceRoomButtons() {
+import type { UUID } from 'crypto';
+import { Database } from '(@/types/database.types)';
+type ParticipantType = Database['public']['Tables']['participants']['Row'];
+
+const AcceptanceRoomButtons = ({ roomId }: { roomId: UUID }) => {
   const router = useRouter();
-  const { deleteMember } = participants();
+  const [maximumParticipants, setMaximumParticipants] = useState(0);
+  const [totalMemberList, setTotalMemberList] = useState<ParticipantType[]>();
+  const { deleteMember, totalMember } = participants();
+  const { getRoomInformation } = meetingRoomHandler();
+
+  useEffect(() => {
+    const getTotalMemeber = async () => {
+      const totalMemberList = await totalMember(roomId);
+      if (!totalMemberList) return;
+      setTotalMemberList(totalMemberList);
+    };
+    const getSingleRoom = async () => {
+      const singleRoom = await getRoomInformation(roomId);
+      if (!singleRoom) {
+        return;
+      }
+      if (singleRoom[0].member_number === '1:1') {
+        setMaximumParticipants(2);
+      } else if (singleRoom[0].member_number === '2:2') {
+        setMaximumParticipants(4);
+      } else if (singleRoom[0].member_number === '3:3') {
+        setMaximumParticipants(6);
+      } else if (singleRoom[0].member_number === '4:4') {
+        setMaximumParticipants(8);
+      }
+      if (!totalMemberList) return;
+      if (totalMemberList.length > maximumParticipants) {
+        return alert('잘못된 접근입니다');
+      }
+    };
+    getSingleRoom();
+    getTotalMemeber();
+  }, []);
+
+  const gotoChattingRoom = async () => {
+    const { data } = await clientSupabase.auth.getUser();
+    if (!data.user) {
+      return alert('잘못된 접근입니다.');
+    }
+    router.push(`/chat`);
+  };
 
   const gotoMeetingRoom = async () => {
     const { data } = await clientSupabase.auth.getUser();
-    console.log('유저데이터 =>', data.user);
     if (!data.user) {
       return alert('잘못된 접근입니다.');
     }
@@ -30,14 +73,13 @@ function AcceptanceRoomButtons() {
         나가기
       </button>
       <button
-        onClick={() => {
-          router.push('/chat');
-        }}
+        disabled={totalMemberList?.length === maximumParticipants ? false : true}
+        onClick={() => gotoChattingRoom()}
       >
-        chat on going
+        go to chat
       </button>
     </div>
   );
-}
+};
 
 export default AcceptanceRoomButtons;

@@ -5,6 +5,7 @@ import { clientSupabase } from '(@/utils/supabase/client)';
 import Image from 'next/image';
 import ReviewEditModal from './ReviewEditModal';
 import { useRouter } from 'next/navigation';
+import ReviewBar from './ReviewBar';
 
 export type ReviewDetailType = {
   review_title: string | null;
@@ -23,7 +24,9 @@ const ReviewDetail = ({ review_id }: Props) => {
   const router = useRouter();
 
   useEffect(() => {
-    getReviewDetail(review_id);
+    if (review_id) {
+      getReviewDetail(review_id);
+    }
   });
 
   async function getReviewDetail(review_id: string) {
@@ -65,6 +68,7 @@ const ReviewDetail = ({ review_id }: Props) => {
         <div>{reviewDetail?.review_title}</div>
         <div>{reviewDetail?.user_id}</div>
         <div>{reviewDetail?.created_at}</div>
+        <ReviewBar review_id={review_id} />
         <div>
           {reviewDetail?.image_url ? (
             <Image src={reviewDetail?.image_url} alt="reviewImage" height={300} width={300} />

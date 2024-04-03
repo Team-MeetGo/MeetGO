@@ -49,7 +49,6 @@ const Member = ({ params }: { params: { id: UUID } }) => {
       {participants.map((member) => (
         <div key={member.part_id}>{member.user_id} </div>
       ))}
-      {/* <RealTimeSubscription participantInsert={participants} /> */}
     </>
   );
 };

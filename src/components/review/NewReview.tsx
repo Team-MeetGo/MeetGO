@@ -6,7 +6,7 @@ import { clientSupabase } from '(@/utils/supabase/client)';
 import React, { ChangeEvent, FormEvent, useState } from 'react';
 import Image from 'next/image';
 import { FaPhotoVideo } from 'react-icons/fa';
-import defaultImg from '../../../public/defaultImg.jpg';
+import defaultImg from '../../../public/reviewDefaultImg.png';
 
 const NewReview = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
