@@ -48,7 +48,6 @@ function MeetingRoomForm() {
     }
     alert('모임이 생성되었습니다.');
   };
-  console.log(...tags);
   return (
     <>
       <Button onPress={onOpen} className="bg-violet-300 m-4">
