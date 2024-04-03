@@ -1,5 +1,3 @@
-export default function Home() {
-  return <main>
-    메인페이지입니다.
-  </main>;
+export default async function Home() {
+  return <main>메인페이지 입니다.</main>;
 }

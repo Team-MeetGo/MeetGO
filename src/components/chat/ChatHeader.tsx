@@ -29,7 +29,7 @@ const ChatHeader = () => {
         {roomData && roomData[0]?.room_title}
         <div className="text-base font-normal">
           누가 들어와 있는지 들어갈 부분
-          <ChatPresence roomId={roomData && roomData[0]?.room_id} />
+          <ChatPresence roomId={roomId} />
         </div>
       </div>
       <div>몇 명 참여중인지</div>

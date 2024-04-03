@@ -1,12 +1,8 @@
 'use client';
-import { chatStore } from '(@/store/chatStore)';
-import { RoomData } from '(@/types/chatTypes)';
 import { clientSupabase } from '(@/utils/supabase/client)';
 import { useEffect } from 'react';
 
 const ChatPresence = ({ roomId }: { roomId: string | undefined }) => {
-  console.log(roomId);
-
   useEffect(() => {
     if (roomId) {
       console.log(roomId);
