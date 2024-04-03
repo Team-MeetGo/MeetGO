@@ -4,7 +4,7 @@ import { emailCodeAPI, emailConfirmAPI, schoolConfirmAPI } from '(@/utils/api/em
 import { useState } from 'react';
 import { schoolValidation } from '(@/utils/Validation)';
 
-const SchoolForm = () => {
+const SchoolForm = ({ userSchoolEmail, userSchoolName, isValidate }) => {
   const [schoolEmail, setSchoolEmail] = useState('');
   const [univName, setUnivName] = useState('');
   const [code, setCode] = useState('');
@@ -81,38 +81,55 @@ const SchoolForm = () => {
         <label className="block text-sm font-medium mb-1" htmlFor="schoolEmail">
           학교 이메일
         </label>
-        <input
-          className="mr-2 border p-3 rounded-md"
-          name="schoolEmail"
-          id="schoolEmail"
-          type="email"
-          value={schoolEmail}
-          placeholder=""
-          onChange={onChangeInput}
-        />
-        {validationMessages.schoolEmail && (
-          <p className="text-red-500 text-[13px] mt-2">{validationMessages.schoolEmail}</p>
+        {isValidate ? (
+          <p>{userSchoolEmail}</p>
+        ) : (
+          <>
+            <input
+              className="mr-2 border p-3 rounded-md"
+              name="schoolEmail"
+              id="schoolEmail"
+              type="email"
+              value={schoolEmail}
+              placeholder=""
+              onChange={onChangeInput}
+            />
+            {validationMessages.schoolEmail && (
+              <p className="text-red-500 text-[13px] mt-2">{validationMessages.schoolEmail}</p>
+            )}
+          </>
         )}
       </div>
       <div className="flex flex-col">
         <label className="block text-sm font-medium mb-1" htmlFor="univName">
           학교명
         </label>
-        <input
-          className="mr-2 border p-3 rounded-md"
-          name="univName"
-          id="univName"
-          type="text"
-          value={univName}
-          placeholder=""
-          onChange={onChangeInput}
-        />
-        {validationMessages.univName && <p className="text-red-500 text-[13px] mt-2">{validationMessages.univName}</p>}
+        {isValidate ? (
+          <p>{userSchoolName}</p>
+        ) : (
+          <>
+            <input
+              className="mr-2 border p-3 rounded-md"
+              name="univName"
+              id="univName"
+              type="text"
+              value={univName}
+              placeholder=""
+              onChange={onChangeInput}
+            />
+            {validationMessages.univName && (
+              <p className="text-red-500 text-[13px] mt-2">{validationMessages.univName}</p>
+            )}
+          </>
+        )}
       </div>
-      <button onClick={onSubmitEmailConfirm} disabled={isCodeSent}>
-        인증
-      </button>
-      <p>인증완료✔️</p>
+      {isValidate ? (
+        <p>인증완료✔️</p>
+      ) : (
+        <button onClick={onSubmitEmailConfirm} disabled={isCodeSent}>
+          인증
+        </button>
+      )}
       {isCodeSent && (
         <div className="flex flex-col">
           <label className="block text-sm font-medium mb-1" htmlFor="schoolEmail">
