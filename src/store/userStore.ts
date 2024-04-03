@@ -1,6 +1,8 @@
+import { UserDataFromTable } from '(@/types/userTypes)';
 import { User } from '@supabase/supabase-js';
 import { create } from 'zustand';
 
+<<<<<<< HEAD
 type UserStoreType = {
   login_email: string;
   nickname: string;
@@ -45,4 +47,14 @@ export const useUserStore = create<UserStoreType>((set) => ({
   setIntro: (newIntro) => set({ intro: newIntro }),
   setFavorite: (newFavorite) => set({ favorite: newFavorite }),
   setIsValidate: (newIsValidate) => set({ isValidate: newIsValidate })
+=======
+type UserState = {
+  user: UserDataFromTable[] | null;
+  setUser: (data: UserDataFromTable[]) => void;
+};
+
+export const userStore = create<UserState>()((set) => ({
+  user: null,
+  setUser: (data) => set({ user: data })
+>>>>>>> af317ef5f6986a914044a9924a672f56f7db216b
 }));
