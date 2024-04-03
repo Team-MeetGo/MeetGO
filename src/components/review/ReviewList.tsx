@@ -36,14 +36,6 @@ const ReviewList: React.FC = () => {
     }
   }
 
-  // async function getRecentReview() {
-  //   let { data } = await clientSupabase.from('review').select('*');
-  //   if (data) {
-  //     data.sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
-  //     setReviewData(data);
-  //   }
-  // }
-
   const handleSelectionChange = (keys: Selection) => {
     setSelected(keys);
 

@@ -23,10 +23,6 @@ const ReviewDetail = ({ review_id }: Props) => {
   const [reviewDetail, setReviewDetail] = useState<ReviewDetailType | null>(null);
   const router = useRouter();
 
-  // useEffect(() => {
-  //   getReviewDetail(review_id);
-  // });
-
   useEffect(() => {
     if (review_id) {
       getReviewDetail(review_id);
