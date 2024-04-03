@@ -33,3 +33,17 @@ export async function schoolConfirmAPI(univName: string): Promise<EmailConfirmAP
     throw new Error('API 호출 실패');
   }
 }
+
+export async function emailCodeAPI(email: string, univName: string, code: number): Promise<EmailConfirmAPIProps> {
+  try {
+    const response = await axios.post('https://univcert.com/api/v1/certifycode', {
+      key: process.env.NEXT_PUBLIC_EMAIL_API_KEY,
+      email,
+      univName,
+      code
+    });
+    return response.data;
+  } catch (error) {
+    throw new Error('API 호출 실패');
+  }
+}
