@@ -10,6 +10,7 @@ import LoadChatMore from './LoadChatMore';
 import ChatDeleteDropDown from './ChatDeleteDropDown';
 import { chatStore } from '(@/store/chatStore)';
 import { Button, Tooltip } from '@nextui-org/react';
+import { UserDataFromTable } from '(@/types/userTypes)';
 
 const ChatList = ({ serverMsg, user }: { serverMsg: Message[]; user: User | null }) => {
   const [messages, setMessages] = useState<Message[]>([...serverMsg]);
@@ -160,20 +161,40 @@ const MyChat = ({ msg }: { msg: Message }) => {
 
 const OthersChat = ({ msg }: { msg: Message }) => {
   const roomId = 'c9c15e2c-eae0-40d4-ad33-9a05ad4792b5';
+  const [usersData, setUsersData] = useState<UserDataFromTable[] | null>();
   useEffect(() => {
     const fetchParticipants = async () => {
-      const { data: userIds, error } = await clientSupabase
+      const { data: userIds, error: userIdErr } = await clientSupabase
         .from('participants')
         .select('user_id')
         .eq('room_id', roomId);
       console.log('채팅방 멤버들', userIds);
+
+      if (userIds) {
+        const users = [];
+        for (const id of userIds) {
+          const { data, error: usersDataErr } = await clientSupabase
+            .from('users')
+            .select('*')
+            .eq('user_id', String(id.user_id));
+          console.log(data);
+          if (data) users.push(...data);
+        }
+        console.log('users', users);
+        setUsersData([...users]);
+      }
     };
     fetchParticipants();
-  });
+  }, []);
+
+  const showThatUser = (userId: string | null) => {
+    const thatUserData = usersData?.find((data) => data.user_id === userId);
+    return thatUserData;
+  };
 
   return (
     <div className="flex gap-4" key={msg.message_id}>
-      <Tooltip content="I am a tooltip">
+      <Tooltip content={<div>{showThatUser(msg.send_from)?.nickname}</div>}>
         <div className="h-14 w-14 bg-indigo-600 rounded-full my-auto">{msg.avatar}</div>
       </Tooltip>
 
