@@ -9,7 +9,7 @@ export const ValidationModal = () => {
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 z-40 flex justify-center items-center">
-      <div className="bg-white px-[50px] py-[30px] rounded-2xl z-50">
+      <div className="bg-white px-[50px] py-[30px] rounded-xl z-50">
         <h2>{name}</h2>
         <pre className="text-[18px]">{text}</pre>
         <div>
@@ -27,7 +27,7 @@ export const ValidationModal = () => {
                   className="pt-2 text-[#8F5DF4] m-auto w-full text-[16px] font-semibold"
                   onClick={(e) => {
                     e.preventDefault();
-                    if (type === 'alert') {
+                    if (type === 'alert' && text === '로그인 되었습니다.') {
                       closeModal();
                       router.replace('/');
                     } else {
