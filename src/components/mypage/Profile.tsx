@@ -4,6 +4,7 @@ import { emailConfirmAPI } from '(@/utils/api/emailConfirmAPI)';
 import { Chip, Select, SelectItem } from '@nextui-org/react';
 import { useState } from 'react';
 import SchoolForm from './SchoolForm';
+import { getUserId } from '(@/utils/api/authAPI)';
 
 const Profile = () => {
   const [selected, setSelected] = useState<Set<string>>(new Set());
