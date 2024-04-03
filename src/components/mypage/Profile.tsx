@@ -3,31 +3,10 @@
 import { emailConfirmAPI } from '(@/utils/api/emailConfirmAPI)';
 import { Chip, Select, SelectItem } from '@nextui-org/react';
 import { useState } from 'react';
+import SchoolForm from './SchoolForm';
 
 const Profile = () => {
-  const [schoolEmail, setSchoolEmail] = useState('');
-  const [univName, setUnivName] = useState('');
-
   const [selected, setSelected] = useState<Set<string>>(new Set());
-
-  const handleEmailConfirm = async (schoolEmail: string, univName: string) => {
-    if (!schoolEmail || !univName) {
-      console.log(schoolEmail, univName);
-      alert('이메일과 학교명을 모두 입력해주세요.');
-      return;
-    }
-    try {
-      const response = await emailConfirmAPI(schoolEmail, univName, true);
-      if (response.success) {
-        console.log(response);
-        alert('인증 성공');
-      } else {
-        alert('인증 실패');
-      }
-    } catch (error: any) {
-      alert(error.message);
-    }
-  };
 
   return (
     <div className="max-w-4xl mx-auto p-6 bg-white">
@@ -43,35 +22,7 @@ const Profile = () => {
           <div className="w-32 h-32 bg-gray-300" />
         </div>
       </div>
-      <div className="mb-6 flex ">
-        <div className="flex flex-col">
-          <label className="block text-sm font-medium mb-1" htmlFor="schoolEmail">
-            학교 이메일
-          </label>
-          <input
-            className="mr-2 border p-3 rounded-md"
-            id="schoolEmail"
-            type="email"
-            value={schoolEmail}
-            placeholder=""
-            onChange={(e) => setSchoolEmail(e.target.value)}
-          />
-        </div>
-        <div className="flex flex-col">
-          <label className="block text-sm font-medium mb-1" htmlFor="univName">
-            학교명
-          </label>
-          <input
-            className="mr-2 border p-3 rounded-md"
-            id="univName"
-            type="text"
-            value={univName}
-            placeholder=""
-            onChange={(e) => setUnivName(e.target.value)}
-          />
-        </div>
-        <button onClick={() => handleEmailConfirm(schoolEmail, univName)}>인증</button>
-      </div>
+      <SchoolForm />
       <div className="mb-6">
         <label className="block text-sm font-medium mb-1" htmlFor="kakaoId">
           카카오톡 ID

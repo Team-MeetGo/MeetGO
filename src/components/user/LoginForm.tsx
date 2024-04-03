@@ -7,7 +7,7 @@ import { Button } from '@nextui-org/react';
 import { googleLogin, kakaoLogin } from '(@/utils/api/authAPI)';
 import { ValidationModal } from '../common/ValidationModal';
 import { useModalStore } from '(@/store/modalStore)';
-import { authValidation } from '(@/utils/authValidation)';
+import { authValidation } from '(@/utils/Validation)';
 import { IsValidateShow, LoginData } from '(@/types/userTypes)';
 
 const LOGIN_FORM_LIST = [

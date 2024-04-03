@@ -4,7 +4,7 @@ import { clientSupabase } from '(@/utils/supabase/client)';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { Button } from '@nextui-org/react';
-import { authValidation } from '(@/utils/authValidation)';
+import { authValidation } from '(@/utils/Validation)';
 import { IsValidateShow } from '(@/types/userTypes)';
 import { ValidationModal } from '../common/ValidationModal';
 import { useModalStore } from '(@/store/modalStore)';
