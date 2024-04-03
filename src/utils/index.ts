@@ -6,3 +6,12 @@ export const getformattedDate = (date: string) =>
     hour: '2-digit',
     minute: '2-digit'
   });
+
+export const ITEM_INTERVAL = 2;
+
+export const getFromTo = (loadCount: number, num: number) => {
+  let from = loadCount * (num + 1);
+  let to = from + num;
+
+  return { from, to };
+};

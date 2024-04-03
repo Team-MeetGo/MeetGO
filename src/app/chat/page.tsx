@@ -3,8 +3,7 @@ import ChatInput from '../../components/chat/ChatInput';
 import { serverSupabase } from '(@/utils/supabase/server)';
 import ChatHeader from '(@/components/chat/ChatHeader)';
 import ChatList from '(@/components/chat/ChatList)';
-import { FaArrowCircleDown } from 'react-icons/fa';
-import ChatScroll from '(@/components/chat/ChatScroll)';
+import { ITEM_INTERVAL } from '(@/utils)';
 
 const ChatPage = async () => {
   const supabase = serverSupabase();
@@ -18,14 +17,21 @@ const ChatPage = async () => {
     .eq('user_id', String(user?.id));
   // console.log(userData);
 
-  const { data: serverMsg } = await supabase.from('messages').select('*');
+  const { data: serverMsg } = await supabase
+    .from('messages')
+    .select('*')
+    .range(0, ITEM_INTERVAL)
+    .order('created_at', { ascending: false });
 
   return (
     <div className="max-w-3xl mx-auto md:py-10 h-screen">
       <div className="h-full border rounded-md flex flex-col border-indigo-600 relative">
         <ChatHeader />
+        {/* <div>
+          <LoadChatMore />
+        </div> */}
         <Suspense fallback="응애 나 애기 폴백">
-          <ChatList serverMsg={serverMsg ?? []} user={user} />
+          <ChatList serverMsg={serverMsg?.reverse() ?? []} user={user} />
         </Suspense>
         <ChatInput userData={userData} />
       </div>

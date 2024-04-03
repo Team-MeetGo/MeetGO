@@ -1,16 +1,22 @@
 'use client';
 import { Message } from '(@/types/chatTypes)';
-import { getformattedDate } from '(@/utils)';
+import { ITEM_INTERVAL, getFromTo, getformattedDate } from '(@/utils)';
 import { clientSupabase } from '(@/utils/supabase/client)';
-import { useEffect, useRef, useState } from 'react';
-import ChatDropDownMenu from './ChatDropDownMenu';
+import { Dispatch, SetStateAction, useEffect, useRef, useState } from 'react';
 import { User } from '@supabase/supabase-js';
 import ChatScroll from './ChatScroll';
+import NewChatAlert from './NewChatAlert';
+import LoadChatMore from './LoadChatMore';
+import ChatDeleteDropDown from './ChatDeleteDropDown';
 
 const ChatList = ({ serverMsg, user }: { serverMsg: Message[]; user: User | null }) => {
   const [messages, setMessages] = useState<Message[]>([...serverMsg]);
   const scrollRef = useRef() as React.MutableRefObject<HTMLDivElement>;
   const [isScrolling, setIsScrolling] = useState(false);
+  const [newAddedMsgNum, setNewAddedMsgNum] = useState(0);
+  const [count, setCount] = useState(1);
+  const [hasMore, setHasMore] = useState(messages.length >= ITEM_INTERVAL + 1);
+
   useEffect(() => {
     const channle = clientSupabase
       .channel('realtime chat')
@@ -23,6 +29,9 @@ const ChatList = ({ serverMsg, user }: { serverMsg: Message[]; user: User | null
         },
         (payload) => {
           setMessages([...messages, payload.new as Message]);
+          if (isScrolling) {
+            setNewAddedMsgNum((prev) => (prev += 1));
+          }
         }
       )
       .on('postgres_changes', { event: 'DELETE', schema: 'public', table: 'messages' }, (payload) => {
@@ -32,26 +41,49 @@ const ChatList = ({ serverMsg, user }: { serverMsg: Message[]; user: User | null
     return () => {
       clientSupabase.removeChannel(channle);
     };
-  }, [messages, setMessages]);
+  }, [messages, setMessages, isScrolling]);
 
   useEffect(() => {
     const scrollBox = scrollRef.current;
-    if (scrollBox) {
+    if (scrollBox && isScrolling === false) {
       scrollBox.scrollTop = scrollBox.scrollHeight;
     }
-  }, [messages]);
+  }, [messages, isScrolling]);
 
   const handleScroll = () => {
     const scrollBox = scrollRef.current;
     if (scrollBox) {
       const isScroll = scrollBox.scrollTop < scrollBox.scrollHeight - scrollBox.clientHeight - 10;
       setIsScrolling(isScroll);
+      if (!isScroll) {
+        setNewAddedMsgNum(0);
+      }
     }
   };
 
   const handleScrollDown = () => {
     scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
   };
+
+  const fetchMoreMsg = async () => {
+    const { from, to } = getFromTo(count, ITEM_INTERVAL);
+    const { error, data: newMsgs } = await clientSupabase
+      .from('messages')
+      .select('*')
+      .range(from, to)
+      .order('created_at', { ascending: false });
+
+    if (error) {
+      alert('이전 메세지를 불러오는 데에 오류가 발생했습니다.');
+    } else {
+      console.log(newMsgs);
+      setCount((prev) => prev + 1);
+      setMessages([...(newMsgs ? newMsgs.reverse() : []), ...messages]);
+    }
+  };
+  // 더보기를 누르면 다시 렌더링이 되면서 useEffect가 실행되어 scrollTop이랑 scrollHeight가 같아져야 하는데(스크롤다운) 왜 스크롤이 안내려가지는지?
+  // 더보기 눌렀을 때 위치 다시 생각해봐야함
+  // 삭제 후 더보기 누르면 제대로 안 불러와짐
 
   return (
     <>
@@ -60,28 +92,50 @@ const ChatList = ({ serverMsg, user }: { serverMsg: Message[]; user: User | null
         ref={scrollRef}
         onScroll={handleScroll}
       >
+        {hasMore && <LoadChatMore fetchMoreMsg={fetchMoreMsg} />}
+
         {messages?.map((msg, idx) => {
           if (msg.send_from === user?.id) {
-            return <MyChat msg={msg} key={idx} />;
+            return <MyChat msg={msg} messages={messages} key={idx} setHasMore={setHasMore} />;
           } else {
             return <OthersChat msg={msg} key={idx} />;
           }
         })}
       </div>
-      {isScrolling ? <ChatScroll handleScrollDown={handleScrollDown} /> : <></>}
+      {isScrolling ? (
+        newAddedMsgNum === 0 ? (
+          <ChatScroll handleScrollDown={handleScrollDown} />
+        ) : (
+          <NewChatAlert
+            newAddedMsgNum={newAddedMsgNum}
+            handleScrollDown={handleScrollDown}
+            setNewAddedMsgNum={setNewAddedMsgNum}
+          />
+        )
+      ) : (
+        <></>
+      )}
     </>
   );
 };
 
 export default ChatList;
 
-const MyChat = ({ msg }: { msg: Message }) => {
+const MyChat = ({
+  msg,
+  messages,
+  setHasMore
+}: {
+  msg: Message;
+  messages: Message[];
+  setHasMore: Dispatch<SetStateAction<boolean>>;
+}) => {
   return (
     <div className="flex gap-4 ml-auto">
       <div className="w-80 h-24 flex flex-col gap-1">
         <div className="font-bold ml-auto">{msg.nickname}</div>
         <div className="flex gap-2 ml-auto">
-          <ChatDropDownMenu msg={msg} />
+          <ChatDeleteDropDown msg={msg} messages={messages} setHasMore={setHasMore} />
           <div className="border rounded-md py-3 px-5 h-full text-right">{msg.message}</div>
         </div>
         <div className="mt-auto text-slate-100 text-xs ml-auto">
