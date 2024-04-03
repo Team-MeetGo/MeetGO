@@ -20,10 +20,10 @@ export default function ReviewEditModal({ review_id }: Props) {
   const [editedContent, setEditedContent] = useState(reviewDetail?.review_contents);
 
   useEffect(() => {
-    if (review_id) {
+    if (review_id && !reviewDetail) {
       getReviewDetail(review_id);
     }
-  }, [review_id]);
+  });
 
   useEffect(() => {
     if (reviewDetail) {
