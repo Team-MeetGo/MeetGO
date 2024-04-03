@@ -3,7 +3,7 @@ import ChatInput from '../../components/chat/ChatInput';
 import ChatListParent from '(@/components/chat/ChatListParent)';
 import { serverSupabase } from '(@/utils/supabase/server)';
 import ChatHeader from '(@/components/chat/ChatHeader)';
-import Map from '(@/components/chat/map/Map)';
+import SideBar from '(@/components/chat/sidebar/SideBar)';
 
 const ChatPage = async () => {
   const supabase = serverSupabase();
@@ -20,8 +20,10 @@ const ChatPage = async () => {
   // const {data: leader_id} = await supabase.from("")
 
   return (
-    <>
-      <Map />
+    <div className="flex felx-row">
+      <div className="border">
+        <SideBar />
+      </div>
       <div className="max-w-3xl mx-auto md:py-10 h-screen">
         <div className="h-full border rounded-md flex flex-col border-indigo-600">
           <ChatHeader />
@@ -32,7 +34,7 @@ const ChatPage = async () => {
           <ChatInput userData={userData} />
         </div>
       </div>
-    </>
+    </div>
   );
 };
 
