@@ -6,6 +6,8 @@ import { useState } from 'react';
 import { Button } from '@nextui-org/react';
 import { authValidation } from '(@/utils/authValidation)';
 import { IsValidateShow } from '(@/types/userTypes)';
+import { ValidationModal } from '../common/ValidationModal';
+import { useModalStore } from '(@/store/modalStore)';
 
 type Gender = 'male' | 'female' | '';
 
@@ -37,8 +39,19 @@ const JoinForm = () => {
     nickname: true
   });
   const [gender, setGender] = useState<Gender>('');
-
   const router = useRouter();
+  const { openModal } = useModalStore();
+
+  const showModal = () => {
+    openModal({
+      type: 'alert',
+      name: '',
+      text: '회원가입 되었습니다.',
+      onFunc: () => {
+        router.push('/users/login');
+      }
+    });
+  };
 
   const onGenderSelect = (selectedGender: Gender) => {
     setGender(selectedGender);
@@ -47,6 +60,7 @@ const JoinForm = () => {
 
   const onChangeInput = (e: React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLSelectElement>) => {
     const { name, value } = e.target;
+    setJoinData((prev) => ({ ...prev, [name]: value }));
     if (value === '') return setIsValidateShow((prev) => ({ ...prev, [name]: true }));
     const isValid = authValidation(name, value); // 유효성 검사 수행
     setIsValidateShow((prev) => ({ ...prev, [name]: isValid })); // 결과 반영
@@ -54,9 +68,14 @@ const JoinForm = () => {
 
   const onSubmitForm = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+
+    const isAllValid = Object.values(isValidateShow).every((v) => v); // 모든 유효성 검사가 통과되었는지 확인
+    if (!isAllValid) return; // 통과되지 않았다면 회원가입 진행을 막음
+
     try {
       const {
-        data: { session }
+        data: { session },
+        error
       } = await clientSupabase.auth.signUp({
         email: joinData.userId,
         password: joinData.password,
@@ -65,76 +84,85 @@ const JoinForm = () => {
         }
       });
       if (session) {
-        router.push('/');
+        showModal();
+      } else if (error) {
+        throw error;
       }
     } catch (error) {
-      console.error('에러: ', error);
+      if (error.message.includes('already exists')) {
+        alert('이미 존재하는 계정입니다.');
+      } else {
+        alert('회원가입 중 오류가 발생했습니다.');
+      }
     }
   };
 
   return (
-    <form className="max-w-[450px] flex flex-col gap-[20px] w-full" onSubmit={onSubmitForm}>
-      <div>
-        <div className="flex gap-[10px] w-full">
-          <label className="w-full mr-[10px]">
+    <>
+      <form className="max-w-[450px] flex flex-col gap-[20px] w-full" onSubmit={onSubmitForm}>
+        <div>
+          <div className="flex gap-[10px] w-full">
+            <label key="nickname" className="w-full mr-[10px]">
+              <input
+                className="p-5 border border-[#A1A1AA] placeholder:text-[#A1A1AA] placeholder:text-[14px] rounded-lg focus:outline-none focus:border-[#8F5DF4] w-full"
+                type="text"
+                name="nickname"
+                placeholder="닉네임을 입력해주세요."
+                onChange={onChangeInput}
+              />
+            </label>
+            <Button
+              className={
+                gender === 'female'
+                  ? 'p-[22px] h-auto border min-w-0 rounded-lg bg-[#8F5DF4] text-white'
+                  : 'p-[22px] h-auto border min-w-0 rounded-lg border-[#A1A1AA]'
+              }
+              color={gender === 'female' ? 'secondary' : 'default'}
+              variant={gender === 'female' ? 'solid' : 'bordered'}
+              type="button"
+              onClick={() => onGenderSelect('female')}
+            >
+              여자
+            </Button>
+            <Button
+              className={
+                gender === 'male'
+                  ? 'p-[22px] h-auto border min-w-0 rounded-lg bg-[#8F5DF4] text-white'
+                  : 'p-[22px] h-auto border min-w-0 rounded-lg border-[#A1A1AA]'
+              }
+              variant={gender === 'male' ? 'solid' : 'bordered'}
+              type="button"
+              onClick={() => onGenderSelect('male')}
+            >
+              남자
+            </Button>
+          </div>
+          {!isValidateShow.nickname && (
+            <p className="text-red-500 text-[13px] mt-2">닉네임은 2-12글자 이내로 작성해주세요. </p>
+          )}
+        </div>
+        {JOIN_FORM_LIST.map(({ type, name, placeholder, error }) => (
+          <label key={name}>
             <input
               className="p-5 border border-[#A1A1AA] placeholder:text-[#A1A1AA] placeholder:text-[14px] rounded-lg focus:outline-none focus:border-[#8F5DF4] w-full"
-              type="text"
-              name="nickname"
-              placeholder="닉네임을 입력해주세요."
+              type={type}
+              name={name}
+              placeholder={placeholder}
               onChange={onChangeInput}
             />
+            {!isValidateShow[name] && <p className="text-red-500 text-[13px] mt-2">{error}</p>}
           </label>
-          <Button
-            className={
-              gender === 'female'
-                ? 'p-[20px] h-auto border min-w-0 rounded-lg bg-[#8F5DF4] text-white'
-                : 'p-[20px] h-auto border min-w-0 rounded-lg border-[#A1A1AA]'
-            }
-            color={gender === 'female' ? 'secondary' : 'default'}
-            variant={gender === 'female' ? 'solid' : 'bordered'}
-            type="button"
-            onClick={() => onGenderSelect('female')}
-          >
-            여자
-          </Button>
-          <Button
-            className={
-              gender === 'male'
-                ? 'p-[20px] h-auto border rounded-lg bg-[#8F5DF4] text-white'
-                : 'p-[20px] h-auto border rounded-lg border-[#A1A1AA]'
-            }
-            variant={gender === 'male' ? 'solid' : 'bordered'}
-            type="button"
-            onClick={() => onGenderSelect('male')}
-          >
-            남자
-          </Button>
-        </div>
-        {!isValidateShow.nickname && (
-          <p className="text-red-500 text-[13px] mt-2">닉네임은 2-12글자 이내로 작성해주세요. </p>
-        )}
-      </div>
-      {JOIN_FORM_LIST.map(({ type, name, placeholder, error }) => (
-        <label key={name}>
-          <input
-            className="p-5 border border-[#A1A1AA] placeholder:text-[#A1A1AA] placeholder:text-[14px] rounded-lg focus:outline-none focus:border-[#8F5DF4] w-full"
-            type={type}
-            name={name}
-            placeholder={placeholder}
-            onChange={onChangeInput}
-          />
-          {!isValidateShow[name] && <p className="text-red-500 text-[13px] mt-2">{error}</p>}
-        </label>
-      ))}
+        ))}
 
-      <Button
-        className="duration-200 bg-[#8F5DF4] text-white p-5 mt-[10px] rounded-lg font-semibold w-full py-[20px] h-auto text-[16px]"
-        type="submit"
-      >
-        회원가입
-      </Button>
-    </form>
+        <Button
+          className="duration-200 bg-[#8F5DF4] text-white p-5 mt-[10px] rounded-lg font-semibold w-full py-[20px] h-auto text-[16px]"
+          type="submit"
+        >
+          회원가입
+        </Button>
+      </form>
+      <ValidationModal />
+    </>
   );
 };
 
