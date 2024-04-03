@@ -4,7 +4,6 @@ import { clientSupabase } from '(@/utils/supabase/client)';
 import { Modal, ModalContent, ModalBody, Button, useDisclosure } from '@nextui-org/react';
 import Image from 'next/image';
 import { ChangeEvent, FormEvent, useEffect, useState } from 'react';
-import { FaPhotoVideo } from 'react-icons/fa';
 import { ReviewDetailType } from './ReviewDetail';
 
 type Props = {
@@ -20,10 +19,10 @@ export default function ReviewEditModal({ review_id }: Props) {
   const [editedContent, setEditedContent] = useState(reviewDetail?.review_contents);
 
   useEffect(() => {
-    if (review_id) {
+    if (review_id && !reviewDetail) {
       getReviewDetail(review_id);
     }
-  }, [review_id]);
+  });
 
   useEffect(() => {
     if (reviewDetail) {
@@ -120,8 +119,6 @@ export default function ReviewEditModal({ review_id }: Props) {
       const { data: imageUrl } = clientSupabase.storage.from('reviewImage').getPublicUrl(data.path);
       ImgDbUrl = imageUrl.publicUrl;
     }
-
-    // console.log(ImgDbUrl);
 
     if (!file && !reviewDetail?.image_url) {
       ImgDbUrl = '';

@@ -1,6 +1,7 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import React from 'react';
+import ReviewBar from './ReviewBar';
 
 export type ReviewType = {
   user_id: string | null;
@@ -13,7 +14,7 @@ export type ReviewType = {
 
 const reviewCard = ({ review }: { review: ReviewType }) => {
   return (
-    <div key={review.review_id} className="flex justify-center item-center bg-green-200 p-4">
+    <div key={review.review_id} className="flex flex-col justify-center item-center bg-green-200 p-4">
       <Link href={`/review/${review.review_id}`}>
         <div>
           {review.image_url ? (
@@ -31,6 +32,7 @@ const reviewCard = ({ review }: { review: ReviewType }) => {
         <div>{review.review_contents}</div>
         <div>{review.created_at}</div>
       </Link>
+      <ReviewBar review_id={review.review_id} />
     </div>
   );
 };
