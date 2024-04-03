@@ -1,4 +1,5 @@
 'use client';
+
 import React, { useEffect, useState } from 'react';
 
 declare global {
@@ -12,19 +13,12 @@ const Map = () => {
   const [marker, setMarker] = useState<any>();
 
   useEffect(() => {
-    // DOM을 이용하여 script 태그를 만들어주기
-    const mapScript = document.createElement('script');
-    // script.async = true 라면,
-    // 해당 스크립트가 다른 페이지와는 비동기적으로 동작함
-    mapScript.async = true;
-    // script.src에 map을 불러오는 api를 넣어주기
-    mapScript.src = `//dapi.kakao.com/v2/maps/sdk.js?appkey=${process.env.NEXT_PUBLIC_KAKAO_MAP_API_KEY}&autoload=false`;
+    const script = document.createElement('script');
+    script.async = true;
+    script.src = `//dapi.kakao.com/v2/maps/sdk.js?appkey=${process.env.NEXT_PUBLIC_KAKAO_MAP_API_KEY}&autoload=false&libraries=services`;
+    document.head.appendChild(script);
 
-    //script를 document에 붙여주기
-    document.head.appendChild(mapScript);
-
-    // script가 완전히 load 된 이후, 실행될 함수
-    const onLoadKakaoMap = () => {
+    script.addEventListener('load', () => {
       window.kakao.maps.load(() => {
         const mapContainer = document.getElementById('map');
         const kakaoMap = new window.kakao.maps.Map(mapContainer, {
@@ -35,9 +29,12 @@ const Map = () => {
 
         getCurrentPosition(kakaoMap);
       });
-    };
+    });
 
-    mapScript.addEventListener('load', onLoadKakaoMap);
+    return () => {
+      script.removeEventListener('load', () => {});
+      document.head.removeChild(script);
+    };
   }, []);
 
   // 현재 위치 받아오는 함수
@@ -52,6 +49,9 @@ const Map = () => {
           map: map
         });
         setMarker(marker);
+
+        // Call function to search for bars near the current location
+        searchBarsNearby(currentPos);
       },
       () => alert('위치 정보를 가져오는데 실패했습니다.'),
       {
@@ -62,9 +62,28 @@ const Map = () => {
     );
   };
 
+  // 주변 술집 데이터 가져오기
+  const searchBarsNearby = (currentPosition: any) => {
+    const places = new window.kakao.maps.services.Places();
+
+    places.keywordSearch(
+      '술집',
+      (data: any, status: any) => {
+        if (status === window.kakao.maps.services.Status.OK) {
+          console.log('Bars nearby:', data);
+        } else {
+          console.error('Failed to retrieve bars nearby:', status);
+        }
+      },
+      {
+        location: currentPosition,
+        radius: 1000
+      }
+    );
+  };
+
   return (
     <div>
-      {/* 지도 출력 영역 설정 */}
       <div id="map" className="w-96 h-96"></div>
     </div>
   );
