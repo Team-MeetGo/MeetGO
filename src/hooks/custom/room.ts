@@ -1,3 +1,4 @@
+'use client';
 import { clientSupabase } from '(@/utils/supabase/client)';
 import { UUID } from 'crypto';
 

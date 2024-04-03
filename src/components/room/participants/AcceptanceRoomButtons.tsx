@@ -21,7 +21,7 @@ function AcceptanceRoomButtons() {
   };
 
   return (
-    <div className="h-100 flex flex-col justify-end gap-8">
+    <div className="h-100 w-16 flex flex-col justify-end gap-8">
       <button
         onClick={() => {
           gotoMeetingRoom();

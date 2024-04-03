@@ -1,12 +1,15 @@
 import AcceptanceRoomButtons from '(@/components/room/participants/AcceptanceRoomButtons)';
 import Member from '(@/components/room/participants/Member)';
+import RoomInformation from '(@/components/room/participants/RoomInformation)';
 import { UUID } from 'crypto';
 
 const memberList = ({ params }: { params: { id: UUID } }) => {
+  const roomId = params.id;
+  console.log(roomId);
   return (
     <>
       <div className="flex flex-col justify-center w-full align-middle">
-        <div className="m-8 text-center">여기는 방 내용</div>
+        <RoomInformation roomId={roomId} />
         <div className="m-12 h-100 flex flex-row justify-evenly">
           <div className="flex flex-col justify-center gap-4">
             <Member params={params} />

@@ -40,7 +40,7 @@ const RealTimeSubscription = ({ participantInsert }: { participantInsert: Partic
     return () => {
       clientSupabase.removeChannel(channels);
     };
-  }, [participants]);
+  }, []);
   console.log('participantsReal', participants);
 
   return (
