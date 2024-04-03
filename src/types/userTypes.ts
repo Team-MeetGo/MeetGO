@@ -13,9 +13,9 @@ export type UserDataFromTable = {
   gender: string | null;
   intro: string | null;
   isValidate: boolean;
+  kakaoId: string | null;
   login_email: string;
   nickname: string | null;
-  phone: string | null;
   school_email: string | null;
   school_name: string | null;
   user_id: string;

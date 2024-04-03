@@ -113,7 +113,7 @@ export type Database = {
         Row: {
           created_at: string;
           image_url: string | null;
-          like_count: number | null;
+          like_user: string[] | null;
           review_contents: string | null;
           review_id: string;
           review_title: string | null;
@@ -122,7 +122,7 @@ export type Database = {
         Insert: {
           created_at?: string;
           image_url?: string | null;
-          like_count?: number | null;
+          like_user?: string[] | null;
           review_contents?: string | null;
           review_id?: string;
           review_title?: string | null;
@@ -131,7 +131,7 @@ export type Database = {
         Update: {
           created_at?: string;
           image_url?: string | null;
-          like_count?: number | null;
+          like_user?: string[] | null;
           review_contents?: string | null;
           review_id?: string;
           review_title?: string | null;
@@ -310,9 +310,9 @@ export type Database = {
           gender: string | null;
           intro: string | null;
           isValidate: boolean;
+          kakaoId: string | null;
           login_email: string;
           nickname: string | null;
-          phone: string | null;
           school_email: string | null;
           school_name: string | null;
           user_id: string;
@@ -323,9 +323,9 @@ export type Database = {
           gender?: string | null;
           intro?: string | null;
           isValidate?: boolean;
+          kakaoId?: string | null;
           login_email: string;
           nickname?: string | null;
-          phone?: string | null;
           school_email?: string | null;
           school_name?: string | null;
           user_id: string;
@@ -336,9 +336,9 @@ export type Database = {
           gender?: string | null;
           intro?: string | null;
           isValidate?: boolean;
+          kakaoId?: string | null;
           login_email?: string;
           nickname?: string | null;
-          phone?: string | null;
           school_email?: string | null;
           school_name?: string | null;
           user_id?: string;
