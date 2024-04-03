@@ -2,27 +2,47 @@
 
 import { Database } from '(@/types/database.types)';
 import { clientSupabase } from '(@/utils/supabase/client)';
-import { UUID } from 'crypto';
 import { useEffect, useState } from 'react';
 
 type ParticipantType = Database['public']['Tables']['participants']['Row'];
+
 const RealTimeSubscription = ({ participantInsert }: { participantInsert: ParticipantType[] }) => {
+  console.log('adad');
   const [participants, setParticipants] = useState<ParticipantType[]>(participantInsert);
+
   useEffect(() => {
+    console.log('use');
     const channels = clientSupabase
-      .channel('participants')
-      .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'participants' }, (payload) => {
-        setParticipants([...participants, payload.new as ParticipantType]);
-      })
+      .channel('custom-insert-channel')
+      .on(
+        'postgres_changes',
+        {
+          event: 'INSERT',
+          schema: 'public',
+          table: 'participants'
+        },
+        (payload) => {
+          console.log('payload', payload);
+          setParticipants([...participants, payload.new as ParticipantType]);
+        }
+      )
+      .subscribe((a) => {
+        console.log('a', a);
+      });
+
+    const deletechannels = clientSupabase
+      .channel('custom-delete-channel')
       .on('postgres_changes', { event: 'DELETE', schema: 'public', table: 'participants' }, (payload) => {
         setParticipants([...participants, payload.new as ParticipantType]);
       })
       .subscribe();
+
     return () => {
       clientSupabase.removeChannel(channels);
     };
-  }, [participants, setParticipants]);
+  }, [participants]);
   console.log('participantsReal', participants);
+
   return (
     <div>
       {participants.map((member) => (

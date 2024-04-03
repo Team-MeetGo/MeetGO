@@ -3,7 +3,6 @@ import Member from '(@/components/room/participants/Member)';
 import { UUID } from 'crypto';
 
 const memberList = ({ params }: { params: { id: UUID } }) => {
-  console.log(params);
   return (
     <>
       <div className="flex flex-col justify-center w-full align-middle">

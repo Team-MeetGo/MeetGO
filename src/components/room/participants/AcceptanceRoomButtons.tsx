@@ -2,6 +2,7 @@
 
 import participants from '(@/hooks/custom/participants)';
 import { clientSupabase } from '(@/utils/supabase/client)';
+import { UUID } from 'crypto';
 import { useRouter } from 'next/navigation';
 
 function AcceptanceRoomButtons() {
@@ -11,8 +12,11 @@ function AcceptanceRoomButtons() {
   const gotoMeetingRoom = async () => {
     const { data } = await clientSupabase.auth.getUser();
     console.log('유저데이터 =>', data.user);
-    const user = data.user;
-    // deleteMember(user?.id);
+    if (!data.user) {
+      return alert('잘못된 접근입니다.');
+    }
+    const user_id = data.user.id;
+    deleteMember(user_id);
     router.push(`/meetingRoom`);
   };
 
