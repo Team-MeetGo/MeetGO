@@ -38,6 +38,15 @@ const ChatList = ({ serverMsg, user }: { serverMsg: Message[]; user: User | null
         setMessages(messages.filter((msg) => msg.message_id !== payload.old.message_id));
       })
       .subscribe();
+
+    const checkRestMsg = async () => {
+      const { data: restMsgs } = await clientSupabase.from('messages').select('*');
+      if (restMsgs && restMsgs?.length <= ITEM_INTERVAL + 1) {
+        setHasMore(false);
+      }
+    };
+    checkRestMsg();
+
     return () => {
       clientSupabase.removeChannel(channle);
     };
@@ -49,6 +58,10 @@ const ChatList = ({ serverMsg, user }: { serverMsg: Message[]; user: User | null
       scrollBox.scrollTop = scrollBox.scrollHeight;
     }
   }, [messages, isScrolling]);
+
+  // useEffect(() => {
+  //   if(messages.length)
+  // }, [])
 
   const handleScroll = () => {
     const scrollBox = scrollRef.current;
@@ -78,10 +91,10 @@ const ChatList = ({ serverMsg, user }: { serverMsg: Message[]; user: User | null
       alert('이전 메세지를 불러오는 데에 오류가 발생했습니다.');
     } else {
       setMessages([...(newMsgs ? newMsgs.reverse() : []), ...messages]);
-      if (newMsgs.length < ITEM_INTERVAL + 1) {
+
+      if (newMsgs.length <= ITEM_INTERVAL + 1) {
         setHasMore(false);
       } else {
-        console.log(newMsgs);
         setCount((prev) => prev + 1);
       }
     }

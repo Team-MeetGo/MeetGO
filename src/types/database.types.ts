@@ -113,6 +113,7 @@ export type Database = {
         Row: {
           created_at: string;
           image_url: string | null;
+          like_count: number | null;
           review_contents: string | null;
           review_id: string;
           review_title: string | null;
@@ -121,6 +122,7 @@ export type Database = {
         Insert: {
           created_at?: string;
           image_url?: string | null;
+          like_count?: number | null;
           review_contents?: string | null;
           review_id?: string;
           review_title?: string | null;
@@ -129,6 +131,7 @@ export type Database = {
         Update: {
           created_at?: string;
           image_url?: string | null;
+          like_count?: number | null;
           review_contents?: string | null;
           review_id?: string;
           review_title?: string | null;

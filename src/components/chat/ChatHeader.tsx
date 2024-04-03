@@ -3,6 +3,7 @@
 import { RoomData } from '(@/types/chatTypes)';
 import { clientSupabase } from '(@/utils/supabase/client)';
 import { useEffect, useState } from 'react';
+import ChatPresence from './ChatPresence';
 
 const ChatHeader = () => {
   async function signOut() {
@@ -25,7 +26,10 @@ const ChatHeader = () => {
     <div className="h-20 border-b border-indigo-600 flex p-3 justify-between">
       <div className="font-bold text-2xl flex gap-2">
         {roomData && roomData[0]?.room_title}
-        <div className="text-base font-normal">누가 들어와 있는지 들어갈 부분</div>
+        <div className="text-base font-normal">
+          누가 들어와 있는지 들어갈 부분
+          <ChatPresence />
+        </div>
       </div>
       <div>몇 명 참여중인지</div>
       <button onClick={signOut}>로그아웃</button>
