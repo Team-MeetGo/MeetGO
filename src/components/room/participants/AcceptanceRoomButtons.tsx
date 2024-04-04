@@ -50,16 +50,26 @@ const AcceptanceRoomButtons = ({ roomId }: { roomId: UUID }) => {
     if (!data.user) {
       return alert('잘못된 접근입니다.');
     }
-    const { data: chat_room, error } = await clientSupabase
+    const { data: alreadyChat } = await clientSupabase
       .from('chatting_room')
-      .insert({
-        room_id: roomId,
-        isActive: true
-      })
-      .select('chatting_room_id');
-    console.log(chat_room);
+      .select('*')
+      .eq('room_id', roomId)
+      .eq('isActive', true);
+    if (alreadyChat && alreadyChat?.length) {
+      router.replace(`/chat/${alreadyChat[0].chatting_room_id}`);
+    } else {
+      const { data: chat_room, error } = await clientSupabase
+        .from('chatting_room')
+        .insert({
+          room_id: roomId,
+          isActive: true
+        })
+        .select('chatting_room_id');
+      console.log(chat_room);
 
-    if (chat_room) router.replace(`/chat/${chat_room[0].chatting_room_id}`);
+      if (chat_room) router.replace(`/chat/${chat_room[0].chatting_room_id}`);
+    }
+
     // "/chatting_room_id" 로 주소값 변경
   };
 
