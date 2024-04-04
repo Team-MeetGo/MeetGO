@@ -1,10 +1,17 @@
-import { User } from '@supabase/supabase-js';
+import { Database } from '(@/types/database.types)';
 import { create } from 'zustand';
+import { UsersType } from '(@/types/userTypes)';
 
 type UserState = {
-  user: User | undefined;
+  user: UsersType[] | null;
+  participants: UserDataFromTable[] | null | undefined;
+  setUser: (data: UsersType[]) => void;
+  setParticipants: (others: UserDataFromTable[]) => void;
 };
 
-const userStore = create<UserState>()((set) => ({
-  user: undefined
+export const userStore = create<UserState>()((set) => ({
+  user: null,
+  participants: null,
+  setUser: (data) => set({ user: data }),
+  setParticipants: (participants) => set({ participants })
 }));

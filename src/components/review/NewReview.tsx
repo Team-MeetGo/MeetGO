@@ -1,30 +1,36 @@
-'use client';
-
-import { Modal, ModalContent, ModalBody, Button, useDisclosure } from '@nextui-org/react';
-import { useRouter } from 'next/navigation';
-import { clientSupabase } from '(@/utils/supabase/client)';
-import React, { ChangeEvent, FormEvent, useState } from 'react';
-import Image from 'next/image';
+import { useState, ChangeEvent, FormEvent } from 'react';
 import { FaPhotoVideo } from 'react-icons/fa';
-import defaultImg from '../../../public/defaultImg.jpg';
+import Image from 'next/image';
+import { Button, Modal, ModalBody, ModalContent, useDisclosure } from '@nextui-org/react';
+import { clientSupabase } from '(@/utils/supabase/client)';
+import { useRouter } from 'next/navigation';
+import { MdCancel } from 'react-icons/md';
 
 const NewReview = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const [files, setFiles] = useState<File[]>([]);
   const [dragging, setDragging] = useState(false);
-  const [file, setFile] = useState<File>();
   const router = useRouter();
+
+  const checkLoginStatus = async () => {
+    const user = clientSupabase.auth.getUser();
+    console.log(user);
+  };
 
   const handleClose = () => {
     if (window.confirm('리뷰 등록을 취소하시겠습니까?')) {
+      setFiles([]);
       onClose();
     }
   };
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
-    const files = e.target?.files;
-    if (files && files[0]) {
-      setFile(files[0]);
+    const fileList = e.target.files;
+    if (fileList) {
+      const filesArray = Array.from(fileList);
+      setFiles((prevFiles) => [...prevFiles, ...filesArray]);
+      console.log(filesArray);
     }
   };
 
@@ -43,23 +49,23 @@ const NewReview = () => {
   const handleDrop = (e: React.DragEvent) => {
     e.preventDefault();
     setDragging(false);
-    const files = e.dataTransfer?.files;
-    if (files && files[0]) {
-      setFile(files[0]);
+    const fileList = e.dataTransfer?.files;
+    if (fileList) {
+      const filesArray = Array.from(fileList);
+      setFiles(filesArray);
     }
+  };
+
+  const handleDeleteImage = (indexToRemove: number) => {
+    setFiles((prevFiles) => prevFiles.filter((_, index) => index != indexToRemove));
   };
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    const userId = (await clientSupabase.auth.getUser()).data.user?.id;
 
-    const userId = '8fe87c99-842a-4fde-a0e8-918a0171e9a6';
-
-    let ImgDbUrl: string | undefined = defaultImg.src;
-
-    const reviewTitle = (document.getElementById('review_title') as HTMLInputElement)?.value;
-    const reviewContents = (document.getElementById('review_contents') as HTMLInputElement)?.value;
-
-    if (file) {
+    let imageUrls: string[] = [];
+    for (const file of files) {
       const uuid = crypto.randomUUID();
       const filePath = `reviewImage/${uuid}`;
 
@@ -76,16 +82,20 @@ const NewReview = () => {
 
         return data;
       };
+
       const data = await uploadImage(filePath, file);
       const { data: imageUrl } = clientSupabase.storage.from('reviewImage').getPublicUrl(data.path);
-      ImgDbUrl = imageUrl.publicUrl;
+      imageUrls.push(imageUrl.publicUrl);
     }
+
+    const reviewTitle = (document.getElementById('review_title') as HTMLInputElement)?.value;
+    const reviewContents = (document.getElementById('review_contents') as HTMLInputElement)?.value;
 
     const { data: insertedData, error: insertError } = await clientSupabase.from('review').insert([
       {
         review_title: reviewTitle,
         review_contents: reviewContents,
-        image_url: ImgDbUrl,
+        test_image_url: imageUrls,
         user_id: userId
       }
     ]);
@@ -104,49 +114,62 @@ const NewReview = () => {
       <Button onPress={onOpen} color="primary">
         새 리뷰 등록
       </Button>
-      <Modal isOpen={isOpen} onClose={handleClose} placement="top-center">
-        <ModalContent className="w-full flex justify-center items-center">
+      <Modal isOpen={isOpen} onClose={handleClose} placement="top-center" className="bg-[#F2EAFA]">
+        <ModalContent className="w-full flex justify-center items-center" style={{ maxWidth: '1000px' }}>
           {(onClose) => (
-            <form className="w-full flex flex-col mt-2" onSubmit={handleSubmit}>
-              <div className="bg-white p-8 rounded-[30px]">
+            <form className="w-full flex flex-col mt-2 bg-[#F2EAFA]" onSubmit={handleSubmit}>
+              <div className=" p-8 rounded-[30px]">
                 <ModalBody>
-                  <div className="mt-[10px] mb-[30px]">
-                    <input
-                      className="hidden items-center justify-center"
-                      name="input"
-                      id="input-upload"
-                      type="file"
-                      accept="image/*"
-                      onChange={handleChange}
-                    />
-                    <label
-                      className={`w-full h-60 flex flex-col items-center justify-center rounded-[20px] ${
-                        !file && 'border-2 rounded-[20px] border-gray-500 border-dashed'
-                      }`}
-                      htmlFor="input-upload"
-                      onDragEnter={handleDrag}
-                      onDragLeave={handleDrag}
-                      onDragOver={handleDragOver}
-                      onDrop={handleDrop}
-                    >
-                      {dragging && <div className="absolute inset-0 z-10 bg-sky-500/20 pointer-events-none" />}
-                      {!file && (
-                        <div className="flex flex-col items-center pointer-events-none">
-                          <FaPhotoVideo className="w-20 h-20 text-gray-300 mb-[10px]" />
-                          <p>클릭하여 이미지를 등록해 주세요.</p>
-                        </div>
-                      )}
-                      {file && (
-                        <div className="relative w-full aspect-square">
-                          <Image
-                            className="object-cover rounded-[20px]"
-                            src={URL.createObjectURL(file)}
-                            alt="local file"
-                            fill
-                          />
-                        </div>
-                      )}
-                    </label>
+                  <div className="flex gap-2 mt-[10px] mb-[10px] relative">
+                    {files.length <= 4 && (
+                      <div className="flex justify-center gap-2">
+                        {files.map((file, index) => (
+                          <div key={index} className="relative absolute w-[150px] h-[150px] aspect-square">
+                            <Image
+                              className="object-cover rounded-[20px]"
+                              src={URL.createObjectURL(file)}
+                              alt={`local file ${index}`}
+                              fill
+                            />
+                            <button
+                              className="absolute top-0 right-0 p-2  rounded-full w-8 h-8"
+                              onClick={(e) => {
+                                e.preventDefault();
+                                handleDeleteImage(index);
+                              }}
+                            >
+                              <MdCancel />
+                            </button>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                    <div>
+                      <input
+                        className="hidden items-center justify-center"
+                        name="input"
+                        id="input-upload"
+                        type="file"
+                        accept="image/*"
+                        multiple
+                        onChange={handleChange}
+                      />
+                      <label
+                        className={`flex items-center ${files.length === 0 && 'rounded-[10px]'}`}
+                        htmlFor="input-upload"
+                        onDragEnter={handleDrag}
+                        onDragLeave={handleDrag}
+                        onDragOver={handleDragOver}
+                        onDrop={handleDrop}
+                      >
+                        {dragging && <div className="inset-0 z-10 bg-sky-500/20 pointer-events-none" />}
+                        {files.length < 4 && (
+                          <div className="flex items-center justify-center pointer-events-none rounded-[20px] w-[150px] h-[150px] bg-gray-300">
+                            <FaPhotoVideo className="w-20 h-20 text-[#A1A1AA]" />
+                          </div>
+                        )}
+                      </label>
+                    </div>
                   </div>
                   <textarea
                     autoFocus
@@ -154,19 +177,31 @@ const NewReview = () => {
                     required
                     rows={1}
                     placeholder="제목을 입력해주세요."
-                    className="outline-none text-lg border-2 rounded-[20px] resize-none p-[8px] pl-4 mb-2"
+                    className="outline-none text-lg border-1 rounded-[10px] resize-none border-[#8F5DF4] p-[8px] pl-4 mb-2"
+                    maxLength={20}
                   />
                   <textarea
                     id="review_contents"
                     required
                     placeholder="내용을 입력해주세요.(200자 이내)"
-                    className="outline-none text-lg resize-none border-2 rounded-[30px] p-[15px]"
+                    className="outline-none text-lg resize-none border-1 rounded-[10px] p-[15px] border-[#8F5DF4]"
                     rows={6}
                     maxLength={200}
                   />
-                  <button className="h-[50px] rounded-[15px] mt-[30px] flex justify-center items-center bg-purple-300">
-                    할 일 등록
-                  </button>
+                  <div className="flex gap-2 justify-end">
+                    <Button
+                      onClick={handleClose}
+                      className="w-[50px] h-[50px] rounded-[10px] mt-[30px] flex justify-center items-center bg-white text-[#A1A1AA] border-1 border-[#A1A1AA]"
+                    >
+                      취소
+                    </Button>
+                    <Button
+                      type="submit"
+                      className="w-[50px] h-[50px] rounded-[10px] mt-[30px] flex justify-center items-center bg-[#8F5DF4] text-white"
+                    >
+                      등록
+                    </Button>
+                  </div>
                 </ModalBody>
               </div>
             </form>

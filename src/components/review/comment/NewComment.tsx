@@ -1,4 +1,5 @@
 import { clientSupabase } from '(@/utils/supabase/client)';
+import { Button } from '@nextui-org/react';
 import React, { FormEvent, useState } from 'react';
 
 type Props = {
@@ -9,7 +10,12 @@ const NewComment = ({ review_id }: Props) => {
   const [comments, setComments] = useState('');
   const handleNewComment = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const userId = '8fe87c99-842a-4fde-a0e8-918a0171e9a6';
+
+    const userId = (await clientSupabase.auth.getUser()).data.user?.id;
+    if (!userId) {
+      alert('로그인 후 이용해주세요.');
+      return;
+    }
     const comment_content = (document.getElementById('comment_content') as HTMLInputElement)?.value;
     const { data, error } = await clientSupabase
       .from('test_review_comment')
@@ -35,7 +41,9 @@ const NewComment = ({ review_id }: Props) => {
             onChange={(e) => setComments(e.target.value)}
             className="outline-none border-2 rounded-[20px] resize-none p-[8px] pl-4 mb-2"
           />
-          <button>등록</button>
+          <Button type="submit" className="bg-[#8F5DF4] text-white">
+            등록
+          </Button>
         </div>
       </form>
     </div>

@@ -1,23 +1,28 @@
 'use client';
-import { UserData } from '(@/types)';
+import { chatStore } from '(@/store/chatStore)';
+import { userStore } from '(@/store/userStore)';
 import { clientSupabase } from '(@/utils/supabase/client)';
 import { Input } from '@nextui-org/react';
 import { useState } from 'react';
 import { FaRegArrowAltCircleUp } from 'react-icons/fa';
 
-const ChatInput = ({ userData }: { userData: UserData }) => {
+const ChatInput = () => {
   const [message, setMessage] = useState('');
+  const userData = userStore((state) => state.user);
+  const chatRoomId = chatStore((state) => state.chatRoomId);
 
   const handleSubmit = async () => {
-    if (userData) {
+    if (userData && chatRoomId) {
       const { error } = await clientSupabase.from('messages').insert({
         send_from: userData[0].user_id,
         message: message,
         nickname: String(userData[0].nickname),
-        avatar: String(userData[0].avatar)
+        avatar: String(userData[0].avatar),
+        chatting_room_id: chatRoomId
       });
       if (error) {
-        alert(error.message);
+        console.error(error.message);
+        alert('새로운 메세지 추가 실패');
       }
     }
   };

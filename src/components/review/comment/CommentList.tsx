@@ -12,13 +12,37 @@ export type CommentListType = {
 
 type Props = {
   review_id: string;
+  onUpdateCommentCount: (count: number) => void;
 };
 
-const CommentList = ({ review_id }: Props) => {
+const CommentList = ({ review_id, onUpdateCommentCount }: Props) => {
   const [commentData, setCommentData] = useState<CommentListType[]>([]);
+  const [commentCount, setCommentCount] = useState(0);
+
+  const fetchCommentCount = async (review_id: string) => {
+    let { data: test_review_comment, error } = await clientSupabase
+      .from('test_review_comment')
+      .select('*')
+      .eq('review_id', review_id);
+
+    if (error) {
+      throw error;
+    }
+
+    if (test_review_comment) {
+      setCommentCount(test_review_comment.length);
+      onUpdateCommentCount(test_review_comment.length);
+    } else {
+      setCommentCount(0);
+      onUpdateCommentCount(0);
+    }
+  };
+
   useEffect(() => {
     getCommentList(review_id);
+    fetchCommentCount(review_id);
   });
+
   async function getCommentList(review_id: string) {
     let { data: test_review_comment, error } = await clientSupabase
       .from('test_review_comment')
@@ -31,6 +55,7 @@ const CommentList = ({ review_id }: Props) => {
   }
   return (
     <div>
+      <div>댓글 {commentCount}개</div>
       {commentData.map((comment, index) => (
         <div key={index}>
           <CommentCard comment={comment} />

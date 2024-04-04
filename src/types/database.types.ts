@@ -3,27 +3,27 @@ export type Json = string | number | boolean | null | { [key: string]: Json | un
 export type Database = {
   public: {
     Tables: {
-      chatting: {
+      chatting_room: {
         Row: {
-          chatting_id: string;
+          chatting_room_id: string;
           created_at: string;
-          going_chat: boolean | null;
+          isActive: boolean;
           meeting_location: string | null;
           meeting_time: string | null;
           room_id: string | null;
         };
         Insert: {
-          chatting_id?: string;
+          chatting_room_id?: string;
           created_at?: string;
-          going_chat?: boolean | null;
+          isActive?: boolean;
           meeting_location?: string | null;
           meeting_time?: string | null;
           room_id?: string | null;
         };
         Update: {
-          chatting_id?: string;
+          chatting_room_id?: string;
           created_at?: string;
-          going_chat?: boolean | null;
+          isActive?: boolean;
           meeting_location?: string | null;
           meeting_time?: string | null;
           room_id?: string | null;
@@ -41,6 +41,7 @@ export type Database = {
       messages: {
         Row: {
           avatar: string;
+          chatting_room_id: string;
           created_at: string;
           message: string;
           message_id: string;
@@ -49,6 +50,7 @@ export type Database = {
         };
         Insert: {
           avatar: string;
+          chatting_room_id: string;
           created_at?: string;
           message: string;
           message_id?: string;
@@ -57,6 +59,7 @@ export type Database = {
         };
         Update: {
           avatar?: string;
+          chatting_room_id?: string;
           created_at?: string;
           message?: string;
           message_id?: string;
@@ -64,6 +67,13 @@ export type Database = {
           send_from?: string;
         };
         Relationships: [
+          {
+            foreignKeyName: 'public_messages_chatting_room_id_fkey';
+            columns: ['chatting_room_id'];
+            isOneToOne: false;
+            referencedRelation: 'chatting_room';
+            referencedColumns: ['chatting_room_id'];
+          },
           {
             foreignKeyName: 'public_messages_send_from_fkey';
             columns: ['send_from'];
@@ -77,19 +87,19 @@ export type Database = {
         Row: {
           created_at: string;
           part_id: string;
-          room_id: string | null;
+          room_id: string;
           user_id: string | null;
         };
         Insert: {
           created_at?: string;
           part_id?: string;
-          room_id?: string | null;
+          room_id?: string;
           user_id?: string | null;
         };
         Update: {
           created_at?: string;
           part_id?: string;
-          room_id?: string | null;
+          room_id?: string;
           user_id?: string | null;
         };
         Relationships: [
@@ -113,25 +123,31 @@ export type Database = {
         Row: {
           created_at: string;
           image_url: string | null;
+          like_user: string[] | null;
           review_contents: string | null;
           review_id: string;
           review_title: string | null;
+          test_image_url: string[] | null;
           user_id: string | null;
         };
         Insert: {
           created_at?: string;
           image_url?: string | null;
+          like_user?: string[] | null;
           review_contents?: string | null;
           review_id?: string;
           review_title?: string | null;
+          test_image_url?: string[] | null;
           user_id?: string | null;
         };
         Update: {
           created_at?: string;
           image_url?: string | null;
+          like_user?: string[] | null;
           review_contents?: string | null;
           review_id?: string;
           review_title?: string | null;
+          test_image_url?: string[] | null;
           user_id?: string | null;
         };
         Relationships: [];
@@ -214,35 +230,36 @@ export type Database = {
       room: {
         Row: {
           created_at: string;
-          feature: string[];
-          going_chat: boolean;
+          feature: string;
+          going_chat: boolean | null;
           leader_id: string | null;
-          location: string;
-          member_number: string;
+          location: string | null;
+          member_number: string | null;
           room_id: string;
-          room_status: string;
-          room_title: string;
+          room_status: string | null;
+          room_title: string | null;
         };
         Insert: {
           created_at?: string;
-          feature?: string[];
-          going_chat?: boolean;
+          feature: string[];
+          going_chat?: boolean | null;
           leader_id?: string | null;
-          location?: string;
-          member_number?: string;
-          room_status?: string;
-          room_title?: string;
+          location?: string | null;
+          member_number?: string | null;
+          room_id?: string;
+          room_status?: string | null;
+          room_title?: string | null;
         };
         Update: {
           created_at?: string;
-          feature?: string[];
-          going_chat?: boolean;
+          feature?: string;
+          going_chat?: boolean | null;
           leader_id?: string | null;
-          location?: string;
-          member_number?: string;
+          location?: string | null;
+          member_number?: string | null;
           room_id?: string;
-          room_status?: string;
-          room_title?: string;
+          room_status?: string | null;
+          room_title?: string | null;
         };
         Relationships: [
           {
@@ -278,15 +295,37 @@ export type Database = {
         };
         Relationships: [];
       };
+      test_review_like: {
+        Row: {
+          created_at: string;
+          liked_id: string;
+          review_id: string | null;
+          user_id: string | null;
+        };
+        Insert: {
+          created_at?: string;
+          liked_id?: string;
+          review_id?: string | null;
+          user_id?: string | null;
+        };
+        Update: {
+          created_at?: string;
+          liked_id?: string;
+          review_id?: string | null;
+          user_id?: string | null;
+        };
+        Relationships: [];
+      };
       users: {
         Row: {
           avatar: string | null;
           favorite: string | null;
           gender: string | null;
           intro: string | null;
+          isValidate: boolean;
+          kakaoId: string | null;
           login_email: string;
           nickname: string | null;
-          phone: string | null;
           school_email: string | null;
           school_name: string | null;
           user_id: string;
@@ -296,9 +335,10 @@ export type Database = {
           favorite?: string | null;
           gender?: string | null;
           intro?: string | null;
+          isValidate?: boolean;
+          kakaoId?: string | null;
           login_email: string;
           nickname?: string | null;
-          phone?: string | null;
           school_email?: string | null;
           school_name?: string | null;
           user_id: string;
@@ -308,9 +348,10 @@ export type Database = {
           favorite?: string | null;
           gender?: string | null;
           intro?: string | null;
+          isValidate?: boolean;
+          kakaoId?: string | null;
           login_email?: string;
           nickname?: string | null;
-          phone?: string | null;
           school_email?: string | null;
           school_name?: string | null;
           user_id?: string;
