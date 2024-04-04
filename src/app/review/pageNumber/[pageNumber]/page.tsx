@@ -16,6 +16,7 @@ interface ReviewData {
   review_contents: string | null;
   created_at: string | null;
   image_url: string | null;
+  test_image_url: string[] | null;
 }
 
 const ReviewsPage = () => {

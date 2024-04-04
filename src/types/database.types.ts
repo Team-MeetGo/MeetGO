@@ -127,6 +127,7 @@ export type Database = {
           review_contents: string | null;
           review_id: string;
           review_title: string | null;
+          test_image_url: string[] | null;
           user_id: string | null;
         };
         Insert: {
@@ -136,6 +137,7 @@ export type Database = {
           review_contents?: string | null;
           review_id?: string;
           review_title?: string | null;
+          test_image_url?: string[] | null;
           user_id?: string | null;
         };
         Update: {
@@ -145,6 +147,7 @@ export type Database = {
           review_contents?: string | null;
           review_id?: string;
           review_title?: string | null;
+          test_image_url?: string[] | null;
           user_id?: string | null;
         };
         Relationships: [];

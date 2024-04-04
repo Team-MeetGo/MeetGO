@@ -1,29 +1,40 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { CommentListType } from './CommentList';
 import { clientSupabase } from '(@/utils/supabase/client)';
+import Image from 'next/image';
+import AvatarDefault from '(@/utils/icons/AvatarDefault)';
 
 type Props = {
   comment: CommentListType;
 };
 
 const CommentCard = ({ comment }: Props) => {
-  const [isEditMode, setIsEditMode] = useState(false);
-  const [editedComment, setEditedComment] = useState(comment.comment_content);
-  const handleEditComment = async () => {
-    if (comment.comment_content === editedComment) {
-      alert('수정 된 내용이 없습니다.');
-      return;
-    }
-    const { data, error } = await clientSupabase
-      .from('test_review_comment')
-      .update({ comment_content: editedComment })
-      .eq('comment_id', comment.comment_id as string)
-      .select();
-    if (error) {
-      console.log(error.message);
-    }
-    setIsEditMode(false);
+  const [userId, setUserId] = useState<string | null>(null);
+  const [userAvatar, setUserAvatar] = useState<string | null>(null);
+  const [userNickname, setUserNickname] = useState<string | null>(null);
+
+  const getUserId = async () => {
+    const { data: user } = await clientSupabase.auth.getUser();
+    setUserId(user?.user?.id || '');
   };
+
+  const getUserInfo = async () => {
+    const { data: userData, error: userError } = await clientSupabase
+      .from('users')
+      .select('nickname, avatar')
+      .eq('user_id', comment.user_id as string)
+      .single();
+    setUserAvatar(userData?.avatar || null);
+    setUserNickname(userData?.nickname || null);
+  };
+
+  useEffect(() => {
+    if (comment.comment_id) {
+      getUserId();
+      getUserInfo();
+    }
+  });
+
   const handleDeleteComment = async () => {
     if (window.confirm('댓글을 삭제하시겠습니까?')) {
       const { error } = await clientSupabase
@@ -33,39 +44,38 @@ const CommentCard = ({ comment }: Props) => {
     }
     return;
   };
-  const handleCancelEdit = () => {
-    if (window.confirm('수정을 취소하시겠습니까?')) {
-      setEditedComment(comment.comment_content);
-      setIsEditMode(false);
-    }
-  };
+
   return (
-    <div>
-      <p>댓글 아이디 : {comment.comment_id}</p>
-      <p>유저 아이디 : {comment.user_id}</p>
-      <p>{comment.created_at}</p>
+    <div className="flex">
       <div>
-        {!isEditMode ? (
-          <p>댓글 내용 : {comment.comment_content}</p>
+        {userAvatar ? (
+          <Image className="mr-[15px] rounded-full" src={userAvatar} alt="유저 아바타" height={50} width={50} />
         ) : (
-          <textarea
-            id="editedComment"
-            required
-            value={editedComment || ''}
-            onChange={(e) => setEditedComment(e.target.value)}
-          />
+          <AvatarDefault />
         )}
       </div>
-      {!isEditMode ? (
-        <button onClick={() => setIsEditMode(true)}>수정</button>
-      ) : (
-        <button onClick={handleEditComment}>수정완료</button>
-      )}
-      {!isEditMode ? (
-        <button onClick={handleDeleteComment}>삭제</button>
-      ) : (
-        <button onClick={handleCancelEdit}>취소</button>
-      )}
+      <div>
+        <div className="flex">
+          <div>{userNickname}</div>
+          <div className="text-[#A1A1AA]">
+            {comment && comment.created_at
+              ? new Intl.DateTimeFormat('ko-KR', {
+                  year: 'numeric',
+                  month: '2-digit',
+                  day: '2-digit',
+                  hour: '2-digit',
+                  minute: '2-digit',
+                  second: '2-digit',
+                  hour12: false
+                }).format(new Date(comment.created_at))
+              : null}
+          </div>
+        </div>
+        <div>
+          <p>{comment.comment_content}</p>
+        </div>
+      </div>
+      <div>{userId === comment.user_id && <button onClick={handleDeleteComment}>삭제</button>}</div>
     </div>
   );
 };
