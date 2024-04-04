@@ -15,7 +15,7 @@ function MeetingRoom({ list }: { list: MeetingRoom[] }) {
         <Card key={room.room_id} shadow="sm" isPressable>
           <CardBody className="overflow-visible p-0 m-8">
             <Link href={`/meetingRoom/${room.room_id}`}>
-              <main onClick={() => addMemeberHandler(room.room_id)}>
+              <main onClick={async () => await addMemeberHandler(room.room_id)}>
                 <div> {room.room_title} </div>
                 <div> {room.feature} </div>
                 <div> {room.location} </div>
