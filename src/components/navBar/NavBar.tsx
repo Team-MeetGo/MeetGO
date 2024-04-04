@@ -6,7 +6,6 @@ const NavBar = async () => {
   const { data } = await supabase.auth.getUser();
   const user = data.user;
   const { data: userData } = await supabase.from('users').select('*').eq('user_id', String(user?.id));
-  console.log('유저데이터 =>', userData);
   return (
     <>
       <InitUser userData={userData} />

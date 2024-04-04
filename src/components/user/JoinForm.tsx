@@ -109,6 +109,7 @@ const JoinForm = () => {
                 name="nickname"
                 placeholder="닉네임을 입력해주세요."
                 onChange={onChangeInput}
+                required
               />
             </label>
             <Button
@@ -149,6 +150,7 @@ const JoinForm = () => {
               name={name}
               placeholder={placeholder}
               onChange={onChangeInput}
+              required
             />
             {!isValidateShow[name] && <p className="text-red-500 text-[13px] mt-2">{error}</p>}
           </label>

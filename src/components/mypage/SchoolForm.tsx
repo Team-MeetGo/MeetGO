@@ -3,6 +3,9 @@
 import { emailCodeAPI, emailConfirmAPI, schoolConfirmAPI } from '(@/utils/api/emailConfirmAPI)';
 import { useState } from 'react';
 import { schoolValidation } from '(@/utils/Validation)';
+import { userStore } from '(@/store/userStore)';
+import { clientSupabase } from '(@/utils/supabase/client)';
+import { getUserId } from '(@/utils/api/authAPI)';
 
 const SchoolForm = () => {
   const [schoolEmail, setSchoolEmail] = useState('');
@@ -14,6 +17,20 @@ const SchoolForm = () => {
     schoolEmail: '',
     univName: ''
   });
+
+  const { user, setUser } = userStore((state) => state);
+
+  /** 학교 업데이트하는 로직 */
+  const updateSchool = async () => {
+    const { result: userId } = await getUserId();
+    const { error } = await clientSupabase
+      .from('users')
+      .update({ school_email: schoolEmail, school_name: univName, isValidate: true })
+      .eq('user_id', userId);
+    if (error) {
+      console.error('Error updating school:', error);
+    }
+  };
 
   const onChangeInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -64,8 +81,7 @@ const SchoolForm = () => {
       if (response.success) {
         setIsCodeValid(true); // 인증 코드 유효성 검사 결과 상태 업데이트
         alert('인증 완료');
-        setIsCodeSent(false); // 인증 완료했으니 코드입력창 다시 없애기
-        //  DB의 isValidata 상태 업데이트 로직 구현해야함
+        updateSchool();
       } else {
         setIsCodeValid(false);
         alert('인증 코드가 유효하지 않습니다.');
@@ -81,38 +97,55 @@ const SchoolForm = () => {
         <label className="block text-sm font-medium mb-1" htmlFor="schoolEmail">
           학교 이메일
         </label>
-        <input
-          className="mr-2 border p-3 rounded-md"
-          name="schoolEmail"
-          id="schoolEmail"
-          type="email"
-          value={schoolEmail}
-          placeholder=""
-          onChange={onChangeInput}
-        />
-        {validationMessages.schoolEmail && (
-          <p className="text-red-500 text-[13px] mt-2">{validationMessages.schoolEmail}</p>
+        {user && user[0].isValidate ? (
+          <p>{user[0].school_email}</p>
+        ) : (
+          <>
+            <input
+              className="mr-2 border p-3 rounded-md"
+              name="schoolEmail"
+              id="schoolEmail"
+              type="email"
+              value={schoolEmail}
+              placeholder=""
+              onChange={onChangeInput}
+            />
+            {validationMessages.schoolEmail && (
+              <p className="text-red-500 text-[13px] mt-2">{validationMessages.schoolEmail}</p>
+            )}
+          </>
         )}
       </div>
       <div className="flex flex-col">
         <label className="block text-sm font-medium mb-1" htmlFor="univName">
           학교명
         </label>
-        <input
-          className="mr-2 border p-3 rounded-md"
-          name="univName"
-          id="univName"
-          type="text"
-          value={univName}
-          placeholder=""
-          onChange={onChangeInput}
-        />
-        {validationMessages.univName && <p className="text-red-500 text-[13px] mt-2">{validationMessages.univName}</p>}
+        {user && user[0].isValidate ? (
+          <p>{user[0].school_name}</p>
+        ) : (
+          <>
+            <input
+              className="mr-2 border p-3 rounded-md"
+              name="univName"
+              id="univName"
+              type="text"
+              value={univName}
+              placeholder=""
+              onChange={onChangeInput}
+            />
+            {validationMessages.univName && (
+              <p className="text-red-500 text-[13px] mt-2">{validationMessages.univName}</p>
+            )}
+          </>
+        )}
       </div>
-      <button onClick={onSubmitEmailConfirm} disabled={isCodeSent}>
-        인증
-      </button>
-      <p>인증완료✔️</p>
+      {user && user[0].isValidate ? (
+        <p>인증완료✔️</p>
+      ) : (
+        <button onClick={onSubmitEmailConfirm} disabled={isCodeSent}>
+          인증
+        </button>
+      )}
       {isCodeSent && (
         <div className="flex flex-col">
           <label className="block text-sm font-medium mb-1" htmlFor="schoolEmail">
