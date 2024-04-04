@@ -21,14 +21,7 @@ const Map = () => {
 
     script.addEventListener('load', () => {
       window.kakao.maps.load(() => {
-        const mapContainer = document.getElementById('map');
-        const kakaoMap = new window.kakao.maps.Map(mapContainer, {
-          center: new window.kakao.maps.LatLng(33.450701, 126.570667),
-          level: 3
-        });
-        setMap(kakaoMap);
-
-        getCurrentPosition(kakaoMap);
+        getCurrentPosition();
       });
     });
 
@@ -39,13 +32,16 @@ const Map = () => {
   }, []);
 
   // 현재 위치 받아오는 함수
-  const getCurrentPosition = (map: any) => {
+  const getCurrentPosition = () => {
     navigator.geolocation.getCurrentPosition(
       (pos: GeolocationPosition) => {
         const currentPos = new window.kakao.maps.LatLng(pos.coords.latitude, pos.coords.longitude);
-        map.panTo(currentPos);
-        console.log('현재 위치', currentPos);
-
+        const mapContainer = document.getElementById('map');
+        const kakaoMap = new window.kakao.maps.Map(mapContainer, {
+          center: currentPos,
+          level: 3
+        });
+        setMap(kakaoMap);
         searchBarsNearby(currentPos);
       },
       () => alert('위치 정보를 가져오는데 실패했습니다.'),
@@ -66,8 +62,8 @@ const Map = () => {
       (data: any, status: any) => {
         if (status === window.kakao.maps.services.Status.OK) {
           console.log('주변 술집:', data);
-          displayBarsAsMarkers(data);
           setBars(data);
+          displayBarsAsMarkers(data);
         } else {
           console.error('실패', status);
         }
@@ -81,21 +77,24 @@ const Map = () => {
 
   // 술집 마커로 찍기
   const displayBarsAsMarkers = (bars: any[]) => {
-    const markers = bars.map((bar, index) => {
+    const newMarkers = bars.map((bar) => {
       const markerPosition = new window.kakao.maps.LatLng(bar.y, bar.x);
       const marker = new window.kakao.maps.Marker({
+        map: map,
         position: markerPosition,
-        map: map
+        title: bar.place_name
       });
+      console.log('map', map);
       return marker;
     });
-    setMarkers(markers);
+
+    setMarkers(newMarkers);
   };
 
   return (
     <div>
       <div id="map" className="w-96 h-96"></div>
-      <div>
+      <div style={{ maxHeight: '400px', overflowY: 'auto' }}>
         {bars.map((bar, index) => (
           <div key={index} className="border">
             <h1>{bar.place_name}</h1>
