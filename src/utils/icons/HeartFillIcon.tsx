@@ -7,7 +7,7 @@ type Props = {
 const HeartFillIcon = ({ className }: Props) => {
   return (
     <div>
-      <AiFillHeart className={className || 'w-5 h-5'} style={{ color: 'red' }} />
+      <AiFillHeart className={`text-red-500 ${className}`} style={{ color: '#F31236' }} />
     </div>
   );
 };

@@ -12,9 +12,10 @@ export type CommentListType = {
 
 type Props = {
   review_id: string;
+  onUpdateCommentCount: (count: number) => void;
 };
 
-const CommentList = ({ review_id }: Props) => {
+const CommentList = ({ review_id, onUpdateCommentCount }: Props) => {
   const [commentData, setCommentData] = useState<CommentListType[]>([]);
   const [commentCount, setCommentCount] = useState(0);
 
@@ -30,8 +31,10 @@ const CommentList = ({ review_id }: Props) => {
 
     if (test_review_comment) {
       setCommentCount(test_review_comment.length);
+      onUpdateCommentCount(test_review_comment.length);
     } else {
       setCommentCount(0);
+      onUpdateCommentCount(0);
     }
   };
 

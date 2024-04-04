@@ -7,7 +7,7 @@ export type Database = {
         Row: {
           chatting_room_id: string;
           created_at: string;
-          going_chat: boolean | null;
+          isActive: boolean;
           meeting_location: string | null;
           meeting_time: string | null;
           room_id: string | null;
@@ -15,7 +15,7 @@ export type Database = {
         Insert: {
           chatting_room_id?: string;
           created_at?: string;
-          going_chat?: boolean | null;
+          isActive?: boolean;
           meeting_location?: string | null;
           meeting_time?: string | null;
           room_id?: string | null;
@@ -23,7 +23,7 @@ export type Database = {
         Update: {
           chatting_room_id?: string;
           created_at?: string;
-          going_chat?: boolean | null;
+          isActive?: boolean;
           meeting_location?: string | null;
           meeting_time?: string | null;
           room_id?: string | null;
@@ -41,6 +41,7 @@ export type Database = {
       messages: {
         Row: {
           avatar: string;
+          chatting_room_id: string;
           created_at: string;
           message: string;
           message_id: string;
@@ -49,6 +50,7 @@ export type Database = {
         };
         Insert: {
           avatar: string;
+          chatting_room_id: string;
           created_at?: string;
           message: string;
           message_id?: string;
@@ -57,6 +59,7 @@ export type Database = {
         };
         Update: {
           avatar?: string;
+          chatting_room_id?: string;
           created_at?: string;
           message?: string;
           message_id?: string;
@@ -64,6 +67,13 @@ export type Database = {
           send_from?: string;
         };
         Relationships: [
+          {
+            foreignKeyName: 'public_messages_chatting_room_id_fkey';
+            columns: ['chatting_room_id'];
+            isOneToOne: false;
+            referencedRelation: 'chatting_room';
+            referencedColumns: ['chatting_room_id'];
+          },
           {
             foreignKeyName: 'public_messages_send_from_fkey';
             columns: ['send_from'];
@@ -117,6 +127,7 @@ export type Database = {
           review_contents: string | null;
           review_id: string;
           review_title: string | null;
+          test_image_url: string[] | null;
           user_id: string | null;
         };
         Insert: {
@@ -126,6 +137,7 @@ export type Database = {
           review_contents?: string | null;
           review_id?: string;
           review_title?: string | null;
+          test_image_url?: string[] | null;
           user_id?: string | null;
         };
         Update: {
@@ -135,6 +147,7 @@ export type Database = {
           review_contents?: string | null;
           review_id?: string;
           review_title?: string | null;
+          test_image_url?: string[] | null;
           user_id?: string | null;
         };
         Relationships: [];
