@@ -9,8 +9,8 @@ import NewChatAlert from './NewChatAlert';
 import LoadChatMore from './LoadChatMore';
 import ChatDeleteDropDown from './ChatDeleteDropDown';
 import { chatStore } from '(@/store/chatStore)';
-import { Button, Tooltip } from '@nextui-org/react';
-import { UserDataFromTable } from '(@/types/userTypes)';
+import { Tooltip } from '@nextui-org/react';
+import OthersChat from './OthersChat';
 
 const ChatList = ({ serverMsg, user }: { serverMsg: Message[]; user: User | null }) => {
   const [messages, setMessages] = useState<Message[]>([...serverMsg]);
@@ -19,42 +19,46 @@ const ChatList = ({ serverMsg, user }: { serverMsg: Message[]; user: User | null
   const [newAddedMsgNum, setNewAddedMsgNum] = useState(0);
   const [count, setCount] = useState(1);
   const [hasMore, setHasMore] = useState(messages.length >= ITEM_INTERVAL + 1);
-  const roomData = chatStore((state) => state.roomData);
+
+  const { roomId, chatRoomId } = chatStore((state) => state);
 
   useEffect(() => {
-    const channle = clientSupabase
-      .channel(`${roomData && roomData[0]?.room_id}`)
-      .on(
-        'postgres_changes',
-        {
-          event: 'INSERT',
-          schema: 'public',
-          table: 'messages'
-        },
-        (payload) => {
-          setMessages([...messages, payload.new as Message]);
-          if (isScrolling) {
-            setNewAddedMsgNum((prev) => (prev += 1));
+    if (roomId && chatRoomId) {
+      // INSERT, DELETE 구독
+      const channle = clientSupabase
+        .channel(String(chatRoomId))
+        .on(
+          'postgres_changes',
+          {
+            event: 'INSERT',
+            schema: 'public',
+            table: 'messages'
+          },
+          (payload) => {
+            setMessages([...messages, payload.new as Message]);
+            if (isScrolling) {
+              setNewAddedMsgNum((prev) => (prev += 1));
+            }
           }
+        )
+        .on('postgres_changes', { event: 'DELETE', schema: 'public', table: 'messages' }, (payload) => {
+          setMessages(messages.filter((msg) => msg.message_id !== payload.old.message_id));
+        })
+        .subscribe();
+
+      const checkRestMsg = async () => {
+        const { data: restMsgs } = await clientSupabase.from('messages').select('*');
+        if (restMsgs && restMsgs?.length <= ITEM_INTERVAL + 1) {
+          setHasMore(false);
         }
-      )
-      .on('postgres_changes', { event: 'DELETE', schema: 'public', table: 'messages' }, (payload) => {
-        setMessages(messages.filter((msg) => msg.message_id !== payload.old.message_id));
-      })
-      .subscribe();
+      };
+      checkRestMsg();
 
-    const checkRestMsg = async () => {
-      const { data: restMsgs } = await clientSupabase.from('messages').select('*');
-      if (restMsgs && restMsgs?.length <= ITEM_INTERVAL + 1) {
-        setHasMore(false);
-      }
-    };
-    checkRestMsg();
-
-    return () => {
-      clientSupabase.removeChannel(channle);
-    };
-  }, [messages, setMessages, isScrolling]);
+      return () => {
+        clientSupabase.removeChannel(channle);
+      };
+    }
+  }, [messages, setMessages, isScrolling, roomId, chatRoomId]);
 
   useEffect(() => {
     const scrollBox = scrollRef.current;
@@ -155,59 +159,6 @@ const MyChat = ({ msg }: { msg: Message }) => {
       <Tooltip content="여기 컴포넌트">
         <div className="h-14 w-14 bg-indigo-600 rounded-full my-auto">{msg.avatar}</div>
       </Tooltip>
-    </div>
-  );
-};
-
-const OthersChat = ({ msg }: { msg: Message }) => {
-  const roomId = 'c9c15e2c-eae0-40d4-ad33-9a05ad4792b5';
-  const [usersData, setUsersData] = useState<UserDataFromTable[] | null>();
-  useEffect(() => {
-    const fetchParticipants = async () => {
-      const { data: userIds, error: userIdErr } = await clientSupabase
-        .from('participants')
-        .select('user_id')
-        .eq('room_id', roomId);
-      console.log('채팅방 멤버들', userIds);
-
-      if (userIds) {
-        const users = [];
-        for (const id of userIds) {
-          const { data, error: usersDataErr } = await clientSupabase
-            .from('users')
-            .select('*')
-            .eq('user_id', String(id.user_id));
-          console.log(data);
-          if (data) users.push(...data);
-        }
-        console.log('users', users);
-        setUsersData([...users]);
-      }
-    };
-    fetchParticipants();
-  }, []);
-
-  const showThatUser = (userId: string | null) => {
-    const thatUserData = usersData?.find((data) => data.user_id === userId);
-    return thatUserData;
-  };
-
-  return (
-    <div className="flex gap-4" key={msg.message_id}>
-      <Tooltip content={<div>{showThatUser(msg.send_from)?.nickname}</div>}>
-        <div className="h-14 w-14 bg-indigo-600 rounded-full my-auto">{msg.avatar}</div>
-      </Tooltip>
-
-      <div className="w-80 h-24 flex flex-col gap-1">
-        <div className="font-bold">{msg.nickname}</div>
-        <div className="gap-2 mr-auto">
-          <div className="border rounded-md py-3 px-5 h-full">{msg.message}</div>
-        </div>
-
-        <div className="mt-auto text-slate-100 text-xs">
-          <p>{getformattedDate(msg.created_at)}</p>
-        </div>
-      </div>
     </div>
   );
 };

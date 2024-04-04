@@ -3,6 +3,7 @@ import { clientSupabase } from '(@/utils/supabase/client)';
 import { useEffect, useState } from 'react';
 import ChatPresence from './ChatPresence';
 import { RoomData } from '(@/types/chatTypes)';
+import { chatStore } from '(@/store/chatStore)';
 
 const ChatHeader = () => {
   async function signOut() {
@@ -11,16 +12,61 @@ const ChatHeader = () => {
   }
   // const roomId = window.location.pathname.substring(1);
   const roomId = 'c9c15e2c-eae0-40d4-ad33-9a05ad4792b5';
-  const [roomData, setRoomData] = useState<RoomData[]>();
+  // const [roomData, setRoomData] = useState<RoomData[]>();
   // store에 roomData 지울지? 다른 사람들 필요하면 냅두기
+  const { roomData, setRoomData, setRoomId, setChatRoomId } = chatStore((state) => state);
 
   useEffect(() => {
     const fetchRoomData = async (roomId: string) => {
-      const { data } = await clientSupabase.from('room').select('*').eq('room_id', roomId);
-      data && setRoomData([...data]);
+      const { data: room } = await clientSupabase.from('room').select('*').eq('room_id', roomId);
+      return room;
     };
-    fetchRoomData(roomId);
-  }, []);
+
+    const fetchChatRoomId = async () => {
+      const { data: chatRoomId, error } = await clientSupabase
+        .from('chatting_room')
+        .select('chatting_room_id')
+        .eq('room_id', String(roomId));
+      return chatRoomId;
+    };
+    fetchChatRoomId();
+
+    const fetchRoomChat = async (roomId: string) => {
+      const room = await fetchRoomData(roomId);
+      const chatRoomId = await fetchChatRoomId();
+      if (room && chatRoomId) {
+        setRoomData([...room]);
+        setRoomId(room[0].room_id);
+        setChatRoomId(chatRoomId[0].chatting_room_id);
+      }
+    };
+    fetchRoomChat(roomId);
+
+    // const abc = async () => {
+    //   const data = await fetchRoomData(roomId);
+    //   console.log(data);
+    // };
+
+    // abc();
+
+    // const getChatRoomId = async () => {
+    //   const { data: chatRoomId, error } = await clientSupabase
+    //     .from('chatting_room')
+    //     .select('chatting_room_id')
+    //     .eq('room_id', String(roomId));
+    // };
+  }, [setRoomData, setRoomId, setChatRoomId]);
+
+  //   const getOutOfRoom = async () => {
+  // const {data:, error} = await clientSupabase.from("chatting_room").delete().eq("room_id", roomId)
+
+  // if(error) {
+  //   console.error(error.message)
+  //  alert("채팅방 나가기에서 오류가 발생하였습니다.")
+  // } else {
+
+  // }
+  //   }
 
   return (
     <div className="h-20 border-b border-indigo-600 flex p-3 justify-between">
@@ -28,11 +74,11 @@ const ChatHeader = () => {
         {roomData && roomData[0]?.room_title}
         <div className="text-base font-normal">
           누가 들어와 있는지 들어갈 부분
-          <ChatPresence roomId={roomId} />
+          <ChatPresence />
         </div>
       </div>
       <div></div>
-      <button onClick={signOut}>로그아웃</button>
+      <button onClick={signOut}>나가기</button>
     </div>
   );
 };

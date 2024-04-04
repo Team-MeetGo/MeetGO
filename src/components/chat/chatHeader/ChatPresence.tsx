@@ -1,15 +1,17 @@
 'use client';
+import { chatStore } from '(@/store/chatStore)';
 import { userStore } from '(@/store/userStore)';
 import { clientSupabase } from '(@/utils/supabase/client)';
 import { useEffect, useState } from 'react';
 
-const ChatPresence = ({ roomId }: { roomId: string | undefined }) => {
+const ChatPresence = () => {
   const userData = userStore((state) => state.user);
   const [onlineUsers, setOnlineUsers] = useState(0);
+  const { chatRoomId } = chatStore((state) => state);
 
   useEffect(() => {
-    if (roomId) {
-      const channel = clientSupabase.channel(roomId);
+    if (chatRoomId) {
+      const channel = clientSupabase.channel(chatRoomId);
       channel
         .on('presence', { event: 'sync' }, () => {
           const nowUsers = [];
