@@ -7,29 +7,66 @@ import SchoolForm from './SchoolForm';
 import { getUserId } from '(@/utils/api/authAPI)';
 import { clientSupabase } from '(@/utils/supabase/client)';
 import { userStore } from '(@/store/userStore)';
+import AvatarForm from './AvatarForm';
 
 const Profile = () => {
+  const [inputIntro, setInputIntro] = useState('' as string);
+  const [intro, setIntro] = useState('' as string);
+  const [inputKakaoId, setInputKakaoId] = useState('' as string);
+  const [kakaoId, setKakaoId] = useState('' as string);
+  const [isEditing, setIsEditing] = useState(false);
+
   const [selected, setSelected] = useState<Set<string>>(new Set());
-  const userId = getUserId();
+
   const { user, setUser } = userStore((state) => state);
 
-  async function getUserInfo(userId: string) {
-    const { data, error } = await clientSupabase.from('users').select('*').eq('user_id', userId);
-    console.log('data:', data);
-    if (error) {
-      console.error('Error fetching user data:', error);
-      return null;
-    }
-    return data;
-  }
+  // async function getUserInfo(userId: string) {
+  //   const { data, error } = await clientSupabase.from('users').select('*').eq('user_id', userId);
+  //   console.log('data:', data);
+  //   if (error) {
+  //     console.error('Error fetching user data:', error);
+  //     return null;
+  //   }
+  //   return data;
+  // }
+
+  const toggleEditing = () => {
+    setIsEditing(!isEditing);
+  };
+
+  // 자기소개 입력 변경 처리
+  const onChangeIntroInput = (e: any) => {
+    setInputIntro(e.target.value);
+  };
+
+  // 카카오ID 입력 변경 처리
+  const onChangeKakaoIdInput = (e: any) => {
+    setInputKakaoId(e.target.value);
+  };
 
   /** 자기소개 업데이트하는 로직 */
-  async function updateIntroduction(introduction: string) {
-    const { error } = await clientSupabase.from('users').update({ intro: introduction }).eq('user_id', userId);
+  const updateIntroduction = async () => {
+    const { result: userId } = await getUserId();
+    const { error } = await clientSupabase.from('users').update({ intro: inputIntro }).eq('user_id', userId);
     if (error) {
       console.error('Error updating introduction:', error);
+    } else {
+      setIntro(inputIntro);
+      setIsEditing(false);
     }
-  }
+  };
+
+  /** 카카오ID 업데이트하는 로직 */
+  const updateKakaoId = async () => {
+    const { result: userId } = await getUserId();
+    const { error } = await clientSupabase.from('users').update({ kakaoId: inputKakaoId }).eq('user_id', userId);
+    if (error) {
+      console.error('Error updating kakaoId:', error);
+    } else {
+      setKakaoId(inputKakaoId);
+      setIsEditing(false);
+    }
+  };
 
   return (
     <div className="max-w-4xl mx-auto p-6 bg-white">
@@ -40,18 +77,32 @@ const Profile = () => {
           <p className="block text-sm font-medium mb-1">{user && user[0].login_email}</p>
           <p className="block text-sm font-medium mb-1">{user && user[0].gender === 'female' ? '여성' : '남성'}</p>
         </div>
-        <div className="flex justify-center items-center">
-          <div className="w-32 h-32 bg-gray-300" />
-        </div>
+        <AvatarForm />
       </div>
-      <SchoolForm
-        userSchoolEmail={user && user[0] && user[0].school_email}
-        userSchoolName={user && user[0] && user[0].school_name}
-        isValidate={user && user[0].isValidate}
-      />
+      <SchoolForm />
       <div className="mb-6">
-        <label className="block text-sm font-medium mb-1">카카오톡 ID</label>
-        <p className="block text-sm font-medium mb-1">{user && user[0].kakaoId}</p>
+        <label className="block text-sm font-medium mb-1">카카오톡ID</label>
+        {user && user[0].kakaoId && !isEditing ? (
+          <>
+            <button className="text-xs" onClick={toggleEditing}>
+              수정하기
+            </button>
+            <p className="block text-sm font-medium mb-1">{user[0].kakaoId}</p>
+          </>
+        ) : (
+          <>
+            <button className="text-xs" onClick={updateKakaoId}>
+              등록하기
+            </button>
+            <textarea
+              className="w-full p-2 border border-gray-300 rounded-md"
+              id="kakaoId"
+              placeholder=""
+              value={inputKakaoId}
+              onChange={onChangeKakaoIdInput}
+            />
+          </>
+        )}
       </div>
       <div className="mb-6">
         <label>취향</label>
@@ -72,7 +123,27 @@ const Profile = () => {
         <label className="block text-sm font-medium mb-1" htmlFor="introduction">
           자기소개(최대 10자)
         </label>
-        <p className="block text-sm font-medium mb-1">{user && user[0].kakaoId}</p>
+        {user && user[0].intro && !isEditing ? (
+          <>
+            <button className="text-xs" onClick={toggleEditing}>
+              수정하기
+            </button>
+            <p className="block text-sm font-medium mb-1">{user[0].intro}</p>
+          </>
+        ) : (
+          <>
+            <button className="text-xs" onClick={updateIntroduction}>
+              등록하기
+            </button>
+            <textarea
+              className="w-full p-2 border border-gray-300 rounded-md"
+              id="introduction"
+              placeholder="자기소개를 입력해주세요."
+              value={isEditing ? inputIntro : user && user[0].intro ? user[0].intro : ''}
+              onChange={onChangeIntroInput}
+            />
+          </>
+        )}
       </div>
       <div className="mb-6">
         <h2 className="text-lg font-semibold mb-4">스쳐간 인연 리스트</h2>

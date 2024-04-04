@@ -9,7 +9,6 @@ import { userStore } from '(@/store/userStore)';
 const ChatPage = async () => {
   const supabase = serverSupabase();
   const { data } = await supabase.auth.getUser();
-  // console.log('유저데이터 =>', data.user);
   const user = data.user;
 
   // const { data: userData } = await supabase

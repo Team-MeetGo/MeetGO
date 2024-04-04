@@ -3,8 +3,11 @@
 import { emailCodeAPI, emailConfirmAPI, schoolConfirmAPI } from '(@/utils/api/emailConfirmAPI)';
 import { useState } from 'react';
 import { schoolValidation } from '(@/utils/Validation)';
+import { userStore } from '(@/store/userStore)';
+import { clientSupabase } from '(@/utils/supabase/client)';
+import { getUserId } from '(@/utils/api/authAPI)';
 
-const SchoolForm = ({ userSchoolEmail, userSchoolName, isValidate }) => {
+const SchoolForm = () => {
   const [schoolEmail, setSchoolEmail] = useState('');
   const [univName, setUnivName] = useState('');
   const [code, setCode] = useState('');
@@ -14,6 +17,20 @@ const SchoolForm = ({ userSchoolEmail, userSchoolName, isValidate }) => {
     schoolEmail: '',
     univName: ''
   });
+
+  const { user, setUser } = userStore((state) => state);
+
+  /** 학교 업데이트하는 로직 */
+  const updateSchool = async () => {
+    const { result: userId } = await getUserId();
+    const { error } = await clientSupabase
+      .from('users')
+      .update({ school_email: schoolEmail, school_name: univName, isValidate: true })
+      .eq('user_id', userId);
+    if (error) {
+      console.error('Error updating school:', error);
+    }
+  };
 
   const onChangeInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -64,8 +81,7 @@ const SchoolForm = ({ userSchoolEmail, userSchoolName, isValidate }) => {
       if (response.success) {
         setIsCodeValid(true); // 인증 코드 유효성 검사 결과 상태 업데이트
         alert('인증 완료');
-        setIsCodeSent(false); // 인증 완료했으니 코드입력창 다시 없애기
-        //  DB의 isValidata 상태 업데이트 로직 구현해야함
+        updateSchool(schoolEmail, univName, true);
       } else {
         setIsCodeValid(false);
         alert('인증 코드가 유효하지 않습니다.');
@@ -81,8 +97,8 @@ const SchoolForm = ({ userSchoolEmail, userSchoolName, isValidate }) => {
         <label className="block text-sm font-medium mb-1" htmlFor="schoolEmail">
           학교 이메일
         </label>
-        {isValidate ? (
-          <p>{userSchoolEmail}</p>
+        {user && user[0].isValidate ? (
+          <p>{user[0].school_email}</p>
         ) : (
           <>
             <input
@@ -104,8 +120,8 @@ const SchoolForm = ({ userSchoolEmail, userSchoolName, isValidate }) => {
         <label className="block text-sm font-medium mb-1" htmlFor="univName">
           학교명
         </label>
-        {isValidate ? (
-          <p>{userSchoolName}</p>
+        {user && user[0].isValidate ? (
+          <p>{user[0].school_name}</p>
         ) : (
           <>
             <input
@@ -123,7 +139,7 @@ const SchoolForm = ({ userSchoolEmail, userSchoolName, isValidate }) => {
           </>
         )}
       </div>
-      {isValidate ? (
+      {user && user[0].isValidate ? (
         <p>인증완료✔️</p>
       ) : (
         <button onClick={onSubmitEmailConfirm} disabled={isCodeSent}>
