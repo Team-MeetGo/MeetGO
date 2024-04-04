@@ -14,41 +14,6 @@ const Member = ({ params }: { params: { id: UUID } }) => {
   console.log('나 포함 참가자들 =>', participants);
 
   useEffect(() => {
-    // const participantsList = async () => {
-    //   const { data: participantList } = await clientSupabase.from('participants').select('*').eq('room_id', params.id);
-
-    //   if (!participantList || participantList === null) return;
-    //   setParticipants(participantList);
-
-    //   const channels = clientSupabase
-    //     .channel('custom-insert-channel')
-    //     .on(
-    //       'postgres_changes',
-    //       {
-    //         event: 'INSERT',
-    //         schema: 'public',
-    //         table: 'participants'
-    //       },
-    //       (payload) => {
-    //         // setParticipants((addMember) => [...addMember, payload.new as ParticipantType]);
-    //       }
-    //     )
-    //     .subscribe();
-
-    //   const deletechannels = clientSupabase
-    //     .channel('custom-delete-channel')
-    //     .on('postgres_changes', { event: 'DELETE', schema: 'public', table: 'participants' }, (payload) => {
-    //       const filterdMember = participants.filter((member) => member.part_id !== payload.old.part_id);
-    //       setParticipants(() => filterdMember);
-    //     })
-    //     .subscribe();
-
-    //   return () => {
-    //     clientSupabase.removeChannel(channels);
-    //   };
-    // };
-    // participantsList();
-
     const channle = clientSupabase
       .channel('custom-insert-channel')
       .on(
@@ -63,6 +28,7 @@ const Member = ({ params }: { params: { id: UUID } }) => {
           setParticipants(participants ? [...participants, payload.new as UserDataFromTable] : []);
         }
       )
+      // .on() Delete
       .subscribe();
     return () => {
       clientSupabase.removeChannel(channle);
