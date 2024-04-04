@@ -21,7 +21,8 @@ const ChatInput = () => {
         chatting_room_id: chatRoomId
       });
       if (error) {
-        alert(error.message);
+        console.error(error.message);
+        alert('새로운 메세지 추가 실패');
       }
     }
   };

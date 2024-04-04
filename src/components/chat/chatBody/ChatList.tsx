@@ -12,13 +12,14 @@ import { chatStore } from '(@/store/chatStore)';
 import { Tooltip } from '@nextui-org/react';
 import OthersChat from './OthersChat';
 
-const ChatList = ({ serverMsg, user }: { serverMsg: Message[]; user: User | null }) => {
-  const [messages, setMessages] = useState<Message[]>([...serverMsg]);
+const ChatList = ({ allMsgs, user }: { allMsgs: Message[]; user: User | null }) => {
+  const [messages, setMessages] = useState<Message[]>([...allMsgs?.slice(0, 3).reverse()]);
   const scrollRef = useRef() as React.MutableRefObject<HTMLDivElement>;
   const [isScrolling, setIsScrolling] = useState(false);
   const [newAddedMsgNum, setNewAddedMsgNum] = useState(0);
   const [count, setCount] = useState(1);
-  const [hasMore, setHasMore] = useState(messages.length >= ITEM_INTERVAL + 1);
+  const NumOfrestMsg = allMsgs?.length - messages?.length;
+  const [hasMore, setHasMore] = useState(NumOfrestMsg > 0);
 
   const { roomId, chatRoomId } = chatStore((state) => state);
 
@@ -95,7 +96,6 @@ const ChatList = ({ serverMsg, user }: { serverMsg: Message[]; user: User | null
       alert('이전 메세지를 불러오는 데에 오류가 발생했습니다.');
     } else {
       setMessages([...(newMsgs ? newMsgs.reverse() : []), ...messages]);
-
       if (newMsgs.length < ITEM_INTERVAL + 1) {
         setHasMore(false);
       } else {

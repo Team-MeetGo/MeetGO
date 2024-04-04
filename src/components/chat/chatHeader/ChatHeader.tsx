@@ -1,8 +1,7 @@
 'use client';
 import { clientSupabase } from '(@/utils/supabase/client)';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import ChatPresence from './ChatPresence';
-import { RoomData } from '(@/types/chatTypes)';
 import { chatStore } from '(@/store/chatStore)';
 
 const ChatHeader = () => {
@@ -12,8 +11,6 @@ const ChatHeader = () => {
   }
   // const roomId = window.location.pathname.substring(1);
   const roomId = 'c9c15e2c-eae0-40d4-ad33-9a05ad4792b5';
-  // const [roomData, setRoomData] = useState<RoomData[]>();
-  // store에 roomData 지울지? 다른 사람들 필요하면 냅두기
   const { roomData, setRoomData, setRoomId, setChatRoomId } = chatStore((state) => state);
 
   useEffect(() => {
@@ -41,20 +38,6 @@ const ChatHeader = () => {
       }
     };
     fetchRoomChat(roomId);
-
-    // const abc = async () => {
-    //   const data = await fetchRoomData(roomId);
-    //   console.log(data);
-    // };
-
-    // abc();
-
-    // const getChatRoomId = async () => {
-    //   const { data: chatRoomId, error } = await clientSupabase
-    //     .from('chatting_room')
-    //     .select('chatting_room_id')
-    //     .eq('room_id', String(roomId));
-    // };
   }, [setRoomData, setRoomId, setChatRoomId]);
 
   //   const getOutOfRoom = async () => {
