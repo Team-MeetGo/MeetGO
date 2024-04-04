@@ -10,28 +10,11 @@ type Props = {
   review_id: string;
 };
 
-const ReviewBar = ({ review_id }: Props) => {
-  const [commentCount, setCommentCount] = useState(0);
+const ReviewHeart = ({ review_id }: Props) => {
   const [likes, setLikes] = useState<boolean | null>(null);
   const [likeCount, setLikeCount] = useState(0);
   const [likeUser, setLiketest] = useState<string[]>([]);
-
-  const fetchCommentCount = async (review_id: string) => {
-    let { data: test_review_comment, error } = await clientSupabase
-      .from('test_review_comment')
-      .select('*')
-      .eq('review_id', review_id);
-
-    if (error) {
-      throw error;
-    }
-
-    if (test_review_comment) {
-      setCommentCount(test_review_comment.length);
-    } else {
-      setCommentCount(0);
-    }
-  };
+  const [userId, setUserId] = useState<string | null>(null);
 
   const fetchLikeCount = async (review_id: string) => {
     let { data: test_review_like, error } = await clientSupabase
@@ -49,29 +32,61 @@ const ReviewBar = ({ review_id }: Props) => {
     }
   };
 
+  const getUserId = async () => {
+    const { data: user } = await clientSupabase.auth.getUser();
+    setUserId(user?.user?.id || '');
+  };
+
   useEffect(() => {
-    fetchCommentCount(review_id);
+    const likedStatus = async () => {
+      const { data: likedUser, error } = await clientSupabase
+        .from('review')
+        .select('like_user')
+        .eq('review_id', review_id)
+        .single();
+
+      if (likedUser && likedUser.like_user && likedUser.like_user.includes(userId as string)) {
+        setLikes(true);
+      } else {
+        setLikes(false);
+      }
+    };
+    likedStatus();
+  }, [userId, review_id]);
+
+  useEffect(() => {
     fetchLikeCount(review_id);
+    getUserId();
   }, [review_id]);
 
   const handleLikeToggle = async () => {
-    const userId = '8fe87c99-842a-4fde-a0e8-918a0171e9a6';
-    await addLikedUser(review_id, userId);
+    const userId = (await clientSupabase.auth.getUser()).data.user?.id;
+    console.log(userId);
+
+    if (!userId) {
+      alert('로그인 후 이용해주세요.');
+      return;
+    }
+
+    await addLikedUser(review_id, userId as string);
     await fetchLikeCount(review_id);
-    await fetchCommentCount(review_id);
     if (likes) {
       setLikes(false);
       setLiketest((prevLikeUser) => prevLikeUser.filter((id) => id !== userId));
     } else {
       setLikes(true);
-      setLiketest((prevLikeUser) => [...prevLikeUser, userId]);
+      setLiketest((prevLikeUser) => {
+        if (userId) {
+          return [...prevLikeUser, userId];
+        } else {
+          return prevLikeUser;
+        }
+      });
     }
     setLikes(!likes);
   };
 
-  const addLikedUser = async (review_id: string, user_id: string) => {
-    const userId = '8fe87c99-842a-4fde-a0e8-918a0171e9a6';
-
+  const addLikedUser = async (review_id: string, userId: string) => {
     const { data: existingData } = await clientSupabase
       .from('test_review_like')
       .select('review_id')
@@ -114,12 +129,8 @@ const ReviewBar = ({ review_id }: Props) => {
         />
         <div>{likeCount}</div>
       </div>
-      <div className="flex gap-2">
-        <p>댓글</p>
-        <div>{commentCount}</div>
-      </div>
     </div>
   );
 };
 
-export default ReviewBar;
+export default ReviewHeart;

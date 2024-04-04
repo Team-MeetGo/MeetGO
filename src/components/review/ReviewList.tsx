@@ -16,6 +16,7 @@ export type reviewData = {
   created_at: string | null;
   image_url: string | null;
   like_user: string[] | null;
+  test_image_url: string[] | null;
 };
 
 const ReviewList: React.FC = () => {
@@ -24,8 +25,23 @@ const ReviewList: React.FC = () => {
   const [totalReviews, setTotalReviews] = useState(0);
   const reviewsPerPage = 9;
   const [selected, setSelected] = React.useState<Selection>(new Set(['최신 순']));
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   const selectedValue = React.useMemo(() => Array.from(selected).join(', ').replaceAll('_', ' '), [selected]);
+
+  const checkLoginStatus = async () => {
+    const user = await clientSupabase.auth.getUser();
+    console.log(user);
+    if (user) {
+      setIsLoggedIn(true);
+    } else {
+      setIsLoggedIn(false);
+    }
+  };
+
+  useEffect(() => {
+    checkLoginStatus();
+  }, []);
 
   async function getMostLikedReview() {
     let { data } = await clientSupabase.from('review').select('*');
@@ -52,6 +68,7 @@ const ReviewList: React.FC = () => {
     } else if (selected instanceof Set && selected.has('좋아요 순')) {
       getMostLikedReview();
     }
+    console.log(getMostLikedReview);
   }, [selected]);
 
   useEffect(() => {
@@ -98,9 +115,7 @@ const ReviewList: React.FC = () => {
             </DropdownMenu>
           </Dropdown>
         </div>
-        <div>
-          <NewReview />
-        </div>
+        <div>{isLoggedIn ? <NewReview /> : null}</div>
       </div>
       <ul className="grid grid-cols-3 gap-2 gap-y-4">
         {currentReviews.map((item, index) => (
