@@ -1,7 +1,6 @@
 import { Chip, Select, SelectItem } from '@nextui-org/react';
 import { useEffect, useState } from 'react';
 import { favoriteOptions } from '(@/utils/FavoriteData)';
-import { getUserId } from '(@/utils/api/authAPI)';
 import { clientSupabase } from '(@/utils/supabase/client)';
 import { userStore } from '(@/store/userStore)';
 
@@ -26,7 +25,8 @@ const Favorite = () => {
   /** 이상형 업데이트하는 로직 */
   const updateFavorite = async () => {
     const favoriteArray = Array.from(selected);
-    const { result: userId } = await getUserId();
+    const userId = user && user[0].user_id;
+    if (!userId) return;
     const { error } = await clientSupabase.from('users').update({ favorite: favoriteArray }).eq('user_id', userId);
     if (error) {
       console.error('Error updating introduction:', error);

@@ -1,5 +1,4 @@
 import { userStore } from '(@/store/userStore)';
-import { getUserId } from '(@/utils/api/authAPI)';
 import { clientSupabase } from '(@/utils/supabase/client)';
 import { Avatar, avatar } from '@nextui-org/react';
 import Image from 'next/image';
@@ -14,7 +13,8 @@ const AvatarForm = () => {
   };
 
   const uploadAvatar = async () => {
-    const { result: userId } = await getUserId();
+    const userId = user && user[0].user_id;
+    if (!userId) return;
     if (!file) return;
 
     const fileExt = file.name.split('.').pop();
@@ -58,13 +58,16 @@ const AvatarForm = () => {
       <input type="file" onChange={onFileChange} accept="image/*" />
       {user && user[0].avatar ? (
         <>
-          <Image
-            src={`${user[0].avatar}?${new Date().getTime()}`}
-            alt="Avatar"
-            className="rounded-full"
-            width="150"
-            height="150"
-          />
+          <div className="w-[150px] h-[150px] overflow-hidden flex justify-center items-center rounded-full">
+            <Image
+              src={`${user[0].avatar}?${new Date().getTime()}`}
+              alt="Avatar"
+              className=""
+              style={{ objectFit: 'cover' }}
+              width={200}
+              height={200}
+            />
+          </div>
           <button className="text-xs" onClick={uploadAvatar}>
             사진 수정
           </button>

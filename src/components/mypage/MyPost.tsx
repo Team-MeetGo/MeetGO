@@ -1,5 +1,4 @@
 import { userStore } from '(@/store/userStore)';
-import { getUserId } from '(@/utils/api/authAPI)';
 import { clientSupabase } from '(@/utils/supabase/client)';
 import Image from 'next/image';
 import { useEffect, useState } from 'react';
@@ -7,9 +6,11 @@ import { useEffect, useState } from 'react';
 const MyPost = () => {
   const [myPost, setMyPost] = useState([] as any);
   const [likePost, setLikePost] = useState([] as any);
+  const { user } = userStore((state) => state);
 
   const getMyPost = async () => {
-    const { result: userId } = await getUserId();
+    const userId = user && user[0].user_id;
+    if (!userId) return;
     const { data } = await clientSupabase.from('review').select('*').eq('user_id', userId);
     if (data) {
       setMyPost(data);
@@ -17,7 +18,8 @@ const MyPost = () => {
   };
 
   const getLikePost = async () => {
-    const { result: userId } = await getUserId();
+    const userId = user && user[0].user_id;
+    if (!userId) return;
     const userIdArray = [userId];
     const { data } = await clientSupabase.from('review').select('*').contains('like_user', userIdArray);
     if (data) {

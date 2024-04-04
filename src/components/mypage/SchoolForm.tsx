@@ -5,7 +5,6 @@ import { useState } from 'react';
 import { schoolValidation } from '(@/utils/Validation)';
 import { userStore } from '(@/store/userStore)';
 import { clientSupabase } from '(@/utils/supabase/client)';
-import { getUserId } from '(@/utils/api/authAPI)';
 
 const SchoolForm = () => {
   const [schoolEmail, setSchoolEmail] = useState('');
@@ -22,7 +21,8 @@ const SchoolForm = () => {
 
   /** 학교 업데이트하는 로직 */
   const updateSchool = async () => {
-    const { result: userId } = await getUserId();
+    const userId = user && user[0].user_id;
+    if (!userId) return;
     const { error } = await clientSupabase
       .from('users')
       .update({ school_email: schoolEmail, school_name: univName, isValidate: true })
