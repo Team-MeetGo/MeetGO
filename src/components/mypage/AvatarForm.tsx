@@ -3,7 +3,7 @@ import { getUserId } from '(@/utils/api/authAPI)';
 import { clientSupabase } from '(@/utils/supabase/client)';
 import { Avatar, avatar } from '@nextui-org/react';
 import Image from 'next/image';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 const AvatarForm = () => {
   const { user, setUser } = userStore((state) => state);
@@ -37,8 +37,6 @@ const AvatarForm = () => {
 
     const publicURL = data.publicUrl;
 
-    console.log(publicURL, 'publicURL');
-
     // 사용자 프로필을 업데이트하여 새 프로필 사진 URL을 참조하도록 함
     const { error } = await clientSupabase.from('users').update({ avatar: publicURL }).eq('user_id', userId);
 
@@ -49,7 +47,6 @@ const AvatarForm = () => {
       if (user && user.length > 0) {
         setUser([{ ...user[0], avatar: publicURL }]);
         alert('프로필 사진이 업데이트되었습니다.');
-        window.location.reload();
       } else {
         console.error('User data is null or empty.');
       }
@@ -61,7 +58,13 @@ const AvatarForm = () => {
       <input type="file" onChange={onFileChange} accept="image/*" />
       {user && user[0].avatar ? (
         <>
-          <Image src={user[0].avatar} alt="Avatar" className="w-32 h-32 rounded-full" width="30" height="30" />
+          <Image
+            src={`${user[0].avatar}?${new Date().getTime()}`}
+            alt="Avatar"
+            className="rounded-full"
+            width="150"
+            height="150"
+          />
           <button className="text-xs" onClick={uploadAvatar}>
             사진 수정
           </button>

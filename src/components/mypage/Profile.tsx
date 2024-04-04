@@ -21,16 +21,6 @@ const Profile = () => {
 
   const { user, setUser } = userStore((state) => state);
 
-  // async function getUserInfo(userId: string) {
-  //   const { data, error } = await clientSupabase.from('users').select('*').eq('user_id', userId);
-  //   console.log('data:', data);
-  //   if (error) {
-  //     console.error('Error fetching user data:', error);
-  //     return null;
-  //   }
-  //   return data;
-  // }
-
   const toggleKakaoEditing = () => {
     setIsKakaoEditing(!isKakaoEditing);
   };
