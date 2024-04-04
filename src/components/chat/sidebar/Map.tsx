@@ -10,7 +10,8 @@ declare global {
 
 const Map = () => {
   const [map, setMap] = useState<any>();
-  const [marker, setMarker] = useState<any>();
+  const [markers, setMarkers] = useState<any>();
+  const [bars, setBars] = useState<any[]>([]);
 
   useEffect(() => {
     const script = document.createElement('script');
@@ -43,14 +44,8 @@ const Map = () => {
       (pos: GeolocationPosition) => {
         const currentPos = new window.kakao.maps.LatLng(pos.coords.latitude, pos.coords.longitude);
         map.panTo(currentPos);
+        console.log('현재 위치', currentPos);
 
-        const marker = new window.kakao.maps.Marker({
-          position: currentPos,
-          map: map
-        });
-        setMarker(marker);
-
-        // Call function to search for bars near the current location
         searchBarsNearby(currentPos);
       },
       () => alert('위치 정보를 가져오는데 실패했습니다.'),
@@ -70,9 +65,11 @@ const Map = () => {
       '술집',
       (data: any, status: any) => {
         if (status === window.kakao.maps.services.Status.OK) {
-          console.log('Bars nearby:', data);
+          console.log('주변 술집:', data);
+          displayBarsAsMarkers(data);
+          setBars(data);
         } else {
-          console.error('Failed to retrieve bars nearby:', status);
+          console.error('실패', status);
         }
       },
       {
@@ -82,9 +79,32 @@ const Map = () => {
     );
   };
 
+  // 술집 마커로 찍기
+  const displayBarsAsMarkers = (bars: any[]) => {
+    const markers = bars.map((bar, index) => {
+      const markerPosition = new window.kakao.maps.LatLng(bar.y, bar.x);
+      const marker = new window.kakao.maps.Marker({
+        position: markerPosition,
+        map: map
+      });
+      return marker;
+    });
+    setMarkers(markers);
+  };
+
   return (
     <div>
       <div id="map" className="w-96 h-96"></div>
+      <div>
+        {bars.map((bar, index) => (
+          <div key={index} className="border">
+            <h1>{bar.place_name}</h1>
+            <p>{bar.address_name}</p>
+            <p>{bar.place_url}</p>
+            <p>{bar.phone}</p>
+          </div>
+        ))}
+      </div>
     </div>
   );
 };
