@@ -91,7 +91,7 @@ const Member = ({ params }: { params: { id: UUID } }) => {
             <div key={member.user_id}>
               <div className="h-36 w-36 flex flex-col align-middle justify-start m-4">
                 <div className="h-28 w-28 bg-indigo-600 rounded-full">
-                  {member.avatar ? <Image src={member.avatar as string} alt="유저" /> : ''}
+                  {member.avatar ? <img src={member.avatar as string} alt="유저" /> : ''}
                 </div>
                 <div>{member.nickname}</div>
                 <div>{member.school_name}</div>
