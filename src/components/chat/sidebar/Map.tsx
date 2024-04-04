@@ -12,11 +12,13 @@ const Map = () => {
   const [map, setMap] = useState<any>();
   const [markers, setMarkers] = useState<any>();
   const [bars, setBars] = useState<any[]>([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(0);
 
   useEffect(() => {
     const script = document.createElement('script');
     script.async = true;
-    script.src = `//dapi.kakao.com/v2/maps/sdk.js?appkey=${process.env.NEXT_PUBLIC_KAKAO_MAP_API_KEY}&autoload=false&libraries=services`;
+    script.src = `//dapi.kakao.com/v2/maps/sdk.js?appkey=${process.env.NEXT_PUBLIC_KAKAO_MAP_API_KEY}&autoload=false&libraries=services,clusterer,drawing`;
     document.head.appendChild(script);
 
     script.addEventListener('load', () => {
@@ -53,42 +55,52 @@ const Map = () => {
     );
   };
 
-  // 주변 술집 데이터 가져오기
-  const searchBarsNearby = (currentPosition: any) => {
+  const searchBarsNearby = (currentPosition: any, page?: number) => {
     const places = new window.kakao.maps.services.Places();
 
     places.keywordSearch(
       '술집',
-      (data: any, status: any) => {
+      (data: any, status: any, pagination: any) => {
         if (status === window.kakao.maps.services.Status.OK) {
-          console.log('주변 술집:', data);
-          setBars(data);
-          displayBarsAsMarkers(data);
+          // 마커 초기화
+          if (markers && markers.length > 0) {
+            markers.forEach((marker: any) => {
+              marker.setMap(null);
+            });
+          }
+
+          const bounds = new window.kakao.maps.LatLngBounds();
+          let newMarkers = [];
+          // 검색된 장소 정보를 바탕으로 마커 생성
+          for (var i = 0; i < data.length; i++) {
+            const markerPosition = new window.kakao.maps.LatLng(data[i].y, data[i].x);
+            const marker = new window.kakao.maps.Marker({
+              position: markerPosition,
+              map: map
+            });
+            bounds.extend(markerPosition); // 지도 영역 설정을 위해 bounds에 포함
+            newMarkers.push(marker); // 생성된 마커를 markers 배열에 추가
+          }
+          setMarkers(newMarkers); // 새로운 마커 배열을 상태에 설정
+          setBars(data); // 검색된 장소 정보를 상태에 설정
+          setTotalPages((prevTotalPages) => Math.max(prevTotalPages, pagination.last));
+          setCurrentPage(page || currentPage);
         } else {
           console.error('실패', status);
         }
       },
       {
         location: currentPosition,
-        radius: 1000
+        radius: 1000,
+        page: page || currentPage
       }
     );
   };
 
-  // 술집 마커로 찍기
-  const displayBarsAsMarkers = (bars: any[]) => {
-    const newMarkers = bars.map((bar) => {
-      const markerPosition = new window.kakao.maps.LatLng(bar.y, bar.x);
-      const marker = new window.kakao.maps.Marker({
-        map: map,
-        position: markerPosition,
-        title: bar.place_name
-      });
-      console.log('map', map);
-      return marker;
-    });
-
-    setMarkers(newMarkers);
+  const handlePageClick = (pageNumber: number) => {
+    setCurrentPage(pageNumber);
+    const currentPosition = map.getCenter();
+    searchBarsNearby(currentPosition, pageNumber);
   };
 
   return (
@@ -102,6 +114,13 @@ const Map = () => {
             <p>{bar.place_url}</p>
             <p>{bar.phone}</p>
           </div>
+        ))}
+      </div>
+      <div>
+        {Array.from({ length: totalPages }, (_, index) => (
+          <button key={index} onClick={() => handlePageClick(index + 1)}>
+            {index + 1}
+          </button>
         ))}
       </div>
     </div>
