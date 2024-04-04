@@ -20,15 +20,18 @@ function RoomInformation({ roomId }: { roomId: UUID }) {
     getSingleRoom();
   }, []);
   if (!room) return;
+
   const { feature, location, member_number, room_title } = room[0];
   console.log('feature', feature);
   return (
-    <div className="m-8 text-center">
-      <div>{room_title}</div>
-      <div>{member_number}</div>
-      <div>{location}</div>
-      <div>{feature}</div>
-    </div>
+    room && (
+      <div className="m-8 text-center">
+        <div>{room_title}</div>
+        <div>{member_number}</div>
+        <div>{location}</div>
+        <div>{feature}</div>
+      </div>
+    )
   );
 }
 

@@ -1,50 +1,13 @@
 'use client';
 import { clientSupabase } from '(@/utils/supabase/client)';
-import { useEffect } from 'react';
 import ChatPresence from './ChatPresence';
 import { chatStore } from '(@/store/chatStore)';
 import { useRouter } from 'next/navigation';
-import { Message } from '(@/types/chatTypes)';
 
-const ChatHeader = ({ allMsgs }: { allMsgs: Message[] }) => {
+const ChatHeader = () => {
   const router = useRouter();
-  // const roomId = window.location.pathname.substring(1);
-  const roomId = 'c9c15e2c-eae0-40d4-ad33-9a05ad4792b5';
-  const { roomData, chatRoomId, setMessages, setRoomData, setRoomId, setChatRoomId } = chatStore((state) => state);
-
-  useEffect(() => {
-    setMessages([...allMsgs?.slice(0, 3).reverse()]);
-
-    const fetchRoomData = async () => {
-      const { data: room, error: roomErr } = await clientSupabase.from('room').select('*').eq('room_id', roomId);
-      return { room, roomErr };
-    };
-    const fetchChatRoomId = async () => {
-      const { data: chatRoomId, error: chatRoomErr } = await clientSupabase
-        .from('chatting_room')
-        .select('chatting_room_id')
-        .eq('room_id', String(roomId)) // params
-        .eq('isActive', true);
-      if (chatRoomErr) console.log('해당하는 chatting방이 없습니다.');
-      return { chatRoomId, chatRoomErr };
-    };
-    const fetchRoomChat = async () => {
-      const { room, roomErr } = await fetchRoomData();
-      const { chatRoomId, chatRoomErr } = await fetchChatRoomId();
-      if (room?.length && chatRoomId?.length) {
-        setRoomData([...room]);
-        setRoomId(room[0].room_id);
-        setChatRoomId(chatRoomId[0].chatting_room_id);
-      }
-      if (roomErr) {
-        console.error(roomErr.message);
-      } else if (chatRoomErr) {
-        console.log(chatRoomErr?.message);
-      }
-    };
-    roomId && fetchRoomChat();
-  }, [setRoomData, setRoomId, setChatRoomId, allMsgs, setMessages]);
-  // 왜 요청이 2번이나 되징
+  const { chatRoomId, roomData, setMessages, setChatRoomId } = chatStore((state) => state);
+  console.log(chatRoomId);
 
   const getOutOfRoom = async () => {
     const { error } = await clientSupabase

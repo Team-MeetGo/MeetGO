@@ -12,20 +12,18 @@ import { chatStore } from '(@/store/chatStore)';
 import { Tooltip } from '@nextui-org/react';
 import OthersChat from './OthersChat';
 
-const ChatList = ({ allMsgs, user }: { allMsgs: Message[]; user: User | null }) => {
-  // const [messages, setMessages] = useState<Message[]>([...allMsgs?.slice(0, 3).reverse()]);
-  const { messages, setMessages } = chatStore((state) => state);
+const ChatList = ({ user }: { user: User | null }) => {
+  const { hasMore, setHasMore, messages, setMessages } = chatStore((state) => state);
   const scrollRef = useRef() as React.MutableRefObject<HTMLDivElement>;
   const [isScrolling, setIsScrolling] = useState(false);
   const [newAddedMsgNum, setNewAddedMsgNum] = useState(0);
   const [count, setCount] = useState(1);
-  const [hasMore, setHasMore] = useState(messages ? allMsgs?.length - messages?.length > 0 : false);
   const { roomId, chatRoomId } = chatStore((state) => state);
 
   useEffect(() => {
     if (roomId && chatRoomId) {
       // INSERT, DELETE 구독
-      const channle = clientSupabase
+      const channel = clientSupabase
         .channel(String(chatRoomId))
         .on(
           'postgres_changes',
@@ -47,7 +45,7 @@ const ChatList = ({ allMsgs, user }: { allMsgs: Message[]; user: User | null }) 
         .subscribe();
 
       return () => {
-        clientSupabase.removeChannel(channle);
+        clientSupabase.removeChannel(channel);
       };
     }
   }, [messages, setMessages, isScrolling, roomId, chatRoomId]);

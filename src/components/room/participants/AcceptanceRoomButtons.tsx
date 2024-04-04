@@ -4,7 +4,6 @@ import meetingRoomHandler from '(@/hooks/custom/room)';
 import { clientSupabase } from '(@/utils/supabase/client)';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
-
 import type { UUID } from 'crypto';
 import { Database } from '(@/types/database.types)';
 type ParticipantType = Database['public']['Tables']['participants']['Row'];
@@ -60,7 +59,8 @@ const AcceptanceRoomButtons = ({ roomId }: { roomId: UUID }) => {
       .select('chatting_room_id');
     console.log(chat_room);
 
-    if (chat_room) router.push(`${chat_room[0].chatting_room_id}`); // "/chatting_room_id" 로 주소값 변경
+    if (chat_room) router.replace(`/chat/${chat_room[0].chatting_room_id}`);
+    // "/chatting_room_id" 로 주소값 변경
   };
 
   const gotoMeetingRoom = async () => {
