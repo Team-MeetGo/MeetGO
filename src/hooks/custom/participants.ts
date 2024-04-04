@@ -1,15 +1,27 @@
 import { clientSupabase } from '(@/utils/supabase/client)';
-import { UUID } from 'crypto';
+
+import type { Database } from '(@/types/database.types)';
+import type { UUID } from 'crypto';
+type UserType = Database['public']['Tables']['users']['Row'];
 
 function participants() {
-  const getFemale = async () => {
-    const { data: getFemale, error } = await clientSupabase
+  const getTotalMember = async ({ roomId }: { roomId: UUID }) => {
+    const { data: getTotalMemberList, error } = await clientSupabase
       .from('participants')
-      .select(`*, user (user_id)`)
-      .eq('gender', 'woman')
-      .order('created_at', { ascending: false });
-    if (error) return alert('error 발생!');
-    return getFemale;
+      .select(`*`)
+      .eq('room_id', roomId)
+      .select(`user_id, users(*)`);
+
+    if (error) return alert('구성원 정보 오류 발생!');
+    const totalMemberList: UserType[] = getTotalMemberList.map((member) => {
+      return member.users as UserType;
+    });
+    if (!totalMemberList || totalMemberList.length < 1) return;
+
+    const getFemaleMember = totalMemberList.filter((member) => member.gender === 'female');
+    const getMaleMember = totalMemberList.filter((member) => member.gender === 'male');
+
+    return { getFemaleMember, getMaleMember };
   };
 
   const totalMember = async (room_id: string) => {
@@ -40,7 +52,7 @@ function participants() {
     return addNewMember();
   };
 
-  return { getFemale, deleteMember, addMemeber, addMemeberHandler, totalMember };
+  return { getTotalMember, deleteMember, addMemeber, addMemeberHandler, totalMember };
 }
 
 export default participants;
