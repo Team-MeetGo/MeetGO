@@ -90,6 +90,7 @@ const LoginForm = () => {
                 name={name}
                 placeholder={placeholder}
                 onChange={onChangeInput}
+                required
               />
               {!isValidateShow[name] && <p className="text-red-500 text-[13px] mt-2">{error}</p>}
             </label>

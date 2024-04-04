@@ -1,15 +1,14 @@
 import React, { Suspense } from 'react';
-import ChatInput from '../../components/chat/ChatInput';
+import ChatInput from '(@/components/chat/chatInput)';
 import { serverSupabase } from '(@/utils/supabase/server)';
-import ChatHeader from '(@/components/chat/ChatHeader)';
-import ChatList from '(@/components/chat/ChatList)';
+import ChatHeader from '(@/components/chat/chatHeader/ChatHeader)';
+import ChatList from '(@/components/chat/chatBody/ChatList)';
 import { ITEM_INTERVAL } from '(@/utils)';
 import { userStore } from '(@/store/userStore)';
 
 const ChatPage = async () => {
   const supabase = serverSupabase();
   const { data } = await supabase.auth.getUser();
-  // console.log('유저데이터 =>', data.user);
   const user = data.user;
 
   // const { data: userData } = await supabase
