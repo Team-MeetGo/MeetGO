@@ -3,6 +3,9 @@ import { Inter } from 'next/font/google';
 import './globals.css';
 import QueryProvider from '(@/app/provider/QueryProvider)';
 import { NextProvider } from './provider/NextUIProvider';
+import { serverSupabase } from '(@/utils/supabase/server)';
+import InitUser from '../components/user/InitUser';
+import NavBar from '(@/components/navBar/NavBar)';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -20,7 +23,10 @@ export default function RootLayout({
     <html lang="ko">
       <body className={inter.className}>
         <NextProvider>
-          <QueryProvider>{children}</QueryProvider>
+          <QueryProvider>
+            <NavBar />
+            {children}
+          </QueryProvider>
         </NextProvider>
       </body>
     </html>

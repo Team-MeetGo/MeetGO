@@ -14,3 +14,15 @@ export type UserData =
       nickname: string | null;
     }[]
   | null;
+
+export type RoomData = {
+  created_at: string;
+  feature: string;
+  going_chat: boolean | null;
+  leader_id: string | null;
+  location: string | null;
+  member_number: string | null;
+  room_id: string;
+  room_status: string | null;
+  room_title: string | null;
+} | null;
