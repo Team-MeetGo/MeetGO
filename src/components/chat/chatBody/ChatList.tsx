@@ -24,7 +24,7 @@ const ChatList = ({ user }: { user: User | null }) => {
     if (roomId && chatRoomId) {
       // INSERT, DELETE 구독
       const channel = clientSupabase
-        .channel(String(chatRoomId))
+        .channel(chatRoomId)
         .on(
           'postgres_changes',
           {

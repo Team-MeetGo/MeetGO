@@ -30,7 +30,7 @@ const InitChat = ({ chatRoomId, allMsgs }: { chatRoomId: string; allMsgs: Messag
       }
     };
     fetchRoomData();
-  }, [setRoomData, setRoomId, setChatRoomId, allMsgs, setMessages, chatRoomId]);
+  }, [setRoomData, setRoomId, setChatRoomId, allMsgs, setMessages, chatRoomId, setHasMore]);
   // 왜 요청이 2번이나 되징
   return <></>;
 };

@@ -6,7 +6,7 @@ import { useRouter } from 'next/navigation';
 
 const ChatHeader = () => {
   const router = useRouter();
-  const { chatRoomId, roomData, setMessages, setChatRoomId } = chatStore((state) => state);
+  const { roomId, chatRoomId, roomData, setMessages, setChatRoomId } = chatStore((state) => state);
   console.log(chatRoomId);
 
   const getOutOfRoom = async () => {
@@ -19,8 +19,7 @@ const ChatHeader = () => {
       alert('채팅방 나가기에서 오류가 발생하였습니다.');
     } else {
       setMessages([]);
-      setChatRoomId(null);
-      // router.push('/');
+      router.push(`/meetingRoom/${roomId}`);
     }
   };
 
