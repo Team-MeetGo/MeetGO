@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
 declare global {
   interface Window {
@@ -9,6 +9,7 @@ declare global {
 }
 
 const Map = () => {
+  const mapRef = useRef<any>();
   const [map, setMap] = useState<any>();
   const [markers, setMarkers] = useState<any>();
   const [bars, setBars] = useState<any[]>([]);
@@ -38,6 +39,7 @@ const Map = () => {
     navigator.geolocation.getCurrentPosition(
       (pos: GeolocationPosition) => {
         const currentPos = new window.kakao.maps.LatLng(pos.coords.latitude, pos.coords.longitude);
+        mapRef.current = currentPos;
         const mapContainer = document.getElementById('map');
         const kakaoMap = new window.kakao.maps.Map(mapContainer, {
           center: currentPos,
@@ -99,8 +101,7 @@ const Map = () => {
 
   const handlePageClick = (pageNumber: number) => {
     setCurrentPage(pageNumber);
-    const currentPosition = map.getCenter();
-    searchBarsNearby(currentPosition, pageNumber);
+    searchBarsNearby(mapRef.current, pageNumber);
   };
 
   return (
