@@ -1,5 +1,5 @@
 import React, { Suspense } from 'react';
-import ChatInput from '../../components/chat/ChatInput';
+import ChatInput from '(@/components/chat/chatInput)';
 import { serverSupabase } from '(@/utils/supabase/server)';
 import ChatHeader from '(@/components/chat/ChatHeader)';
 import ChatList from '(@/components/chat/ChatList)';

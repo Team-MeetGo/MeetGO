@@ -81,7 +81,7 @@ const SchoolForm = () => {
       if (response.success) {
         setIsCodeValid(true); // 인증 코드 유효성 검사 결과 상태 업데이트
         alert('인증 완료');
-        updateSchool(schoolEmail, univName, true);
+        updateSchool();
       } else {
         setIsCodeValid(false);
         alert('인증 코드가 유효하지 않습니다.');

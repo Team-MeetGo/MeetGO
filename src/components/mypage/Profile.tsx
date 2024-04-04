@@ -8,15 +8,16 @@ import { getUserId } from '(@/utils/api/authAPI)';
 import { clientSupabase } from '(@/utils/supabase/client)';
 import { userStore } from '(@/store/userStore)';
 import AvatarForm from './AvatarForm';
+import MyPost from './MyPost';
+import Favorite from './Favorite';
 
 const Profile = () => {
   const [inputIntro, setInputIntro] = useState('' as string);
   const [intro, setIntro] = useState('' as string);
   const [inputKakaoId, setInputKakaoId] = useState('' as string);
   const [kakaoId, setKakaoId] = useState('' as string);
-  const [isEditing, setIsEditing] = useState(false);
-
-  const [selected, setSelected] = useState<Set<string>>(new Set());
+  const [isKakaoEditing, setIsKakaoEditing] = useState(false);
+  const [isIntroEditing, setIsIntroEditing] = useState(false);
 
   const { user, setUser } = userStore((state) => state);
 
@@ -30,8 +31,12 @@ const Profile = () => {
   //   return data;
   // }
 
-  const toggleEditing = () => {
-    setIsEditing(!isEditing);
+  const toggleKakaoEditing = () => {
+    setIsKakaoEditing(!isKakaoEditing);
+  };
+
+  const toggleIntroEditing = () => {
+    setIsIntroEditing(!isIntroEditing);
   };
 
   // 자기소개 입력 변경 처리
@@ -52,7 +57,7 @@ const Profile = () => {
       console.error('Error updating introduction:', error);
     } else {
       setIntro(inputIntro);
-      setIsEditing(false);
+      setIsIntroEditing(false);
     }
   };
 
@@ -64,7 +69,7 @@ const Profile = () => {
       console.error('Error updating kakaoId:', error);
     } else {
       setKakaoId(inputKakaoId);
-      setIsEditing(false);
+      setIsKakaoEditing(false);
     }
   };
 
@@ -82,9 +87,9 @@ const Profile = () => {
       <SchoolForm />
       <div className="mb-6">
         <label className="block text-sm font-medium mb-1">카카오톡ID</label>
-        {user && user[0].kakaoId && !isEditing ? (
+        {user && user[0].kakaoId && !isKakaoEditing ? (
           <>
-            <button className="text-xs" onClick={toggleEditing}>
+            <button className="text-xs" onClick={toggleKakaoEditing}>
               수정하기
             </button>
             <p className="block text-sm font-medium mb-1">{user[0].kakaoId}</p>
@@ -104,28 +109,14 @@ const Profile = () => {
           </>
         )}
       </div>
-      <div className="mb-6">
-        <label>취향</label>
-        {/* <Select selectedKeys={selected} onSelectionChange={setSelected}>
-          <SelectItem key="180cm" value="1">
-            180cm
-          </SelectItem>
-          <SelectItem key="비흡연자" value="2">
-            비흡연자
-          </SelectItem>
-          <SelectItem key="다정함" value="3">
-            다정함
-          </SelectItem>
-        </Select>
-        <Chip className="bg-[#8F5DF4]">{selected}</Chip> */}
-      </div>
+      <Favorite />
       <div className="mb-6">
         <label className="block text-sm font-medium mb-1" htmlFor="introduction">
           자기소개(최대 10자)
         </label>
-        {user && user[0].intro && !isEditing ? (
+        {user && user[0].intro && !isIntroEditing ? (
           <>
-            <button className="text-xs" onClick={toggleEditing}>
+            <button className="text-xs" onClick={toggleIntroEditing}>
               수정하기
             </button>
             <p className="block text-sm font-medium mb-1">{user[0].intro}</p>
@@ -139,7 +130,7 @@ const Profile = () => {
               className="w-full p-2 border border-gray-300 rounded-md"
               id="introduction"
               placeholder="자기소개를 입력해주세요."
-              value={isEditing ? inputIntro : user && user[0].intro ? user[0].intro : ''}
+              value={isIntroEditing ? inputIntro : user && user[0].intro ? user[0].intro : ''}
               onChange={onChangeIntroInput}
             />
           </>
@@ -165,18 +156,7 @@ const Profile = () => {
           </div>
         </div>
       </div>
-      <div className="grid grid-cols-2 gap-6">
-        <div>
-          <h2 className="text-lg font-semibold mb-4">내가 쓴 글</h2>
-          <div className="w-full h-32 bg-gray-300 mb-2" />
-          <div className="w-full h-32 bg-gray-300" />
-        </div>
-        <div>
-          <h2 className="text-lg font-semibold mb-4">좋아요한 글</h2>
-          <div className="w-full h-32 bg-gray-300 mb-2" />
-          <div className="w-full h-32 bg-gray-300" />
-        </div>
-      </div>
+      <MyPost />
     </div>
   );
 };
