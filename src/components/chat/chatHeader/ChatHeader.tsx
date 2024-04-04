@@ -3,23 +3,29 @@ import { clientSupabase } from '(@/utils/supabase/client)';
 import ChatPresence from './ChatPresence';
 import { chatStore } from '(@/store/chatStore)';
 import { useRouter } from 'next/navigation';
+import { userStore } from '(@/store/userStore)';
 
 const ChatHeader = () => {
   const router = useRouter();
-  const { roomId, chatRoomId, roomData, setMessages, setChatRoomId } = chatStore((state) => state);
-  console.log(chatRoomId);
+  const { roomId, chatRoomId, roomData, setMessages, messages } = chatStore((state) => state);
+  const user = userStore((state) => state.user);
+  // console.log(chatRoomId);
+  console.log('messages', messages);
 
   const getOutOfRoom = async () => {
-    const { error } = await clientSupabase
+    const { error: updateActiveErr } = await clientSupabase
       .from('chatting_room')
       .update({ isActive: false })
       .eq('chatting_room_id', String(chatRoomId));
-    if (error) {
-      console.error(error.message);
+
+    const { error: deleteErr } = await clientSupabase.from('participants').delete().eq('room_id', String(roomId));
+
+    if (updateActiveErr && deleteErr) {
+      console.error(updateActiveErr.message, deleteErr.message);
       alert('채팅방 나가기에서 오류가 발생하였습니다.');
     } else {
       setMessages([]);
-      router.push(`/meetingRoom/${roomId}`);
+      router.push(`/meetingRoom`);
     }
   };
 
@@ -33,7 +39,7 @@ const ChatHeader = () => {
         </div>
       </div>
       <div></div>
-      <button onClick={getOutOfRoom}>나가기</button>
+      <button onClick={getOutOfRoom}>죄송합니다 제 스타일은 아니신 것 같아요</button>
     </div>
   );
 };

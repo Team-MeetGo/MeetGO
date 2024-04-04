@@ -9,7 +9,7 @@ const InitChat = ({ chatRoomId, allMsgs }: { chatRoomId: string; allMsgs: Messag
   const { messages, setMessages, setRoomId, setRoomData, setChatRoomId, setHasMore } = chatStore((state) => state);
   useEffect(() => {
     setMessages([...allMsgs?.slice(0, 3).reverse()]);
-    setHasMore(messages.length ? allMsgs?.length - messages?.length > 0 : false);
+    setHasMore(allMsgs?.length - messages?.length > 0);
     setChatRoomId(chatRoomId);
 
     const fetchRoomData = async () => {

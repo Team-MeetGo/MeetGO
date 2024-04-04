@@ -46,18 +46,20 @@ const AcceptanceRoomButtons = ({ roomId }: { roomId: UUID }) => {
 
   const gotoChattingRoom = async () => {
     const { data } = await clientSupabase.auth.getUser();
-
     if (!data.user) {
       return alert('잘못된 접근입니다.');
     }
+
     const { data: alreadyChat } = await clientSupabase
       .from('chatting_room')
       .select('*')
       .eq('room_id', roomId)
       .eq('isActive', true);
     if (alreadyChat && alreadyChat?.length) {
+      // 만약 isActive인 채팅방이 이미 있다면 그 방으로 보내기
       router.replace(`/chat/${alreadyChat[0].chatting_room_id}`);
     } else {
+      // 없으면 새로 만들어주기
       const { data: chat_room, error } = await clientSupabase
         .from('chatting_room')
         .insert({
