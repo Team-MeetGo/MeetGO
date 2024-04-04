@@ -1,5 +1,5 @@
 import { Suspense } from 'react';
-import ChatInput from '../../components/chat/ChatInput';
+import ChatInput from '../../../components/chat/ChatInput';
 import { serverSupabase } from '(@/utils/supabase/server)';
 import ChatHeader from '(@/components/chat/chatHeader/ChatHeader)';
 import ChatList from '(@/components/chat/chatBody/ChatList)';
@@ -14,7 +14,7 @@ const ChatPage = async () => {
   return (
     <div className="max-w-3xl mx-auto md:py-10 h-screen">
       <div className="h-full border rounded-md flex flex-col border-indigo-600 relative">
-        <ChatHeader />
+        <ChatHeader allMsgs={allMsgs ?? []} />
         <Suspense fallback="응애 나 애기 폴백">
           <ChatList allMsgs={allMsgs ?? []} user={user} />
         </Suspense>

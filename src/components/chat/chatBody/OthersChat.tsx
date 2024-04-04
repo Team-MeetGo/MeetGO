@@ -1,3 +1,4 @@
+import { chatStore } from '(@/store/chatStore)';
 import { Message } from '(@/types/chatTypes)';
 import { UserDataFromTable } from '(@/types/userTypes)';
 import { getformattedDate } from '(@/utils)';
@@ -6,7 +7,7 @@ import { Tooltip } from '@nextui-org/react';
 import { useEffect, useState } from 'react';
 
 const OthersChat = ({ msg }: { msg: Message }) => {
-  const roomId = 'c9c15e2c-eae0-40d4-ad33-9a05ad4792b5';
+  const roomId = chatStore((state) => state.roomId);
   const [usersData, setUsersData] = useState<UserDataFromTable[] | null>();
 
   useEffect(() => {
@@ -14,8 +15,8 @@ const OthersChat = ({ msg }: { msg: Message }) => {
       const { data: userIds, error: userIdErr } = await clientSupabase
         .from('participants')
         .select('user_id')
-        .eq('room_id', roomId);
-      console.log('채팅방 멤버들', userIds);
+        .eq('room_id', String(roomId));
+      console.log('채팅방 멤버들', userIds); // 남은 애들
 
       if (userIds) {
         const users = [];
@@ -29,10 +30,11 @@ const OthersChat = ({ msg }: { msg: Message }) => {
         }
         console.log('users', users);
         setUsersData([...users]);
+        console.log(usersData); // 남은 애들의 유저정보가 gender
       }
     };
-    fetchParticipants();
-  }, []);
+    roomId && fetchParticipants();
+  }, [roomId]);
 
   const showThatUser = (userId: string | null) => {
     const thatUserData = usersData?.find((data) => data.user_id === userId);
@@ -41,7 +43,7 @@ const OthersChat = ({ msg }: { msg: Message }) => {
 
   return (
     <div className="flex gap-4" key={msg.message_id}>
-      <Tooltip content={<div>{showThatUser(msg.send_from)?.nickname}</div>}>
+      <Tooltip content={<div>{usersData && showThatUser(msg.send_from)?.nickname}</div>}>
         <div className="h-14 w-14 bg-indigo-600 rounded-full my-auto">
           <img src={msg.avatar} alt="유저 이미지"></img>
         </div>

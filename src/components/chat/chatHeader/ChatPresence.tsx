@@ -7,7 +7,7 @@ import { useEffect, useState } from 'react';
 const ChatPresence = () => {
   const userData = userStore((state) => state.user);
   const [onlineUsers, setOnlineUsers] = useState(0);
-  const { chatRoomId } = chatStore((state) => state);
+  const chatRoomId = chatStore((state) => state.chatRoomId);
 
   useEffect(() => {
     if (chatRoomId) {
@@ -19,6 +19,7 @@ const ChatPresence = () => {
             // @ts-ignore
             nowUsers.push(channel.presenceState()[id][0].user_id);
           }
+          console.log(nowUsers.length);
           setOnlineUsers(nowUsers.length);
         })
         .subscribe(async (status) => {
@@ -27,14 +28,14 @@ const ChatPresence = () => {
           }
         });
     }
-  }, [userData]);
-  // 나중에 roomId 받아오면 의존성에 넣을지 말지 결정예정
+  }, [userData, chatRoomId]);
+  // presence가 re-load시 바로 반영이 안되는 문제 발생
 
   return (
     <>
       <div className="flex gap-2">
         <div className="h-4  w-4 bg-indigo-500 rounded-full animate-pulse my-auto"></div>
-        <h1>{onlineUsers} online</h1>
+        {chatRoomId && <h1>{onlineUsers} online</h1>}
       </div>
     </>
   );

@@ -47,10 +47,20 @@ const AcceptanceRoomButtons = ({ roomId }: { roomId: UUID }) => {
 
   const gotoChattingRoom = async () => {
     const { data } = await clientSupabase.auth.getUser();
+
     if (!data.user) {
       return alert('잘못된 접근입니다.');
     }
-    router.push(`/chat`);
+    const { data: chat_room, error } = await clientSupabase
+      .from('chatting_room')
+      .insert({
+        room_id: roomId,
+        isActive: true
+      })
+      .select('chatting_room_id');
+    console.log(chat_room);
+
+    if (chat_room) router.push(`${chat_room[0].chatting_room_id}`); // "/chatting_room_id" 로 주소값 변경
   };
 
   const gotoMeetingRoom = async () => {
@@ -73,7 +83,7 @@ const AcceptanceRoomButtons = ({ roomId }: { roomId: UUID }) => {
         나가기
       </button>
       <button
-        disabled={totalMemberList?.length === maximumParticipants ? false : true}
+        // disabled={totalMemberList?.length === maximumParticipants ? false : true}
         onClick={() => gotoChattingRoom()}
       >
         go to chat

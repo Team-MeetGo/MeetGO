@@ -13,14 +13,13 @@ import { Tooltip } from '@nextui-org/react';
 import OthersChat from './OthersChat';
 
 const ChatList = ({ allMsgs, user }: { allMsgs: Message[]; user: User | null }) => {
-  const [messages, setMessages] = useState<Message[]>([...allMsgs?.slice(0, 3).reverse()]);
+  // const [messages, setMessages] = useState<Message[]>([...allMsgs?.slice(0, 3).reverse()]);
+  const { messages, setMessages } = chatStore((state) => state);
   const scrollRef = useRef() as React.MutableRefObject<HTMLDivElement>;
   const [isScrolling, setIsScrolling] = useState(false);
   const [newAddedMsgNum, setNewAddedMsgNum] = useState(0);
   const [count, setCount] = useState(1);
-  const NumOfrestMsg = allMsgs?.length - messages?.length;
-  const [hasMore, setHasMore] = useState(NumOfrestMsg > 0);
-
+  const [hasMore, setHasMore] = useState(messages ? allMsgs?.length - messages?.length > 0 : false);
   const { roomId, chatRoomId } = chatStore((state) => state);
 
   useEffect(() => {
@@ -46,14 +45,6 @@ const ChatList = ({ allMsgs, user }: { allMsgs: Message[]; user: User | null }) 
           setMessages(messages.filter((msg) => msg.message_id !== payload.old.message_id));
         })
         .subscribe();
-
-      const checkRestMsg = async () => {
-        const { data: restMsgs } = await clientSupabase.from('messages').select('*');
-        if (restMsgs && restMsgs?.length <= ITEM_INTERVAL + 1) {
-          setHasMore(false);
-        }
-      };
-      checkRestMsg();
 
       return () => {
         clientSupabase.removeChannel(channle);
