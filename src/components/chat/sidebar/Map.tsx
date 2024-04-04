@@ -106,7 +106,7 @@ const Map = () => {
   return (
     <div>
       <div id="map" className="w-96 h-96"></div>
-      <div style={{ maxHeight: '400px', overflowY: 'auto' }}>
+      <div style={{ maxHeight: '500px', overflowY: 'auto' }}>
         {bars.map((bar, index) => (
           <div key={index} className="border">
             <h1>{bar.place_name}</h1>
@@ -116,9 +116,9 @@ const Map = () => {
           </div>
         ))}
       </div>
-      <div>
+      <div className="flex justify-center">
         {Array.from({ length: totalPages }, (_, index) => (
-          <button key={index} onClick={() => handlePageClick(index + 1)}>
+          <button className=" px-3" key={index} onClick={() => handlePageClick(index + 1)}>
             {index + 1}
           </button>
         ))}
