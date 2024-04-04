@@ -1,5 +1,6 @@
 import Image from 'next/image';
 import React, { useState } from 'react';
+import { GrNext, GrPrevious } from 'react-icons/gr';
 
 interface Props {
   images: string[];
@@ -26,10 +27,10 @@ const ImageGallery = ({ images }: Props) => {
       {images.length > 1 && (
         <>
           <button className="absolute top-1/2 left-4 transform -translate-y-1/2" onClick={prevImage}>
-            Prev
+            <GrPrevious />
           </button>
           <button className="absolute top-1/2 right-4 transform -translate-y-1/2" onClick={nextImage}>
-            Next
+            <GrNext />
           </button>
         </>
       )}
