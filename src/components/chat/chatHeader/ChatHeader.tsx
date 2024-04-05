@@ -8,12 +8,19 @@ const ChatHeader = () => {
   const { roomId, chatRoomId, roomData, setMessages, setisRest } = chatStore((state) => state);
   const { user } = userStore((state) => state);
 
-  const getOutOfRoom = async () => {
+  const UpdateIsActive = async () => {
     // 채팅방 isActive 상태를 false로 변경
     const { error: updateActiveErr } = await clientSupabase
       .from('chatting_room')
       .update({ isActive: false })
       .eq('chatting_room_id', String(chatRoomId));
+    if (updateActiveErr) {
+      alert('채팅방 비활성화에 실패하였습니다.');
+      console.error(updateActiveErr?.message);
+    }
+  };
+
+  const getRidOfMe = async () => {
     // participants 테이블에서 해당 룸에 대한 유저정보 삭제
     if (user) {
       const { error: deleteErr } = await clientSupabase
@@ -21,21 +28,33 @@ const ChatHeader = () => {
         .delete()
         .eq('room_id', String(roomId))
         .eq('user_id', user[0].user_id);
-      // room에 남아있는 사람들 조회
-      const { data: restOf } = await clientSupabase
+      if (deleteErr) {
+        console.error(deleteErr?.message);
+        alert('채팅방 나가기에서 오류가 발생하였습니다.');
+      }
+    }
+  };
+
+  const handleIsRest = async () => {
+    if (user) {
+      const { data: restOf, error: getPartErr } = await clientSupabase
         .from('participants')
         .select('user_id')
         .eq('room_id', String(roomId));
       const restArr = restOf?.map((r) => r.user_id);
       setisRest(restArr?.includes(user[0].user_id) as boolean);
-
-      if (updateActiveErr || deleteErr) {
-        console.error(updateActiveErr?.message, deleteErr?.message);
-        alert('채팅방 나가기에서 오류가 발생하였습니다.');
-      } else {
-        setMessages([]);
+      if (getPartErr) {
+        console.error(getPartErr.message);
+        alert('참가자들 정보를 불러오는 데 실패했습니다.');
       }
     }
+  };
+
+  const getOutOfChatRoom = async () => {
+    await UpdateIsActive();
+    await getRidOfMe();
+    await handleIsRest();
+    setMessages([]);
   };
 
   return (
@@ -48,7 +67,7 @@ const ChatHeader = () => {
         </div>
       </div>
       <div></div>
-      <button onClick={getOutOfRoom}>죄송합니다 제 스타일은 아니신 것 같아요</button>
+      <button onClick={getOutOfChatRoom}>죄송합니다 제 스타일은 아니신 것 같아요</button>
     </div>
   );
 };

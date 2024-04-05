@@ -13,15 +13,13 @@ import { Tooltip } from '@nextui-org/react';
 import OthersChat from './OthersChat';
 
 const ChatList = ({ user }: { user: User | null }) => {
-  const { hasMore, setHasMore, messages, setMessages } = chatStore((state) => state);
   const scrollRef = useRef() as React.MutableRefObject<HTMLDivElement>;
+  const { hasMore, setHasMore, messages, setMessages } = chatStore((state) => state);
   const [isScrolling, setIsScrolling] = useState(false);
   const [newAddedMsgNum, setNewAddedMsgNum] = useState(0);
-  const [count, setCount] = useState(1);
   const { roomId, chatRoomId } = chatStore((state) => state);
+  const [count, setCount] = useState(1);
 
-  console.log(chatRoomId);
-  console.log(hasMore);
   useEffect(() => {
     if (roomId && chatRoomId) {
       // INSERT, DELETE 구독

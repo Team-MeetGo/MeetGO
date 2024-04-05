@@ -55,16 +55,16 @@ const InitChat = ({ chatRoomId, allMsgs }: { chatRoomId: string; allMsgs: Messag
       setHasMore(allMsgs?.length - messages?.length > 0);
       setChatRoomId(chatRoomId);
 
-      // roomId 불러오기
       const fetchRoomData = async () => {
+        // roomId 불러오기
         const { data: roomId, error: roomIdErr } = await clientSupabase
           .from('chatting_room')
           .select('room_id')
           .eq('chatting_room_id', chatRoomId);
         if (roomIdErr) console.error('roomId 불러오는 중 오류 발생');
-
         if (roomId?.length) {
           setRoomId(roomId[0].room_id);
+
           // 룸 정보 가져오기
           const { data: room, error: roomDataErr } = await clientSupabase
             .from('room')
