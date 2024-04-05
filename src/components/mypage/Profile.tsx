@@ -7,6 +7,7 @@ import { userStore } from '(@/store/userStore)';
 import AvatarForm from './AvatarForm';
 import MyPost from './MyPost';
 import Favorite from './Favorite';
+import MetPeople from './MetPeople';
 
 const Profile = () => {
   const [inputIntro, setInputIntro] = useState('' as string);
@@ -125,26 +126,7 @@ const Profile = () => {
           </>
         )}
       </div>
-      <div className="mb-6">
-        <h2 className="text-lg font-semibold mb-4">스쳐간 인연 리스트</h2>
-        <div className="grid grid-cols-3 gap-4">
-          <div className="flex flex-col items-center">
-            <div className="w-24 h-24 rounded-full bg-gray-300 mb-2" />
-            <p className="text-sm">닉네임</p>
-            <button className="text-xs">카톡ID요청하기</button>
-          </div>
-          <div className="flex flex-col items-center">
-            <div className="w-24 h-24 rounded-full bg-gray-300 mb-2" />
-            <p className="text-sm">닉네임</p>
-            <button className="text-xs">카톡ID요청하기</button>
-          </div>
-          <div className="flex flex-col items-center">
-            <div className="w-24 h-24 rounded-full bg-gray-300 mb-2" />
-            <p className="text-sm">닉네임</p>
-            <button className="text-xs">카톡ID요청하기</button>
-          </div>
-        </div>
-      </div>
+      <MetPeople />
       <MyPost />
     </div>
   );
