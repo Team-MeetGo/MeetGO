@@ -8,7 +8,11 @@ declare global {
   }
 }
 
-const Map = () => {
+interface MapProps {
+  setSelectedLocation: (barName: string) => void; // 이벤트 핸들러를 props로 받음
+}
+
+const Map: React.FC<MapProps> = ({ setSelectedLocation }) => {
   const mapRef = useRef<any>();
   const [map, setMap] = useState<any>();
   const [markers, setMarkers] = useState<any>();
@@ -115,13 +119,27 @@ const Map = () => {
     searchBarsNearby(mapRef.current, pageNumber);
   };
 
+  // 장소 선택 함수
+  const handleSelectLocation = (barName: string) => {
+    setSelectedLocation(barName);
+  };
+
   return (
     <div>
       <div id="map" className="w-96 h-96"></div>
       <div style={{ maxHeight: '500px', overflowY: 'auto' }}>
         {bars.map((bar, index) => (
           <div key={index} className="border">
-            <h1>{bar.place_name}</h1>
+            <div className="flex flex-row justify-between">
+              <h1>{bar.place_name}</h1>
+              <button
+                onClick={() => {
+                  handleSelectLocation(bar.place_name);
+                }}
+              >
+                선택
+              </button>
+            </div>
             <p>{bar.address_name}</p>
             <p>{bar.place_url}</p>
             <p>{bar.phone}</p>
