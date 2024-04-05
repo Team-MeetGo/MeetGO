@@ -47,6 +47,7 @@ const Profile = () => {
     } else {
       setIntro(inputIntro);
       setIsIntroEditing(false);
+      setUser([{ ...user[0], intro: inputIntro }]);
     }
   };
 
@@ -60,6 +61,7 @@ const Profile = () => {
     } else {
       setKakaoId(inputKakaoId);
       setIsKakaoEditing(false);
+      setUser([{ ...user[0], kakaoId: inputKakaoId }]);
     }
   };
 
