@@ -2,16 +2,23 @@
 import { userStore } from '(@/store/userStore)';
 import { Database } from '(@/types/database.types)';
 import { clientSupabase } from '(@/utils/supabase/client)';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 import type { UUID } from 'crypto';
 type UserType = Database['public']['Tables']['users']['Row'];
 
 const Member = ({ params }: { params: { id: UUID } }) => {
   const { participants, setParticipants } = userStore((state) => state);
+  const [leaderMember, setLeaderMember] = useState('');
 
   useEffect(() => {
     console.log('나 포함 참가자들 =>', participants);
+    const leaderSelector = async () => {
+      const { data: nowLeader } = await clientSupabase.from('room').select('*').eq('room_id', params.id);
+      if (!nowLeader || nowLeader === null) return;
+      setLeaderMember(nowLeader[0].leader_id as string);
+    };
+
     const channle = clientSupabase
       .channel('custom-insert-channel')
       .on(
@@ -50,6 +57,7 @@ const Member = ({ params }: { params: { id: UUID } }) => {
         }
       )
       .subscribe();
+    leaderSelector();
     return () => {
       clientSupabase.removeChannel(channle);
     };
@@ -68,6 +76,7 @@ const Member = ({ params }: { params: { id: UUID } }) => {
                     <div className="h-28 w-28 bg-indigo-600 rounded-full">
                       {member.avatar ? <img src={member.avatar as string} alt="유저" /> : ''}
                     </div>
+                    {leaderMember === member.user_id ? <div>리더!</div> : ''}
                     <div>{member.nickname}</div>
                     <div>{member.school_name}</div>
                   </div>
