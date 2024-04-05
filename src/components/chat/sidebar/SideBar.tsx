@@ -6,12 +6,22 @@ import DatePicker from './DatePicker';
 
 const SideBar = () => {
   const [selectedLocation, setSelectedLocation] = useState<string>('');
+  const [isSidebarOpen, setIsSidebarOpen] = useState<boolean>(false);
+
+  const toggleSidebar = () => {
+    setIsSidebarOpen(!isSidebarOpen);
+  };
 
   return (
     <div>
-      <DatePicker />
-      <div>미팅 장소 : {selectedLocation}</div>
-      <Map setSelectedLocation={setSelectedLocation} />
+      <button onClick={toggleSidebar}>Toggle Sidebar</button>
+      {isSidebarOpen && (
+        <div>
+          <DatePicker />
+          <div>미팅 장소 : {selectedLocation}</div>
+          <Map setSelectedLocation={setSelectedLocation} />
+        </div>
+      )}
     </div>
   );
 };
