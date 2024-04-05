@@ -18,3 +18,5 @@ export type UserData =
   | null;
 
 export type RoomData = Tables<'room'>;
+
+export type chatRoomPayloadType = Tables<'chatting_room'>;

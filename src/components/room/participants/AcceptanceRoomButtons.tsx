@@ -3,12 +3,7 @@ import meetingRoomHandler from '(@/hooks/custom/room)';
 import { clientSupabase } from '(@/utils/supabase/client)';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
-<<<<<<< HEAD
-import type { UUID } from 'crypto';
-=======
-
 import participantsHandler from '(@/hooks/custom/participants)';
->>>>>>> 133859f4e71b77b61895e517ec5f6550312b277c
 import { Database } from '(@/types/database.types)';
 import type { UUID } from 'crypto';
 type ParticipantType = Database['public']['Tables']['participants']['Row'];
