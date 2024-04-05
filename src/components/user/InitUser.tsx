@@ -1,10 +1,10 @@
 'use client';
 
 import { userStore } from '(@/store/userStore)';
-import { UserDataFromTable } from '(@/types/userTypes)';
+import { UsersType } from '(@/types/userTypes)';
 import { useEffect } from 'react';
 
-const InitUser = ({ userData }: { userData: UserDataFromTable[] | null }) => {
+const InitUser = ({ userData }: { userData: UsersType[] | null }) => {
   const setUser = userStore((state) => state.setUser);
 
   useEffect(() => {

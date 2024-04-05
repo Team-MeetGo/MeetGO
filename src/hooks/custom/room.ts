@@ -28,7 +28,19 @@ function meetingRoomHandler() {
     return roominformation;
   };
 
-  return { getMeetingRoom, getChattingRoom, getRoomInformation };
+  const getmaxGenderMemberNumber = async (memberNumber: string) => {
+    if (memberNumber === '1:1') {
+      return 1;
+    } else if (memberNumber === '2:2') {
+      return 2;
+    } else if (memberNumber === '3:3') {
+      return 3;
+    } else if (memberNumber === '4:4') {
+      return 4;
+    }
+  };
+
+  return { getMeetingRoom, getChattingRoom, getRoomInformation, getmaxGenderMemberNumber };
 }
 
 export default meetingRoomHandler;

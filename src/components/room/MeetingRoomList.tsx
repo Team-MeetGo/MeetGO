@@ -26,8 +26,16 @@ function MeetingRoomList() {
   return (
     <>
       <article>
-        <MeetingRoom list={meetingRoomList} />
-        <MeetingRoom list={chattingRoomList} />
+        <div className="gap-2 grid grid-cols-2 sm:grid-cols-4 m-8">
+          {meetingRoomList.map((room) => (
+            <MeetingRoom key={room.room_id} room={room} />
+          ))}
+        </div>
+        <div className="gap-2 grid grid-cols-2 sm:grid-cols-4 m-8">
+          {chattingRoomList.map((room) => (
+            <MeetingRoom key={room.room_id} room={room} />
+          ))}
+        </div>
       </article>
     </>
   );

@@ -1,4 +1,3 @@
-import { Database } from '(@/types/database.types)';
 import { create } from 'zustand';
 import { UsersType } from '(@/types/userTypes)';
 
