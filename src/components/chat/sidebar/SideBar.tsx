@@ -23,6 +23,8 @@ const SideBar: React.FC<SideBarProps> = ({ userId, leaderId }) => {
       <button onClick={toggleSidebar}>사이드바</button>
       {isSidebarOpen && (
         <div>
+          미팅 날짜/시간: <input type="text" className="border" />
+          <button>날짜 선택</button>
           <DatePicker />
           <div>미팅 장소 : {selectedLocation}</div>
           <Map setSelectedLocation={setSelectedLocation} userId={userId} leaderId={leaderId} />

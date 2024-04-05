@@ -134,13 +134,15 @@ const Map: React.FC<MapProps> = ({ setSelectedLocation, userId, leaderId }) => {
           <div key={index} className="border">
             <div className="flex flex-row justify-between">
               <h1>{bar.place_name}</h1>
-              <button
-                onClick={() => {
-                  handleSelectLocation(bar.place_name);
-                }}
-              >
-                선택
-              </button>
+              {userId === leaderId && (
+                <button
+                  onClick={() => {
+                    handleSelectLocation(bar.place_name);
+                  }}
+                >
+                  선택
+                </button>
+              )}
             </div>
             <p>{bar.address_name}</p>
             <p>{bar.place_url}</p>
