@@ -22,7 +22,7 @@ function RoomInformation({ roomId }: { roomId: UUID }) {
   if (!room) return;
 
   const { feature, location, member_number, room_title } = room[0];
-  console.log('feature', feature);
+
   return (
     room && (
       <div className="m-8 text-center">

@@ -7,9 +7,6 @@ import { useEffect, useState } from 'react';
 
 const InitChat = ({ chatRoomId, allMsgs }: { chatRoomId: string; allMsgs: Message[] }) => {
   const { messages, setMessages, setRoomId, setRoomData, setChatRoomId, setHasMore } = chatStore((state) => state);
-  console.log(allMsgs);
-  console.log('messages', messages);
-  console.log(allMsgs?.length - messages?.length > 0);
 
   useEffect(() => {
     const channel = clientSupabase
@@ -28,7 +25,7 @@ const InitChat = ({ chatRoomId, allMsgs }: { chatRoomId: string; allMsgs: Messag
   }, [chatRoomId]);
 
   useEffect(() => {
-    setMessages([...allMsgs?.slice(0, 3).reverse()]);
+    if (messages.length === 0) setMessages([...allMsgs?.slice(0, 3).reverse()]); // 현재 메세지가 없을 때만(처음시작 or 메세지 한개일 때)
     setHasMore(allMsgs?.length - messages?.length > 0);
     setChatRoomId(chatRoomId);
 
@@ -50,7 +47,7 @@ const InitChat = ({ chatRoomId, allMsgs }: { chatRoomId: string; allMsgs: Messag
       }
     };
     fetchRoomData();
-  }, [setRoomData, setRoomId, setChatRoomId, allMsgs, setMessages, chatRoomId, setHasMore, messages.length]);
+  }, [setRoomData, setRoomId, setChatRoomId, allMsgs, chatRoomId, setMessages, setHasMore, messages.length]);
   // 왜 요청이 2번이나 되징
   return <></>;
 };

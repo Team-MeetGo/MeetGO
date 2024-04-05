@@ -20,6 +20,7 @@ export const chatStore = create<chatState>()((set) => ({
   chatRoomId: null,
   messages: [],
   hasMore: false,
+
   setRoomData: (data: RoomData[]) => set({ roomData: data }),
   setRoomId: (roomId) => set({ roomId }),
   setChatRoomId: (chatRoomId) => set({ chatRoomId }),

@@ -36,6 +36,9 @@ const ChatList = ({ user }: { user: User | null }) => {
             filter: `chatting_room_id=eq.${chatRoomId}`
           },
           (payload) => {
+            console.log(payload);
+            console.log(payload.new);
+            console.log([...messages, payload.new as Message]);
             setMessages([...messages, payload.new as Message]);
             if (isScrolling) {
               setNewAddedMsgNum((prev) => (prev += 1));
@@ -103,6 +106,7 @@ const ChatList = ({ user }: { user: User | null }) => {
   // 더보기를 누르면 다시 렌더링이 되면서 useEffect가 실행되어 scrollTop이랑 scrollHeight가 같아져야 하는데(스크롤다운) 왜 스크롤이 안내려가지는지?
   // 더보기 눌렀을 때 위치 다시 생각해봐야함
   // 삭제 후 더보기 누르면 제대로 안 불러와짐
+  console.log('messages =>', messages);
 
   return (
     <>
