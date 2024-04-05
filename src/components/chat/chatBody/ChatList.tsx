@@ -36,6 +36,7 @@ const ChatList = ({ user }: { user: User | null }) => {
             filter: `chatting_room_id=eq.${chatRoomId}`
           },
           (payload) => {
+            console.log('이거는?', payload.new);
             setMessages([...messages, payload.new as Message]);
             if (isScrolling) {
               setNewAddedMsgNum((prev) => (prev += 1));
