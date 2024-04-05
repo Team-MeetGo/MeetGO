@@ -15,6 +15,7 @@ const Map = () => {
   const [bars, setBars] = useState<any[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
+  const [currentPos, setCurrentPos] = useState<any>();
 
   useEffect(() => {
     const script = document.createElement('script');
@@ -45,8 +46,8 @@ const Map = () => {
           center: currentPos,
           level: 3
         });
+        setCurrentPos(currentPos);
         setMap(kakaoMap);
-        searchBarsNearby(currentPos);
       },
       () => alert('위치 정보를 가져오는데 실패했습니다.'),
       {
@@ -56,6 +57,15 @@ const Map = () => {
       }
     );
   };
+
+  // 맵 나타난 후 searchBarsNearby로 마커 표시
+  useEffect(() => {
+    if (!currentPos) {
+      return;
+    } else {
+      searchBarsNearby(currentPos);
+    }
+  }, [map]);
 
   const searchBarsNearby = (currentPosition: any, page?: number) => {
     const places = new window.kakao.maps.services.Places();
@@ -99,6 +109,7 @@ const Map = () => {
     );
   };
 
+  // 페이지네이션 함수
   const handlePageClick = (pageNumber: number) => {
     setCurrentPage(pageNumber);
     searchBarsNearby(mapRef.current, pageNumber);
