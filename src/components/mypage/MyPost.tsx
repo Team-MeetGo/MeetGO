@@ -44,7 +44,10 @@ const MyPost = () => {
               <Image
                 src={post.image_urls[0]}
                 alt="Post Image"
-                style={{ objectFit: 'cover' }}
+                style={{
+                  width: '100%',
+                  height: 'auto'
+                }}
                 width={200}
                 height={200}
                 className="mb-2"
@@ -61,7 +64,17 @@ const MyPost = () => {
         {likePost.map((post: any) => (
           <Link href={`review/${post.review_id}`} key={post.review_id} className="mb-4">
             {post.image_urls ? (
-              <Image src={post.image_urls[0]} alt="Like Post Image" width={320} height={180} className="mb-2" />
+              <Image
+                src={post.image_urls[0]}
+                alt="Like Post Image"
+                style={{
+                  width: '100%',
+                  height: 'auto'
+                }}
+                width={200}
+                height={200}
+                className="mb-2"
+              />
             ) : (
               <div className="w-full h-80 bg-gray-300 mb-2" />
             )}
