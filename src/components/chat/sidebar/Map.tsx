@@ -27,6 +27,23 @@ const Map: React.FC<MapProps> = ({ userId, leaderId, chatRoomId }) => {
   const [selectedLocation, setSelectedLocation] = useState<string>('');
 
   useEffect(() => {
+    // 서버에서 불러와서
+    const fetchData = async () => {
+      if (!chatRoomId) {
+        return;
+      }
+      const { data: chatData } = await clientSupabase
+        .from('chatting_room')
+        .select(' meeting_location')
+        .eq('chatting_room_id', chatRoomId)
+        .single();
+      const meetingLocation = chatData?.meeting_location;
+      setSelectedLocation(meetingLocation || '');
+    };
+    fetchData();
+  }, []);
+
+  useEffect(() => {
     console.log('selecte', selectedLocation);
     const script = document.createElement('script');
     script.async = true;

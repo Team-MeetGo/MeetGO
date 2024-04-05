@@ -20,6 +20,21 @@ const SideBar: React.FC<SideBarProps> = ({ userId, leaderId, chatRoomId }) => {
 
   useEffect(() => {
     // 서버에서 불러와서
+    const fetchData = async () => {
+      if (!chatRoomId) {
+        return;
+      }
+      const { data: chatData } = await clientSupabase
+        .from('chatting_room')
+        .select('meeting_time, meeting_location')
+        .eq('chatting_room_id', chatRoomId)
+        .single();
+      const meetingTime = chatData?.meeting_time;
+      const meetingLocation = chatData?.meeting_location;
+      setSelectedLocation(meetingLocation || '');
+      setFinalDateTime(meetingTime || '');
+    };
+    fetchData();
   }, []);
 
   const toggleSidebar = () => {
