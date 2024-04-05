@@ -16,6 +16,7 @@ const SideBar: React.FC<SideBarProps> = ({ userId, leaderId, chatRoomId }) => {
   const [selectedDateTime, setSelectedDateTime] = useState<string>('');
   const [isSidebarOpen, setIsSidebarOpen] = useState<boolean>(false);
   const [finalDateTime, setFinalDateTime] = useState<string>('');
+  const [isTimePicked, setIsTimePicked] = useState<boolean>(false);
 
   const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);
@@ -25,13 +26,24 @@ const SideBar: React.FC<SideBarProps> = ({ userId, leaderId, chatRoomId }) => {
     if (!chatRoomId) {
       return;
     }
-
+    setIsTimePicked(!isTimePicked);
     setFinalDateTime(selectedDateTime);
-    const { error } = await clientSupabase
-      .from('chatting_room')
-      .update({ meeting_time: selectedDateTime })
-      .eq('chatting_room_id', chatRoomId);
-    console.log(chatRoomId);
+
+    if (!isTimePicked) {
+      // 장소 선택 안되었을 때
+      const { error } = await clientSupabase
+        .from('chatting_room')
+        .update({ meeting_time: selectedDateTime })
+        .eq('chatting_room_id', chatRoomId);
+      console.log(chatRoomId);
+    } else {
+      setSelectedDateTime('');
+      setFinalDateTime('');
+      const { error } = await clientSupabase
+        .from('chatting_room')
+        .update({ meeting_time: null })
+        .eq('chatting_room_id', chatRoomId);
+    }
   };
 
   return (
@@ -47,8 +59,8 @@ const SideBar: React.FC<SideBarProps> = ({ userId, leaderId, chatRoomId }) => {
               value={selectedDateTime}
               onChange={(e) => setSelectedDateTime(e.target.value)}
             />
-            <button onClick={handleSelectedTime}>날짜 선택</button>
-            <p>선택한 날짜 시간이 보여진다. {finalDateTime}</p>
+            <button onClick={handleSelectedTime}>{isTimePicked ? '취소' : '선택'}</button>
+            <p>최종 날짜 : {finalDateTime}</p>
           </div>
           <DatePicker />
           <p>미팅 장소 : {selectedLocation}</p>
