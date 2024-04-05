@@ -25,10 +25,9 @@ const Map: React.FC<MapProps> = ({ userId, leaderId, chatRoomId }) => {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
   const [currentPos, setCurrentPos] = useState<any>();
-  const [isSelectedLocation, setIsSelectedLocation] = useState<boolean>(false);
-  //const [selectedLocation, setSelectedLocation] = useState<string>('');
+  const [isLocationSelected, setisLocationSelected] = useState<boolean>(false);
 
-  const { setSelectedLocation, selectedLocation } = useSidebarStore();
+  const { setSelectedMeetingLocation, selectedMeetingLocation } = useSidebarStore();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -41,9 +40,9 @@ const Map: React.FC<MapProps> = ({ userId, leaderId, chatRoomId }) => {
         .eq('chatting_room_id', chatRoomId)
         .single();
       const meetingLocation = chatData?.meeting_location;
-      setSelectedLocation(meetingLocation || '');
+      setSelectedMeetingLocation(meetingLocation || '');
 
-      setIsSelectedLocation(!!meetingLocation);
+      setisLocationSelected(!!meetingLocation);
     };
     fetchData();
   }, []);
@@ -148,14 +147,14 @@ const Map: React.FC<MapProps> = ({ userId, leaderId, chatRoomId }) => {
 
   // 장소 선택 함수
   const handleSelectLocation = async (barName: string) => {
-    setSelectedLocation(barName);
-    setIsSelectedLocation(!isSelectedLocation);
-    console.log(isSelectedLocation);
+    setSelectedMeetingLocation(barName);
+    setisLocationSelected(!isLocationSelected);
+    console.log(isLocationSelected);
     if (!chatRoomId) {
       return;
     }
 
-    if (!isSelectedLocation) {
+    if (!isLocationSelected) {
       // 장소 선택 안되었을 때
       const { error } = await clientSupabase
         .from('chatting_room')
@@ -172,7 +171,7 @@ const Map: React.FC<MapProps> = ({ userId, leaderId, chatRoomId }) => {
 
   return (
     <div>
-      <p>미팅 장소 : {selectedLocation}</p>
+      <p>미팅 장소 : {selectedMeetingLocation}</p>
       <div id="map" className="w-96 h-96"></div>
       <div style={{ maxHeight: '500px', overflowY: 'auto' }}>
         {bars.map((bar, index) => (
@@ -189,21 +188,21 @@ const Map: React.FC<MapProps> = ({ userId, leaderId, chatRoomId }) => {
                 </button>
               )} */}
 
-              {selectedLocation === '' ? (
+              {selectedMeetingLocation === '' ? (
                 <button
                   onClick={() => {
                     handleSelectLocation(bar.place_name);
                   }}
                 >
-                  {isSelectedLocation ? '취소' : '선택'}
+                  {isLocationSelected ? '취소' : '선택'}
                 </button>
-              ) : selectedLocation === bar.place_name ? (
+              ) : selectedMeetingLocation === bar.place_name ? (
                 <button
                   onClick={() => {
                     handleSelectLocation('');
                   }}
                 >
-                  {isSelectedLocation ? '취소' : '선택'}
+                  {isLocationSelected ? '취소' : '선택'}
                 </button>
               ) : (
                 <div></div>

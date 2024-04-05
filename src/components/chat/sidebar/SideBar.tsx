@@ -16,8 +16,14 @@ const SideBar: React.FC<SideBarProps> = ({ userId, leaderId, chatRoomId }) => {
   const [selectedLocation, setSelectedLocation] = useState<string>('');
   const [isSidebarOpen, setIsSidebarOpen] = useState<boolean>(false);
 
-  const { selectedDateTime, setSelectedDateTime, setFinalDateTime, setIsTimePicked, finalDateTime, isTimePicked } =
-    useSidebarStore();
+  const {
+    selectedMeetingTime,
+    SetSelectedMeetingTime,
+    setFinalDateTime,
+    setIsTimeSelected,
+    finalDateTime,
+    isTimeSelected
+  } = useSidebarStore();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -31,9 +37,9 @@ const SideBar: React.FC<SideBarProps> = ({ userId, leaderId, chatRoomId }) => {
         .single();
       const meetingTime = chatData?.meeting_time;
 
-      setIsTimePicked(!!meetingTime);
+      setIsTimeSelected(!!meetingTime);
 
-      setSelectedDateTime(meetingTime || '');
+      SetSelectedMeetingTime(meetingTime || '');
       setFinalDateTime(meetingTime || '');
     };
     fetchData();
@@ -47,18 +53,18 @@ const SideBar: React.FC<SideBarProps> = ({ userId, leaderId, chatRoomId }) => {
     if (!chatRoomId) {
       return;
     }
-    setIsTimePicked(!isTimePicked);
-    setFinalDateTime(selectedDateTime);
+    setIsTimeSelected(!isTimeSelected);
+    setFinalDateTime(selectedMeetingTime);
 
-    if (!isTimePicked) {
+    if (!isTimeSelected) {
       // 장소 선택 안되었을 때
       const { error } = await clientSupabase
         .from('chatting_room')
-        .update({ meeting_time: selectedDateTime })
+        .update({ meeting_time: selectedMeetingTime })
         .eq('chatting_room_id', chatRoomId);
       console.log(chatRoomId);
     } else {
-      setSelectedDateTime('');
+      SetSelectedMeetingTime('');
       setFinalDateTime('');
       const { error } = await clientSupabase
         .from('chatting_room')
@@ -77,10 +83,10 @@ const SideBar: React.FC<SideBarProps> = ({ userId, leaderId, chatRoomId }) => {
             <input
               type="text"
               className="border"
-              value={selectedDateTime}
-              onChange={(e) => setSelectedDateTime(e.target.value)}
+              value={selectedMeetingTime}
+              onChange={(e) => SetSelectedMeetingTime(e.target.value)}
             />
-            <button onClick={handleSelectedTime}>{isTimePicked ? '취소' : '선택'}</button>
+            <button onClick={handleSelectedTime}>{isTimeSelected ? '취소' : '선택'}</button>
             <p>최종 날짜 : {finalDateTime}</p>
           </div>
           <DatePicker />

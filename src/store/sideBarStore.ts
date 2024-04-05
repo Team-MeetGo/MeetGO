@@ -1,23 +1,23 @@
-import create from 'zustand';
+import { create } from 'zustand';
 
 interface SidebarState {
-  selectedLocation: string;
-  selectedDateTime: string;
+  selectedMeetingLocation: string;
+  selectedMeetingTime: string;
   finalDateTime: string;
-  isTimePicked: boolean;
-  setSelectedDateTime: (dateTime: string) => void;
+  isTimeSelected: boolean;
+  SetSelectedMeetingTime: (dateTime: string) => void;
   setFinalDateTime: (dateTime: string) => void;
-  setIsTimePicked: (isPicked: boolean) => void;
-  setSelectedLocation: (selectedLocation: string) => void;
+  setIsTimeSelected: (isTimeSelected: boolean) => void;
+  setSelectedMeetingLocation: (selectedMeetingLocation: string) => void;
 }
 
 export const useSidebarStore = create<SidebarState>((set) => ({
-  selectedLocation: '',
-  selectedDateTime: '',
+  selectedMeetingLocation: '',
+  selectedMeetingTime: '',
   finalDateTime: '',
-  isTimePicked: false,
-  setSelectedDateTime: (dateTime) => set({ selectedDateTime: dateTime }),
+  isTimeSelected: false,
+  SetSelectedMeetingTime: (dateTime) => set({ selectedMeetingTime: dateTime }),
   setFinalDateTime: (dateTime) => set({ finalDateTime: dateTime }),
-  setIsTimePicked: (isPicked) => set({ isTimePicked: isPicked }),
-  setSelectedLocation: (selectedLocation) => set({ selectedLocation: selectedLocation })
+  setIsTimeSelected: (isTimeSelected) => set({ isTimeSelected: isTimeSelected }),
+  setSelectedMeetingLocation: (selectedMeetingLocation) => set({ selectedMeetingLocation: selectedMeetingLocation })
 }));
