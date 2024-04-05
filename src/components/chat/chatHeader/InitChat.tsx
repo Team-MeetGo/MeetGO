@@ -22,6 +22,7 @@ const InitChat = ({ chatRoomId, allMsgs }: { chatRoomId: string; allMsgs: Messag
   } = chatStore((state) => state);
 
   useEffect(() => {
+    // 채팅방 isActive 상태 구독
     const channel = clientSupabase
       .channel(`${chatRoomId}_chatting_room_table`)
       .on(

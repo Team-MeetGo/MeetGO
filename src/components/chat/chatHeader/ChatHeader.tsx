@@ -6,7 +6,7 @@ import { userStore } from '(@/store/userStore)';
 
 const ChatHeader = () => {
   const { roomId, chatRoomId, roomData, setMessages, setisRest } = chatStore((state) => state);
-  const { user } = userStore((state) => state);
+  const user = userStore((state) => state.user);
 
   const UpdateIsActive = async () => {
     // 채팅방 isActive 상태를 false로 변경
@@ -36,6 +36,7 @@ const ChatHeader = () => {
   };
 
   const handleIsRest = async () => {
+    // OthersChat이랑 코드 겹침 나중에 마무리단계에서 따로 뺄 예정
     if (user) {
       const { data: restOf, error: getPartErr } = await clientSupabase
         .from('participants')
