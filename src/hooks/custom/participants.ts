@@ -13,7 +13,7 @@ function participantsHandler() {
     return totalParticipants;
   };
 
-  const userMemberInformation = async (roomId) => {
+  const userMemberInformation = async (roomId: string) => {
     const { data: userIds, error: userIdErr } = await clientSupabase
       .from('participants')
       .select('user_id')
