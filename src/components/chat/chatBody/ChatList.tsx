@@ -13,15 +13,13 @@ import { Tooltip } from '@nextui-org/react';
 import OthersChat from './OthersChat';
 
 const ChatList = ({ user }: { user: User | null }) => {
-  const { hasMore, setHasMore, messages, setMessages } = chatStore((state) => state);
   const scrollRef = useRef() as React.MutableRefObject<HTMLDivElement>;
+  const { hasMore, setHasMore, messages, setMessages } = chatStore((state) => state);
   const [isScrolling, setIsScrolling] = useState(false);
   const [newAddedMsgNum, setNewAddedMsgNum] = useState(0);
-  const [count, setCount] = useState(1);
   const { roomId, chatRoomId } = chatStore((state) => state);
+  const [count, setCount] = useState(1);
 
-  console.log(chatRoomId);
-  console.log(hasMore);
   useEffect(() => {
     if (roomId && chatRoomId) {
       // INSERT, DELETE 구독
@@ -36,6 +34,7 @@ const ChatList = ({ user }: { user: User | null }) => {
             filter: `chatting_room_id=eq.${chatRoomId}`
           },
           (payload) => {
+            console.log('이거는?', payload.new);
             setMessages([...messages, payload.new as Message]);
             if (isScrolling) {
               setNewAddedMsgNum((prev) => (prev += 1));
@@ -58,6 +57,7 @@ const ChatList = ({ user }: { user: User | null }) => {
   }, [messages, setMessages, isScrolling, roomId, chatRoomId]);
 
   useEffect(() => {
+    // 스크롤 중이 아니면 처음에 로드될 시 기본적으로 스크롤 다운
     const scrollBox = scrollRef.current;
     if (scrollBox && isScrolling === false) {
       scrollBox.scrollTop = scrollBox.scrollHeight;
@@ -88,7 +88,6 @@ const ChatList = ({ user }: { user: User | null }) => {
       .range(from, to)
       .eq('chatting_room_id', String(chatRoomId))
       .order('created_at', { ascending: false });
-
     if (error) {
       alert('이전 메세지를 불러오는 데에 오류가 발생했습니다.');
     } else {

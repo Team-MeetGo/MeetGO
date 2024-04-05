@@ -2,8 +2,8 @@ import { Suspense } from 'react';
 import { serverSupabase } from '(@/utils/supabase/server)';
 import ChatHeader from '(@/components/chat/chatHeader/ChatHeader)';
 import ChatList from '(@/components/chat/chatBody/ChatList)';
-import ChatInput from '(@/components/chat/chatInput)';
 import InitChat from '(@/components/chat/chatHeader/InitChat)';
+import ChatInput from '(@/components/chat/ChatInput)';
 
 const ChatPage = async ({ params }: { params: { chatroom_id: string } }) => {
   const chatRoomId = params.chatroom_id;
