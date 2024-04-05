@@ -38,7 +38,6 @@ function MeetingRoomForm() {
 
     const nextMeetingRoom: NextMeetingRoomType = {
       feature: tags,
-      going_chat: false,
       leader_id: user[0].user_id,
       location,
       member_number: memberNumber,
