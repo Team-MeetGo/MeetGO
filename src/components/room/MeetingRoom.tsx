@@ -23,7 +23,7 @@ function MeetingRoom({ room }: { room: MeetingRoom }) {
 
   const addMember = async ({ room_id, member_number }: { room_id: string; member_number: string }) => {
     if (!user) return alert('로그인이 필요한 서비스입니다.');
-    if (!participants) return alert('유효하지 않은 접근입니다.');
+    // if (!participants) return alert('유효하지 않은 접근입니다.');
 
     //room의 정보를 가져와서 성별에 할당된 인원을 확인
     const genderMaxNumber = await getmaxGenderMemberNumber(member_number);
@@ -46,9 +46,9 @@ function MeetingRoom({ room }: { room: MeetingRoom }) {
     }
 
     //모든 인원이 다 찼을 경우 모집완료로 변경
-    if (participants.length === genderMaxNumber * 2) {
-      await clientSupabase.from('room').update({ room_status: '모집종료' }).eq('room_id', room_id);
-    }
+    // if (participants.length === genderMaxNumber * 2) {
+    //   await clientSupabase.from('room').update({ room_status: '모집종료' }).eq('room_id', room_id);
+    // }
   };
   return (
     <div>

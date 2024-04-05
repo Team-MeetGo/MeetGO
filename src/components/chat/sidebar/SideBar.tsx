@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import Map from '(@/components/chat/sidebar/Map)';
 import DatePicker from './DatePicker';
+import { serverSupabase } from '(@/utils/supabase/server)';
 
 const SideBar = () => {
   const [selectedLocation, setSelectedLocation] = useState<string>('');
@@ -14,7 +15,7 @@ const SideBar = () => {
 
   return (
     <div>
-      <button onClick={toggleSidebar}>Toggle Sidebar</button>
+      <button onClick={toggleSidebar}>사이드바</button>
       {isSidebarOpen && (
         <div>
           <DatePicker />
