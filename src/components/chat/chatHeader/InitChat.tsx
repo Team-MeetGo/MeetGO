@@ -7,14 +7,20 @@ import { useEffect, useState } from 'react';
 
 const InitChat = ({ chatRoomId, allMsgs }: { chatRoomId: string; allMsgs: Message[] }) => {
   const { messages, setMessages, setRoomId, setRoomData, setChatRoomId, setHasMore } = chatStore((state) => state);
-  const [count, setCount] = useState(0);
+  console.log(allMsgs);
+  console.log('messages', messages);
+  console.log(allMsgs?.length - messages?.length > 0);
 
   useEffect(() => {
     const channel = clientSupabase
       .channel(`${chatRoomId}_chatting_room_table`)
-      .on('postgres_changes', { event: '*', schema: 'public', table: 'chatting_room' }, (payload) => {
-        console.log('Change received!', payload);
-      })
+      .on(
+        'postgres_changes',
+        { event: '*', schema: 'public', table: 'chatting_room', filter: `chatting_room_id=eq.${chatRoomId}` },
+        (payload) => {
+          console.log('Change received!', payload);
+        }
+      )
       .subscribe();
     return () => {
       clientSupabase.removeChannel(channel);
@@ -44,7 +50,7 @@ const InitChat = ({ chatRoomId, allMsgs }: { chatRoomId: string; allMsgs: Messag
       }
     };
     fetchRoomData();
-  }, [setRoomData, setRoomId, setChatRoomId, allMsgs, setMessages, chatRoomId, setHasMore]);
+  }, [setRoomData, setRoomId, setChatRoomId, allMsgs, setMessages, chatRoomId, setHasMore, messages.length]);
   // 왜 요청이 2번이나 되징
   return <></>;
 };

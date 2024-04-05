@@ -20,6 +20,8 @@ const ChatList = ({ user }: { user: User | null }) => {
   const [count, setCount] = useState(1);
   const { roomId, chatRoomId } = chatStore((state) => state);
 
+  console.log(chatRoomId);
+  console.log(hasMore);
   useEffect(() => {
     if (roomId && chatRoomId) {
       // INSERT, DELETE 구독
@@ -30,7 +32,8 @@ const ChatList = ({ user }: { user: User | null }) => {
           {
             event: 'INSERT',
             schema: 'public',
-            table: 'messages'
+            table: 'messages',
+            filter: `chatting_room_id=eq.${chatRoomId}`
           },
           (payload) => {
             setMessages([...messages, payload.new as Message]);
@@ -39,9 +42,13 @@ const ChatList = ({ user }: { user: User | null }) => {
             }
           }
         )
-        .on('postgres_changes', { event: 'DELETE', schema: 'public', table: 'messages' }, (payload) => {
-          setMessages(messages.filter((msg) => msg.message_id !== payload.old.message_id));
-        })
+        .on(
+          'postgres_changes',
+          { event: 'DELETE', schema: 'public', table: 'messages', filter: `chatting_room_id=eq.${chatRoomId}` },
+          (payload) => {
+            setMessages(messages.filter((msg) => msg.message_id !== payload.old.message_id));
+          }
+        )
         .subscribe();
 
       return () => {
@@ -79,6 +86,7 @@ const ChatList = ({ user }: { user: User | null }) => {
       .from('messages')
       .select('*')
       .range(from, to)
+      .eq('chatting_room_id', String(chatRoomId))
       .order('created_at', { ascending: false });
 
     if (error) {
