@@ -230,7 +230,7 @@ export type Database = {
       room: {
         Row: {
           created_at: string;
-          feature: string[];
+          feature: string[] | null;
           going_chat: boolean | null;
           leader_id: string | null;
           location: string;
@@ -252,7 +252,7 @@ export type Database = {
         };
         Update: {
           created_at?: string;
-          feature?: string[];
+          feature?: string[] | null;
           going_chat?: boolean | null;
           leader_id?: string | null;
           location?: string;

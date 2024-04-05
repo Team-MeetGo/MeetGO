@@ -12,27 +12,28 @@ import { chatStore } from '(@/store/chatStore)';
 import { Tooltip } from '@nextui-org/react';
 import OthersChat from './OthersChat';
 
-const ChatList = ({ allMsgs, user }: { allMsgs: Message[]; user: User | null }) => {
-  // const [messages, setMessages] = useState<Message[]>([...allMsgs?.slice(0, 3).reverse()]);
-  const { messages, setMessages } = chatStore((state) => state);
+const ChatList = ({ user }: { user: User | null }) => {
+  const { hasMore, setHasMore, messages, setMessages } = chatStore((state) => state);
   const scrollRef = useRef() as React.MutableRefObject<HTMLDivElement>;
   const [isScrolling, setIsScrolling] = useState(false);
   const [newAddedMsgNum, setNewAddedMsgNum] = useState(0);
   const [count, setCount] = useState(1);
-  const [hasMore, setHasMore] = useState(messages ? allMsgs?.length - messages?.length > 0 : false);
   const { roomId, chatRoomId } = chatStore((state) => state);
 
+  console.log(chatRoomId);
+  console.log(hasMore);
   useEffect(() => {
     if (roomId && chatRoomId) {
       // INSERT, DELETE 구독
-      const channle = clientSupabase
-        .channel(String(chatRoomId))
+      const channel = clientSupabase
+        .channel(chatRoomId)
         .on(
           'postgres_changes',
           {
             event: 'INSERT',
             schema: 'public',
-            table: 'messages'
+            table: 'messages',
+            filter: `chatting_room_id=eq.${chatRoomId}`
           },
           (payload) => {
             setMessages([...messages, payload.new as Message]);
@@ -41,13 +42,17 @@ const ChatList = ({ allMsgs, user }: { allMsgs: Message[]; user: User | null }) 
             }
           }
         )
-        .on('postgres_changes', { event: 'DELETE', schema: 'public', table: 'messages' }, (payload) => {
-          setMessages(messages.filter((msg) => msg.message_id !== payload.old.message_id));
-        })
+        .on(
+          'postgres_changes',
+          { event: 'DELETE', schema: 'public', table: 'messages', filter: `chatting_room_id=eq.${chatRoomId}` },
+          (payload) => {
+            setMessages(messages.filter((msg) => msg.message_id !== payload.old.message_id));
+          }
+        )
         .subscribe();
 
       return () => {
-        clientSupabase.removeChannel(channle);
+        clientSupabase.removeChannel(channel);
       };
     }
   }, [messages, setMessages, isScrolling, roomId, chatRoomId]);
@@ -81,6 +86,7 @@ const ChatList = ({ allMsgs, user }: { allMsgs: Message[]; user: User | null }) 
       .from('messages')
       .select('*')
       .range(from, to)
+      .eq('chatting_room_id', String(chatRoomId))
       .order('created_at', { ascending: false });
 
     if (error) {
@@ -97,6 +103,7 @@ const ChatList = ({ allMsgs, user }: { allMsgs: Message[]; user: User | null }) 
   // 더보기를 누르면 다시 렌더링이 되면서 useEffect가 실행되어 scrollTop이랑 scrollHeight가 같아져야 하는데(스크롤다운) 왜 스크롤이 안내려가지는지?
   // 더보기 눌렀을 때 위치 다시 생각해봐야함
   // 삭제 후 더보기 누르면 제대로 안 불러와짐
+  console.log('messages =>', messages);
 
   return (
     <>
