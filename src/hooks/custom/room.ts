@@ -17,7 +17,7 @@ function meetingRoomHandler() {
     const { data: chattingRoom, error } = await clientSupabase
       .from('room')
       .select(`*`)
-      .eq('going_chat', true)
+      .eq('room_status', '모집종료')
       .order('created_at', { ascending: false });
     if (error) return alert('error 발생!');
     return chattingRoom;

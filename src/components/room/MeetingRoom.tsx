@@ -12,18 +12,32 @@ import { useRouter } from 'next/navigation';
 type MeetingRoom = Database['public']['Tables']['room']['Row'];
 
 function MeetingRoom({ room }: { room: MeetingRoom }) {
-  const { participants } = userStore((state) => state);
   const { user } = userStore((state) => state);
   const router = useRouter();
 
   const { room_id, room_status, room_title, member_number, location, feature } = room;
 
-  const { addMemberHandler, userMemberInformation } = participantsHandler();
+  const { addMemberHandler, totalMember, userMemberInformation } = participantsHandler();
   const { getmaxGenderMemberNumber } = meetingRoomHandler();
 
   const addMember = async ({ room_id, member_number }: { room_id: string; member_number: string }) => {
     if (!user) return alert('로그인이 필요한 서비스입니다.');
     // if (!participants) return alert('유효하지 않은 접근입니다.');
+    //채팅창으로 넘어갔을 경우에는 채팅창으로 이동
+    const { data: alreadyChat } = await clientSupabase
+      .from('chatting_room')
+      .select('*')
+      .eq('room_id', room_id)
+      .eq('isActive', true);
+    if (alreadyChat && alreadyChat?.length) {
+      // 만약 isActive인 채팅방이 이미 있다면 그 방으로 보내기
+      router.replace(`/chat/${alreadyChat[0].chatting_room_id}`);
+    }
+    //아직 인원을 모집중인 경우 + 채팅창이 열리지 않은 경우
+    const participants = await totalMember(room_id);
+    console.log('participants', participants);
+    if (!user || user.length === 0) return alert('로그인이 필요한 서비스입니다.');
+    if (!participants || participants.length === 0) return alert('유효하지 않은 접근입니다.');
 
     //room의 정보를 가져와서 성별에 할당된 인원을 확인
     const genderMaxNumber = await getmaxGenderMemberNumber(member_number);
@@ -41,7 +55,7 @@ function MeetingRoom({ room }: { room: MeetingRoom }) {
     }
 
     //성별에 할당된 인원이 다 찼으면 알람
-    else if (genderMaxNumber === participatedGenderMember) {
+    else if (genderMaxNumber === participatedGenderMember && room_status === '모집중') {
       return alert('해당 성별은 모두 참여가 완료되었습니다.');
     }
 
@@ -55,7 +69,7 @@ function MeetingRoom({ room }: { room: MeetingRoom }) {
       {
         <Card shadow="sm" isPressable>
           <CardBody className="overflow-visible p-0 m-8">
-            <main onClick={() => addMember({ room_id, member_number })}>
+            <main onClick={(e) => addMember({ room_id, member_number })}>
               <div> {room_title} </div>
               <div> {feature} </div>
               <div> {location} </div>
