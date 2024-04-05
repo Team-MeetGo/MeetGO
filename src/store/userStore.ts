@@ -1,11 +1,12 @@
-import { UserDataFromTable } from '(@/types/userTypes)';
+import { Database } from '(@/types/database.types)';
 import { create } from 'zustand';
+import { UsersType } from '(@/types/userTypes)';
 
 type UserState = {
-  user: UserDataFromTable[] | null;
-  participants: UserDataFromTable[] | null | undefined;
-  setUser: (data: UserDataFromTable[]) => void;
-  setParticipants: (others: UserDataFromTable[]) => void;
+  user: UsersType[] | null;
+  participants: UsersType[] | null | undefined;
+  setUser: (data: UsersType[]) => void;
+  setParticipants: (others: UsersType[]) => void;
 };
 
 export const userStore = create<UserState>()((set) => ({
