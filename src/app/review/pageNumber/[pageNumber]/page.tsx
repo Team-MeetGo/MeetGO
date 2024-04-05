@@ -25,8 +25,23 @@ const ReviewsPage = () => {
   const [totalReviews, setTotalReviews] = useState<number>(0);
   const reviewsPerPage = 9;
   const [selected, setSelected] = React.useState<Selection>(new Set(['최신 순']));
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   const selectedValue = React.useMemo(() => Array.from(selected).join(', ').replaceAll('_', ' '), [selected]);
+
+  const checkLoginStatus = async () => {
+    const data = await clientSupabase.auth.getUser();
+    console.log(data.data.user);
+    if (data.data.user !== null) {
+      setIsLoggedIn(true);
+    } else {
+      setIsLoggedIn(false);
+    }
+  };
+
+  useEffect(() => {
+    checkLoginStatus();
+  }, []);
 
   async function getMostLikedReview(page: number) {
     const likedReviewIds = (await clientSupabase.from('review_like').select('review_id')).data?.map(
@@ -126,7 +141,7 @@ const ReviewsPage = () => {
           </Dropdown>
         </div>
         <div>
-          <NewReview />
+          <div>{isLoggedIn ? <NewReview /> : null}</div>
         </div>
       </div>
       <ul className="grid grid-cols-3 gap-2 gap-y-4">
