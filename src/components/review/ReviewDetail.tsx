@@ -8,6 +8,7 @@ import { useRouter } from 'next/navigation';
 import ReviewHeart from './ReviewHeart';
 import AvatarDefault from '(@/utils/icons/AvatarDefault)';
 import ImageGallery from './ImageGallery';
+import { HiOutlineChatBubbleOvalLeftEllipsis } from 'react-icons/hi2';
 
 export type ReviewDetailType = {
   review_title: string | null;
@@ -114,9 +115,14 @@ const ReviewDetail = ({ review_id, commentCount }: Props) => {
               }).format(new Date(reviewDetail.created_at))
             : null}
         </div>
-        <div className="flex">
+        <div className="flex gap-1">
           <ReviewHeart review_id={review_id} />
-          <p>댓글 {commentCount}</p>
+          <div className="flex gap-1">
+            <div className="pt-[2px]" style={{ fontSize: '1.1rem' }}>
+              <HiOutlineChatBubbleOvalLeftEllipsis />
+            </div>
+            <div className="pb-1">{commentCount}</div>
+          </div>
         </div>
         <div>
           <ImageGallery images={reviewDetail?.test_image_url || []} />

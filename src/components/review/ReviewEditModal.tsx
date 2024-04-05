@@ -133,6 +133,7 @@ export default function ReviewEditModal({ review_id }: Props) {
     } else {
       alert('리뷰가 수정되었습니다.');
       onClose();
+      window.location.reload();
     }
   };
 

@@ -1,13 +1,14 @@
-import { AiFillHeart } from 'react-icons/ai';
+import { IoMdHeart } from 'react-icons/io';
 
 type Props = {
+  size?: string;
   className?: string;
 };
 
-const HeartFillIcon = ({ className }: Props) => {
+const HeartFillIcon = ({ size = '1.1em', className }: Props) => {
   return (
     <div>
-      <AiFillHeart className={`${className}`} style={{ color: '#F31236' }} />
+      <IoMdHeart className={className} size={size} style={{ color: '#F31236' }} />
     </div>
   );
 };

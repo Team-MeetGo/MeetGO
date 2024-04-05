@@ -2,6 +2,7 @@
 
 import React, { useEffect, useState } from 'react';
 import { clientSupabase } from '(@/utils/supabase/client)';
+import { HiOutlineChatBubbleOvalLeftEllipsis } from 'react-icons/hi2';
 
 type Props = {
   review_id: string;
@@ -39,11 +40,11 @@ const ReviewComment = ({ review_id }: Props) => {
   }, [review_id]);
 
   return (
-    <div className="flex gap-2 justify-center item-center">
-      <div className="flex gap-2">
-        <p>댓글</p>
-        <div>{commentCount}</div>
+    <div className="flex gap-1 items-center">
+      <div className="pb-[7px]" style={{ fontSize: '1.1rem' }}>
+        <HiOutlineChatBubbleOvalLeftEllipsis />
       </div>
+      <div className="pb-1">{commentCount}</div>
     </div>
   );
 };

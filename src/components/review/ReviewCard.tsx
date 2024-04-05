@@ -52,7 +52,10 @@ const ReviewCard = ({ review }: { review: ReviewType }) => {
   });
 
   return (
-    <div key={review.review_id} className="flex flex-col justify-center item-center bg-green-200 p-4">
+    <div
+      key={review.review_id}
+      className="flex flex-col justify-center item-center border-1 border-[#A1A1AA] rounded-[10px] p-4"
+    >
       <Link href={`/review/${review.review_id}`}>
         <div>
           {review.test_image_url && review.test_image_url.length > 0 ? (
@@ -61,7 +64,7 @@ const ReviewCard = ({ review }: { review: ReviewType }) => {
               alt="reviewImage"
               height={400}
               width={400}
-              className="w-full h-[280px] object-cover"
+              className="w-full h-[280px] object-cover rounded-[10px]"
             />
           ) : null}
         </div>
@@ -69,8 +72,10 @@ const ReviewCard = ({ review }: { review: ReviewType }) => {
         <div>{review.review_contents}</div>
         <div>{userNickname}</div>
       </Link>
-      <ReviewHeart review_id={review.review_id} />
-      <ReviewComment review_id={review.review_id} />
+      <div className="flex gap-2">
+        <ReviewHeart review_id={review.review_id} />
+        <ReviewComment review_id={review.review_id} />
+      </div>
     </div>
   );
 };
