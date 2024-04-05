@@ -1,5 +1,6 @@
 'use client';
 
+import { clientSupabase } from '(@/utils/supabase/client)';
 import React, { useEffect, useRef, useState } from 'react';
 
 declare global {
@@ -12,9 +13,10 @@ interface MapProps {
   setSelectedLocation: (barName: string) => void; // 이벤트 핸들러를 props로 받음
   userId: string | null | undefined;
   leaderId: string | null | undefined;
+  chatRoomId: string | null;
 }
 
-const Map: React.FC<MapProps> = ({ setSelectedLocation, userId, leaderId }) => {
+const Map: React.FC<MapProps> = ({ setSelectedLocation, userId, leaderId, chatRoomId }) => {
   const mapRef = useRef<any>();
   const [map, setMap] = useState<any>();
   const [markers, setMarkers] = useState<any>();
@@ -122,8 +124,17 @@ const Map: React.FC<MapProps> = ({ setSelectedLocation, userId, leaderId }) => {
   };
 
   // 장소 선택 함수
-  const handleSelectLocation = (barName: string) => {
+  const handleSelectLocation = async (barName: string) => {
     setSelectedLocation(barName);
+    if (!chatRoomId) {
+      return;
+    }
+
+    const { error } = await clientSupabase
+      .from('chatting_room')
+      .update({ meeting_location: barName })
+      .eq('chatting_room_id', chatRoomId);
+    console.log(chatRoomId);
   };
 
   return (
@@ -134,7 +145,7 @@ const Map: React.FC<MapProps> = ({ setSelectedLocation, userId, leaderId }) => {
           <div key={index} className="border">
             <div className="flex flex-row justify-between">
               <h1>{bar.place_name}</h1>
-              {userId === leaderId && (
+              {/* {userId === leaderId && (
                 <button
                   onClick={() => {
                     handleSelectLocation(bar.place_name);
@@ -142,7 +153,14 @@ const Map: React.FC<MapProps> = ({ setSelectedLocation, userId, leaderId }) => {
                 >
                   선택
                 </button>
-              )}
+              )} */}
+              <button
+                onClick={() => {
+                  handleSelectLocation(bar.place_name);
+                }}
+              >
+                테스트 선택
+              </button>
             </div>
             <p>{bar.address_name}</p>
             <p>{bar.place_url}</p>

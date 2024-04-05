@@ -52,7 +52,7 @@ const SideBar: React.FC<SideBarProps> = ({ userId, leaderId, chatRoomId }) => {
           </div>
           <DatePicker />
           <p>미팅 장소 : {selectedLocation}</p>
-          <Map setSelectedLocation={setSelectedLocation} userId={userId} leaderId={leaderId} />
+          <Map setSelectedLocation={setSelectedLocation} userId={userId} leaderId={leaderId} chatRoomId={chatRoomId} />
         </div>
       )}
     </div>
