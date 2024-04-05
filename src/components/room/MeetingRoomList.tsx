@@ -31,6 +31,7 @@ function MeetingRoomList() {
             <MeetingRoom key={room.room_id} room={room} />
           ))}
         </div>
+        {/* 이 부분은 채팅룸이 형성된 전체 방으로, 마지막에는 삭제 예정입니다. */}
         <div className="gap-2 grid grid-cols-2 sm:grid-cols-4 m-8">
           {chattingRoomList.map((room) => (
             <MeetingRoom key={room.room_id} room={room} />
