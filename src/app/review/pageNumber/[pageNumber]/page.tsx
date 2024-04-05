@@ -15,8 +15,7 @@ interface ReviewData {
   review_title: string | null;
   review_contents: string | null;
   created_at: string | null;
-  image_url: string | null;
-  test_image_url: string[] | null;
+  image_urls: string[] | null;
 }
 
 const ReviewsPage = () => {
@@ -30,14 +29,30 @@ const ReviewsPage = () => {
   const selectedValue = React.useMemo(() => Array.from(selected).join(', ').replaceAll('_', ' '), [selected]);
 
   async function getMostLikedReview(page: number) {
-    let { data } = await clientSupabase.from('review').select('*', { count: 'estimated' });
-    if (data) {
-      data.sort((a, b) => (b.like_user?.length || 0) - (a.like_user?.length || 0));
+    const likedReviewIds = (await clientSupabase.from('review_like').select('review_id')).data?.map(
+      (item) => item.review_id
+    );
+
+    const { data: allReviews } = await clientSupabase.from('review').select('*');
+
+    const zeroLikedReviews = allReviews?.filter((review) => !likedReviewIds?.includes(review.review_id));
+
+    const likedReviews = allReviews?.filter((review) => likedReviewIds?.includes(review.review_id));
+
+    likedReviews?.sort((a, b) => {
+      const aLikes = likedReviewIds?.filter((id) => id === a.review_id).length || 0;
+      const bLikes = likedReviewIds?.filter((id) => id === b.review_id).length || 0;
+      return bLikes - aLikes;
+    });
+
+    const combinedReviews = [...(likedReviews || []), ...(zeroLikedReviews || [])];
+
+    if (combinedReviews) {
       const startIdx = (page - 1) * reviewsPerPage;
       const endIdx = page * reviewsPerPage;
-      const slicedData = data.slice(startIdx, endIdx);
+      const slicedData = combinedReviews.slice(startIdx, endIdx);
       setReviewData(slicedData);
-      setTotalReviews(data.length);
+      setTotalReviews(combinedReviews.length);
     }
   }
 

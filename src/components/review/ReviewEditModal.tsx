@@ -33,14 +33,14 @@ export default function ReviewEditModal({ review_id }: Props) {
     if (reviewDetail) {
       setEditedTitle(reviewDetail.review_title || '');
       setEditedContent(reviewDetail.review_contents || '');
-      setPreviewImages(reviewDetail.test_image_url || []);
+      setPreviewImages(reviewDetail.image_urls || []);
     }
   }, [reviewDetail]);
 
   async function getReviewDetail(review_id: string) {
     let { data: reviewDetail, error } = await clientSupabase
       .from('review')
-      .select('review_title, review_contents, created_at, image_url, user_id, test_image_url')
+      .select('review_title, review_contents, created_at, user_id, image_urls')
       .eq('review_id', review_id);
 
     if (error) {
@@ -56,7 +56,7 @@ export default function ReviewEditModal({ review_id }: Props) {
     if (window.confirm('리뷰 수정을 취소하시겠습니까?')) {
       setEditedTitle(reviewDetail?.review_title || '');
       setEditedContent(reviewDetail?.review_contents || '');
-      setPreviewImages(reviewDetail?.test_image_url || []);
+      setPreviewImages(reviewDetail?.image_urls || []);
       setFiles([]);
       onClose();
     }
@@ -125,7 +125,7 @@ export default function ReviewEditModal({ review_id }: Props) {
 
     const { data: updateReview, error } = await clientSupabase
       .from('review')
-      .update({ review_title: editedTitle, review_contents: editedContent, test_image_url: allImages })
+      .update({ review_title: editedTitle, review_contents: editedContent, image_urls: allImages })
       .eq('review_id', review_id);
 
     if (error) {

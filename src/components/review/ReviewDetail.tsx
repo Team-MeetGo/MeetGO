@@ -9,14 +9,14 @@ import ReviewHeart from './ReviewHeart';
 import AvatarDefault from '(@/utils/icons/AvatarDefault)';
 import ImageGallery from './ImageGallery';
 import { HiOutlineChatBubbleOvalLeftEllipsis } from 'react-icons/hi2';
+import defaultImg from '../../../public/defaultImg.jpg';
 
 export type ReviewDetailType = {
   review_title: string | null;
   review_contents: string | null;
   created_at: string | null;
-  image_url: string | null;
   user_id: string | null;
-  test_image_url: string[] | null;
+  image_urls: string[] | null;
 };
 
 type Props = {
@@ -46,7 +46,7 @@ const ReviewDetail = ({ review_id, commentCount }: Props) => {
   async function getReviewDetail(review_id: string) {
     let { data: reviewDetail, error } = await clientSupabase
       .from('review')
-      .select('review_title, review_contents, created_at, image_url, user_id, test_image_url')
+      .select('review_title, review_contents, created_at, user_id, image_urls')
       .eq('review_id', review_id)
       .single();
 
@@ -77,7 +77,7 @@ const ReviewDetail = ({ review_id, commentCount }: Props) => {
     if (window.confirm('리뷰를 삭제하시겠습니까?')) {
       const { error: reviewDeleteError } = await clientSupabase.from('review').delete().eq('review_id', review_id);
       const { error: commentDeleteError } = await clientSupabase
-        .from('test_review_comment')
+        .from('review_comment')
         .delete()
         .eq('review_id', review_id);
       if (reviewDeleteError) {
@@ -125,7 +125,17 @@ const ReviewDetail = ({ review_id, commentCount }: Props) => {
           </div>
         </div>
         <div>
-          <ImageGallery images={reviewDetail?.test_image_url || []} />
+          {reviewDetail?.image_urls && reviewDetail.image_urls.length > 0 ? (
+            <ImageGallery images={reviewDetail?.image_urls || []} />
+          ) : (
+            <Image
+              src={defaultImg}
+              alt="reviewImage"
+              height={300}
+              width={300}
+              className="w-[300px] h-full object-cover rounded-[10px]"
+            />
+          )}
         </div>
         <div>{reviewDetail?.review_contents}</div>
       </div>

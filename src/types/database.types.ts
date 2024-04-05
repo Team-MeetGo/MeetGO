@@ -122,32 +122,26 @@ export type Database = {
       review: {
         Row: {
           created_at: string;
-          image_url: string | null;
-          like_user: string[] | null;
           review_contents: string | null;
           review_id: string;
           review_title: string | null;
-          test_image_url: string[] | null;
+          image_urls: string[] | null;
           user_id: string | null;
         };
         Insert: {
           created_at?: string;
-          image_url?: string | null;
-          like_user?: string[] | null;
           review_contents?: string | null;
           review_id?: string;
           review_title?: string | null;
-          test_image_url?: string[] | null;
+          image_urls?: string[] | null;
           user_id?: string | null;
         };
         Update: {
           created_at?: string;
-          image_url?: string | null;
-          like_user?: string[] | null;
           review_contents?: string | null;
           review_id?: string;
           review_title?: string | null;
-          test_image_url?: string[] | null;
+          image_urls?: string[] | null;
           user_id?: string | null;
         };
         Relationships: [];

@@ -95,7 +95,7 @@ const NewReview = () => {
       {
         review_title: reviewTitle,
         review_contents: reviewContents,
-        test_image_url: imageUrls,
+        image_urls: imageUrls,
         user_id: userId
       }
     ]);

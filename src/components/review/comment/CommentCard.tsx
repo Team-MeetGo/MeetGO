@@ -38,7 +38,7 @@ const CommentCard = ({ comment }: Props) => {
   const handleDeleteComment = async () => {
     if (window.confirm('댓글을 삭제하시겠습니까?')) {
       const { error } = await clientSupabase
-        .from('test_review_comment')
+        .from('review_comment')
         .delete()
         .eq('comment_id', comment.comment_id as string);
     }

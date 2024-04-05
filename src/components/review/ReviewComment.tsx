@@ -13,8 +13,8 @@ const ReviewComment = ({ review_id }: Props) => {
   const [userId, setUserId] = useState<string | null>(null);
 
   const fetchCommentCount = async (review_id: string) => {
-    let { data: test_review_comment, error } = await clientSupabase
-      .from('test_review_comment')
+    let { data: review_comment, error } = await clientSupabase
+      .from('review_comment')
       .select('*')
       .eq('review_id', review_id);
 
@@ -22,8 +22,8 @@ const ReviewComment = ({ review_id }: Props) => {
       throw error;
     }
 
-    if (test_review_comment) {
-      setCommentCount(test_review_comment.length);
+    if (review_comment) {
+      setCommentCount(review_comment.length);
     } else {
       setCommentCount(0);
     }
