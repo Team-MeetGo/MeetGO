@@ -1,35 +1,63 @@
-import { Card, CardBody, CardFooter } from '@nextui-org/react';
+'use client';
+import participantsHandler from '(@/hooks/custom/participants)';
+import meetingRoomHandler from '(@/hooks/custom/room)';
+import { userStore } from '(@/store/userStore)';
+import { Card, CardBody } from '@nextui-org/react';
 import DeleteMeetingRoom from './DeleteMeetingRoom';
 import EditMeetingRoom from './EditMeetingRoom';
-import Link from 'next/link';
-import participants from '(@/hooks/custom/participants)';
 
 import type { Database } from '(@/types/database.types)';
+import { useRouter } from 'next/navigation';
 type MeetingRoom = Database['public']['Tables']['room']['Row'];
 
-function MeetingRoom({ list }: { list: MeetingRoom[] }) {
-  const { addMemeberHandler } = participants();
+function MeetingRoom({ room }: { room: MeetingRoom }) {
+  const { participants } = userStore((state) => state);
+  const { user } = userStore((state) => state);
+  const router = useRouter();
+
+  const { room_id, room_status, room_title, member_number, location, feature } = room;
+
+  const { addMemberHandler, userMemberInformation } = participantsHandler();
+  const { getmaxGenderMemberNumber } = meetingRoomHandler();
+  const addMember = async ({ room_id, member_number }: { room_id: string; member_number: string }) => {
+    if (!user) return alert('로그인이 필요한 서비스입니다.');
+    //room의 정보를 가져와서 성별에 할당된 인원을 확인
+    const genderMaxNember = await getmaxGenderMemberNumber(member_number);
+    if (genderMaxNember === undefined) return alert('최대 성별 오류 다시 시도해 주세요');
+    console.log(genderMaxNember);
+    console.log(participants);
+    //참여자 정보를 가져와서 해당 성별이 안에 몇명 있는지 확인
+    // const participatedGenderMember = await participants?.filter((member) => member.gender === user[0].gender).length;
+    const totalMemberList = await userMemberInformation(room_id);
+    if (totalMemberList === undefined) return alert('참여 성벌 요류 다시 시도해 주세요');
+    const participatedGenderMember = totalMemberList.filter((member) => member.gender === user[0].gender).length;
+    console.log(participatedGenderMember);
+    //성별에 할당된 인원이 참여자 정보보다 적을 때 입장
+    if (genderMaxNember > participatedGenderMember || !participatedGenderMember) {
+      console.log(participants);
+      await addMemberHandler(room_id);
+      router.push(`/meetingRoom/${room_id}`);
+    } else return alert('해당 성별은 모두 참여가 완료되었습니다.');
+  };
   return (
-    <div className="gap-2 grid grid-cols-2 sm:grid-cols-4 m-8">
-      {list.map((room) => (
-        <Card key={room.room_id} shadow="sm" isPressable>
+    <div>
+      {
+        <Card shadow="sm" isPressable>
           <CardBody className="overflow-visible p-0 m-8">
-            <Link href={`/meetingRoom/${room.room_id}`}>
-              <main onClick={async () => await addMemeberHandler(room.room_id)}>
-                <div> {room.room_title} </div>
-                <div> {room.feature} </div>
-                <div> {room.location} </div>
-                <div> {room.room_status} </div>
-                <div> {room.member_number}</div>
-              </main>
-            </Link>
+            <main onClick={() => addMember({ room_id, member_number })}>
+              <div> {room_title} </div>
+              <div> {feature} </div>
+              <div> {location} </div>
+              <div> {room_status} </div>
+              <div> {member_number}</div>
+            </main>
             <div className="flex flex-row gap-12">
-              <DeleteMeetingRoom id={room.room_id} />
+              <DeleteMeetingRoom id={room_id} />
               <EditMeetingRoom room={room} />
             </div>
           </CardBody>
         </Card>
-      ))}
+      }
     </div>
   );
 }

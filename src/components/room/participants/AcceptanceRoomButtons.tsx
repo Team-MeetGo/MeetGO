@@ -1,19 +1,19 @@
 'use client';
-import participants from '(@/hooks/custom/participants)';
 import meetingRoomHandler from '(@/hooks/custom/room)';
 import { clientSupabase } from '(@/utils/supabase/client)';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
-import type { UUID } from 'crypto';
+import participantsHandler from '(@/hooks/custom/participants)';
 import { Database } from '(@/types/database.types)';
+import type { UUID } from 'crypto';
 type ParticipantType = Database['public']['Tables']['participants']['Row'];
 
 const AcceptanceRoomButtons = ({ roomId }: { roomId: UUID }) => {
   const router = useRouter();
   const [maximumParticipants, setMaximumParticipants] = useState(0);
   const [totalMemberList, setTotalMemberList] = useState<ParticipantType[]>();
-  const { deleteMember, totalMember } = participants();
+  const { deleteMember, totalMember } = participantsHandler();
   const { getRoomInformation } = meetingRoomHandler();
 
   useEffect(() => {
