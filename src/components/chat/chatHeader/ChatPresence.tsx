@@ -14,12 +14,12 @@ const ChatPresence = () => {
       const channel = clientSupabase.channel(chatRoomId);
       channel
         .on('presence', { event: 'sync' }, () => {
+          console.log('channel.presenceState() => ', channel.presenceState());
           const nowUsers = [];
           for (const id in channel.presenceState()) {
             // @ts-ignore
             nowUsers.push(channel.presenceState()[id][0].user_id);
           }
-          console.log(nowUsers.length);
           setOnlineUsers(nowUsers.length);
         })
         .subscribe(async (status) => {

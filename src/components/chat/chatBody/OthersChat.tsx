@@ -1,6 +1,6 @@
 import { chatStore } from '(@/store/chatStore)';
 import { Message } from '(@/types/chatTypes)';
-import { UserDataFromTable } from '(@/types/userTypes)';
+import { UsersType } from '(@/types/userTypes)';
 import { getformattedDate } from '(@/utils)';
 import { clientSupabase } from '(@/utils/supabase/client)';
 import { Tooltip } from '@nextui-org/react';
@@ -8,7 +8,7 @@ import { useEffect, useState } from 'react';
 
 const OthersChat = ({ msg }: { msg: Message }) => {
   const roomId = chatStore((state) => state.roomId);
-  const [usersData, setUsersData] = useState<UserDataFromTable[] | null>();
+  const [usersData, setUsersData] = useState<UsersType[] | null>();
 
   useEffect(() => {
     const fetchParticipants = async () => {
@@ -30,14 +30,13 @@ const OthersChat = ({ msg }: { msg: Message }) => {
         }
         console.log('users', users);
         setUsersData([...users]);
-        console.log(usersData); // 남은 애들의 유저정보가 gender
       }
     };
     roomId && fetchParticipants();
   }, [roomId]);
 
   const showThatUser = (userId: string | null) => {
-    const thatUserData = usersData?.find((data) => data.user_id === userId);
+    const thatUserData = usersData?.find((p) => p.user_id === userId);
     return thatUserData;
   };
 
