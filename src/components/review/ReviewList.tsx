@@ -47,7 +47,6 @@ const ReviewList: React.FC = () => {
     let { data: likedReviews, error } = await clientSupabase.from('test_review_like').select('*');
 
     if (likedReviews) {
-      // review_id를 기준으로 데이터를 그룹화합니다.
       const groupedReviews: { [key: string]: reviewData[] } = likedReviews.reduce((acc, curr) => {
         if (curr.review_id !== null) {
           acc[curr.review_id] = acc[curr.review_id] || [];
@@ -56,14 +55,9 @@ const ReviewList: React.FC = () => {
         return acc;
       }, {});
 
-      // 그룹화된 데이터를 review_id의 갯수를 기준으로 정렬합니다.
-      const sortedReviews = Object.values(groupedReviews).sort(
-        (a: reviewData[], b: reviewData[]) => b.length - a.length
-      );
+      const groupedReviewsArray = Object.values(groupedReviews);
 
-      // 정렬된 데이터를 리뷰 데이터로 설정합니다.
-      setReviewData(sortedReviews.flat());
-      console.log(sortedReviews.flat());
+      console.log(groupedReviewsArray);
     }
   }
 
