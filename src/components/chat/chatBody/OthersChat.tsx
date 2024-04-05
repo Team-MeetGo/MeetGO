@@ -25,10 +25,8 @@ const OthersChat = ({ msg }: { msg: Message }) => {
             .from('users')
             .select('*')
             .eq('user_id', String(id.user_id));
-          console.log(data);
           if (data) users.push(...data);
         }
-        console.log('users', users);
         setUsersData([...users]);
       }
     };

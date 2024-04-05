@@ -20,8 +20,8 @@ const CommentList = ({ review_id, onUpdateCommentCount }: Props) => {
   const [commentCount, setCommentCount] = useState(0);
 
   const fetchCommentCount = async (review_id: string) => {
-    let { data: test_review_comment, error } = await clientSupabase
-      .from('test_review_comment')
+    let { data: review_comment, error } = await clientSupabase
+      .from('review_comment')
       .select('*')
       .eq('review_id', review_id);
 
@@ -29,9 +29,9 @@ const CommentList = ({ review_id, onUpdateCommentCount }: Props) => {
       throw error;
     }
 
-    if (test_review_comment) {
-      setCommentCount(test_review_comment.length);
-      onUpdateCommentCount(test_review_comment.length);
+    if (review_comment) {
+      setCommentCount(review_comment.length);
+      onUpdateCommentCount(review_comment.length);
     } else {
       setCommentCount(0);
       onUpdateCommentCount(0);
@@ -44,14 +44,14 @@ const CommentList = ({ review_id, onUpdateCommentCount }: Props) => {
   });
 
   async function getCommentList(review_id: string) {
-    let { data: test_review_comment, error } = await clientSupabase
-      .from('test_review_comment')
+    let { data: review_comment, error } = await clientSupabase
+      .from('review_comment')
       .select('user_id, comment_content, created_at, comment_id, review_id')
       .eq('review_id', review_id);
     if (error) {
       console.log('댓글 표시 중 에러 발생', error);
     }
-    setCommentData(test_review_comment || []);
+    setCommentData(review_comment || []);
   }
   return (
     <div>
