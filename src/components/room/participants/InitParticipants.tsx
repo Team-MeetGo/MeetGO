@@ -4,7 +4,7 @@ import { clientSupabase } from '(@/utils/supabase/client)';
 import { useEffect } from 'react';
 
 const InitParticipants = ({ roomId }: { roomId: string }) => {
-  const { user, setParticipants } = userStore((state) => state);
+  const { setParticipants } = userStore((state) => state);
 
   useEffect(() => {
     const fetchParticipants = async () => {
