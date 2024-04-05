@@ -6,24 +6,21 @@ import { useState } from 'react';
 import TagList from './MeetingRoomFeatureTags';
 
 import type { Database } from '(@/types/database.types)';
+import { userStore } from '(@/store/userStore)';
+import { useRouter } from 'next/navigation';
+import { randomUUID } from 'crypto';
+import meetingRoomHandler from '(@/hooks/custom/room)';
 type NextMeetingRoomType = Database['public']['Tables']['room']['Insert'];
 
 function MeetingRoomForm() {
+  const router = useRouter();
   const { tags, resetTags } = useTagStore();
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
+  const { user } = userStore((state) => state);
   const [title, setTitle] = useState('');
   const [location, setLocation] = useState('');
   const [memberNumber, setMemberNumber] = useState('');
-
-  const nextMeetingRoom: NextMeetingRoomType = {
-    feature: tags,
-    going_chat: false,
-    leader_id: '1a083af9-53f5-42b3-88e9-2f7d3a19a9b0', // 이후 로그인된 유저 아이디로 대체될 예정입니다.
-    location,
-    member_number: memberNumber,
-    room_status: '모집중',
-    room_title: title
-  };
+  const [address, setAddress] = useState('');
 
   const cancelMakingMeetingRoom = () => {
     setTitle('');
@@ -36,17 +33,33 @@ function MeetingRoomForm() {
     if (!title || !tags || !location || memberNumber === '인원수') {
       return alert('모든 항목은 필수입니다.');
     }
+    if (!user || user.length < 1) {
+      return alert('로그인을 해주시기 바랍니다.');
+    }
 
+    const nextMeetingRoom: NextMeetingRoomType = {
+      feature: tags,
+      going_chat: false,
+      leader_id: user[0].user_id,
+      location,
+      member_number: memberNumber,
+      room_status: '모집중',
+      room_title: title
+    };
+    console.log(nextMeetingRoom);
     const { data: insertMeetingRoom, error: insertMeetingRoomError } = await clientSupabase
       .from('room')
-      .insert([nextMeetingRoom])
+      .upsert([nextMeetingRoom])
       .select();
 
     if (insertMeetingRoomError) {
       console.log(insertMeetingRoomError);
       return;
+    } else {
+      console.log(insertMeetingRoom[0].room_id);
+      alert('모임이 생성되었습니다.');
+      router.push(`/${insertMeetingRoom[0].room_id}`);
     }
-    alert('모임이 생성되었습니다.');
   };
   return (
     <>
