@@ -5,18 +5,21 @@ import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import participantsHandler from '(@/hooks/custom/participants)';
 import { Database } from '(@/types/database.types)';
+import { userStore } from '(@/store/userStore)';
+
 import type { UUID } from 'crypto';
 type ParticipantType = Database['public']['Tables']['participants']['Row'];
 
 const AcceptanceRoomButtons = ({ roomId }: { roomId: UUID }) => {
   const router = useRouter();
+  const { user } = userStore((state) => state);
   const [maximumParticipants, setMaximumParticipants] = useState(0);
   const [totalMemberList, setTotalMemberList] = useState<ParticipantType[]>();
   const { deleteMember, totalMember } = participantsHandler();
   const { getRoomInformation } = meetingRoomHandler();
 
   useEffect(() => {
-    const getTotalMemeber = async () => {
+    const getTotalMember = async () => {
       const totalMemberList = await totalMember(roomId);
       if (!totalMemberList) return;
       setTotalMemberList(totalMemberList);
@@ -41,12 +44,11 @@ const AcceptanceRoomButtons = ({ roomId }: { roomId: UUID }) => {
       }
     };
     getSingleRoom();
-    getTotalMemeber();
+    getTotalMember();
   }, []);
 
   const gotoChattingRoom = async () => {
-    const { data } = await clientSupabase.auth.getUser();
-    if (!data.user) {
+    if (!user) {
       return alert('잘못된 접근입니다.');
     }
 
@@ -69,17 +71,31 @@ const AcceptanceRoomButtons = ({ roomId }: { roomId: UUID }) => {
         .select('chatting_room_id');
       console.log(chat_room);
 
+      //선택창이 채팅창으로 전환됩니다.
+      const { data: changeTochattingRoom, error: changeGoingChat } = await clientSupabase
+        .from('room')
+        .update({ going_chat: true })
+        .eq('roomId', roomId)
+        .select();
+
       if (chat_room) router.replace(`/chat/${chat_room[0].chatting_room_id}`);
     } // "/chatting_room_id" 로 주소값 변경
   };
 
-  const gotoMeetingRoom = async () => {
-    const { data } = await clientSupabase.auth.getUser();
-    if (!data.user) {
+  //나가기를 클릭하면 로비로 이동합니다.
+  const gotoLobby = async () => {
+    if (!user) {
       return alert('잘못된 접근입니다.');
     }
-    const user_id = data.user.id;
+    //로비로 나가는 사람이 생기면 방은 다시 모집중으로 바뀝니다.
+    await clientSupabase.from('room').update({ room_status: '모집중' }).eq('room_id', roomId);
+    const user_id = user[0].user_id;
+    //참가자 테이블에서 해당 유저의 정보가 삭제됩니다.
     deleteMember(user_id);
+    //만약 참가자 한명만 방에 있었다면 나감과 동시에 방은 삭제됩니다.
+    if (user.length === 1) {
+      await clientSupabase.from('room').delete().eq('room_id', roomId);
+    }
     router.push(`/meetingRoom`);
   };
 
@@ -87,7 +103,7 @@ const AcceptanceRoomButtons = ({ roomId }: { roomId: UUID }) => {
     <div className="h-100 w-16 flex flex-col justify-end gap-8">
       <button
         onClick={() => {
-          gotoMeetingRoom();
+          gotoLobby();
         }}
       >
         나가기
