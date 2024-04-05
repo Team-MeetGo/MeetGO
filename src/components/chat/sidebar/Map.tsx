@@ -2,6 +2,7 @@
 
 import { clientSupabase } from '(@/utils/supabase/client)';
 import React, { useEffect, useRef, useState } from 'react';
+import { MdSettings } from 'react-icons/md';
 
 declare global {
   interface Window {
@@ -27,7 +28,6 @@ const Map: React.FC<MapProps> = ({ userId, leaderId, chatRoomId }) => {
   const [selectedLocation, setSelectedLocation] = useState<string>('');
 
   useEffect(() => {
-    // 서버에서 불러와서
     const fetchData = async () => {
       if (!chatRoomId) {
         return;
@@ -38,6 +38,10 @@ const Map: React.FC<MapProps> = ({ userId, leaderId, chatRoomId }) => {
         .eq('chatting_room_id', chatRoomId)
         .single();
       const meetingLocation = chatData?.meeting_location;
+      if (!meetingLocation) {
+        // 저장된 장소가 없으면
+        isSelectedLocation === false;
+      }
       setSelectedLocation(meetingLocation || '');
     };
     fetchData();

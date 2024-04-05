@@ -4,6 +4,7 @@ import React, { useEffect, useState } from 'react';
 import Map from '(@/components/chat/sidebar/Map)';
 import DatePicker from './DatePicker';
 import { clientSupabase } from '(@/utils/supabase/client)';
+import { useSidebarStore } from '(@/store/sideBarStore)';
 
 interface SideBarProps {
   userId: string | null | undefined;
@@ -13,25 +14,26 @@ interface SideBarProps {
 
 const SideBar: React.FC<SideBarProps> = ({ userId, leaderId, chatRoomId }) => {
   const [selectedLocation, setSelectedLocation] = useState<string>('');
-  const [selectedDateTime, setSelectedDateTime] = useState<string>('');
   const [isSidebarOpen, setIsSidebarOpen] = useState<boolean>(false);
-  const [finalDateTime, setFinalDateTime] = useState<string>('');
-  const [isTimePicked, setIsTimePicked] = useState<boolean>(false);
+
+  const { selectedDateTime, setSelectedDateTime, setFinalDateTime, setIsTimePicked, finalDateTime, isTimePicked } =
+    useSidebarStore();
 
   useEffect(() => {
-    // 서버에서 불러와서
     const fetchData = async () => {
       if (!chatRoomId) {
         return;
       }
       const { data: chatData } = await clientSupabase
         .from('chatting_room')
-        .select('meeting_time, meeting_location')
+        .select('meeting_time')
         .eq('chatting_room_id', chatRoomId)
         .single();
       const meetingTime = chatData?.meeting_time;
-      const meetingLocation = chatData?.meeting_location;
-      setSelectedLocation(meetingLocation || '');
+
+      setIsTimePicked(!!meetingTime);
+
+      setSelectedDateTime(meetingTime || '');
       setFinalDateTime(meetingTime || '');
     };
     fetchData();
