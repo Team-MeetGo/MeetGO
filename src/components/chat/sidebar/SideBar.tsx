@@ -8,7 +8,7 @@ import { clientSupabase } from '(@/utils/supabase/client)';
 interface SideBarProps {
   userId: string | null | undefined;
   leaderId: string | null | undefined;
-  chatRoomId: string | null | undefined;
+  chatRoomId: string | null;
 }
 
 const SideBar: React.FC<SideBarProps> = ({ userId, leaderId, chatRoomId }) => {
@@ -23,14 +23,7 @@ const SideBar: React.FC<SideBarProps> = ({ userId, leaderId, chatRoomId }) => {
 
   const handleSelectedTime = async () => {
     setFinalDateTime(selectedDateTime);
-    if (chatRoomId) {
-      const { data: insertedTime, error: insertError } = await clientSupabase
-        .from('chatting_room')
-        .update({ meeting_time: selectedDateTime })
-        .eq('chatting_room_id', chatRoomId);
-      console.log('시간', selectedDateTime);
-    }
-  };
+
     console.log('시간', selectedDateTime);
   };
 
