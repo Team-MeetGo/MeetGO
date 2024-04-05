@@ -8,12 +8,14 @@ type chatState = {
   messages: Message[];
   hasMore: boolean;
   chatState: boolean;
+  isRest: boolean;
   setRoomData: (data: RoomData[]) => void;
   setRoomId: (roomId: string | null) => void;
   setChatRoomId: (chatRoomId: string | null) => void;
   setMessages: (messages: Message[]) => void;
   setHasMore: (hasMore: boolean) => void;
   setChatState: (isActive: boolean) => void;
+  setisRest: (isRest: boolean) => void;
 };
 
 export const chatStore = create<chatState>()((set) => ({
@@ -23,10 +25,12 @@ export const chatStore = create<chatState>()((set) => ({
   messages: [],
   hasMore: false,
   chatState: true,
+  isRest: true,
   setRoomData: (data: RoomData[]) => set({ roomData: data }),
   setRoomId: (roomId) => set({ roomId }),
   setChatRoomId: (chatRoomId) => set({ chatRoomId }),
   setMessages: (messages) => set({ messages }),
   setHasMore: (hasMore) => set({ hasMore }),
-  setChatState: (isActive) => set({ chatState: isActive })
+  setChatState: (isActive) => set({ chatState: isActive }),
+  setisRest: (isRest) => set({ isRest })
 }));
