@@ -3,7 +3,6 @@ import { serverSupabase } from '(@/utils/supabase/server)';
 import ChatHeader from '(@/components/chat/chatHeader/ChatHeader)';
 import ChatList from '(@/components/chat/chatBody/ChatList)';
 import ChatInput from '(@/components/chat/chatInput)';
-import SideBar from '(@/components/chat/sidebar/SideBar)';
 
 const ChatPage = async () => {
   const supabase = serverSupabase();
@@ -14,7 +13,6 @@ const ChatPage = async () => {
 
   return (
     <div className="flex felx-row ">
-      <SideBar />
       <div className="max-w-3xl mx-auto md:py-10 h-screen">
         <div className="h-full border rounded-md flex flex-col border-indigo-600 relative">
           <ChatHeader allMsgs={allMsgs ?? []} />

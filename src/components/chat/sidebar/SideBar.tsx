@@ -3,9 +3,14 @@
 import React, { useState } from 'react';
 import Map from '(@/components/chat/sidebar/Map)';
 import DatePicker from './DatePicker';
-import { serverSupabase } from '(@/utils/supabase/server)';
+import { User } from '@supabase/supabase-js';
 
-const SideBar = () => {
+interface SideBarProps {
+  userId: string | null | undefined;
+  leaderId: string | null | undefined;
+}
+
+const SideBar: React.FC<SideBarProps> = ({ userId, leaderId }) => {
   const [selectedLocation, setSelectedLocation] = useState<string>('');
   const [isSidebarOpen, setIsSidebarOpen] = useState<boolean>(false);
 
@@ -20,7 +25,7 @@ const SideBar = () => {
         <div>
           <DatePicker />
           <div>미팅 장소 : {selectedLocation}</div>
-          <Map setSelectedLocation={setSelectedLocation} />
+          <Map setSelectedLocation={setSelectedLocation} userId={userId} leaderId={leaderId} />
         </div>
       )}
     </div>

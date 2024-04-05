@@ -10,9 +10,11 @@ declare global {
 
 interface MapProps {
   setSelectedLocation: (barName: string) => void; // 이벤트 핸들러를 props로 받음
+  userId: string | null | undefined;
+  leaderId: string | null | undefined;
 }
 
-const Map: React.FC<MapProps> = ({ setSelectedLocation }) => {
+const Map: React.FC<MapProps> = ({ setSelectedLocation, userId, leaderId }) => {
   const mapRef = useRef<any>();
   const [map, setMap] = useState<any>();
   const [markers, setMarkers] = useState<any>();
