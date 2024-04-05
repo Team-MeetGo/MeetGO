@@ -20,7 +20,6 @@ const ChatPresence = () => {
             // @ts-ignore
             nowUsers.push(channel.presenceState()[id][0].user_id);
           }
-          console.log(nowUsers.length);
           setOnlineUsers(nowUsers.length);
         })
         .subscribe(async (status) => {

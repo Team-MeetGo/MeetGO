@@ -230,7 +230,7 @@ export type Database = {
       room: {
         Row: {
           created_at: string;
-          feature: string[];
+          feature: string;
           going_chat: boolean | null;
           leader_id: string | null;
           location: string;
@@ -241,7 +241,7 @@ export type Database = {
         };
         Insert: {
           created_at?: string;
-          feature: string[];
+          feature?: string[] | null;
           going_chat?: boolean | null;
           leader_id?: string | null;
           location?: string;
@@ -252,7 +252,7 @@ export type Database = {
         };
         Update: {
           created_at?: string;
-          feature?: string[];
+          feature?: string;
           going_chat?: boolean | null;
           leader_id?: string | null;
           location?: string;
@@ -320,7 +320,7 @@ export type Database = {
       users: {
         Row: {
           avatar: string | null;
-          favorite: string | null;
+          favorite: string[] | null;
           gender: string | null;
           intro: string | null;
           isValidate: boolean;
@@ -333,7 +333,7 @@ export type Database = {
         };
         Insert: {
           avatar?: string | null;
-          favorite?: string | null;
+          favorite?: string[] | null;
           gender?: string | null;
           intro?: string | null;
           isValidate?: boolean;
@@ -346,7 +346,7 @@ export type Database = {
         };
         Update: {
           avatar?: string | null;
-          favorite?: string | null;
+          favorite?: string[] | null;
           gender?: string | null;
           intro?: string | null;
           isValidate?: boolean;

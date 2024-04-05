@@ -9,8 +9,6 @@ const ChatHeader = () => {
   const router = useRouter();
   const { roomId, chatRoomId, roomData, setMessages, messages } = chatStore((state) => state);
   const user = userStore((state) => state.user);
-  // console.log(chatRoomId);
-  console.log('messages', messages);
 
   const getOutOfRoom = async () => {
     const { error: updateActiveErr } = await clientSupabase

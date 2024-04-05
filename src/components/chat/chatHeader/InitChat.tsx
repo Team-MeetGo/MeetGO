@@ -3,10 +3,24 @@
 import { chatStore } from '(@/store/chatStore)';
 import { Message } from '(@/types/chatTypes)';
 import { clientSupabase } from '(@/utils/supabase/client)';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 const InitChat = ({ chatRoomId, allMsgs }: { chatRoomId: string; allMsgs: Message[] }) => {
   const { messages, setMessages, setRoomId, setRoomData, setChatRoomId, setHasMore } = chatStore((state) => state);
+  const [count, setCount] = useState(0);
+
+  useEffect(() => {
+    const channel = clientSupabase
+      .channel(`${chatRoomId}_chatting_room_table`)
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'chatting_room' }, (payload) => {
+        console.log('Change received!', payload);
+      })
+      .subscribe();
+    return () => {
+      clientSupabase.removeChannel(channel);
+    };
+  }, [chatRoomId]);
+
   useEffect(() => {
     setMessages([...allMsgs?.slice(0, 3).reverse()]);
     setHasMore(allMsgs?.length - messages?.length > 0);

@@ -6,7 +6,6 @@ import ChatInput from '(@/components/chat/chatInput)';
 import InitChat from '(@/components/chat/chatHeader/InitChat)';
 
 const ChatPage = async ({ params }: { params: { chatroom_id: string } }) => {
-  console.log(params.chatroom_id);
   const chatRoomId = params.chatroom_id;
 
   const supabase = serverSupabase();
@@ -18,7 +17,6 @@ const ChatPage = async ({ params }: { params: { chatroom_id: string } }) => {
     .select('*')
     .eq('chatting_room_id', chatRoomId)
     .order('created_at', { ascending: false });
-  console.log(allMsgs);
 
   return (
     <div className="max-w-3xl mx-auto md:py-10 h-screen">
