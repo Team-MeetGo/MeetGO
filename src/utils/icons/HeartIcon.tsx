@@ -1,14 +1,15 @@
 import React from 'react';
-import { AiOutlineHeart } from 'react-icons/ai';
+import { IoMdHeartEmpty } from 'react-icons/io';
 
 type Props = {
+  size?: string;
   className?: string;
 };
 
-const HeartIcon = ({ className }: Props) => {
+const HeartIcon = ({ size = '1.1em', className }: Props) => {
   return (
-    <div>
-      <AiOutlineHeart className={`${className}`} style={{ color: '#F31236' }} />
+    <div style={{ padding: 0, margin: 0 }}>
+      <IoMdHeartEmpty className={className} size={size} style={{ color: '#F31236' }} />
     </div>
   );
 };

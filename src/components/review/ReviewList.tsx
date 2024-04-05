@@ -14,9 +14,7 @@ export type reviewData = {
   review_title: string | null;
   review_contents: string | null;
   created_at: string | null;
-  image_url: string | null;
-  like_user: string[] | null;
-  test_image_url: string[] | null;
+  image_urls: string[] | null;
 };
 
 const ReviewList: React.FC = () => {
@@ -30,9 +28,9 @@ const ReviewList: React.FC = () => {
   const selectedValue = React.useMemo(() => Array.from(selected).join(', ').replaceAll('_', ' '), [selected]);
 
   const checkLoginStatus = async () => {
-    const user = await clientSupabase.auth.getUser();
-    console.log(user);
-    if (user) {
+    const data = await clientSupabase.auth.getUser();
+    console.log(data.data.user);
+    if (data.data.user !== null) {
       setIsLoggedIn(true);
     } else {
       setIsLoggedIn(false);
@@ -44,12 +42,23 @@ const ReviewList: React.FC = () => {
   }, []);
 
   async function getMostLikedReview() {
-    let { data } = await clientSupabase.from('review').select('*');
-    if (data) {
-      data.sort((a, b) => (b.like_user?.length || 0) - (a.like_user?.length || 0));
-      setReviewData([...data]);
-      console.log(data);
-    }
+    const likedReviewIds = (await clientSupabase.from('review_like').select('review_id')).data?.map(
+      (item) => item.review_id
+    );
+
+    const { data: allReviews } = await clientSupabase.from('review').select('*');
+
+    const zeroLikedReviews = allReviews?.filter((review) => !likedReviewIds?.includes(review.review_id));
+
+    const likedReviews = allReviews?.filter((review) => likedReviewIds?.includes(review.review_id));
+
+    likedReviews?.sort((a, b) => {
+      const aLikes = likedReviewIds?.filter((id) => id === a.review_id).length || 0;
+      const bLikes = likedReviewIds?.filter((id) => id === b.review_id).length || 0;
+      return bLikes - aLikes;
+    });
+
+    setReviewData([...(likedReviews || []), ...(zeroLikedReviews || [])]);
   }
 
   const handleSelectionChange = (keys: Selection) => {
