@@ -24,6 +24,7 @@ const Map: React.FC<MapProps> = ({ setSelectedLocation, userId, leaderId, chatRo
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
   const [currentPos, setCurrentPos] = useState<any>();
+  const [isSelectedLocation, setIsSelectedLocation] = useState<boolean>(false);
 
   useEffect(() => {
     const script = document.createElement('script');
@@ -126,15 +127,25 @@ const Map: React.FC<MapProps> = ({ setSelectedLocation, userId, leaderId, chatRo
   // 장소 선택 함수
   const handleSelectLocation = async (barName: string) => {
     setSelectedLocation(barName);
+    setIsSelectedLocation(!isSelectedLocation);
+    console.log(isSelectedLocation);
     if (!chatRoomId) {
       return;
     }
 
-    const { error } = await clientSupabase
-      .from('chatting_room')
-      .update({ meeting_location: barName })
-      .eq('chatting_room_id', chatRoomId);
-    console.log(chatRoomId);
+    if (!isSelectedLocation) {
+      // 장소 선택 안되었을 때
+      const { error } = await clientSupabase
+        .from('chatting_room')
+        .update({ meeting_location: barName })
+        .eq('chatting_room_id', chatRoomId);
+      console.log(chatRoomId);
+    } else {
+      const { error } = await clientSupabase
+        .from('chatting_room')
+        .update({ meeting_location: null })
+        .eq('chatting_room_id', chatRoomId);
+    }
   };
 
   return (
@@ -159,7 +170,7 @@ const Map: React.FC<MapProps> = ({ setSelectedLocation, userId, leaderId, chatRo
                   handleSelectLocation(bar.place_name);
                 }}
               >
-                테스트 선택
+                {isSelectedLocation ? '취소' : '선택'}
               </button>
             </div>
             <p>{bar.address_name}</p>
