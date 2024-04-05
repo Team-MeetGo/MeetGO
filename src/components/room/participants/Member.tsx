@@ -1,13 +1,10 @@
 'use client';
+import { userStore } from '(@/store/userStore)';
 import { Database } from '(@/types/database.types)';
 import { clientSupabase } from '(@/utils/supabase/client)';
-import Image from 'next/image';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 
-import { userStore } from '(@/store/userStore)';
-import { UserDataFromTable } from '(@/types/userTypes)';
 import type { UUID } from 'crypto';
-type ParticipantType = Database['public']['Tables']['participants']['Row'];
 type UserType = Database['public']['Tables']['users']['Row'];
 
 const Member = ({ params }: { params: { id: UUID } }) => {
@@ -25,7 +22,7 @@ const Member = ({ params }: { params: { id: UUID } }) => {
           table: 'participants'
         },
         (payload) => {
-          setParticipants(participants ? [...participants, payload.new as UserDataFromTable] : []);
+          setParticipants(participants ? [...participants, payload.new as UserType] : []);
         }
       )
       .on(
@@ -81,29 +78,6 @@ const Member = ({ params }: { params: { id: UUID } }) => {
                 </div>
               </div>
             ))}
-          </div>
-        </div>
-        <div className="m-12 h-100 flex flex-row justify-evenly">
-          <div className="flex flex-col justify-start gap-4 bg-slate-400">
-            {participants
-              .filter((member) => member.gender === 'male')
-              .map((member) => (
-                <div key={member.user_id}>
-                  <div className="flex flex-row">
-                    <div className="flex flex-col justify-center align-top gap-1 bg-violet-300 p-4">
-                      <div>{member.favorite}</div>
-                      <div>{member.intro}</div>
-                    </div>
-                    <div className="h-36 w-36 flex flex-col align-middle justify-start m-4">
-                      <div className="h-28 w-28 bg-indigo-600 rounded-full">
-                        {member.avatar ? <img src={member.avatar as string} alt="유저" /> : ''}
-                      </div>
-                      <div>{member.nickname}</div>
-                      <div>{member.school_name}</div>
-                    </div>
-                  </div>
-                </div>
-              ))}
           </div>
         </div>
       </div>
