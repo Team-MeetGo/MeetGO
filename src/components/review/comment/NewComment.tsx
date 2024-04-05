@@ -18,7 +18,7 @@ const NewComment = ({ review_id }: Props) => {
     }
     const comment_content = (document.getElementById('comment_content') as HTMLInputElement)?.value;
     const { data, error } = await clientSupabase
-      .from('test_review_comment')
+      .from('review_comment')
       .insert([{ comment_content: comment_content, user_id: userId, review_id: review_id }]);
 
     if (error) {
