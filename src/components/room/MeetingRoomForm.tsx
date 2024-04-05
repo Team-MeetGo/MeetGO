@@ -5,11 +5,9 @@ import { Button, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, useDi
 import { useState } from 'react';
 import TagList from './MeetingRoomFeatureTags';
 
-import type { Database } from '(@/types/database.types)';
 import { userStore } from '(@/store/userStore)';
+import type { Database } from '(@/types/database.types)';
 import { useRouter } from 'next/navigation';
-import { randomUUID } from 'crypto';
-import meetingRoomHandler from '(@/hooks/custom/room)';
 type NextMeetingRoomType = Database['public']['Tables']['room']['Insert'];
 
 function MeetingRoomForm() {
@@ -29,7 +27,8 @@ function MeetingRoomForm() {
     resetTags();
   };
 
-  const addMeetingRoom = async () => {
+  const addMeetingRoom = async (e: any) => {
+    e.preventDefault();
     if (!title || !tags || !location || memberNumber === '인원수') {
       return alert('모든 항목은 필수입니다.');
     }
@@ -58,7 +57,7 @@ function MeetingRoomForm() {
     } else {
       console.log(insertMeetingRoom[0].room_id);
       alert('모임이 생성되었습니다.');
-      router.push(`/${insertMeetingRoom[0].room_id}`);
+      router.push(`/meetingRoom/${insertMeetingRoom[0].room_id}`);
     }
   };
   return (
@@ -95,7 +94,7 @@ function MeetingRoomForm() {
           {(onClose) => (
             <>
               <ModalHeader className="flex flex-col gap-1">방 만들기</ModalHeader>
-              <form onSubmit={() => addMeetingRoom()}>
+              <form onSubmit={(e) => addMeetingRoom(e)}>
                 <ModalBody>
                   <input value={title} onChange={(e) => setTitle(e.target.value)} placeholder="title" maxLength={15} />
                   <TagList />
