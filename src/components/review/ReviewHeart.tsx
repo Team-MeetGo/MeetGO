@@ -150,7 +150,7 @@ type Props = {
 const ReviewHeart = ({ review_id }: Props) => {
   const [likes, setLikes] = useState<boolean | null>(null);
   const [likeCount, setLikeCount] = useState(0);
-  const [likeUser, setLiketest] = useState<string[]>([]);
+  const [likeUser, setLikeUser] = useState<string[]>([]);
   const [userId, setUserId] = useState<string | null>(null);
 
   const fetchLikeCount = async (review_id: string) => {
@@ -181,11 +181,11 @@ const ReviewHeart = ({ review_id }: Props) => {
 
       const { data: likedUser } = await clientSupabase
         .from('test_review_like')
-        .select('liked_id')
+        .select('user_id')
         .eq('review_id', review_id)
         .single();
 
-      if (likedUser && likedUser.liked_id && likedUser.liked_id.includes(userId)) {
+      if (likedUser && likedUser.user_id && likedUser.user_id.includes(userId)) {
         setLikes(true);
       } else {
         setLikes(false);
@@ -193,7 +193,12 @@ const ReviewHeart = ({ review_id }: Props) => {
     };
 
     fetchLikedStatus();
-  }, [userId, review_id]);
+  }, [review_id]);
+
+  useEffect(() => {
+    fetchLikeCount(review_id);
+    getUserId();
+  }, [review_id, userId]);
 
   useEffect(() => {
     fetchLikeCount(review_id);
@@ -217,12 +222,12 @@ const ReviewHeart = ({ review_id }: Props) => {
       await clientSupabase.from('test_review_like').delete().eq('review_id', review_id).eq('user_id', userId);
       setLikeCount((prevCount) => prevCount - 1);
       setLikes(false);
-      setLiketest((prevLiketest) => prevLiketest.filter((id) => id !== userId));
+      setLikeUser((prevLikeUser) => prevLikeUser.filter((id) => id !== userId));
     } else {
       await clientSupabase.from('test_review_like').insert([{ review_id, user_id: userId }]);
       setLikeCount((prevCount) => prevCount + 1);
       setLikes(true);
-      setLiketest((prevLiketest) => [...prevLiketest, userId]);
+      setLikeUser((prevLikeUser) => [...prevLikeUser, userId]);
     }
   };
 
