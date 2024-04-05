@@ -40,6 +40,10 @@ const AcceptanceRoomButtons = ({ roomId }: { roomId: UUID }) => {
       if (totalMemberList.length > maximumParticipants) {
         return alert('잘못된 접근입니다');
       }
+      //총 인원수가 최대 인원수와 같다면 방 상태는 모집완료로 변경됩니다.
+      if (totalMemberList.length === maximumParticipants) {
+        await clientSupabase.from('room').update({ room_status: '모집완료' }).eq('roomId', roomId).select();
+      }
     };
     getSingleRoom();
     getTotalMemeber();
@@ -48,9 +52,19 @@ const AcceptanceRoomButtons = ({ roomId }: { roomId: UUID }) => {
   const gotoChattingRoom = async () => {
     const { data } = await clientSupabase.auth.getUser();
 
+    //로그인된 유저가 아니면 채팅창에 접근이 불가합니다.
     if (!data.user) {
       return alert('잘못된 접근입니다.');
     }
+
+    //선택창이 채팅창으로 전환됩니다.
+    const { data: changeTochattingRoom, error: changeGoingChat } = await clientSupabase
+      .from('room')
+      .update({ going_chat: true })
+      .eq('roomId', roomId)
+      .select();
+
+    //채팅창이 생성됩니다.
     const { data: chat_room, error } = await clientSupabase
       .from('chatting_room')
       .insert({
@@ -60,14 +74,17 @@ const AcceptanceRoomButtons = ({ roomId }: { roomId: UUID }) => {
       .select('chatting_room_id');
     console.log(chat_room);
 
+    //채팅창으로 입장합니다.
     if (chat_room) router.replace(`/chat/${chat_room[0].chatting_room_id}`); // "/chatting_room_id" 로 주소값 변경
   };
 
   const gotoMeetingRoom = async () => {
     const { data } = await clientSupabase.auth.getUser();
+    //로그인된 유저가 아니라면 이 경로는 잘못된 경로입니다.
     if (!data.user) {
       return alert('잘못된 접근입니다.');
     }
+    //나가기를 누르면 유저의 정보가 참가자 테이블에서 삭제됩니다.
     const user_id = data.user.id;
     deleteMember(user_id);
     router.push(`/meetingRoom`);
