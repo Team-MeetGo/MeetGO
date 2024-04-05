@@ -13,7 +13,6 @@ interface SideBarProps {
 }
 
 const SideBar: React.FC<SideBarProps> = ({ userId, leaderId, chatRoomId }) => {
-  const [selectedLocation, setSelectedLocation] = useState<string>('');
   const [isSidebarOpen, setIsSidebarOpen] = useState<boolean>(false);
 
   const {
@@ -62,7 +61,6 @@ const SideBar: React.FC<SideBarProps> = ({ userId, leaderId, chatRoomId }) => {
         .from('chatting_room')
         .update({ meeting_time: selectedMeetingTime })
         .eq('chatting_room_id', chatRoomId);
-      console.log(chatRoomId);
     } else {
       SetSelectedMeetingTime('');
       setFinalDateTime('');

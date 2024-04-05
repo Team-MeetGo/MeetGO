@@ -149,7 +149,6 @@ const Map: React.FC<MapProps> = ({ userId, leaderId, chatRoomId }) => {
   const handleSelectLocation = async (barName: string) => {
     setSelectedMeetingLocation(barName);
     setisLocationSelected(!isLocationSelected);
-    console.log(isLocationSelected);
     if (!chatRoomId) {
       return;
     }
@@ -160,7 +159,6 @@ const Map: React.FC<MapProps> = ({ userId, leaderId, chatRoomId }) => {
         .from('chatting_room')
         .update({ meeting_location: barName })
         .eq('chatting_room_id', chatRoomId);
-      console.log(chatRoomId);
     } else {
       const { error } = await clientSupabase
         .from('chatting_room')
