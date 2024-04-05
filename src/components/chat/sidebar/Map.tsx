@@ -1,5 +1,6 @@
 'use client';
 
+import { useSidebarStore } from '(@/store/sideBarStore)';
 import { clientSupabase } from '(@/utils/supabase/client)';
 import React, { useEffect, useRef, useState } from 'react';
 import { MdSettings } from 'react-icons/md';
@@ -25,7 +26,9 @@ const Map: React.FC<MapProps> = ({ userId, leaderId, chatRoomId }) => {
   const [totalPages, setTotalPages] = useState(0);
   const [currentPos, setCurrentPos] = useState<any>();
   const [isSelectedLocation, setIsSelectedLocation] = useState<boolean>(false);
-  const [selectedLocation, setSelectedLocation] = useState<string>('');
+  //const [selectedLocation, setSelectedLocation] = useState<string>('');
+
+  const { setSelectedLocation, selectedLocation } = useSidebarStore();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -38,17 +41,14 @@ const Map: React.FC<MapProps> = ({ userId, leaderId, chatRoomId }) => {
         .eq('chatting_room_id', chatRoomId)
         .single();
       const meetingLocation = chatData?.meeting_location;
-      if (!meetingLocation) {
-        // 저장된 장소가 없으면
-        isSelectedLocation === false;
-      }
       setSelectedLocation(meetingLocation || '');
+
+      setIsSelectedLocation(!!meetingLocation);
     };
     fetchData();
   }, []);
 
   useEffect(() => {
-    console.log('selecte', selectedLocation);
     const script = document.createElement('script');
     script.async = true;
     script.src = `//dapi.kakao.com/v2/maps/sdk.js?appkey=${process.env.NEXT_PUBLIC_KAKAO_MAP_API_KEY}&autoload=false&libraries=services,clusterer,drawing`;

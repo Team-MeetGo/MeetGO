@@ -8,6 +8,7 @@ interface SidebarState {
   setSelectedDateTime: (dateTime: string) => void;
   setFinalDateTime: (dateTime: string) => void;
   setIsTimePicked: (isPicked: boolean) => void;
+  setSelectedLocation: (selectedLocation: string) => void;
 }
 
 export const useSidebarStore = create<SidebarState>((set) => ({
@@ -17,5 +18,6 @@ export const useSidebarStore = create<SidebarState>((set) => ({
   isTimePicked: false,
   setSelectedDateTime: (dateTime) => set({ selectedDateTime: dateTime }),
   setFinalDateTime: (dateTime) => set({ finalDateTime: dateTime }),
-  setIsTimePicked: (isPicked) => set({ isTimePicked: isPicked })
+  setIsTimePicked: (isPicked) => set({ isTimePicked: isPicked }),
+  setSelectedLocation: (selectedLocation) => set({ selectedLocation: selectedLocation })
 }));
