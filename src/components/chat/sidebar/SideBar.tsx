@@ -22,9 +22,16 @@ const SideBar: React.FC<SideBarProps> = ({ userId, leaderId, chatRoomId }) => {
   };
 
   const handleSelectedTime = async () => {
-    setFinalDateTime(selectedDateTime);
+    if (!chatRoomId) {
+      return;
+    }
 
-    console.log('시간', selectedDateTime);
+    setFinalDateTime(selectedDateTime);
+    const { error } = await clientSupabase
+      .from('chatting_room')
+      .update({ meeting_time: selectedDateTime })
+      .eq('chatting_room_id', chatRoomId);
+    console.log(chatRoomId);
   };
 
   return (
