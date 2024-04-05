@@ -13,7 +13,7 @@ const ChatPage = async () => {
   const { data: allMsgs } = await supabase.from('messages').select('*').order('created_at', { ascending: false });
 
   return (
-    <div className="flex felx-row">
+    <div className="flex felx-row ">
       <div className="border">
         <SideBar />
       </div>

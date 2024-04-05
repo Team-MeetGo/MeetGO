@@ -1,10 +1,7 @@
 'use client';
 
-import { emailConfirmAPI } from '(@/utils/api/emailConfirmAPI)';
-import { Chip, Select, SelectItem } from '@nextui-org/react';
-import { use, useEffect, useState } from 'react';
+import { useState } from 'react';
 import SchoolForm from './SchoolForm';
-import { getUserId } from '(@/utils/api/authAPI)';
 import { clientSupabase } from '(@/utils/supabase/client)';
 import { userStore } from '(@/store/userStore)';
 import AvatarForm from './AvatarForm';
@@ -20,16 +17,6 @@ const Profile = () => {
   const [isIntroEditing, setIsIntroEditing] = useState(false);
 
   const { user, setUser } = userStore((state) => state);
-
-  // async function getUserInfo(userId: string) {
-  //   const { data, error } = await clientSupabase.from('users').select('*').eq('user_id', userId);
-  //   console.log('data:', data);
-  //   if (error) {
-  //     console.error('Error fetching user data:', error);
-  //     return null;
-  //   }
-  //   return data;
-  // }
 
   const toggleKakaoEditing = () => {
     setIsKakaoEditing(!isKakaoEditing);
@@ -51,7 +38,8 @@ const Profile = () => {
 
   /** 자기소개 업데이트하는 로직 */
   const updateIntroduction = async () => {
-    const { result: userId } = await getUserId();
+    const userId = user && user[0].user_id;
+    if (!userId) return;
     const { error } = await clientSupabase.from('users').update({ intro: inputIntro }).eq('user_id', userId);
     if (error) {
       console.error('Error updating introduction:', error);
@@ -63,7 +51,8 @@ const Profile = () => {
 
   /** 카카오ID 업데이트하는 로직 */
   const updateKakaoId = async () => {
-    const { result: userId } = await getUserId();
+    const userId = user && user[0].user_id;
+    if (!userId) return;
     const { error } = await clientSupabase.from('users').update({ kakaoId: inputKakaoId }).eq('user_id', userId);
     if (error) {
       console.error('Error updating kakaoId:', error);
