@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Map from '(@/components/chat/sidebar/Map)';
 import DatePicker from './DatePicker';
 import { clientSupabase } from '(@/utils/supabase/client)';
@@ -17,6 +17,10 @@ const SideBar: React.FC<SideBarProps> = ({ userId, leaderId, chatRoomId }) => {
   const [isSidebarOpen, setIsSidebarOpen] = useState<boolean>(false);
   const [finalDateTime, setFinalDateTime] = useState<string>('');
   const [isTimePicked, setIsTimePicked] = useState<boolean>(false);
+
+  useEffect(() => {
+    // 서버에서 불러와서
+  }, []);
 
   const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);
@@ -63,8 +67,7 @@ const SideBar: React.FC<SideBarProps> = ({ userId, leaderId, chatRoomId }) => {
             <p>최종 날짜 : {finalDateTime}</p>
           </div>
           <DatePicker />
-          <p>미팅 장소 : {selectedLocation}</p>
-          <Map setSelectedLocation={setSelectedLocation} userId={userId} leaderId={leaderId} chatRoomId={chatRoomId} />
+          <Map userId={userId} leaderId={leaderId} chatRoomId={chatRoomId} />
         </div>
       )}
     </div>

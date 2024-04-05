@@ -10,13 +10,12 @@ declare global {
 }
 
 interface MapProps {
-  setSelectedLocation: (barName: string) => void; // 이벤트 핸들러를 props로 받음
   userId: string | null | undefined;
   leaderId: string | null | undefined;
   chatRoomId: string | null;
 }
 
-const Map: React.FC<MapProps> = ({ setSelectedLocation, userId, leaderId, chatRoomId }) => {
+const Map: React.FC<MapProps> = ({ userId, leaderId, chatRoomId }) => {
   const mapRef = useRef<any>();
   const [map, setMap] = useState<any>();
   const [markers, setMarkers] = useState<any>();
@@ -25,8 +24,10 @@ const Map: React.FC<MapProps> = ({ setSelectedLocation, userId, leaderId, chatRo
   const [totalPages, setTotalPages] = useState(0);
   const [currentPos, setCurrentPos] = useState<any>();
   const [isSelectedLocation, setIsSelectedLocation] = useState<boolean>(false);
+  const [selectedLocation, setSelectedLocation] = useState<string>('');
 
   useEffect(() => {
+    console.log('selecte', selectedLocation);
     const script = document.createElement('script');
     script.async = true;
     script.src = `//dapi.kakao.com/v2/maps/sdk.js?appkey=${process.env.NEXT_PUBLIC_KAKAO_MAP_API_KEY}&autoload=false&libraries=services,clusterer,drawing`;
@@ -150,6 +151,7 @@ const Map: React.FC<MapProps> = ({ setSelectedLocation, userId, leaderId, chatRo
 
   return (
     <div>
+      <p>미팅 장소 : {selectedLocation}</p>
       <div id="map" className="w-96 h-96"></div>
       <div style={{ maxHeight: '500px', overflowY: 'auto' }}>
         {bars.map((bar, index) => (
@@ -165,13 +167,26 @@ const Map: React.FC<MapProps> = ({ setSelectedLocation, userId, leaderId, chatRo
                   선택
                 </button>
               )} */}
-              <button
-                onClick={() => {
-                  handleSelectLocation(bar.place_name);
-                }}
-              >
-                {isSelectedLocation ? '취소' : '선택'}
-              </button>
+
+              {selectedLocation === '' ? (
+                <button
+                  onClick={() => {
+                    handleSelectLocation(bar.place_name);
+                  }}
+                >
+                  {isSelectedLocation ? '취소' : '선택'}
+                </button>
+              ) : selectedLocation === bar.place_name ? (
+                <button
+                  onClick={() => {
+                    handleSelectLocation('');
+                  }}
+                >
+                  {isSelectedLocation ? '취소' : '선택'}
+                </button>
+              ) : (
+                <div></div>
+              )}
             </div>
             <p>{bar.address_name}</p>
             <p>{bar.place_url}</p>
