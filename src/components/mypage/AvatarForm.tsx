@@ -66,6 +66,7 @@ const AvatarForm = () => {
               style={{ objectFit: 'cover' }}
               width={200}
               height={200}
+              priority={true}
             />
           </div>
           <button className="text-xs" onClick={uploadAvatar}>
