@@ -17,7 +17,7 @@ const SideBar: React.FC<SideBarProps> = ({ userId, leaderId, chatRoomId }) => {
 
   const {
     selectedMeetingTime,
-    SetSelectedMeetingTime,
+    setSelectedMeetingTime,
     setFinalDateTime,
     setIsTimeSelected,
     finalDateTime,
@@ -38,7 +38,7 @@ const SideBar: React.FC<SideBarProps> = ({ userId, leaderId, chatRoomId }) => {
 
       setIsTimeSelected(!!meetingTime);
 
-      SetSelectedMeetingTime(meetingTime || '');
+      setSelectedMeetingTime(meetingTime || '');
       setFinalDateTime(meetingTime || '');
     };
     fetchData();
@@ -62,7 +62,7 @@ const SideBar: React.FC<SideBarProps> = ({ userId, leaderId, chatRoomId }) => {
         .update({ meeting_time: selectedMeetingTime })
         .eq('chatting_room_id', chatRoomId);
     } else {
-      SetSelectedMeetingTime('');
+      setSelectedMeetingTime('');
       setFinalDateTime('');
       const { error } = await clientSupabase
         .from('chatting_room')
@@ -77,14 +77,18 @@ const SideBar: React.FC<SideBarProps> = ({ userId, leaderId, chatRoomId }) => {
       {isSidebarOpen && (
         <div>
           <div>
-            미팅 날짜/시간:
-            <input
-              type="text"
-              className="border"
-              value={selectedMeetingTime}
-              onChange={(e) => SetSelectedMeetingTime(e.target.value)}
-            />
-            <button onClick={handleSelectedTime}>{isTimeSelected ? '취소' : '선택'}</button>
+            {userId === leaderId && (
+              <>
+                미팅 날짜/시간:
+                <input
+                  type="text"
+                  className="border"
+                  value={selectedMeetingTime}
+                  onChange={(e) => setSelectedMeetingTime(e.target.value)}
+                />
+                <button onClick={handleSelectedTime}>{isTimeSelected ? '취소' : '선택'}</button>
+              </>
+            )}
             <p>최종 날짜 : {finalDateTime}</p>
           </div>
           <DatePicker />

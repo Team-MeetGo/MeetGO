@@ -5,7 +5,7 @@ interface SidebarState {
   selectedMeetingTime: string;
   finalDateTime: string;
   isTimeSelected: boolean;
-  SetSelectedMeetingTime: (dateTime: string) => void;
+  setSelectedMeetingTime: (dateTime: string) => void;
   setFinalDateTime: (dateTime: string) => void;
   setIsTimeSelected: (isTimeSelected: boolean) => void;
   setSelectedMeetingLocation: (selectedMeetingLocation: string) => void;
@@ -16,7 +16,7 @@ export const useSidebarStore = create<SidebarState>((set) => ({
   selectedMeetingTime: '',
   finalDateTime: '',
   isTimeSelected: false,
-  SetSelectedMeetingTime: (dateTime) => set({ selectedMeetingTime: dateTime }),
+  setSelectedMeetingTime: (dateTime) => set({ selectedMeetingTime: dateTime }),
   setFinalDateTime: (dateTime) => set({ finalDateTime: dateTime }),
   setIsTimeSelected: (isTimeSelected) => set({ isTimeSelected: isTimeSelected }),
   setSelectedMeetingLocation: (selectedMeetingLocation) => set({ selectedMeetingLocation: selectedMeetingLocation })

@@ -176,35 +176,26 @@ const Map: React.FC<MapProps> = ({ userId, leaderId, chatRoomId }) => {
           <div key={index} className="border">
             <div className="flex flex-row justify-between">
               <h1>{bar.place_name}</h1>
-              {/* {userId === leaderId && (
-                <button
-                  onClick={() => {
-                    handleSelectLocation(bar.place_name);
-                  }}
-                >
-                  선택
-                </button>
-              )} */}
-
-              {selectedMeetingLocation === '' ? (
-                <button
-                  onClick={() => {
-                    handleSelectLocation(bar.place_name);
-                  }}
-                >
-                  {isLocationSelected ? '취소' : '선택'}
-                </button>
-              ) : selectedMeetingLocation === bar.place_name ? (
-                <button
-                  onClick={() => {
-                    handleSelectLocation('');
-                  }}
-                >
-                  {isLocationSelected ? '취소' : '선택'}
-                </button>
-              ) : (
-                <div></div>
-              )}
+              {userId === leaderId &&
+                (selectedMeetingLocation === '' ? (
+                  <button
+                    onClick={() => {
+                      handleSelectLocation(bar.place_name);
+                    }}
+                  >
+                    {isLocationSelected ? '취소' : '선택'}
+                  </button>
+                ) : selectedMeetingLocation === bar.place_name ? (
+                  <button
+                    onClick={() => {
+                      handleSelectLocation('');
+                    }}
+                  >
+                    {isLocationSelected ? '취소' : '선택'}
+                  </button>
+                ) : (
+                  <div></div>
+                ))}
             </div>
             <p>{bar.address_name}</p>
             <p>{bar.place_url}</p>
