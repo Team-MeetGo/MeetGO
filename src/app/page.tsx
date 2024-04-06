@@ -9,6 +9,7 @@ export default function Home() {
       <div>
         <button onClick={signOut}>임시 로그아웃</button>
       </div>
+      <button onClick={() => location.replace('/test')}>test</button>
     </main>
   );
 }
