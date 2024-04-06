@@ -53,6 +53,7 @@ export default function Home() {
           ))}
         </ul>
       </div>
+      <button onClick={() => location.replace('/test')}>test</button>
     </main>
   );
 }
