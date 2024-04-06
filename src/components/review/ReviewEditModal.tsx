@@ -27,7 +27,7 @@ export default function ReviewEditModal({ review_id }: Props) {
     if (review_id && !reviewDetail) {
       getReviewDetail(review_id);
     }
-  }, [review_id, reviewDetail]);
+  }, []);
 
   useEffect(() => {
     if (reviewDetail) {

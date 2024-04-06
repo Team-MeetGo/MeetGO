@@ -5,6 +5,7 @@ import ToggleButton from './ToggleButton';
 import HeartFillIcon from '(@/utils/icons/HeartFillIcon)';
 import HeartIcon from '(@/utils/icons/HeartIcon)';
 import { clientSupabase } from '(@/utils/supabase/client)';
+import { userStore } from '(@/store/userStore)';
 
 type Props = {
   review_id: string;
@@ -14,7 +15,7 @@ const ReviewHeart = ({ review_id }: Props) => {
   const [likes, setLikes] = useState<boolean | null>(null);
   const [likeCount, setLikeCount] = useState(0);
   const [likeUser, setLikeUser] = useState<string[]>([]);
-  const [userId, setUserId] = useState<string | null>(null);
+  // const [userId, setUserId] = useState<string | null>(null);
 
   const fetchLikeCount = async (review_id: string) => {
     let { data: review_like, error } = await clientSupabase.from('review_like').select('*').eq('review_id', review_id);
@@ -29,17 +30,18 @@ const ReviewHeart = ({ review_id }: Props) => {
     }
   };
 
-  const getUserId = async () => {
-    const { data: user } = await clientSupabase.auth.getUser();
-    setUserId(user?.user?.id || '');
-  };
+  // const getUserId = async () => {
+  //   // const { data: user } = await clientSupabase.auth.getUser();
+  //   // setUserId(user?.user?.id || '');
+  //   const { user, setUser } = userStore((state) => state);
+  //   const userId = user && user[0].user_id;
+  // };
+
+  const { user, setUser } = userStore((state) => state);
+  const userId = user && user[0].user_id;
 
   useEffect(() => {
     const fetchLikedStatus = async () => {
-      const { data: user } = await clientSupabase.auth.getUser();
-      const userId = user?.user?.id || '';
-      console.log('유저 아이디:', userId);
-
       const { data: likedUsers } = await clientSupabase
         .from('review_like')
         .select('user_id')
@@ -55,19 +57,18 @@ const ReviewHeart = ({ review_id }: Props) => {
     };
 
     fetchLikedStatus();
-  }, [review_id]);
+  }, [review_id, userStore]); // review_id나 userStore가 변경될 때마다 실행됨
 
   useEffect(() => {
     fetchLikeCount(review_id);
-    getUserId();
-  }, [review_id, userId]);
+    // getUserId();
+    // fetchLikedStatus();
+  }, []);
 
-  useEffect(() => {
-    fetchLikeCount(review_id);
-    getUserId();
-  }, [review_id, userId]);
   const handleLikeToggle = async () => {
-    const userId = (await clientSupabase.auth.getUser()).data.user?.id;
+    // const userId = (await clientSupabase.auth.getUser()).data.user?.id;
+    const { user, setUser } = userStore((state) => state);
+    const userId = user && user[0].user_id;
 
     if (!userId) {
       alert('로그인 후 이용해주세요.');

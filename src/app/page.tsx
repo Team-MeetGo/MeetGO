@@ -2,6 +2,7 @@
 
 import ReviewCard from '(@/components/review/ReviewCard)';
 import { reviewData } from '(@/components/review/ReviewList)';
+import { userStore } from '(@/store/userStore)';
 import { signOut } from '(@/utils/api/authAPI)';
 import { clientSupabase } from '(@/utils/supabase/client)';
 import Link from 'next/link';
@@ -9,6 +10,9 @@ import { useEffect, useState } from 'react';
 
 export default function Home() {
   const [reviewData, setReviewData] = useState<reviewData[]>([]);
+  const { user, setUser } = userStore((state) => state);
+  // const userId = user && user[0].user_id;
+  // console.log(userId);
 
   async function getMostLikedReview() {
     const likedReviewIds = (await clientSupabase.from('review_like').select('review_id')).data?.map(
@@ -34,8 +38,8 @@ export default function Home() {
 
   useEffect(() => {
     getMostLikedReview();
-    console.log(getMostLikedReview);
-  });
+    // console.log(getMostLikedReview);
+  }, []);
 
   return (
     <main>

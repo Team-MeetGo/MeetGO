@@ -5,6 +5,7 @@ import { Button, Modal, ModalBody, ModalContent, useDisclosure } from '@nextui-o
 import { clientSupabase } from '(@/utils/supabase/client)';
 import { useRouter } from 'next/navigation';
 import { MdCancel } from 'react-icons/md';
+import { userStore } from '(@/store/userStore)';
 
 const NewReview = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -12,10 +13,14 @@ const NewReview = () => {
   const [dragging, setDragging] = useState(false);
   const router = useRouter();
 
-  const checkLoginStatus = async () => {
-    const user = clientSupabase.auth.getUser();
-    console.log(user);
-  };
+  // const checkLoginStatus = async () => {
+  //   const user = clientSupabase.auth.getUser();
+  //   console.log(user);
+  // };
+
+  // const { user, setUser } = userStore((state) => state);
+  const { user, setUser } = userStore((state) => state);
+  const userId = user && user[0].user_id;
 
   const handleClose = () => {
     if (window.confirm('리뷰 등록을 취소하시겠습니까?')) {
@@ -62,7 +67,10 @@ const NewReview = () => {
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const userId = (await clientSupabase.auth.getUser()).data.user?.id;
+    // const userId = (await clientSupabase.auth.getUser()).data.user?.id;
+
+    const { user, setUser } = userStore((state) => state);
+    const userId = user && user[0].user_id;
 
     let imageUrls: string[] = [];
     for (const file of files) {
