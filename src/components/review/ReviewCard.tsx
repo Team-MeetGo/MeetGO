@@ -7,6 +7,7 @@ import { clientSupabase } from '(@/utils/supabase/client)';
 import ReviewComment from './ReviewComment';
 import ReviewHeart from './ReviewHeart';
 import defaultImg from '../../../public/defaultImg.jpg';
+import { userStore } from '(@/store/userStore)';
 
 export type ReviewType = {
   user_id: string | null;
@@ -20,6 +21,9 @@ export type ReviewType = {
 const ReviewCard = ({ review }: { review: ReviewType }) => {
   const [userNickname, setUserNickname] = useState<string | null>(null);
 
+  const { user, setUser } = userStore((state) => state);
+  const userId = user && user[0].user_id;
+
   async function getReviewDetail(review_id: string) {
     let { data: reviewDetail, error } = await clientSupabase
       .from('review')
@@ -27,24 +31,24 @@ const ReviewCard = ({ review }: { review: ReviewType }) => {
       .eq('review_id', review_id)
       .single();
 
-    if (error) {
-      console.error('리뷰를 불러오지 못함', error);
-    } else {
-      if (reviewDetail) {
-        const { user_id } = reviewDetail;
-        const { data: userData, error: userError } = await clientSupabase
-          .from('users')
-          .select('nickname, avatar')
-          .eq('user_id', user_id as string)
-          .single();
+    // if (error) {
+    //   console.error('리뷰를 불러오지 못함', error);
+    // } else {
+    //   if (reviewDetail) {
+    //     const { user_id } = reviewDetail;
+    //     const { data: userData, error: userError } = await clientSupabase
+    //       .from('users')
+    //       .select('nickname, avatar')
+    //       .eq('user_id', user_id as string)
+    //       .single();
 
-        if (userError) {
-          console.error('유저 정보를 불러오지 못함', userError);
-        } else {
-          setUserNickname(userData?.nickname || null);
-        }
-      }
-    }
+    //     if (userError) {
+    //       console.error('유저 정보를 불러오지 못함', userError);
+    //     } else {
+    //       setUserNickname(userData?.nickname || null);
+    //     }
+    //   }
+    // }
   }
 
   useEffect(() => {
@@ -78,7 +82,7 @@ const ReviewCard = ({ review }: { review: ReviewType }) => {
         </div>
         <div>{review.review_title}</div>
         <div>{review.review_contents}</div>
-        <div>{userNickname}</div>
+        <div>{user && user[0].nickname}</div>
       </Link>
       <div className="flex gap-2">
         <ReviewHeart review_id={review.review_id} />

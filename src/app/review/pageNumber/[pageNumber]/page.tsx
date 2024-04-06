@@ -34,7 +34,6 @@ const ReviewsPage = () => {
   const userId = user && user[0].user_id;
 
   const checkLoginStatus = async () => {
-    // const data = await clientSupabase.auth.getUser();
     console.log(userId);
     if (userId !== null) {
       setIsLoggedIn(true);

@@ -69,8 +69,8 @@ const NewReview = () => {
     e.preventDefault();
     // const userId = (await clientSupabase.auth.getUser()).data.user?.id;
 
-    const { user, setUser } = userStore((state) => state);
-    const userId = user && user[0].user_id;
+    // const { user, setUser } = userStore((state) => state);
+    // const userId = user && user[0].user_id;
 
     let imageUrls: string[] = [];
     for (const file of files) {

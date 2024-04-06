@@ -54,25 +54,25 @@ const ReviewDetail = ({ review_id, commentCount }: Props) => {
       .eq('review_id', review_id)
       .single();
 
-    if (error) {
-      console.error('리뷰를 불러오지 못함', error);
-    } else {
-      if (reviewDetail) {
-        const { user_id } = reviewDetail;
-        const { data: userData, error: userError } = await clientSupabase
-          .from('users')
-          .select('nickname, avatar')
-          .eq('user_id', user_id as string)
-          .single();
+    // if (error) {
+    //   console.error('리뷰를 불러오지 못함', error);
+    // } else {
+    //   if (reviewDetail) {
+    //     const { user_id } = reviewDetail;
+    //     const { data: userData, error: userError } = await clientSupabase
+    //       .from('users')
+    //       .select('nickname, avatar')
+    //       .eq('user_id', user_id as string)
+    //       .single();
 
-        if (userError) {
-          console.error('유저 정보를 불러오지 못함', userError);
-        } else {
-          setUserAvatar(userData?.avatar || null);
-          setUserNickname(userData?.nickname || null);
-        }
-      }
-    }
+    //     if (userError) {
+    //       console.error('유저 정보를 불러오지 못함', userError);
+    //     } else {
+    //       setUserAvatar(userData?.avatar || null);
+    //       setUserNickname(userData?.nickname || null);
+    //     }
+    //   }
+    // }
 
     setReviewDetail(reviewDetail || null);
   }
@@ -99,12 +99,18 @@ const ReviewDetail = ({ review_id, commentCount }: Props) => {
       <div>
         <div>{reviewDetail?.review_title}</div>
         <div className="flex items-center">
-          {userAvatar ? (
-            <Image className="mr-[15px] rounded-full" src={userAvatar} alt="유저 아바타" height={50} width={50} />
+          {user && user[0].avatar ? (
+            <Image
+              className="mr-[15px] rounded-full"
+              src={user && user[0].avatar}
+              alt="유저 아바타"
+              height={50}
+              width={50}
+            />
           ) : (
             <AvatarDefault />
           )}
-          <div>{userNickname}</div>
+          <div>{user && user[0].nickname}</div>
         </div>
         <div className="text-[#A1A1AA]">
           {reviewDetail && reviewDetail.created_at

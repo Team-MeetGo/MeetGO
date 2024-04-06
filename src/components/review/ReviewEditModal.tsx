@@ -205,9 +205,7 @@ export default function ReviewEditModal({ review_id }: Props) {
                     />
                     <label
                       className={`w-full flex items-center rounded-[20px] gap-2  ${
-                        !files.length &&
-                        previewImages.length === 0 &&
-                        'border-2 rounded-[20px] border-gray-500 border-dashed'
+                        !files.length && previewImages.length === 0
                       }`}
                       htmlFor="input-upload"
                     >
