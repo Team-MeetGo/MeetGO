@@ -36,8 +36,8 @@ function MeetingRoom({ room }: { room: MeetingRoom }) {
     //아직 인원을 모집중인 경우 + 채팅창이 열리지 않은 경우
     const participants = await totalMember(room_id);
     console.log('participants', participants);
-    if (!user || user.length === 0) return alert('로그인이 필요한 서비스입니다.');
-    if (!participants || participants.length === 0) return alert('유효하지 않은 접근입니다.');
+    // if (!user || user.length === 0) return alert('로그인이 필요한 서비스입니다.');
+    // if (!participants || participants.length === 0) return alert('유효하지 않은 접근입니다.');
 
     //room의 정보를 가져와서 성별에 할당된 인원을 확인
     const genderMaxNumber = await getmaxGenderMemberNumber(member_number);
