@@ -1,5 +1,6 @@
 'use client';
 
+import { clientSupabase } from '(@/utils/supabase/client)';
 import React, { useEffect, useRef, useState } from 'react';
 
 declare global {
@@ -8,7 +9,13 @@ declare global {
   }
 }
 
-const Map = () => {
+interface MapProps {
+  userId: string | null | undefined;
+  leaderId: string | null | undefined;
+  chatRoomId: string | null;
+}
+
+const Map: React.FC<MapProps> = ({ userId, leaderId, chatRoomId }) => {
   const mapRef = useRef<any>();
   const [map, setMap] = useState<any>();
   const [markers, setMarkers] = useState<any>();
@@ -16,6 +23,26 @@ const Map = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
   const [currentPos, setCurrentPos] = useState<any>();
+  const [isLocationSelected, setisLocationSelected] = useState<boolean>(false);
+  const [selectedMeetingLocation, setSelectedMeetingLocation] = useState<string>();
+
+  useEffect(() => {
+    const fetchData = async () => {
+      if (!chatRoomId) {
+        return;
+      }
+      const { data: chatData } = await clientSupabase
+        .from('chatting_room')
+        .select(' meeting_location')
+        .eq('chatting_room_id', chatRoomId)
+        .single();
+      const meetingLocation = chatData?.meeting_location;
+      setSelectedMeetingLocation(meetingLocation || '');
+
+      setisLocationSelected(!!meetingLocation);
+    };
+    fetchData();
+  }, []);
 
   useEffect(() => {
     const script = document.createElement('script');
@@ -115,13 +142,58 @@ const Map = () => {
     searchBarsNearby(mapRef.current, pageNumber);
   };
 
+  // 장소 선택 함수
+  const handleSelectLocation = async (barName: string) => {
+    setSelectedMeetingLocation(barName);
+    setisLocationSelected(!isLocationSelected);
+    if (!chatRoomId) {
+      return;
+    }
+
+    if (!isLocationSelected) {
+      // 장소 선택 안되었을 때
+      const { error } = await clientSupabase
+        .from('chatting_room')
+        .update({ meeting_location: barName })
+        .eq('chatting_room_id', chatRoomId);
+    } else {
+      const { error } = await clientSupabase
+        .from('chatting_room')
+        .update({ meeting_location: null })
+        .eq('chatting_room_id', chatRoomId);
+    }
+  };
+
   return (
     <div>
+      <p>미팅 장소 : {selectedMeetingLocation}</p>
       <div id="map" className="w-96 h-96"></div>
       <div style={{ maxHeight: '500px', overflowY: 'auto' }}>
         {bars.map((bar, index) => (
           <div key={index} className="border">
-            <h1>{bar.place_name}</h1>
+            <div className="flex flex-row justify-between">
+              <h1>{bar.place_name}</h1>
+              {userId === leaderId &&
+                (selectedMeetingLocation === '' ? (
+                  <button
+                    onClick={() => {
+                      handleSelectLocation(bar.place_name);
+                    }}
+                  >
+                    {isLocationSelected ? '취소' : '선택'}
+                  </button>
+                ) : selectedMeetingLocation === bar.place_name ? (
+                  <button
+                    onClick={() => {
+                      handleSelectLocation('');
+                    }}
+                  >
+                    {isLocationSelected ? '취소' : '선택'}
+                  </button>
+                ) : (
+                  <div></div>
+                ))}
+            </div>
             <p>{bar.address_name}</p>
             <p>{bar.place_url}</p>
             <p>{bar.phone}</p>
