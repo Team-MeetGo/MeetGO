@@ -10,6 +10,7 @@ import AvatarDefault from '(@/utils/icons/AvatarDefault)';
 import ImageGallery from './ImageGallery';
 import { HiOutlineChatBubbleOvalLeftEllipsis } from 'react-icons/hi2';
 import defaultImg from '../../../public/defaultImg.jpg';
+import { userStore } from '(@/store/userStore)';
 
 export type ReviewDetailType = {
   review_title: string | null;
@@ -26,22 +27,18 @@ type Props = {
 
 const ReviewDetail = ({ review_id, commentCount }: Props) => {
   const [reviewDetail, setReviewDetail] = useState<ReviewDetailType | null>(null);
-  const [userId, setUserId] = useState<string | null>(null);
   const [userAvatar, setUserAvatar] = useState<string | null>(null);
   const [userNickname, setUserNickname] = useState<string | null>(null);
   const router = useRouter();
 
-  const getUserId = async () => {
-    const { data: user } = await clientSupabase.auth.getUser();
-    setUserId(user?.user?.id || '');
-  };
+  const { user, setUser } = userStore((state) => state);
+  const userId = user && user[0].user_id;
 
   useEffect(() => {
     if (review_id) {
       getReviewDetail(review_id);
-      getUserId();
     }
-  });
+  }, []);
 
   async function getReviewDetail(review_id: string) {
     let { data: reviewDetail, error } = await clientSupabase

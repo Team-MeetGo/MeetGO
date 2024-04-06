@@ -9,6 +9,7 @@ import { ValidationModal } from '../common/ValidationModal';
 import { useModalStore } from '(@/store/modalStore)';
 import { authValidation } from '(@/utils/Validation)';
 import { IsValidateShow, LoginData } from '(@/types/userTypes)';
+import { revalidatePath } from 'next/cache';
 
 const LOGIN_FORM_LIST = [
   {
@@ -40,7 +41,7 @@ const LoginForm = () => {
       name: '',
       text: '로그인 되었습니다.',
       onFunc: () => {
-        router.push('/');
+        router.replace('/');
       }
     });
   };

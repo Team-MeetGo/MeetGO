@@ -23,7 +23,7 @@ const Map: React.FC<MapProps> = ({ userId, leaderId, chatRoomId }) => {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
   const [currentPos, setCurrentPos] = useState<any>();
-  const [searchText, setSearchText] = useState<any>('술집');
+  const [searchText, setSearchText] = useState<any>('');
   const [isLocationSelected, setisLocationSelected] = useState<boolean>(false);
   const [selectedMeetingLocation, setSelectedMeetingLocation] = useState<string>();
 
@@ -139,6 +139,7 @@ const Map: React.FC<MapProps> = ({ userId, leaderId, chatRoomId }) => {
     );
   };
 
+  // 지도 검색 함수
   const searchNewPlaces = (page?: number) => {
     const places = new window.kakao.maps.services.Places();
 
@@ -170,6 +171,7 @@ const Map: React.FC<MapProps> = ({ userId, leaderId, chatRoomId }) => {
         setBars(data); // 검색된 장소 정보를 상태에 설정
         setTotalPages((prevTotalPages) => Math.max(prevTotalPages, pagination.last));
         setCurrentPage(page || currentPage);
+        setSearchText('');
       } else {
         console.error('실패', status);
       }

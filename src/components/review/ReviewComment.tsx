@@ -10,7 +10,6 @@ type Props = {
 
 const ReviewComment = ({ review_id }: Props) => {
   const [commentCount, setCommentCount] = useState(0);
-  const [userId, setUserId] = useState<string | null>(null);
 
   const fetchCommentCount = async (review_id: string) => {
     let { data: review_comment, error } = await clientSupabase
@@ -29,15 +28,9 @@ const ReviewComment = ({ review_id }: Props) => {
     }
   };
 
-  const getUserId = async () => {
-    const { data: user } = await clientSupabase.auth.getUser();
-    setUserId(user?.user?.id || '');
-  };
-
   useEffect(() => {
     fetchCommentCount(review_id);
-    getUserId();
-  }, [review_id]);
+  }, []);
 
   return (
     <div className="flex gap-1 items-center">

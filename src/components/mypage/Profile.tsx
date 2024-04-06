@@ -8,31 +8,22 @@ import AvatarForm from './AvatarForm';
 import MyPost from './MyPost';
 import Favorite from './Favorite';
 import MetPeople from './MetPeople';
+import useInputChange from '(@/hooks/useInputChange)';
 
 const Profile = () => {
-  const [inputIntro, setInputIntro] = useState('' as string);
-  const [inputKakaoId, setInputKakaoId] = useState('' as string);
-  const [isEdting, setIsEdting] = useState(false);
-  const [inputnickname, setInputNickname] = useState('' as string);
-
   const { user, setUser } = userStore((state) => state);
+  const [isEdting, setIsEdting] = useState(false);
+  const inputNickname = useInputChange(user && user[0].nickname ? user[0].nickname : '');
+  const inputIntro = useInputChange(user && user[0].intro ? user[0].intro : '');
+  const inputKakaoId = useInputChange(user && user[0].kakaoId ? user[0].kakaoId : '');
 
   const toggleEditing = () => {
-    setIsEdting(!isEdting);
-  };
-
-  const onChangeNicknameInput = (e: any) => {
-    setInputNickname(e.target.value);
-  };
-
-  // 자기소개 입력 변경 처리
-  const onChangeIntroInput = (e: any) => {
-    setInputIntro(e.target.value);
-  };
-
-  // 카카오ID 입력 변경 처리
-  const onChangeKakaoIdInput = (e: any) => {
-    setInputKakaoId(e.target.value);
+    setIsEdting(true);
+    if (user && user[0]) {
+      inputNickname.setValue(user && user[0].nickname);
+      inputIntro.setValue(user && user[0].intro);
+      inputKakaoId.setValue(user && user[0].kakaoId);
+    }
   };
 
   /** 프로필 업데이트하는 로직 */
@@ -41,12 +32,12 @@ const Profile = () => {
     if (!userId) return;
     const { error } = await clientSupabase
       .from('users')
-      .update({ intro: inputIntro, kakaoId: inputKakaoId })
+      .update({ intro: inputIntro.value, kakaoId: inputKakaoId.value, nickname: inputNickname.value })
       .eq('user_id', userId);
     if (error) {
       console.error('Error updating introduction:', error);
     } else {
-      setUser([{ ...user[0], intro: inputIntro, kakaoId: inputKakaoId, nickname: inputnickname }]);
+      setUser([{ ...user[0], intro: inputIntro.value, kakaoId: inputKakaoId.value, nickname: inputNickname.value }]);
       setIsEdting(false);
     }
   };
@@ -72,8 +63,9 @@ const Profile = () => {
               className="w-full p-2 border border-gray-300 rounded-md"
               id="nickname"
               placeholder=""
-              value={inputnickname}
-              onChange={onChangeNicknameInput}
+              type="text"
+              value={inputNickname.value}
+              onChange={inputNickname.onChange}
             />
           )}
           <p className="block text-sm font-medium mb-1">{user && user[0].login_email}</p>
@@ -87,12 +79,13 @@ const Profile = () => {
         {user && user[0].kakaoId && !isEdting ? (
           <p className="block text-sm font-medium mb-1">{user[0].kakaoId}</p>
         ) : (
-          <textarea
+          <input
             className="w-full p-2 border border-gray-300 rounded-md"
             id="kakaoId"
             placeholder=""
-            value={inputKakaoId}
-            onChange={onChangeKakaoIdInput}
+            type="text"
+            value={inputKakaoId.value}
+            onChange={inputKakaoId.onChange}
           />
         )}
       </div>
@@ -108,8 +101,8 @@ const Profile = () => {
             className="w-full p-2 border border-gray-300 rounded-md"
             id="introduction"
             placeholder="자기소개를 입력해주세요. 예)MBTI, 취미, 관심사 등"
-            value={isEdting ? inputIntro : user && user[0].intro ? user[0].intro : ''}
-            onChange={onChangeIntroInput}
+            value={inputIntro.value}
+            onChange={inputIntro.onChange}
           />
         )}
       </div>
