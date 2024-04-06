@@ -91,13 +91,13 @@ const AcceptanceRoomButtons = ({ roomId }: { roomId: UUID }) => {
     if (!participants) return;
     const { data: leader } = await clientSupabase.from('room').select('*').eq('room_id', roomId);
     if (!leader) return;
-    if (leader.length === 1) {
+    if (leader.length === 1 && leader[0].leader_id === user[0].user_id && participants.length !== 1) {
       const otherParticipants = participants.filter((person) => person.user_id !== leader[0].leader_id);
       await clientSupabase.from('room').update({ leader_id: otherParticipants[0].user_id }).eq('room_id', roomId);
     }
 
     //만약 참가자 한명만 방에 있었다면 나감과 동시에 방은 삭제됩니다.
-    if (participants.length === 1) {
+    if (leader.length === 1 && participants.length === 1) {
       await clientSupabase.from('room').delete().eq('room_id', roomId);
     }
     router.push(`/meetingRoom`);
