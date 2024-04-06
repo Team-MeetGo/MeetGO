@@ -49,7 +49,7 @@ const ReviewCard = ({ review }: { review: ReviewType }) => {
 
   useEffect(() => {
     getReviewDetail(review.review_id);
-  });
+  }, []);
 
   return (
     <div

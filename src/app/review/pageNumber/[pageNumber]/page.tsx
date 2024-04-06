@@ -8,6 +8,7 @@ import NewReview from '(@/components/review/NewReview)';
 import { useParams } from 'next/navigation';
 import { Dropdown, DropdownTrigger, DropdownMenu, DropdownItem, Button } from '@nextui-org/react';
 import { Selection } from '@react-types/shared';
+import { userStore } from '(@/store/userStore)';
 
 interface ReviewData {
   user_id: string | null;
@@ -29,10 +30,14 @@ const ReviewsPage = () => {
 
   const selectedValue = React.useMemo(() => Array.from(selected).join(', ').replaceAll('_', ' '), [selected]);
 
+  const getUserId = async () => {
+    const userData = userStore.getState().user;
+    return userData && userData[0].user_id;
+  };
+
   const checkLoginStatus = async () => {
-    const data = await clientSupabase.auth.getUser();
-    console.log(data.data.user);
-    if (data.data.user !== null) {
+    const userId = await getUserId();
+    if (userId !== null) {
       setIsLoggedIn(true);
     } else {
       setIsLoggedIn(false);
@@ -87,7 +92,7 @@ const ReviewsPage = () => {
     } else if (selected instanceof Set && selected.has('좋아요 순')) {
       getMostLikedReview(currentPageNumber);
     }
-  }, [selected, currentPageNumber]);
+  }, []);
 
   async function getRecentReview(page: number) {
     let { data, count } = await clientSupabase.from('review').select('*', { count: 'estimated' });
@@ -104,10 +109,9 @@ const ReviewsPage = () => {
 
   useEffect(() => {
     if (currentPageNumber) {
-      console.log(currentPageNumber);
       getRecentReview(currentPageNumber);
     }
-  }, [currentPageNumber]);
+  }, []);
 
   async function handlePageChange(page: number) {
     await getRecentReview(page);

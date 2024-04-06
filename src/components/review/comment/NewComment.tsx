@@ -1,3 +1,5 @@
+import { useCommentStore } from '(@/store/commentStore)';
+import { userStore } from '(@/store/userStore)';
 import { clientSupabase } from '(@/utils/supabase/client)';
 import { Button } from '@nextui-org/react';
 import React, { FormEvent, useState } from 'react';
@@ -8,10 +10,15 @@ type Props = {
 
 const NewComment = ({ review_id }: Props) => {
   const [comments, setComments] = useState('');
+  const addComment = useCommentStore((state) => state.addComment);
+  const { user, setUser } = userStore((state) => state);
+  const userId = user && user[0].user_id;
+
   const handleNewComment = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    const userId = (await clientSupabase.auth.getUser()).data.user?.id;
+    const uuid = crypto.randomUUID();
+    const currentDate = new Date().toISOString();
     if (!userId) {
       alert('로그인 후 이용해주세요.');
       return;
@@ -19,12 +26,20 @@ const NewComment = ({ review_id }: Props) => {
     const comment_content = (document.getElementById('comment_content') as HTMLInputElement)?.value;
     const { data, error } = await clientSupabase
       .from('review_comment')
-      .insert([{ comment_content: comment_content, user_id: userId, review_id: review_id }]);
+      .insert([{ comment_content: comment_content, user_id: userId, review_id: review_id, comment_id: uuid }]);
 
     if (error) {
       console.error('insert error', error);
       return;
     }
+
+    addComment({
+      comment_id: uuid,
+      comment_content: comment_content,
+      user_id: userId,
+      review_id: review_id,
+      created_at: currentDate
+    });
     alert('댓글이 등록되었습니다.');
     setComments('');
   };
