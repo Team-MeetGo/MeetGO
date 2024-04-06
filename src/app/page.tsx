@@ -3,7 +3,6 @@
 import ReviewCard from '(@/components/review/ReviewCard)';
 import { reviewData } from '(@/components/review/ReviewList)';
 import { userStore } from '(@/store/userStore)';
-import { signOut } from '(@/utils/api/authAPI)';
 import { clientSupabase } from '(@/utils/supabase/client)';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
@@ -59,9 +58,6 @@ export default function Home() {
   return (
     <main>
       <div className="">배너</div>
-      <div>
-        <button onClick={signOut}>임시 로그아웃 버튼입니다</button>
-      </div>
       <div>
         <div>
           <Link href="/review">더보기</Link>
