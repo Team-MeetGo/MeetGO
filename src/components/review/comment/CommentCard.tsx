@@ -1,22 +1,24 @@
 import { useEffect, useState } from 'react';
-import { CommentListType } from './CommentList';
 import { clientSupabase } from '(@/utils/supabase/client)';
 import Image from 'next/image';
 import AvatarDefault from '(@/utils/icons/AvatarDefault)';
+import { userStore } from '(@/store/userStore)';
+import { CommentListType } from './CommentList';
+import { useCommentStore } from '(@/store/commentStore)';
 
 type Props = {
   comment: CommentListType;
+  onDeleteComment: (commentId: string) => void;
 };
 
-const CommentCard = ({ comment }: Props) => {
-  const [userId, setUserId] = useState<string | null>(null);
+const CommentCard = ({ comment, onDeleteComment }: Props) => {
   const [userAvatar, setUserAvatar] = useState<string | null>(null);
   const [userNickname, setUserNickname] = useState<string | null>(null);
 
-  const getUserId = async () => {
-    const { data: user } = await clientSupabase.auth.getUser();
-    setUserId(user?.user?.id || '');
-  };
+  const { user } = userStore((state) => state);
+  const userId = user && user[0].user_id;
+
+  const deleteComment = useCommentStore((state) => state.deleteComment);
 
   const getUserInfo = async () => {
     const { data: userData, error: userError } = await clientSupabase
@@ -30,10 +32,9 @@ const CommentCard = ({ comment }: Props) => {
 
   useEffect(() => {
     if (comment.comment_id) {
-      getUserId();
       getUserInfo();
     }
-  });
+  }, []);
 
   const handleDeleteComment = async () => {
     if (window.confirm('댓글을 삭제하시겠습니까?')) {
@@ -41,8 +42,9 @@ const CommentCard = ({ comment }: Props) => {
         .from('review_comment')
         .delete()
         .eq('comment_id', comment.comment_id as string);
+      onDeleteComment(comment.comment_id as string);
+      deleteComment(comment.comment_id as string);
     }
-    return;
   };
 
   return (

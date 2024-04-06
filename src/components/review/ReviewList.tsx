@@ -7,6 +7,7 @@ import NewReview from './NewReview';
 import Link from 'next/link';
 import { Dropdown, DropdownTrigger, DropdownMenu, DropdownItem, Button } from '@nextui-org/react';
 import { Selection } from '@react-types/shared';
+import { userStore } from '(@/store/userStore)';
 
 export type reviewData = {
   user_id: string | null;
@@ -27,10 +28,14 @@ const ReviewList: React.FC = () => {
 
   const selectedValue = React.useMemo(() => Array.from(selected).join(', ').replaceAll('_', ' '), [selected]);
 
+  const getUserId = async () => {
+    const userData = userStore.getState().user;
+    return userData && userData[0].user_id;
+  };
+
   const checkLoginStatus = async () => {
-    const data = await clientSupabase.auth.getUser();
-    console.log(data.data.user);
-    if (data.data.user !== null) {
+    const userId = await getUserId();
+    if (userId !== null) {
       setIsLoggedIn(true);
     } else {
       setIsLoggedIn(false);
@@ -77,12 +82,11 @@ const ReviewList: React.FC = () => {
     } else if (selected instanceof Set && selected.has('좋아요 순')) {
       getMostLikedReview();
     }
-    console.log(getMostLikedReview);
-  }, [selected]);
+  }, []);
 
   useEffect(() => {
     getRecentReview();
-  }, [currentPage]);
+  }, []);
 
   async function getRecentReview() {
     let { data, count } = await clientSupabase.from('review').select('*', { count: 'estimated' });
