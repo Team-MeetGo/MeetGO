@@ -7,6 +7,7 @@ type UserState = {
 
   setUser: (data: UsersType[]) => void;
   setParticipants: (others: UsersType[]) => void;
+  clearUser: () => void;
 };
 
 export const userStore = create<UserState>()((set) => ({
@@ -14,5 +15,6 @@ export const userStore = create<UserState>()((set) => ({
   participants: null,
 
   setUser: (data) => set({ user: data }),
-  setParticipants: (participants) => set({ participants })
+  setParticipants: (participants) => set({ participants }),
+  clearUser: () => set({ user: null })
 }));
