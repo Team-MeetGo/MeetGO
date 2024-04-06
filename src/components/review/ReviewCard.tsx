@@ -31,24 +31,24 @@ const ReviewCard = ({ review }: { review: ReviewType }) => {
       .eq('review_id', review_id)
       .single();
 
-    // if (error) {
-    //   console.error('리뷰를 불러오지 못함', error);
-    // } else {
-    //   if (reviewDetail) {
-    //     const { user_id } = reviewDetail;
-    //     const { data: userData, error: userError } = await clientSupabase
-    //       .from('users')
-    //       .select('nickname, avatar')
-    //       .eq('user_id', user_id as string)
-    //       .single();
+    if (error) {
+      console.error('리뷰를 불러오지 못함', error);
+    } else {
+      if (reviewDetail) {
+        const { user_id } = reviewDetail;
+        const { data: userData, error: userError } = await clientSupabase
+          .from('users')
+          .select('nickname, avatar')
+          .eq('user_id', user_id as string)
+          .single();
 
-    //     if (userError) {
-    //       console.error('유저 정보를 불러오지 못함', userError);
-    //     } else {
-    //       setUserNickname(userData?.nickname || null);
-    //     }
-    //   }
-    // }
+        if (userError) {
+          console.error('유저 정보를 불러오지 못함', userError);
+        } else {
+          setUserNickname(userData?.nickname || null);
+        }
+      }
+    }
   }
 
   useEffect(() => {
@@ -82,7 +82,7 @@ const ReviewCard = ({ review }: { review: ReviewType }) => {
         </div>
         <div>{review.review_title}</div>
         <div>{review.review_contents}</div>
-        <div>{user && user[0].nickname}</div>
+        <div>{userNickname}</div>
       </Link>
       <div className="flex gap-2">
         <ReviewHeart review_id={review.review_id} />

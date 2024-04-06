@@ -38,7 +38,6 @@ export default function Home() {
 
   useEffect(() => {
     getMostLikedReview();
-    // console.log(getMostLikedReview);
   }, []);
 
   return (

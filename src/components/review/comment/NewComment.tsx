@@ -17,6 +17,8 @@ const NewComment = ({ review_id }: Props) => {
   const handleNewComment = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
+    const uuid = crypto.randomUUID();
+    const currentDate = new Date().toISOString();
     if (!userId) {
       alert('로그인 후 이용해주세요.');
       return;
@@ -24,14 +26,13 @@ const NewComment = ({ review_id }: Props) => {
     const comment_content = (document.getElementById('comment_content') as HTMLInputElement)?.value;
     const { data, error } = await clientSupabase
       .from('review_comment')
-      .insert([{ comment_content: comment_content, user_id: userId, review_id: review_id }]);
+      .insert([{ comment_content: comment_content, user_id: userId, review_id: review_id, comment_id: uuid }]);
 
     if (error) {
       console.error('insert error', error);
       return;
     }
-    const uuid = crypto.randomUUID();
-    const currentDate = new Date().toISOString();
+
     addComment({
       comment_id: uuid,
       comment_content: comment_content,
