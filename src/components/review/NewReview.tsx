@@ -29,7 +29,6 @@ const NewReview = () => {
     if (fileList) {
       const filesArray = Array.from(fileList);
       setFiles((prevFiles) => [...prevFiles, ...filesArray]);
-      console.log(filesArray);
     }
   };
 

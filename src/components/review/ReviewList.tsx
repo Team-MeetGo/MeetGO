@@ -35,7 +35,6 @@ const ReviewList: React.FC = () => {
 
   const checkLoginStatus = async () => {
     const userId = await getUserId();
-    console.log(userId);
     if (userId !== null) {
       setIsLoggedIn(true);
     } else {
