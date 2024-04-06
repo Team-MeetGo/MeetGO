@@ -10,9 +10,26 @@ import { useEffect, useState } from 'react';
 
 export default function Home() {
   const [reviewData, setReviewData] = useState<reviewData[]>([]);
-  const { user, setUser } = userStore((state) => state);
-  // const userId = user && user[0].user_id;
-  // console.log(userId);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  const getUserId = async () => {
+    const userData = userStore.getState().user;
+    return userData && userData[0].user_id;
+  };
+
+  const checkLoginStatus = async () => {
+    const userId = await getUserId();
+    console.log(userId);
+    if (userId !== null) {
+      setIsLoggedIn(true);
+    } else {
+      setIsLoggedIn(false);
+    }
+  };
+
+  useEffect(() => {
+    checkLoginStatus();
+  }, []);
 
   async function getMostLikedReview() {
     const likedReviewIds = (await clientSupabase.from('review_like').select('review_id')).data?.map(

@@ -13,12 +13,6 @@ const NewReview = () => {
   const [dragging, setDragging] = useState(false);
   const router = useRouter();
 
-  // const checkLoginStatus = async () => {
-  //   const user = clientSupabase.auth.getUser();
-  //   console.log(user);
-  // };
-
-  // const { user, setUser } = userStore((state) => state);
   const { user, setUser } = userStore((state) => state);
   const userId = user && user[0].user_id;
 
@@ -67,10 +61,6 @@ const NewReview = () => {
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    // const userId = (await clientSupabase.auth.getUser()).data.user?.id;
-
-    // const { user, setUser } = userStore((state) => state);
-    // const userId = user && user[0].user_id;
 
     let imageUrls: string[] = [];
     for (const file of files) {

@@ -27,15 +27,9 @@ type Props = {
 
 const ReviewDetail = ({ review_id, commentCount }: Props) => {
   const [reviewDetail, setReviewDetail] = useState<ReviewDetailType | null>(null);
-  // const [userId, setUserId] = useState<string | null>(null);
   const [userAvatar, setUserAvatar] = useState<string | null>(null);
   const [userNickname, setUserNickname] = useState<string | null>(null);
   const router = useRouter();
-
-  // const getUserId = async () => {
-  //   const { data: user } = await clientSupabase.auth.getUser();
-  //   setUserId(user?.user?.id || '');
-  // };
 
   const { user, setUser } = userStore((state) => state);
   const userId = user && user[0].user_id;
@@ -43,7 +37,6 @@ const ReviewDetail = ({ review_id, commentCount }: Props) => {
   useEffect(() => {
     if (review_id) {
       getReviewDetail(review_id);
-      // getUserId();
     }
   }, []);
 

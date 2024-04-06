@@ -30,10 +30,13 @@ const ReviewsPage = () => {
 
   const selectedValue = React.useMemo(() => Array.from(selected).join(', ').replaceAll('_', ' '), [selected]);
 
-  const { user, setUser } = userStore((state) => state);
-  const userId = user && user[0].user_id;
+  const getUserId = async () => {
+    const userData = userStore.getState().user;
+    return userData && userData[0].user_id;
+  };
 
   const checkLoginStatus = async () => {
+    const userId = await getUserId();
     console.log(userId);
     if (userId !== null) {
       setIsLoggedIn(true);
@@ -107,7 +110,6 @@ const ReviewsPage = () => {
 
   useEffect(() => {
     if (currentPageNumber) {
-      console.log(currentPageNumber);
       getRecentReview(currentPageNumber);
     }
   }, []);

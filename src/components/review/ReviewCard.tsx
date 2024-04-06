@@ -7,7 +7,6 @@ import { clientSupabase } from '(@/utils/supabase/client)';
 import ReviewComment from './ReviewComment';
 import ReviewHeart from './ReviewHeart';
 import defaultImg from '../../../public/defaultImg.jpg';
-import { userStore } from '(@/store/userStore)';
 
 export type ReviewType = {
   user_id: string | null;
@@ -20,9 +19,6 @@ export type ReviewType = {
 
 const ReviewCard = ({ review }: { review: ReviewType }) => {
   const [userNickname, setUserNickname] = useState<string | null>(null);
-
-  const { user, setUser } = userStore((state) => state);
-  const userId = user && user[0].user_id;
 
   async function getReviewDetail(review_id: string) {
     let { data: reviewDetail, error } = await clientSupabase

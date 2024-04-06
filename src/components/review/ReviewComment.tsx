@@ -3,7 +3,6 @@
 import React, { useEffect, useState } from 'react';
 import { clientSupabase } from '(@/utils/supabase/client)';
 import { HiOutlineChatBubbleOvalLeftEllipsis } from 'react-icons/hi2';
-import { userStore } from '(@/store/userStore)';
 
 type Props = {
   review_id: string;
