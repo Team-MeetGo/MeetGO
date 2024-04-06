@@ -25,7 +25,7 @@ export const getUserNickname = async () => {
 export const googleLogin = async () => {
   const { data, error } = await clientSupabase.auth.signInWithOAuth({
     provider: 'google',
-    options: { queryParams: { access_type: 'offline', prompt: 'consent' } }
+    options: { queryParams: { access_type: 'offline', prompt: 'consent' }, redirectTo: '/' }
   });
   if (data) {
     return console.log('구글 로그인 성공');
@@ -46,9 +46,4 @@ export const kakaoLogin = async () => {
   if (error) {
     return console.error('카카오 로그인 에러: ', error);
   }
-};
-
-export const signOut = async () => {
-  await clientSupabase.auth.signOut();
-  console.log('로그아웃 성공');
 };
