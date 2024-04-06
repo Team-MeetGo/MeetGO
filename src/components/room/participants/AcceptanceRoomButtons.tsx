@@ -12,7 +12,7 @@ type ParticipantType = Database['public']['Tables']['participants']['Row'];
 
 const AcceptanceRoomButtons = ({ roomId }: { roomId: UUID }) => {
   const router = useRouter();
-  const { user } = userStore((state) => state);
+  const { user, participants } = userStore((state) => state);
   const [maximumParticipants, setMaximumParticipants] = useState(0);
   const [totalMemberList, setTotalMemberList] = useState<ParticipantType[]>();
   const { deleteMember, totalMember } = participantsHandler();
@@ -82,12 +82,22 @@ const AcceptanceRoomButtons = ({ roomId }: { roomId: UUID }) => {
     }
     //로비로 나가는 사람이 생기면 방은 다시 모집중으로 바뀝니다.
     await clientSupabase.from('room').update({ room_status: '모집중' }).eq('room_id', roomId);
-    const user_id = user[0].user_id;
     //참가자 테이블에서 해당 유저의 정보가 삭제됩니다.
-    deleteMember(user_id);
+    const user_id = user[0].user_id;
+    await deleteMember(user_id);
+    //유저가 리더였다면 다른 사람에게 리더 역할이 승계됩니다.
+    //방을 생성할 때 리더는 자동으로 할당되어 초기값은 방 생성자입니다.
+    //리더는 유일하므로 1 이외의 값은 없습니다.
+    if (!participants) return;
+    const { data: leader } = await clientSupabase.from('room').select('*').eq('room_id', roomId);
+    if (!leader) return;
+    if (leader.length === 1) {
+      const otherParticipants = participants.filter((person) => person.user_id !== leader[0].leader_id);
+      await clientSupabase.from('room').update({ leader_id: otherParticipants[0].user_id }).eq('room_id', roomId);
+    }
+
     //만약 참가자 한명만 방에 있었다면 나감과 동시에 방은 삭제됩니다.
-    if (user.length === 0) {
-      console.log(user.length);
+    if (participants.length === 1) {
       await clientSupabase.from('room').delete().eq('room_id', roomId);
     }
     router.push(`/meetingRoom`);
