@@ -13,11 +13,22 @@ function meetingRoomHandler() {
     return meetingroom;
   };
 
+  const getMyRoom = async (user_id: string) => {
+    const { data: myRoom, error } = await clientSupabase
+      .from('participants')
+      .select(`*`)
+      .eq('user_id', user_id)
+      .select('user_id, room(*)')
+      .order('created_at', { ascending: false });
+    if (error) return alert('error 발생!');
+    return myRoom;
+  };
+
   const getChattingRoom = async () => {
     const { data: chattingRoom, error } = await clientSupabase
       .from('room')
       .select(`*`)
-      .eq('going_chat', true)
+      .eq('room_status', '모집종료')
       .order('created_at', { ascending: false });
     if (error) return alert('error 발생!');
     return chattingRoom;
@@ -40,7 +51,7 @@ function meetingRoomHandler() {
     }
   };
 
-  return { getMeetingRoom, getChattingRoom, getRoomInformation, getmaxGenderMemberNumber };
+  return { getMeetingRoom, getMyRoom, getChattingRoom, getRoomInformation, getmaxGenderMemberNumber };
 }
 
 export default meetingRoomHandler;

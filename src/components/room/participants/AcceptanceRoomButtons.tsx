@@ -71,13 +71,6 @@ const AcceptanceRoomButtons = ({ roomId }: { roomId: UUID }) => {
         .select('chatting_room_id');
       console.log(chat_room);
 
-      //선택창이 채팅창으로 전환됩니다.
-      const { data: changeTochattingRoom, error: changeGoingChat } = await clientSupabase
-        .from('room')
-        .update({ going_chat: true })
-        .eq('roomId', roomId)
-        .select();
-
       if (chat_room) router.replace(`/chat/${chat_room[0].chatting_room_id}`);
     } // "/chatting_room_id" 로 주소값 변경
   };
@@ -93,7 +86,8 @@ const AcceptanceRoomButtons = ({ roomId }: { roomId: UUID }) => {
     //참가자 테이블에서 해당 유저의 정보가 삭제됩니다.
     deleteMember(user_id);
     //만약 참가자 한명만 방에 있었다면 나감과 동시에 방은 삭제됩니다.
-    if (user.length === 1) {
+    if (user.length === 0) {
+      console.log(user.length);
       await clientSupabase.from('room').delete().eq('room_id', roomId);
     }
     router.push(`/meetingRoom`);
