@@ -12,7 +12,7 @@ const MyPost = () => {
   const getMyPost = async () => {
     const userId = user && user[0].user_id;
     if (!userId) return;
-    const { data } = await clientSupabase..select('*').eq('user_id', userId);
+    const { data } = await clientSupabase.from('review').select('*').eq('user_id', userId);
     if (data) {
       setMyPost(data);
     }
@@ -24,7 +24,7 @@ const MyPost = () => {
     const { data } = await clientSupabase.from('review_like').select('review_id').eq('user_id', userId);
     if (data) {
       const likePostId = data.map((like: any) => like.review_id);
-      const { data: reviewData } = await clientSupabase..select('*').in('review_id', likePostId);
+      const { data: reviewData } = await clientSupabase.from('review').select('*').in('review_id', likePostId);
       setLikePost(reviewData);
     }
   };
