@@ -4,7 +4,6 @@ import React, { useEffect, useState } from 'react';
 import Map from '(@/components/chat/sidebar/Map)';
 import DatePicker from './DatePicker';
 import { clientSupabase } from '(@/utils/supabase/client)';
-import { useSidebarStore } from '(@/store/sideBarStore)';
 
 interface SideBarProps {
   userId: string | null | undefined;
@@ -14,15 +13,9 @@ interface SideBarProps {
 
 const SideBar: React.FC<SideBarProps> = ({ userId, leaderId, chatRoomId }) => {
   const [isSidebarOpen, setIsSidebarOpen] = useState<boolean>(false);
-
-  const {
-    selectedMeetingTime,
-    setSelectedMeetingTime,
-    setFinalDateTime,
-    setIsTimeSelected,
-    finalDateTime,
-    isTimeSelected
-  } = useSidebarStore();
+  const [selectedMeetingTime, setSelectedMeetingTime] = useState<string>();
+  const [isTimeSelected, setIsTimeSelected] = useState<boolean>(false);
+  const [finalDateTime, setFinalDateTime] = useState<string>();
 
   useEffect(() => {
     const fetchData = async () => {

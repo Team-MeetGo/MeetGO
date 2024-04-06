@@ -1,9 +1,7 @@
 'use client';
 
-import { useSidebarStore } from '(@/store/sideBarStore)';
 import { clientSupabase } from '(@/utils/supabase/client)';
 import React, { useEffect, useRef, useState } from 'react';
-import { MdSettings } from 'react-icons/md';
 
 declare global {
   interface Window {
@@ -26,8 +24,7 @@ const Map: React.FC<MapProps> = ({ userId, leaderId, chatRoomId }) => {
   const [totalPages, setTotalPages] = useState(0);
   const [currentPos, setCurrentPos] = useState<any>();
   const [isLocationSelected, setisLocationSelected] = useState<boolean>(false);
-
-  const { setSelectedMeetingLocation, selectedMeetingLocation } = useSidebarStore();
+  const [selectedMeetingLocation, setSelectedMeetingLocation] = useState<string>();
 
   useEffect(() => {
     const fetchData = async () => {
