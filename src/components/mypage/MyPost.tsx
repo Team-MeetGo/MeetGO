@@ -1,3 +1,5 @@
+'use client';
+
 import { userStore } from '(@/store/userStore)';
 import { clientSupabase } from '(@/utils/supabase/client)';
 import Image from 'next/image';
