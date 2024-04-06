@@ -1,9 +1,17 @@
-import { type NextRequest } from 'next/server';
-import { updateSession } from '(@/utils/supabase/middleware)';
+import { chain } from './middleware/chain';
+// import { checkSchoolMiddleware } from './middleware/checkSchoolMiddleware';
+import { routeHandlerMiddleware } from './middleware/routeHandlerMiddleware';
+import { schoolValidateMiddleware } from './middleware/schoolValidateMiddleware';
+import { updateSessionMiddleware } from './middleware/updateSessionMiddleware';
 
-export async function middleware(request: NextRequest) {
-  return await updateSession(request);
-}
+const middlewareList = [
+  updateSessionMiddleware,
+  routeHandlerMiddleware,
+  schoolValidateMiddleware
+  // checkSchoolMiddleware
+];
+
+export default chain(middlewareList);
 
 export const config = {
   matcher: [

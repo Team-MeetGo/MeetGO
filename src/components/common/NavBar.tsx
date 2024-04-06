@@ -14,6 +14,7 @@ import {
 } from '@nextui-org/react';
 import MeetGoLogo from '(@/utils/icons/meetgo-logo.png)';
 import Image from 'next/image';
+import SignOut from './SignOut';
 
 const NavBar = async () => {
   const supabase = serverSupabase();
@@ -54,6 +55,7 @@ const NavBar = async () => {
               메뉴더있었으면..
             </Link>
           </NavbarItem> */}
+          <SignOut />
         </NavbarContent>
 
         <NavbarContent as="div" justify="end">
