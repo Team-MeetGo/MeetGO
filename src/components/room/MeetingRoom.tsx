@@ -2,23 +2,24 @@
 import participantsHandler from '(@/hooks/custom/participants)';
 import meetingRoomHandler from '(@/hooks/custom/room)';
 import { userStore } from '(@/store/userStore)';
-import { Card, CardBody } from '@nextui-org/react';
+import { Card, CardBody, Chip } from '@nextui-org/react';
 import DeleteMeetingRoom from './DeleteMeetingRoom';
 import EditMeetingRoom from './EditMeetingRoom';
-
-import type { Database } from '(@/types/database.types)';
+import { favoriteOptions } from '(@/utils/FavoriteData)';
 import { clientSupabase } from '(@/utils/supabase/client)';
 import { useRouter } from 'next/navigation';
-type MeetingRoom = Database['public']['Tables']['room']['Row'];
 
-function MeetingRoom({ room }: { room: MeetingRoom }) {
+import type { MeetingRoomType } from '(@/types/roomTypes)';
+
+function MeetingRoom({ room }: { room: MeetingRoomType }) {
   const { user } = userStore((state) => state);
   const router = useRouter();
-
-  const { room_id, room_status, room_title, member_number, location, feature } = room;
-
   const { addMemberHandler, totalMember, userMemberInformation } = participantsHandler();
   const { getmaxGenderMemberNumber } = meetingRoomHandler();
+
+  const { room_id, room_status, room_title, member_number, location, feature } = room;
+  //특성 입력이 안됐으면 빈칸으로
+  if (!feature) return {};
 
   const addMember = async ({ room_id, member_number }: { room_id: string; member_number: string }) => {
     if (!user) return alert('로그인이 필요한 서비스입니다.');
@@ -71,7 +72,17 @@ function MeetingRoom({ room }: { room: MeetingRoom }) {
           <CardBody className="overflow-visible p-0 m-8">
             <main onClick={(e) => addMember({ room_id, member_number })}>
               <div> {room_title} </div>
-              <div> {feature} </div>
+              <div>
+                {Array.from(feature).map((value) => (
+                  <Chip
+                    key={value}
+                    color="default"
+                    style={{ backgroundColor: favoriteOptions.find((option) => option.value === value)?.color }}
+                  >
+                    {value}
+                  </Chip>
+                ))}
+              </div>
               <div> {location} </div>
               <div> {room_status} </div>
               <div> {member_number}</div>

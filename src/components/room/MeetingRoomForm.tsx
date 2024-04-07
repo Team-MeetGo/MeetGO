@@ -1,5 +1,5 @@
 'use client';
-import { useTagStore } from '(@/store/zustand)';
+import { useTagStore } from '(@/store/roomStore)';
 import { clientSupabase } from '(@/utils/supabase/client)';
 import { Button, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, useDisclosure } from '@nextui-org/react';
 import { useState } from 'react';
@@ -18,7 +18,6 @@ function MeetingRoomForm() {
   const [title, setTitle] = useState('');
   const [location, setLocation] = useState('');
   const [memberNumber, setMemberNumber] = useState('');
-  const [address, setAddress] = useState('');
 
   const cancelMakingMeetingRoom = () => {
     setTitle('');
@@ -44,11 +43,16 @@ function MeetingRoomForm() {
       room_status: '모집중',
       room_title: title
     };
-    console.log(nextMeetingRoom);
+    //다음 미팅룸을 생성해서 추가합니다.
     const { data: insertMeetingRoom, error: insertMeetingRoomError } = await clientSupabase
       .from('room')
       .upsert([nextMeetingRoom])
       .select();
+    if (!insertMeetingRoom) return {};
+    //추가된 미팅룸에 유저를 추가합니다.
+    await clientSupabase
+      .from('participants')
+      .insert([{ room_id: insertMeetingRoom[0].room_id }, { user_id: user[0].user_id }]);
 
     if (insertMeetingRoomError) {
       console.log(insertMeetingRoomError);
@@ -56,6 +60,8 @@ function MeetingRoomForm() {
     } else {
       console.log(insertMeetingRoom[0].room_id);
       alert('모임이 생성되었습니다.');
+      resetTags();
+
       router.push(`/meetingRoom/${insertMeetingRoom[0].room_id}`);
     }
   };
@@ -97,7 +103,6 @@ function MeetingRoomForm() {
                 <ModalBody>
                   <input value={title} onChange={(e) => setTitle(e.target.value)} placeholder="title" maxLength={15} />
                   <TagList />
-                  feature :{tags}
                   <input
                     value={location}
                     onChange={(e) => setLocation(e.target.value)}

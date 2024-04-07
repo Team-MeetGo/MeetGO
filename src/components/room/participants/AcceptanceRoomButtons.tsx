@@ -1,14 +1,13 @@
 'use client';
+import participantsHandler from '(@/hooks/custom/participants)';
 import meetingRoomHandler from '(@/hooks/custom/room)';
+import { userStore } from '(@/store/userStore)';
 import { clientSupabase } from '(@/utils/supabase/client)';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
-import participantsHandler from '(@/hooks/custom/participants)';
-import { Database } from '(@/types/database.types)';
-import { userStore } from '(@/store/userStore)';
 
+import type { ParticipantType } from '(@/types/roomTypes)';
 import type { UUID } from 'crypto';
-type ParticipantType = Database['public']['Tables']['participants']['Row'];
 
 const AcceptanceRoomButtons = ({ roomId }: { roomId: UUID }) => {
   const router = useRouter();
@@ -21,6 +20,7 @@ const AcceptanceRoomButtons = ({ roomId }: { roomId: UUID }) => {
   useEffect(() => {
     const getTotalMember = async () => {
       const totalMemberList = await totalMember(roomId);
+      console.log(totalMemberList);
       if (!totalMemberList) return;
       setTotalMemberList(totalMemberList);
     };
@@ -77,7 +77,7 @@ const AcceptanceRoomButtons = ({ roomId }: { roomId: UUID }) => {
 
   //나가기를 클릭하면 로비로 이동합니다.
   const gotoLobby = async () => {
-    if (!user) {
+    if (!user || !totalMemberList) {
       return alert('잘못된 접근입니다.');
     }
     //로비로 나가는 사람이 생기면 방은 다시 모집중으로 바뀝니다.
@@ -86,8 +86,8 @@ const AcceptanceRoomButtons = ({ roomId }: { roomId: UUID }) => {
     //참가자 테이블에서 해당 유저의 정보가 삭제됩니다.
     deleteMember(user_id);
     //만약 참가자 한명만 방에 있었다면 나감과 동시에 방은 삭제됩니다.
-    if (user.length === 0) {
-      console.log(user.length);
+    if (totalMemberList.length === 1) {
+      console.log(totalMemberList);
       await clientSupabase.from('room').delete().eq('room_id', roomId);
     }
     router.push(`/meetingRoom`);

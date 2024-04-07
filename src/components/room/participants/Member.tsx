@@ -13,6 +13,7 @@ const Member = ({ params }: { params: { id: UUID } }) => {
 
   useEffect(() => {
     console.log('나 포함 참가자들 =>', participants);
+    //리더를 찾아 표시
     const leaderSelector = async () => {
       const { data: nowLeader } = await clientSupabase.from('room').select('*').eq('room_id', params.id);
       if (!nowLeader || nowLeader === null) return;
