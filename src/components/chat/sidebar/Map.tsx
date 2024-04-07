@@ -23,6 +23,7 @@ const Map: React.FC<MapProps> = ({ userId, leaderId, chatRoomId }) => {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
   const [currentPos, setCurrentPos] = useState<any>();
+  const [searchText, setSearchText] = useState<any>('');
   const [isLocationSelected, setisLocationSelected] = useState<boolean>(false);
   const [selectedMeetingLocation, setSelectedMeetingLocation] = useState<string>();
 
@@ -100,7 +101,9 @@ const Map: React.FC<MapProps> = ({ userId, leaderId, chatRoomId }) => {
     places.keywordSearch(
       '술집',
       (data: any, status: any, pagination: any) => {
+        console.log(data);
         if (status === window.kakao.maps.services.Status.OK) {
+          console.log(data);
           // 마커 초기화
           if (markers && markers.length > 0) {
             markers.forEach((marker: any) => {
@@ -136,6 +139,43 @@ const Map: React.FC<MapProps> = ({ userId, leaderId, chatRoomId }) => {
     );
   };
 
+  // 지도 검색 함수
+  const searchNewPlaces = (page?: number) => {
+    const places = new window.kakao.maps.services.Places();
+
+    places.keywordSearch(searchText, (data: any, status: any, pagination: any) => {
+      if (status === window.kakao.maps.services.Status.OK) {
+        // 마커 초기화
+        if (markers && markers.length > 0) {
+          markers.forEach((marker: any) => {
+            marker.setMap(null);
+          });
+        }
+
+        const bounds = new window.kakao.maps.LatLngBounds();
+        let newMarkers = [];
+        // 검색된 장소 정보를 바탕으로 마커 생성
+        for (var i = 0; i < data.length; i++) {
+          const markerPosition = new window.kakao.maps.LatLng(data[i].y, data[i].x);
+          const marker = new window.kakao.maps.Marker({
+            position: markerPosition,
+            map: map
+          });
+          bounds.extend(markerPosition); // 지도 영역 설정을 위해 bounds에 포함
+          newMarkers.push(marker); // 생성된 마커를 markers 배열에 추가
+        }
+        map.setBounds(bounds);
+        setMarkers(newMarkers); // 새로운 마커 배열을 상태에 설정
+        setBars(data); // 검색된 장소 정보를 상태에 설정
+        setTotalPages((prevTotalPages) => Math.max(prevTotalPages, pagination.last));
+        setCurrentPage(page || currentPage);
+        setSearchText('');
+      } else {
+        console.error('실패', status);
+      }
+    });
+  };
+
   // 페이지네이션 함수
   const handlePageClick = (pageNumber: number) => {
     setCurrentPage(pageNumber);
@@ -167,6 +207,11 @@ const Map: React.FC<MapProps> = ({ userId, leaderId, chatRoomId }) => {
   return (
     <div>
       <p>미팅 장소 : {selectedMeetingLocation}</p>
+      <>
+        장소 검색:
+        <input type="text" className="border" value={searchText} onChange={(e) => setSearchText(e.target.value)} />
+        <button onClick={() => searchNewPlaces()}>검색</button>
+      </>
       <div id="map" className="w-96 h-96"></div>
       <div style={{ maxHeight: '500px', overflowY: 'auto' }}>
         {bars.map((bar, index) => (
