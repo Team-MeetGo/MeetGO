@@ -56,9 +56,6 @@ const ReviewHeart = ({ review_id }: Props) => {
   }, []);
 
   const handleLikeToggle = async () => {
-    const { user, setUser } = userStore((state) => state);
-    const userId = user && user[0].user_id;
-
     if (!userId) {
       alert('로그인 후 이용해주세요.');
       return;
