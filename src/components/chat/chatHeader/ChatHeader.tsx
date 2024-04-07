@@ -3,9 +3,10 @@ import { clientSupabase } from '(@/utils/supabase/client)';
 import ChatPresence from './ChatPresence';
 import { chatStore } from '(@/store/chatStore)';
 import { userStore } from '(@/store/userStore)';
+import { IoIosSearch } from 'react-icons/io';
 
 const ChatHeader = () => {
-  const { roomId, chatRoomId, roomData, setMessages, setisRest } = chatStore((state) => state);
+  const { roomId, chatRoomId, roomData, setMessages, setisRest, setSearchMode } = chatStore((state) => state);
   const user = userStore((state) => state.user);
 
   const UpdateIsActive = async () => {
@@ -18,6 +19,10 @@ const ChatHeader = () => {
       alert('채팅방 비활성화에 실패하였습니다.');
       console.error(updateActiveErr?.message);
     }
+  };
+
+  const handleSearchMode = () => {
+    setSearchMode();
   };
 
   const getRidOfMe = async () => {
@@ -67,7 +72,10 @@ const ChatHeader = () => {
           <ChatPresence />
         </div>
       </div>
-      <div></div>
+      <button>
+        <IoIosSearch />
+      </button>
+
       <button onClick={getOutOfChatRoom}>죄송합니다 제 스타일은 아니신 것 같아요</button>
     </div>
   );

@@ -11,10 +11,11 @@ import ChatDeleteDropDown from './ChatDeleteDropDown';
 import { chatStore } from '(@/store/chatStore)';
 import { Tooltip } from '@nextui-org/react';
 import OthersChat from './OthersChat';
+import { IoIosSearch } from 'react-icons/io';
 
 const ChatList = ({ user }: { user: User | null }) => {
   const scrollRef = useRef() as React.MutableRefObject<HTMLDivElement>;
-  const { hasMore, setHasMore, messages, setMessages } = chatStore((state) => state);
+  const { hasMore, setHasMore, messages, setMessages, searchMode, setSearchMode } = chatStore((state) => state);
   const [isScrolling, setIsScrolling] = useState(false);
   const [newAddedMsgNum, setNewAddedMsgNum] = useState(0);
   const { roomId, chatRoomId } = chatStore((state) => state);
@@ -34,7 +35,6 @@ const ChatList = ({ user }: { user: User | null }) => {
             filter: `chatting_room_id=eq.${chatRoomId}`
           },
           (payload) => {
-            console.log('이거는?', payload.new);
             setMessages([...messages, payload.new as Message]);
             if (isScrolling) {
               setNewAddedMsgNum((prev) => (prev += 1));
@@ -111,6 +111,12 @@ const ChatList = ({ user }: { user: User | null }) => {
         ref={scrollRef}
         onScroll={handleScroll}
       >
+        <div className="absolute">
+          <form onSubmit={(e) => e.preventDefault()}>
+            <input></input>
+            <button></button>
+          </form>
+        </div>
         {hasMore && <LoadChatMore fetchMoreMsg={fetchMoreMsg} />}
 
         {messages?.map((msg, idx) => {

@@ -1,4 +1,5 @@
 import { Message, RoomData } from '(@/types/chatTypes)';
+import { SetStateAction } from 'react';
 import { create } from 'zustand';
 
 type chatState = {
@@ -9,6 +10,7 @@ type chatState = {
   hasMore: boolean;
   chatState: boolean;
   isRest: boolean;
+  searchMode: boolean;
   setRoomData: (data: RoomData[]) => void;
   setRoomId: (roomId: string | null) => void;
   setChatRoomId: (chatRoomId: string | null) => void;
@@ -16,6 +18,7 @@ type chatState = {
   setHasMore: (hasMore: boolean) => void;
   setChatState: (isActive: boolean) => void;
   setisRest: (isRest: boolean) => void;
+  setSearchMode: () => void;
 };
 
 export const chatStore = create<chatState>()((set) => ({
@@ -26,11 +29,13 @@ export const chatStore = create<chatState>()((set) => ({
   hasMore: false,
   chatState: true,
   isRest: true,
+  searchMode: false,
   setRoomData: (data: RoomData[]) => set({ roomData: data }),
   setRoomId: (roomId) => set({ roomId }),
   setChatRoomId: (chatRoomId) => set({ chatRoomId }),
   setMessages: (messages) => set({ messages }),
   setHasMore: (hasMore) => set({ hasMore }),
   setChatState: (isActive) => set({ chatState: isActive }),
-  setisRest: (isRest) => set({ isRest })
+  setisRest: (isRest) => set({ isRest }),
+  setSearchMode: () => set((state) => ({ searchMode: !state.searchMode }))
 }));

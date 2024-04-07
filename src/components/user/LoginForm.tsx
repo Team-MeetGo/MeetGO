@@ -71,7 +71,6 @@ const LoginForm = () => {
       if (session) {
         showModal();
         setIsLoggedIn(true);
-        // setUser
         console.log('로그인 성공: ', session);
       } else if (error) throw error;
     } catch (error: any) {
