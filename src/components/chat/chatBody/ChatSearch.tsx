@@ -36,10 +36,8 @@ const ChatSearch = ({ isScrollTop }: { isScrollTop: boolean }) => {
   };
 
   const handleSearchUp = () => {
-    console.log(doneSearchDivs);
     if (doneSearchDivs) {
       const theDiv = doneSearchDivs[upDownCount];
-      console.log(theDiv);
       if (theDiv) {
         theDiv.style.backgroundColor! = 'gray';
         theDiv.scrollIntoView({ block: 'center' });
@@ -48,10 +46,8 @@ const ChatSearch = ({ isScrollTop }: { isScrollTop: boolean }) => {
     }
   };
   const handleSearchDown = () => {
-    console.log(doneSearchDivs);
     if (doneSearchDivs) {
       const theDiv = doneSearchDivs[upDownCount - 2];
-      console.log(theDiv);
       if (theDiv) {
         theDiv.style.backgroundColor! = 'gray';
         theDiv.scrollIntoView({ block: 'center' });
