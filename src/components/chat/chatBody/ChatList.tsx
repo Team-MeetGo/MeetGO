@@ -22,9 +22,11 @@ const ChatList = ({ user }: { user: User | null }) => {
   const [isScrolling, setIsScrolling] = useState(false);
   const [isScrollTop, setIsScrollTop] = useState(true);
   const [newAddedMsgNum, setNewAddedMsgNum] = useState(0);
-  const [searchWord, setSearchWord] = useState('');
-  const [doneSearchList, setDoneSearchList] = useState<string[]>();
   const [count, setCount] = useState(1);
+  const [searchWord, setSearchWord] = useState('');
+  const [doneSearchDivs, setDoneSearchdivs] = useState<(HTMLElement | null)[]>();
+  const [searchCount, setSearchCount] = useState(0);
+  const [upDownCount, setUpDownCount] = useState(0);
 
   useEffect(() => {
     if (roomId && chatRoomId) {
@@ -81,20 +83,6 @@ const ChatList = ({ user }: { user: User | null }) => {
     }
   };
 
-  const toThatScroll = () => {
-    // const scrollBox = scrollRef.current;
-    const theWord = document.getElementById(
-      `${messages.find((m) => m.message_id === '34c12c19-9ab1-470a-a4a6-64d8dec45339')?.message_id}`
-    );
-    console.log('theWord => ', theWord);
-    const divTop = theWord?.getBoundingClientRect().top;
-    console.log('divTop =>', divTop);
-    if (theWord) {
-      theWord.style.backgroundColor = 'gray';
-      theWord.scrollIntoView({ block: 'center' });
-    }
-  };
-
   const handleScrollDown = () => {
     scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
   };
@@ -122,14 +110,75 @@ const ChatList = ({ user }: { user: User | null }) => {
   // 더보기를 누르면 다시 렌더링이 되면서 useEffect가 실행되어 scrollTop이랑 scrollHeight가 같아져야 하는데(스크롤다운) 왜 스크롤이 안내려가지는지?
   // 더보기 눌렀을 때 위치 다시 생각해봐야함
   // 삭제 후 더보기 누르면 제대로 안 불러와짐
-  // console.log('messages =>', messages);
-  // console.log(isScrolling);
-  // console.log('isScrollTop', isScrollTop);
-  // console.log(doneSearchList);
 
   const handleSearch = () => {
-    const filteredArr = messages.filter((m) => m.message.includes(searchWord)).map((messages) => messages.message);
-    setDoneSearchList(filteredArr);
+    const filteredIds = messages
+      .filter((m) => m.message.includes(searchWord))
+      .map((messages) => messages.message_id)
+      .reverse();
+
+    const idsDivs = filteredIds.map((id) => {
+      return document.getElementById(`${messages.find((m) => m.message_id === id)?.message_id}`);
+    });
+    console.log('IdsDivs =>', idsDivs);
+    setDoneSearchdivs(idsDivs);
+
+    if (idsDivs && idsDivs.length >= searchCount + 1) {
+      const theDiv = idsDivs[searchCount];
+      if (theDiv) {
+        theDiv.style.backgroundColor! = 'gray';
+        theDiv.scrollIntoView({ block: 'center' });
+        setSearchCount((prev) => prev + 1);
+        setUpDownCount((prev) => prev + 1);
+        // upDownCount는 지금까지 search한 것을 기반으로 되어야 하니까 여기에 종속되어서 +
+      }
+    } else {
+      alert('더 이상 찾을 내용이 없습니다.');
+    }
+  };
+
+  const handleSearchUp = () => {
+    console.log(doneSearchDivs);
+    if (doneSearchDivs) {
+      console.log(searchCount);
+      console.log(upDownCount);
+      const theDiv = doneSearchDivs[upDownCount];
+      console.log(theDiv);
+      if (theDiv) {
+        theDiv.style.backgroundColor! = 'gray';
+        theDiv.scrollIntoView({ block: 'center' });
+      }
+      setUpDownCount((prev) => prev + 1);
+    }
+  };
+  const handleSearchDown = () => {
+    console.log(doneSearchDivs);
+    if (doneSearchDivs) {
+      console.log(searchCount);
+      console.log(upDownCount);
+      const theDiv = doneSearchDivs[upDownCount - 2];
+      console.log(theDiv);
+      if (theDiv) {
+        theDiv.style.backgroundColor! = 'gray';
+        theDiv.scrollIntoView({ block: 'center' });
+      }
+      setUpDownCount((prev) => prev - 1);
+    }
+  };
+
+  const clearColor = () => {
+    doneSearchDivs?.forEach((div) => {
+      if (div) div.style.backgroundColor = 'transparent';
+    });
+  };
+
+  const stopSearch = () => {
+    setSearchMode();
+    setSearchCount(0);
+    setSearchWord('');
+    clearColor();
+    setDoneSearchdivs([]);
+    setUpDownCount(0);
   };
 
   return (
@@ -152,19 +201,19 @@ const ChatList = ({ user }: { user: User | null }) => {
                 <input value={searchWord} onChange={(e) => setSearchWord(e.target.value)} autoFocus></input>
                 <button>검색</button>
               </form>
-              <div>{doneSearchList ? `(${doneSearchList?.length})` : ''}</div>
+              <div>{doneSearchDivs?.length ? `(${doneSearchDivs?.length})` : ''}</div>
             </div>
 
             <div className="flex gap-2">
               <div>
-                <button>
+                <button onClick={handleSearchUp}>
                   <FaChevronUp />
                 </button>
-                <button>
+                <button onClick={handleSearchDown}>
                   <FaChevronDown />
                 </button>
               </div>
-              <button onClick={setSearchMode}>
+              <button onClick={stopSearch}>
                 <FaX />
               </button>
             </div>
@@ -172,8 +221,6 @@ const ChatList = ({ user }: { user: User | null }) => {
         ) : null}
 
         {hasMore && <LoadChatMore fetchMoreMsg={fetchMoreMsg} />}
-
-        <button onClick={toThatScroll}>ddd</button>
         {messages?.map((msg) => {
           if (msg.send_from === user?.id) {
             return <MyChat msg={msg} key={msg.message_id} />;
