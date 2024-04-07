@@ -49,7 +49,7 @@ const ReviewHeart = ({ review_id }: Props) => {
     };
 
     fetchLikedStatus();
-  }, []);
+  }, [userId, review_id]);
 
   useEffect(() => {
     fetchLikeCount(review_id);

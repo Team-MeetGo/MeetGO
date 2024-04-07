@@ -72,15 +72,18 @@ const ReviewDetail = ({ review_id, commentCount }: Props) => {
 
   const handleDeleteReview = async () => {
     if (window.confirm('리뷰를 삭제하시겠습니까?')) {
-      const { error: reviewDeleteError } = await clientSupabase.from('review').delete().eq('review_id', review_id);
       const { error: commentDeleteError } = await clientSupabase
         .from('review_comment')
         .delete()
         .eq('review_id', review_id);
+      const { error: likeDeleteError } = await clientSupabase.from('review_like').delete().eq('review_id', review_id);
+      const { error: reviewDeleteError } = await clientSupabase.from('review').delete().eq('review_id', review_id);
       if (reviewDeleteError) {
         console.log('리뷰 삭제 오류:', reviewDeleteError.message);
       } else if (commentDeleteError) {
         console.log('댓글 삭제 오류:', commentDeleteError.message);
+      } else if (likeDeleteError) {
+        console.log('댓글 삭제 오류:', likeDeleteError.message);
       } else {
         router.push(`/review/pageNumber/1`);
       }

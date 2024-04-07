@@ -26,7 +26,8 @@ const ReviewsPage = () => {
   const [totalReviews, setTotalReviews] = useState<number>(0);
   const reviewsPerPage = 9;
   const [selected, setSelected] = React.useState<Selection>(new Set(['최신 순']));
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  // const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const { isLoggedIn, setIsLoggedIn } = userStore((state) => state);
 
   const selectedValue = React.useMemo(() => Array.from(selected).join(', ').replaceAll('_', ' '), [selected]);
 
