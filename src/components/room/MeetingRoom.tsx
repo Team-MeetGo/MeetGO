@@ -2,27 +2,27 @@
 import participantsHandler from '(@/hooks/custom/participants)';
 import meetingRoomHandler from '(@/hooks/custom/room)';
 import { userStore } from '(@/store/userStore)';
-import { Card, CardBody } from '@nextui-org/react';
+import { Card, CardBody, Chip } from '@nextui-org/react';
 import DeleteMeetingRoom from './DeleteMeetingRoom';
 import EditMeetingRoom from './EditMeetingRoom';
-
-import type { Database } from '(@/types/database.types)';
+import { favoriteOptions } from '(@/utils/FavoriteData)';
 import { clientSupabase } from '(@/utils/supabase/client)';
 import { useRouter } from 'next/navigation';
-type MeetingRoom = Database['public']['Tables']['room']['Row'];
 
-function MeetingRoom({ room }: { room: MeetingRoom }) {
+import type { MeetingRoomType } from '(@/types/roomTypes)';
+
+function MeetingRoom({ room }: { room: MeetingRoomType }) {
   const { user } = userStore((state) => state);
   const router = useRouter();
-
-  const { room_id, room_status, room_title, member_number, location, feature } = room;
-
   const { addMemberHandler, totalMember, userMemberInformation } = participantsHandler();
   const { getmaxGenderMemberNumber } = meetingRoomHandler();
 
+  const { room_id, room_status, room_title, member_number, location, feature, leader_id } = room;
+  //특성 입력이 안됐으면 빈칸으로
+  if (!feature) return {};
+  if (!user) return alert('로그인이 필요한 서비스입니다.');
+
   const addMember = async ({ room_id, member_number }: { room_id: string; member_number: string }) => {
-    if (!user) return alert('로그인이 필요한 서비스입니다.');
-    // if (!participants) return alert('유효하지 않은 접근입니다.');
     //채팅창으로 넘어갔을 경우에는 채팅창으로 이동
     const { data: alreadyChat } = await clientSupabase
       .from('chatting_room')
@@ -33,11 +33,16 @@ function MeetingRoom({ room }: { room: MeetingRoom }) {
       // 만약 isActive인 채팅방이 이미 있다면 그 방으로 보내기
       router.replace(`/chat/${alreadyChat[0].chatting_room_id}`);
     }
+
     //아직 인원을 모집중인 경우 + 채팅창이 열리지 않은 경우
     const participants = await totalMember(room_id);
     console.log('participants', participants);
-    // if (!user || user.length === 0) return alert('로그인이 필요한 서비스입니다.');
-    // if (!participants || participants.length === 0) return alert('유효하지 않은 접근입니다.');
+    if (!participants || participants.length === 0) return alert('유효하지 않은 접근입니다.');
+
+    //수락창인 단계에서 내가 이미 방에 참여하고 있는 경우
+    if (participants.find((member) => member.user_id === user[0].user_id)) {
+      return router.push(`/meetingRoom/${room_id}`);
+    }
 
     //room의 정보를 가져와서 성별에 할당된 인원을 확인
     const genderMaxNumber = await getmaxGenderMemberNumber(member_number);
@@ -59,10 +64,10 @@ function MeetingRoom({ room }: { room: MeetingRoom }) {
       return alert('해당 성별은 모두 참여가 완료되었습니다.');
     }
 
-    //모든 인원이 다 찼을 경우 모집완료로 변경
-    // if (participants.length === genderMaxNumber * 2) {
-    //   await clientSupabase.from('room').update({ room_status: '모집종료' }).eq('room_id', room_id);
-    // }
+    //모든 인원이 다 찼을 경우 모집종료로 변경
+    if (participants.length === genderMaxNumber * 2) {
+      await clientSupabase.from('room').update({ room_status: '모집종료' }).eq('room_id', room_id);
+    }
   };
   return (
     <div>
@@ -71,14 +76,28 @@ function MeetingRoom({ room }: { room: MeetingRoom }) {
           <CardBody className="overflow-visible p-0 m-8">
             <main onClick={(e) => addMember({ room_id, member_number })}>
               <div> {room_title} </div>
-              <div> {feature} </div>
+              <div>
+                {Array.from(feature).map((value) => (
+                  <Chip
+                    key={value}
+                    color="default"
+                    style={{ backgroundColor: favoriteOptions.find((option) => option.value === value)?.color }}
+                  >
+                    {value}
+                  </Chip>
+                ))}
+              </div>
               <div> {location} </div>
               <div> {room_status} </div>
               <div> {member_number}</div>
             </main>
             <div className="flex flex-row gap-12">
-              <DeleteMeetingRoom id={room_id} />
-              <EditMeetingRoom room={room} />
+              {user[0].user_id === leader_id ? (
+                <div>
+                  <DeleteMeetingRoom id={room_id} />
+                  <EditMeetingRoom room={room} />
+                </div>
+              ) : null}
             </div>
           </CardBody>
         </Card>
