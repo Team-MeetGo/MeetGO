@@ -41,17 +41,17 @@ const MyPost = () => {
         {myPost.map((post: any) => (
           <Link href={`review/${post.review_id}`} key={post.review_id} className="mb-4">
             {post.image_urls ? (
-              <Image
-                src={post.image_urls[0]}
-                alt="Post Image"
-                style={{
-                  width: '100%',
-                  height: 'auto'
-                }}
-                width={200}
-                height={200}
-                className="mb-2"
-              />
+              <div className="relative w-full h-[200px]">
+                <Image
+                  src={post.image_urls[0]}
+                  alt="Post Image"
+                  style={{ objectFit: 'cover' }}
+                  fill={true}
+                  sizes="200px"
+                  priority={false}
+                  className="mb-2"
+                />
+              </div>
             ) : (
               <div className="w-full h-80 bg-white mb-2" />
             )}
@@ -64,17 +64,17 @@ const MyPost = () => {
         {likePost.map((post: any) => (
           <Link href={`review/${post.review_id}`} key={post.review_id} className="mb-4">
             {post.image_urls ? (
-              <Image
-                src={post.image_urls[0]}
-                alt="Like Post Image"
-                style={{
-                  width: '100%',
-                  height: 'auto'
-                }}
-                width={200}
-                height={200}
-                className="mb-2"
-              />
+              <div className="relative w-full h-[200px]">
+                <Image
+                  src={post.image_urls[0]}
+                  alt="Like Post Image"
+                  style={{ objectFit: 'cover' }}
+                  fill={true}
+                  sizes="200px"
+                  priority={false}
+                  className="mb-2"
+                />
+              </div>
             ) : (
               <div className="w-full h-80 bg-gray-300 mb-2" />
             )}

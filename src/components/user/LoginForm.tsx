@@ -9,7 +9,6 @@ import { ValidationModal } from '../common/ValidationModal';
 import { useModalStore } from '(@/store/modalStore)';
 import { authValidation } from '(@/utils/Validation)';
 import { IsValidateShow, LoginData } from '(@/types/userTypes)';
-import { revalidatePath } from 'next/cache';
 import { userStore } from '(@/store/userStore)';
 
 const LOGIN_FORM_LIST = [
@@ -71,7 +70,6 @@ const LoginForm = () => {
       if (session) {
         showModal();
         setIsLoggedIn(true);
-        // setUser
         console.log('로그인 성공: ', session);
       } else if (error) throw error;
     } catch (error: any) {

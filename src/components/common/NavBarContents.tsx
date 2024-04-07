@@ -71,15 +71,25 @@ const NavBarContents = () => {
             <p>{user && user[0].nickname}</p>
             <Dropdown placement="bottom-end">
               <DropdownTrigger>
-                <Avatar
-                  isBordered
-                  as="button"
-                  className="transition-transform"
-                  color="secondary"
-                  name="profile"
-                  size="sm"
-                  src={`${user && user[0].avatar}?${new Date().getTime()}`}
-                />
+                {user && user[0].avatar ? (
+                  <Avatar
+                    isBordered
+                    as="button"
+                    className="transition-transform"
+                    color="secondary"
+                    name="profile"
+                    src={`${user[0].avatar}?${new Date().getTime()}`}
+                  />
+                ) : (
+                  <Avatar
+                    isBordered
+                    showFallback
+                    as="button"
+                    className="transition-transform"
+                    color="secondary"
+                    size="sm"
+                  />
+                )}
               </DropdownTrigger>
               <DropdownMenu aria-label="Profile Actions" variant="flat">
                 <DropdownItem key="mypage" href="/mypage">
