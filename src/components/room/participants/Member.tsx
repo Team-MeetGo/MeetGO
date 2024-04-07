@@ -12,14 +12,12 @@ const Member = ({ params }: { params: { id: UUID } }) => {
   const [leaderMember, setLeaderMember] = useState('');
 
   useEffect(() => {
-    console.log('나 포함 참가자들 =>', participants);
     //리더를 찾아 표시
     const leaderSelector = async () => {
       const { data: nowLeader } = await clientSupabase.from('room').select('*').eq('room_id', params.id);
       if (!nowLeader) {
         return;
       }
-      console.log('nowLeader', nowLeader);
       setLeaderMember(nowLeader[0].leader_id as string);
     };
 
@@ -44,7 +42,6 @@ const Member = ({ params }: { params: { id: UUID } }) => {
           table: 'participants'
         },
         (payload) => {
-          console.log(payload.old);
           const deletePartId = payload.old;
           type test = Awaited<typeof payload.old>;
           const deleteMemeberUserId = async ({ deletePartId }: { deletePartId: test }) => {
@@ -54,7 +51,6 @@ const Member = ({ params }: { params: { id: UUID } }) => {
               .eq('user_id', deletePartId);
             if (!participants || participants.length < 1) return;
             if (!userData || userData.length < 1) return;
-            console.log(userData[0]);
             setParticipants(participants?.filter((member) => member.user_id !== userData[0].user_id));
           };
           deleteMemeberUserId({ deletePartId });

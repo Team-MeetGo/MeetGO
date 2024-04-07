@@ -15,29 +15,25 @@ const AcceptanceRoomButtons = ({ roomId }: { roomId: UUID }) => {
   const [maximumParticipants, setMaximumParticipants] = useState(0);
   const [totalMemberList, setTotalMemberList] = useState<ParticipantType[]>();
   const { deleteMember, totalMember } = participantsHandler();
-  const { getRoomInformation } = meetingRoomHandler();
+  const { getRoomInformation, getmaxGenderMemberNumber } = meetingRoomHandler();
 
   useEffect(() => {
+    //방 안의 총 인원수를 구합니다.
     const getTotalMember = async () => {
       const totalMemberList = await totalMember(roomId);
-      console.log(totalMemberList);
       if (!totalMemberList) return;
       setTotalMemberList(totalMemberList);
     };
+    // 방의 정보를 가져옵니다.
     const getSingleRoom = async () => {
       const singleRoom = await getRoomInformation(roomId);
       if (!singleRoom) {
         return;
       }
-      if (singleRoom[0].member_number === '1:1') {
-        setMaximumParticipants(2);
-      } else if (singleRoom[0].member_number === '2:2') {
-        setMaximumParticipants(4);
-      } else if (singleRoom[0].member_number === '3:3') {
-        setMaximumParticipants(6);
-      } else if (singleRoom[0].member_number === '4:4') {
-        setMaximumParticipants(8);
-      }
+      //방에 최대 인원은 얼마나 들어갈 수 있는지 확인합니다.
+      const maximumGenderParticipants = await getmaxGenderMemberNumber(singleRoom[0].member_number);
+      if (!maximumGenderParticipants) return;
+      setMaximumParticipants(maximumGenderParticipants * 2);
       if (!totalMemberList) return;
       if (totalMemberList.length > maximumParticipants) {
         return alert('잘못된 접근입니다');
@@ -97,7 +93,8 @@ const AcceptanceRoomButtons = ({ roomId }: { roomId: UUID }) => {
     }
 
     //만약 참가자 한명만 방에 있었다면 나감과 동시에 방은 삭제됩니다.
-    if (leader.length === 1 && participants.length === 1) {
+    if (user.length === 0) {
+      console.log(user.length);
       await clientSupabase.from('room').delete().eq('room_id', roomId);
     }
     router.push(`/meetingRoom`);
