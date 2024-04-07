@@ -39,7 +39,7 @@ const OthersChat = ({ msg }: { msg: Message }) => {
   };
 
   return (
-    <div className="flex gap-4" key={msg.message_id}>
+    <div id={msg.message_id} className="flex gap-4">
       <Tooltip content={<div>{usersData && showThatUser(msg.send_from)?.nickname}</div>}>
         <div className="h-14 w-14 bg-indigo-600 rounded-full my-auto">
           <img src={msg.avatar} alt="유저 이미지"></img>

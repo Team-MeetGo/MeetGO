@@ -28,14 +28,14 @@ export const routeHandlerMiddleware = (middleware: CustomMiddleware) => {
 
     // 직접 쳐서 들어가려는 경우
     const referer = request.headers.get('Referer');
-    if (!referer && request.nextUrl.pathname.startsWith('/meetingRoom/')) {
-      // 직접 타이핑 해서 수락창에 들어가려고 하는 경우
-      return NextResponse.redirect(new URL('/meetingRoom', request.url));
-    }
-    if (referer?.startsWith('http://localhost:3000/chat') && request.nextUrl.pathname.startsWith('/meetingRoom/')) {
-      //
-      return NextResponse.redirect(new URL('/', request.url));
-    }
+    // if (!referer && request.nextUrl.pathname.startsWith('/meetingRoom/')) {
+    //   // 직접 타이핑 해서 수락창에 들어가려고 하는 경우
+    //   return NextResponse.redirect(new URL('/meetingRoom', request.url));
+    // }
+    // if (referer?.startsWith('http://localhost:3000/chat') && request.nextUrl.pathname.startsWith('/meetingRoom/')) {
+    //   //
+    //   return NextResponse.redirect(new URL('/', request.url));
+    // }
 
     console.log('가려고 하는 주소', request.nextUrl.pathname);
     console.log('Request came from:', referer);

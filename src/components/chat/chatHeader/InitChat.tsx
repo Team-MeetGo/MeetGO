@@ -1,5 +1,4 @@
 'use client';
-
 import { chatStore } from '(@/store/chatStore)';
 import { Message, chatRoomPayloadType } from '(@/types/chatTypes)';
 import { clientSupabase } from '(@/utils/supabase/client)';
@@ -44,7 +43,7 @@ const InitChat = ({ chatRoomId, allMsgs }: { chatRoomId: string; allMsgs: Messag
     if (!chatState) {
       // 한 명이 채팅방을 나가서 채팅방 isActive가 false가 되면,
       if (isRest) {
-        // 내가 나가기를 누른 사람이 아니라면 다시 수락창으로
+        // 내가 나가기를 누른 사람이 아니라면(남은사람이면) 다시 수락창으로
         router.push(`/meetingRoom/${roomId}`);
       } else {
         // 내가 나가기를 누른 사람이라면 아예 로비로
