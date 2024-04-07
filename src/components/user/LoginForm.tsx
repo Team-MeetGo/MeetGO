@@ -9,7 +9,6 @@ import { ValidationModal } from '../common/ValidationModal';
 import { useModalStore } from '(@/store/modalStore)';
 import { authValidation } from '(@/utils/Validation)';
 import { IsValidateShow, LoginData } from '(@/types/userTypes)';
-import { revalidatePath } from 'next/cache';
 import { userStore } from '(@/store/userStore)';
 
 const LOGIN_FORM_LIST = [
