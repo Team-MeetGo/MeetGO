@@ -99,7 +99,7 @@ const Map: React.FC<MapProps> = ({ userId, leaderId, chatRoomId }) => {
     const places = new window.kakao.maps.services.Places();
 
     places.keywordSearch(
-      searchText,
+      '술집',
       (data: any, status: any, pagination: any) => {
         console.log(data);
         if (status === window.kakao.maps.services.Status.OK) {
@@ -144,9 +144,7 @@ const Map: React.FC<MapProps> = ({ userId, leaderId, chatRoomId }) => {
     const places = new window.kakao.maps.services.Places();
 
     places.keywordSearch(searchText, (data: any, status: any, pagination: any) => {
-      console.log(data);
       if (status === window.kakao.maps.services.Status.OK) {
-        console.log(data);
         // 마커 초기화
         if (markers && markers.length > 0) {
           markers.forEach((marker: any) => {
@@ -210,7 +208,7 @@ const Map: React.FC<MapProps> = ({ userId, leaderId, chatRoomId }) => {
     <div>
       <p>미팅 장소 : {selectedMeetingLocation}</p>
       <>
-        미팅 날짜/시간:
+        장소 검색:
         <input type="text" className="border" value={searchText} onChange={(e) => setSearchText(e.target.value)} />
         <button onClick={() => searchNewPlaces()}>검색</button>
       </>
