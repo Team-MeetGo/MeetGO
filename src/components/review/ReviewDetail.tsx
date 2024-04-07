@@ -82,7 +82,8 @@ const ReviewDetail = ({ review_id, commentCount }: Props) => {
       } else if (commentDeleteError) {
         console.log('댓글 삭제 오류:', commentDeleteError.message);
       } else {
-        router.push('/review');
+        // router.push('/review');
+        router.push(`/review/pageNumber/1`);
       }
     }
   };

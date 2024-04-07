@@ -60,7 +60,8 @@ export default function Home() {
       <div className="">배너</div>
       <div>
         <div>
-          <Link href="/review">더보기</Link>
+          {/* <Link href="/review">더보기</Link> */}
+          <Link href="/review/pageNumber/1">더보기</Link>
         </div>
         <ul className="grid grid-cols-3 gap-2 gap-y-4">
           {reviewData.map((item, index) => (
