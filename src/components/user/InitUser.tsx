@@ -9,6 +9,7 @@ const InitUser = () => {
 
   useEffect(() => {
     // isLoggedIn 상태가 변경되거나, 새로고침 했을때 쎄션 유지 중인지 여부에 따라 실행되는 함수
+    // (참고: isLoggedIn 상태는 로그인/로그아웃 시에만 변경됨 = 로그인/로그아웃에 모든 호출이 종속되도록)
     const fetchUserData = async () => {
       const {
         data: { user }
@@ -23,12 +24,12 @@ const InitUser = () => {
           setUser(userData);
         }
       } else {
+        // 이 때는 새로고침 시를 고려하여 isLoggedIn을 false로 하지 않아도 됨
+        // -> isLoggedIn의 초기값 자체가 false이기 때문에 새로고침하면 자동으로 false
         // 로그아웃하면(= 쎄션 유지 중이 아니면) 유저데이터 null로 변경
         setUser(null);
       }
     };
-
-    // console.log("user", user)
     fetchUserData();
   }, [setUser, isLoggedIn, setIsLoggedIn]);
   return <></>;
