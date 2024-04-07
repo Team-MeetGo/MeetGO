@@ -47,9 +47,7 @@ const JoinForm = () => {
       type: 'alert',
       name: '',
       text: '회원가입 되었습니다.',
-      onFunc: () => {
-        router.push('/users/login');
-      }
+      onFunc: () => {}
     });
   };
 

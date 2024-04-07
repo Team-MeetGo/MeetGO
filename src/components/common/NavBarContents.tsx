@@ -25,7 +25,7 @@ const NavBarContents = () => {
   const signOut = async () => {
     await clientSupabase.auth.signOut();
     userStore.getState().clearUser(); // 로그아웃 시 스토어의 유저 정보도 초기화
-    router.replace('/'); // 로그아웃 후 메인 페이지로 이동. 뒤로가기 방지.
+    router.replace('/'); // 로그아웃 후 메인 페이지로 이동. 뒤로가기 방지. 미들웨어 완성되면 필요없을 듯.
     alert('로그아웃 성공');
   };
 

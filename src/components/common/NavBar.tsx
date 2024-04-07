@@ -4,8 +4,9 @@ import NavBarContents from './NavBarContents';
 
 const NavBar = async () => {
   const supabase = serverSupabase();
-  const { data } = await supabase.auth.getUser();
-  const user = data.user;
+  const {
+    data: { user }
+  } = await supabase.auth.getUser();
   const { data: userData } = await supabase.from('users').select('*').eq('user_id', String(user?.id));
 
   return (

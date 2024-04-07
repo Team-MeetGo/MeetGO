@@ -6,6 +6,7 @@ import { useEffect } from 'react';
 
 const InitUser = ({ userData }: { userData: UsersType[] | null }) => {
   const setUser = userStore((state) => state.setUser);
+
   useEffect(() => {
     if (userData) {
       setUser(userData);
