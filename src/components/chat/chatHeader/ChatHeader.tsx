@@ -72,7 +72,7 @@ const ChatHeader = () => {
           <ChatPresence />
         </div>
       </div>
-      <button>
+      <button onClick={handleSearchMode}>
         <IoIosSearch />
       </button>
 

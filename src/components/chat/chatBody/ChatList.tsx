@@ -17,6 +17,7 @@ const ChatList = ({ user }: { user: User | null }) => {
   const scrollRef = useRef() as React.MutableRefObject<HTMLDivElement>;
   const { hasMore, setHasMore, messages, setMessages, searchMode, setSearchMode } = chatStore((state) => state);
   const [isScrolling, setIsScrolling] = useState(false);
+  const [isScrollTop, setIsScrollTop] = useState(false);
   const [newAddedMsgNum, setNewAddedMsgNum] = useState(0);
   const { roomId, chatRoomId } = chatStore((state) => state);
   const [count, setCount] = useState(1);
@@ -72,6 +73,7 @@ const ChatList = ({ user }: { user: User | null }) => {
       if (!isScroll) {
         setNewAddedMsgNum(0);
       }
+      setIsScrollTop(scrollBox.scrollTop === 0);
     }
   };
 
@@ -102,7 +104,9 @@ const ChatList = ({ user }: { user: User | null }) => {
   // 더보기를 누르면 다시 렌더링이 되면서 useEffect가 실행되어 scrollTop이랑 scrollHeight가 같아져야 하는데(스크롤다운) 왜 스크롤이 안내려가지는지?
   // 더보기 눌렀을 때 위치 다시 생각해봐야함
   // 삭제 후 더보기 누르면 제대로 안 불러와짐
-  console.log('messages =>', messages);
+  // console.log('messages =>', messages);
+  // console.log(isScrolling);
+  console.log('isScrollTop', isScrollTop);
 
   return (
     <>
@@ -111,12 +115,15 @@ const ChatList = ({ user }: { user: User | null }) => {
         ref={scrollRef}
         onScroll={handleScroll}
       >
-        <div className="absolute">
-          <form onSubmit={(e) => e.preventDefault()}>
-            <input></input>
-            <button></button>
-          </form>
-        </div>
+        {searchMode ? (
+          <div className={isScrollTop ? '' : 'absolute'}>
+            <form onSubmit={(e) => e.preventDefault()}>
+              <input></input>
+              <button>검색</button>
+            </form>
+          </div>
+        ) : null}
+
         {hasMore && <LoadChatMore fetchMoreMsg={fetchMoreMsg} />}
 
         {messages?.map((msg, idx) => {
