@@ -7,9 +7,42 @@ import { useEffect, useState } from 'react';
 const AvatarForm = () => {
   const { user, setUser } = userStore((state) => state);
   const [file, setFile] = useState(null as File | null);
+  const [avatarView, setAvatarView] = useState<string | null>(null);
+  const [isEditing, setIsEditing] = useState(false);
 
-  const onFileChange = (e: any) => {
-    setFile(e.target.files[0]);
+  useEffect(() => {
+    if (!file) {
+      setAvatarView(null);
+      return;
+    }
+
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      setAvatarView(reader.result as string);
+    };
+    reader.readAsDataURL(file);
+  }, [file]);
+
+  const onFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files?.[0]) {
+      setFile(e.target.files[0]);
+    } else {
+      setFile(null);
+    }
+  };
+
+  const onFileCancel = () => {
+    setFile(null);
+    setAvatarView(null);
+    setIsEditing(!isEditing);
+  };
+
+  const toggleEdit = () => {
+    setIsEditing(!isEditing);
+    if (!isEditing) {
+      setFile(null);
+      setAvatarView(null);
+    }
   };
 
   const uploadAvatar = async () => {
@@ -47,6 +80,7 @@ const AvatarForm = () => {
       if (user && user.length > 0) {
         setUser([{ ...user[0], avatar: publicURL }]);
         alert('프로필 사진이 업데이트되었습니다.');
+        setIsEditing(!isEditing);
       } else {
         console.error('User data is null or empty.');
       }
@@ -55,31 +89,43 @@ const AvatarForm = () => {
 
   return (
     <div className="flex flex-col justify-center items-center gap-2">
-      <input type="file" onChange={onFileChange} accept="image/*" />
-      {user && user[0].avatar ? (
+      {isEditing && <input type="file" onChange={onFileChange} accept="image/*" />}
+      <div className="w-[150px] h-[150px] overflow-hidden flex justify-center items-center rounded-full relative">
+        {avatarView ? (
+          <Image
+            src={avatarView}
+            alt="Avatar Preview"
+            style={{ objectFit: 'cover' }}
+            fill={true}
+            sizes="200px"
+            priority={false}
+          />
+        ) : user && user[0].avatar ? (
+          <Image
+            src={`${user[0].avatar}?${new Date().getTime()}`}
+            alt="Avatar"
+            style={{ objectFit: 'cover' }}
+            fill={true}
+            sizes="200px"
+            priority={true}
+          />
+        ) : (
+          <Avatar color="secondary" className="w-32 h-32" />
+        )}
+      </div>
+      {isEditing ? (
         <>
-          <div className="w-[150px] h-[150px] overflow-hidden flex justify-center items-center rounded-full">
-            <Image
-              src={`${user[0].avatar}?${new Date().getTime()}`}
-              alt="Avatar"
-              className=""
-              style={{ objectFit: 'cover' }}
-              width={200}
-              height={200}
-              priority={true}
-            />
-          </div>
           <button className="text-xs" onClick={uploadAvatar}>
-            사진 수정
+            수정
+          </button>
+          <button className="text-xs" onClick={onFileCancel}>
+            취소
           </button>
         </>
       ) : (
-        <>
-          <Avatar className="w-32 h-32" />
-          <button className="text-xs" onClick={uploadAvatar}>
-            사진 등록
-          </button>
-        </>
+        <button className="text-xs" onClick={toggleEdit}>
+          사진 등록하기
+        </button>
       )}
     </div>
   );
