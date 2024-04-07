@@ -72,11 +72,14 @@ const ChatHeader = () => {
           <ChatPresence />
         </div>
       </div>
-      <button onClick={handleSearchMode}>
-        <IoIosSearch />
-      </button>
 
-      <button onClick={getOutOfChatRoom}>죄송합니다 제 스타일은 아니신 것 같아요</button>
+      <div className="flex gap-2">
+        <button onClick={handleSearchMode}>
+          <IoIosSearch />
+        </button>
+
+        <button onClick={getOutOfChatRoom}>죄송합니다 제 스타일은 아니신 것 같아요</button>
+      </div>
     </div>
   );
 };

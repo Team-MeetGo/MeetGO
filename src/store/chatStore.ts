@@ -1,5 +1,4 @@
 import { Message, RoomData } from '(@/types/chatTypes)';
-import { SetStateAction } from 'react';
 import { create } from 'zustand';
 
 type chatState = {

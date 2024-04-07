@@ -11,15 +11,19 @@ import ChatDeleteDropDown from './ChatDeleteDropDown';
 import { chatStore } from '(@/store/chatStore)';
 import { Tooltip } from '@nextui-org/react';
 import OthersChat from './OthersChat';
-import { IoIosSearch } from 'react-icons/io';
+import { FaChevronDown, FaChevronUp } from 'react-icons/fa';
+import { FaX } from 'react-icons/fa6';
 
 const ChatList = ({ user }: { user: User | null }) => {
   const scrollRef = useRef() as React.MutableRefObject<HTMLDivElement>;
-  const { hasMore, setHasMore, messages, setMessages, searchMode, setSearchMode } = chatStore((state) => state);
+  const { roomId, chatRoomId, hasMore, setHasMore, messages, setMessages, searchMode, setSearchMode } = chatStore(
+    (state) => state
+  );
   const [isScrolling, setIsScrolling] = useState(false);
-  const [isScrollTop, setIsScrollTop] = useState(false);
+  const [isScrollTop, setIsScrollTop] = useState(true);
   const [newAddedMsgNum, setNewAddedMsgNum] = useState(0);
-  const { roomId, chatRoomId } = chatStore((state) => state);
+  const [searchWord, setSearchWord] = useState('');
+  const [doneSearchList, setDoneSearchList] = useState<string[]>();
   const [count, setCount] = useState(1);
 
   useEffect(() => {
@@ -77,6 +81,20 @@ const ChatList = ({ user }: { user: User | null }) => {
     }
   };
 
+  const toThatScroll = () => {
+    // const scrollBox = scrollRef.current;
+    const theWord = document.getElementById(
+      `${messages.find((m) => m.message_id === '34c12c19-9ab1-470a-a4a6-64d8dec45339')?.message_id}`
+    );
+    console.log('theWord => ', theWord);
+    const divTop = theWord?.getBoundingClientRect().top;
+    console.log('divTop =>', divTop);
+    if (theWord) {
+      theWord.style.backgroundColor = 'gray';
+      theWord.scrollIntoView({ block: 'center' });
+    }
+  };
+
   const handleScrollDown = () => {
     scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
   };
@@ -106,7 +124,13 @@ const ChatList = ({ user }: { user: User | null }) => {
   // 삭제 후 더보기 누르면 제대로 안 불러와짐
   // console.log('messages =>', messages);
   // console.log(isScrolling);
-  console.log('isScrollTop', isScrollTop);
+  // console.log('isScrollTop', isScrollTop);
+  // console.log(doneSearchList);
+
+  const handleSearch = () => {
+    const filteredArr = messages.filter((m) => m.message.includes(searchWord)).map((messages) => messages.message);
+    setDoneSearchList(filteredArr);
+  };
 
   return (
     <>
@@ -116,21 +140,45 @@ const ChatList = ({ user }: { user: User | null }) => {
         onScroll={handleScroll}
       >
         {searchMode ? (
-          <div className={isScrollTop ? '' : 'absolute'}>
-            <form onSubmit={(e) => e.preventDefault()}>
-              <input></input>
-              <button>검색</button>
-            </form>
+          <div className={`${isScrollTop ? '' : 'absolute'} flex justify-between w-full bg-gray-500`}>
+            <div className="flex gap-1">
+              <form
+                onSubmit={(e) => {
+                  e.preventDefault();
+                  handleSearch();
+                }}
+                className="flex gap-2"
+              >
+                <input value={searchWord} onChange={(e) => setSearchWord(e.target.value)} autoFocus></input>
+                <button>검색</button>
+              </form>
+              <div>{doneSearchList ? `(${doneSearchList?.length})` : ''}</div>
+            </div>
+
+            <div className="flex gap-2">
+              <div>
+                <button>
+                  <FaChevronUp />
+                </button>
+                <button>
+                  <FaChevronDown />
+                </button>
+              </div>
+              <button onClick={setSearchMode}>
+                <FaX />
+              </button>
+            </div>
           </div>
         ) : null}
 
         {hasMore && <LoadChatMore fetchMoreMsg={fetchMoreMsg} />}
 
-        {messages?.map((msg, idx) => {
+        <button onClick={toThatScroll}>ddd</button>
+        {messages?.map((msg) => {
           if (msg.send_from === user?.id) {
-            return <MyChat msg={msg} key={idx} />;
+            return <MyChat msg={msg} key={msg.message_id} />;
           } else {
-            return <OthersChat msg={msg} key={idx} />;
+            return <OthersChat msg={msg} key={msg.message_id} />;
           }
         })}
       </div>
@@ -155,7 +203,7 @@ export default ChatList;
 
 const MyChat = ({ msg }: { msg: Message }) => {
   return (
-    <div className="flex gap-4 ml-auto">
+    <div id={msg.message_id} className="flex gap-4 ml-auto">
       <div className="w-80 h-24 flex flex-col gap-1">
         <div className="font-bold ml-auto">{msg.nickname}</div>
         <div className="flex gap-2 ml-auto">
