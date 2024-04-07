@@ -1,4 +1,5 @@
 import { userStore } from '(@/store/userStore)';
+import { createRequestKakaoId } from '(@/utils/api/authAPI)';
 import { clientSupabase } from '(@/utils/supabase/client)';
 import { useEffect, useState } from 'react';
 
@@ -25,6 +26,36 @@ const MetPeople = () => {
     }
   };
 
+  const getRequestStatus = async (userId: string, personId: string) => {
+    const { data, error } = await clientSupabase
+      .from('kakaoId_request')
+      .select('request_status')
+      .eq('request_Id', userId)
+      .eq('response_Id', personId)
+      .single();
+
+    if (error || !data) {
+      console.error(error || '요청상태를 가져오는데 실패했습니다.');
+      return null;
+    }
+
+    return data.request_status;
+  };
+
+  const onKakaoIdRequest = async (responseId: string) => {
+    const userId = user && user[0].user_id;
+    if (!userId) {
+      console.error('사용자 ID가 존재하지 않습니다.');
+      return;
+    }
+    const result = await createRequestKakaoId(userId, responseId);
+    if (result) {
+      alert('상대방에게 카카오톡ID를 요청하셨습니다!');
+    } else {
+      alert('요청 실패.');
+    }
+  };
+
   useEffect(() => {
     getMetPeople();
   }, [user]);
@@ -37,8 +68,9 @@ const MetPeople = () => {
           <div key={index} className="flex flex-col items-center">
             <div className="w-24 h-24 rounded-full bg-gray-300 mb-2" />
             <p className="text-sm">{person.nickname}</p>
-            <button className="text-xs">카톡ID요청하기</button>
-            <p>{person.kakaoId}</p>
+            <button className="text-xs" onClick={() => onKakaoIdRequest(person.user_id)}>
+              카톡ID요청하기
+            </button>
           </div>
         ))}
       </div>

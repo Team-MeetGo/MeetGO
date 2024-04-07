@@ -47,3 +47,20 @@ export const kakaoLogin = async () => {
     return console.error('카카오 로그인 에러: ', error);
   }
 };
+
+/** 카카오톡ID 요청하기 API */
+export const createRequestKakaoId = async (requestId: string, responseId: string) => {
+  const { data, error } = await clientSupabase
+    .from('kakaoId_request')
+    .insert([
+      { request_Id: requestId, response_Id: responseId, request_status: '요청중', created_at: new Date().toISOString() }
+    ])
+    .select('*');
+
+  if (error) {
+    console.error(error);
+    return null;
+  }
+
+  return data;
+};
