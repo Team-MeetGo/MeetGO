@@ -16,7 +16,10 @@ const Member = ({ params }: { params: { id: UUID } }) => {
     //리더를 찾아 표시
     const leaderSelector = async () => {
       const { data: nowLeader } = await clientSupabase.from('room').select('*').eq('room_id', params.id);
-      if (!nowLeader || nowLeader === null) return;
+      if (!nowLeader) {
+        return;
+      }
+      console.log('nowLeader', nowLeader);
       setLeaderMember(nowLeader[0].leader_id as string);
     };
 

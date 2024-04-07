@@ -8,10 +8,12 @@ import TagList from './MeetingRoomFeatureTags';
 import { userStore } from '(@/store/userStore)';
 import type { Database } from '(@/types/database.types)';
 import { useRouter } from 'next/navigation';
+import participantsHandler from '(@/hooks/custom/participants)';
 type NextMeetingRoomType = Database['public']['Tables']['room']['Insert'];
 
 function MeetingRoomForm() {
   const router = useRouter();
+  const { addMemberHandler } = participantsHandler();
   const { tags, resetTags } = useTagStore();
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const { user } = userStore((state) => state);
@@ -59,6 +61,8 @@ function MeetingRoomForm() {
       return;
     } else {
       console.log(insertMeetingRoom[0].room_id);
+      await addMemberHandler(insertMeetingRoom[0].room_id);
+
       alert('모임이 생성되었습니다.');
       resetTags();
 
