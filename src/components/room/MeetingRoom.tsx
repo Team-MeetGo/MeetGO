@@ -33,10 +33,16 @@ function MeetingRoom({ room }: { room: MeetingRoomType }) {
       // 만약 isActive인 채팅방이 이미 있다면 그 방으로 보내기
       router.replace(`/chat/${alreadyChat[0].chatting_room_id}`);
     }
+
     //아직 인원을 모집중인 경우 + 채팅창이 열리지 않은 경우
     const participants = await totalMember(room_id);
     console.log('participants', participants);
     if (!participants || participants.length === 0) return alert('유효하지 않은 접근입니다.');
+
+    //수락창인 단계에서 내가 이미 방에 참여하고 있는 경우
+    if (participants.find((member) => member.user_id === user[0].user_id)) {
+      return router.push(`/meetingRoom/${room_id}`);
+    }
 
     //room의 정보를 가져와서 성별에 할당된 인원을 확인
     const genderMaxNumber = await getmaxGenderMemberNumber(member_number);

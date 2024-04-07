@@ -54,7 +54,7 @@ const NavBarContents = () => {
           </Link>
         </NavbarItem>
         <NavbarItem isActive>
-          <Link href="review" aria-current="page" color="secondary">
+          <Link href="/review/pageNumber/1" aria-current="page" color="secondary">
             리뷰게시판
           </Link>
         </NavbarItem>
