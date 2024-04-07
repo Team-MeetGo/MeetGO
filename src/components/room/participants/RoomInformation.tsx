@@ -1,10 +1,11 @@
 'use client';
 import meetingRoomHandler from '(@/hooks/custom/room)';
-import { Database } from '(@/types/database.types)';
-import { UUID } from 'crypto';
+import { Chip } from '@nextui-org/react';
 import { useEffect, useState } from 'react';
+import { favoriteOptions } from '(@/utils/FavoriteData)';
 
-type MeetingRoomType = Database['public']['Tables']['room']['Row'];
+import type { MeetingRoomType } from '(@/types/roomTypes)';
+import type { UUID } from 'crypto';
 
 function RoomInformation({ roomId }: { roomId: UUID }) {
   const [room, setRoom] = useState<MeetingRoomType[]>();
@@ -22,6 +23,9 @@ function RoomInformation({ roomId }: { roomId: UUID }) {
   if (!room) return;
 
   const { feature, location, member_number, room_title } = room[0];
+  if (!feature) {
+    return;
+  }
 
   return (
     room && (
@@ -29,7 +33,17 @@ function RoomInformation({ roomId }: { roomId: UUID }) {
         <div>{room_title}</div>
         <div>{member_number}</div>
         <div>{location}</div>
-        <div>{feature}</div>
+        <div>
+          {Array.from(feature).map((value) => (
+            <Chip
+              key={value}
+              color="default"
+              style={{ backgroundColor: favoriteOptions.find((option) => option.value === value)?.color }}
+            >
+              {value}
+            </Chip>
+          ))}
+        </div>
       </div>
     )
   );
