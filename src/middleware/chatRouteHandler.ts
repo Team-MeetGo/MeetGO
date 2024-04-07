@@ -9,9 +9,9 @@ export const chatRoomHandler = (middleware: CustomMiddleware) => {
       return NextResponse.redirect(new URL('/meetingRoom', request.url));
     }
     // 다른 페이지에서(/meeting/~~ 외의 모든 페이지) 뒤로가기해서 채팅방으로 들어오려고 하는 경우
-    // if (!referer?.startsWith('http://localhost:3000/meeting/') && request.nextUrl.pathname.startsWith('/chat/')) {
-    //   return NextResponse.redirect(new URL('/meetingRoom', request.url));
-    // }
+    if (!referer?.startsWith('http://localhost:3000/meeting/') && request.nextUrl.pathname.startsWith('/chat/')) {
+      return NextResponse.redirect(new URL('/meetingRoom', request.url));
+    }
 
     return middleware(request, event, NextResponse.next());
   };
