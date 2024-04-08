@@ -1,5 +1,5 @@
 import { chatStore } from '(@/store/chatStore)';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { FaChevronDown, FaChevronUp } from 'react-icons/fa';
 import { FaX } from 'react-icons/fa6';
 
@@ -11,27 +11,31 @@ const ChatSearch = ({ isScrollTop }: { isScrollTop: boolean }) => {
   const [upDownCount, setUpDownCount] = useState(0);
 
   const handleSearch = () => {
-    const filteredIds = messages
-      .filter((m) => m.message.includes(searchWord))
-      .map((messages) => messages.message_id)
-      .reverse();
+    if (searchWord) {
+      const filteredIds = messages
+        .filter((m) => m.message.includes(searchWord))
+        .map((messages) => messages.message_id)
+        .reverse();
 
-    const idsDivs = filteredIds.map((id) => {
-      return document.getElementById(`${messages.find((m) => m.message_id === id)?.message_id}`);
-    });
-    setDoneSearchdivs(idsDivs);
+      const idsDivs = filteredIds.map((id) => {
+        return document.getElementById(`${messages.find((m) => m.message_id === id)?.message_id}`);
+      });
+      setDoneSearchdivs(idsDivs);
 
-    if (idsDivs && idsDivs.length >= searchCount + 1) {
-      const theDiv = idsDivs[searchCount];
-      if (theDiv) {
-        theDiv.style.backgroundColor! = 'gray';
-        theDiv.scrollIntoView({ block: 'center' });
-        setSearchCount((prev) => prev + 1);
-        setUpDownCount((prev) => prev + 1);
-        // upDownCount는 지금까지 search한 것을 기반으로 되어야 하니까 여기에 종속되어서 +
+      if (idsDivs && idsDivs.length >= searchCount + 1) {
+        const theDiv = idsDivs[searchCount];
+        if (theDiv) {
+          theDiv.style.backgroundColor! = 'gray';
+          theDiv.scrollIntoView({ block: 'center' });
+          setSearchCount((prev) => prev + 1);
+          setUpDownCount((prev) => prev + 1);
+          // upDownCount는 지금까지 search한 것을 기반으로 되어야 하니까 여기에 종속되어서 +
+        }
+      } else {
+        alert('더 이상 찾을 내용이 없습니다.');
       }
     } else {
-      alert('더 이상 찾을 내용이 없습니다.');
+      alert('검색어를 입력해주세요');
     }
   };
 
@@ -70,6 +74,15 @@ const ChatSearch = ({ isScrollTop }: { isScrollTop: boolean }) => {
     setDoneSearchdivs([]);
     setUpDownCount(0);
   };
+
+  useEffect(() => {
+    if (!searchWord) {
+      setSearchCount(0);
+      setUpDownCount(0);
+      clearColor();
+      setDoneSearchdivs([]);
+    }
+  }, [searchWord]);
 
   return (
     <>

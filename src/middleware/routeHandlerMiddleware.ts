@@ -37,8 +37,9 @@ export const routeHandlerMiddleware = (middleware: CustomMiddleware) => {
     //   return NextResponse.redirect(new URL('/', request.url));
     // }
 
-    console.log('가려고 하는 주소', request.nextUrl.pathname);
-    console.log('Request came from:', referer);
+    console.log('어디서 왔니', referer);
+    console.log('어디로 가니', request.nextUrl.pathname);
+
     console.log(referer?.startsWith('http://localhost:3000/chat'));
     return middleware(request, event, response);
   };

@@ -5,6 +5,7 @@ import ChatList from '(@/components/chat/chatBody/ChatList)';
 import InitChat from '(@/components/chat/chatHeader/InitChat)';
 import SideBar from '(@/components/chat/sidebar/SideBar)';
 import ChatInput from '(@/components/chat/ChatInput)';
+import ChatLoading from '(@/components/chat/ChatLoading)';
 
 const ChatPage = async ({ params }: { params: { chatroom_id: string } }) => {
   const chatRoomId = params.chatroom_id;
@@ -20,19 +21,21 @@ const ChatPage = async ({ params }: { params: { chatroom_id: string } }) => {
     .order('created_at', { ascending: false });
 
   return (
-    <div className="flex felx-row">
-      <SideBar userId={user?.id} />
-      <div className="max-w-3xl mx-auto md:py-10 h-screen">
-        <div className="h-full border rounded-md flex flex-col border-indigo-600 relative">
-          <InitChat chatRoomId={chatRoomId} allMsgs={allMsgs ?? []} />
-          <ChatHeader />
-          <Suspense fallback="응애 나 애기 폴백">
-            <ChatList user={user} />
-          </Suspense>
-          <ChatInput />
+    <Suspense fallback={<ChatLoading />}>
+      <div className="flex felx-row">
+        <InitChat chatRoomId={chatRoomId} allMsgs={allMsgs ?? []} />
+        <SideBar userId={user?.id} chatRoomId={chatRoomId} />
+        <div className="w-full max-w-2xl mx-auto md:py-10 h-screen">
+          <div className="h-full border rounded-md flex flex-col border-indigo-600 relative">
+            <ChatHeader chatRoomId={chatRoomId} />
+            <Suspense fallback="skeleton 들어갈 자리">
+              <ChatList user={user} chatRoomId={chatRoomId} />
+            </Suspense>
+            <ChatInput />
+          </div>
         </div>
       </div>
-    </div>
+    </Suspense>
   );
 };
 

@@ -6,12 +6,14 @@ import DatePicker from './DatePicker';
 import { clientSupabase } from '(@/utils/supabase/client)';
 import { chatStore } from '(@/store/chatStore)';
 import { sideBarStore } from '(@/store/sideBarStore)';
+import { useRoomDataQuery } from '(@/hooks/useQueries/useChattingQuery)';
 
 interface SideBarProps {
   userId: string | null | undefined;
+  chatRoomId: string;
 }
 
-const SideBar: React.FC<SideBarProps> = ({ userId }) => {
+const SideBar: React.FC<SideBarProps> = ({ userId, chatRoomId }) => {
   const [isSidebarOpen, setIsSidebarOpen] = useState<boolean>(false);
   const {
     selectedMeetingTime,
@@ -22,10 +24,8 @@ const SideBar: React.FC<SideBarProps> = ({ userId }) => {
     setFinalDateTime
   } = sideBarStore((state) => state);
 
-  const { roomId, chatRoomId, roomData } = chatStore((state) => state);
-
-  const thisRoomId = roomData?.find((room) => room.room_id === roomId);
-  const leaderId = thisRoomId?.leader_id;
+  const room = useRoomDataQuery(chatRoomId);
+  const leaderId = room?.roomData.leader_id;
 
   const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);

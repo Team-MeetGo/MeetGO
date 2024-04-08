@@ -8,11 +8,12 @@ import type { Database, Tables } from '(@/types/database.types)';
 
 function MeetingRoomList() {
   type MeetingRoom = Database['public']['Tables']['room']['Row'];
-  const { user } = userStore((state) => state);
+  const { user, isLoggedIn } = userStore((state) => state);
   const [meetingRoomList, setMeetingRoomList] = useState<MeetingRoom[]>();
   const [myMeetingRoomList, setMyMeetingRoomList] = useState<MeetingRoom[]>();
   const [chattingRoomList, setChattingRoomList] = useState<MeetingRoom[]>();
   const { getMeetingRoom, getChattingRoom, getMyRoom } = meetingRoomHandler();
+  console.log(isLoggedIn);
 
   useEffect(() => {
     const getMeetingRoomList = async () => {
