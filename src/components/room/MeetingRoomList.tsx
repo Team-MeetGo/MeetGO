@@ -17,7 +17,6 @@ function MeetingRoomList() {
   const [myRoomList, setMyRoomList] = useState<MeetingRoom[]>();
   const [chattingRoomList, setChattingRoomList] = useState<MeetingRoom[]>();
   const { getMeetingRoom, getChattingRoom, getMyRoom } = meetingRoomHandler();
-  console.log(isLoggedIn);
 
   useEffect(() => {
     const getMeetingRoomList = async () => {

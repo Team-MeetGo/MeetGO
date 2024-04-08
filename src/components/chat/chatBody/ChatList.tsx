@@ -14,6 +14,8 @@ import OthersChat from './OthersChat';
 import ChatSearch from './ChatSearch';
 import { useRoomDataQuery } from '(@/hooks/useQueries/useChattingQuery)';
 import { ITEM_INTERVAL } from '(@/utils/constant)';
+import { useRecruitingMyroomQuery } from '(@/hooks/useQueries/useMeetingQuery)';
+import { userStore } from '(@/store/userStore)';
 
 const ChatList = ({ user, chatRoomId }: { user: User | null; chatRoomId: string }) => {
   const scrollRef = useRef() as React.MutableRefObject<HTMLDivElement>;
@@ -24,6 +26,8 @@ const ChatList = ({ user, chatRoomId }: { user: User | null; chatRoomId: string 
   const [count, setCount] = useState(1);
   const room = useRoomDataQuery(chatRoomId);
   const roomId = room?.roomId;
+  const result = useRecruitingMyroomQuery(user ? user?.id : null);
+  console.log(result);
 
   useEffect(() => {
     if (roomId && chatRoomId) {
