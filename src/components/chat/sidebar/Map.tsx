@@ -1,9 +1,8 @@
 'use client';
 
-import { useRoomDataQuery } from '(@/hooks/useQueries/useChattingQuery)';
+import { useChatDataQuery, useRoomDataQuery } from '(@/hooks/useQueries/useChattingQuery)';
 import { chatStore } from '(@/store/chatStore)';
 import { clientSupabase } from '(@/utils/supabase/client)';
-import { useQuery } from '@tanstack/react-query';
 import React, { useEffect, useRef, useState } from 'react';
 
 declare global {
@@ -32,23 +31,16 @@ const Map: React.FC<MapProps> = ({ userId, chatRoomId }) => {
   const room = useRoomDataQuery(chatRoomId);
   const leaderId = room?.roomData.leader_id;
 
-  useEffect(() => {
-    const fetchData = async () => {
-      if (!chatRoomId) {
-        return;
-      }
-      const { data: chatData } = await clientSupabase
-        .from('chatting_room')
-        .select(' meeting_location')
-        .eq('chatting_room_id', chatRoomId)
-        .single();
-      const meetingLocation = chatData?.meeting_location;
-      setSelectedMeetingLocation(meetingLocation || '');
+  // 채팅방 정보 가져오기
+  const chat = useChatDataQuery(chatRoomId);
+  const meetingLocation = chat?.[0]?.meeting_location;
 
-      setisLocationSelected(!!meetingLocation);
-    };
-    fetchData();
-  }, []);
+  useEffect(() => {
+    setSelectedMeetingLocation(meetingLocation || '');
+    setisLocationSelected(!!meetingLocation);
+  }, [meetingLocation]);
+
+  console.log('채팅정보', chat);
 
   useEffect(() => {
     const script = document.createElement('script');
