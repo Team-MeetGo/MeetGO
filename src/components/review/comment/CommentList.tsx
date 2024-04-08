@@ -26,7 +26,10 @@ const CommentList = ({ review_id, onUpdateCommentCount }: Props) => {
   }, []);
 
   useEffect(() => {
-    const combinedComments = [...supabaseCommentData, ...commentsFromStore];
+    const combinedComments = [
+      ...supabaseCommentData,
+      ...commentsFromStore.filter((comment) => comment.review_id === review_id)
+    ];
     setTotalCommentCount(combinedComments.length);
     onUpdateCommentCount(combinedComments.length);
   }, [commentsFromStore, supabaseCommentData]);
@@ -50,11 +53,13 @@ const CommentList = ({ review_id, onUpdateCommentCount }: Props) => {
   return (
     <div>
       <div>댓글 {totalCommentCount}개</div>
-      {[...supabaseCommentData, ...commentsFromStore].map((comment, index) => (
-        <div key={index}>
-          <CommentCard comment={comment} onDeleteComment={handleDeleteComment} />
-        </div>
-      ))}
+      {[...supabaseCommentData, ...commentsFromStore.filter((comment) => comment.review_id === review_id)].map(
+        (comment, index) => (
+          <div key={index}>
+            <CommentCard comment={comment} onDeleteComment={handleDeleteComment} />
+          </div>
+        )
+      )}
     </div>
   );
 };
