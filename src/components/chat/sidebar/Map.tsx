@@ -101,9 +101,7 @@ const Map: React.FC<MapProps> = ({ userId, leaderId, chatRoomId }) => {
     places.keywordSearch(
       '술집',
       (data: any, status: any, pagination: any) => {
-        console.log(data);
         if (status === window.kakao.maps.services.Status.OK) {
-          console.log(data);
           // 마커 초기화
           if (markers && markers.length > 0) {
             markers.forEach((marker: any) => {
