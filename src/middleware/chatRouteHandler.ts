@@ -8,8 +8,13 @@ export const chatRoomHandler = (middleware: CustomMiddleware) => {
     if (!referer && request.nextUrl.pathname.startsWith('/chat/')) {
       return NextResponse.redirect(new URL('/meetingRoom', request.url));
     }
-    // 다른 페이지에서(/meeting/~~ 외의 모든 페이지) 뒤로가기해서 채팅방으로 들어오려고 하는 경우
-    if (!referer?.startsWith('http://localhost:3000/meetingRoom/') && request.nextUrl.pathname.startsWith('/chat/')) {
+
+    if (
+      // 다른 페이지에서(/meeting/~~ + /chat/~~(현재창) 외의 모든 페이지) 뒤로가기해서 채팅방으로 들어오려고 하는 경우
+      !referer?.startsWith('http://localhost:3000/meetingRoom/') &&
+      !referer?.startsWith('http://localhost:3000/chat/') &&
+      request.nextUrl.pathname.startsWith('/chat/')
+    ) {
       return NextResponse.redirect(new URL('/meetingRoom', request.url));
     }
 
