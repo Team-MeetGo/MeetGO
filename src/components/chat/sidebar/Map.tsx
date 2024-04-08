@@ -141,7 +141,9 @@ const Map: React.FC<MapProps> = ({ userId, chatRoomId, leaderId }) => {
   // 지도 검색 함수
   const searchNewPlaces = (page?: number) => {
     const places = new window.kakao.maps.services.Places();
-
+    if (searchText === '') {
+      alert('검색어를 입력해 주세요.');
+    }
     places.keywordSearch(searchText, (data: any, status: any, pagination: any) => {
       if (status === window.kakao.maps.services.Status.OK) {
         // 마커 초기화
@@ -170,6 +172,7 @@ const Map: React.FC<MapProps> = ({ userId, chatRoomId, leaderId }) => {
         setCurrentPage(page || currentPage);
         setSearchText('');
       } else {
+        alert('검색 결과가 없습니다.');
         console.error('실패', status);
       }
     });
