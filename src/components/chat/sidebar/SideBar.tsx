@@ -35,6 +35,9 @@ const SideBar: React.FC<SideBarProps> = ({ userId }) => {
     if (!chatRoomId) {
       return;
     }
+    if (selectedMeetingTime === '') {
+      alert('시간을 선택해주세요.');
+    }
     setIsTimeSelected(!isTimeSelected);
 
     setFinalDateTime(selectedMeetingTime);
