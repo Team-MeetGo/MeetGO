@@ -5,7 +5,6 @@ import { UsersType } from '(@/types/userTypes)';
 import { getformattedDate } from '(@/utils)';
 import { clientSupabase } from '(@/utils/supabase/client)';
 import { Tooltip } from '@nextui-org/react';
-import { useQueries } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
 
 const OthersChat = ({ msg }: { msg: Message }) => {

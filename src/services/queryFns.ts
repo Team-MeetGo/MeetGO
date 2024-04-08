@@ -10,6 +10,17 @@ export const fetchRecruitingRoom = async () => {
   return meetingroom;
 };
 
+export const fetchMyRoom = async (user_id: string) => {
+  const { data: myRoom, error } = await clientSupabase
+    .from('participants')
+    .select(`*`)
+    .eq('user_id', user_id)
+    .select('user_id, room(*)')
+    .order('created_at', { ascending: false });
+  if (error) alert('error 발생!');
+  return myRoom;
+};
+
 export const fetchRoomData = async (chatRoomId: string) => {
   // roomId 불러오기
   const { data: roomId, error: roomIdErr } = await clientSupabase
