@@ -1,5 +1,5 @@
 import { chatStore } from '(@/store/chatStore)';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { FaChevronDown, FaChevronUp } from 'react-icons/fa';
 import { FaX } from 'react-icons/fa6';
 
@@ -74,6 +74,15 @@ const ChatSearch = ({ isScrollTop }: { isScrollTop: boolean }) => {
     setDoneSearchdivs([]);
     setUpDownCount(0);
   };
+
+  useEffect(() => {
+    if (!searchWord) {
+      setSearchCount(0);
+      setUpDownCount(0);
+      clearColor();
+      setDoneSearchdivs([]);
+    }
+  }, [searchWord]);
 
   return (
     <>

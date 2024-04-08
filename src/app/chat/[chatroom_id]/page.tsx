@@ -38,9 +38,9 @@ const ChatPage = async ({ params }: { params: { chatroom_id: string } }) => {
       <SideBar userId={user?.id} leaderId={leaderId} chatRoomId={chatRoomId} />
       <div className="w-full max-w-2xl mx-auto md:py-10 h-screen">
         <div className="h-full border rounded-md flex flex-col border-indigo-600 relative">
-          <ChatHeader />
-          <Suspense fallback="응애 나 애기 폴백">
-            <ChatList user={user} />
+          <ChatHeader chatRoomId={chatRoomId} />
+          <Suspense fallback="skeleton 들어갈 자리">
+            <ChatList user={user} chatRoomId={chatRoomId} />
           </Suspense>
           <ChatInput />
         </div>
