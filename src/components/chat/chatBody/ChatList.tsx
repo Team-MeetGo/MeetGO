@@ -11,9 +11,7 @@ import ChatDeleteDropDown from './ChatDeleteDropDown';
 import { chatStore } from '(@/store/chatStore)';
 import { Tooltip } from '@nextui-org/react';
 import OthersChat from './OthersChat';
-import { FaChevronDown, FaChevronUp } from 'react-icons/fa';
-import { FaX } from 'react-icons/fa6';
-import ChatSearch from './chatSearch';
+import ChatSearch from './ChatSearch';
 
 const ChatList = ({ user }: { user: User | null }) => {
   const scrollRef = useRef() as React.MutableRefObject<HTMLDivElement>;
