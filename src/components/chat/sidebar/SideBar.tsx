@@ -65,7 +65,7 @@ const SideBar: React.FC<SideBarProps> = ({ userId, leaderId, chatRoomId }) => {
   };
 
   return (
-    <div>
+    <div className="absolute">
       <button onClick={toggleSidebar}>사이드바</button>
       {isSidebarOpen && (
         <div>

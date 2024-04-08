@@ -1,6 +1,6 @@
 'use client';
 import { Message } from '(@/types/chatTypes)';
-import { ITEM_INTERVAL, getFromTo, getformattedDate } from '(@/utils)';
+import { getFromTo, getformattedDate } from '(@/utils)';
 import { clientSupabase } from '(@/utils/supabase/client)';
 import { useEffect, useRef, useState } from 'react';
 import { User } from '@supabase/supabase-js';
@@ -11,19 +11,19 @@ import ChatDeleteDropDown from './ChatDeleteDropDown';
 import { chatStore } from '(@/store/chatStore)';
 import { Tooltip } from '@nextui-org/react';
 import OthersChat from './OthersChat';
-import { FaChevronDown, FaChevronUp } from 'react-icons/fa';
-import { FaX } from 'react-icons/fa6';
-import ChatSearch from './chatSearch';
+import ChatSearch from './ChatSearch';
+import { useRoomDataQuery } from '(@/hooks/useQueries/useChattingQuery)';
+import { ITEM_INTERVAL } from '(@/utils/constant)';
 
-const ChatList = ({ user }: { user: User | null }) => {
+const ChatList = ({ user, chatRoomId }: { user: User | null; chatRoomId: string }) => {
   const scrollRef = useRef() as React.MutableRefObject<HTMLDivElement>;
-  const { roomId, chatRoomId, hasMore, setHasMore, messages, setMessages, searchMode, setSearchMode } = chatStore(
-    (state) => state
-  );
+  const { hasMore, setHasMore, messages, setMessages } = chatStore((state) => state);
   const [isScrolling, setIsScrolling] = useState(false);
   const [isScrollTop, setIsScrollTop] = useState(true);
   const [newAddedMsgNum, setNewAddedMsgNum] = useState(0);
   const [count, setCount] = useState(1);
+  const room = useRoomDataQuery(chatRoomId);
+  const roomId = room?.roomId;
 
   useEffect(() => {
     if (roomId && chatRoomId) {
