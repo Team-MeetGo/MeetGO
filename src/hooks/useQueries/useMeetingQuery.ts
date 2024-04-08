@@ -2,7 +2,7 @@ import { fetchMyRoom, fetchRecruitingRoom } from '(@/query/meetingRoom/meetingQu
 import { MY_ROOM, RECRUTING_ROOMDATA } from '(@/query/meetingRoom/meetingQueryKeys)';
 import { useSuspenseQueries } from '@tanstack/react-query';
 
-export const useRecruitingMyroomQuery = (user_id: string) => {
+export const useRecruitingMyroomQuery = (user_id: string | null) => {
   const results = useSuspenseQueries({
     queries: [
       {

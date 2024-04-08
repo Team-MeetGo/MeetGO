@@ -1,11 +1,8 @@
 import { useParticipantsQuery, useRoomDataQuery } from '(@/hooks/useQueries/useChattingQuery)';
 import { chatStore } from '(@/store/chatStore)';
 import { Message } from '(@/types/chatTypes)';
-import { UsersType } from '(@/types/userTypes)';
 import { getformattedDate } from '(@/utils)';
-import { clientSupabase } from '(@/utils/supabase/client)';
 import { Tooltip } from '@nextui-org/react';
-import { useEffect, useState } from 'react';
 
 const OthersChat = ({ msg }: { msg: Message }) => {
   const chatRoomId = chatStore((state) => state.chatRoomId);

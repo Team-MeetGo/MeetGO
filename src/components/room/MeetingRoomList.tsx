@@ -5,6 +5,7 @@ import MeetingRoom from './MeetingRoom';
 import { userStore } from '(@/store/userStore)';
 
 import type { Database, Tables } from '(@/types/database.types)';
+import { useRecruitingMyroomQuery } from '(@/hooks/useQueries/useMeetingQuery)';
 
 function MeetingRoomList() {
   type MeetingRoom = Database['public']['Tables']['room']['Row'];
@@ -13,7 +14,6 @@ function MeetingRoomList() {
   const [myMeetingRoomList, setMyMeetingRoomList] = useState<MeetingRoom[]>();
   const [chattingRoomList, setChattingRoomList] = useState<MeetingRoom[]>();
   const { getMeetingRoom, getChattingRoom, getMyRoom } = meetingRoomHandler();
-  console.log(isLoggedIn);
 
   useEffect(() => {
     const getMeetingRoomList = async () => {
