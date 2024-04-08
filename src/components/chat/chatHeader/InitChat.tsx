@@ -74,6 +74,7 @@ const InitChat = ({ chatRoomId, allMsgs }: { chatRoomId: string; allMsgs: Messag
           room && setRoomData([...room]);
         }
       };
+
       fetchRoomData();
     }
   }, [
