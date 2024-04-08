@@ -66,29 +66,25 @@ const Member = ({ params }: { params: { id: UUID } }) => {
 
   return (
     <>
-      <div className="flex flex-row justify-center w-full align-middle">
-        <div className="m-12 h-100 flex flex-row justify-evenly">
-          <div className="flex flex-col justify-start gap-8 bg-slate-300">
-            {participants.map((member) => (
-              <div key={member.user_id}>
-                <div className="flex flex-row">
-                  <div className="h-36 w-36 flex flex-col align-middle justify-start m-4">
-                    <div className="h-28 w-28 bg-indigo-600 rounded-full">
-                      {member.avatar ? <img src={member.avatar as string} alt="유저" /> : ''}
-                    </div>
-                    {leaderMember === member.user_id ? <div>리더!</div> : ''}
-                    <div>{member.nickname}</div>
-                    <div>{member.school_name}</div>
-                  </div>
-                  <div className="flex flex-col justify-center align-top gap-1 bg-violet-300 p-4">
-                    <div>{member.favorite}</div>
-                    <div>{member.intro}</div>
-                  </div>
+      <div className="gap-2 grid grid-cols-2 m-4 w-100% gap-8">
+        {participants.map((member) => (
+          <div key={member.user_id}>
+            <div className="flex flex-row">
+              <div className="h-36 w-36 flex flex-col align-middle justify-start m-4">
+                <div className="h-28 w-28 bg-indigo-600 rounded-full">
+                  {member.avatar ? <img src={member.avatar as string} alt="유저" /> : ''}
                 </div>
+                {leaderMember === member.user_id ? <div>리더!</div> : ''}
+                <div>{member.nickname}</div>
+                <div>{member.school_name}</div>
               </div>
-            ))}
+              <div className="flex flex-col justify-center align-top gap-1 bg-violet-300 p-4">
+                <div>{member.favorite}</div>
+                <div>{member.intro}</div>
+              </div>
+            </div>
           </div>
-        </div>
+        ))}
       </div>
     </>
   );
