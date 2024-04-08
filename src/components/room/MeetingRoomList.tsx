@@ -5,7 +5,6 @@ import MeetingRoom from './MeetingRoom';
 import { userStore } from '(@/store/userStore)';
 
 import type { Database, Tables } from '(@/types/database.types)';
-import { useRecruitingMyroomQuery } from '(@/hooks/useQueries/useMeetingQuery)';
 
 function MeetingRoomList() {
   type MeetingRoom = Database['public']['Tables']['room']['Row'];
