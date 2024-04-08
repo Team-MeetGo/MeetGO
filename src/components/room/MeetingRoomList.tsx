@@ -1,23 +1,23 @@
 'use client';
 import meetingRoomHandler from '(@/hooks/custom/room)';
+import { userStore } from '(@/store/userStore)';
 import { useEffect, useState } from 'react';
 import MeetingRoom from './MeetingRoom';
-import { userStore } from '(@/store/userStore)';
 
-import type { Database, Tables } from '(@/types/database.types)';
-import MeetingRoomForm from './MeetingRoomForm';
-import { IoMdRefresh } from 'react-icons/io';
+import type { Database } from '(@/types/database.types)';
 import { useRouter } from 'next/navigation';
-import { UsersType } from '(@/types/userTypes)';
+import { IoMdRefresh } from 'react-icons/io';
+import MeetingRoomForm from './MeetingRoomForm';
 
 function MeetingRoomList() {
   type MeetingRoom = Database['public']['Tables']['room']['Row'];
-  const { user } = userStore((state) => state);
   const router = useRouter();
+  const { user, isLoggedIn } = userStore((state) => state);
   const [meetingRoomList, setMeetingRoomList] = useState<MeetingRoom[]>();
   const [myRoomList, setMyRoomList] = useState<MeetingRoom[]>();
   const [chattingRoomList, setChattingRoomList] = useState<MeetingRoom[]>();
   const { getMeetingRoom, getChattingRoom, getMyRoom } = meetingRoomHandler();
+  console.log(isLoggedIn);
 
   useEffect(() => {
     const getMeetingRoomList = async () => {

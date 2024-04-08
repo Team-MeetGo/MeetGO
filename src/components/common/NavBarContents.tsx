@@ -18,16 +18,19 @@ import { useRouter } from 'next/navigation';
 import { clientSupabase } from '(@/utils/supabase/client)';
 
 const NavBarContents = () => {
-  const { user, setUser } = userStore((state) => state);
+  const { isLoggedIn, setIsLoggedIn, user, setUser } = userStore((state) => state);
 
   const router = useRouter();
 
   const signOut = async () => {
     await clientSupabase.auth.signOut();
-    userStore.getState().clearUser(); // 로그아웃 시 스토어의 유저 정보도 초기화
+    setIsLoggedIn(false);
     router.replace('/'); // 로그아웃 후 메인 페이지로 이동. 뒤로가기 방지.
     alert('로그아웃 성공');
   };
+
+  // console.log('isLoggedIn', isLoggedIn);
+  // console.log('user =>', user);
 
   return (
     <Navbar>
@@ -63,20 +66,30 @@ const NavBarContents = () => {
       </NavbarContent>
 
       <NavbarContent as="div" justify="end">
-        {user ? (
+        {isLoggedIn ? (
           <div className="flex items-center gap-4">
-            <p>{user[0].nickname}</p>
+            <p>{user && user[0].nickname}</p>
             <Dropdown placement="bottom-end">
               <DropdownTrigger>
-                <Avatar
-                  isBordered
-                  as="button"
-                  className="transition-transform"
-                  color="secondary"
-                  name="profile"
-                  size="sm"
-                  src={`${user[0].avatar}?${new Date().getTime()}`}
-                />
+                {user && user[0].avatar ? (
+                  <Avatar
+                    isBordered
+                    as="button"
+                    className="transition-transform"
+                    color="secondary"
+                    name="profile"
+                    src={`${user[0].avatar}?${new Date().getTime()}`}
+                  />
+                ) : (
+                  <Avatar
+                    isBordered
+                    showFallback
+                    as="button"
+                    className="transition-transform"
+                    color="secondary"
+                    size="sm"
+                  />
+                )}
               </DropdownTrigger>
               <DropdownMenu aria-label="Profile Actions" variant="flat">
                 <DropdownItem key="mypage" href="/mypage">

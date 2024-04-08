@@ -9,7 +9,7 @@ import { useEffect, useState } from 'react';
 
 export default function Home() {
   const [reviewData, setReviewData] = useState<reviewData[]>([]);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const { isLoggedIn, setIsLoggedIn } = userStore((state) => state);
 
   const getUserId = async () => {
     const userData = userStore.getState().user;
