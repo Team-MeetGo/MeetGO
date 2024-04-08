@@ -108,12 +108,6 @@ const ReviewList: React.FC = () => {
     }
   }
 
-  // useEffect(() => {
-  //   if (currentPageNumber) {
-  //     getRecentReview(currentPageNumber);
-  //   }
-  // }, []);
-
   async function handlePageChange(page: number) {
     await getRecentReview(page);
   }
