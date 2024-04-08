@@ -33,7 +33,7 @@ const ChatPage = async ({ params }: { params: { chatroom_id: string } }) => {
     .order('created_at', { ascending: false });
 
   return (
-    <div className="flex felx-row ">
+    <div className="flex felx-row">
       <SideBar userId={user?.id} leaderId={leaderId} chatRoomId={chatRoomId} />
       <div className="max-w-3xl mx-auto md:py-10 h-screen">
         <div className="h-full border rounded-md flex flex-col border-indigo-600 relative">
