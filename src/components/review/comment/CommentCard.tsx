@@ -75,7 +75,6 @@ const CommentCard = ({ comment, onDeleteComment }: Props) => {
         </div>
         <div>
           <p>{comment.comment_content}</p>
-          <p>{comment.review_id}</p>
         </div>
       </div>
       <div>{userId === comment.user_id && <button onClick={handleDeleteComment}>삭제</button>}</div>
