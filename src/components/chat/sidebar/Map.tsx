@@ -2,6 +2,7 @@
 
 import { chatStore } from '(@/store/chatStore)';
 import { clientSupabase } from '(@/utils/supabase/client)';
+import { useQuery } from '@tanstack/react-query';
 import React, { useEffect, useRef, useState } from 'react';
 
 declare global {
