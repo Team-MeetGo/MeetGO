@@ -5,7 +5,7 @@ import Map from '(@/components/chat/sidebar/Map)';
 import DatePicker from './DatePicker';
 import { clientSupabase } from '(@/utils/supabase/client)';
 import { sideBarStore } from '(@/store/sideBarStore)';
-import { useRoomDataQuery } from '(@/hooks/useQueries/useChattingQuery)';
+import { useChatDataQuery, useRoomDataQuery } from '(@/hooks/useQueries/useChattingQuery)';
 
 interface SideBarProps {
   userId: string | null | undefined;
@@ -20,6 +20,16 @@ const SideBar: React.FC<SideBarProps> = ({ userId, chatRoomId }) => {
 
   const room = useRoomDataQuery(chatRoomId);
   const leaderId = room?.roomData.leader_id;
+
+  // 채팅방 정보 가져오기
+  const chat = useChatDataQuery(chatRoomId);
+  const meetingTime = chat?.[0]?.meeting_time;
+
+  useEffect(() => {
+    setSelectedMeetingTime(meetingTime || '');
+    setIsTimeSelected(!!meetingTime);
+    setFinalDateTime(meetingTime || '');
+  }, [meetingTime]);
 
   const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);
