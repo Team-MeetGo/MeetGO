@@ -1,14 +1,18 @@
+import { useRoomDataQuery } from '(@/hooks/useQueries/useChattingQuery)';
 import { chatStore } from '(@/store/chatStore)';
 import { Message } from '(@/types/chatTypes)';
 import { UsersType } from '(@/types/userTypes)';
 import { getformattedDate } from '(@/utils)';
 import { clientSupabase } from '(@/utils/supabase/client)';
 import { Tooltip } from '@nextui-org/react';
+import { useQueries } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
 
 const OthersChat = ({ msg }: { msg: Message }) => {
-  const roomId = chatStore((state) => state.roomId);
   const [usersData, setUsersData] = useState<UsersType[] | null>();
+  const chatRoomId = chatStore((state) => state.chatRoomId);
+  const room = useRoomDataQuery(chatRoomId as string);
+  const roomId = room?.roomId;
 
   useEffect(() => {
     const fetchParticipants = async () => {

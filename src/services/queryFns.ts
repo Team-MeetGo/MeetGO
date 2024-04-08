@@ -1,8 +1,13 @@
 import { clientSupabase } from '(@/utils/supabase/client)';
 
-export const selectMessage = async () => {
-  const { data } = await clientSupabase.from('messages').select('*');
-  return data;
+export const fetchRecruitingRoom = async () => {
+  const { data: meetingroom, error } = await clientSupabase
+    .from('room')
+    .select(`*`)
+    .eq('room_status', '모집중')
+    .order('created_at', { ascending: false });
+  if (error) return alert('error 발생!');
+  return meetingroom;
 };
 
 export const fetchRoomData = async (chatRoomId: string) => {
@@ -13,8 +18,6 @@ export const fetchRoomData = async (chatRoomId: string) => {
     .eq('chatting_room_id', chatRoomId);
   if (roomIdErr) console.error('roomId 불러오는 중 오류 발생');
   if (roomId?.length) {
-    // setRoomId(roomId[0].room_id);
-
     // 룸 정보 가져오기
     const { data: roomData, error: roomDataErr } = await clientSupabase
       .from('room')
@@ -25,6 +28,5 @@ export const fetchRoomData = async (chatRoomId: string) => {
     } else {
       return { roomId: roomId[0].room_id, roomData: roomData[0] };
     }
-    // room && setRoomData([...room]);
   }
 };

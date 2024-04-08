@@ -1,4 +1,4 @@
-import { fetchRoomData, selectMessage } from '(@/services/queryFns)';
+import { fetchRoomData } from '(@/services/queryFns)';
 import { ROOMDATA_QUERY_KEY } from '(@/services/queryKeys)';
 import { useSuspenseQuery } from '@tanstack/react-query';
 
