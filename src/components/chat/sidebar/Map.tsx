@@ -207,11 +207,16 @@ const Map: React.FC<MapProps> = ({ userId, leaderId, chatRoomId }) => {
   return (
     <div>
       <p>미팅 장소 : {selectedMeetingLocation}</p>
-      <>
+      <form
+        onSubmit={(e) => {
+          e.preventDefault();
+          searchNewPlaces();
+        }}
+      >
         장소 검색:
         <input type="text" className="border" value={searchText} onChange={(e) => setSearchText(e.target.value)} />
-        <button onClick={() => searchNewPlaces()}>검색</button>
-      </>
+        <button type="submit">검색</button>
+      </form>
       <div id="map" className="w-96 h-96"></div>
       <div style={{ maxHeight: '500px', overflowY: 'auto' }}>
         {bars.map((bar, index) => (
