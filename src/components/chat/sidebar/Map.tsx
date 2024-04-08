@@ -1,5 +1,6 @@
 'use client';
 
+import { chatStore } from '(@/store/chatStore)';
 import { clientSupabase } from '(@/utils/supabase/client)';
 import React, { useEffect, useRef, useState } from 'react';
 
@@ -12,10 +13,10 @@ declare global {
 interface MapProps {
   userId: string | null | undefined;
   leaderId: string | null | undefined;
-  chatRoomId: string | null;
+  chatRoomId: string | null | undefined;
 }
 
-const Map: React.FC<MapProps> = ({ userId, leaderId, chatRoomId }) => {
+const Map: React.FC<MapProps> = ({ userId, chatRoomId, leaderId }) => {
   const mapRef = useRef<any>();
   const [map, setMap] = useState<any>();
   const [markers, setMarkers] = useState<any>();
@@ -221,7 +222,7 @@ const Map: React.FC<MapProps> = ({ userId, leaderId, chatRoomId }) => {
           <div key={index} className="border">
             <div className="flex flex-row justify-between">
               <h1>{bar.place_name}</h1>
-              {userId === leaderId &&
+              {/* {userId === leaderId &&
                 (selectedMeetingLocation === '' ? (
                   <button
                     onClick={() => {
@@ -240,7 +241,26 @@ const Map: React.FC<MapProps> = ({ userId, leaderId, chatRoomId }) => {
                   </button>
                 ) : (
                   <div></div>
-                ))}
+                ))} */}
+              {selectedMeetingLocation === '' ? (
+                <button
+                  onClick={() => {
+                    handleSelectLocation(bar.place_name);
+                  }}
+                >
+                  {isLocationSelected ? '취소' : '선택'}
+                </button>
+              ) : selectedMeetingLocation === bar.place_name ? (
+                <button
+                  onClick={() => {
+                    handleSelectLocation('');
+                  }}
+                >
+                  {isLocationSelected ? '취소' : '선택'}
+                </button>
+              ) : (
+                <div></div>
+              )}
             </div>
             <p>{bar.address_name}</p>
             <p>{bar.place_url}</p>

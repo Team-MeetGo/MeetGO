@@ -4,18 +4,22 @@ import React, { useEffect, useState } from 'react';
 import Map from '(@/components/chat/sidebar/Map)';
 import DatePicker from './DatePicker';
 import { clientSupabase } from '(@/utils/supabase/client)';
+import { chatStore } from '(@/store/chatStore)';
 
 interface SideBarProps {
   userId: string | null | undefined;
-  leaderId: string | null | undefined;
-  chatRoomId: string | null;
 }
 
-const SideBar: React.FC<SideBarProps> = ({ userId, leaderId, chatRoomId }) => {
+const SideBar: React.FC<SideBarProps> = ({ userId }) => {
   const [isSidebarOpen, setIsSidebarOpen] = useState<boolean>(false);
   const [selectedMeetingTime, setSelectedMeetingTime] = useState<string>();
   const [isTimeSelected, setIsTimeSelected] = useState<boolean>(false);
   const [finalDateTime, setFinalDateTime] = useState<string>();
+
+  const { roomId, chatRoomId, roomData } = chatStore((state) => state);
+
+  const thisRoomId = roomData?.find((room) => room.room_id === roomId);
+  const leaderId = thisRoomId?.leader_id;
 
   useEffect(() => {
     const fetchData = async () => {
@@ -70,7 +74,7 @@ const SideBar: React.FC<SideBarProps> = ({ userId, leaderId, chatRoomId }) => {
       {isSidebarOpen && (
         <div>
           <div>
-            {userId === leaderId && (
+            {/* {userId === leaderId && (
               <>
                 미팅 날짜/시간:
                 <input
@@ -81,7 +85,19 @@ const SideBar: React.FC<SideBarProps> = ({ userId, leaderId, chatRoomId }) => {
                 />
                 <button onClick={handleSelectedTime}>{isTimeSelected ? '취소' : '선택'}</button>
               </>
-            )}
+            )} */}
+
+            <>
+              미팅 날짜/시간:
+              <input
+                type="text"
+                className="border"
+                value={selectedMeetingTime}
+                onChange={(e) => setSelectedMeetingTime(e.target.value)}
+              />
+              <button onClick={handleSelectedTime}>{isTimeSelected ? '취소' : '선택'}</button>
+            </>
+
             <p>최종 날짜 : {finalDateTime}</p>
           </div>
           <DatePicker />
