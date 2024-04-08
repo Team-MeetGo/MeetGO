@@ -35,7 +35,7 @@ function EditMeetingRoom({ room }: { room: MeetingRoom }) {
 
   return (
     <>
-      <Button onPress={onOpen} className="bg-purple-400">
+      <Button onPress={onOpen} className="bg-purple-400 gap-0 p-0 m-0 h-4 w-4">
         수정
       </Button>
       <Modal

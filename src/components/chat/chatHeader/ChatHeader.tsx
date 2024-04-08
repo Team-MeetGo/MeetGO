@@ -4,10 +4,14 @@ import ChatPresence from './ChatPresence';
 import { chatStore } from '(@/store/chatStore)';
 import { userStore } from '(@/store/userStore)';
 import { IoIosSearch } from 'react-icons/io';
+import { useRoomDataQuery } from '(@/hooks/useQueries/useChattingQuery)';
 
-const ChatHeader = () => {
-  const { roomId, chatRoomId, roomData, setMessages, setisRest, setSearchMode } = chatStore((state) => state);
+const ChatHeader = ({ chatRoomId }: { chatRoomId: string }) => {
+  const { setMessages, setisRest, setSearchMode } = chatStore((state) => state);
   const user = userStore((state) => state.user);
+  const room = useRoomDataQuery(chatRoomId);
+  const roomId = room?.roomId;
+  const roomData = room?.roomData;
 
   const UpdateIsActive = async () => {
     // 채팅방 isActive 상태를 false로 변경
@@ -66,7 +70,7 @@ const ChatHeader = () => {
   return (
     <div className="h-20 border-b border-indigo-600 flex p-3 justify-between">
       <div className="font-bold text-2xl flex gap-2">
-        {roomData && roomData[0]?.room_title}
+        {roomData && roomData.room_title}
         <div className="text-base font-normal">
           누가 들어와 있는지 들어갈 부분
           <ChatPresence />

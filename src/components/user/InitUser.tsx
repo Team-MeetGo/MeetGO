@@ -13,6 +13,7 @@ const InitUser = () => {
       const {
         data: { user }
       } = await clientSupabase.auth.getUser();
+      console.log(user);
       // 쎄션 유지중이면
       if (user) {
         setIsLoggedIn(true); // 새로고침해도 isLoggedIn 상태 true로 유지
