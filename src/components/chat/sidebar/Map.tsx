@@ -17,14 +17,14 @@ interface MapProps {
 }
 
 const Map: React.FC<MapProps> = ({ userId, chatRoomId }) => {
-  const mapRef = useRef<any>();
+  const mapRef = useRef<string>();
   const [map, setMap] = useState<any>();
   const [markers, setMarkers] = useState<any>();
   const [bars, setBars] = useState<any[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
-  const [currentPos, setCurrentPos] = useState<any>();
-  const [searchText, setSearchText] = useState<any>('');
+  const [currentPos, setCurrentPos] = useState<string>();
+  const [searchText, setSearchText] = useState<string>('');
   const [isLocationSelected, setisLocationSelected] = useState<boolean>(false);
   const [selectedMeetingLocation, setSelectedMeetingLocation] = useState<string>();
 

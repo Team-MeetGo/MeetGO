@@ -14,14 +14,9 @@ interface SideBarProps {
 
 const SideBar: React.FC<SideBarProps> = ({ userId, chatRoomId }) => {
   const [isSidebarOpen, setIsSidebarOpen] = useState<boolean>(false);
-  const {
-    selectedMeetingTime,
-    isTimeSelected,
-    finalDateTime,
-    setSelectedMeetingTime,
-    setIsTimeSelected,
-    setFinalDateTime
-  } = sideBarStore((state) => state);
+  const [isTimeSelected, setIsTimeSelected] = useState<boolean>(false);
+  const [selectedMeetingTime, setSelectedMeetingTime] = useState<string>();
+  const [finalDateTime, setFinalDateTime] = useState<string>();
 
   const room = useRoomDataQuery(chatRoomId);
   const leaderId = room?.roomData.leader_id;
