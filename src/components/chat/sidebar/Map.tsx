@@ -1,5 +1,6 @@
 'use client';
 
+import { useRoomDataQuery } from '(@/hooks/useQueries/useChattingQuery)';
 import { chatStore } from '(@/store/chatStore)';
 import { clientSupabase } from '(@/utils/supabase/client)';
 import { useQuery } from '@tanstack/react-query';
@@ -13,11 +14,10 @@ declare global {
 
 interface MapProps {
   userId: string | null | undefined;
-  leaderId: string | null | undefined;
-  chatRoomId: string | null | undefined;
+  chatRoomId: string;
 }
 
-const Map: React.FC<MapProps> = ({ userId, chatRoomId, leaderId }) => {
+const Map: React.FC<MapProps> = ({ userId, chatRoomId }) => {
   const mapRef = useRef<any>();
   const [map, setMap] = useState<any>();
   const [markers, setMarkers] = useState<any>();
@@ -28,6 +28,9 @@ const Map: React.FC<MapProps> = ({ userId, chatRoomId, leaderId }) => {
   const [searchText, setSearchText] = useState<any>('');
   const [isLocationSelected, setisLocationSelected] = useState<boolean>(false);
   const [selectedMeetingLocation, setSelectedMeetingLocation] = useState<string>();
+
+  const room = useRoomDataQuery(chatRoomId);
+  const leaderId = room?.roomData.leader_id;
 
   useEffect(() => {
     const fetchData = async () => {

@@ -4,7 +4,6 @@ import React, { useEffect, useState } from 'react';
 import Map from '(@/components/chat/sidebar/Map)';
 import DatePicker from './DatePicker';
 import { clientSupabase } from '(@/utils/supabase/client)';
-import { chatStore } from '(@/store/chatStore)';
 import { sideBarStore } from '(@/store/sideBarStore)';
 import { useRoomDataQuery } from '(@/hooks/useQueries/useChattingQuery)';
 
@@ -91,7 +90,7 @@ const SideBar: React.FC<SideBarProps> = ({ userId, chatRoomId }) => {
             <p>최종 날짜 : {finalDateTime}</p>
           </div>
           <DatePicker />
-          <Map userId={userId} leaderId={leaderId} chatRoomId={chatRoomId} />
+          <Map userId={userId} chatRoomId={chatRoomId} />
         </div>
       )}
     </div>
