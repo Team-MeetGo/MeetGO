@@ -6,7 +6,7 @@ import Image from 'next/image';
 import { ChangeEvent, FormEvent, useEffect, useState } from 'react';
 import { ReviewDetailType } from './ReviewDetail';
 import { MdCancel } from 'react-icons/md';
-import { FaPhotoVideo } from 'react-icons/fa';
+import { LuImagePlus } from 'react-icons/lu';
 
 type Props = {
   review_id: string;
@@ -40,7 +40,7 @@ export default function ReviewEditModal({ review_id }: Props) {
   async function getReviewDetail(review_id: string) {
     let { data: reviewDetail, error } = await clientSupabase
       .from('review')
-      .select('review_title, review_contents, created_at, user_id, image_urls')
+      .select('review_title, review_contents, created_at, user_id, image_urls, show_nickname')
       .eq('review_id', review_id);
 
     if (error) {
@@ -213,7 +213,7 @@ export default function ReviewEditModal({ review_id }: Props) {
 
                       {totalFiles < 4 && (
                         <div className="flex items-center justify-center pointer-events-none rounded-[20px] w-[150px] h-[150px] bg-gray-300">
-                          <FaPhotoVideo className="w-20 h-20 text-[#A1A1AA]" />
+                          <LuImagePlus className="w-20 h-20 text-[#A1A1AA]" />
                         </div>
                       )}
                     </label>

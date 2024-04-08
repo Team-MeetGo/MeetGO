@@ -7,6 +7,7 @@ import { clientSupabase } from '(@/utils/supabase/client)';
 import ReviewComment from './ReviewComment';
 import ReviewHeart from './ReviewHeart';
 import defaultImg from '../../../public/defaultImg.jpg';
+import { useQuery } from '@tanstack/react-query';
 
 export type ReviewType = {
   user_id: string | null;
@@ -15,41 +16,76 @@ export type ReviewType = {
   review_contents: string | null;
   created_at: string | null;
   image_urls: string[] | null;
+  show_nickname: boolean | null;
 };
 
 const ReviewCard = ({ review }: { review: ReviewType }) => {
   const [userNickname, setUserNickname] = useState<string | null>(null);
 
-  async function getReviewDetail(review_id: string) {
-    let { data: reviewDetail, error } = await clientSupabase
-      .from('review')
-      .select('review_title, review_contents, created_at, user_id, image_urls')
-      .eq('review_id', review_id)
-      .single();
+  const {
+    data: reviewDetailData,
+    isLoading,
+    isError
+  } = useQuery({
+    queryKey: ['REVIEW_DATA'],
+    queryFn: async (review_id) => {
+      let { data: reviewDetail, error } = await clientSupabase
+        .from('review')
+        .select('review_title, review_contents, created_at, user_id, image_urls')
+        .eq('review_id', review_id)
+        .single();
 
-    if (error) {
-      console.error('리뷰를 불러오지 못함', error);
-    } else {
-      if (reviewDetail) {
-        const { user_id } = reviewDetail;
-        const { data: userData, error: userError } = await clientSupabase
-          .from('users')
-          .select('nickname, avatar')
-          .eq('user_id', user_id as string)
-          .single();
+      if (error) {
+        console.error('리뷰를 불러오지 못함', error);
+      } else {
+        if (reviewDetail) {
+          const { user_id } = reviewDetail;
+          const { data: userData, error: userError } = await clientSupabase
+            .from('users')
+            .select('nickname, avatar')
+            .eq('user_id', user_id as string)
+            .single();
 
-        if (userError) {
-          console.error('유저 정보를 불러오지 못함', userError);
-        } else {
-          setUserNickname(userData?.nickname || null);
+          if (userError) {
+            console.error('유저 정보를 불러오지 못함', userError);
+          } else {
+            setUserNickname(userData?.nickname || null);
+          }
         }
       }
     }
-  }
+  });
 
-  useEffect(() => {
-    getReviewDetail(review.review_id);
-  }, []);
+  // async function getReviewDetail(review_id: string) {
+  //   let { data: reviewDetail, error } = await clientSupabase
+  //     .from('review')
+  //     .select('review_title, review_contents, created_at, user_id, image_urls')
+  //     .eq('review_id', review_id)
+  //     .single();
+
+  //   if (error) {
+  //     console.error('리뷰를 불러오지 못함', error);
+  //   } else {
+  //     if (reviewDetail) {
+  //       const { user_id } = reviewDetail;
+  //       const { data: userData, error: userError } = await clientSupabase
+  //         .from('users')
+  //         .select('nickname, avatar')
+  //         .eq('user_id', user_id as string)
+  //         .single();
+
+  //       if (userError) {
+  //         console.error('유저 정보를 불러오지 못함', userError);
+  //       } else {
+  //         setUserNickname(userData?.nickname || null);
+  //       }
+  //     }
+  //   }
+  // }
+
+  // useEffect(() => {
+  //   getReviewDetail(review.review_id);
+  // }, []);
 
   return (
     <div
@@ -78,7 +114,7 @@ const ReviewCard = ({ review }: { review: ReviewType }) => {
         </div>
         <div>{review.review_title}</div>
         <div>{review.review_contents}</div>
-        <div>{userNickname}</div>
+        <div>{review.show_nickname ? userNickname || '익명유저' : '익명유저'}</div>
       </Link>
       <div className="flex gap-2">
         <ReviewHeart review_id={review.review_id} />

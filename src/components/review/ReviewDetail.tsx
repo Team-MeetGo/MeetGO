@@ -18,6 +18,7 @@ export type ReviewDetailType = {
   created_at: string | null;
   user_id: string | null;
   image_urls: string[] | null;
+  show_nickname: boolean | null;
 };
 
 type Props = {
@@ -43,7 +44,7 @@ const ReviewDetail = ({ review_id, commentCount }: Props) => {
   async function getReviewDetail(review_id: string) {
     let { data: reviewDetail, error } = await clientSupabase
       .from('review')
-      .select('review_title, review_contents, created_at, user_id, image_urls')
+      .select('review_title, review_contents, created_at, user_id, image_urls, show_nickname')
       .eq('review_id', review_id)
       .single();
 
@@ -89,7 +90,6 @@ const ReviewDetail = ({ review_id, commentCount }: Props) => {
       }
     }
   };
-
   return (
     <div>
       <div>
@@ -100,7 +100,7 @@ const ReviewDetail = ({ review_id, commentCount }: Props) => {
           ) : (
             <AvatarDefault />
           )}
-          <div>{userNickname}</div>
+          <div>{reviewDetail?.show_nickname ? userNickname || '익명유저' : '익명유저'}</div>
         </div>
         <div className="text-[#A1A1AA]">
           {reviewDetail && reviewDetail.created_at

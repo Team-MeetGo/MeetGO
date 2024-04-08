@@ -49,11 +49,8 @@ const ReviewHeart = ({ review_id }: Props) => {
     };
 
     fetchLikedStatus();
-  }, [userId, review_id]);
-
-  useEffect(() => {
     fetchLikeCount(review_id);
-  }, []);
+  }, [userId, review_id]);
 
   const handleLikeToggle = async () => {
     if (!userId) {
