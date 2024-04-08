@@ -1,4 +1,4 @@
-import { useRoomDataQuery } from '(@/hooks/useQueries/useChattingQuery)';
+import { useParticipantsQuery, useRoomDataQuery } from '(@/hooks/useQueries/useChattingQuery)';
 import { chatStore } from '(@/store/chatStore)';
 import { Message } from '(@/types/chatTypes)';
 import { UsersType } from '(@/types/userTypes)';
@@ -8,42 +8,19 @@ import { Tooltip } from '@nextui-org/react';
 import { useEffect, useState } from 'react';
 
 const OthersChat = ({ msg }: { msg: Message }) => {
-  const [usersData, setUsersData] = useState<UsersType[] | null>();
   const chatRoomId = chatStore((state) => state.chatRoomId);
   const room = useRoomDataQuery(chatRoomId as string);
   const roomId = room?.roomId;
-
-  useEffect(() => {
-    const fetchParticipants = async () => {
-      const { data: userIds, error: userIdErr } = await clientSupabase
-        .from('participants')
-        .select('user_id')
-        .eq('room_id', String(roomId));
-      console.log('채팅방 멤버들', userIds); // 남은 애들
-
-      if (userIds) {
-        const users = [];
-        for (const id of userIds) {
-          const { data, error: usersDataErr } = await clientSupabase
-            .from('users')
-            .select('*')
-            .eq('user_id', String(id.user_id));
-          if (data) users.push(...data);
-        }
-        setUsersData([...users]);
-      }
-    };
-    roomId && fetchParticipants();
-  }, [roomId]);
+  const users = useParticipantsQuery(roomId as string);
 
   const showThatUser = (userId: string | null) => {
-    const thatUserData = usersData?.find((p) => p.user_id === userId);
+    const thatUserData = users?.find((p) => p.user_id === userId);
     return thatUserData;
   };
 
   return (
     <div id={msg.message_id} className="flex gap-4">
-      <Tooltip content={<div>{usersData && showThatUser(msg.send_from)?.nickname}</div>}>
+      <Tooltip content={<div>{users && showThatUser(msg.send_from)?.nickname}</div>}>
         <div className="h-14 w-14 bg-indigo-600 rounded-full my-auto">
           <img src={msg.avatar} alt="유저 이미지"></img>
         </div>
