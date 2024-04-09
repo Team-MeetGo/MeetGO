@@ -13,22 +13,22 @@ const AcceptanceRoomButtons = ({ roomId }: { roomId: UUID }) => {
   const { user, participants } = userStore((state) => state);
   const [maximumParticipants, setMaximumParticipants] = useState(0);
   const { deleteMember } = participantsHandler();
-  const { getRoomInformation, getmaxGenderMemberNumber } = meetingRoomHandler();
+  // const { getRoomInformation, getmaxGenderMemberNumber } = meetingRoomHandler();
 
-  useEffect(() => {
-    // 방의 정보를 가져옵니다.
-    const getSingleRoom = async () => {
-      const singleRoom = await getRoomInformation(roomId);
-      if (!singleRoom) {
-        return;
-      }
-      //방에 최대 인원은 얼마나 들어갈 수 있는지 확인합니다.
-      const maximumGenderParticipants = await getmaxGenderMemberNumber(singleRoom[0].member_number);
-      if (!maximumGenderParticipants) return;
-      setMaximumParticipants(maximumGenderParticipants * 2);
-    };
-    getSingleRoom();
-  }, []);
+  // useEffect(() => {
+  //   // 방의 정보를 가져옵니다.
+  //   const getSingleRoom = async () => {
+  //     const singleRoom = await getRoomInformation(roomId);
+  //     if (!singleRoom) {
+  //       return;
+  //     }
+  //     //방에 최대 인원은 얼마나 들어갈 수 있는지 확인합니다.
+  //     const maximumGenderParticipants = await getmaxGenderMemberNumber(singleRoom[0].member_number);
+  //     if (!maximumGenderParticipants) return;
+  //     setMaximumParticipants(maximumGenderParticipants * 2);
+  //   };
+  //   getSingleRoom();
+  // }, []);
 
   const gotoChattingRoom = async () => {
     if (!user) {

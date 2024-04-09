@@ -90,14 +90,14 @@ const AvatarForm = () => {
   return (
     <div className="flex flex-col justify-center items-center gap-2">
       {isEditing && <input type="file" onChange={onFileChange} accept="image/*" />}
-      <div className="w-[150px] h-[150px] overflow-hidden flex justify-center items-center rounded-full relative">
+      <div className="w-[180px] h-[180px] overflow-hidden flex justify-center items-center rounded-full relative">
         {avatarView ? (
           <Image
             src={avatarView}
             alt="Avatar Preview"
             style={{ objectFit: 'cover' }}
             fill={true}
-            sizes="200px"
+            sizes="500px"
             priority={false}
           />
         ) : user && user[0].avatar ? (
@@ -106,7 +106,7 @@ const AvatarForm = () => {
             alt="Avatar"
             style={{ objectFit: 'cover' }}
             fill={true}
-            sizes="200px"
+            sizes="500px"
             priority={true}
           />
         ) : (

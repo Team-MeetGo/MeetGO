@@ -9,6 +9,7 @@ import type { Database } from '(@/types/database.types)';
 import { IoMdRefresh } from 'react-icons/io';
 import MeetingRoomForm from './MeetingRoomForm';
 import { useRouter } from 'next/navigation';
+import { useRecruitingMyroomQuery } from '(@/hooks/useQueries/useMeetingQuery)';
 
 function MeetingRoomList() {
   type MeetingRoom = Database['public']['Tables']['room']['Row'];
@@ -20,21 +21,21 @@ function MeetingRoomList() {
   const { getMeetingRoom, getChattingRoom, getMyRoom } = meetingRoomHandler();
   console.log(isLoggedIn);
   console.log('user', user);
-  // const results = useRecruitingMyroomQuery(user ? user[0].user_id : null);
-  // console.log(results);
+  const results = useRecruitingMyroomQuery(user ? (user[0].user_id as string) : '');
+  console.log(results);
 
-  useEffect(() => {
-    const getMeetingRoomList = async () => {
-      const meetingroom = (await getMeetingRoom()) as MeetingRoom[];
-      const myRoomWithId = (await getMyRoom(user[0].user_id)) as any;
-      const myRoom = myRoomWithId.map((sample: any) => sample.room);
-      const chattingroom = (await getChattingRoom()) as MeetingRoom[];
-      setMeetingRoomList(meetingroom);
-      setChattingRoomList(chattingroom);
-      setMyRoomList(myRoom); //여러개 참여하면 여러개입니다 네네 ㄴ
-    };
-    getMeetingRoomList();
-  }, [user]);
+  // useEffect(() => {
+  //   const getMeetingRoomList = async () => {
+  //     const meetingroom = (await getMeetingRoom()) as MeetingRoom[];
+  //     const myRoomWithId = (await getMyRoom(user[0].user_id)) as any;
+  //     const myRoom = myRoomWithId.map((sample: any) => sample.room);
+  //     const chattingroom = (await getChattingRoom()) as MeetingRoom[];
+  //     setMeetingRoomList(meetingroom);
+  //     setChattingRoomList(chattingroom);
+  //     setMyRoomList(myRoom); //여러개 참여하면 여러개입니다 네네 ㄴ
+  //   };
+  //   getMeetingRoomList();
+  // }, [user]);
 
   if (meetingRoomList === undefined) return;
   if (chattingRoomList === undefined) return;
@@ -50,7 +51,7 @@ function MeetingRoomList() {
   });
 
   console.log('myRoomList', myRoomList);
-  console.log('otherRooms ==> ', otherRooms);
+  // console.log('otherRooms ==> ', otherRooms);
   return (
     <Suspense fallback="미팅룸들 나열중~~">
       <article>
