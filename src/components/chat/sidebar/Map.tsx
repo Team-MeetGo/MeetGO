@@ -274,7 +274,7 @@ const Map: React.FC<MapProps> = ({ userId, chatRoomId }) => {
           </div>
         ))}
       </div>
-      <div className="flex justify-center ">
+      <div className="flex justify-center mt-5">
         <Pagination
           showControls
           total={totalPages}
