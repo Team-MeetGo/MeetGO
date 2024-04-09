@@ -146,7 +146,7 @@ const Profile = () => {
           />
         )}
       </div>
-      <Favorite />
+      <Favorite isEdting={isEdting} />
       <div className="mb-6">
         <label className="block text-sm font-medium mb-1" htmlFor="introduction">
           자기소개(최대 15자)
