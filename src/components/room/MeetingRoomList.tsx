@@ -67,13 +67,10 @@ function MeetingRoomList({ user }: { user: User | null }) {
                 <div
                   key={index}
                   className={`room ${
-                    page < 1 || myRoom.length / 3 + 1 < page
-                      ? setPage(1)
-                      : 3 * page - 1 > index && 3 * page - 3 < index && 'hidden'
-                  }`}
+                    page < 1 || myRoom.length / 3 + 1 < page ? setPage(1) : page * 3 <= index && index <= (page + 1) * 3
+                  }&& hidden`}
                 >
-                  {page * 3 + 1} 시작
-                  {page * 3 - 1} 끝{index}
+                  {index}
                   <MeetingRoom room={room} />
                 </div>
               ))}

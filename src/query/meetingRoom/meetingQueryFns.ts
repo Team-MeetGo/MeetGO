@@ -1,6 +1,5 @@
 import { NextMeetingRoomType, UpdateRoomType, UserType } from '(@/types/roomTypes)';
 import { clientSupabase } from '(@/utils/supabase/client)';
-import { UUID } from 'crypto';
 
 export const fetchRecruitingRoom = async () => {
   const { data: meetingroom, error } = await clientSupabase

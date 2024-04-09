@@ -24,9 +24,6 @@ function MeetingRoom({ room }: { room: MeetingRoomType }) {
   const roomMemberMutation = useAddRoomMemberMutation({ user_id, room_id });
   const updateRoomStatusCloseMutation = useUpdateRoomStatusClose({ room_id });
 
-  console.log('미팅룸 유저', user);
-  console.log('미팅룸 참여자', participants);
-
   const addMember = async ({ room_id, member_number }: { room_id: string; member_number: string }) => {
     //채팅창으로 넘어갔을 경우에는 채팅창으로 이동
     const { data: alreadyChat } = await clientSupabase
