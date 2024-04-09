@@ -24,6 +24,6 @@ export const useRoomInfoWithRoomIdQuery = (room_id: UUID) => {
     queryKey: [ROOMDATA_WITH_ROOMID, room_id],
     queryFn: async () => await fetchRoomInfoWithRoomId(room_id)
   });
-  // console.log(roomData);
+  console.log(roomData);
   return roomData;
 };

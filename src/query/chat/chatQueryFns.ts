@@ -56,3 +56,23 @@ export const fetchChatData = async (chatRoomId: string) => {
     return chatData;
   }
 };
+
+export const fetchMyChatRoomIds = async (userId: string) => {
+  const myChatRooms = [];
+
+  const { data: myRooms } = await clientSupabase.from('participants').select('room_id').eq('user_id', userId);
+
+  if (myRooms) {
+    for (let room of myRooms) {
+      const { data: myChatRoomId } = await clientSupabase
+        .from('chatting_room')
+        .select('chatting_room_id')
+        .eq('room_id', room.room_id)
+        .eq('isActive', true);
+      if (myChatRoomId && myChatRoomId.length) {
+        myChatRooms.push(myChatRoomId[0].chatting_room_id);
+      }
+    }
+  }
+  return myChatRooms;
+};
