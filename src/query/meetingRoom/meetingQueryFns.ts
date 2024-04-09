@@ -15,23 +15,19 @@ export const fetchRecruitingRoom = async () => {
 };
 
 export const fetchMyRoom = async (user_id: string) => {
-  if (user_id.length) {
-    const { data: myRoom, error } = await clientSupabase
-      .from('participants')
-      .select(`*`)
-      .eq('user_id', user_id)
-      .select('user_id, room(*)')
-      .order('created_at', { ascending: false });
-    console.log('myRoom =>', myRoom);
-    if (error) {
-      alert('error 발생!');
-      console.log(error.message);
-      return null;
-    }
-    return myRoom;
-  } else {
+  const { data: myRoom, error } = await clientSupabase
+    .from('participants')
+    .select(`*`)
+    .eq('user_id', user_id)
+    .select('user_id, room(*)')
+    .order('created_at', { ascending: false });
+  console.log('myRoom =>', myRoom);
+  if (error) {
+    // alert('error 발생!');
+    console.log(error.message);
     return null;
   }
+  return myRoom;
 };
 
 export const fetchRoomInfoWithRoomId = async (room_id: UUID) => {

@@ -7,7 +7,6 @@ const Test = () => {
   const user = userStore((state) => state.user);
 
   const result = useRecruitingMyroomQuery(user ? user[0].user_id : '');
-  console.log(result);
   return <div>Test</div>;
 };
 

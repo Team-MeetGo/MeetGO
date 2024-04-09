@@ -24,18 +24,18 @@ function MeetingRoomList() {
   const results = useRecruitingMyroomQuery(user ? (user[0].user_id as string) : '');
   console.log(results);
 
-  useEffect(() => {
-    const getMeetingRoomList = async () => {
-      const meetingroom = (await getMeetingRoom()) as MeetingRoom[];
-      const myRoomWithId = (await getMyRoom(user[0].user_id)) as any;
-      const myRoom = myRoomWithId.map((sample: any) => sample.room);
-      const chattingroom = (await getChattingRoom()) as MeetingRoom[];
-      setMeetingRoomList(meetingroom);
-      setChattingRoomList(chattingroom);
-      setMyRoomList(myRoom); //여러개 참여하면 여러개입니다 네네 ㄴ
-    };
-    getMeetingRoomList();
-  }, [user]);
+  // useEffect(() => {
+  //   const getMeetingRoomList = async () => {
+  //     const meetingroom = (await getMeetingRoom()) as MeetingRoom[];
+  //     const myRoomWithId = (await getMyRoom(user[0].user_id)) as any;
+  //     const myRoom = myRoomWithId.map((sample: any) => sample.room);
+  //     const chattingroom = (await getChattingRoom()) as MeetingRoom[];
+  //     setMeetingRoomList(meetingroom);
+  //     setChattingRoomList(chattingroom);
+  //     setMyRoomList(myRoom); //여러개 참여하면 여러개입니다 네네 ㄴ
+  //   };
+  //   getMeetingRoomList();
+  // }, [user]);
 
   if (meetingRoomList === undefined) return;
   if (chattingRoomList === undefined) return;

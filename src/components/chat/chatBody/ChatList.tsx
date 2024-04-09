@@ -24,7 +24,6 @@ const ChatList = ({ user, chatRoomId }: { user: User | null; chatRoomId: string 
   const [count, setCount] = useState(1);
   const room = useRoomDataQuery(chatRoomId);
   const roomId = room?.roomId;
-  console.log(roomId);
 
   // const results = useRecruitingMyroomQuery(user?.id as string);
   // console.log(results);
