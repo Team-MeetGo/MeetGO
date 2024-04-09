@@ -2,11 +2,12 @@
 
 import React, { useEffect, useState } from 'react';
 import Map from '(@/components/chat/sidebar/Map)';
-import DatePicker from './DatePicker';
+import DatePicker from './DateTimePicker';
 import { clientSupabase } from '(@/utils/supabase/client)';
 import { useChatDataQuery, useRoomDataQuery } from '(@/hooks/useQueries/useChattingQuery)';
 import { GiHamburgerMenu } from 'react-icons/gi';
 import { Card, CardBody } from '@nextui-org/react';
+import DateTimePicker from './DateTimePicker';
 
 interface SideBarProps {
   userId: string | null | undefined;
@@ -110,7 +111,9 @@ const SideBar: React.FC<SideBarProps> = ({ userId, chatRoomId }) => {
                 <button onClick={handleSelectedTime}>{isTimeSelected ? '취소' : '선택'}</button>
               </>
             </div>
-            {/* <DatePicker /> */}
+            {/* DateTimePicker component */}
+            <DateTimePicker />
+            {/* Map component */}
             <Map userId={userId} chatRoomId={chatRoomId} />
           </div>
         )}

@@ -5,6 +5,7 @@ import { clientSupabase } from '(@/utils/supabase/client)';
 import React, { useEffect, useRef, useState } from 'react';
 import { Card, CardBody, Pagination } from '@nextui-org/react';
 import { IoMdSearch } from 'react-icons/io';
+import DateTimePicker from './DateTimePicker';
 
 declare global {
   interface Window {
@@ -213,13 +214,15 @@ const Map: React.FC<MapProps> = ({ userId, chatRoomId }) => {
   };
 
   return (
-    <div>
+    <div className="z-0">
       <h1 className="font-semibold text-2xl mb-2.5">미팅 장소</h1>
       <Card className="border border-mainColor shadow-none mb-6">
         <CardBody className=" h-[60px]">
           <p className="text-lg">{selectedMeetingLocation}</p>
         </CardBody>
       </Card>
+
+      <DateTimePicker />
 
       <h1 className="font-semibold text-2xl mb-2.5">장소 검색</h1>
       <Card className="border border-gray2 shadow-none mb-6">
