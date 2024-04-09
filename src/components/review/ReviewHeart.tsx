@@ -6,7 +6,6 @@ import HeartFillIcon from '(@/utils/icons/HeartFillIcon)';
 import HeartIcon from '(@/utils/icons/HeartIcon)';
 import { clientSupabase } from '(@/utils/supabase/client)';
 import { userStore } from '(@/store/userStore)';
-import { useQuery } from '@tanstack/react-query';
 
 type Props = {
   review_id: string;
@@ -33,29 +32,8 @@ const ReviewHeart = ({ review_id }: Props) => {
   const { user, setUser } = userStore((state) => state);
   const userId = user && user[0].user_id;
 
-  // useEffect(() => {
-  //   const fetchLikedStatus = async () => {
-  //     const { data: likedUsers } = await clientSupabase
-  //       .from('review_like')
-  //       .select('user_id')
-  //       .eq('review_id', review_id);
-
-  //     if (!likedUsers || likedUsers.length === 0) {
-  //       setLikes(false);
-  //       return;
-  //     }
-
-  //     const userLikes = likedUsers.some((likedUser) => likedUser.user_id === userId);
-  //     setLikes(userLikes);
-  //   };
-
-  //   fetchLikedStatus();
-  //   fetchLikeCount(review_id);
-  // }, [userId, review_id]);
-
-  const { data: LikedReviewData } = useQuery({
-    queryKey: ['REVIEW'],
-    queryFn: async () => {
+  useEffect(() => {
+    const fetchLikedStatus = async () => {
       const { data: likedUsers } = await clientSupabase
         .from('review_like')
         .select('user_id')
@@ -68,9 +46,30 @@ const ReviewHeart = ({ review_id }: Props) => {
 
       const userLikes = likedUsers.some((likedUser) => likedUser.user_id === userId);
       setLikes(userLikes);
-      return likedUsers.map((likedUser) => likedUser.user_id);
-    }
-  });
+    };
+
+    fetchLikedStatus();
+    fetchLikeCount(review_id);
+  }, [userId, review_id]);
+
+  // const { data: LikedReviewData } = useQuery({
+  //   queryKey: ['REVIEW'],
+  //   queryFn: async () => {
+  //     const { data: likedUsers } = await clientSupabase
+  //       .from('review_like')
+  //       .select('user_id')
+  //       .eq('review_id', review_id);
+
+  //     if (!likedUsers || likedUsers.length === 0) {
+  //       setLikes(false);
+  //       return;
+  //     }
+
+  //     const userLikes = likedUsers.some((likedUser) => likedUser.user_id === userId);
+  //     setLikes(userLikes);
+  //     return likedUsers.map((likedUser) => likedUser.user_id);
+  //   }
+  // });
 
   const handleLikeToggle = async () => {
     if (!userId) {
