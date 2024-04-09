@@ -38,6 +38,45 @@ export type Database = {
           }
         ];
       };
+      kakaoId_request: {
+        Row: {
+          created_at: string;
+          id: number;
+          request_Id: string | null;
+          request_status: string;
+          response_Id: string | null;
+        };
+        Insert: {
+          created_at?: string;
+          id?: number;
+          request_Id?: string | null;
+          request_status: string;
+          response_Id?: string | null;
+        };
+        Update: {
+          created_at?: string;
+          id?: number;
+          request_Id?: string | null;
+          request_status?: string;
+          response_Id?: string | null;
+        };
+        Relationships: [
+          {
+            foreignKeyName: 'public_kakaoId_request_request_Id_fkey';
+            columns: ['request_Id'];
+            isOneToOne: false;
+            referencedRelation: 'users';
+            referencedColumns: ['user_id'];
+          },
+          {
+            foreignKeyName: 'public_kakaoId_request_response_Id_fkey';
+            columns: ['response_Id'];
+            isOneToOne: false;
+            referencedRelation: 'users';
+            referencedColumns: ['user_id'];
+          }
+        ];
+      };
       messages: {
         Row: {
           avatar: string;
@@ -122,26 +161,29 @@ export type Database = {
       review: {
         Row: {
           created_at: string;
+          image_urls: string[] | null;
           review_contents: string | null;
           review_id: string;
           review_title: string | null;
-          image_urls: string[] | null;
+          show_nickname: boolean | null;
           user_id: string | null;
         };
         Insert: {
           created_at?: string;
+          image_urls?: string[] | null;
           review_contents?: string | null;
           review_id?: string;
           review_title?: string | null;
-          image_urls?: string[] | null;
+          show_nickname?: boolean | null;
           user_id?: string | null;
         };
         Update: {
           created_at?: string;
+          image_urls?: string[] | null;
           review_contents?: string | null;
           review_id?: string;
           review_title?: string | null;
-          image_urls?: string[] | null;
+          show_nickname?: boolean | null;
           user_id?: string | null;
         };
         Relationships: [];
@@ -225,34 +267,33 @@ export type Database = {
         Row: {
           created_at: string;
           feature: string[] | null;
-          leader_id: string | null;
+          leader_id: string;
           location: string;
           member_number: string;
           room_id: string;
-          room_status: string | null;
+          room_status: string;
           room_title: string;
         };
         Insert: {
           created_at?: string;
           feature?: string[] | null;
-          leader_id?: string | null;
+          leader_id: string;
           location?: string;
           member_number?: string;
           room_id?: string;
-          room_status?: string | null;
+          room_status?: string;
           room_title?: string;
         };
         Update: {
           created_at?: string;
           feature?: string[] | null;
-          leader_id?: string | null;
+          leader_id?: string;
           location?: string;
           member_number?: string;
           room_id?: string;
-          room_status?: string | null;
+          room_status?: string;
           room_title?: string;
         };
-
         Relationships: [
           {
             foreignKeyName: 'public_room_user_id_fkey';
@@ -290,19 +331,19 @@ export type Database = {
       test_review_like: {
         Row: {
           created_at: string;
-          liked_id: string;
+          like_id: string;
           review_id: string | null;
           user_id: string | null;
         };
         Insert: {
           created_at?: string;
-          liked_id?: string;
+          like_id?: string;
           review_id?: string | null;
           user_id?: string | null;
         };
         Update: {
           created_at?: string;
-          liked_id?: string;
+          like_id?: string;
           review_id?: string | null;
           user_id?: string | null;
         };

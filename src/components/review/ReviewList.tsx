@@ -5,6 +5,7 @@ import ReviewCard from './ReviewCard';
 import { clientSupabase } from '(@/utils/supabase/client)';
 import NewReview from './NewReview';
 import Link from 'next/link';
+import { useParams } from 'next/navigation';
 import { Dropdown, DropdownTrigger, DropdownMenu, DropdownItem, Button } from '@nextui-org/react';
 import { Selection } from '@react-types/shared';
 import { userStore } from '(@/store/userStore)';
@@ -16,12 +17,14 @@ export type reviewData = {
   review_contents: string | null;
   created_at: string | null;
   image_urls: string[] | null;
+  show_nickname: boolean | null;
 };
 
 const ReviewList: React.FC = () => {
+  const currentPage = useParams().pageNumber;
+  const currentPageNumber = parseInt(currentPage[0]);
   const [reviewData, setReviewData] = useState<reviewData[]>([]);
-  const [currentPage, setCurrentPage] = useState(1);
-  const [totalReviews, setTotalReviews] = useState(0);
+  const [totalReviews, setTotalReviews] = useState<number>(0);
   const reviewsPerPage = 9;
   const [selected, setSelected] = React.useState<Selection>(new Set(['최신 순']));
   const { isLoggedIn, setIsLoggedIn } = userStore((state) => state);
@@ -46,7 +49,7 @@ const ReviewList: React.FC = () => {
     checkLoginStatus();
   }, []);
 
-  async function getMostLikedReview() {
+  async function getMostLikedReview(page: number) {
     const likedReviewIds = (await clientSupabase.from('review_like').select('review_id')).data?.map(
       (item) => item.review_id
     );
@@ -63,43 +66,51 @@ const ReviewList: React.FC = () => {
       return bLikes - aLikes;
     });
 
-    setReviewData([...(likedReviews || []), ...(zeroLikedReviews || [])]);
+    const combinedReviews = [...(likedReviews || []), ...(zeroLikedReviews || [])];
+
+    if (combinedReviews) {
+      const startIdx = (page - 1) * reviewsPerPage;
+      const endIdx = page * reviewsPerPage;
+      const slicedData = combinedReviews.slice(startIdx, endIdx);
+      setReviewData(slicedData);
+      setTotalReviews(combinedReviews.length);
+    }
   }
 
   const handleSelectionChange = (keys: Selection) => {
     setSelected(keys);
 
     if (keys instanceof Set && keys.has('최신 순')) {
-      getRecentReview();
+      getRecentReview(currentPageNumber);
     } else if (keys instanceof Set && keys.has('좋아요 순')) {
-      getMostLikedReview();
+      getMostLikedReview(currentPageNumber);
     }
   };
 
   useEffect(() => {
     if (selected instanceof Set && selected.has('최신 순')) {
-      getRecentReview();
+      getRecentReview(currentPageNumber);
     } else if (selected instanceof Set && selected.has('좋아요 순')) {
-      getMostLikedReview();
+      getMostLikedReview(currentPageNumber);
     }
   }, []);
 
-  useEffect(() => {
-    getRecentReview();
-  }, []);
-
-  async function getRecentReview() {
+  async function getRecentReview(page: number) {
     let { data, count } = await clientSupabase.from('review').select('*', { count: 'estimated' });
+
     if (data) {
       data.sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
-      setReviewData(data);
+      const startIdx = (page - 1) * reviewsPerPage;
+      const endIdx = page * reviewsPerPage;
+      const slicedData = data.slice(startIdx, endIdx);
+      setReviewData(slicedData);
       setTotalReviews(count || 0);
     }
   }
 
-  const indexOfLastReview = currentPage * reviewsPerPage;
-  const indexOfFirstReview = indexOfLastReview - reviewsPerPage;
-  const currentReviews = reviewData.slice(indexOfFirstReview, indexOfLastReview);
+  async function handlePageChange(page: number) {
+    await getRecentReview(page);
+  }
 
   return (
     <div>
@@ -119,19 +130,21 @@ const ReviewList: React.FC = () => {
               selectedKeys={selected}
               onSelectionChange={handleSelectionChange}
             >
-              <DropdownItem key="최신 순" onClick={getRecentReview}>
+              <DropdownItem key="최신 순" onClick={() => getRecentReview(currentPageNumber)}>
                 최신 순
               </DropdownItem>
-              <DropdownItem key="좋아요 순" onClick={getMostLikedReview}>
+              <DropdownItem key="좋아요 순" onClick={() => getMostLikedReview(currentPageNumber)}>
                 좋아요 순
               </DropdownItem>
             </DropdownMenu>
           </Dropdown>
         </div>
-        <div>{isLoggedIn ? <NewReview /> : null}</div>
+        <div>
+          <div>{isLoggedIn ? <NewReview /> : null}</div>
+        </div>
       </div>
       <ul className="grid grid-cols-3 gap-2 gap-y-4">
-        {currentReviews.map((item, index) => (
+        {reviewData.map((item, index) => (
           <ReviewCard key={index} review={item} />
         ))}
       </ul>
@@ -142,7 +155,7 @@ const ReviewList: React.FC = () => {
 
           for (let i = 1; i <= totalPages; i++) {
             pageNumbers.push(
-              <Link key={i} href={`/review/pageNumber/${i}`} onClick={() => setCurrentPage(i)}>
+              <Link key={i} href={`/review/pageNumber/${i}`} prefetch onClick={() => handlePageChange(i)}>
                 {i}
               </Link>
             );
