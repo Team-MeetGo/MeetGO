@@ -1,5 +1,4 @@
 'use client';
-import participantsHandler from '(@/hooks/custom/participants)';
 import meetingRoomHandler from '(@/hooks/custom/room)';
 import { userStore } from '(@/store/userStore)';
 import { favoriteOptions } from '(@/utils/FavoriteData)';
@@ -9,17 +8,21 @@ import { useRouter } from 'next/navigation';
 import DeleteMeetingRoom from './DeleteMeetingRoom';
 import EditMeetingRoom from './EditMeetingRoom';
 
+import { useAddRoomMemberMutation, useUpdateRoomStatusClose } from '(@/hooks/useMutation/useMeetingMutation)';
 import { useParticipantsQuery } from '(@/hooks/useQueries/useChattingQuery)';
 import type { MeetingRoomType } from '(@/types/roomTypes)';
 
 function MeetingRoom({ room }: { room: MeetingRoomType }) {
   const { user } = userStore((state) => state);
   const router = useRouter();
-  const { addMemberHandler } = participantsHandler();
   const { getmaxGenderMemberNumber } = meetingRoomHandler();
   const participants = useParticipantsQuery(room.room_id);
+
   const { room_id, room_status, room_title, member_number, location, feature, leader_id } = room;
   const userInformation = user ? user[0] : null;
+  const user_id = userInformation?.user_id;
+  const roomMemberMutation = useAddRoomMemberMutation({ user_id, room_id });
+  const updateRoomStatusCloseMutation = useUpdateRoomStatusClose({ room_id });
 
   console.log('미팅룸 유저', user);
   console.log('미팅룸 참여자', participants);
@@ -42,17 +45,12 @@ function MeetingRoom({ room }: { room: MeetingRoomType }) {
       router.push(`/meetingRoom/${room_id}`);
     }
 
-    //room의 정보를 가져와서 성별에 할당된 인원을 확인
+    //성별에 할당된 인원이 참여자 정보보다 적을 때 입장
     const genderMaxNumber = await getmaxGenderMemberNumber(member_number);
-    if (genderMaxNumber === undefined) return alert('최대 성별 오류 다시 시도해 주세요');
-
-    //참여자 정보를 가져와서 해당 성별이 안에 몇명 있는지 확인
-    if (participants === undefined) return alert('참여 성벌 요류 다시 시도해 주세요');
     const participatedGenderMember = participants.filter((member) => member.gender === userInformation?.gender).length;
 
-    //성별에 할당된 인원이 참여자 정보보다 적을 때 입장
-    if (genderMaxNumber > participatedGenderMember || !participatedGenderMember) {
-      await addMemberHandler(room_id);
+    if ((genderMaxNumber && genderMaxNumber > participatedGenderMember) || !participatedGenderMember) {
+      await roomMemberMutation.mutateAsync();
       router.push(`/meetingRoom/${room_id}`);
     }
 
@@ -63,8 +61,8 @@ function MeetingRoom({ room }: { room: MeetingRoomType }) {
     }
 
     //모든 인원이 다 찼을 경우 모집종료로 변경
-    if (participants?.length === genderMaxNumber * 2) {
-      await clientSupabase.from('room').update({ room_status: '모집종료' }).eq('room_id', room_id);
+    if (genderMaxNumber && participants?.length === genderMaxNumber * 2) {
+      await updateRoomStatusCloseMutation.mutateAsync();
     }
   };
 

@@ -1,6 +1,5 @@
 'use client';
 import { clientSupabase } from '(@/utils/supabase/client)';
-import { UUID } from 'crypto';
 
 function meetingRoomHandler() {
   const getChattingRoom = async () => {
@@ -11,11 +10,6 @@ function meetingRoomHandler() {
       .order('created_at', { ascending: false });
     if (error) return alert('error 발생!');
     return chattingRoom;
-  };
-
-  const getRoomInformation = async (room_id: UUID) => {
-    const { data: roomInformation } = await clientSupabase.from('room').select(`*`).eq('room_id', room_id);
-    return roomInformation;
   };
 
   const getmaxGenderMemberNumber = async (memberNumber: string) => {
@@ -30,7 +24,7 @@ function meetingRoomHandler() {
     }
   };
 
-  return { getChattingRoom, getRoomInformation, getmaxGenderMemberNumber };
+  return { getChattingRoom, getmaxGenderMemberNumber };
 }
 
 export default meetingRoomHandler;

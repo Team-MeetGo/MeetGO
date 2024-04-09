@@ -19,7 +19,7 @@ export const useRecruitingMyroomQuery = (user_id: string | null) => {
   return results.map((re) => re.data);
 };
 
-export const useRoomInfoWithRoomIdQuery = (room_id: UUID) => {
+export const useRoomInfoWithRoomIdQuery = (room_id: string) => {
   const { data: roomData } = useSuspenseQuery({
     queryKey: [ROOMDATA_WITH_ROOMID, room_id],
     queryFn: async () => await fetchRoomInfoWithRoomId(room_id)
