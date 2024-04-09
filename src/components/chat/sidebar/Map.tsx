@@ -219,7 +219,7 @@ const Map: React.FC<MapProps> = ({ userId, chatRoomId }) => {
         <input type="text" className="border" value={searchText} onChange={(e) => setSearchText(e.target.value)} />
         <button type="submit">검색</button>
       </form>
-      <div id="map" className="w-96 h-96"></div>
+      <div id="map" className="w-70 h-80"></div>
       <div style={{ maxHeight: '500px', overflowY: 'auto' }}>
         {bars.map((bar, index) => (
           <div key={index} className="border">

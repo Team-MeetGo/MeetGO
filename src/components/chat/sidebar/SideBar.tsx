@@ -71,12 +71,16 @@ const SideBar: React.FC<SideBarProps> = ({ userId, chatRoomId }) => {
   };
 
   return (
-    <div className="absolute fill-background">
-      <GiHamburgerMenu onClick={toggleSidebar} />
-      {isSidebarOpen && (
-        <div>
+    <div className="absolute w-1/5 flex flex-col">
+      <div className={`flex ${isSidebarOpen ? 'justify-end' : 'justify-start'}`}>
+        <GiHamburgerMenu onClick={toggleSidebar} />
+      </div>
+
+      <div>
+        {isSidebarOpen && (
           <div>
-            {/* {userId === leaderId && (
+            <div>
+              {/* {userId === leaderId && (
               <>
                 미팅 날짜/시간:
                 <input
@@ -89,27 +93,28 @@ const SideBar: React.FC<SideBarProps> = ({ userId, chatRoomId }) => {
               </>
             )} */}
 
-            <>
-              <h1 className="font-semibold text-2xl">미팅 날짜/시간</h1>
-              <Card>
-                <CardBody>
-                  <p>최종 날짜 : {finalDateTime}</p>
-                </CardBody>
-              </Card>
-              미팅 날짜/시간:
-              <input
-                type="text"
-                className="border"
-                value={selectedMeetingTime ?? ''}
-                onChange={(e) => setSelectedMeetingTime(e.target.value)}
-              />
-              <button onClick={handleSelectedTime}>{isTimeSelected ? '취소' : '선택'}</button>
-            </>
+              <>
+                <h1 className="font-semibold text-2xl mb-2.5">미팅 날짜/시간</h1>
+                <Card className="border border-mainColor shadow-none mb-6">
+                  <CardBody className="py-5">
+                    <p className="text-lg">{finalDateTime}</p>
+                  </CardBody>
+                </Card>
+                미팅 날짜/시간:
+                <input
+                  type="text"
+                  className="border"
+                  value={selectedMeetingTime ?? ''}
+                  onChange={(e) => setSelectedMeetingTime(e.target.value)}
+                />
+                <button onClick={handleSelectedTime}>{isTimeSelected ? '취소' : '선택'}</button>
+              </>
+            </div>
+            {/* <DatePicker /> */}
+            <Map userId={userId} chatRoomId={chatRoomId} />
           </div>
-          <DatePicker />
-          <Map userId={userId} chatRoomId={chatRoomId} />
-        </div>
-      )}
+        )}
+      </div>
     </div>
   );
 };
