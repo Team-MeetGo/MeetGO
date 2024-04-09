@@ -72,7 +72,7 @@ const SideBar: React.FC<SideBarProps> = ({ userId, chatRoomId }) => {
   };
 
   return (
-    <div className="absolute w-1/5 flex flex-col">
+    <div className="absolute w-[800px] flex flex-col">
       <div className={`flex ${isSidebarOpen ? 'justify-end' : 'justify-start'}`}>
         <GiHamburgerMenu onClick={toggleSidebar} />
       </div>
