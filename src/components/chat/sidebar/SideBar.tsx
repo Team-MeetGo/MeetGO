@@ -51,6 +51,9 @@ const SideBar: React.FC<SideBarProps> = ({ userId, chatRoomId }) => {
         .from('chatting_room')
         .update({ meeting_time: selectedMeetingTime })
         .eq('chatting_room_id', chatRoomId);
+      if (error) {
+        console.log('서버에 미팅 시간 추가 에러', error);
+      }
     } else {
       setSelectedMeetingTime('');
       setFinalDateTime('');
@@ -58,6 +61,9 @@ const SideBar: React.FC<SideBarProps> = ({ userId, chatRoomId }) => {
         .from('chatting_room')
         .update({ meeting_time: null })
         .eq('chatting_room_id', chatRoomId);
+      if (error) {
+        console.log('서버에 미팅 시간 삭제 에러', error);
+      }
     }
   };
 

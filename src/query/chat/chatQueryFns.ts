@@ -43,7 +43,7 @@ export const fetchParticipants = async (roomId: string) => {
   return users;
 };
 
-// 채팅창 정보 가져오기
+// 채팅방 정보 가져오기
 export const fetchChatData = async (chatRoomId: string) => {
   const { data: chatData, error: chatDataErr } = await clientSupabase
     .from('chatting_room')

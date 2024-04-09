@@ -28,6 +28,7 @@ const Map: React.FC<MapProps> = ({ userId, chatRoomId }) => {
   const [isLocationSelected, setisLocationSelected] = useState<boolean>(false);
   const [selectedMeetingLocation, setSelectedMeetingLocation] = useState<string>();
 
+  // useRoomDataQuery로 리더 아이디 가져오기
   const room = useRoomDataQuery(chatRoomId);
   const leaderId = room?.roomData.leader_id;
 
@@ -39,8 +40,6 @@ const Map: React.FC<MapProps> = ({ userId, chatRoomId }) => {
     setSelectedMeetingLocation(meetingLocation || '');
     setisLocationSelected(!!meetingLocation);
   }, [meetingLocation]);
-
-  console.log('채팅정보', chat);
 
   useEffect(() => {
     const script = document.createElement('script');
@@ -194,11 +193,17 @@ const Map: React.FC<MapProps> = ({ userId, chatRoomId }) => {
         .from('chatting_room')
         .update({ meeting_location: barName })
         .eq('chatting_room_id', chatRoomId);
+      if (error) {
+        console.log('서버에 미팅 장소 추가 에러', error);
+      }
     } else {
       const { error } = await clientSupabase
         .from('chatting_room')
         .update({ meeting_location: null })
         .eq('chatting_room_id', chatRoomId);
+      if (error) {
+        console.log('서버에 미팅 장소 제거 에러', error);
+      }
     }
   };
 
