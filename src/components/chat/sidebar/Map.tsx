@@ -246,12 +246,12 @@ const Map: React.FC<MapProps> = ({ userId, chatRoomId }) => {
       </Card>
 
       <div id="map" className="w-70 h-80"></div>
-      <div>
+      <div className="flex flex-col justify-center place-item-center">
         {bars.map((bar, index) => (
           <div
             key={index}
             className={`flex flex-col justify-center border-b-1 border-gray2 py-4 ${
-              selectedMeetingLocation === bar.place_name ? 'bg-pink-100' : ''
+              selectedMeetingLocation === bar.place_name ? 'bg-purpleSecondary' : ''
             }`}
             // onClick={() => {
             //   if (userId === leaderId) {
@@ -261,20 +261,20 @@ const Map: React.FC<MapProps> = ({ userId, chatRoomId }) => {
             onClick={() => {
               handleSelectLocation(selectedMeetingLocation === bar.place_name ? '' : bar.place_name);
             }}
-            style={{ cursor: 'pointer' }}
+            style={{ cursor: 'pointer', alignItems: 'center' }}
           >
-            <div className="flex flex-row justify-between">
+            <div className="flex flex-col text-left">
               <h1 className="text-base mb-2.5">{bar.place_name}</h1>
-            </div>
-            <div className="text-sm">
-              <p>{bar.address_name}</p>
-              <p>{bar.place_url}</p>
-              <p>{bar.phone}</p>
+              <div className="text-sm">
+                <p>{bar.address_name}</p>
+                <p>{bar.place_url}</p>
+                <p>{bar.phone}</p>
+              </div>
             </div>
           </div>
         ))}
       </div>
-      <div className="flex justify-center">
+      <div className="flex justify-center ">
         <Pagination
           showControls
           total={totalPages}
