@@ -4,7 +4,7 @@ import { useSuspenseQuery } from '@tanstack/react-query';
 
 export const useRoomDataQuery = (chatRoomId: string) => {
   const { data: room } = useSuspenseQuery({
-    queryKey: ROOMDATA_QUERY_KEY,
+    queryKey: [ROOMDATA_QUERY_KEY, chatRoomId],
     queryFn: async () => await fetchRoomData(chatRoomId)
   });
   return room;
@@ -12,7 +12,7 @@ export const useRoomDataQuery = (chatRoomId: string) => {
 
 export const useParticipantsQuery = (roomId: string) => {
   const { data: users } = useSuspenseQuery({
-    queryKey: PARTICIPANTS_QUERY_KEY,
+    queryKey: [PARTICIPANTS_QUERY_KEY, roomId],
     queryFn: async () => await fetchParticipants(roomId)
   });
   return users;

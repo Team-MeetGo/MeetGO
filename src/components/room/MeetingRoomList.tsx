@@ -1,10 +1,11 @@
 'use client';
 import meetingRoomHandler from '(@/hooks/custom/room)';
-import { useEffect, useState } from 'react';
+import { Suspense, useEffect, useState } from 'react';
 import MeetingRoom from './MeetingRoom';
 import { userStore } from '(@/store/userStore)';
 
 import type { Database, Tables } from '(@/types/database.types)';
+import { useRecruitingMyroomQuery } from '(@/hooks/useQueries/useMeetingQuery)';
 
 function MeetingRoomList() {
   type MeetingRoom = Database['public']['Tables']['room']['Row'];
@@ -12,27 +13,31 @@ function MeetingRoomList() {
   const [meetingRoomList, setMeetingRoomList] = useState<MeetingRoom[]>();
   const [myMeetingRoomList, setMyMeetingRoomList] = useState<MeetingRoom[]>();
   const [chattingRoomList, setChattingRoomList] = useState<MeetingRoom[]>();
-  const { getMeetingRoom, getChattingRoom, getMyRoom } = meetingRoomHandler();
+  // const { getMeetingRoom, getChattingRoom, getMyRoom } = meetingRoomHandler();
+  console.log(isLoggedIn);
+  console.log('user', user);
+  const results = useRecruitingMyroomQuery(user ? user[0].user_id : null);
+  console.log(results);
 
-  useEffect(() => {
-    const getMeetingRoomList = async () => {
-      if (!user) return;
-      const meetingroom = (await getMeetingRoom()) as MeetingRoom[];
-      const myRoomWithId = (await getMyRoom(user[0].user_id)) as any;
-      const myRoom = myRoomWithId.map((sample: any) => sample.room);
-      const chattingroom = (await getChattingRoom()) as MeetingRoom[];
-      setMeetingRoomList(meetingroom);
-      setChattingRoomList(chattingroom);
-      setMyMeetingRoomList(myRoom);
-    };
-    getMeetingRoomList();
-  }, [user]);
+  // useEffect(() => {
+  //   const getMeetingRoomList = async () => {
+  //     if (!user) return;
+  //     const meetingroom = (await getMeetingRoom()) as MeetingRoom[];
+  //     const myRoomWithId = (await getMyRoom(user[0].user_id)) as any;
+  //     const myRoom = myRoomWithId.map((sample: any) => sample.room);
+  //     const chattingroom = (await getChattingRoom()) as MeetingRoom[];
+  //     setMeetingRoomList(meetingroom);
+  //     setChattingRoomList(chattingroom);
+  //     setMyMeetingRoomList(myRoom);
+  //   };
+  //   getMeetingRoomList();
+  // }, [user]);
   if (meetingRoomList === undefined || !meetingRoomList) return;
   if (myMeetingRoomList === undefined || !myMeetingRoomList) return;
   if (chattingRoomList === undefined || !chattingRoomList) return;
 
   return (
-    <>
+    <Suspense fallback="미팅룸들 나열중~~">
       <article>
         <div>
           <div>========여기부터는 내가 참여한 방========</div>
@@ -60,7 +65,7 @@ function MeetingRoomList() {
           ))}
         </div>
       </article>
-    </>
+    </Suspense>
   );
 }
 

@@ -42,6 +42,5 @@ export const fetchParticipants = async (roomId: string) => {
       }
     }
     return users;
-    // setUsersData([...users]);
   }
 };
