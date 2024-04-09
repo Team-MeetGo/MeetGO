@@ -61,10 +61,14 @@ const ChatHeader = ({ chatRoomId }: { chatRoomId: string }) => {
   };
 
   const getOutOfChatRoom = async () => {
-    await UpdateIsActive();
-    await getRidOfMe();
-    await handleIsRest();
-    setMessages([]);
+    if (window.confirm('채팅창에서 한번 나가면 다시 입장할 수 없습니다. 그래도 나가시겠습니까?')) {
+      await UpdateIsActive();
+      await getRidOfMe();
+      await handleIsRest();
+      setMessages([]);
+    } else {
+      return;
+    }
   };
 
   return (
