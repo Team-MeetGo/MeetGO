@@ -86,7 +86,7 @@ const ChatHeader = ({ chatRoomId }: { chatRoomId: string }) => {
           <IoIosSearch />
         </button>
 
-        <button onClick={getOutOfChatRoom}>죄송합니다 제 스타일은 아니신 것 같아요</button>
+        <button onClick={getOutOfChatRoom}>나가기</button>
       </div>
     </div>
   );
