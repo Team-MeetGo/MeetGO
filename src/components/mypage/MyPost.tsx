@@ -47,7 +47,7 @@ const MyPost = () => {
                   alt="Post Image"
                   style={{ objectFit: 'cover' }}
                   fill={true}
-                  sizes="200px"
+                  sizes="500px"
                   priority={false}
                   className="mb-2"
                 />
@@ -70,7 +70,7 @@ const MyPost = () => {
                   alt="Like Post Image"
                   style={{ objectFit: 'cover' }}
                   fill={true}
-                  sizes="200px"
+                  sizes="500px"
                   priority={false}
                   className="mb-2"
                 />

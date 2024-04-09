@@ -9,8 +9,8 @@ const Favorite = () => {
   const { user, setUser } = userStore((state) => state);
 
   const handleSelect = (value: string[]) => {
-    if (selected.size >= 10) {
-      alert('최대 10개까지 선택 가능합니다.');
+    if (selected.size >= 5) {
+      alert('최대 5개까지 선택 가능합니다.');
       return;
     }
     setSelected(new Set(value));
@@ -46,7 +46,7 @@ const Favorite = () => {
       <label>이상형</label>
       <div className="flex whitespace-nowrap">
         <Select
-          label="이상형 선택(최대 10개)"
+          label="이상형 선택(최대 5개)"
           selectionMode="multiple"
           variant="bordered"
           selectedKeys={selected}
