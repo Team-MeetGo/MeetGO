@@ -1,7 +1,7 @@
 import { clientSupabase } from '(@/utils/supabase/client)';
 
 // 요청상태 조회
-export async function getMetPeople(userId: any, userGender: any) {
+export async function getMetPeople(userId: string, userGender: string) {
   if (!userId) return [];
 
   // 방 참여자 정보 가져오기
@@ -30,7 +30,7 @@ export async function getMetPeople(userId: any, userGender: any) {
     metPeopleDetails.map(async (personDetails) => {
       const { data: requestsMade } = await clientSupabase
         .from('kakaoId_request')
-        .select('request_status, created_at')
+        .select('request_status, created_at, request_Id, response_Id')
         .eq('request_Id', userId)
         .eq('response_Id', personDetails.user_id)
         .order('created_at', { ascending: false })
@@ -39,30 +39,23 @@ export async function getMetPeople(userId: any, userGender: any) {
       let requestStatus = '요청전';
       if (requestsMade && requestsMade.length > 0) {
         requestStatus = requestsMade[0].request_status;
-      }
+        const { request_Id, response_Id } = requestsMade[0];
 
+        return {
+          ...personDetails,
+          requestStatus,
+          request_Id,
+          response_Id
+        };
+      }
       return {
         ...personDetails,
-        requestStatus
+        requestStatus,
+        request_Id: null,
+        response_Id: null
       };
     })
   );
 
   return metPeopleWithStatus;
 }
-
-// 요청상태 업데이트
-export const updateRequestStatus = async (requestId: string, responseId: string, newStatus: string) => {
-  const { data, error } = await clientSupabase
-    .from('kakaoId_request')
-    .update({ request_status: newStatus })
-    .match({ request_Id: requestId, response_Id: responseId });
-
-  if (error) {
-    console.error('상태 업데이트 실패:', error);
-    return false;
-  }
-
-  console.log('상태 업데이트 성공:', data);
-  return true;
-};

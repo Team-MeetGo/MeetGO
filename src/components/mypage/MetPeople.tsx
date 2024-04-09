@@ -1,13 +1,10 @@
 'use client';
 
-import { useMetPeopleMutation } from '(@/hooks/useMutation/useMetPeopleMutation)';
+import { useAcceptKakaoIdMutation, useMetPeopleMutation } from '(@/hooks/useMutation/useMetPeopleMutation)';
 import { useMetPeople } from '(@/hooks/useQueries/useMetPeople)';
 import { KAKAOID_REQUEST_QUERY_KEY } from '(@/query/user/metPeopleQueryKeys)';
 import { userStore } from '(@/store/userStore)';
-import { createRequestKakaoId } from '(@/utils/api/authAPI)';
-import { clientSupabase } from '(@/utils/supabase/client)';
 import { useQueryClient } from '@tanstack/react-query';
-import { useEffect, useState } from 'react';
 
 /**
  * useMutation을 이용한 데이터 처리 사용 방법
@@ -24,48 +21,64 @@ const MetPeople = () => {
   const { user, setUser } = userStore((state) => state);
   const userId = user?.[0]?.user_id ?? '';
   const userGender = user?.[0]?.gender ?? '';
-
-  const { mutate: requestKakaoMutate } = useMetPeopleMutation();
   const metPeopleList = useMetPeople(userId, userGender);
+  const { mutate: requestKakaoMutate } = useMetPeopleMutation();
+  const { mutate: acceptKakaoIdMutate } = useAcceptKakaoIdMutation();
 
-  console.log('metPeopleList => ', metPeopleList);
+  /** 카카오ID요청하기 버튼 클릭시 실행될 로직(상태 업데이트 및 갱신) */
+  const handleKakaoIdRequestClick = (responseId: string) => {
+    requestKakaoMutate(
+      {
+        requestId: userId,
+        responseId
+      },
+      {
+        onSuccess: () => {
+          queryClient.invalidateQueries({
+            queryKey: [KAKAOID_REQUEST_QUERY_KEY, userId, userGender]
+          });
+        }
+      }
+    );
+  };
 
-  // const onKakaoIdRequest = async (responseId: string) => {
-  //   if (!userId) {
-  //     console.error('사용자 ID가 존재하지 않습니다.');
-  //     return;
-  //   }
-  //   const result = await createRequestKakaoId(userId, responseId);
-  //   if (result) {
-  //     alert('상대방에게 카카오톡ID를 요청하셨습니다!');
-  //     const updatedMetPeopleList = metPeopleList.map((person: any) => {
-  //       if (person.user_id === responseId) {
-  //         return { ...person, requestStatus: '요청중' };
-  //       }
-  //       return person;
-  //     });
-  //   } else {
-  //     alert('요청 실패.');
-  //   }
-  // };
+  const handleAcceptKakaoId = (responseId: string, newStatus: string) => {
+    acceptKakaoIdMutate(
+      {
+        requestId: userId,
+        responseId,
+        newStatus: '수락'
+      },
+      {
+        onSuccess: () => {
+          alert('카톡ID 요청을 수락했습니다.');
+          queryClient.invalidateQueries({
+            queryKey: [KAKAOID_REQUEST_QUERY_KEY, userId, userGender]
+          });
+        }
+      }
+    );
+  };
 
-  // const handleStatusChange = async (requestId: string, responseId: string, newStatus: string) => {
-  //   const success = await updateRequestStatus(requestId, responseId, newStatus);
-  //   if (success) {
-  //     alert(`${newStatus}하셨습니다.`);
-  //     // 상태 업데이트 후 목록을 새로고침하거나 업데이트하기 위한 로직 추가
-  //     const updatedMetPeopleList = metPeopleList.map((person: any) => {
-  //       if (person.user_id === responseId && person.request_Id === requestId) {
-  //         return { ...person, requestStatus: newStatus };
-  //       }
-  //       return person;
-  //     });
+  const handleRejectKakaoId = (responseId: string, newStatus: string) => {
+    acceptKakaoIdMutate(
+      {
+        requestId: userId,
+        responseId,
+        newStatus: '거절'
+      },
+      {
+        onSuccess: () => {
+          alert('카톡ID 요청을 거절했습니다.');
+          queryClient.invalidateQueries({
+            queryKey: [KAKAOID_REQUEST_QUERY_KEY, userId, userGender]
+          });
+        }
+      }
+    );
+  };
 
-  //     setMetPeopleList(updatedMetPeopleList);
-  //   }
-  // };
-
-  // console.log(metPeopleList, '이성리스트');
+  console.log('metPeopleList:', metPeopleList);
 
   return (
     <div className="mb-6">
@@ -76,40 +89,22 @@ const MetPeople = () => {
             <div className="w-24 h-24 rounded-full bg-gray-300 mb-2" />
             <p className="text-sm">{person.nickname}</p>
             {(!person.requestStatus || person.requestStatus === '요청전') && (
-              // <button className="text-xs" onClick={() => onKakaoIdRequest(person.user_id)}>
-              <button
-                className="text-xs"
-                onClick={() =>
-                  requestKakaoMutate(
-                    {
-                      requestId: userId,
-                      responseId: person.user_id
-                    },
-                    {
-                      onSuccess: () => {
-                        queryClient.invalidateQueries({
-                          queryKey: [KAKAOID_REQUEST_QUERY_KEY, userId, userGender]
-                        });
-                      }
-                    }
-                  )
-                }
-              >
+              <button className="text-xs" onClick={() => handleKakaoIdRequestClick(person.user_id)}>
                 카톡ID 요청
               </button>
             )}
             {userId === person.request_Id && person.requestStatus === '요청중' && <p className="text-xs">요청중</p>}
-            {/* {userId === person.response_Id && person.requestStatus === '요청중' && (
+            {userId === person.response_Id && person.requestStatus === '요청중' && (
               <>
-                <button className="text-xs" onClick={() => handleStatusChange(person.request_Id, userId, '수락')}>
+                <button className="text-xs" onClick={() => handleAcceptKakaoId(person.user_id, '수락')}>
                   수락
                 </button>
-                <button className="text-xs" onClick={() => handleStatusChange(person.request_Id, userId, '거절')}>
+                <button className="text-xs" onClick={() => handleRejectKakaoId(person.user_id, '거절')}>
                   거절
                 </button>
               </>
-            )} */}
-            {person.requestStatus === '수락' && <p className="text-xs">카톡ID: {person.kakaoId}</p>}
+            )}
+            {person.requestStatus === '수락' && <p className="text-xs">카톡ID : {person.kakaoId}</p>}
             {userId === person.request_Id && person.requestStatus === '거절' && <p className="text-xs">거절됨</p>}
             {userId === person.response_Id && person.requestStatus === '거절' && <p className="text-xs">거절</p>}
           </div>
