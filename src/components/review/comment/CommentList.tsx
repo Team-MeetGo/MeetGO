@@ -89,6 +89,7 @@ export type CommentListType = {
 };
 
 const CommentList = ({ review_id, onUpdateCommentCount }: Props) => {
+  const [updatedCommentList, setUpdatedCommentList] = useState<CommentListType[]>([]);
   const commentsFromStore = useCommentStore((state) => state.comments);
 
   const useCommentDataQuery = (review_id: string) => {
@@ -100,20 +101,21 @@ const CommentList = ({ review_id, onUpdateCommentCount }: Props) => {
   };
 
   const commentData = useCommentDataQuery(review_id as string);
-
   const updatedComment = [
     ...(commentData ?? []),
     ...commentsFromStore.filter((comment) => comment.review_id === review_id)
   ];
-  console.log('updatedComment', updatedComment);
-  console.log('updatedComment.length', updatedComment.length);
+  // console.log('updatedComment', updatedComment);
+  // console.log('updatedComment.length', updatedComment.length);
 
   useEffect(() => {
+    setUpdatedCommentList(updatedComment || []);
     onUpdateCommentCount(updatedComment.length as number);
   }, [onUpdateCommentCount, updatedComment.length]);
 
   const handleDeleteComment = (commentId: string) => {
-    commentData?.filter((comment) => comment.comment_id !== commentId);
+    updatedCommentList ? updatedCommentList.filter((comment) => comment.comment_id !== commentId) : [];
+    setUpdatedCommentList(updatedCommentList);
   };
 
   return (
@@ -121,8 +123,8 @@ const CommentList = ({ review_id, onUpdateCommentCount }: Props) => {
       <div>
         <NewComment review_id={review_id} />
       </div>
-      <div>댓글 {updatedComment.length}개</div>
-      {updatedComment.map((comment, index) => (
+      <div>댓글 {updatedCommentList.length}개</div>
+      {updatedCommentList.map((comment, index) => (
         <div key={index}>
           <CommentCard comment={comment} onDeleteComment={handleDeleteComment} />
         </div>
