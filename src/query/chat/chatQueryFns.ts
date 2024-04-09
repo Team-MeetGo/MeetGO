@@ -57,11 +57,10 @@ export const fetchChatData = async (chatRoomId: string) => {
   }
 };
 
+// 내 채팅방들의 아이디
 export const fetchMyChatRoomIds = async (userId: string) => {
   const myChatRooms = [];
-
   const { data: myRooms } = await clientSupabase.from('participants').select('room_id').eq('user_id', userId);
-
   if (myRooms) {
     for (let room of myRooms) {
       const { data: myChatRoomId } = await clientSupabase

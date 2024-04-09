@@ -11,7 +11,6 @@ import { ITEM_INTERVAL } from '(@/utils/constant)';
 
 const ChatPage = async ({ params }: { params: { chatroom_id: string } }) => {
   const chatRoomId = params.chatroom_id;
-
   const supabase = serverSupabase();
   const { data } = await supabase.auth.getUser();
   const user = data.user;
@@ -22,7 +21,6 @@ const ChatPage = async ({ params }: { params: { chatroom_id: string } }) => {
     .eq('chatting_room_id', chatRoomId)
     .range(from, to)
     .order('created_at', { ascending: false });
-  console.log(allMsgs);
 
   return (
     <Suspense fallback={<ChatLoading />}>
