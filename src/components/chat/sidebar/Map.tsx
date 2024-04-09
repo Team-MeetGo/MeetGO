@@ -189,23 +189,26 @@ const Map: React.FC<MapProps> = ({ userId, chatRoomId }) => {
       return;
     }
 
-    if (!isLocationSelected) {
-      // 장소 선택 안되었을 때
-      const { error } = await clientSupabase
-        .from('chatting_room')
-        .update({ meeting_location: barName })
-        .eq('chatting_room_id', chatRoomId);
-      if (error) {
-        console.log('서버에 미팅 장소 추가 에러', error);
+    try {
+      // 선택한 장소의 이름이 이미 선택된 장소와 같다면, 선택을 해제
+      if (selectedMeetingLocation === barName) {
+        setSelectedMeetingLocation('');
+        setisLocationSelected(false);
+        await clientSupabase
+          .from('chatting_room')
+          .update({ meeting_location: null })
+          .eq('chatting_room_id', chatRoomId);
+      } else {
+        // 선택한 장소의 이름을 선택된 장소로 업데이트합니다.
+        setSelectedMeetingLocation(barName);
+        setisLocationSelected(true);
+        await clientSupabase
+          .from('chatting_room')
+          .update({ meeting_location: barName })
+          .eq('chatting_room_id', chatRoomId);
       }
-    } else {
-      const { error } = await clientSupabase
-        .from('chatting_room')
-        .update({ meeting_location: null })
-        .eq('chatting_room_id', chatRoomId);
-      if (error) {
-        console.log('서버에 미팅 장소 제거 에러', error);
-      }
+    } catch (error) {
+      console.error('서버에 미팅 장소 업데이트 에러:', error);
     }
   };
 
