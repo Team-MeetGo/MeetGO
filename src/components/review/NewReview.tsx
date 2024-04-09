@@ -1,20 +1,22 @@
 import { useState, ChangeEvent, FormEvent } from 'react';
-import { FaPhotoVideo } from 'react-icons/fa';
 import Image from 'next/image';
-import { Button, Modal, ModalBody, ModalContent, useDisclosure } from '@nextui-org/react';
+import { Button, Checkbox, Modal, ModalBody, ModalContent, useDisclosure } from '@nextui-org/react';
 import { clientSupabase } from '(@/utils/supabase/client)';
 import { useRouter } from 'next/navigation';
 import { MdCancel } from 'react-icons/md';
 import { userStore } from '(@/store/userStore)';
+import { LuImagePlus } from 'react-icons/lu';
 
 const NewReview = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [files, setFiles] = useState<File[]>([]);
   const [dragging, setDragging] = useState(false);
+  const [showNickname, setShowNickname] = useState(true);
   const router = useRouter();
 
   const { user, setUser } = userStore((state) => state);
   const userId = user && user[0].user_id;
+  const show_nickname = showNickname;
 
   const handleClose = () => {
     if (window.confirm('리뷰 등록을 취소하시겠습니까?')) {
@@ -93,7 +95,8 @@ const NewReview = () => {
         review_title: reviewTitle,
         review_contents: reviewContents,
         image_urls: imageUrls,
-        user_id: userId
+        user_id: userId,
+        show_nickname
       }
     ]);
 
@@ -141,6 +144,7 @@ const NewReview = () => {
                         ))}
                       </div>
                     )}
+
                     <div>
                       <input
                         className="hidden items-center justify-center"
@@ -162,12 +166,19 @@ const NewReview = () => {
                         {dragging && <div className="inset-0 z-10 bg-sky-500/20 pointer-events-none" />}
                         {files.length < 4 && (
                           <div className="flex items-center justify-center pointer-events-none rounded-[20px] w-[150px] h-[150px] bg-gray-300">
-                            <FaPhotoVideo className="w-20 h-20 text-[#A1A1AA]" />
+                            <LuImagePlus className="w-20 h-20 text-[#A1A1AA]" />
                           </div>
                         )}
                       </label>
                     </div>
                   </div>
+                  <Checkbox
+                    defaultSelected={showNickname}
+                    onChange={() => setShowNickname(!showNickname)}
+                    className="text-black"
+                  >
+                    닉네임 표시
+                  </Checkbox>
                   <textarea
                     autoFocus
                     id="review_title"

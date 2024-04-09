@@ -29,8 +29,8 @@ const NavBarContents = () => {
     alert('로그아웃 성공');
   };
 
-  console.log('isLoggedIn', isLoggedIn);
-  console.log('user =>', user);
+  // console.log('isLoggedIn', isLoggedIn);
+  // console.log('user =>', user);
 
   return (
     <Navbar>

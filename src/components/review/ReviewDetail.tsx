@@ -1,6 +1,3 @@
-'use client';
-
-import { useEffect, useState } from 'react';
 import { clientSupabase } from '(@/utils/supabase/client)';
 import Image from 'next/image';
 import ReviewEditModal from './ReviewEditModal';
@@ -11,6 +8,9 @@ import ImageGallery from './ImageGallery';
 import { HiOutlineChatBubbleOvalLeftEllipsis } from 'react-icons/hi2';
 import defaultImg from '../../../public/defaultImg.jpg';
 import { userStore } from '(@/store/userStore)';
+import { AUTHOR_QUERY_KEY, REVIEW_QUERY_KEY } from '(@/query/review/reviewQueryKeys)';
+import { useSuspenseQuery } from '@tanstack/react-query';
+import { fetchAuthorData, fetchReviewData } from '(@/query/review/reviewQueryFns)';
 
 export type ReviewDetailType = {
   review_title: string | null;
@@ -18,6 +18,7 @@ export type ReviewDetailType = {
   created_at: string | null;
   user_id: string | null;
   image_urls: string[] | null;
+  show_nickname: boolean | null;
 };
 
 type Props = {
@@ -26,81 +27,71 @@ type Props = {
 };
 
 const ReviewDetail = ({ review_id, commentCount }: Props) => {
-  const [reviewDetail, setReviewDetail] = useState<ReviewDetailType | null>(null);
-  const [userAvatar, setUserAvatar] = useState<string | null>(null);
-  const [userNickname, setUserNickname] = useState<string | null>(null);
   const router = useRouter();
 
   const { user, setUser } = userStore((state) => state);
   const userId = user && user[0].user_id;
 
-  useEffect(() => {
-    if (review_id) {
-      getReviewDetail(review_id);
-    }
-  }, []);
+  const useAuthorDataQuery = (review_id: string) => {
+    const { data: userData } = useSuspenseQuery({
+      queryKey: [AUTHOR_QUERY_KEY, review_id],
+      queryFn: async () => await fetchAuthorData(review_id)
+    });
+    return userData;
+  };
 
-  async function getReviewDetail(review_id: string) {
-    let { data: reviewDetail, error } = await clientSupabase
-      .from('review')
-      .select('review_title, review_contents, created_at, user_id, image_urls')
-      .eq('review_id', review_id)
-      .single();
+  const userData = useAuthorDataQuery(review_id);
+  const authorNickname = userData?.nickname || null;
+  const authorAvatar = userData?.avatar;
 
-    if (error) {
-      console.error('리뷰를 불러오지 못함', error);
-    } else {
-      if (reviewDetail) {
-        const { user_id } = reviewDetail;
-        const { data: userData, error: userError } = await clientSupabase
-          .from('users')
-          .select('nickname, avatar')
-          .eq('user_id', user_id as string)
-          .single();
+  const useReviewDataQuery = (review_id: string) => {
+    const { data: reviewDetail } = useSuspenseQuery({
+      queryKey: [REVIEW_QUERY_KEY, review_id],
+      queryFn: async () => await fetchReviewData(review_id)
+    });
+    return reviewDetail;
+  };
 
-        if (userError) {
-          console.error('유저 정보를 불러오지 못함', userError);
-        } else {
-          setUserAvatar(userData?.avatar || null);
-          setUserNickname(userData?.nickname || null);
-        }
-      }
-    }
-
-    setReviewDetail(reviewDetail || null);
-  }
+  const reviewDetail = useReviewDataQuery(review_id);
+  const reviewTitle = reviewDetail?.review_title;
+  const reviewContent = reviewDetail?.review_contents;
+  const showNickname = reviewDetail?.show_nickname;
+  const reviewImageUrls = reviewDetail?.image_urls;
+  const reviewCreatedAt = reviewDetail?.created_at;
 
   const handleDeleteReview = async () => {
     if (window.confirm('리뷰를 삭제하시겠습니까?')) {
-      const { error: reviewDeleteError } = await clientSupabase.from('review').delete().eq('review_id', review_id);
       const { error: commentDeleteError } = await clientSupabase
         .from('review_comment')
         .delete()
         .eq('review_id', review_id);
+      const { error: likeDeleteError } = await clientSupabase.from('review_like').delete().eq('review_id', review_id);
+      const { error: reviewDeleteError } = await clientSupabase.from('review').delete().eq('review_id', review_id);
       if (reviewDeleteError) {
         console.log('리뷰 삭제 오류:', reviewDeleteError.message);
       } else if (commentDeleteError) {
         console.log('댓글 삭제 오류:', commentDeleteError.message);
+      } else if (likeDeleteError) {
+        console.log('댓글 삭제 오류:', likeDeleteError.message);
       } else {
         router.push(`/review/pageNumber/1`);
       }
     }
   };
-
   return (
     <div>
       <div>
-        <div>{reviewDetail?.review_title}</div>
+        <div>{reviewTitle}</div>
         <div className="flex items-center">
-          {userAvatar ? (
-            <Image className="mr-[15px] rounded-full" src={userAvatar} alt="유저 아바타" height={50} width={50} />
+          {authorAvatar ? (
+            <Image className="mr-[15px] rounded-full" src={authorAvatar} alt="유저 아바타" height={50} width={50} />
           ) : (
             <AvatarDefault />
           )}
-          <div>{userNickname}</div>
+          <div>{showNickname ? authorNickname || '익명유저' : '익명유저'}</div>
         </div>
         <div className="text-[#A1A1AA]">
-          {reviewDetail && reviewDetail.created_at
+          {reviewCreatedAt
             ? new Intl.DateTimeFormat('ko-KR', {
                 year: 'numeric',
                 month: '2-digit',
@@ -109,7 +100,7 @@ const ReviewDetail = ({ review_id, commentCount }: Props) => {
                 minute: '2-digit',
                 second: '2-digit',
                 hour12: false
-              }).format(new Date(reviewDetail.created_at))
+              }).format(new Date(reviewCreatedAt))
             : null}
         </div>
         <div className="flex gap-1">
@@ -122,8 +113,8 @@ const ReviewDetail = ({ review_id, commentCount }: Props) => {
           </div>
         </div>
         <div>
-          {reviewDetail?.image_urls && reviewDetail.image_urls.length > 0 ? (
-            <ImageGallery images={reviewDetail?.image_urls || []} />
+          {reviewImageUrls && reviewImageUrls.length > 0 ? (
+            <ImageGallery images={reviewImageUrls || []} />
           ) : (
             <Image
               src={defaultImg}
@@ -134,7 +125,7 @@ const ReviewDetail = ({ review_id, commentCount }: Props) => {
             />
           )}
         </div>
-        <div>{reviewDetail?.review_contents}</div>
+        <div>{reviewContent}</div>
       </div>
       <div>
         {userId === reviewDetail?.user_id && (

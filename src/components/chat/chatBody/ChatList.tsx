@@ -1,6 +1,6 @@
 'use client';
 import { Message } from '(@/types/chatTypes)';
-import { ITEM_INTERVAL, getFromTo, getformattedDate } from '(@/utils)';
+import { getFromTo, getformattedDate } from '(@/utils)';
 import { clientSupabase } from '(@/utils/supabase/client)';
 import { useEffect, useRef, useState } from 'react';
 import { User } from '@supabase/supabase-js';
@@ -11,14 +11,23 @@ import ChatDeleteDropDown from './ChatDeleteDropDown';
 import { chatStore } from '(@/store/chatStore)';
 import { Tooltip } from '@nextui-org/react';
 import OthersChat from './OthersChat';
+import ChatSearch from './ChatSearch';
+import { useRoomDataQuery } from '(@/hooks/useQueries/useChattingQuery)';
+import { ITEM_INTERVAL } from '(@/utils/constant)';
+import { useRecruitingMyroomQuery } from '(@/hooks/useQueries/useMeetingQuery)';
+import { userStore } from '(@/store/userStore)';
 
-const ChatList = ({ user }: { user: User | null }) => {
+const ChatList = ({ user, chatRoomId }: { user: User | null; chatRoomId: string }) => {
   const scrollRef = useRef() as React.MutableRefObject<HTMLDivElement>;
   const { hasMore, setHasMore, messages, setMessages } = chatStore((state) => state);
   const [isScrolling, setIsScrolling] = useState(false);
+  const [isScrollTop, setIsScrollTop] = useState(true);
   const [newAddedMsgNum, setNewAddedMsgNum] = useState(0);
-  const { roomId, chatRoomId } = chatStore((state) => state);
   const [count, setCount] = useState(1);
+  const room = useRoomDataQuery(chatRoomId);
+  const roomId = room?.roomId;
+  const result = useRecruitingMyroomQuery(user ? user?.id : null);
+  console.log(result);
 
   useEffect(() => {
     if (roomId && chatRoomId) {
@@ -34,7 +43,6 @@ const ChatList = ({ user }: { user: User | null }) => {
             filter: `chatting_room_id=eq.${chatRoomId}`
           },
           (payload) => {
-            console.log('이거는?', payload.new);
             setMessages([...messages, payload.new as Message]);
             if (isScrolling) {
               setNewAddedMsgNum((prev) => (prev += 1));
@@ -72,6 +80,7 @@ const ChatList = ({ user }: { user: User | null }) => {
       if (!isScroll) {
         setNewAddedMsgNum(0);
       }
+      setIsScrollTop(scrollBox.scrollTop === 0);
     }
   };
 
@@ -102,7 +111,6 @@ const ChatList = ({ user }: { user: User | null }) => {
   // 더보기를 누르면 다시 렌더링이 되면서 useEffect가 실행되어 scrollTop이랑 scrollHeight가 같아져야 하는데(스크롤다운) 왜 스크롤이 안내려가지는지?
   // 더보기 눌렀을 때 위치 다시 생각해봐야함
   // 삭제 후 더보기 누르면 제대로 안 불러와짐
-  console.log('messages =>', messages);
 
   return (
     <>
@@ -111,13 +119,14 @@ const ChatList = ({ user }: { user: User | null }) => {
         ref={scrollRef}
         onScroll={handleScroll}
       >
-        {hasMore && <LoadChatMore fetchMoreMsg={fetchMoreMsg} />}
+        <ChatSearch isScrollTop={isScrollTop} />
 
-        {messages?.map((msg, idx) => {
+        {hasMore && <LoadChatMore fetchMoreMsg={fetchMoreMsg} />}
+        {messages?.map((msg) => {
           if (msg.send_from === user?.id) {
-            return <MyChat msg={msg} key={idx} />;
+            return <MyChat msg={msg} key={msg.message_id} />;
           } else {
-            return <OthersChat msg={msg} key={idx} />;
+            return <OthersChat msg={msg} key={msg.message_id} />;
           }
         })}
       </div>
@@ -142,7 +151,7 @@ export default ChatList;
 
 const MyChat = ({ msg }: { msg: Message }) => {
   return (
-    <div className="flex gap-4 ml-auto">
+    <div id={msg.message_id} className="flex gap-4 ml-auto">
       <div className="w-80 h-24 flex flex-col gap-1">
         <div className="font-bold ml-auto">{msg.nickname}</div>
         <div className="flex gap-2 ml-auto">

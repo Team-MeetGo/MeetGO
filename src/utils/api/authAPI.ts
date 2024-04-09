@@ -48,7 +48,7 @@ export const kakaoLogin = async () => {
   }
 };
 
-/** 카카오톡ID 요청하기 API */
+/** 카카오톡ID 요청하기 누르면 DB에 상태 저장하는 API */
 export const createRequestKakaoId = async (requestId: string, responseId: string) => {
   const { data, error } = await clientSupabase
     .from('kakaoId_request')
