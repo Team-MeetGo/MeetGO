@@ -1,7 +1,6 @@
 'use client';
 
 import { useChatDataQuery, useRoomDataQuery } from '(@/hooks/useQueries/useChattingQuery)';
-import { chatStore } from '(@/store/chatStore)';
 import { clientSupabase } from '(@/utils/supabase/client)';
 import React, { useEffect, useRef, useState } from 'react';
 
