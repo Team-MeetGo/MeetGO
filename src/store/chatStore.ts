@@ -1,4 +1,4 @@
-import { Message, RoomData } from '(@/types/chatTypes)';
+import { Message } from '(@/types/chatTypes)';
 import { create } from 'zustand';
 
 type chatState = {

@@ -4,7 +4,7 @@ import { CustomMiddleware } from './middlewareType';
 export const chatRoomHandler = (middleware: CustomMiddleware) => {
   return async (request: NextRequest, event: NextFetchEvent) => {
     const referer = request.headers.get('Referer');
-    // // 직접 타이핑 해서 채팅창에 들어가려고 하는 경우
+    // 직접 타이핑 해서 채팅창에 들어가려고 하는 경우
     // if (!referer && request.nextUrl.pathname.startsWith('/chat/')) {
     //   return NextResponse.redirect(new URL('/meetingRoom', request.url));
     // }

@@ -5,6 +5,7 @@ import { useEffect, useState } from 'react';
 import { IoMdRefresh } from 'react-icons/io';
 import MeetingRoom from './MeetingRoom';
 import MeetingRoomForm from './MeetingRoomForm';
+import { useRouter } from 'next/navigation';
 
 import type { MeetingRoomType, MeetingRoomTypes } from '(@/types/roomTypes)';
 import type { User } from '@supabase/supabase-js';
@@ -48,7 +49,7 @@ function MeetingRoomList({ user }: { user: User | null }) {
   console.log('otherRooms', otherRooms);
   console.log('myRoom', myRoom);
   return (
-    <>
+    <Suspense fallback="미팅룸들 나열중~~">
       <article>
         <header className="h-72">
           <div className="flex flex-row justify-between">
@@ -97,7 +98,7 @@ function MeetingRoomList({ user }: { user: User | null }) {
           ))}
         </div>
       </article>
-    </>
+    </Suspense>
   );
 }
 

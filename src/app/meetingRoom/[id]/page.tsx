@@ -7,6 +7,7 @@ import { Suspense } from 'react';
 
 const memberList = ({ params }: { params: { id: UUID } }) => {
   const roomId = params.id;
+
   return (
     <>
       <Suspense>
