@@ -4,13 +4,13 @@ import { favoriteOptions } from '(@/utils/FavoriteData)';
 import { clientSupabase } from '(@/utils/supabase/client)';
 import { userStore } from '(@/store/userStore)';
 
-const Favorite = () => {
+const Favorite = ({ isEdting }: any) => {
   const [selected, setSelected] = useState<Set<string>>(new Set([]));
   const { user, setUser } = userStore((state) => state);
 
   const handleSelect = (value: string[]) => {
-    if (selected.size >= 10) {
-      alert('최대 10개까지 선택 가능합니다.');
+    if (selected.size >= 5) {
+      alert('최대 5개까지 선택 가능합니다.');
       return;
     }
     setSelected(new Set(value));
@@ -46,7 +46,7 @@ const Favorite = () => {
       <label>이상형</label>
       <div className="flex whitespace-nowrap">
         <Select
-          label="이상형 선택(최대 10개)"
+          label="이상형 선택(최대 5개)"
           selectionMode="multiple"
           variant="bordered"
           selectedKeys={selected}
@@ -70,7 +70,7 @@ const Favorite = () => {
             key={value}
             color="default"
             style={{ backgroundColor: favoriteOptions.find((option) => option.value === value)?.color }}
-            onClose={() => handleDelete(value)}
+            {...(isEdting ? { onClose: () => handleDelete(value) } : {})}
           >
             {value}
           </Chip>
