@@ -9,8 +9,9 @@ import { HiOutlineChatBubbleOvalLeftEllipsis } from 'react-icons/hi2';
 import defaultImg from '../../../public/defaultImg.jpg';
 import { userStore } from '(@/store/userStore)';
 import { AUTHOR_QUERY_KEY, REVIEW_QUERY_KEY } from '(@/query/review/reviewQueryKeys)';
-import { useSuspenseQuery } from '@tanstack/react-query';
+import { useQuery } from '@tanstack/react-query';
 import { fetchAuthorData, fetchReviewData } from '(@/query/review/reviewQueryFns)';
+import { useEffect, useState } from 'react';
 
 export type ReviewDetailType = {
   review_title: string | null;
@@ -21,19 +22,26 @@ export type ReviewDetailType = {
   show_nickname: boolean | null;
 };
 
+export type AuthorDataType = {
+  avatar: string | null;
+  nickname: string | null;
+};
+
 type Props = {
   review_id: string;
   commentCount: number;
 };
 
 const ReviewDetail = ({ review_id, commentCount }: Props) => {
+  const [reviewDetailData, setReviewDetailData] = useState<ReviewDetailType | null>(null);
+  const [authorData, setAuthorData] = useState<AuthorDataType | null>(null);
   const router = useRouter();
 
   const { user, setUser } = userStore((state) => state);
   const userId = user && user[0].user_id;
 
   const useAuthorDataQuery = (review_id: string) => {
-    const { data: userData } = useSuspenseQuery({
+    const { data: userData } = useQuery({
       queryKey: [AUTHOR_QUERY_KEY, review_id],
       queryFn: async () => await fetchAuthorData(review_id)
     });
@@ -41,11 +49,9 @@ const ReviewDetail = ({ review_id, commentCount }: Props) => {
   };
 
   const userData = useAuthorDataQuery(review_id);
-  const authorNickname = userData?.nickname || null;
-  const authorAvatar = userData?.avatar;
 
   const useReviewDataQuery = (review_id: string) => {
-    const { data: reviewDetail } = useSuspenseQuery({
+    const { data: reviewDetail } = useQuery({
       queryKey: [REVIEW_QUERY_KEY, review_id],
       queryFn: async () => await fetchReviewData(review_id)
     });
@@ -53,11 +59,15 @@ const ReviewDetail = ({ review_id, commentCount }: Props) => {
   };
 
   const reviewDetail = useReviewDataQuery(review_id);
-  const reviewTitle = reviewDetail?.review_title;
-  const reviewContent = reviewDetail?.review_contents;
-  const showNickname = reviewDetail?.show_nickname;
-  const reviewImageUrls = reviewDetail?.image_urls;
-  const reviewCreatedAt = reviewDetail?.created_at;
+
+  useEffect(() => {
+    if (reviewDetail) {
+      setReviewDetailData(reviewDetail);
+    }
+    if (userData) {
+      setAuthorData(userData);
+    }
+  }, [review_id, reviewDetail, userData]);
 
   const handleDeleteReview = async () => {
     if (window.confirm('리뷰를 삭제하시겠습니까?')) {
@@ -78,20 +88,21 @@ const ReviewDetail = ({ review_id, commentCount }: Props) => {
       }
     }
   };
+
   return (
     <div>
       <div>
-        <div>{reviewTitle}</div>
+        <div>{reviewDetail?.review_title}</div>
         <div className="flex items-center">
-          {authorAvatar ? (
-            <Image className="mr-[15px] rounded-full" src={authorAvatar} alt="유저 아바타" height={50} width={50} />
+          {userData?.avatar ? (
+            <Image className="mr-[15px] rounded-full" src={userData?.avatar} alt="유저 아바타" height={50} width={50} />
           ) : (
             <AvatarDefault />
           )}
-          <div>{showNickname ? authorNickname || '익명유저' : '익명유저'}</div>
+          <div>{reviewDetail?.show_nickname ? userData?.nickname || '익명유저' : '익명유저'}</div>
         </div>
         <div className="text-[#A1A1AA]">
-          {reviewCreatedAt
+          {reviewDetail?.created_at
             ? new Intl.DateTimeFormat('ko-KR', {
                 year: 'numeric',
                 month: '2-digit',
@@ -100,7 +111,7 @@ const ReviewDetail = ({ review_id, commentCount }: Props) => {
                 minute: '2-digit',
                 second: '2-digit',
                 hour12: false
-              }).format(new Date(reviewCreatedAt))
+              }).format(new Date(reviewDetail?.created_at))
             : null}
         </div>
         <div className="flex gap-1">
@@ -113,8 +124,8 @@ const ReviewDetail = ({ review_id, commentCount }: Props) => {
           </div>
         </div>
         <div>
-          {reviewImageUrls && reviewImageUrls.length > 0 ? (
-            <ImageGallery images={reviewImageUrls || []} />
+          {reviewDetail?.image_urls && reviewDetail?.image_urls.length > 0 ? (
+            <ImageGallery images={reviewDetail?.image_urls || []} />
           ) : (
             <Image
               src={defaultImg}
@@ -125,7 +136,7 @@ const ReviewDetail = ({ review_id, commentCount }: Props) => {
             />
           )}
         </div>
-        <div>{reviewContent}</div>
+        <div>{reviewDetail?.review_contents}</div>
       </div>
       <div>
         {userId === reviewDetail?.user_id && (
