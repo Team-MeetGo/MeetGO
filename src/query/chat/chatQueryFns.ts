@@ -6,7 +6,8 @@ export const fetchRoomDataWithChatRoomId = async (chatRoomId: string) => {
     .from('chatting_room')
     .select('room_id')
     .eq('chatting_room_id', chatRoomId);
-  if (roomIdErr) console.error('roomId 불러오는 중 오류 발생');
+
+  if (roomIdErr) console.error('roomId 불러오는 중 오류 발생', roomIdErr.message);
 
   if (roomId?.length) {
     // 룸 정보 가져오기
@@ -41,4 +42,17 @@ export const fetchParticipants = async (roomId: string) => {
     }
   }
   return users;
+};
+
+// 채팅방 정보 가져오기
+export const fetchChatData = async (chatRoomId: string) => {
+  const { data: chatData, error: chatDataErr } = await clientSupabase
+    .from('chatting_room')
+    .select('*')
+    .eq('chatting_room_id', chatRoomId);
+  if (chatDataErr) {
+    console.error('chat 데이터 불러오는 중 오류 발생');
+  } else {
+    return chatData;
+  }
 };
