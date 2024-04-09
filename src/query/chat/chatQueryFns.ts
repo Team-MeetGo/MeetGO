@@ -17,7 +17,7 @@ export const fetchRoomDataWithChatRoomId = async (chatRoomId: string) => {
     if (roomDataErr) console.error('room 데이터 불러오는 중 오류 발생');
     if (roomData) return { roomId: roomId[0].room_id, roomData: roomData[0] };
   }
-  // return null;
+  return null;
 };
 
 export const fetchParticipants = async (roomId: string) => {
