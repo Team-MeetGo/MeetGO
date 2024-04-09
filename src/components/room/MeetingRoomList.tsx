@@ -1,13 +1,14 @@
 'use client';
 import meetingRoomHandler from '(@/hooks/custom/room)';
 import { userStore } from '(@/store/userStore)';
-import { useEffect, useState } from 'react';
+import { Suspense, useEffect, useState } from 'react';
 import MeetingRoom from './MeetingRoom';
 
 import type { Database } from '(@/types/database.types)';
-import { useRouter } from 'next/navigation';
+
 import { IoMdRefresh } from 'react-icons/io';
 import MeetingRoomForm from './MeetingRoomForm';
+import { useRouter } from 'next/navigation';
 
 function MeetingRoomList() {
   type MeetingRoom = Database['public']['Tables']['room']['Row'];
@@ -17,6 +18,10 @@ function MeetingRoomList() {
   const [myRoomList, setMyRoomList] = useState<MeetingRoom[]>();
   const [chattingRoomList, setChattingRoomList] = useState<MeetingRoom[]>();
   const { getMeetingRoom, getChattingRoom, getMyRoom } = meetingRoomHandler();
+  console.log(isLoggedIn);
+  console.log('user', user);
+  // const results = useRecruitingMyroomQuery(user ? user[0].user_id : null);
+  // console.log(results);
 
   useEffect(() => {
     const getMeetingRoomList = async () => {
@@ -47,7 +52,7 @@ function MeetingRoomList() {
   console.log('myRoomList', myRoomList);
   console.log('otherRooms ==> ', otherRooms);
   return (
-    <>
+    <Suspense fallback="미팅룸들 나열중~~">
       <article>
         <div>
           <div className="flex flex-row justify-between">
@@ -81,7 +86,7 @@ function MeetingRoomList() {
           ))}
         </div>
       </article>
-    </>
+    </Suspense>
   );
 }
 
