@@ -4,7 +4,10 @@ import { useAcceptKakaoIdMutation, useMetPeopleMutation } from '(@/hooks/useMuta
 import { useMetPeople } from '(@/hooks/useQueries/useMetPeople)';
 import { KAKAOID_REQUEST_QUERY_KEY } from '(@/query/user/metPeopleQueryKeys)';
 import { userStore } from '(@/store/userStore)';
+import { clientSupabase } from '(@/utils/supabase/client)';
 import { useQueryClient } from '@tanstack/react-query';
+import { subscribe } from 'diagnostics_channel';
+import { useEffect } from 'react';
 
 /**
  * useMutation을 이용한 데이터 처리 사용 방법
@@ -24,6 +27,21 @@ const MetPeople = () => {
   const metPeopleList = useMetPeople(userId, userGender);
   const { mutate: requestKakaoMutate } = useMetPeopleMutation();
   const { mutate: acceptKakaoIdMutate } = useAcceptKakaoIdMutation();
+
+  useEffect(() => {
+    if (userId) {
+      const channel = clientSupabase
+        .channel('kakaoId_channel')
+        .on('postgres_changes', { event: 'UPDATE', schema: 'public', table: 'kakaoId_request' }, (payload) => {
+          console.log('Change received!', payload);
+        })
+        .subscribe();
+
+      return () => {
+        clientSupabase.removeChannel(channel);
+      };
+    }
+  }, [userId]);
 
   /** 카카오ID요청하기 버튼 클릭시 실행될 로직(상태 업데이트 및 갱신) */
   const handleKakaoIdRequestClick = (responseId: string) => {

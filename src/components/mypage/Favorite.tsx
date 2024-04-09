@@ -4,7 +4,7 @@ import { favoriteOptions } from '(@/utils/FavoriteData)';
 import { clientSupabase } from '(@/utils/supabase/client)';
 import { userStore } from '(@/store/userStore)';
 
-const Favorite = () => {
+const Favorite = ({ isEdting }: any) => {
   const [selected, setSelected] = useState<Set<string>>(new Set([]));
   const { user, setUser } = userStore((state) => state);
 
@@ -70,7 +70,7 @@ const Favorite = () => {
             key={value}
             color="default"
             style={{ backgroundColor: favoriteOptions.find((option) => option.value === value)?.color }}
-            onClose={() => handleDelete(value)}
+            {...(isEdting ? { onClose: () => handleDelete(value) } : {})}
           >
             {value}
           </Chip>
