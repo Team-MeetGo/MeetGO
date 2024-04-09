@@ -2,6 +2,7 @@
 import { useRoomDataQuery } from '(@/hooks/useQueries/useChattingQuery)';
 import { chatStore } from '(@/store/chatStore)';
 import { Message, chatRoomPayloadType } from '(@/types/chatTypes)';
+import { ITEM_INTERVAL } from '(@/utils/constant)';
 import { clientSupabase } from '(@/utils/supabase/client)';
 import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
@@ -13,6 +14,8 @@ const InitChat = ({ chatRoomId, allMsgs }: { chatRoomId: string; allMsgs: Messag
   );
   const room = useRoomDataQuery(chatRoomId);
   const roomId = room?.roomId;
+
+  console.log('allMsgs', allMsgs);
 
   useEffect(() => {
     // 채팅방 isActive 상태 구독
@@ -45,8 +48,11 @@ const InitChat = ({ chatRoomId, allMsgs }: { chatRoomId: string; allMsgs: Messag
       }
     } else {
       // **채팅방에 있는다면
-      if (messages.length === 0) setMessages([...allMsgs?.slice(0, 3).reverse()]); // 현재 메세지가 없을 때만(처음시작 or 메세지 한개일 때)
-      setHasMore(allMsgs?.length - messages?.length > 0);
+      if (messages.length === 0) {
+        setMessages([...allMsgs].reverse()); // 현재 메세지가 없을 때만(처음시작 or 메세지 한개일 때)
+        setHasMore(allMsgs?.length >= ITEM_INTERVAL + 1);
+      }
+
       setChatRoomId(chatRoomId);
     }
   }, [setChatRoomId, allMsgs, chatRoomId, setMessages, setHasMore, messages.length, chatState, isRest, router, roomId]);

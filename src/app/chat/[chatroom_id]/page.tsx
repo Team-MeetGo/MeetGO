@@ -6,6 +6,8 @@ import InitChat from '(@/components/chat/chatHeader/InitChat)';
 import SideBar from '(@/components/chat/sidebar/SideBar)';
 import ChatInput from '(@/components/chat/ChatInput)';
 import ChatLoading from '(@/components/chat/ChatLoading)';
+import { getFromTo } from '(@/utils)';
+import { ITEM_INTERVAL } from '(@/utils/constant)';
 
 const ChatPage = async ({ params }: { params: { chatroom_id: string } }) => {
   const chatRoomId = params.chatroom_id;
@@ -13,12 +15,14 @@ const ChatPage = async ({ params }: { params: { chatroom_id: string } }) => {
   const supabase = serverSupabase();
   const { data } = await supabase.auth.getUser();
   const user = data.user;
-
+  const { from, to } = getFromTo(0, ITEM_INTERVAL);
   const { data: allMsgs } = await supabase
     .from('messages')
     .select('*')
     .eq('chatting_room_id', chatRoomId)
+    .range(from, to)
     .order('created_at', { ascending: false });
+  console.log(allMsgs);
 
   return (
     <Suspense fallback={<ChatLoading />}>
