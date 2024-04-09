@@ -76,7 +76,7 @@ const SideBar: React.FC<SideBarProps> = ({ userId, chatRoomId }) => {
         <GiHamburgerMenu onClick={toggleSidebar} />
       </div>
 
-      <div>
+      <div style={{ maxHeight: '100vh', overflowY: 'auto' }}>
         {isSidebarOpen && (
           <div>
             <div>

@@ -243,64 +243,35 @@ const Map: React.FC<MapProps> = ({ userId, chatRoomId }) => {
       </Card>
 
       <div id="map" className="w-70 h-80"></div>
-      <div style={{ maxHeight: '500px', overflowY: 'auto' }}>
+      <div>
         {bars.map((bar, index) => (
-          <div key={index} className="border">
+          <div
+            key={index}
+            className={`flex flex-col justify-center border-b-1 border-gray2 py-4 ${
+              selectedMeetingLocation === bar.place_name ? 'bg-pink-100' : ''
+            }`}
+            // onClick={() => {
+            //   if (userId === leaderId) {
+            //     handleSelectLocation(selectedMeetingLocation === bar.place_name ? '' : bar.place_name);
+            //   }
+            // }}
+            onClick={() => {
+              handleSelectLocation(selectedMeetingLocation === bar.place_name ? '' : bar.place_name);
+            }}
+            style={{ cursor: 'pointer' }}
+          >
             <div className="flex flex-row justify-between">
-              <h1>{bar.place_name}</h1>
-              {/* {userId === leaderId &&
-                (selectedMeetingLocation === '' ? (
-                  <button
-                    onClick={() => {
-                      handleSelectLocation(bar.place_name);
-                    }}
-                  >
-                    {isLocationSelected ? '취소' : '선택'}
-                  </button>
-                ) : selectedMeetingLocation === bar.place_name ? (
-                  <button
-                    onClick={() => {
-                      handleSelectLocation('');
-                    }}
-                  >
-                    {isLocationSelected ? '취소' : '선택'}
-                  </button>
-                ) : (
-                  <div></div>
-                ))} */}
-              {selectedMeetingLocation === '' ? (
-                <button
-                  onClick={() => {
-                    handleSelectLocation(bar.place_name);
-                  }}
-                >
-                  {isLocationSelected ? '취소' : '선택'}
-                </button>
-              ) : selectedMeetingLocation === bar.place_name ? (
-                <button
-                  onClick={() => {
-                    handleSelectLocation('');
-                  }}
-                >
-                  {isLocationSelected ? '취소' : '선택'}
-                </button>
-              ) : (
-                <div></div>
-              )}
+              <h1 className="text-base mb-2.5">{bar.place_name}</h1>
             </div>
-            <p>{bar.address_name}</p>
-            <p>{bar.place_url}</p>
-            <p>{bar.phone}</p>
+            <div className="text-sm">
+              <p>{bar.address_name}</p>
+              <p>{bar.place_url}</p>
+              <p>{bar.phone}</p>
+            </div>
           </div>
         ))}
       </div>
       <div className="flex justify-center">
-        {/* {Array.from({ length: totalPages }, (_, index) => (
-          <button className=" px-3" key={index} onClick={() => handlePageClick(index + 1)}>
-            {index + 1}
-          </button>
-          
-        ))} */}
         <Pagination
           showControls
           total={totalPages}
