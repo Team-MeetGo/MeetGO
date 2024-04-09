@@ -6,7 +6,8 @@ export const fetchRoomDataWithChatRoomId = async (chatRoomId: string) => {
     .from('chatting_room')
     .select('room_id')
     .eq('chatting_room_id', chatRoomId);
-  if (roomIdErr) console.error('roomId 불러오는 중 오류 발생');
+
+  if (roomIdErr) console.error('roomId 불러오는 중 오류 발생', roomIdErr.message);
 
   if (roomId?.length) {
     // 룸 정보 가져오기

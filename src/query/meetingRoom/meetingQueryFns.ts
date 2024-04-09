@@ -11,11 +11,11 @@ export const fetchRecruitingRoom = async () => {
   return meetingroom;
 };
 
-export const fetchMyRoom = async (user_id: string | null) => {
+export const fetchMyRoom = async (user_id: string) => {
   const { data: myRoom, error } = await clientSupabase
     .from('participants')
     .select(`*`)
-    .eq('user_id', String(user_id))
+    .eq('user_id', user_id)
     .select('user_id, room(*)')
     .order('created_at', { ascending: false });
   if (error) console.log('myRoom error 발생!', error.message);

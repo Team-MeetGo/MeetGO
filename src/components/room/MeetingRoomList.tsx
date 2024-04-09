@@ -11,7 +11,7 @@ import type { User } from '@supabase/supabase-js';
 
 function MeetingRoomList({ user }: { user: User | null }) {
   const [page, setPage] = useState(1);
-  const result = useRecruitingMyroomQuery(user ? user?.id : null);
+  const result = useRecruitingMyroomQuery(user ? user.id : '');
   const recruitingRoom = result[0] as MeetingRoomTypes;
   const myRoom = result[1]?.map((sample: any) => sample.room);
 

@@ -68,7 +68,7 @@ const AcceptanceRoomButtons = ({ roomId }: { roomId: UUID }) => {
     }
     //만약 유일한 참여자라면 나감과 동시에 방은 삭제됩니다.
     if (participants.length === 1) {
-      deleteRoomMutation.mutateAsync();
+      await deleteRoomMutation.mutateAsync();
     }
     router.push(`/meetingRoom`);
   };
