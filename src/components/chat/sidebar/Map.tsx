@@ -3,7 +3,7 @@
 import { useChatDataQuery, useRoomDataQuery } from '(@/hooks/useQueries/useChattingQuery)';
 import { clientSupabase } from '(@/utils/supabase/client)';
 import React, { useEffect, useRef, useState } from 'react';
-import { Card, CardBody } from '@nextui-org/react';
+import { Card, CardBody, Pagination } from '@nextui-org/react';
 import { IoMdSearch } from 'react-icons/io';
 
 declare global {
@@ -295,11 +295,20 @@ const Map: React.FC<MapProps> = ({ userId, chatRoomId }) => {
         ))}
       </div>
       <div className="flex justify-center">
-        {Array.from({ length: totalPages }, (_, index) => (
+        {/* {Array.from({ length: totalPages }, (_, index) => (
           <button className=" px-3" key={index} onClick={() => handlePageClick(index + 1)}>
             {index + 1}
           </button>
-        ))}
+          
+        ))} */}
+        <Pagination
+          showControls
+          total={totalPages}
+          initialPage={currentPage}
+          variant="bordered"
+          color="secondary"
+          onChange={(pageNumber: number) => handlePageClick(pageNumber)}
+        />
       </div>
     </div>
   );
