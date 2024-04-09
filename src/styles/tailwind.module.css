@@ -1,0 +1,42 @@
+.selectedDay,
+.unselectedDay {
+    color: white;
+    padding: 3px 1px 0 0;
+    width: 36px;
+    height: 36px;
+}
+
+.selectedDay {
+    background-color: orange;
+    border-radius: 50%;
+
+    /* &:hover {
+        border-radius: 50%;
+        background-color: #c27101;
+    } */
+}
+
+.unselectedDay {
+    /* &:hover {
+        border-radius: 50%;
+        background-color: rgba(white, 0.08);
+    } */
+}
+
+.datePicker {
+    display: flex;
+    align-items: center;
+    border: 1px solid gray;
+    border-radius: 4px;
+    background-color: purple;
+    box-sizing: border-box;
+    width: 100%;
+    height: 46px;
+    color: white;
+    text-align: center;
+    padding-right: 14px;
+
+    /* &:focus {
+        border: 2px solid colors.$ORANGE;
+    } */
+}

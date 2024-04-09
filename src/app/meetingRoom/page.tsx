@@ -1,9 +1,12 @@
 import MeetingRoomList from '(@/components/room/MeetingRoomList)';
+import { Suspense } from 'react';
 
 const LobbyPage = () => {
   return (
     <>
-      <MeetingRoomList />
+      <Suspense fallback="이거때문인가">
+        <MeetingRoomList />
+      </Suspense>
     </>
   );
 };
