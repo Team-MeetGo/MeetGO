@@ -10,7 +10,7 @@ const memberList = ({ params }: { params: { id: UUID } }) => {
 
   return (
     <>
-      <Suspense fallback="미팅룸...">
+      <Suspense>
         <InitParticipants roomId={roomId} />
         <div className="flex flex-col justify-center w-full align-middle">
           <RoomInformation roomId={roomId} />

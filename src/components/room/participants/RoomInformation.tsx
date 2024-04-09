@@ -1,58 +1,31 @@
 'use client';
-import meetingRoomHandler from '(@/hooks/custom/room)';
-import { Chip } from '@nextui-org/react';
-import { useEffect, useState } from 'react';
 import { favoriteOptions } from '(@/utils/FavoriteData)';
+import { Chip } from '@nextui-org/react';
 
-import type { MeetingRoomType } from '(@/types/roomTypes)';
+import { useRoomInfoWithRoomIdQuery } from '(@/hooks/useQueries/useMeetingQuery)';
 import type { UUID } from 'crypto';
-<<<<<<< HEAD
-import { useRouter } from 'next/router';
-import { userStore } from '(@/store/userStore)';
-=======
-import { useRouter } from 'next/navigation';
->>>>>>> e23180491e8cd2111946a6589391d6e6e7dd1485
 
 function RoomInformation({ roomId }: { roomId: UUID }) {
-  const [room, setRoom] = useState<MeetingRoomType[]>();
-  // const { getRoomInformation } = meetingRoomHandler();
-  const router = useRouter();
-
-  // useEffect(() => {
-  //   const getSingleRoom = async () => {
-  //     const singleRoom = await getRoomInformation(roomId);
-  //     if (!singleRoom) {
-  //       return;
-  //     }
-  //     setRoom(singleRoom);
-  //   };
-  //   getSingleRoom();
-  // }, []);
-  if (!room) {
-    router.back();
-  }
-
-  const { feature, location, member_number, room_title } = room[0];
-  if (!feature) {
-    return;
-  }
+  const roomInformation = useRoomInfoWithRoomIdQuery(roomId);
+  const { room_title, member_number, location, feature } = roomInformation![0];
 
   return (
-    room && (
+    roomInformation && (
       <div className="m-8 text-center">
         <div>{room_title}</div>
         <div>{member_number}</div>
         <div>{location}</div>
         <div>
-          {Array.from(feature).map((value) => (
-            <Chip
-              key={value}
-              color="default"
-              style={{ backgroundColor: favoriteOptions.find((option) => option.value === value)?.color }}
-            >
-              {value}
-            </Chip>
-          ))}
+          {feature &&
+            Array.from(feature).map((value) => (
+              <Chip
+                key={value}
+                color="default"
+                style={{ backgroundColor: favoriteOptions.find((option) => option.value === value)?.color }}
+              >
+                {value}
+              </Chip>
+            ))}
         </div>
       </div>
     )

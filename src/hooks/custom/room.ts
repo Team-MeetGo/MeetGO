@@ -1,29 +1,7 @@
 'use client';
 import { clientSupabase } from '(@/utils/supabase/client)';
-import { UUID } from 'crypto';
 
 function meetingRoomHandler() {
-  const getMeetingRoom = async () => {
-    const { data: meetingroom, error } = await clientSupabase
-      .from('room')
-      .select(`*`)
-      .eq('room_status', '모집중')
-      .order('created_at', { ascending: false });
-    if (error) return alert('error 발생!');
-    return meetingroom;
-  };
-
-  const getMyRoom = async (user_id: string) => {
-    const { data: myRoom, error } = await clientSupabase
-      .from('participants')
-      .select(`*`)
-      .eq('user_id', user_id)
-      .select('user_id, room(*)')
-      .order('created_at', { ascending: false });
-    if (error) return alert('error 발생!');
-    return myRoom;
-  };
-
   const getChattingRoom = async () => {
     const { data: chattingRoom, error } = await clientSupabase
       .from('room')
@@ -32,11 +10,6 @@ function meetingRoomHandler() {
       .order('created_at', { ascending: false });
     if (error) return alert('error 발생!');
     return chattingRoom;
-  };
-
-  const getRoomInformation = async (room_id: UUID) => {
-    const { data: roominformation } = await clientSupabase.from('room').select(`*`).eq('room_id', room_id);
-    return roominformation;
   };
 
   const getmaxGenderMemberNumber = async (memberNumber: string) => {
@@ -51,7 +24,7 @@ function meetingRoomHandler() {
     }
   };
 
-  return { getMeetingRoom, getMyRoom, getChattingRoom, getRoomInformation, getmaxGenderMemberNumber };
+  return { getChattingRoom, getmaxGenderMemberNumber };
 }
 
 export default meetingRoomHandler;

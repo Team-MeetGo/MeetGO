@@ -7,7 +7,7 @@ import { useState } from 'react';
 
 const TagList = () => {
   const [selected, setSelected] = useState<Set<string>>(new Set([]));
-  const { setTags, tags } = useTagStore();
+  const { setTags } = useTagStore();
 
   const handleSelect = (value: string[]) => {
     if (selected.size > 5) {

@@ -1,29 +1,26 @@
 'use client';
-import { clientSupabase } from '(@/utils/supabase/client)';
 import { Button, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, useDisclosure } from '@nextui-org/react';
 import { useState } from 'react';
 import TagList from './MeetingRoomFeatureTags';
 import { useTagStore } from '(@/store/roomStore)';
+import { useUpdateRoom } from '(@/hooks/useMutation/useMeetingMutation)';
 
-import type { Database } from '(@/types/database.types)';
-type MeetingRoom = Database['public']['Tables']['room']['Row'];
+import type { MeetingRoomType } from '(@/types/roomTypes)';
 
-function EditMeetingRoom({ room }: { room: MeetingRoom }) {
+function EditMeetingRoom({ room }: { room: MeetingRoomType }) {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const [title, setTitle] = useState(room.room_title);
   const [location, setLocation] = useState(room.location);
   const [memberNumber, setMemberNumber] = useState(room.member_number);
   const { tags, resetTags } = useTagStore();
+  const room_id = room.room_id;
+  const roomUpdateMutation = useUpdateRoom({ title, tags, location, memberNumber, room_id });
 
   const editMeetingRoom = async () => {
     if (!title || !tags || !location || memberNumber === '인원수') {
       return alert('모든 항목은 필수입니다.');
     }
-    const { data, error } = await clientSupabase
-      .from('room')
-      .update({ room_title: title, feature: tags, location: location, member_number: memberNumber })
-      .eq('room_id', room.room_id)
-      .select();
+    roomUpdateMutation.mutateAsync();
   };
 
   const cancelMakingMeetingRoom = () => {
