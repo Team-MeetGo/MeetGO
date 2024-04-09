@@ -2,7 +2,7 @@
 import participantsHandler from '(@/hooks/custom/participants)';
 import meetingRoomHandler from '(@/hooks/custom/room)';
 import { userStore } from '(@/store/userStore)';
-import { Card, CardBody, Chip } from '@nextui-org/react';
+import { Chip } from '@nextui-org/react';
 import DeleteMeetingRoom from './DeleteMeetingRoom';
 import EditMeetingRoom from './EditMeetingRoom';
 import { favoriteOptions } from '(@/utils/FavoriteData)';
@@ -18,9 +18,6 @@ function MeetingRoom({ room }: { room: MeetingRoomType }) {
   const { getmaxGenderMemberNumber } = meetingRoomHandler();
 
   const { room_id, room_status, room_title, member_number, location, feature, leader_id } = room;
-  //특성 입력이 안됐으면 빈칸으로
-  if (!feature) return {};
-  if (!user) return alert('로그인이 필요한 서비스입니다.');
 
   const addMember = async ({ room_id, member_number }: { room_id: string; member_number: string }) => {
     //채팅창으로 넘어갔을 경우에는 채팅창으로 이동
@@ -36,12 +33,10 @@ function MeetingRoom({ room }: { room: MeetingRoomType }) {
 
     //아직 인원을 모집중인 경우 + 채팅창이 열리지 않은 경우
     const participants = await totalMember(room_id);
-    console.log('participants', participants);
-    if (!participants || participants.length === 0) return alert('유효하지 않은 접근입니다.');
 
     //수락창인 단계에서 내가 이미 방에 참여하고 있는 경우
-    if (participants.find((member) => member.user_id === user[0].user_id)) {
-      return router.push(`/meetingRoom/${room_id}`);
+    if (participants?.find((member) => member.user_id === user[0].user_id)) {
+      router.push(`/meetingRoom/${room_id}`);
     }
 
     //room의 정보를 가져와서 성별에 할당된 인원을 확인
@@ -60,48 +55,53 @@ function MeetingRoom({ room }: { room: MeetingRoomType }) {
     }
 
     //성별에 할당된 인원이 다 찼으면 알람
-    else if (genderMaxNumber === participatedGenderMember && room_status === '모집중') {
-      return alert('해당 성별은 모두 참여가 완료되었습니다.');
+    if (genderMaxNumber === participatedGenderMember && room_status === '모집중') {
+      alert('해당 성별은 모두 참여가 완료되었습니다.');
+      // router.back();
     }
 
     //모든 인원이 다 찼을 경우 모집종료로 변경
-    if (participants.length === genderMaxNumber * 2) {
+    if (participants?.length === genderMaxNumber * 2) {
       await clientSupabase.from('room').update({ room_status: '모집종료' }).eq('room_id', room_id);
     }
   };
+
   return (
     <div>
-      {
-        <Card shadow="sm" isPressable>
-          <CardBody className="overflow-visible p-0 m-8">
-            <main onClick={(e) => addMember({ room_id, member_number })}>
-              <div> {room_title} </div>
+      <div className="border-gray-950 border-1 w-100% h-full rounded-xl">
+        <div className="">
+          <div className="flex flex-row justify-between align-middle text-sm">
+            <div>정보 </div>
+            {user[0].user_id === leader_id ? (
               <div>
-                {Array.from(feature).map((value) => (
-                  <Chip
-                    key={value}
-                    color="default"
-                    style={{ backgroundColor: favoriteOptions.find((option) => option.value === value)?.color }}
-                  >
-                    {value}
-                  </Chip>
-                ))}
+                <DeleteMeetingRoom id={room_id} />
+                <EditMeetingRoom room={room} />
               </div>
-              <div> {location} </div>
+            ) : null}
+          </div>
+          <main className="m-2 p-2 h-100%" onClick={(e) => addMember({ room_id, member_number })}>
+            <div className="flex flex-row justify-between">
+              <div> {room_title} </div>
+              <div className="text-sm"> {location} </div>
+            </div>
+            <div className="text-sm">
               <div> {room_status} </div>
               <div> {member_number}</div>
-            </main>
-            <div className="flex flex-row gap-12">
-              {user[0].user_id === leader_id ? (
-                <div>
-                  <DeleteMeetingRoom id={room_id} />
-                  <EditMeetingRoom room={room} />
-                </div>
-              ) : null}
             </div>
-          </CardBody>
-        </Card>
-      }
+            <div>
+              {Array.from(feature).map((value) => (
+                <Chip
+                  key={value}
+                  color="default"
+                  style={{ backgroundColor: favoriteOptions.find((option) => option.value === value)?.color }}
+                >
+                  {value}
+                </Chip>
+              ))}
+            </div>
+          </main>
+        </div>
+      </div>
     </div>
   );
 }
