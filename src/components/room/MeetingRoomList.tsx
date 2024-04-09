@@ -5,9 +5,9 @@ import { useEffect, useState } from 'react';
 import MeetingRoom from './MeetingRoom';
 
 import type { Database } from '(@/types/database.types)';
-import { useRouter } from 'next/navigation';
 import { IoMdRefresh } from 'react-icons/io';
 import MeetingRoomForm from './MeetingRoomForm';
+import { useRouter } from 'next/navigation';
 
 function MeetingRoomList() {
   type MeetingRoom = Database['public']['Tables']['room']['Row'];
@@ -16,8 +16,8 @@ function MeetingRoomList() {
   const [meetingRoomList, setMeetingRoomList] = useState<MeetingRoom[]>();
   const [myRoomList, setMyRoomList] = useState<MeetingRoom[]>();
   const [chattingRoomList, setChattingRoomList] = useState<MeetingRoom[]>();
+  const [page, setPage] = useState(1);
   const { getMeetingRoom, getChattingRoom, getMyRoom } = meetingRoomHandler();
-  console.log(isLoggedIn);
 
   useEffect(() => {
     const getMeetingRoomList = async () => {
@@ -27,7 +27,7 @@ function MeetingRoomList() {
       const chattingroom = (await getChattingRoom()) as MeetingRoom[];
       setMeetingRoomList(meetingroom);
       setChattingRoomList(chattingroom);
-      setMyRoomList(myRoom); //여러개 참여하면 여러개입니다 네네 ㄴ
+      setMyRoomList(myRoom);
     };
     getMeetingRoomList();
   }, [user]);
@@ -45,29 +45,47 @@ function MeetingRoomList() {
     }
   });
 
-  console.log('myRoomList', myRoomList);
-  console.log('otherRooms ==> ', otherRooms);
+  const nextPage = () => {
+    setPage((page) => page + 1);
+  };
+  const beforePage = () => {
+    if (page < 2) {
+      setPage(1);
+    }
+    setPage((page) => page - 1);
+  };
+  console.log(myRoomList);
+  console.log(page);
   return (
     <>
       <article>
-        <div>
+        <header className="h-72">
           <div className="flex flex-row justify-between">
             <div className="m-4 text-xl	font-semibold">들어가 있는 방</div>
             <div className="flex flex-row align-middle justify-center">
               <MeetingRoomForm />
-              <button onClick={() => router.refresh()}>
+              <button>
                 <IoMdRefresh className="h-8 w-8 m-2" />
               </button>
             </div>
           </div>
-          {
-            <div className="gap-2 grid grid-cols-3 m-4 w-100%">
-              {myRoomList?.map((room) => (
-                <MeetingRoom key={room.room_id} room={room} />
-              ))}
-            </div>
-          }
-        </div>
+          <div className="w-full flex flex-row justify-center">
+            <button onClick={() => beforePage()}> - </button>
+            {
+              <div className="gap-8 grid grid-cols-3 m-4 w-full px-4">
+                {myRoomList?.map((room, index) => (
+                  <div
+                    key={index}
+                    className={`room ${page < 1 ? setPage(1) : page * 3 + 2 >= index && index >= page * 3 && 'hidden'}`}
+                  >
+                    <MeetingRoom room={room} />
+                  </div>
+                ))}
+              </div>
+            }
+            <button onClick={() => nextPage()}> + </button>
+          </div>
+        </header>
         <div className="m-4 text-xl	font-semibold">모집중</div>
         <div className="gap-2 grid grid-cols-3 m-4 w-100%">
           {otherRooms?.map((room) => (

@@ -57,7 +57,7 @@ function MeetingRoom({ room }: { room: MeetingRoomType }) {
     //성별에 할당된 인원이 다 찼으면 알람
     if (genderMaxNumber === participatedGenderMember && room_status === '모집중') {
       alert('해당 성별은 모두 참여가 완료되었습니다.');
-      // router.back();
+      router.push('/meetingRoom');
     }
 
     //모든 인원이 다 찼을 경우 모집종료로 변경

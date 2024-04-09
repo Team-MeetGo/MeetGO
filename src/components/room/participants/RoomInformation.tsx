@@ -6,12 +6,10 @@ import { favoriteOptions } from '(@/utils/FavoriteData)';
 
 import type { MeetingRoomType } from '(@/types/roomTypes)';
 import type { UUID } from 'crypto';
-import { useRouter } from 'next/router';
 
 function RoomInformation({ roomId }: { roomId: UUID }) {
-  const [room, setRoom] = useState<MeetingRoomType[]>();
+  const [room, setRoom] = useState<MeetingRoomType>();
   const { getRoomInformation } = meetingRoomHandler();
-  const router = useRouter();
 
   useEffect(() => {
     const getSingleRoom = async () => {
@@ -24,30 +22,25 @@ function RoomInformation({ roomId }: { roomId: UUID }) {
     getSingleRoom();
   }, []);
   if (!room) {
-    router.back();
+    alert('방 정보 오류');
   }
-
-  const { feature, location, member_number, room_title } = room[0];
-  if (!feature) {
-    return;
-  }
-
   return (
     room && (
       <div className="m-8 text-center">
-        <div>{room_title}</div>
-        <div>{member_number}</div>
-        <div>{location}</div>
+        <div>{room.room_title}</div>
+        <div>{room.member_number}</div>
+        <div>{room.location}</div>
         <div>
-          {Array.from(feature).map((value) => (
-            <Chip
-              key={value}
-              color="default"
-              style={{ backgroundColor: favoriteOptions.find((option) => option.value === value)?.color }}
-            >
-              {value}
-            </Chip>
-          ))}
+          {room.feature &&
+            Array.from(room.feature).map((value) => (
+              <Chip
+                key={value}
+                color="default"
+                style={{ backgroundColor: favoriteOptions.find((option) => option.value === value)?.color }}
+              >
+                {value}
+              </Chip>
+            ))}
         </div>
       </div>
     )

@@ -4,12 +4,11 @@ import { UUID } from 'crypto';
 
 function meetingRoomHandler() {
   const getMeetingRoom = async () => {
-    const { data: meetingroom, error } = await clientSupabase
+    const { data: meetingroom } = await clientSupabase
       .from('room')
       .select(`*`)
       .eq('room_status', '모집중')
       .order('created_at', { ascending: false });
-    if (error) return alert('error 발생!');
     return meetingroom;
   };
 
@@ -35,8 +34,8 @@ function meetingRoomHandler() {
   };
 
   const getRoomInformation = async (room_id: UUID) => {
-    const { data: roominformation } = await clientSupabase.from('room').select(`*`).eq('room_id', room_id);
-    return roominformation;
+    const { data: roomInformation } = await clientSupabase.from('room').select(`*`).eq('room_id', room_id);
+    return roomInformation;
   };
 
   const getmaxGenderMemberNumber = async (memberNumber: string) => {
