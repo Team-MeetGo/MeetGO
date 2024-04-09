@@ -4,6 +4,7 @@ import { useChatDataQuery, useRoomDataQuery } from '(@/hooks/useQueries/useChatt
 import { clientSupabase } from '(@/utils/supabase/client)';
 import React, { useEffect, useRef, useState } from 'react';
 import { Card, CardBody } from '@nextui-org/react';
+import { IoMdSearch } from 'react-icons/io';
 
 declare global {
   interface Window {
@@ -138,6 +139,7 @@ const Map: React.FC<MapProps> = ({ userId, chatRoomId }) => {
     const places = new window.kakao.maps.services.Places();
     if (searchText === '') {
       alert('검색어를 입력해 주세요.');
+      return;
     }
     places.keywordSearch(searchText, (data: any, status: any, pagination: any) => {
       if (status === window.kakao.maps.services.Status.OK) {
@@ -168,7 +170,7 @@ const Map: React.FC<MapProps> = ({ userId, chatRoomId }) => {
         setSearchText('');
       } else {
         alert('검색 결과가 없습니다.');
-        console.error('실패', status);
+        setSearchText('');
       }
     });
   };
@@ -215,16 +217,31 @@ const Map: React.FC<MapProps> = ({ userId, chatRoomId }) => {
           <p className="text-lg">{selectedMeetingLocation}</p>
         </CardBody>
       </Card>
-      <form
-        onSubmit={(e) => {
-          e.preventDefault();
-          searchNewPlaces();
-        }}
-      >
-        장소 검색:
-        <input type="text" className="border" value={searchText} onChange={(e) => setSearchText(e.target.value)} />
-        <button type="submit">검색</button>
-      </form>
+
+      <h1 className="font-semibold text-2xl mb-2.5">장소 검색</h1>
+      <Card className="border border-gray2 shadow-none mb-6">
+        <CardBody className=" h-[60px]">
+          <form
+            onSubmit={(e) => {
+              e.preventDefault();
+              searchNewPlaces();
+            }}
+            className="flex flex-row justify-between"
+          >
+            <input
+              type="text"
+              className="outline-none"
+              value={searchText}
+              placeholder="장소 검색하기"
+              onChange={(e) => setSearchText(e.target.value)}
+            />
+            <button type="submit" className="bg-transparent border-none p-0">
+              <IoMdSearch size={25} color="#A1A1AA" />
+            </button>
+          </form>
+        </CardBody>
+      </Card>
+
       <div id="map" className="w-70 h-80"></div>
       <div style={{ maxHeight: '500px', overflowY: 'auto' }}>
         {bars.map((bar, index) => (
