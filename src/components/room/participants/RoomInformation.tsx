@@ -7,22 +7,23 @@ import { favoriteOptions } from '(@/utils/FavoriteData)';
 import type { MeetingRoomType } from '(@/types/roomTypes)';
 import type { UUID } from 'crypto';
 import { useRouter } from 'next/router';
+import { userStore } from '(@/store/userStore)';
 
 function RoomInformation({ roomId }: { roomId: UUID }) {
   const [room, setRoom] = useState<MeetingRoomType[]>();
-  const { getRoomInformation } = meetingRoomHandler();
+  // const { getRoomInformation } = meetingRoomHandler();
   const router = useRouter();
 
-  useEffect(() => {
-    const getSingleRoom = async () => {
-      const singleRoom = await getRoomInformation(roomId);
-      if (!singleRoom) {
-        return;
-      }
-      setRoom(singleRoom);
-    };
-    getSingleRoom();
-  }, []);
+  // useEffect(() => {
+  //   const getSingleRoom = async () => {
+  //     const singleRoom = await getRoomInformation(roomId);
+  //     if (!singleRoom) {
+  //       return;
+  //     }
+  //     setRoom(singleRoom);
+  //   };
+  //   getSingleRoom();
+  // }, []);
   if (!room) {
     router.back();
   }

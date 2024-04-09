@@ -7,18 +7,25 @@ export const fetchRecruitingRoom = async () => {
     .select(`*`)
     .eq('room_status', '모집중')
     .order('created_at', { ascending: false });
-  if (error) return alert('error 발생!');
+  if (error) {
+    alert('error 발생!');
+    return null;
+  }
   return meetingroom;
 };
 
-export const fetchMyRoom = async (user_id: string | null) => {
+export const fetchMyRoom = async (user_id: string) => {
   const { data: myRoom, error } = await clientSupabase
     .from('participants')
     .select(`*`)
-    .eq('user_id', String(user_id))
+    .eq('user_id', user_id)
     .select('user_id, room(*)')
     .order('created_at', { ascending: false });
-  if (error) alert('error 발생!');
+  console.log(myRoom);
+  if (error) {
+    alert('roomData error 발생!');
+    return null;
+  }
   return myRoom;
 };
 

@@ -3,7 +3,7 @@ import { MY_ROOM, RECRUTING_ROOMDATA, ROOMDATA_WITH_ROOMID } from '(@/query/meet
 import { useSuspenseQueries, useSuspenseQuery } from '@tanstack/react-query';
 import { UUID } from 'crypto';
 
-export const useRecruitingMyroomQuery = (user_id: string | null) => {
+export const useRecruitingMyroomQuery = (user_id: string) => {
   const results = useSuspenseQueries({
     queries: [
       {

@@ -9,6 +9,7 @@ import type { Database } from '(@/types/database.types)';
 import { IoMdRefresh } from 'react-icons/io';
 import MeetingRoomForm from './MeetingRoomForm';
 import { useRouter } from 'next/navigation';
+import { useRecruitingMyroomQuery } from '(@/hooks/useQueries/useMeetingQuery)';
 
 function MeetingRoomList() {
   type MeetingRoom = Database['public']['Tables']['room']['Row'];
@@ -20,8 +21,8 @@ function MeetingRoomList() {
   const { getMeetingRoom, getChattingRoom, getMyRoom } = meetingRoomHandler();
   console.log(isLoggedIn);
   console.log('user', user);
-  // const results = useRecruitingMyroomQuery(user ? user[0].user_id : null);
-  // console.log(results);
+  const results = useRecruitingMyroomQuery(user ? (user[0].user_id as string) : '');
+  console.log(results);
 
   useEffect(() => {
     const getMeetingRoomList = async () => {
@@ -50,7 +51,7 @@ function MeetingRoomList() {
   });
 
   console.log('myRoomList', myRoomList);
-  console.log('otherRooms ==> ', otherRooms);
+  // console.log('otherRooms ==> ', otherRooms);
   return (
     <Suspense fallback="미팅룸들 나열중~~">
       <article>
