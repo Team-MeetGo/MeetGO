@@ -5,6 +5,8 @@ import Map from '(@/components/chat/sidebar/Map)';
 import DatePicker from './DatePicker';
 import { clientSupabase } from '(@/utils/supabase/client)';
 import { useChatDataQuery, useRoomDataQuery } from '(@/hooks/useQueries/useChattingQuery)';
+import { GiHamburgerMenu } from 'react-icons/gi';
+import { Card, CardBody } from '@nextui-org/react';
 
 interface SideBarProps {
   userId: string | null | undefined;
@@ -69,8 +71,8 @@ const SideBar: React.FC<SideBarProps> = ({ userId, chatRoomId }) => {
   };
 
   return (
-    <div className="absolute">
-      <button onClick={toggleSidebar}>사이드바</button>
+    <div className="absolute fill-background">
+      <GiHamburgerMenu onClick={toggleSidebar} />
       {isSidebarOpen && (
         <div>
           <div>
@@ -88,6 +90,12 @@ const SideBar: React.FC<SideBarProps> = ({ userId, chatRoomId }) => {
             )} */}
 
             <>
+              <h1 className="font-semibold text-2xl">미팅 날짜/시간</h1>
+              <Card>
+                <CardBody>
+                  <p>최종 날짜 : {finalDateTime}</p>
+                </CardBody>
+              </Card>
               미팅 날짜/시간:
               <input
                 type="text"
@@ -97,8 +105,6 @@ const SideBar: React.FC<SideBarProps> = ({ userId, chatRoomId }) => {
               />
               <button onClick={handleSelectedTime}>{isTimeSelected ? '취소' : '선택'}</button>
             </>
-
-            <p>최종 날짜 : {finalDateTime}</p>
           </div>
           <DatePicker />
           <Map userId={userId} chatRoomId={chatRoomId} />
