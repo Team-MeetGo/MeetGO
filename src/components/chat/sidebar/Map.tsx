@@ -1,5 +1,6 @@
 'use client';
 
+import { useChatDataQuery, useRoomDataQuery } from '(@/hooks/useQueries/useChattingQuery)';
 import { clientSupabase } from '(@/utils/supabase/client)';
 import React, { useEffect, useRef, useState } from 'react';
 
@@ -11,39 +12,33 @@ declare global {
 
 interface MapProps {
   userId: string | null | undefined;
-  leaderId: string | null | undefined;
-  chatRoomId: string | null;
+  chatRoomId: string;
 }
 
-const Map: React.FC<MapProps> = ({ userId, leaderId, chatRoomId }) => {
-  const mapRef = useRef<any>();
+const Map: React.FC<MapProps> = ({ userId, chatRoomId }) => {
+  const mapRef = useRef<string>();
   const [map, setMap] = useState<any>();
   const [markers, setMarkers] = useState<any>();
   const [bars, setBars] = useState<any[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
-  const [currentPos, setCurrentPos] = useState<any>();
-  const [searchText, setSearchText] = useState<any>('');
+  const [currentPos, setCurrentPos] = useState<string>();
+  const [searchText, setSearchText] = useState<string>('');
   const [isLocationSelected, setisLocationSelected] = useState<boolean>(false);
   const [selectedMeetingLocation, setSelectedMeetingLocation] = useState<string>();
 
-  useEffect(() => {
-    const fetchData = async () => {
-      if (!chatRoomId) {
-        return;
-      }
-      const { data: chatData } = await clientSupabase
-        .from('chatting_room')
-        .select(' meeting_location')
-        .eq('chatting_room_id', chatRoomId)
-        .single();
-      const meetingLocation = chatData?.meeting_location;
-      setSelectedMeetingLocation(meetingLocation || '');
+  // useRoomDataQuery로 리더 아이디 가져오기
+  const room = useRoomDataQuery(chatRoomId);
+  const leaderId = room?.roomData.leader_id;
 
-      setisLocationSelected(!!meetingLocation);
-    };
-    fetchData();
-  }, []);
+  // 채팅방 정보 가져오기
+  const chat = useChatDataQuery(chatRoomId);
+  const meetingLocation = chat?.[0]?.meeting_location;
+
+  useEffect(() => {
+    setSelectedMeetingLocation(meetingLocation || '');
+    setisLocationSelected(!!meetingLocation);
+  }, [meetingLocation]);
 
   useEffect(() => {
     const script = document.createElement('script');
@@ -101,9 +96,7 @@ const Map: React.FC<MapProps> = ({ userId, leaderId, chatRoomId }) => {
     places.keywordSearch(
       '술집',
       (data: any, status: any, pagination: any) => {
-        console.log(data);
         if (status === window.kakao.maps.services.Status.OK) {
-          console.log(data);
           // 마커 초기화
           if (markers && markers.length > 0) {
             markers.forEach((marker: any) => {
@@ -142,7 +135,9 @@ const Map: React.FC<MapProps> = ({ userId, leaderId, chatRoomId }) => {
   // 지도 검색 함수
   const searchNewPlaces = (page?: number) => {
     const places = new window.kakao.maps.services.Places();
-
+    if (searchText === '') {
+      alert('검색어를 입력해 주세요.');
+    }
     places.keywordSearch(searchText, (data: any, status: any, pagination: any) => {
       if (status === window.kakao.maps.services.Status.OK) {
         // 마커 초기화
@@ -171,6 +166,7 @@ const Map: React.FC<MapProps> = ({ userId, leaderId, chatRoomId }) => {
         setCurrentPage(page || currentPage);
         setSearchText('');
       } else {
+        alert('검색 결과가 없습니다.');
         console.error('실패', status);
       }
     });
@@ -196,29 +192,40 @@ const Map: React.FC<MapProps> = ({ userId, leaderId, chatRoomId }) => {
         .from('chatting_room')
         .update({ meeting_location: barName })
         .eq('chatting_room_id', chatRoomId);
+      if (error) {
+        console.log('서버에 미팅 장소 추가 에러', error);
+      }
     } else {
       const { error } = await clientSupabase
         .from('chatting_room')
         .update({ meeting_location: null })
         .eq('chatting_room_id', chatRoomId);
+      if (error) {
+        console.log('서버에 미팅 장소 제거 에러', error);
+      }
     }
   };
 
   return (
     <div>
       <p>미팅 장소 : {selectedMeetingLocation}</p>
-      <>
+      <form
+        onSubmit={(e) => {
+          e.preventDefault();
+          searchNewPlaces();
+        }}
+      >
         장소 검색:
         <input type="text" className="border" value={searchText} onChange={(e) => setSearchText(e.target.value)} />
-        <button onClick={() => searchNewPlaces()}>검색</button>
-      </>
+        <button type="submit">검색</button>
+      </form>
       <div id="map" className="w-96 h-96"></div>
       <div style={{ maxHeight: '500px', overflowY: 'auto' }}>
         {bars.map((bar, index) => (
           <div key={index} className="border">
             <div className="flex flex-row justify-between">
               <h1>{bar.place_name}</h1>
-              {userId === leaderId &&
+              {/* {userId === leaderId &&
                 (selectedMeetingLocation === '' ? (
                   <button
                     onClick={() => {
@@ -237,7 +244,26 @@ const Map: React.FC<MapProps> = ({ userId, leaderId, chatRoomId }) => {
                   </button>
                 ) : (
                   <div></div>
-                ))}
+                ))} */}
+              {selectedMeetingLocation === '' ? (
+                <button
+                  onClick={() => {
+                    handleSelectLocation(bar.place_name);
+                  }}
+                >
+                  {isLocationSelected ? '취소' : '선택'}
+                </button>
+              ) : selectedMeetingLocation === bar.place_name ? (
+                <button
+                  onClick={() => {
+                    handleSelectLocation('');
+                  }}
+                >
+                  {isLocationSelected ? '취소' : '선택'}
+                </button>
+              ) : (
+                <div></div>
+              )}
             </div>
             <p>{bar.address_name}</p>
             <p>{bar.place_url}</p>
