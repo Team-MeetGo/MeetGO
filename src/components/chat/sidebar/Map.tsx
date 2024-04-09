@@ -3,6 +3,7 @@
 import { useChatDataQuery, useRoomDataQuery } from '(@/hooks/useQueries/useChattingQuery)';
 import { clientSupabase } from '(@/utils/supabase/client)';
 import React, { useEffect, useRef, useState } from 'react';
+import { Card, CardBody } from '@nextui-org/react';
 
 declare global {
   interface Window {
@@ -208,7 +209,12 @@ const Map: React.FC<MapProps> = ({ userId, chatRoomId }) => {
 
   return (
     <div>
-      <p>미팅 장소 : {selectedMeetingLocation}</p>
+      <h1 className="font-semibold text-2xl mb-2.5">미팅 장소</h1>
+      <Card className="border border-mainColor shadow-none mb-6">
+        <CardBody className=" h-[60px]">
+          <p className="text-lg">{selectedMeetingLocation}</p>
+        </CardBody>
+      </Card>
       <form
         onSubmit={(e) => {
           e.preventDefault();

@@ -95,8 +95,8 @@ const SideBar: React.FC<SideBarProps> = ({ userId, chatRoomId }) => {
 
               <>
                 <h1 className="font-semibold text-2xl mb-2.5">미팅 날짜/시간</h1>
-                <Card className="border border-mainColor shadow-none mb-6">
-                  <CardBody className="py-5">
+                <Card className="border border-mainColor shadow-none mb-6 h-[60px] items-center">
+                  <CardBody>
                     <p className="text-lg">{finalDateTime}</p>
                   </CardBody>
                 </Card>
