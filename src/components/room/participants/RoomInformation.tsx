@@ -17,13 +17,11 @@ function RoomInformation({ roomId }: { roomId: UUID }) {
       if (!singleRoom) {
         return;
       }
-      setRoom(singleRoom);
+      setRoom(singleRoom[0]);
     };
     getSingleRoom();
   }, []);
-  if (!room) {
-    alert('방 정보 오류');
-  }
+
   return (
     room && (
       <div className="m-8 text-center">

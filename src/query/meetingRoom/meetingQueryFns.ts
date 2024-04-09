@@ -6,7 +6,7 @@ export const fetchRecruitingRoom = async () => {
     .select(`*`)
     .eq('room_status', '모집중')
     .order('created_at', { ascending: false });
-  if (error) return alert('error 발생!');
+  if (error) console.log('error 발생!');
   return meetingroom;
 };
 
@@ -17,6 +17,6 @@ export const fetchMyRoom = async (user_id: string | null) => {
     .eq('user_id', String(user_id))
     .select('user_id, room(*)')
     .order('created_at', { ascending: false });
-  if (error) alert('error 발생!');
+  if (error) console.log('myRoom error 발생!', error.message);
   return myRoom;
 };

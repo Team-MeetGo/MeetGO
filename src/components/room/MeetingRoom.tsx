@@ -2,22 +2,27 @@
 import participantsHandler from '(@/hooks/custom/participants)';
 import meetingRoomHandler from '(@/hooks/custom/room)';
 import { userStore } from '(@/store/userStore)';
-import { Chip } from '@nextui-org/react';
-import DeleteMeetingRoom from './DeleteMeetingRoom';
-import EditMeetingRoom from './EditMeetingRoom';
 import { favoriteOptions } from '(@/utils/FavoriteData)';
 import { clientSupabase } from '(@/utils/supabase/client)';
+import { Chip } from '@nextui-org/react';
 import { useRouter } from 'next/navigation';
+import DeleteMeetingRoom from './DeleteMeetingRoom';
+import EditMeetingRoom from './EditMeetingRoom';
 
+import { useParticipantsQuery } from '(@/hooks/useQueries/useChattingQuery)';
 import type { MeetingRoomType } from '(@/types/roomTypes)';
 
 function MeetingRoom({ room }: { room: MeetingRoomType }) {
   const { user } = userStore((state) => state);
   const router = useRouter();
-  const { addMemberHandler, totalMember, userMemberInformation } = participantsHandler();
+  const { addMemberHandler } = participantsHandler();
   const { getmaxGenderMemberNumber } = meetingRoomHandler();
-
+  const participants = useParticipantsQuery(room.room_id);
   const { room_id, room_status, room_title, member_number, location, feature, leader_id } = room;
+  const userInformation = user ? user[0] : null;
+
+  console.log('미팅룸 유저', user);
+  console.log('미팅룸 참여자', participants);
 
   const addMember = async ({ room_id, member_number }: { room_id: string; member_number: string }) => {
     //채팅창으로 넘어갔을 경우에는 채팅창으로 이동
@@ -31,11 +36,9 @@ function MeetingRoom({ room }: { room: MeetingRoomType }) {
       router.replace(`/chat/${alreadyChat[0].chatting_room_id}`);
     }
 
-    //아직 인원을 모집중인 경우 + 채팅창이 열리지 않은 경우
-    const participants = await totalMember(room_id);
-
     //수락창인 단계에서 내가 이미 방에 참여하고 있는 경우
-    if (participants?.find((member) => member.user_id === user[0].user_id)) {
+    const alreadyParticipants = participants?.find((member) => member.user_id === userInformation?.user_id);
+    if (alreadyParticipants) {
       router.push(`/meetingRoom/${room_id}`);
     }
 
@@ -44,9 +47,8 @@ function MeetingRoom({ room }: { room: MeetingRoomType }) {
     if (genderMaxNumber === undefined) return alert('최대 성별 오류 다시 시도해 주세요');
 
     //참여자 정보를 가져와서 해당 성별이 안에 몇명 있는지 확인
-    const totalMemberList = await userMemberInformation(room_id);
-    if (totalMemberList === undefined) return alert('참여 성벌 요류 다시 시도해 주세요');
-    const participatedGenderMember = totalMemberList.filter((member) => member.gender === user[0].gender).length;
+    if (participants === undefined) return alert('참여 성벌 요류 다시 시도해 주세요');
+    const participatedGenderMember = participants.filter((member) => member.gender === userInformation?.gender).length;
 
     //성별에 할당된 인원이 참여자 정보보다 적을 때 입장
     if (genderMaxNumber > participatedGenderMember || !participatedGenderMember) {
@@ -55,7 +57,7 @@ function MeetingRoom({ room }: { room: MeetingRoomType }) {
     }
 
     //성별에 할당된 인원이 다 찼으면 알람
-    if (genderMaxNumber === participatedGenderMember && room_status === '모집중') {
+    if (genderMaxNumber === participatedGenderMember && room_status === '모집중' && !alreadyParticipants) {
       alert('해당 성별은 모두 참여가 완료되었습니다.');
       router.push('/meetingRoom');
     }
@@ -72,7 +74,7 @@ function MeetingRoom({ room }: { room: MeetingRoomType }) {
         <div className="">
           <div className="flex flex-row justify-between align-middle text-sm">
             <div>정보 </div>
-            {user[0].user_id === leader_id ? (
+            {userInformation?.user_id === leader_id ? (
               <div>
                 <DeleteMeetingRoom id={room_id} />
                 <EditMeetingRoom room={room} />
@@ -89,15 +91,16 @@ function MeetingRoom({ room }: { room: MeetingRoomType }) {
               <div> {member_number}</div>
             </div>
             <div>
-              {Array.from(feature).map((value) => (
-                <Chip
-                  key={value}
-                  color="default"
-                  style={{ backgroundColor: favoriteOptions.find((option) => option.value === value)?.color }}
-                >
-                  {value}
-                </Chip>
-              ))}
+              {feature &&
+                Array.from(feature).map((value) => (
+                  <Chip
+                    key={value}
+                    color="default"
+                    style={{ backgroundColor: favoriteOptions.find((option) => option.value === value)?.color }}
+                  >
+                    {value}
+                  </Chip>
+                ))}
             </div>
           </main>
         </div>

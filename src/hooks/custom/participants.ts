@@ -1,18 +1,6 @@
 import { clientSupabase } from '(@/utils/supabase/client)';
 
-import type { Database } from '(@/types/database.types)';
-import type { UUID } from 'crypto';
-type UserType = Database['public']['Tables']['users']['Row'];
-
 function participantsHandler() {
-  const totalMember = async (room_id: string) => {
-    let { data: totalParticipants, error } = await clientSupabase
-      .from('participants')
-      .select('*')
-      .eq('room_id', room_id);
-    return totalParticipants;
-  };
-
   const userMemberInformation = async (roomId: string) => {
     const { data: userIds, error: userIdErr } = await clientSupabase
       .from('participants')
@@ -55,7 +43,7 @@ function participantsHandler() {
     return addNewMember();
   };
 
-  return { deleteMember, addMember, addMemberHandler, totalMember, userMemberInformation };
+  return { deleteMember, addMember, addMemberHandler, userMemberInformation };
 }
 
 export default participantsHandler;
