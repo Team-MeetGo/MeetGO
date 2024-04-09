@@ -6,7 +6,7 @@ import { favoriteOptions } from '(@/utils/FavoriteData)';
 
 import type { MeetingRoomType } from '(@/types/roomTypes)';
 import type { UUID } from 'crypto';
-import { useRouter } from 'next/router';
+import { useRouter } from 'next/navigation';
 
 function RoomInformation({ roomId }: { roomId: UUID }) {
   const [room, setRoom] = useState<MeetingRoomType[]>();

@@ -1,5 +1,5 @@
-import { fetchParticipants, fetchRoomDataWithChatRoomId } from '(@/query/chat/chatQueryFns)';
-import { PARTICIPANTS_QUERY_KEY, ROOMDATA_QUERY_KEY } from '(@/query/chat/chatQueryKeys)';
+import { fetchChatData, fetchParticipants, fetchRoomDataWithChatRoomId } from '(@/query/chat/chatQueryFns)';
+import { CHATDATA_QUERY_KEY, PARTICIPANTS_QUERY_KEY, ROOMDATA_QUERY_KEY } from '(@/query/chat/chatQueryKeys)';
 import { useSuspenseQuery } from '@tanstack/react-query';
 
 export const useRoomDataQuery = (chatRoomId: string) => {
@@ -16,4 +16,12 @@ export const useParticipantsQuery = (roomId: string) => {
     queryFn: async () => await fetchParticipants(roomId)
   });
   return users;
+};
+
+export const useChatDataQuery = (chatRoomId: string) => {
+  const { data: chat } = useSuspenseQuery({
+    queryKey: CHATDATA_QUERY_KEY,
+    queryFn: async () => await fetchChatData(chatRoomId)
+  });
+  return chat;
 };
