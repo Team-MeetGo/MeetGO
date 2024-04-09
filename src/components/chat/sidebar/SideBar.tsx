@@ -4,7 +4,6 @@ import React, { useEffect, useState } from 'react';
 import Map from '(@/components/chat/sidebar/Map)';
 import DatePicker from './DatePicker';
 import { clientSupabase } from '(@/utils/supabase/client)';
-import { sideBarStore } from '(@/store/sideBarStore)';
 import { useChatDataQuery, useRoomDataQuery } from '(@/hooks/useQueries/useChattingQuery)';
 
 interface SideBarProps {

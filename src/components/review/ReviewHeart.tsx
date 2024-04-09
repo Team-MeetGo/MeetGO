@@ -49,11 +49,27 @@ const ReviewHeart = ({ review_id }: Props) => {
     };
 
     fetchLikedStatus();
+    fetchLikeCount(review_id);
   }, [userId, review_id]);
 
-  useEffect(() => {
-    fetchLikeCount(review_id);
-  }, []);
+  // const { data: LikedReviewData } = useQuery({
+  //   queryKey: ['REVIEW'],
+  //   queryFn: async () => {
+  //     const { data: likedUsers } = await clientSupabase
+  //       .from('review_like')
+  //       .select('user_id')
+  //       .eq('review_id', review_id);
+
+  //     if (!likedUsers || likedUsers.length === 0) {
+  //       setLikes(false);
+  //       return;
+  //     }
+
+  //     const userLikes = likedUsers.some((likedUser) => likedUser.user_id === userId);
+  //     setLikes(userLikes);
+  //     return likedUsers.map((likedUser) => likedUser.user_id);
+  //   }
+  // });
 
   const handleLikeToggle = async () => {
     if (!userId) {
