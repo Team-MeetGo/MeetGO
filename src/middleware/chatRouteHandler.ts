@@ -13,10 +13,7 @@ export const chatRoomHandler = (middleware: CustomMiddleware) => {
       } = await supabase.auth.getUser();
       const myChatRooms = [];
 
-      const { data: myRooms } = await supabase
-        .from('participants')
-        .select('room_id')
-        .eq('user_id', '8cf2ad1f-abf4-48ba-bc3b-dea47bb268e0');
+      const { data: myRooms } = await supabase.from('participants').select('room_id').eq('user_id', String(user?.id));
 
       if (myRooms) {
         for (let room of myRooms) {

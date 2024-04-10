@@ -19,7 +19,7 @@ function MeetingRoom({ room }: { room: MeetingRoomType }) {
   const participants = useParticipantsQuery(room.room_id);
 
   const { room_id, room_status, room_title, member_number, location, feature, leader_id } = room;
-  const userInformation = user ? user[0] : null;
+  const userInformation = user;
   const user_id = userInformation?.user_id;
   const roomMemberMutation = useAddRoomMemberMutation({ user_id, room_id });
   const updateRoomStatusCloseMutation = useUpdateRoomStatusClose({ room_id });
