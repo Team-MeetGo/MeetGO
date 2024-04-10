@@ -25,7 +25,7 @@ function MeetingRoomForm() {
     resetTags();
   };
 
-  const user_id = user && user[0].user_id;
+  const user_id = user?.user_id!;
   const nextMeetingRoom: NextMeetingRoomType = {
     feature: tags,
     leader_id: String(user_id),

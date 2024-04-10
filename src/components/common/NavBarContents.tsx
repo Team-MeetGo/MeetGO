@@ -68,17 +68,17 @@ const NavBarContents = () => {
       <NavbarContent as="div" justify="end">
         {isLoggedIn ? (
           <div className="flex items-center gap-4">
-            <p>{user && user[0].nickname}</p>
+            <p>{user?.nickname}</p>
             <Dropdown placement="bottom-end">
               <DropdownTrigger>
-                {user && user[0].avatar ? (
+                {user?.avatar ? (
                   <Avatar
                     isBordered
                     as="button"
                     className="transition-transform"
                     color="secondary"
                     name="profile"
-                    src={`${user[0].avatar}?${new Date().getTime()}`}
+                    src={`${user.avatar}?${new Date().getTime()}`}
                   />
                 ) : (
                   <Avatar

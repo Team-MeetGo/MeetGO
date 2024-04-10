@@ -31,40 +31,40 @@ const ChatHeader = ({ chatRoomId }: { chatRoomId: string }) => {
 
   const getRidOfMe = async () => {
     // participants 테이블에서 해당 룸에 대한 유저정보 삭제
-    if (user) {
-      const { error: deleteErr } = await clientSupabase
-        .from('participants')
-        .delete()
-        .eq('room_id', String(roomId))
-        .eq('user_id', user[0].user_id);
-      if (deleteErr) {
-        console.error(deleteErr?.message);
-        alert('채팅방 나가기에서 오류가 발생하였습니다.');
-      }
+    const { error: deleteErr } = await clientSupabase
+      .from('participants')
+      .delete()
+      .eq('room_id', String(roomId))
+      .eq('user_id', user?.user_id!);
+    if (deleteErr) {
+      console.error(deleteErr?.message);
+      alert('채팅방 나가기에서 오류가 발생하였습니다.');
     }
   };
 
   const handleIsRest = async () => {
     // OthersChat이랑 코드 겹침 나중에 마무리단계에서 따로 뺄 예정
-    if (user) {
-      const { data: restOf, error: getPartErr } = await clientSupabase
-        .from('participants')
-        .select('user_id')
-        .eq('room_id', String(roomId));
-      const restArr = restOf?.map((r) => r.user_id);
-      setisRest(restArr?.includes(user[0].user_id) as boolean);
-      if (getPartErr) {
-        console.error(getPartErr.message);
-        alert('참가자들 정보를 불러오는 데 실패했습니다.');
-      }
+    const { data: restOf, error: getPartErr } = await clientSupabase
+      .from('participants')
+      .select('user_id')
+      .eq('room_id', String(roomId));
+    const restArr = restOf?.map((r) => r.user_id);
+    setisRest(restArr?.includes(user?.user_id!) as boolean);
+    if (getPartErr) {
+      console.error(getPartErr.message);
+      alert('참가자들 정보를 불러오는 데 실패했습니다.');
     }
   };
 
   const getOutOfChatRoom = async () => {
-    await UpdateIsActive();
-    await getRidOfMe();
-    await handleIsRest();
-    setMessages([]);
+    if (window.confirm('채팅창에서 한번 나가면 다시 입장할 수 없습니다. 그래도 나가시겠습니까?')) {
+      await UpdateIsActive();
+      await getRidOfMe();
+      await handleIsRest();
+      setMessages([]);
+    } else {
+      return;
+    }
   };
 
   return (
@@ -82,7 +82,7 @@ const ChatHeader = ({ chatRoomId }: { chatRoomId: string }) => {
           <IoIosSearch />
         </button>
 
-        <button onClick={getOutOfChatRoom}>죄송합니다 제 스타일은 아니신 것 같아요</button>
+        <button onClick={getOutOfChatRoom}>나가기</button>
       </div>
     </div>
   );

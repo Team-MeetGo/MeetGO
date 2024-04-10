@@ -1,6 +1,7 @@
 'use client';
 
 import Test from '(@/components/chat/Test)';
+import HowManyMsg from '(@/components/room/meetingChat/HowManyMsg)';
 import { Suspense, useEffect } from 'react';
 
 const Page = () => {
@@ -32,6 +33,7 @@ const Page = () => {
       여기는 테스트 페이지
       <Suspense>
         <Test />
+        <HowManyMsg />
       </Suspense>
     </div>
   );
