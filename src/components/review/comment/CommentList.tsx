@@ -113,10 +113,25 @@ const CommentList = ({ review_id, onUpdateCommentCount }: Props) => {
     onUpdateCommentCount(updatedComment.length as number);
   }, [onUpdateCommentCount, updatedComment.length]);
 
+  // const handleDeleteComment = (commentId: string) => {
+  //   const updateList = updatedCommentList
+  //     ? updatedCommentList.filter((comment) => comment.comment_id !== commentId)
+  //     : [];
+  //   setUpdatedCommentList(updateList);
+  //   // onUpdateCommentCount(updateList.length);
+  // };
+
   const handleDeleteComment = (commentId: string) => {
-    updatedCommentList ? updatedCommentList.filter((comment) => comment.comment_id !== commentId) : [];
-    setUpdatedCommentList(updatedCommentList);
+    const updateList = updatedCommentList
+      ? updatedCommentList.filter((comment) => comment.comment_id !== commentId)
+      : [];
+    setUpdatedCommentList(updateList);
   };
+
+  // useEffect를 사용하여 onUpdateCommentCount 호출
+  // useEffect(() => {
+  //   onUpdateCommentCount(updatedCommentList.length);
+  // }, [updatedCommentList]);
 
   return (
     <div>
