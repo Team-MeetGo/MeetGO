@@ -46,7 +46,7 @@ const AvatarForm = () => {
   };
 
   const uploadAvatar = async () => {
-    const userId = user && user[0].user_id;
+    const userId = user?.user_id;
     if (!userId) return;
     if (!file) return;
 
@@ -77,8 +77,8 @@ const AvatarForm = () => {
       console.error('Error updating user profile:', error);
     } else {
       // 사용자 상태 업데이트 - 스토어를 업데이트 해야 됨
-      if (user && user.length > 0) {
-        setUser([{ ...user[0], avatar: publicURL }]);
+      if (user) {
+        setUser({ ...user, avatar: publicURL });
         alert('프로필 사진이 업데이트되었습니다.');
         setIsEditing(!isEditing);
       } else {
@@ -100,9 +100,9 @@ const AvatarForm = () => {
             sizes="500px"
             priority={false}
           />
-        ) : user && user[0].avatar ? (
+        ) : user?.avatar ? (
           <Image
-            src={`${user[0].avatar}?${new Date().getTime()}`}
+            src={`${user.avatar}?${new Date().getTime()}`}
             alt="Avatar"
             style={{ objectFit: 'cover' }}
             fill={true}

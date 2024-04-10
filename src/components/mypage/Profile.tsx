@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { Suspense, useState } from 'react';
 import SchoolForm from './SchoolForm';
 import { clientSupabase } from '(@/utils/supabase/client)';
 import { userStore } from '(@/store/userStore)';
@@ -8,23 +8,23 @@ import AvatarForm from './AvatarForm';
 import MyPost from './MyPost';
 import Favorite from './Favorite';
 import MetPeople from './MetPeople';
-import useInputChange from '(@/hooks/useInputChange)';
+import useInputChange from '(@/hooks/custom/useInputChange)';
 import { Select, SelectItem } from '@nextui-org/react';
 
 const Profile = () => {
   const { user, setUser } = userStore((state) => state);
   const [isEdting, setIsEdting] = useState(false);
-  const inputNickname = useInputChange(user && user[0].nickname ? user[0].nickname : '');
-  const inputIntro = useInputChange(user && user[0].intro ? user[0].intro : '');
-  const inputKakaoId = useInputChange(user && user[0].kakaoId ? user[0].kakaoId : '');
-  const inputGender = useInputChange(user && user[0].gender ? user[0].gender : '');
+  const inputNickname = useInputChange(user?.nickname ? user?.nickname : '');
+  const inputIntro = useInputChange(user?.intro ? user?.intro : '');
+  const inputKakaoId = useInputChange(user?.kakaoId ? user?.kakaoId : '');
+  const inputGender = useInputChange(user?.gender ? user?.gender : '');
 
   const toggleEditing = () => {
     setIsEdting(true);
-    if (user && user[0]) {
-      inputNickname.setValue(user && user[0].nickname);
-      inputIntro.setValue(user && user[0].intro);
-      inputKakaoId.setValue(user && user[0].kakaoId);
+    if (user) {
+      inputNickname.setValue(user?.nickname);
+      inputIntro.setValue(user?.intro);
+      inputKakaoId.setValue(user?.kakaoId);
     }
   };
 
@@ -34,14 +34,14 @@ const Profile = () => {
 
   /** 프로필 업데이트하는 로직 */
   const updateProfile = async () => {
-    const userId = user && user[0].user_id;
+    const userId = user?.user_id;
     if (!userId) return;
     /** 닉네임 중복 검사 로직 */
     const { data: nicknameData, error: nicknameError } = await clientSupabase
       .from('users')
       .select('nickname')
       .eq('nickname', inputNickname.value)
-      .not('user_id', 'eq', user[0].user_id);
+      .not('user_id', 'eq', user?.user_id);
     if (nicknameError) {
       console.error('Error fetching:', nicknameError);
       return;
@@ -63,15 +63,13 @@ const Profile = () => {
     if (error) {
       console.error('Error updating:', error);
     } else {
-      setUser([
-        {
-          ...user[0],
-          intro: inputIntro.value,
-          kakaoId: inputKakaoId.value,
-          nickname: inputNickname.value,
-          gender: inputGender.value
-        }
-      ]);
+      setUser({
+        ...user,
+        intro: inputIntro.value,
+        kakaoId: inputKakaoId.value,
+        nickname: inputNickname.value,
+        gender: inputGender.value
+      });
       setIsEdting(false);
     }
   };
@@ -96,7 +94,7 @@ const Profile = () => {
       <div className="grid grid-cols-2 gap-6 mb-6">
         <div>
           {!isEdting ? (
-            <p className="block text-base font-medium mb-1">{user && user[0].nickname}</p>
+            <p className="block text-base font-medium mb-1">{user?.nickname}</p>
           ) : (
             <input
               className="w-full p-2 border border-gray-300 rounded-md"
@@ -107,12 +105,12 @@ const Profile = () => {
               onChange={inputNickname.onChange}
             />
           )}
-          <p className="block text-sm font-medium mb-1">{user && user[0].login_email}</p>
+          <p className="block text-sm font-medium mb-1">{user?.login_email}</p>
           <p className="block text-sm font-medium mb-1">
-            {user && user.length > 0
-              ? user[0].gender === 'female'
+            {user
+              ? user?.gender === 'female'
                 ? '여성'
-                : user[0].gender === 'male'
+                : user?.gender === 'male'
                 ? '남성'
                 : '성별을 골라주세요.'
               : '사용자 정보 없음'}
@@ -134,7 +132,7 @@ const Profile = () => {
       <div className="mb-6">
         <label className="block text-sm font-medium mb-1">카카오톡ID</label>
         {!isEdting ? (
-          <p className="block text-sm font-medium mb-1">{user && user[0].kakaoId}</p>
+          <p className="block text-sm font-medium mb-1">{user?.kakaoId}</p>
         ) : (
           <input
             className="w-full p-2 border border-gray-300 rounded-md"
@@ -152,7 +150,7 @@ const Profile = () => {
           자기소개(최대 15자)
         </label>
         {!isEdting ? (
-          <p className="block text-sm font-medium mb-1">{user && user[0].intro}</p>
+          <p className="block text-sm font-medium mb-1">{user?.intro}</p>
         ) : (
           <textarea
             className="w-full p-2 border border-gray-300 rounded-md"
@@ -163,7 +161,9 @@ const Profile = () => {
           />
         )}
       </div>
-      <MetPeople />
+      <Suspense fallback={<div>Loading...</div>}>
+        <MetPeople />
+      </Suspense>
       <MyPost />
     </div>
   );
