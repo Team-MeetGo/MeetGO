@@ -10,7 +10,7 @@ const MyPost = () => {
   const { user } = userStore((state) => state);
 
   const getMyPost = async () => {
-    const userId = user && user[0].user_id;
+    const userId = user?.user_id;
     if (!userId) return;
     const { data } = await clientSupabase.from('review').select('*').eq('user_id', userId);
     if (data) {
@@ -19,7 +19,7 @@ const MyPost = () => {
   };
 
   const getLikePost = async () => {
-    const userId = user && user[0].user_id;
+    const userId = user?.user_id;
     if (!userId) return;
     const { data } = await clientSupabase.from('review_like').select('review_id').eq('user_id', userId);
     if (data) {

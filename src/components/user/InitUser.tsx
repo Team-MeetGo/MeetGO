@@ -30,7 +30,7 @@ const InitUser = () => {
       }
     };
     fetchUserData();
-  }, [setUser, isLoggedIn, setIsLoggedIn]);
+  }, [isLoggedIn, setIsLoggedIn]);
   return <></>;
 };
 

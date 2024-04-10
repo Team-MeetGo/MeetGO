@@ -16,7 +16,7 @@ export const userStore = create<UserState>()((set) => ({
   user: null,
   participants: null,
   isLoggedIn: false,
-  setUser: (data) => set({ user: data }),
+  setUser: (user) => set({ user }),
   setParticipants: (participants) => set({ participants }),
   clearUser: () => set({ user: null }),
   setIsLoggedIn: (isLoggedIn) => set({ isLoggedIn })
