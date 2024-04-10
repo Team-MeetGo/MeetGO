@@ -88,12 +88,13 @@ pre {
 
 .react-datepicker__day--selected {
   background-color: #8F5DF4 !important;
-  border-radius: 100%;
+  border-radius: 100% !important;
 }
 
 .react-datepicker__time-container .react-datepicker__time .react-datepicker__time-box ul.react-datepicker__time-list li.react-datepicker__time-list-item--selected {
   background-color: #8F5DF4 !important;
   border-radius: 5%;
+  /* margin: 0 2px; */
 
 }
 
@@ -104,4 +105,8 @@ pre {
 .react-datepicker-time__header {
   font-size: 16px !important;
   font-weight: 400 !important;
+}
+
+.react-datepicker-popper {
+  display: flex;
 }

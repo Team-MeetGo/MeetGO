@@ -11,11 +11,13 @@ function RoomInformation({ roomId }: { roomId: UUID }) {
 
   return (
     roomInformation && (
-      <div className="m-8 text-center">
-        <div>{room_title}</div>
-        <div>{member_number}</div>
-        <div>{location}</div>
+      <div className="h-28 m-8 text-center border-4 flex flex-row justify-start gap-4 p-6">
+        <div className="text-5xl ">{room_title}</div>
         <div>
+          <div>{member_number}</div>
+          <div>{location}</div>
+        </div>
+        <div className="flex flex-row w-44 justify-start align-bottom">
           {feature &&
             Array.from(feature).map((value) => (
               <Chip

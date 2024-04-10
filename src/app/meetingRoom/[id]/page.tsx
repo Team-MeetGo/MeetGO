@@ -14,9 +14,9 @@ const memberList = ({ params }: { params: { id: UUID } }) => {
         <InitParticipants roomId={roomId} />
         <div className="flex flex-col justify-center w-full align-middle">
           <RoomInformation roomId={roomId} />
-          <div className="m-12 h-100 flex flex-row justify-evenly">
+          <AcceptanceRoomButtons roomId={roomId} />
+          <div className="w-100 h-100 flex flex-row justify-evenly">
             <Member params={params} />
-            <AcceptanceRoomButtons roomId={roomId} />
           </div>
         </div>
       </Suspense>

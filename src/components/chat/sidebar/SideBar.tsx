@@ -72,46 +72,27 @@ const SideBar: React.FC<SideBarProps> = ({ userId, chatRoomId }) => {
   };
 
   return (
-    <div className=" w-[350px] flex flex-col ml-8 z-0">
+    <div className=" w-[377px] flex flex-col ml-8 z-0 ">
       <div className={`flex ${isSidebarOpen ? 'justify-end' : 'justify-start'}`}>
         <GiHamburgerMenu onClick={toggleSidebar} />
       </div>
-      <div style={{ maxHeight: '100vh', overflowY: 'auto' }}>
+      <div style={{ maxHeight: '100vh', overflowY: 'auto', paddingRight: '24px' }}>
         {isSidebarOpen && (
           <div>
-            <div>
-              {/* {userId === leaderId && (
-              <>
-                미팅 날짜/시간:
-                <input
-                  type="text"
-                  className="border"
-                  value={selectedMeetingTime}
-                  onChange={(e) => setSelectedMeetingTime(e.target.value)}
-                />
-                <button onClick={handleSelectedTime}>{isTimeSelected ? '취소' : '선택'}</button>
-              </>
-            )} */}
-
-              <>
-                <h1 className="font-semibold text-2xl mb-2.5">미팅 날짜/시간</h1>
-                <Card className="border border-mainColor shadow-none mb-6 h-[60px]">
-                  <CardBody>
-                    <p className=" justify-start items-center text-lg">{finalDateTime}</p>
-                  </CardBody>
-                </Card>
-                미팅 날짜/시간:
-                <input
-                  type="text"
-                  className="border"
-                  value={selectedMeetingTime ?? ''}
-                  onChange={(e) => setSelectedMeetingTime(e.target.value)}
-                />
-                <button onClick={handleSelectedTime}>{isTimeSelected ? '취소' : '선택'}</button>
-              </>
-            </div>
-            {/* DateTimePicker component */}
-            {/* Map component */}
+            <h1 className="font-semibold text-2xl mb-2.5">미팅 날짜/시간</h1>
+            <Card className="border border-mainColor shadow-none mb-6 h-[60px]">
+              <CardBody>
+                <p className=" justify-start items-center text-lg">{finalDateTime}</p>
+              </CardBody>
+            </Card>
+            미팅 날짜/시간:
+            <input
+              type="text"
+              className="border"
+              value={selectedMeetingTime ?? ''}
+              onChange={(e) => setSelectedMeetingTime(e.target.value)}
+            />
+            <button onClick={handleSelectedTime}>{isTimeSelected ? '취소' : '선택'}</button>
             <Map userId={userId} chatRoomId={chatRoomId} />
           </div>
         )}

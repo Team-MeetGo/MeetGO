@@ -222,7 +222,7 @@ const Map: React.FC<MapProps> = ({ userId, chatRoomId }) => {
         </CardBody>
       </Card>
 
-      <DateTimePicker />
+      <DateTimePicker chatRoomId={chatRoomId} />
 
       <h1 className="font-semibold text-2xl mb-2.5">장소 검색</h1>
       <Card className="border border-gray2 shadow-none mb-6">
