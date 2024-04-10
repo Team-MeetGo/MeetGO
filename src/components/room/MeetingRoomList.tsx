@@ -41,12 +41,14 @@ function MeetingRoomList({ user }: { user: User | null }) {
   });
 
   const nextPage = () => {
-    if (myRoom && myRoom.length / 3 + 1 < page) setPage(1);
+    if (myRoom && myRoom.length / 3 < page) {
+      return setPage(1);
+    }
     setPage((page) => page + 1);
   };
   const beforePage = () => {
     if (page < 2) {
-      setPage(1);
+      return setPage(1);
     }
     setPage((page) => page - 1);
   };
