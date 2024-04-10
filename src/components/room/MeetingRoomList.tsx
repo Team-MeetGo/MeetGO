@@ -26,6 +26,10 @@ function MeetingRoomList({ user }: { user: User | null }) {
   }, []);
   if (chattingRoomList === undefined) return;
 
+  const onReload = () => {
+    window.location.reload();
+  };
+
   // meetingRoomList 중에서 myRoomList가 없는 것을 뽑아내기
   const otherRooms = recruitingRoom?.filter(function (room: MeetingRoomType) {
     const foundItem = myRoom?.find((r) => r.room_id === room?.room_id);
@@ -37,6 +41,7 @@ function MeetingRoomList({ user }: { user: User | null }) {
   });
 
   const nextPage = () => {
+    if (myRoom && myRoom.length / 3 + 1 < page) setPage(1);
     setPage((page) => page + 1);
   };
   const beforePage = () => {
@@ -47,6 +52,7 @@ function MeetingRoomList({ user }: { user: User | null }) {
   };
   console.log('otherRooms', otherRooms);
   console.log('myRoom', myRoom);
+
   return (
     <article>
       <header className="h-72">
@@ -54,7 +60,11 @@ function MeetingRoomList({ user }: { user: User | null }) {
           <div className="m-4 text-xl	font-semibold">들어가 있는 방</div>
           <div className="flex flex-row align-middle justify-center">
             <MeetingRoomForm />
-            <button>
+            <button
+              onClick={() => {
+                onReload();
+              }}
+            >
               <IoMdRefresh className="h-8 w-8 m-2" />
             </button>
           </div>
@@ -63,17 +73,15 @@ function MeetingRoomList({ user }: { user: User | null }) {
           <button onClick={() => beforePage()}> - </button>
           {
             <div className="gap-8 grid grid-cols-3 m-4 w-full px-4">
-              {myRoom?.map((room, index) => (
-                <div
-                  key={index}
-                  className={`room ${
-                    page < 1 || myRoom.length / 3 + 1 < page ? setPage(1) : page * 3 <= index && index <= (page + 1) * 3
-                  }&& hidden`}
-                >
-                  {index}
-                  <MeetingRoom room={room} />
-                </div>
-              ))}
+              {myRoom?.map((room, index) => {
+                if (index < 3 * page && index >= 3 * (page - 1))
+                  return (
+                    <div key={index}>
+                      {index}
+                      <MeetingRoom room={room} />
+                    </div>
+                  );
+              })}
             </div>
           }
           <button onClick={() => nextPage()}> + </button>
