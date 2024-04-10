@@ -1,5 +1,6 @@
 'use client';
 
+import Test from '(@/components/mypage/Test)';
 import { useEffect } from 'react';
 
 const Page = () => {
@@ -30,6 +31,7 @@ const Page = () => {
     <div>
       여기는 테스트 페이지
       {/* <button onClick={noBack}>뒤로가기</button> */}
+      <Test />
     </div>
   );
 };

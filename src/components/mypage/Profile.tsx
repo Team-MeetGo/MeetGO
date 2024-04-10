@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { Suspense, useState } from 'react';
 import SchoolForm from './SchoolForm';
 import { clientSupabase } from '(@/utils/supabase/client)';
 import { userStore } from '(@/store/userStore)';
@@ -8,7 +8,7 @@ import AvatarForm from './AvatarForm';
 import MyPost from './MyPost';
 import Favorite from './Favorite';
 import MetPeople from './MetPeople';
-import useInputChange from '(@/hooks/useInputChange)';
+import useInputChange from '(@/hooks/custom/useInputChange)';
 import { Select, SelectItem } from '@nextui-org/react';
 
 const Profile = () => {
@@ -163,7 +163,9 @@ const Profile = () => {
           />
         )}
       </div>
-      <MetPeople />
+      <Suspense fallback={<div>Loading...</div>}>
+        <MetPeople />
+      </Suspense>
       <MyPost />
     </div>
   );

@@ -1,13 +1,13 @@
 'use client';
 
 import { useAcceptKakaoIdMutation, useMetPeopleMutation } from '(@/hooks/useMutation/useMetPeopleMutation)';
-import { useMetPeople } from '(@/hooks/useQueries/useMetPeople)';
+import { useMetPeople } from '(@/hooks/useQueries/useMetPeopleQuery)';
+import { useGetUserDataQuery } from '(@/hooks/useQueries/useUserQuery)';
 import { KAKAOID_REQUEST_QUERY_KEY } from '(@/query/user/metPeopleQueryKeys)';
 import { userStore } from '(@/store/userStore)';
 import { clientSupabase } from '(@/utils/supabase/client)';
 import { useQueryClient } from '@tanstack/react-query';
-import { subscribe } from 'diagnostics_channel';
-import { useEffect } from 'react';
+import { use, useEffect } from 'react';
 
 /**
  * useMutation을 이용한 데이터 처리 사용 방법
@@ -32,16 +32,44 @@ const MetPeople = () => {
     if (userId) {
       const channel = clientSupabase
         .channel('kakaoId_channel')
-        .on('postgres_changes', { event: 'UPDATE', schema: 'public', table: 'kakaoId_request' }, (payload) => {
-          console.log('Change received!', payload);
-        })
-        .subscribe();
+        .on(
+          'postgres_changes',
+          { event: 'INSERT', schema: 'public', table: 'kakaoId_request', filter: `request_Id=eq.${userId}` },
+          (payload) => {
+            console.log('요청 보내서 바뀜', payload);
+            queryClient.invalidateQueries({ queryKey: [KAKAOID_REQUEST_QUERY_KEY, userId, userGender] });
+          }
+        )
+        .on(
+          'postgres_changes',
+          { event: 'INSERT', schema: 'public', table: 'kakaoId_request', filter: `response_Id=eq.${userId}` },
+          (payload) => {
+            console.log('요청 보내서 바뀜', payload);
+            queryClient.invalidateQueries({ queryKey: [KAKAOID_REQUEST_QUERY_KEY, userId, userGender] });
+          }
+        )
+        .on(
+          'postgres_changes',
+          { event: 'UPDATE', schema: 'public', table: 'kakaoId_request', filter: `request_Id=eq.${userId}` },
+          (payload) => {
+            console.log('수락 또는 거절해서 바뀜', payload);
+            queryClient.invalidateQueries({ queryKey: [KAKAOID_REQUEST_QUERY_KEY, userId, userGender] });
+          }
+        )
+        .on(
+          'postgres_changes',
+          { event: 'UPDATE', schema: 'public', table: 'kakaoId_request', filter: `response_Id=eq.${userId}` },
+          (payload) => {
+            console.log('수락 또는 거절해서 바뀜', payload);
+            queryClient.invalidateQueries({ queryKey: [KAKAOID_REQUEST_QUERY_KEY, userId, userGender] });
+          }
+        );
 
       return () => {
         clientSupabase.removeChannel(channel);
       };
     }
-  }, [userId]);
+  }, [userId, queryClient]);
 
   /** 카카오ID요청하기 버튼 클릭시 실행될 로직(상태 업데이트 및 갱신) */
   const handleKakaoIdRequestClick = (responseId: string) => {
@@ -96,7 +124,7 @@ const MetPeople = () => {
     );
   };
 
-  console.log('metPeopleList:', metPeopleList);
+  console.log('metPeopleList', metPeopleList);
 
   return (
     <div className="mb-6">

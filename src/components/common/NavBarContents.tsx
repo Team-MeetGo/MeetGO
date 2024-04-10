@@ -16,11 +16,21 @@ import Image from 'next/image';
 import { userStore } from '(@/store/userStore)';
 import { useRouter } from 'next/navigation';
 import { clientSupabase } from '(@/utils/supabase/client)';
+import { useGetUserDataQuery } from '(@/hooks/useQueries/useUserQuery)';
 
 const NavBarContents = () => {
-  const { isLoggedIn, setIsLoggedIn, user, setUser } = userStore((state) => state);
-
+  const { isLoggedIn, setIsLoggedIn } = userStore((state) => state);
+  const { data: userData, isPending, isError, error } = useGetUserDataQuery();
   const router = useRouter();
+
+  if (isPending) {
+    return <span>Loading...</span>;
+  }
+  if (isError) {
+    return <span>{error?.message}</span>;
+  }
+
+  console.log(userData, 'userData');
 
   const signOut = async () => {
     await clientSupabase.auth.signOut();
@@ -28,9 +38,6 @@ const NavBarContents = () => {
     router.replace('/'); // 로그아웃 후 메인 페이지로 이동. 뒤로가기 방지.
     alert('로그아웃 성공');
   };
-
-  // console.log('isLoggedIn', isLoggedIn);
-  // console.log('user =>', user);
 
   return (
     <Navbar>
@@ -68,17 +75,17 @@ const NavBarContents = () => {
       <NavbarContent as="div" justify="end">
         {isLoggedIn ? (
           <div className="flex items-center gap-4">
-            <p>{user && user[0].nickname}</p>
+            <p>{userData?.nickname}</p>
             <Dropdown placement="bottom-end">
               <DropdownTrigger>
-                {user && user[0].avatar ? (
+                {userData?.avatar ? (
                   <Avatar
                     isBordered
                     as="button"
                     className="transition-transform"
                     color="secondary"
                     name="profile"
-                    src={`${user[0].avatar}?${new Date().getTime()}`}
+                    src={`${userData?.avatar}?${new Date().getTime()}`}
                   />
                 ) : (
                   <Avatar
@@ -106,6 +113,7 @@ const NavBarContents = () => {
           <div>
             <Link href="/users/login">로그인</Link>
             <Link href="/users/join">회원가입</Link>
+            <button onClick={signOut}>로그아웃</button>
           </div>
         )}
       </NavbarContent>
