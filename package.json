@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@date-fns/upgrade": "^1.0.3",
     "@nextui-org/react": "^2.2.10",
     "@supabase/ssr": "^0.1.0",
     "@supabase/supabase-js": "^2.41.1",

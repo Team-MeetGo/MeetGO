@@ -72,7 +72,7 @@ const SideBar: React.FC<SideBarProps> = ({ userId, chatRoomId }) => {
   };
 
   return (
-    <div className="absolute w-[350px] flex flex-col ml-8 z-0">
+    <div className=" w-[350px] flex flex-col ml-8 z-0">
       <div className={`flex ${isSidebarOpen ? 'justify-end' : 'justify-start'}`}>
         <GiHamburgerMenu onClick={toggleSidebar} />
       </div>
@@ -111,7 +111,6 @@ const SideBar: React.FC<SideBarProps> = ({ userId, chatRoomId }) => {
               </>
             </div>
             {/* DateTimePicker component */}
-            <DateTimePicker />
             {/* Map component */}
             <Map userId={userId} chatRoomId={chatRoomId} />
           </div>
