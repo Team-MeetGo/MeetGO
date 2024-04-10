@@ -4,21 +4,19 @@ import { Database } from '(@/types/database.types)';
 import { clientSupabase } from '(@/utils/supabase/client)';
 import { useEffect, useState } from 'react';
 
-import type { UUID } from 'crypto';
+import { useRoomInfoWithRoomIdQuery } from '(@/hooks/useQueries/useMeetingQuery)';
 type UserType = Database['public']['Tables']['users']['Row'];
 
-const Member = ({ params }: { params: { id: UUID } }) => {
+const Member = ({ params }: { params: { id: string } }) => {
   const { participants, setParticipants } = userStore((state) => state);
   const [leaderMember, setLeaderMember] = useState('');
+  const user_id = params.id;
+  const roomInformation = useRoomInfoWithRoomIdQuery(user_id);
 
   useEffect(() => {
     //리더를 찾아 표시
     const leaderSelector = async () => {
-      const { data: nowLeader } = await clientSupabase.from('room').select('*').eq('room_id', params.id);
-      if (!nowLeader) {
-        return;
-      }
-      setLeaderMember(nowLeader[0].leader_id as string);
+      setLeaderMember(roomInformation ? (roomInformation[0].leader_id as string) : '');
     };
 
     const channle = clientSupabase

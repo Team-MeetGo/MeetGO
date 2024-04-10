@@ -6,21 +6,18 @@ import { useState } from 'react';
 import TagList from './MeetingRoomFeatureTags';
 
 import { userStore } from '(@/store/userStore)';
-import type { Database } from '(@/types/database.types)';
 import { useRouter } from 'next/navigation';
-import participantsHandler from '(@/hooks/custom/participants)';
-type NextMeetingRoomType = Database['public']['Tables']['room']['Insert'];
+import { NextMeetingRoomType } from '(@/types/roomTypes)';
+import { useAddRoom } from '(@/hooks/useMutation/useMeetingMutation)';
 
 function MeetingRoomForm() {
   const router = useRouter();
-  const { addMemberHandler } = participantsHandler();
   const { tags, resetTags } = useTagStore();
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const { user } = userStore((state) => state);
   const [title, setTitle] = useState('');
   const [location, setLocation] = useState('');
   const [memberNumber, setMemberNumber] = useState('');
-
   const cancelMakingMeetingRoom = () => {
     setTitle('');
     setLocation('');
@@ -28,47 +25,28 @@ function MeetingRoomForm() {
     resetTags();
   };
 
+  const user_id = user && user[0].user_id;
+  const nextMeetingRoom: NextMeetingRoomType = {
+    feature: tags,
+    leader_id: String(user_id),
+    location,
+    member_number: memberNumber,
+    room_status: '모집중',
+    room_title: title
+  };
+  const addRoomMutation = useAddRoom({ nextMeetingRoom, user_id });
+
   const addMeetingRoom = async (e: any) => {
     e.preventDefault();
     if (!title || !tags || !location || memberNumber === '인원수') {
       return alert('모든 항목은 필수입니다.');
     }
-    if (!user || user.length < 1) {
-      return alert('로그인을 해주시기 바랍니다.');
-    }
-
-    const nextMeetingRoom: NextMeetingRoomType = {
-      feature: tags,
-      leader_id: user[0].user_id,
-      location,
-      member_number: memberNumber,
-      room_status: '모집중',
-      room_title: title
-    };
-    //다음 미팅룸을 생성해서 추가합니다.
-    const { data: insertMeetingRoom, error: insertMeetingRoomError } = await clientSupabase
-      .from('room')
-      .upsert([nextMeetingRoom])
-      .select();
-    if (!insertMeetingRoom) return {};
-    //추가된 미팅룸에 유저를 추가합니다.
-    await clientSupabase
-      .from('participants')
-      .insert([{ room_id: insertMeetingRoom[0].room_id }, { user_id: user[0].user_id }]);
-
-    if (insertMeetingRoomError) {
-      console.log(insertMeetingRoomError);
-      return;
-    } else {
-      console.log(insertMeetingRoom[0].room_id);
-      await addMemberHandler(insertMeetingRoom[0].room_id);
-
-      alert('모임이 생성되었습니다.');
-      resetTags();
-
-      router.push(`/meetingRoom/${insertMeetingRoom[0].room_id}`);
-    }
+    const newRoom = await addRoomMutation.mutateAsync();
+    alert('모임이 생성되었습니다.');
+    resetTags();
+    router.push(`/meetingRoom/${newRoom}`);
   };
+
   return (
     <>
       <Button onPress={onOpen} className="bg-violet-300 m-4">

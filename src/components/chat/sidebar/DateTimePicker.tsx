@@ -24,7 +24,7 @@ const DateTimePicker = () => {
           setSelectedMeetingTime(date as Date);
           setCalendarOpen(false); // 캘린더를 닫습니다.
         }}
-        minDate={new Date()} // 오늘 이전의 날짜 선택 불가
+        minDate={new Date()} // 오늘 이전의 날짜 선택 불가능
         showTimeSelect
         timeIntervals={30}
         timeCaption="Time"
@@ -39,15 +39,3 @@ const DateTimePicker = () => {
 };
 
 export default DateTimePicker;
-
-//popperPlacement="left"
-// 캘린더 위치 테스트
-//popperPlacement="bottom"
-//className={'react-datepicker__input-container input'styles.default.datepicker}
-//popperClassName="react-datepicker-right"
-//dayClassName={(d) =>
-//   d.getDate() === selectedMeetingTime!.getDate() ? styles.default.selectedDay : styles.default.unselectedDay
-// }
-//calendarClassName="w-full"
-//fixedHeight
-//className="w-full flex items-center border border-gray-300 rounded bg-white box-border h-12 text-center pr-14 focus:border-2 focus:border-orange-500"

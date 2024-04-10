@@ -72,3 +72,20 @@ pre {
   font-weight: 400;
   box-sizing: border-box;
 }
+
+.react-datepicker__current-month {
+  font-size: 30px;
+  font-weight: bold;
+  /* Example: Change font weight */
+  color: black;
+}
+
+.react-datepicker__triangle {
+  display: none;
+
+}
+
+.react-datepicker__header {
+  background-color: white !important;
+  color: white;
+}
