@@ -7,7 +7,7 @@ import { useCallback, useEffect, useState } from 'react';
 
 const HowManyMsg = () => {
   const { user } = userStore((state) => state);
-  const myChatRoomIds = useMyChatRoomIdsQuery(user ? user[0].user_id : '');
+  const myChatRoomIds = useMyChatRoomIdsQuery(user?.user_id!);
   console.log(myChatRoomIds);
   const [countArr, setCountArr] = useState(Array(myChatRoomIds.length).fill(0));
   console.log(countArr);

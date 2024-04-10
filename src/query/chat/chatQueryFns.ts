@@ -27,7 +27,7 @@ export const fetchParticipants = async (roomId: string) => {
     .select('user_id')
     .eq('room_id', String(roomId));
   console.log('채팅방 멤버들', userIds); // 남은 애들
-  if (userIdErr) alert('채팅방 멤버들 ID를 불러오는 데에 실패했습니다.');
+  if (userIdErr) console.error('채팅방 멤버들 ID를 불러오는 데에 실패했습니다.', userIdErr.message);
   const users = [];
   if (userIds) {
     for (const id of userIds) {
@@ -35,7 +35,8 @@ export const fetchParticipants = async (roomId: string) => {
         .from('users')
         .select('*')
         .eq('user_id', String(id.user_id));
-      if (usersDataErr) alert('채팅방 멤버들의 유저정보를 불러오는 데에 실패했습니다.');
+      console.log(data);
+      if (usersDataErr) console.error('채팅방 멤버들의 유저정보를 불러오는 데에 실패했습니다.', usersDataErr.message);
       if (data) {
         users.push(...data);
       }

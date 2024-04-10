@@ -2,11 +2,11 @@ import { create } from 'zustand';
 import { UsersType } from '(@/types/userTypes)';
 
 type UserState = {
-  user: UsersType[] | null;
+  user: UsersType | null;
   participants: UsersType[] | null | undefined;
   isLoggedIn: boolean;
 
-  setUser: (data: UsersType[] | null) => void;
+  setUser: (data: UsersType | null) => void;
   setParticipants: (others: UsersType[]) => void;
   clearUser: () => void;
   setIsLoggedIn: (isLoggedIn: boolean) => void;

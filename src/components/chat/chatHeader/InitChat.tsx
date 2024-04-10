@@ -14,10 +14,11 @@ const InitChat = ({ chatRoomId, allMsgs }: { chatRoomId: string; allMsgs: Messag
   const { messages, chatState, isRest, setChatState, setMessages, setChatRoomId, setHasMore } = chatStore(
     (state) => state
   );
-  const user = userStore((state) => state.user);
   const room = useRoomDataQuery(chatRoomId);
   const roomId = room?.roomId;
-  const myLastMsgId = useMyLastMsgs((user as UsersType[])[0].user_id, chatRoomId);
+  const user = userStore((state) => state.user);
+
+  const myLastMsgId = useMyLastMsgs(user?.user_id!, chatRoomId);
   console.log('원래 있던 마지막 id', myLastMsgId);
 
   useEffect(() => {

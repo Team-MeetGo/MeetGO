@@ -19,7 +19,7 @@ const ReviewHeart = ({ review_id }: Props) => {
   const [likeUser, setLikeUser] = useState<string[]>([]);
 
   const { user, setUser } = userStore((state) => state);
-  const userId = user && user[0].user_id;
+  const userId = user?.user_id;
 
   //좋아요 status
   const useLikedReviewDataQuery = (review_id: string) => {

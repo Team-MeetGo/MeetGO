@@ -9,7 +9,7 @@ import { useEffect } from 'react';
 const RouteChangeListener = () => {
   const pathname = usePathname();
   const { user } = userStore((state) => state);
-  const userId = user ? user[0].user_id : '';
+  const userId = user?.user_id!;
   const { chatRoomId, messages } = chatStore((state) => state);
   const MychatRoomId = chatRoomId ? chatRoomId : '';
   //   const myLastMsgs = use()
