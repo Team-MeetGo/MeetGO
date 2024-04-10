@@ -52,7 +52,7 @@ const InitChat = ({ user, chatRoomId, allMsgs }: { user: User | null; chatRoomId
       // **채팅방에 있는다면
       if (messages.length === 0) {
         setMessages([...allMsgs].reverse()); // 현재 메세지가 없을 때만(처음시작 or 메세지 한개일 때)
-        setHasMore(allMsgs?.length < ITEM_INTERVAL + 1);
+        setHasMore(allMsgs?.length >= ITEM_INTERVAL + 1);
       }
       setChatRoomId(chatRoomId);
     }
