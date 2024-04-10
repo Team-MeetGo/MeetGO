@@ -74,7 +74,7 @@ const AcceptanceRoomButtons = ({ roomId }: { roomId: UUID }) => {
   };
 
   return (
-    <div className="h-100 w-16 flex flex-col justify-end gap-8">
+    <div className="h-100 w-40 flex flex-row justify-end gap-8">
       <button
         onClick={() => {
           gotoLobby();
