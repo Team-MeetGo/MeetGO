@@ -75,3 +75,26 @@ export const fetchMyChatRoomIds = async (userId: string) => {
   }
   return myChatRooms;
 };
+
+// 내가 본 마지막 메세지들의 아이디
+export const fetchMyLastMsgs = async (user_id: string, chatRoomId: string) => {
+  const { data: lastMsgs, error } = await clientSupabase
+    .from('remember_last_msg')
+    .select('last_msg_id')
+    .eq('user_id', user_id)
+    .eq('chatting_room_id', chatRoomId);
+  if (error) console.error('마지막 메세지를 가져오는 데 실패했습니다.', error.message);
+  return lastMsgs;
+};
+
+export const updateMyLastMsg = async (user_id: string, chatRoomId: string, msg_id: string) => {
+  const { data: updatedLastMsg, error } = await clientSupabase
+    .from('remember_last_msg')
+    .update({ last_msg_id: msg_id })
+    .eq('user_id', user_id)
+    .eq('chatting_room_id', chatRoomId)
+    .select('*');
+  console.log('업데이트 된 메세지 아이디', updatedLastMsg);
+  if (error) console.error('마지막 메세지 업데이트 실패 =>', error.message);
+  return updateMyLastMsg;
+};

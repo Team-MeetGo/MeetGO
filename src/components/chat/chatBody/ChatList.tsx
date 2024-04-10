@@ -12,9 +12,10 @@ import { chatStore } from '(@/store/chatStore)';
 import { Tooltip } from '@nextui-org/react';
 import OthersChat from './OthersChat';
 import ChatSearch from './ChatSearch';
-import { useRoomDataQuery } from '(@/hooks/useQueries/useChattingQuery)';
+import { useRoomDataQuery, useUpdateLastMsg } from '(@/hooks/useQueries/useChattingQuery)';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import path from 'path';
+import FinishChat from '../chatFooter/FinishChat';
 
 const ChatList = ({ user, chatRoomId }: { user: User | null; chatRoomId: string }) => {
   const scrollRef = useRef() as React.MutableRefObject<HTMLDivElement>;
@@ -30,9 +31,6 @@ const ChatList = ({ user, chatRoomId }: { user: User | null; chatRoomId: string 
   const router = useRouter();
 
   // console.log('서버에서 받은 messages', messages);
-
-  const pathname = usePathname().replace('/chat/', '');
-  // console.log('pathname =>', pathname);
 
   const rememberLastMsg = () => {
     const lastDiv = document.getElementById(`${messages[messages.length - 1].message_id}`);
@@ -93,19 +91,18 @@ const ChatList = ({ user, chatRoomId }: { user: User | null; chatRoomId: string 
     }
   }, [messages, isScrolling]);
 
-  // useEffect(() => {
-  //   if (messages) {
-  //     if (pathname.replace('/chat/', '') === chatRoomId) {
-  //       const lastMsgID = localStorage.getItem(`${chatRoomId}`);
-  //       console.log('lastMsgID =>', lastMsgID);
+  const pathname = usePathname();
+  // const { mutate: mutateToUpdate } = useUpdateLastMsg(
+  //   user?.id as string,
+  //   chatRoomId as string,
+  //   messages[messages.length - 1].message_id as string
+  // );
 
-  //       return () => {
-  //         localStorage.setItem(`${chatRoomId}`, JSON.stringify(messages[messages.length - 1].message_id));
-  //         console.log('이거는 실행되니');
-  //       };
-  //     }
-  //   }
-  // }, [pathname, chatRoomId, messages]);
+  useEffect(() => {
+    return () => {
+      console.log('나갈 때');
+    };
+  }, [pathname]);
 
   // 스크롤 이벤트가 발생할 때
   const handleScroll = () => {

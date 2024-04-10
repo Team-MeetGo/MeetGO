@@ -23,7 +23,7 @@ export default function RootLayout({
       <body className={inter.className}>
         <NextProvider>
           <QueryProvider>
-            <RouteChangeListener />
+            {/* <RouteChangeListener /> */}
             <NavBar />
             {children}
           </QueryProvider>

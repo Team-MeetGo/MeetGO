@@ -1,7 +1,9 @@
 'use client';
-import { useRoomDataQuery } from '(@/hooks/useQueries/useChattingQuery)';
+import { useMyLastMsgs, useRoomDataQuery } from '(@/hooks/useQueries/useChattingQuery)';
 import { chatStore } from '(@/store/chatStore)';
+import { userStore } from '(@/store/userStore)';
 import { Message, chatRoomPayloadType } from '(@/types/chatTypes)';
+import { UsersType } from '(@/types/userTypes)';
 import { ITEM_INTERVAL } from '(@/utils/constant)';
 import { clientSupabase } from '(@/utils/supabase/client)';
 import { useRouter } from 'next/navigation';
@@ -12,8 +14,11 @@ const InitChat = ({ chatRoomId, allMsgs }: { chatRoomId: string; allMsgs: Messag
   const { messages, chatState, isRest, setChatState, setMessages, setChatRoomId, setHasMore } = chatStore(
     (state) => state
   );
+  const user = userStore((state) => state.user);
   const room = useRoomDataQuery(chatRoomId);
   const roomId = room?.roomId;
+  const myLastMsgId = useMyLastMsgs((user as UsersType[])[0].user_id, chatRoomId);
+  console.log('원래 있던 마지막 id', myLastMsgId);
 
   useEffect(() => {
     // 채팅방 isActive 상태 구독
@@ -50,11 +55,26 @@ const InitChat = ({ chatRoomId, allMsgs }: { chatRoomId: string; allMsgs: Messag
         setMessages([...allMsgs].reverse()); // 현재 메세지가 없을 때만(처음시작 or 메세지 한개일 때)
         setHasMore(allMsgs?.length >= ITEM_INTERVAL + 1);
       }
-
       setChatRoomId(chatRoomId);
     }
   }, [setChatRoomId, allMsgs, chatRoomId, setMessages, setHasMore, messages.length, chatState, isRest, router, roomId]);
   // 왜 요청이 2번이나 되징
+
+  // const userId = user ? user[0].user_id : '';
+  // console.log(messages);
+
+  // const { mutate: mutateToUpdate } = useUpdateLastMsg(
+  //   userId,
+  //   chatRoomId as string,
+  //   messages[messages.length - 1].message_id
+  // );
+
+  // useEffect(() => {
+  //   return () => {
+  //     mutateToUpdate();
+  //   };
+  // }, [pathname]);
+
   return <></>;
 };
 

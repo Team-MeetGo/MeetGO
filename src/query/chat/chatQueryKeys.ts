@@ -5,3 +5,5 @@ export const PARTICIPANTS_QUERY_KEY = ['paricipants'];
 export const CHATDATA_QUERY_KEY = ['chat'];
 
 export const MYCHAT_ROOMIDS = ['myChatRoomIds'];
+
+export const MY_LAST_MSGS = ['myLastMsgs'];
