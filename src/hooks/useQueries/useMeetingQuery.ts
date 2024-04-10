@@ -1,7 +1,6 @@
 import { fetchMyRoom, fetchRecruitingRoom, fetchRoomInfoWithRoomId } from '(@/query/meetingRoom/meetingQueryFns)';
 import { MY_ROOM, RECRUTING_ROOMDATA, ROOMDATA_WITH_ROOMID } from '(@/query/meetingRoom/meetingQueryKeys)';
 import { useSuspenseQueries, useSuspenseQuery } from '@tanstack/react-query';
-import { UUID } from 'crypto';
 
 export const useRecruitingMyroomQuery = (user_id: string) => {
   const results = useSuspenseQueries({
@@ -24,6 +23,6 @@ export const useRoomInfoWithRoomIdQuery = (room_id: string) => {
     queryKey: [ROOMDATA_WITH_ROOMID, room_id],
     queryFn: async () => await fetchRoomInfoWithRoomId(room_id)
   });
-  // console.log(roomData);
+  console.log(roomData);
   return roomData;
 };

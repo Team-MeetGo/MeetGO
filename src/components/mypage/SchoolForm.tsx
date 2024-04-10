@@ -21,7 +21,7 @@ const SchoolForm = () => {
 
   /** 학교 업데이트하는 로직 */
   const updateSchool = async () => {
-    const userId = user && user[0].user_id;
+    const userId = user?.user_id;
     if (!userId) return;
     const { error } = await clientSupabase
       .from('users')
@@ -30,7 +30,7 @@ const SchoolForm = () => {
     if (error) {
       console.error('Error updating school:', error);
     } else {
-      setUser([{ ...user[0], school_email: schoolEmail, school_name: univName, isValidate: true }]);
+      setUser({ ...user, school_email: schoolEmail, school_name: univName, isValidate: true });
     }
   };
 
@@ -71,7 +71,7 @@ const SchoolForm = () => {
         alert('인증 실패');
         setIsCodeSent(false);
       }
-    } catch (error: any) {
+    } catch (error) {
       console.error(error);
       alert('인증 과정 중 오류가 발생했습니다.');
     }
@@ -88,8 +88,8 @@ const SchoolForm = () => {
         setIsCodeValid(false);
         alert('인증 코드가 유효하지 않습니다.');
       }
-    } catch (error: any) {
-      alert(error.message);
+    } catch (error) {
+      alert(error);
     }
   };
 
@@ -99,8 +99,8 @@ const SchoolForm = () => {
         <label className="block text-sm font-medium mb-1" htmlFor="schoolEmail">
           학교 이메일
         </label>
-        {user && user[0].isValidate ? (
-          <p>{user[0].school_email}</p>
+        {user?.isValidate ? (
+          <p>{user?.school_email}</p>
         ) : (
           <>
             <input
@@ -122,8 +122,8 @@ const SchoolForm = () => {
         <label className="block text-sm font-medium mb-1" htmlFor="univName">
           학교명
         </label>
-        {user && user[0].isValidate ? (
-          <p>{user[0].school_name}</p>
+        {user?.isValidate ? (
+          <p>{user?.school_name}</p>
         ) : (
           <>
             <input
@@ -141,14 +141,14 @@ const SchoolForm = () => {
           </>
         )}
       </div>
-      {user && user[0].isValidate ? (
+      {user?.isValidate ? (
         <p>인증완료✔️</p>
       ) : (
         <button onClick={onSubmitEmailConfirm} disabled={isCodeSent}>
           인증
         </button>
       )}
-      {user && user[0].isValidate
+      {user?.isValidate
         ? null
         : isCodeSent && (
             <div className="flex flex-col">

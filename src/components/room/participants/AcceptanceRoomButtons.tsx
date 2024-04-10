@@ -16,7 +16,7 @@ import { useRoomInfoWithRoomIdQuery } from '(@/hooks/useQueries/useMeetingQuery)
 const AcceptanceRoomButtons = ({ roomId }: { roomId: UUID }) => {
   const router = useRouter();
   const { user } = userStore((state) => state);
-  const user_id = String(user && user[0].user_id);
+  const user_id = String(user?.user_id!);
   const room_id = String(roomId);
   const participants = useParticipantsQuery(roomId);
   const deleteMemberMutation = useDeleteMember({ user_id, room_id });

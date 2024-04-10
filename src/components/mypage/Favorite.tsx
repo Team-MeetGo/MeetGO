@@ -4,7 +4,7 @@ import { favoriteOptions } from '(@/utils/FavoriteData)';
 import { clientSupabase } from '(@/utils/supabase/client)';
 import { userStore } from '(@/store/userStore)';
 
-const Favorite = ({ isEdting }: any) => {
+const Favorite = (isEdting: boolean) => {
   const [selected, setSelected] = useState<Set<string>>(new Set([]));
   const { user, setUser } = userStore((state) => state);
 
@@ -25,7 +25,7 @@ const Favorite = ({ isEdting }: any) => {
   /** 이상형 업데이트하는 로직 */
   const updateFavorite = async () => {
     const favoriteArray = Array.from(selected);
-    const userId = user && user[0].user_id;
+    const userId = user?.user_id;
     if (!userId) return;
     const { error } = await clientSupabase.from('users').update({ favorite: favoriteArray }).eq('user_id', userId);
     if (error) {
@@ -37,7 +37,7 @@ const Favorite = ({ isEdting }: any) => {
 
   useEffect(() => {
     // userStore에서 favorite 정보를 가져와서 selected 상태에 설정
-    const initialFavorites = new Set((user && user[0].favorite) || []);
+    const initialFavorites = new Set(user?.favorite || []);
     setSelected(initialFavorites);
   }, [user]);
 
