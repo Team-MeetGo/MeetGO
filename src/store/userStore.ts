@@ -6,7 +6,7 @@ type UserState = {
   participants: UsersType[] | null | undefined;
   isLoggedIn: boolean;
 
-  setUser: (user: UsersType | null) => void;
+  setUser: (data: UsersType | null) => void;
   setParticipants: (others: UsersType[]) => void;
   clearUser: () => void;
   setIsLoggedIn: (isLoggedIn: boolean) => void;

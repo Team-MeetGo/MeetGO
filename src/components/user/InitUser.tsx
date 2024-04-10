@@ -20,7 +20,7 @@ const InitUser = () => {
         // 쎄션 유지중일 때만 supabase DB에 요청하도록(성능적 효율성)
         const { data: userData } = await clientSupabase.from('users').select('*').eq('user_id', String(user?.id));
         if (userData && userData[0]) {
-          setUser(userData);
+          setUser(userData[0]);
         }
       } else {
         // 이 때는 새로고침 시를 고려하여 isLoggedIn을 false로 하지 않아도 됨

@@ -1,23 +1,19 @@
 'use client';
 import { Message } from '(@/types/chatTypes)';
-import { getFromTo, getformattedDate } from '(@/utils)';
 import { clientSupabase } from '(@/utils/supabase/client)';
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { User } from '@supabase/supabase-js';
 import ChatScroll from './ChatScroll';
 import NewChatAlert from './NewChatAlert';
 import LoadChatMore from './LoadChatMore';
-import ChatDeleteDropDown from './ChatDeleteDropDown';
 import { chatStore } from '(@/store/chatStore)';
-import { Tooltip } from '@nextui-org/react';
 import OthersChat from './OthersChat';
 import ChatSearch from './ChatSearch';
-import { useRoomDataQuery, useUpdateLastMsg } from '(@/hooks/useQueries/useChattingQuery)';
-import { usePathname, useRouter, useSearchParams } from 'next/navigation';
-import path from 'path';
-import FinishChat from '../chatFooter/FinishChat';
+import { useRoomDataQuery } from '(@/hooks/useQueries/useChattingQuery)';
+import { usePathname, useRouter } from 'next/navigation';
+import { MyChat } from './ChatList';
 
-const ChatList = ({ user, chatRoomId }: { user: User | null; chatRoomId: string }) => {
+export const ChatList = ({ user, chatRoomId }: { user: User | null; chatRoomId: string }) => {
   const scrollRef = useRef() as React.MutableRefObject<HTMLDivElement>;
   const { hasMore, messages, setMessages } = chatStore((state) => state);
   const [isScrolling, setIsScrolling] = useState(false);
@@ -28,10 +24,23 @@ const ChatList = ({ user, chatRoomId }: { user: User | null; chatRoomId: string 
   const room = useRoomDataQuery(chatRoomId);
   const roomId = room?.roomId;
 
-  console.log(hasMore);
+  const router = useRouter();
 
+  // console.log('서버에서 받은 messages', messages);
   const rememberLastMsg = () => {
     const lastDiv = document.getElementById(`${messages[messages.length - 1].message_id}`);
+  };
+
+  const keepLastMsgID = () => {
+    if (messages.length) {
+      localStorage.setItem(`${chatRoomId}`, JSON.stringify(messages[messages.length - 1].message_id));
+    }
+  };
+
+  const getLastMsgID = () => {
+    const lastMsgID = localStorage.getItem(`${chatRoomId}`);
+    console.log(lastMsgID);
+    // localStorage.removeItem(`${chatRoomId}`);
   };
 
   useEffect(() => {
@@ -78,17 +87,14 @@ const ChatList = ({ user, chatRoomId }: { user: User | null; chatRoomId: string 
   }, [messages, isScrolling]);
 
   const pathname = usePathname();
-
-  const { mutate: mutateToUpdate } = useUpdateLastMsg(
-    user?.id as string,
-    chatRoomId as string,
-    messages && messages.length > 0 ? messages[messages.length - 1].message_id : undefined
-  );
-
+  // const { mutate: mutateToUpdate } = useUpdateLastMsg(
+  //   user?.id as string,
+  //   chatRoomId as string,
+  //   messages[messages.length - 1].message_id as string
+  // );
   useEffect(() => {
     return () => {
       console.log('나갈 때');
-      mutateToUpdate();
     };
   }, [pathname]);
 
@@ -109,7 +115,6 @@ const ChatList = ({ user, chatRoomId }: { user: User | null; chatRoomId: string 
     scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
   };
   // insert 할 때 없어졌으면 좋겠는데..
-
   return (
     <>
       <div
@@ -142,27 +147,5 @@ const ChatList = ({ user, chatRoomId }: { user: User | null; chatRoomId: string 
         <></>
       )}
     </>
-  );
-};
-
-export default ChatList;
-
-const MyChat = ({ msg }: { msg: Message }) => {
-  return (
-    <div id={msg.message_id} className="flex gap-4 ml-auto">
-      <div className="w-80 h-24 flex flex-col gap-1">
-        <div className="font-bold ml-auto">{msg.nickname}</div>
-        <div className="flex gap-2 ml-auto">
-          <ChatDeleteDropDown msg={msg} />
-          <div className="border rounded-md py-3 px-5 h-full text-right">{msg.message}</div>
-        </div>
-        <div className="mt-auto text-slate-100 text-xs ml-auto">
-          <p>{getformattedDate(msg.created_at)}</p>
-        </div>
-      </div>
-      <Tooltip content="여기 컴포넌트">
-        <div className="h-14 w-14 bg-indigo-600 rounded-full my-auto">{msg.avatar}</div>
-      </Tooltip>
-    </div>
   );
 };
