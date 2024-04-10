@@ -160,25 +160,25 @@ export type Database = {
       };
       remember_last_msg: {
         Row: {
-          chatting_room_id: string | null;
+          chatting_room_id: string;
           created_at: string;
           id: string;
-          last_msg_id: string | null;
-          user_id: string | null;
+          last_msg_id: string;
+          user_id: string;
         };
         Insert: {
-          chatting_room_id?: string | null;
+          chatting_room_id?: string;
           created_at?: string;
           id?: string;
-          last_msg_id?: string | null;
-          user_id?: string | null;
+          last_msg_id: string;
+          user_id?: string;
         };
         Update: {
-          chatting_room_id?: string | null;
+          chatting_room_id?: string;
           created_at?: string;
           id?: string;
-          last_msg_id?: string | null;
-          user_id?: string | null;
+          last_msg_id?: string;
+          user_id?: string;
         };
         Relationships: [
           {
