@@ -44,8 +44,8 @@ const SideBar: React.FC<SideBarProps> = ({ userId, chatRoomId }) => {
   };
 
   return (
-    <div className=" w-[377px] flex flex-col ml-8 z-0 ">
-      <div className={`flex ${isSidebarOpen ? 'justify-end' : 'justify-start'}`}>
+    <div className="absolute w-[377px] flex flex-col ml-8 z-0 transition-all duration-300 ease-in-out">
+      <div className={`flex ${isSidebarOpen ? 'justify-end' : 'justify-end'}`}>
         <GiHamburgerMenu onClick={toggleSidebar} />
       </div>
       <div style={{ maxHeight: '100vh', overflowY: 'auto', paddingRight: '24px' }}>
