@@ -55,7 +55,7 @@ export const useMyLastMsgs = (user_id: string, chatRoomId: string) => {
   return myLastMsgs;
 };
 
-export const useUpdateLastMsg = (user_id: string, chatRoomId: string, msg_id: string) => {
+export const useUpdateLastMsg = (user_id: string, chatRoomId: string, msg_id: string | undefined) => {
   const queryClient = useQueryClient();
   const { mutate: mutateToUpdate } = useMutation({
     mutationFn: async () => updateMyLastMsg(user_id, chatRoomId, msg_id),

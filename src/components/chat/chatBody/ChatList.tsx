@@ -28,24 +28,10 @@ const ChatList = ({ user, chatRoomId }: { user: User | null; chatRoomId: string 
   const room = useRoomDataQuery(chatRoomId);
   const roomId = room?.roomId;
 
-  const router = useRouter();
-
-  // console.log('서버에서 받은 messages', messages);
+  console.log(hasMore);
 
   const rememberLastMsg = () => {
     const lastDiv = document.getElementById(`${messages[messages.length - 1].message_id}`);
-  };
-
-  const keepLastMsgID = () => {
-    if (messages.length) {
-      localStorage.setItem(`${chatRoomId}`, JSON.stringify(messages[messages.length - 1].message_id));
-    }
-  };
-
-  const getLastMsgID = () => {
-    const lastMsgID = localStorage.getItem(`${chatRoomId}`);
-    console.log(lastMsgID);
-    // localStorage.removeItem(`${chatRoomId}`);
   };
 
   useEffect(() => {
@@ -92,16 +78,17 @@ const ChatList = ({ user, chatRoomId }: { user: User | null; chatRoomId: string 
   }, [messages, isScrolling]);
 
   const pathname = usePathname();
-  // const { mutate: mutateToUpdate } = useUpdateLastMsg(
-  //   user?.id as string,
-  //   chatRoomId as string,
-  //   messages[messages.length - 1].message_id as string
-  // );
+
+  const { mutate: mutateToUpdate } = useUpdateLastMsg(
+    user?.id as string,
+    chatRoomId as string,
+    messages && messages.length > 0 ? messages[messages.length - 1].message_id : undefined
+  );
 
   useEffect(() => {
     return () => {
       console.log('나갈 때');
-      // mutateToUpdate();
+      mutateToUpdate();
     };
   }, [pathname]);
 
