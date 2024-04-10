@@ -17,9 +17,10 @@ import { userStore } from '(@/store/userStore)';
 import { useRouter } from 'next/navigation';
 import { clientSupabase } from '(@/utils/supabase/client)';
 import { useGetUserDataQuery } from '(@/hooks/useQueries/useUserQuery)';
+import { useEffect } from 'react';
 
 const NavBarContents = () => {
-  const { isLoggedIn, setIsLoggedIn } = userStore((state) => state);
+  const { isLoggedIn, setIsLoggedIn, setUser, user } = userStore((state) => state);
   const { data: userData, isPending, isError, error } = useGetUserDataQuery();
   const router = useRouter();
 
@@ -31,6 +32,8 @@ const NavBarContents = () => {
   }
 
   console.log(userData, 'userData');
+  console.log(isLoggedIn, '로그인됐냐');
+  console.log(user, '유저 객체냐?');
 
   const signOut = async () => {
     await clientSupabase.auth.signOut();
