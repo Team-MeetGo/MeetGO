@@ -31,10 +31,6 @@ const NavBarContents = () => {
     return <span>{error?.message}</span>;
   }
 
-  console.log(userData, 'userData');
-  console.log(isLoggedIn, '로그인됐냐');
-  console.log(user, '유저 객체냐?');
-
   const signOut = async () => {
     await clientSupabase.auth.signOut();
     setIsLoggedIn(false);

@@ -22,8 +22,8 @@ import { use, useEffect } from 'react';
 const MetPeople = () => {
   const queryClient = useQueryClient();
   const { user, setUser } = userStore((state) => state);
-  const userId = user?.[0]?.user_id ?? '';
-  const userGender = user?.[0]?.gender ?? '';
+  const userId = user?.user_id ?? '';
+  const userGender = user?.gender ?? '';
   const metPeopleList = useMetPeople(userId, userGender);
   const { mutate: requestKakaoMutate } = useMetPeopleMutation();
   const { mutate: acceptKakaoIdMutate } = useAcceptKakaoIdMutation();
