@@ -6,7 +6,7 @@ import DatePicker from './DateTimePicker';
 import { clientSupabase } from '(@/utils/supabase/client)';
 import { useChatDataQuery, useRoomDataQuery } from '(@/hooks/useQueries/useChattingQuery)';
 import { GiHamburgerMenu } from 'react-icons/gi';
-import { Card, CardBody } from '@nextui-org/react';
+import { Card, CardBody, Select, SelectItem } from '@nextui-org/react';
 import DateTimePicker from './DateTimePicker';
 
 interface SideBarProps {
@@ -72,11 +72,10 @@ const SideBar: React.FC<SideBarProps> = ({ userId, chatRoomId }) => {
   };
 
   return (
-    <div className="absolute w-[600px] flex flex-col ml-8 z-0">
+    <div className="absolute w-[350px] flex flex-col ml-8 z-0">
       <div className={`flex ${isSidebarOpen ? 'justify-end' : 'justify-start'}`}>
         <GiHamburgerMenu onClick={toggleSidebar} />
       </div>
-
       <div style={{ maxHeight: '100vh', overflowY: 'auto' }}>
         {isSidebarOpen && (
           <div>

@@ -26,17 +26,41 @@
 .datePicker {
     display: flex;
     align-items: center;
-    border: 1px solid gray;
-    border-radius: 4px;
-    background-color: purple;
+    border: 1px solid #8F5DF4;
+    border-radius: 9px;
     box-sizing: border-box;
     width: 100%;
-    height: 46px;
-    color: white;
+    height: 60px;
+    color: black;
     text-align: center;
-    padding-right: 14px;
+    outline: none;
+}
 
-    /* &:focus {
-        border: 2px solid colors.$ORANGE;
-    } */
+.rdtPicker {
+    width: 10px;
+    /* Change it your preferred width */
+}
+
+.rdtPicker tr {
+    height: 50px;
+    /* Choose the height of each row so that the overall height will change */
+}
+
+.react-datepicker {
+    width: 100%
+}
+
+.react-datepicker__input-container input {
+    display: block;
+    width: 100%;
+}
+
+.calenderWrapper {
+    background-color: balck;
+    color: white;
+    width: 100%;
+}
+
+.react-datepicker__month-container {
+    width: 50px;
 }
