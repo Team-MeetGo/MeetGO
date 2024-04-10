@@ -4,21 +4,19 @@ import { Database } from '(@/types/database.types)';
 import { clientSupabase } from '(@/utils/supabase/client)';
 import { useEffect, useState } from 'react';
 
-import type { UUID } from 'crypto';
+import { useRoomInfoWithRoomIdQuery } from '(@/hooks/useQueries/useMeetingQuery)';
 type UserType = Database['public']['Tables']['users']['Row'];
 
-const Member = ({ params }: { params: { id: UUID } }) => {
+const Member = ({ params }: { params: { id: string } }) => {
   const { participants, setParticipants } = userStore((state) => state);
   const [leaderMember, setLeaderMember] = useState('');
+  const user_id = params.id;
+  const roomInformation = useRoomInfoWithRoomIdQuery(user_id);
 
   useEffect(() => {
     //리더를 찾아 표시
     const leaderSelector = async () => {
-      const { data: nowLeader } = await clientSupabase.from('room').select('*').eq('room_id', params.id);
-      if (!nowLeader) {
-        return;
-      }
-      setLeaderMember(nowLeader[0].leader_id as string);
+      setLeaderMember(roomInformation ? (roomInformation[0].leader_id as string) : '');
     };
 
     const channle = clientSupabase
@@ -69,16 +67,16 @@ const Member = ({ params }: { params: { id: UUID } }) => {
       <div className="gap-2 grid grid-cols-2 m-4 w-100% gap-8">
         {participants.map((member) => (
           <div key={member.user_id}>
-            <div className="flex flex-row">
-              <div className="h-36 w-36 flex flex-col align-middle justify-start m-4">
-                <div className="h-28 w-28 bg-indigo-600 rounded-full">
+            <div className="flex flex-row h-32 w-unit-7xl border-4 rounded-2xl">
+              <div className="flex flex-col align-middle justify-start m-1">
+                <div className="w-24 h-24 border-4">
+                  {leaderMember === member.user_id ? <div>왕관모양</div> : ''}
                   {member.avatar ? <img src={member.avatar as string} alt="유저" /> : ''}
                 </div>
-                {leaderMember === member.user_id ? <div>리더!</div> : ''}
-                <div>{member.nickname}</div>
-                <div>{member.school_name}</div>
+                <div className="px-2">{member.nickname}</div>
               </div>
-              <div className="flex flex-col justify-center align-top gap-1 bg-violet-300 p-4">
+              <div className="flex flex-col w-unit-6xl justify-center align-top gap-1 border-4 px-3">
+                <div>{member.school_name}</div>
                 <div>{member.favorite}</div>
                 <div>{member.intro}</div>
               </div>
