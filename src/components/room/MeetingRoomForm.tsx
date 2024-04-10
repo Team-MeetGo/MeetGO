@@ -1,14 +1,13 @@
 'use client';
+import TagList from './MeetingRoomFeatureTags';
 import { useTagStore } from '(@/store/roomStore)';
-import { clientSupabase } from '(@/utils/supabase/client)';
 import { Button, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, useDisclosure } from '@nextui-org/react';
 import { useState } from 'react';
-import TagList from './MeetingRoomFeatureTags';
-
+import { useAddRoom } from '(@/hooks/useMutation/useMeetingMutation)';
 import { userStore } from '(@/store/userStore)';
 import { useRouter } from 'next/navigation';
-import { NextMeetingRoomType } from '(@/types/roomTypes)';
-import { useAddRoom } from '(@/hooks/useMutation/useMeetingMutation)';
+
+import type { NextMeetingRoomType } from '(@/types/roomTypes)';
 
 function MeetingRoomForm() {
   const router = useRouter();

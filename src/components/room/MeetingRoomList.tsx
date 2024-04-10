@@ -8,8 +8,9 @@ import MeetingRoomForm from './MeetingRoomForm';
 
 import type { MeetingRoomType, MeetingRoomTypes } from '(@/types/roomTypes)';
 import type { User } from '@supabase/supabase-js';
+import RegionSelection from './RegionSelection';
 
-function MeetingRoomList({ user }: { user: User | null }) {
+function MeetingRoomList({ user }: { user: User }) {
   const [page, setPage] = useState(1);
   const result = useRecruitingMyroomQuery(user ? user.id : '');
   const recruitingRoom = result[0] as MeetingRoomTypes;
@@ -89,7 +90,12 @@ function MeetingRoomList({ user }: { user: User | null }) {
           <button onClick={() => nextPage()}> + </button>
         </div>
       </header>
-      <div className="m-4 text-xl	font-semibold">모집중</div>
+      <div className="flex flex-row justify-between">
+        <div className="m-4 text-xl	font-semibold">모집중</div>
+        <div className="flex flex-row gap-x-4 mx-4">
+          <RegionSelection />
+        </div>
+      </div>
       <div className="gap-2 grid grid-cols-3 m-4 w-100%">
         {otherRooms?.map((room) => (
           <MeetingRoom key={room?.room_id} room={room} />
