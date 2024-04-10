@@ -158,6 +158,52 @@ export type Database = {
           }
         ];
       };
+      remember_last_msg: {
+        Row: {
+          chatting_room_id: string | null;
+          created_at: string;
+          id: string;
+          last_msg_id: string | null;
+          user_id: string | null;
+        };
+        Insert: {
+          chatting_room_id?: string | null;
+          created_at?: string;
+          id?: string;
+          last_msg_id?: string | null;
+          user_id?: string | null;
+        };
+        Update: {
+          chatting_room_id?: string | null;
+          created_at?: string;
+          id?: string;
+          last_msg_id?: string | null;
+          user_id?: string | null;
+        };
+        Relationships: [
+          {
+            foreignKeyName: 'public_remember_last_msg_chatting_room_id_fkey';
+            columns: ['chatting_room_id'];
+            isOneToOne: false;
+            referencedRelation: 'chatting_room';
+            referencedColumns: ['chatting_room_id'];
+          },
+          {
+            foreignKeyName: 'public_remember_last_msg_last_msg_id_fkey';
+            columns: ['last_msg_id'];
+            isOneToOne: false;
+            referencedRelation: 'messages';
+            referencedColumns: ['message_id'];
+          },
+          {
+            foreignKeyName: 'public_remember_last_msg_user_id_fkey';
+            columns: ['user_id'];
+            isOneToOne: false;
+            referencedRelation: 'users';
+            referencedColumns: ['id'];
+          }
+        ];
+      };
       review: {
         Row: {
           created_at: string;
@@ -165,7 +211,7 @@ export type Database = {
           review_contents: string | null;
           review_id: string;
           review_title: string | null;
-          image_urls: string[] | null;
+          show_nickname: boolean | null;
           user_id: string | null;
         };
         Insert: {
@@ -174,7 +220,7 @@ export type Database = {
           review_contents?: string | null;
           review_id?: string;
           review_title?: string | null;
-          image_urls?: string[] | null;
+          show_nickname?: boolean | null;
           user_id?: string | null;
         };
         Update: {
@@ -183,7 +229,7 @@ export type Database = {
           review_contents?: string | null;
           review_id?: string;
           review_title?: string | null;
-          image_urls?: string[] | null;
+          show_nickname?: boolean | null;
           user_id?: string | null;
         };
         Relationships: [];

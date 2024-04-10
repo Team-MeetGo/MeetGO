@@ -9,10 +9,7 @@ const HowManyMsg = () => {
   const { user } = userStore((state) => state);
   const myChatRoomIds = useMyChatRoomIdsQuery(user ? user[0].user_id : '');
   console.log(myChatRoomIds);
-  const [arr, setArr] = useState(myChatRoomIds);
   const [countArr, setCountArr] = useState(Array(myChatRoomIds.length).fill(0));
-
-  console.log(arr);
   console.log(countArr);
 
   const handleCount = useCallback(

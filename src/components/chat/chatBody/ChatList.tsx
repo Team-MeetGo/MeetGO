@@ -2,7 +2,7 @@
 import { Message } from '(@/types/chatTypes)';
 import { getFromTo, getformattedDate } from '(@/utils)';
 import { clientSupabase } from '(@/utils/supabase/client)';
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { User } from '@supabase/supabase-js';
 import ChatScroll from './ChatScroll';
 import NewChatAlert from './NewChatAlert';
@@ -13,18 +13,42 @@ import { Tooltip } from '@nextui-org/react';
 import OthersChat from './OthersChat';
 import ChatSearch from './ChatSearch';
 import { useRoomDataQuery } from '(@/hooks/useQueries/useChattingQuery)';
-import { ITEM_INTERVAL } from '(@/utils/constant)';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import path from 'path';
 
 const ChatList = ({ user, chatRoomId }: { user: User | null; chatRoomId: string }) => {
   const scrollRef = useRef() as React.MutableRefObject<HTMLDivElement>;
-  const { hasMore, setHasMore, messages, setMessages } = chatStore((state) => state);
+  const { hasMore, messages, setMessages } = chatStore((state) => state);
   const [isScrolling, setIsScrolling] = useState(false);
   const [isScrollTop, setIsScrollTop] = useState(true);
   const [newAddedMsgNum, setNewAddedMsgNum] = useState(0);
   const [count, setCount] = useState(1);
+  const [lastCheckedMsg, setLastCheckedMsg] = useState();
   const room = useRoomDataQuery(chatRoomId);
   const roomId = room?.roomId;
-  console.log(hasMore);
+
+  const router = useRouter();
+
+  // console.log('서버에서 받은 messages', messages);
+
+  const pathname = usePathname().replace('/chat/', '');
+  // console.log('pathname =>', pathname);
+
+  const rememberLastMsg = () => {
+    const lastDiv = document.getElementById(`${messages[messages.length - 1].message_id}`);
+  };
+
+  const keepLastMsgID = () => {
+    if (messages.length) {
+      localStorage.setItem(`${chatRoomId}`, JSON.stringify(messages[messages.length - 1].message_id));
+    }
+  };
+
+  const getLastMsgID = () => {
+    const lastMsgID = localStorage.getItem(`${chatRoomId}`);
+    console.log(lastMsgID);
+    // localStorage.removeItem(`${chatRoomId}`);
+  };
 
   useEffect(() => {
     if (roomId && chatRoomId) {
@@ -54,7 +78,6 @@ const ChatList = ({ user, chatRoomId }: { user: User | null; chatRoomId: string 
           }
         )
         .subscribe();
-
       return () => {
         clientSupabase.removeChannel(channel);
       };
@@ -70,6 +93,20 @@ const ChatList = ({ user, chatRoomId }: { user: User | null; chatRoomId: string 
     }
   }, [messages, isScrolling]);
 
+  // useEffect(() => {
+  //   if (messages) {
+  //     if (pathname.replace('/chat/', '') === chatRoomId) {
+  //       const lastMsgID = localStorage.getItem(`${chatRoomId}`);
+  //       console.log('lastMsgID =>', lastMsgID);
+
+  //       return () => {
+  //         localStorage.setItem(`${chatRoomId}`, JSON.stringify(messages[messages.length - 1].message_id));
+  //         console.log('이거는 실행되니');
+  //       };
+  //     }
+  //   }
+  // }, [pathname, chatRoomId, messages]);
+
   // 스크롤 이벤트가 발생할 때
   const handleScroll = () => {
     const scrollBox = scrollRef.current;
@@ -79,7 +116,6 @@ const ChatList = ({ user, chatRoomId }: { user: User | null; chatRoomId: string 
       if (!isScroll) {
         setNewAddedMsgNum(0);
       }
-      // console.log('여기 scrollTop', scrollBox.scrollTop);
       setIsScrollTop(scrollBox.scrollTop === 0);
     }
   };
