@@ -6,22 +6,26 @@ import { IoMdRefresh } from 'react-icons/io';
 import MeetingRoom from './MeetingRoom';
 import MeetingRoomForm from './MeetingRoomForm';
 
-import type { MeetingRoomType, MeetingRoomTypes } from '(@/types/roomTypes)';
-import type { User } from '@supabase/supabase-js';
+import { useSearchRoomStore } from '(@/store/searchRoomStore)';
 import { userStore } from '(@/store/userStore)';
+import type { MeetingRoomType, MeetingRoomTypes } from '(@/types/roomTypes)';
 import { useMyChatRoomIdsQuery } from '(@/hooks/useQueries/useChattingQuery)';
 import { clientSupabase } from '(@/utils/supabase/client)';
+import MemberNumberSelection from './MemberNumberSelection';
+import RegionSelection from './RegionSelection';
 
-function MeetingRoomList({ user }: { user: User | null }) {
+function MeetingRoomList() {
   const [page, setPage] = useState(1);
-  const result = useRecruitingMyroomQuery(user ? user.id : '');
+  const { user } = userStore((state) => state);
+  const result = useRecruitingMyroomQuery(user?.user_id!);
   const recruitingRoom = result[0] as MeetingRoomTypes;
   const myRoom = result[1]?.map((sample: any) => sample.room);
+  const { selectRegion, selectMemberNumber } = useSearchRoomStore();
 
   const [chattingRoomList, setChattingRoomList] = useState<MeetingRoomTypes>();
   const { getChattingRoom } = meetingRoomHandler();
 
-  const myChatRoomIds = useMyChatRoomIdsQuery(user?.id!);
+  const myChatRoomIds = useMyChatRoomIdsQuery(user?.user_id!);
   console.log(myChatRoomIds);
   const [msgCountArr, setMsgCountArr] = useState(Array(myChatRoomIds.length).fill(0));
   console.log(msgCountArr);
@@ -88,6 +92,11 @@ function MeetingRoomList({ user }: { user: User | null }) {
       return true;
     }
   });
+  const regionSelectedOtherRooms = otherRooms?.filter((room) => room.region === selectRegion);
+  const memberNumberSelectedOtherRooms = otherRooms?.filter((room) => room.member_number === selectMemberNumber);
+  const regionMemberNumberSelectedOtherRooms = otherRooms?.filter(
+    (room) => room.member_number === selectMemberNumber && room.region === selectRegion
+  );
 
   const nextPage = () => {
     if (myRoom && myRoom.length / 3 < page) {
@@ -101,8 +110,6 @@ function MeetingRoomList({ user }: { user: User | null }) {
     }
     setPage((page) => page - 1);
   };
-  console.log('otherRooms', otherRooms);
-  console.log('myRoom', myRoom);
 
   return (
     <article>
@@ -145,11 +152,36 @@ function MeetingRoomList({ user }: { user: User | null }) {
           <button onClick={() => nextPage()}> + </button>
         </div>
       </header>
-      <div className="m-4 text-xl	font-semibold">모집중</div>
+      <div className="flex flex-row justify-between">
+        <div className="m-4 text-xl	font-semibold">모집중</div>
+        <div className="flex flex-row gap-x-4 mx-4">
+          <RegionSelection text={'selectRegion'} />
+          <MemberNumberSelection text={'selectMember'} />
+        </div>
+      </div>
       <div className="gap-2 grid grid-cols-3 m-4 w-100%">
-        {otherRooms?.map((room) => (
-          <MeetingRoom key={room?.room_id} room={room} />
-        ))}
+        {selectRegion &&
+          selectRegion !== '지역' &&
+          selectRegion !== '전국' &&
+          (!selectMemberNumber || selectMemberNumber === '인원' || selectMemberNumber === '전체') &&
+          regionSelectedOtherRooms?.map((room) => <MeetingRoom key={room?.room_id} room={room} />)}
+        {selectMemberNumber &&
+          selectMemberNumber !== '인원' &&
+          selectMemberNumber !== '전체' &&
+          (!selectRegion || selectRegion === '지역' || selectRegion === '전국') &&
+          memberNumberSelectedOtherRooms?.map((room) => <MeetingRoom key={room?.room_id} room={room} />)}
+
+        {selectMemberNumber &&
+          selectMemberNumber !== '인원' &&
+          selectMemberNumber !== '전체' &&
+          selectRegion &&
+          selectRegion !== '지역' &&
+          selectRegion !== '전국' &&
+          regionMemberNumberSelectedOtherRooms?.map((room) => <MeetingRoom key={room?.room_id} room={room} />)}
+
+        {(!selectMemberNumber || selectMemberNumber === '인원' || selectMemberNumber === '전체') &&
+          (!selectRegion || selectRegion === '지역' || selectRegion === '전국') &&
+          otherRooms?.map((room) => <MeetingRoom key={room?.room_id} room={room} />)}
       </div>
       {/* 이 부분은 채팅룸이 형성된 전체 방으로, 마지막에는 삭제 예정입니다. */}
       <div>========여기부터는 채팅방========</div>

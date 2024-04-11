@@ -35,7 +35,7 @@ export const addRoom = async ({
   user_id
 }: {
   nextMeetingRoom: NextMeetingRoomType;
-  user_id: string | null;
+  user_id: string;
 }) => {
   const { data: insertMeetingRoom } = await clientSupabase.from('room').upsert([nextMeetingRoom]).select();
   if (insertMeetingRoom) {
@@ -81,6 +81,6 @@ export const addMember = async ({ user_id, room_id }: { user_id: string | undefi
   await clientSupabase.from('participants').insert([{ user_id, room_id }]);
 };
 
-export const deleteMember = async ({ user_id }: { user_id: string }) => {
-  await clientSupabase.from('participants').delete().eq('user_id', user_id);
+export const deleteMember = async ({ user_id, room_id }: { user_id: string; room_id: string }) => {
+  await clientSupabase.from('participants').delete().eq('user_id', user_id).eq('room_id', room_id);
 };
