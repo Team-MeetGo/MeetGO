@@ -28,7 +28,7 @@ const ChatList = ({ user, chatRoomId }: { user: User | null; chatRoomId: string 
   const room = useRoomDataQuery(chatRoomId);
   const roomId = room?.roomId;
   const lastMsgId = useMyLastMsgs(user?.id!, chatRoomId);
-  console.log('lastMsgId => ', lastMsgId && lastMsgId[0].last_msg_id);
+  // console.log('lastMsgId => ', lastMsgId && lastMsgId[0].last_msg_id);
   const prevMsgsLengthRef = useRef(messages.length);
   const lastDivRefs = useRef(messages);
 
@@ -175,7 +175,9 @@ const ChatList = ({ user, chatRoomId }: { user: User | null; chatRoomId: string 
             lastMsgId[0]?.last_msg_id === msg.message_id &&
             isScrolling &&
             checkedLastMsg ? (
-              <p>여기까지 읽으셨습니다.</p>
+              <div className={`flex ${msg.send_from === user?.id ? 'ml-auto' : 'mr-auto'}`}>
+                <p>여기까지 읽으셨습니다.</p>
+              </div>
             ) : null}
           </>
         ))}
