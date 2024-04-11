@@ -111,7 +111,7 @@ const ChatList = ({ user, chatRoomId }: { user: User | null; chatRoomId: string 
       } else {
         // 이전에 저장된 마지막 메세지가 있고 그게 강조처리 되어있다가, 스크롤다운(마지막 메세지를 확인)되면 투명으로 변경
         if (checkedLastMsg && lastCheckedDiv) {
-          lastCheckedDiv.style.backgroundColor = 'transparent';
+          lastCheckedDiv.style.display = 'none';
         }
       }
     }
