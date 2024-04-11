@@ -20,5 +20,5 @@ export const useGetUserDataQuery = () => {
     }
   }, [data, setIsLoggedIn, setUser]);
 
-  return { data, isPending, isError, error };
+  return { data, isPending, isError, error, isLoggedIn };
 };

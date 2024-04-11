@@ -28,10 +28,19 @@ const ChatList = ({ user, chatRoomId }: { user: User | null; chatRoomId: string 
   const room = useRoomDataQuery(chatRoomId);
   const roomId = room?.roomId;
   const lastMsgId = useMyLastMsgs(user?.id!, chatRoomId);
-  // console.log('이전 마지막 메세지 ID =>', lastMsgId && lastMsgId[0].last_msg_id);
-  const prevMsgsRef = useRef(messages);
-  // console.log(prevMsgsRef.current);
-  // console.log(isScrolling);
+  const prevMsgsLengthRef = useRef(messages.length);
+
+  const pathname = usePathname();
+  const { mutate: mutateToUpdate } = useUpdateLastMsg(
+    user?.id as string,
+    chatRoomId as string,
+    messages && messages.length > 0 ? messages[messages.length - 1].message_id : undefined
+  );
+  const { mutate: mutateToAdd } = useAddLastMsg(
+    chatRoomId,
+    user?.id as string,
+    messages && messages.length > 0 ? messages[messages.length - 1].message_id : undefined
+  );
 
   useEffect(() => {
     if (roomId && chatRoomId) {
@@ -90,10 +99,10 @@ const ChatList = ({ user, chatRoomId }: { user: User | null; chatRoomId: string 
     const scrollBox = scrollRef.current;
     if (scrollBox && !isScrolling) {
       // 처음에 로드 시 스크롤 중이 아닐 때
-      if (!lastMsgId || !lastMsgId?.length || prevMsgsRef.current.length !== messages.length) {
+      if (!lastMsgId || !lastMsgId?.length || prevMsgsLengthRef.current !== messages.length) {
         // 이전에 저장된 마지막 메세지가 없으면 그냥 스크롤 다운
         scrollBox.scrollTop = scrollBox.scrollHeight;
-        prevMsgsRef.current = messages;
+        prevMsgsLengthRef.current = messages.length;
       } else {
         // 이전에 저장된 마지막 메세지가 있고 그게 강조처리 되어있다가, 스크롤다운(마지막 메세지를 확인)되면 투명으로 변경
         if (checkedLastMsg && lastCheckedDiv) {
@@ -101,21 +110,9 @@ const ChatList = ({ user, chatRoomId }: { user: User | null; chatRoomId: string 
         }
       }
     }
-  }, [messages, isScrolling, lastMsgId]);
+  }, [messages, isScrolling]);
 
   // 마지막으로 읽은 메세지 기억하기
-  const pathname = usePathname();
-  const { mutate: mutateToUpdate } = useUpdateLastMsg(
-    user?.id as string,
-    chatRoomId as string,
-    messages && messages.length > 0 ? messages[messages.length - 1].message_id : undefined
-  );
-  const { mutate: mutateToAdd } = useAddLastMsg(
-    chatRoomId,
-    user?.id as string,
-    messages && messages.length > 0 ? messages[messages.length - 1].message_id : undefined
-  );
-
   useEffect(() => {
     return () => {
       // 현재 나누는 메세지가 있을 때
