@@ -1,8 +1,8 @@
 'use client';
 import { Message } from '(@/types/chatTypes)';
-import { getFromTo, getformattedDate } from '(@/utils)';
+import { getformattedDate } from '(@/utils)';
 import { clientSupabase } from '(@/utils/supabase/client)';
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { User } from '@supabase/supabase-js';
 import ChatScroll from './ChatScroll';
 import NewChatAlert from './NewChatAlert';
@@ -12,10 +12,9 @@ import { chatStore } from '(@/store/chatStore)';
 import { Tooltip } from '@nextui-org/react';
 import OthersChat from './OthersChat';
 import ChatSearch from './ChatSearch';
-import { useRoomDataQuery, useUpdateLastMsg } from '(@/hooks/useQueries/useChattingQuery)';
-import { usePathname, useRouter, useSearchParams } from 'next/navigation';
-import path from 'path';
-import FinishChat from '../chatFooter/FinishChat';
+import { useMyLastMsgs, useRoomDataQuery } from '(@/hooks/useQueries/useChattingQuery)';
+import { usePathname } from 'next/navigation';
+import { useAddLastMsg, useUpdateLastMsg } from '(@/hooks/useMutation/useChattingMutation)';
 
 const ChatList = ({ user, chatRoomId }: { user: User | null; chatRoomId: string }) => {
   const scrollRef = useRef() as React.MutableRefObject<HTMLDivElement>;
@@ -24,15 +23,21 @@ const ChatList = ({ user, chatRoomId }: { user: User | null; chatRoomId: string 
   const [isScrollTop, setIsScrollTop] = useState(true);
   const [newAddedMsgNum, setNewAddedMsgNum] = useState(0);
   const [count, setCount] = useState(1);
-  const [lastCheckedMsg, setLastCheckedMsg] = useState();
+  const [lastCheckedDiv, setLastCheckedDiv] = useState<HTMLElement | null>();
+
   const room = useRoomDataQuery(chatRoomId);
   const roomId = room?.roomId;
 
-  console.log(hasMore);
+  const lastMsgId = useMyLastMsgs(user?.id!, chatRoomId);
+  console.log(lastMsgId);
 
   const rememberLastMsg = () => {
-    const lastDiv = document.getElementById(`${messages[messages.length - 1].message_id}`);
+    const lastDiv = document.getElementById(` ${messages[messages.length - 1].message_id}`);
   };
+
+  // useEffect(() => {
+  //   if (lastMsgId) setLastCheckedDiv(document.getElementById(`${lastMsgId[0].last_msg_id}`));
+  // }, []);
 
   useEffect(() => {
     if (roomId && chatRoomId) {
@@ -68,14 +73,59 @@ const ChatList = ({ user, chatRoomId }: { user: User | null; chatRoomId: string 
     }
   }, [messages, setMessages, isScrolling, roomId, chatRoomId]);
 
-  // 처음에 로드될 시
   useEffect(() => {
-    // 스크롤 중이 아니면 기본적으로 스크롤 다운
     const scrollBox = scrollRef.current;
     if (scrollBox && isScrolling === false) {
       scrollBox.scrollTop = scrollBox.scrollHeight;
     }
-  }, [messages, isScrolling]);
+  }, [isScrolling]);
+
+  // 처음에 로드될 시 스크롤 조정
+  useEffect(() => {
+    const scrollBox = scrollRef.current;
+    if (lastMsgId && lastMsgId.length) {
+      let lastDiv = document.getElementById(`${lastMsgId[0].last_msg_id}`);
+      // if (lastCheckedDiv) {
+      if (lastDiv) {
+        setLastCheckedDiv(lastDiv);
+        if (scrollBox && isScrolling === false && lastCheckedDiv) {
+          lastCheckedDiv.style.backgroundColor = 'pink';
+          lastCheckedDiv.scrollIntoView({ block: 'center' });
+        }
+        if (isScrolling) {
+          console.log('이제 스크롤중');
+          // setLastCheckedDiv(null);
+          lastDiv.style.backgroundColor = 'transparent';
+          lastDiv.scrollIntoView(false);
+        }
+      }
+    }
+    // else if (isScrolling) setLastCheckedDiv(null);
+    // } else {
+    //   if (scrollBox && isScrolling === false) {
+    //     scrollBox.scrollTop = scrollBox.scrollHeight;
+    //   }
+    // }
+    //   if (scrollBox && isScrolling === false) {
+    //     // 스크롤 중이 아닐 때,
+    //     if (lastMsgId.length && lastDiv) {
+    //       // 저장된 마지막 메세지가 있고 + 그 div가 뷰포트에 있으면
+    //       if (lastCheckedDiv) lastCheckedDiv.style.backgroundColor = 'pink';
+    //       lastDiv.scrollIntoView({ block: 'center' });
+    //       if (isScrolling) setLastCheckedDiv(null);
+    //     } else {
+    //       // 저장된 마지막 메세지가 없거나 + 그 div가 뷰포트에 없으면
+    //       scrollBox.scrollTop = scrollBox.scrollHeight;
+    //     }
+    //   }
+    //   if (isScrolling && lastDiv) {
+    //     // 그 div가 뷰포트에 있는데 스크롤을 하면
+    //   }
+    // } else {
+    //   if (scrollBox && isScrolling === false) {
+    //     scrollBox.scrollTop = scrollBox.scrollHeight;
+    //   }
+  }, [isScrolling, lastCheckedDiv]);
 
   const pathname = usePathname();
 
@@ -85,10 +135,25 @@ const ChatList = ({ user, chatRoomId }: { user: User | null; chatRoomId: string 
     messages && messages.length > 0 ? messages[messages.length - 1].message_id : undefined
   );
 
+  const { mutate: mutateToAdd } = useAddLastMsg(
+    chatRoomId,
+    user?.id as string,
+    messages && messages.length > 0 ? messages[messages.length - 1].message_id : undefined
+  );
+
+  // 마지막으로 읽은 메세지 기억하기
   useEffect(() => {
     return () => {
-      console.log('나갈 때');
-      mutateToUpdate();
+      if (lastMsgId?.length) {
+        // 이전에 저장된 마지막 메세지가 있을 때
+        if (messages.length) {
+          // 채팅방에 메세지가 있으면
+          mutateToUpdate(); // 마지막 메세지 업데이트
+        }
+      } else {
+        // 이전에 저장된 마지막 메세지가 없을 때(처음 채팅방이 시작되었을 때)
+        mutateToAdd();
+      }
     };
   }, [pathname]);
 

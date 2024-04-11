@@ -8,16 +8,16 @@ import { FaRegArrowAltCircleUp } from 'react-icons/fa';
 
 const ChatInput = () => {
   const [message, setMessage] = useState('');
-  const userData = userStore((state) => state.user);
+  const user = userStore((state) => state.user);
   const chatRoomId = chatStore((state) => state.chatRoomId);
 
   const handleSubmit = async () => {
-    if (userData && chatRoomId) {
+    if (user && chatRoomId) {
       const { error } = await clientSupabase.from('messages').insert({
-        send_from: userData[0].user_id,
+        send_from: user.user_id,
         message: message,
-        nickname: String(userData[0].nickname),
-        avatar: String(userData[0].avatar),
+        nickname: String(user.nickname),
+        avatar: String(user.avatar),
         chatting_room_id: chatRoomId
       });
       if (error) {

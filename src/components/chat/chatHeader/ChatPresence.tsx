@@ -5,7 +5,7 @@ import { clientSupabase } from '(@/utils/supabase/client)';
 import { useEffect, useState } from 'react';
 
 const ChatPresence = () => {
-  const userData = userStore((state) => state.user);
+  const user = userStore((state) => state.user);
   const [onlineUsers, setOnlineUsers] = useState(0);
   const chatRoomId = chatStore((state) => state.chatRoomId);
 
@@ -24,11 +24,11 @@ const ChatPresence = () => {
         })
         .subscribe(async (status) => {
           if (status === 'SUBSCRIBED') {
-            await channel.track({ online_at: new Date().toISOString(), user_id: userData && userData[0].user_id });
+            await channel.track({ online_at: new Date().toISOString(), user_id: user?.user_id });
           }
         });
     }
-  }, [userData, chatRoomId]);
+  }, [user, chatRoomId]);
   // presence가 re-load시 바로 반영이 안되는 문제 발생
 
   return (

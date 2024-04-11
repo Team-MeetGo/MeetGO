@@ -3,8 +3,7 @@ import {
   fetchMyChatRoomIds,
   fetchMyLastMsgs,
   fetchParticipants,
-  fetchRoomDataWithChatRoomId,
-  updateMyLastMsg
+  fetchRoomDataWithChatRoomId
 } from '(@/query/chat/chatQueryFns)';
 import {
   CHATDATA_QUERY_KEY,
@@ -13,7 +12,7 @@ import {
   PARTICIPANTS_QUERY_KEY,
   ROOMDATA_QUERY_KEY
 } from '(@/query/chat/chatQueryKeys)';
-import { useMutation, useQueryClient, useSuspenseQuery } from '@tanstack/react-query';
+import { useSuspenseQuery } from '@tanstack/react-query';
 
 export const useRoomDataQuery = (chatRoomId: string) => {
   const { data: room } = useSuspenseQuery({
@@ -53,16 +52,4 @@ export const useMyLastMsgs = (user_id: string, chatRoomId: string) => {
     queryFn: async () => await fetchMyLastMsgs(user_id, chatRoomId)
   });
   return myLastMsgs;
-};
-
-export const useUpdateLastMsg = (user_id: string, chatRoomId: string, msg_id: string | undefined) => {
-  const queryClient = useQueryClient();
-  const { mutate: mutateToUpdate } = useMutation({
-    mutationFn: async () => updateMyLastMsg(user_id, chatRoomId, msg_id),
-    onSuccess: async () => {
-      await queryClient.invalidateQueries({ queryKey: [MY_LAST_MSGS, user_id, chatRoomId] });
-      console.log('성공!');
-    }
-  });
-  return { mutate: mutateToUpdate };
 };
