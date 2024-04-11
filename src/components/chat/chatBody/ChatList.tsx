@@ -81,13 +81,12 @@ const ChatList = ({ user, chatRoomId }: { user: User | null; chatRoomId: string 
     if (scrollBox && !isScrolling) {
       // 처음에 로드 시 스크롤 중이 아닐 때
       if (lastMsgId && lastMsgId.length) {
-        console.log('lastMsgId => ', lastMsgId[0].last_msg_id);
         // 이전에 저장된 마지막 메세지가 있으면 그 메세지 강조처리
         let lastDiv = document.getElementById(`${lastMsgId[0].last_msg_id}`);
         if (lastDiv) {
+          console.log(lastDiv);
           setLastCheckedDiv(lastDiv);
-          lastDiv.style.backgroundColor = 'pink';
-          lastDiv.scrollIntoView({ block: 'center' });
+          makeHereText(lastDiv);
           setCheckedLastMsg(true);
         }
       }
@@ -141,6 +140,14 @@ const ChatList = ({ user, chatRoomId }: { user: User | null; chatRoomId: string 
     scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
   };
   // insert 할 때 없어졌으면 좋겠는데..
+
+  const makeHereText = (lastDiv: HTMLElement) => {
+    const hereText = document.createElement('p');
+    hereText.textContent = '여기까지 읽으셨습니다.';
+    lastDiv.appendChild(hereText);
+    lastDiv.style.backgroundColor = 'pink';
+    lastDiv.scrollIntoView({ block: 'center' });
+  };
 
   return (
     <>
