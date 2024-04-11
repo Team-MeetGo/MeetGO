@@ -25,7 +25,6 @@ const DateTimePicker: React.FC<DateTimePickerProps> = forwardRef(({ chatRoomId }
   useEffect(() => {
     const isoStringMeetingTime = selectedMeetingTime.toISOString();
     console.log(selectedMeetingTime, '///', isoStringMeetingTime);
-    //Sat Apr 27 2024 18:00:00 GMT+0900 (한국 표준시) '///' '2024-04-27T09:00:00.000Z'
 
     // 슈퍼베이스에 시간 추가
     const updateMeetingTime = async () => {
