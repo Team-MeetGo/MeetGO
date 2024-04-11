@@ -1,6 +1,6 @@
 import { clientSupabase } from '(@/utils/supabase/client)';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { NEW_IMAGES_UPLOAD_QUERY_KEY, NEW_REVIEW_QUERY_KEY } from './reviewQueryKeys';
+import { NEW_REVIEW_QUERY_KEY } from './reviewQueryKeys';
 
 export const fetchAuthorData = async (review_id: string) => {
   const { data: reviewDetail, error } = await clientSupabase
@@ -22,8 +22,9 @@ export const fetchAuthorData = async (review_id: string) => {
 
       if (userError) {
         console.error('유저 정보를 불러오지 못함', userError);
+        return null;
       } else {
-        return userData;
+        return userData || null;
       }
     }
   }
@@ -44,12 +45,13 @@ export const fetchReviewData = async (review_id: string) => {
 };
 
 export const fetchReviewList = async () => {
-  let { data: reviewData, error } = await clientSupabase.from('review').select('*');
-  if (error) {
-    console.error('리뷰를 불러오지 못함', error);
-  } else {
-    return reviewData;
-  }
+  let { data, count } = await clientSupabase.from('review').select('*', { count: 'estimated' });
+  return { data, count };
+};
+
+export const fetchLikedReviewList = async () => {
+  let { data: likedReviewList } = await clientSupabase.from('review_like').select('review_id');
+  return likedReviewList;
 };
 
 export const useDeleteReviewMutation = () => {

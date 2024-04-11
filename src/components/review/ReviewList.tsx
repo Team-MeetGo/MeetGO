@@ -2,7 +2,6 @@
 
 import React, { useEffect, useState } from 'react';
 import ReviewCard from './ReviewCard';
-import { clientSupabase } from '(@/utils/supabase/client)';
 import NewReview from './NewReview';
 import Link from 'next/link';
 import { useParams } from 'next/navigation';
@@ -10,8 +9,8 @@ import { Dropdown, DropdownTrigger, DropdownMenu, DropdownItem, Button } from '@
 import { Selection } from '@react-types/shared';
 import { userStore } from '(@/store/userStore)';
 import { useQuery } from '@tanstack/react-query';
-import { REVIEWLIST_QUERY_KEY } from '(@/query/review/reviewQueryKeys)';
-import { fetchReviewList } from '(@/query/review/reviewQueryFns)';
+import { fetchLikedReviewList, fetchReviewList } from '(@/query/review/reviewQueryFns)';
+import { LIKED_REVIEWLIST_QUERY_KEY, REVIEWLIST_QUERY_KEY } from '(@/query/review/reviewQueryKeys)';
 
 export type reviewData = {
   user_id: string | null;
@@ -52,16 +51,17 @@ const ReviewList: React.FC = () => {
     checkLoginStatus();
   }, []);
 
+  const { data: likedReviewList } = useQuery({
+    queryKey: [LIKED_REVIEWLIST_QUERY_KEY],
+    queryFn: fetchLikedReviewList
+  });
+
   async function getMostLikedReview(page: number) {
-    const likedReviewIds = (await clientSupabase.from('review_like').select('review_id')).data?.map(
-      (item) => item.review_id
-    );
+    const likedReviewIds = likedReviewList?.map((item) => item.review_id);
 
-    const { data: allReviews } = await clientSupabase.from('review').select('*');
+    const zeroLikedReviews = fetchReviewsData?.data?.filter((review) => !likedReviewIds?.includes(review.review_id));
 
-    const zeroLikedReviews = allReviews?.filter((review) => !likedReviewIds?.includes(review.review_id));
-
-    const likedReviews = allReviews?.filter((review) => likedReviewIds?.includes(review.review_id));
+    const likedReviews = fetchReviewsData?.data?.filter((review) => likedReviewIds?.includes(review.review_id));
 
     likedReviews?.sort((a, b) => {
       const aLikes = likedReviewIds?.filter((id) => id === a.review_id).length || 0;
@@ -98,34 +98,25 @@ const ReviewList: React.FC = () => {
     }
   }, []);
 
-  const useGetReviewsQuery = () => {
-    const {
-      data: ReviewListData,
-      isLoading,
-      isError
-    } = useQuery({
-      queryKey: [REVIEWLIST_QUERY_KEY],
-      queryFn: async () => await fetchReviewList()
-    });
-    return ReviewListData;
-  };
-
-  const ReviewListData = useGetReviewsQuery();
+  const { data: fetchReviewsData } = useQuery({
+    queryKey: [REVIEWLIST_QUERY_KEY],
+    queryFn: fetchReviewList
+  });
 
   async function getRecentReview(page: number) {
-    if (ReviewListData) {
-      ReviewListData.sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
+    if (fetchReviewsData) {
+      fetchReviewsData.data?.sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
       const startIdx = (page - 1) * reviewsPerPage;
       const endIdx = page * reviewsPerPage;
-      const slicedData = ReviewListData.slice(startIdx, endIdx);
-      setReviewData(slicedData);
-      setTotalReviews(ReviewListData.length || 0);
+      const slicedData = fetchReviewsData.data?.slice(startIdx, endIdx);
+      setReviewData(slicedData || []);
+      setTotalReviews(fetchReviewsData.count || 0);
     }
   }
 
-  async function handlePageChange(page: number) {
-    await getRecentReview(page);
-  }
+  useEffect(() => {
+    getRecentReview(currentPageNumber);
+  }, [currentPageNumber, fetchReviewsData]);
 
   return (
     <div>
@@ -170,7 +161,7 @@ const ReviewList: React.FC = () => {
 
           for (let i = 1; i <= totalPages; i++) {
             pageNumbers.push(
-              <Link key={i} href={`/review/pageNumber/${i}`} prefetch onClick={() => handlePageChange(i)}>
+              <Link key={i} href={`/review/pageNumber/${i}`} prefetch>
                 {i}
               </Link>
             );

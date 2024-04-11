@@ -37,7 +37,7 @@ const ReviewDetail = ({ review_id, commentCount }: Props) => {
   const router = useRouter();
 
   const { user, setUser } = userStore((state) => state);
-  const userId = user && user[0].user_id;
+  const userId = user && user.user_id;
 
   const useAuthorDataQuery = (review_id: string) => {
     const { data: userData } = useQuery({

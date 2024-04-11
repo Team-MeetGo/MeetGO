@@ -81,7 +81,7 @@ const NewComment = ({ review_id }: Props) => {
   const [comments, setComments] = useState('');
   const addComment = useCommentStore((state) => state.addComment);
   const { user, setUser } = userStore((state) => state);
-  const userId = user && user[0].user_id;
+  const userId = user && user.user_id;
 
   const addCommentMutation = useNewCommentMutation();
 
