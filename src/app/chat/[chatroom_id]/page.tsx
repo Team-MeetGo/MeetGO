@@ -7,7 +7,7 @@ import ChatInput from '(@/components/chat/chatFooter/ChatInput)';
 import ChatLoading from '(@/components/chat/ChatLoading)';
 import { getFromTo } from '(@/utils)';
 import { ITEM_INTERVAL } from '(@/utils/constant)';
-import { ChatList } from '(@/components/chat/chatBody/ChatList.1)';
+import ChatList from '(@/components/chat/chatBody/ChatList)';
 
 const ChatPage = async ({ params }: { params: { chatroom_id: string } }) => {
   const chatRoomId = params.chatroom_id;
