@@ -7,6 +7,8 @@ import { Card, CardBody, Pagination } from '@nextui-org/react';
 import { IoMdSearch } from 'react-icons/io';
 import DateTimePicker from './DateTimePicker';
 import { userStore } from '(@/store/userStore)';
+import { useUpdateMeetingLocationMutation } from '(@/hooks/useMutation/useUpdateMeetingLocationMutation)';
+import { useClearMeetingLocationMutation } from '(@/hooks/useMutation/useClearMettingLocation)';
 
 declare global {
   interface Window {
@@ -27,7 +29,7 @@ const Map: React.FC<MapProps> = ({ chatRoomId }) => {
   const [totalPages, setTotalPages] = useState(0);
   const [currentPos, setCurrentPos] = useState<string>();
   const [searchText, setSearchText] = useState<string>('');
-  const [isLocationSelected, setisLocationSelected] = useState<boolean>(false);
+  const [isLocationSelected, setIsLocationSelected] = useState<boolean>(false);
   const [selectedMeetingLocation, setSelectedMeetingLocation] = useState<string>();
 
   // userStore에서 userId 받아오기
@@ -44,7 +46,7 @@ const Map: React.FC<MapProps> = ({ chatRoomId }) => {
 
   useEffect(() => {
     setSelectedMeetingLocation(meetingLocation || '');
-    setisLocationSelected(!!meetingLocation);
+    setIsLocationSelected(!!meetingLocation);
   }, [meetingLocation]);
 
   useEffect(() => {
@@ -186,34 +188,29 @@ const Map: React.FC<MapProps> = ({ chatRoomId }) => {
     searchBarsNearby(mapRef.current, pageNumber);
   };
 
+  const updateMeetingLocationMutation = useUpdateMeetingLocationMutation();
+
   // 장소 선택 함수
   const handleSelectLocation = async (barName: string) => {
     setSelectedMeetingLocation(barName);
-    setisLocationSelected(!isLocationSelected);
+    setIsLocationSelected(!isLocationSelected);
     if (!chatRoomId) {
       return;
     }
 
-    try {
-      // 선택한 장소의 이름이 이미 선택된 장소와 같다면, 선택을 해제
-      if (selectedMeetingLocation === barName) {
-        setSelectedMeetingLocation('');
-        setisLocationSelected(false);
-        await clientSupabase
-          .from('chatting_room')
-          .update({ meeting_location: null })
-          .eq('chatting_room_id', chatRoomId);
-      } else {
-        // 선택한 장소의 이름을 선택된 장소로 업데이트합니다.
-        setSelectedMeetingLocation(barName);
-        setisLocationSelected(true);
-        await clientSupabase
-          .from('chatting_room')
-          .update({ meeting_location: barName })
-          .eq('chatting_room_id', chatRoomId);
+    if (selectedMeetingLocation === barName) {
+      const clearMutation = useClearMeetingLocationMutation({ chatRoomId });
+      try {
+        await clearMutation.mutateAsync();
+      } catch (error) {
+        console.error('미팅장소 삭제 오류:', error);
       }
-    } catch (error) {
-      console.error('서버에 미팅 장소 업데이트 에러:', error);
+    } else {
+      try {
+        await updateMeetingLocationMutation.mutateAsync({ chatRoomId, barName });
+      } catch (error) {
+        console.error('미팅장소 업데이트 오류:', error);
+      }
     }
   };
 

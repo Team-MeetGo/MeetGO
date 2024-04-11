@@ -29,7 +29,6 @@ const DateTimePicker: React.FC<DateTimePickerProps> = forwardRef(({ chatRoomId }
 
   useEffect(() => {
     const isoStringMeetingTime = selectedMeetingTime.toISOString();
-    console.log(selectedMeetingTime, '///', isoStringMeetingTime);
 
     // 슈퍼베이스에 시간 추가
     const updateMeetingTime = async () => {
