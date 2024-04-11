@@ -37,6 +37,18 @@ const CommentList = ({ review_id, onUpdateCommentCount }: Props) => {
 
   const commentData = useCommentDataQuery(review_id as string);
 
+  const deleteCommentMutation = useDeleteCommentMutation();
+
+  const handleDeleteComment = async (commentId: string) => {
+    if (window.confirm('댓글을 삭제하시겠습니까?')) {
+      try {
+        await deleteCommentMutation.mutate(commentId);
+      } catch (error) {
+        console.error('댓글 삭제 오류:', error);
+      }
+    }
+  };
+
   useEffect(() => {
     const mergedComments = [
       ...(commentData ?? []),
@@ -50,21 +62,6 @@ const CommentList = ({ review_id, onUpdateCommentCount }: Props) => {
     setUpdatedComment(mergedComments);
     onUpdateCommentCount(mergedComments.length);
   }, [commentData, onUpdateCommentCount, commentsFromStore, review_id]);
-
-  const deleteCommentMutation = useDeleteCommentMutation();
-
-  const handleDeleteComment = async (commentId: string) => {
-    if (window.confirm('댓글을 삭제하시겠습니까?')) {
-      try {
-        await deleteCommentMutation.mutate(commentId);
-        // const updatedList = updatedComment.filter((c) => c.comment_id !== commentId);
-        // setUpdatedComment(updatedList);
-        window.location.reload();
-      } catch (error) {
-        console.error('댓글 삭제 오류:', error);
-      }
-    }
-  };
 
   return (
     <div>

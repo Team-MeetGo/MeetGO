@@ -1,6 +1,6 @@
 import { clientSupabase } from '(@/utils/supabase/client)';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { NEW_REVIEW_QUERY_KEY } from './reviewQueryKeys';
+import { DELETE_REVIEW_QUERY_KEY, NEW_REVIEW_QUERY_KEY } from './reviewQueryKeys';
 
 export const fetchAuthorData = async (review_id: string) => {
   const { data: reviewDetail, error } = await clientSupabase
@@ -55,6 +55,7 @@ export const fetchLikedReviewList = async () => {
 };
 
 export const useDeleteReviewMutation = () => {
+  const queryClient = useQueryClient();
   const deleteCommentMutation = useMutation({
     mutationFn: async (review_id: string) => {
       const { error: commentDeleteError } = await clientSupabase
@@ -63,6 +64,9 @@ export const useDeleteReviewMutation = () => {
         .eq('review_id', review_id);
       const { error: likeDeleteError } = await clientSupabase.from('review_like').delete().eq('review_id', review_id);
       const { error: reviewDeleteError } = await clientSupabase.from('review').delete().eq('review_id', review_id);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: DELETE_REVIEW_QUERY_KEY });
     }
   });
   return deleteCommentMutation;

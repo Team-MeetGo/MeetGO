@@ -1,6 +1,6 @@
 import { clientSupabase } from '(@/utils/supabase/client)';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { DELETE_COMMENT_QUERY_KEY, NEW_COMMENT_QUERY_KEY } from './commentQueryKeys';
+import { COMMENT_QUERY_KEY, DELETE_COMMENT_QUERY_KEY, NEW_COMMENT_QUERY_KEY } from './commentQueryKeys';
 import { useCommentStore } from '(@/store/commentStore)';
 
 export const fetchCommentAuthor = async (commentAuthorId: string) => {
@@ -66,16 +66,35 @@ export const useNewCommentMutation = () => {
   return newCommentMutation;
 };
 
+// export const useDeleteCommentMutation = () => {
+//   const queryClient = useQueryClient();
+//   const deleteComment = useCommentStore((state) => state.deleteComment);
+//   const deleteCommentMutation = useMutation({
+//     mutationFn: async (commentId: string) => {
+//       const { error } = await clientSupabase.from('review_comment').delete().eq('comment_id', commentId);
+//       deleteComment(commentId as string);
+//     },
+//     onSuccess: () => {
+//       queryClient.invalidateQueries({ queryKey: COMMENT_QUERY_KEY });
+//     }
+//   });
+//   return deleteCommentMutation;
+// };
+
 export const useDeleteCommentMutation = () => {
   const queryClient = useQueryClient();
-  const deleteComment = useCommentStore((state) => state.deleteComment);
   const deleteCommentMutation = useMutation({
     mutationFn: async (commentId: string) => {
-      const { error } = await clientSupabase.from('review_comment').delete().eq('comment_id', commentId);
-      deleteComment(commentId as string);
+      return clientSupabase.from('review_comment').delete().eq('comment_id', commentId);
     },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: DELETE_COMMENT_QUERY_KEY });
+    // onSuccess 내에서 코멘트 상태를 업데이트
+    onSuccess: (_, commentId) => {
+      queryClient.setQueryData([COMMENT_QUERY_KEY], (oldData) => {
+        return {
+          ...oldData,
+          data: oldData.data.filter((comment) => comment.comment_id !== commentId)
+        };
+      });
     }
   });
   return deleteCommentMutation;
