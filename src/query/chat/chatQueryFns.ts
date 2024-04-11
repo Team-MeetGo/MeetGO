@@ -61,6 +61,7 @@ export const fetchChatData = async (chatRoomId: string) => {
 export const fetchMyChatRoomIds = async (userId: string) => {
   const myChatRooms = [];
   const { data: myRooms } = await clientSupabase.from('participants').select('room_id').eq('user_id', userId);
+
   if (myRooms) {
     for (let room of myRooms) {
       const { data: myChatRoomId } = await clientSupabase
