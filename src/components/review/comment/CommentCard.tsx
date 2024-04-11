@@ -1,51 +1,29 @@
-import { useEffect, useState } from 'react';
-import { clientSupabase } from '(@/utils/supabase/client)';
 import Image from 'next/image';
 import AvatarDefault from '(@/utils/icons/AvatarDefault)';
-import { userStore } from '(@/store/userStore)';
 import { CommentListType } from './CommentList';
-import { useCommentStore } from '(@/store/commentStore)';
+import { useQuery } from '@tanstack/react-query';
+import { COMMENT_AUTHOR_QUERY_KEY } from '(@/query/review/commentQueryKeys)';
+import { fetchCommentAuthor } from '(@/query/review/commentQueryFns)';
 
 type Props = {
   comment: CommentListType;
-  onDeleteComment: (commentId: string) => void;
 };
 
-const CommentCard = ({ comment, onDeleteComment }: Props) => {
-  const [userAvatar, setUserAvatar] = useState<string | null>(null);
-  const [userNickname, setUserNickname] = useState<string | null>(null);
+const CommentCard = ({ comment }: Props) => {
+  const commentAuthorId = comment.user_id;
 
-  const { user } = userStore((state) => state);
-  const userId = user && user[0].user_id;
-
-  const deleteComment = useCommentStore((state) => state.deleteComment);
-
-  const getUserInfo = async () => {
-    const { data: userData, error: userError } = await clientSupabase
-      .from('users')
-      .select('nickname, avatar')
-      .eq('user_id', comment.user_id as string)
-      .single();
-    setUserAvatar(userData?.avatar || null);
-    setUserNickname(userData?.nickname || null);
+  const useCommentAuthorDataQuery = (commentAuthorId: string) => {
+    const { data: commentAuthorData } = useQuery({
+      queryKey: [COMMENT_AUTHOR_QUERY_KEY, commentAuthorId],
+      queryFn: async () => await fetchCommentAuthor(commentAuthorId)
+    });
+    return commentAuthorData;
   };
 
-  useEffect(() => {
-    if (comment.comment_id) {
-      getUserInfo();
-    }
-  }, []);
+  const commentAuthorData = useCommentAuthorDataQuery(commentAuthorId as string);
 
-  const handleDeleteComment = async () => {
-    if (window.confirm('댓글을 삭제하시겠습니까?')) {
-      const { error } = await clientSupabase
-        .from('review_comment')
-        .delete()
-        .eq('comment_id', comment.comment_id as string);
-      onDeleteComment(comment.comment_id as string);
-      deleteComment(comment.comment_id as string);
-    }
-  };
+  const userAvatar = commentAuthorData?.avatar || null;
+  const userNickname = commentAuthorData?.nickname || null;
 
   return (
     <div className="flex">
@@ -58,7 +36,7 @@ const CommentCard = ({ comment, onDeleteComment }: Props) => {
       </div>
       <div>
         <div className="flex">
-          <div>{userNickname}</div>
+          <div>{userNickname ? userNickname : '익명유저'}</div>
           <div className="text-[#A1A1AA]">
             {comment && comment.created_at
               ? new Intl.DateTimeFormat('ko-KR', {
@@ -75,9 +53,9 @@ const CommentCard = ({ comment, onDeleteComment }: Props) => {
         </div>
         <div>
           <p>{comment.comment_content}</p>
+          <p>{comment.comment_id}</p>
         </div>
       </div>
-      <div>{userId === comment.user_id && <button onClick={handleDeleteComment}>삭제</button>}</div>
     </div>
   );
 };

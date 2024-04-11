@@ -2,9 +2,9 @@
 
 import React, { useEffect, useState } from 'react';
 import Map from '(@/components/chat/sidebar/Map)';
-import DatePicker from './DatePicker';
-import { clientSupabase } from '(@/utils/supabase/client)';
 import { useChatDataQuery, useRoomDataQuery } from '(@/hooks/useQueries/useChattingQuery)';
+import { GiHamburgerMenu } from 'react-icons/gi';
+import { Card, CardBody } from '@nextui-org/react';
 
 interface SideBarProps {
   userId: string | null | undefined;
@@ -13,8 +13,6 @@ interface SideBarProps {
 
 const SideBar: React.FC<SideBarProps> = ({ userId, chatRoomId }) => {
   const [isSidebarOpen, setIsSidebarOpen] = useState<boolean>(false);
-  const [isTimeSelected, setIsTimeSelected] = useState<boolean>(false);
-  const [selectedMeetingTime, setSelectedMeetingTime] = useState<string>();
   const [finalDateTime, setFinalDateTime] = useState<string>();
 
   const room = useRoomDataQuery(chatRoomId);
@@ -24,86 +22,45 @@ const SideBar: React.FC<SideBarProps> = ({ userId, chatRoomId }) => {
   const chat = useChatDataQuery(chatRoomId);
   const meetingTime = chat?.[0]?.meeting_time;
 
+  const options: Intl.DateTimeFormatOptions = {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+    hour: 'numeric',
+    minute: 'numeric',
+    hour12: true,
+    timeZone: 'Asia/Seoul'
+  };
+
   useEffect(() => {
-    setSelectedMeetingTime(meetingTime || '');
-    setIsTimeSelected(!!meetingTime);
-    setFinalDateTime(meetingTime || '');
+    if (meetingTime) {
+      const convertedTime = new Intl.DateTimeFormat('ko-KR', options).format(new Date(meetingTime));
+      setFinalDateTime(convertedTime);
+    }
   }, [meetingTime]);
 
   const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);
   };
 
-  const handleSelectedTime = async () => {
-    if (!chatRoomId) {
-      return;
-    }
-    if (selectedMeetingTime === '') {
-      alert('시간을 선택해주세요.');
-      return;
-    }
-    setIsTimeSelected(!isTimeSelected);
-
-    setFinalDateTime(selectedMeetingTime);
-
-    if (!isTimeSelected) {
-      // 장소 선택 안되었을 때
-      const { error } = await clientSupabase
-        .from('chatting_room')
-        .update({ meeting_time: selectedMeetingTime })
-        .eq('chatting_room_id', chatRoomId);
-      if (error) {
-        console.log('서버에 미팅 시간 추가 에러', error);
-      }
-    } else {
-      setSelectedMeetingTime('');
-      setFinalDateTime('');
-      const { error } = await clientSupabase
-        .from('chatting_room')
-        .update({ meeting_time: null })
-        .eq('chatting_room_id', chatRoomId);
-      if (error) {
-        console.log('서버에 미팅 시간 삭제 에러', error);
-      }
-    }
-  };
-
   return (
-    <div className="absolute">
-      <button onClick={toggleSidebar}>사이드바</button>
-      {isSidebarOpen && (
-        <div>
+    <div className="absolute w-[377px] flex flex-col ml-8 z-0 transition-all duration-300 ease-in-out">
+      <div className={`flex ${isSidebarOpen ? 'justify-end' : 'justify-end'}`}>
+        <GiHamburgerMenu onClick={toggleSidebar} />
+      </div>
+      <div style={{ maxHeight: '100vh', overflowY: 'auto', paddingRight: '24px' }}>
+        {isSidebarOpen && (
           <div>
-            {/* {userId === leaderId && (
-              <>
-                미팅 날짜/시간:
-                <input
-                  type="text"
-                  className="border"
-                  value={selectedMeetingTime}
-                  onChange={(e) => setSelectedMeetingTime(e.target.value)}
-                />
-                <button onClick={handleSelectedTime}>{isTimeSelected ? '취소' : '선택'}</button>
-              </>
-            )} */}
-
-            <>
-              미팅 날짜/시간:
-              <input
-                type="text"
-                className="border"
-                value={selectedMeetingTime ?? ''}
-                onChange={(e) => setSelectedMeetingTime(e.target.value)}
-              />
-              <button onClick={handleSelectedTime}>{isTimeSelected ? '취소' : '선택'}</button>
-            </>
-
-            <p>최종 날짜 : {finalDateTime}</p>
+            <h1 className="font-semibold text-2xl mb-2.5">미팅 날짜/시간</h1>
+            <Card className="border border-mainColor shadow-none mb-6 h-[60px]">
+              <CardBody>
+                <p className=" justify-start items-center text-lg">{finalDateTime}</p>
+              </CardBody>
+            </Card>
+            <Map userId={userId} chatRoomId={chatRoomId} />
           </div>
-          <DatePicker />
-          <Map userId={userId} chatRoomId={chatRoomId} />
-        </div>
-      )}
+        )}
+      </div>
     </div>
   );
 };

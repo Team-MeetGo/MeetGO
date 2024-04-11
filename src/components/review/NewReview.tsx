@@ -6,6 +6,7 @@ import { useRouter } from 'next/navigation';
 import { MdCancel } from 'react-icons/md';
 import { userStore } from '(@/store/userStore)';
 import { LuImagePlus } from 'react-icons/lu';
+import { useNewReviewMutation } from '(@/query/review/reviewQueryFns)';
 
 const NewReview = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -15,7 +16,7 @@ const NewReview = () => {
   const router = useRouter();
 
   const { user, setUser } = userStore((state) => state);
-  const userId = user && user[0].user_id;
+  const userId = (user && user.user_id) as string;
   const show_nickname = showNickname;
 
   const handleClose = () => {
@@ -60,6 +61,8 @@ const NewReview = () => {
     setFiles((prevFiles) => prevFiles.filter((_, index) => index != indexToRemove));
   };
 
+  const addNewReviewMutation = useNewReviewMutation();
+
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
@@ -90,20 +93,7 @@ const NewReview = () => {
     const reviewTitle = (document.getElementById('review_title') as HTMLInputElement)?.value;
     const reviewContents = (document.getElementById('review_contents') as HTMLInputElement)?.value;
 
-    const { data: insertedData, error: insertError } = await clientSupabase.from('review').insert([
-      {
-        review_title: reviewTitle,
-        review_contents: reviewContents,
-        image_urls: imageUrls,
-        user_id: userId,
-        show_nickname
-      }
-    ]);
-
-    if (insertError) {
-      console.error('insert error', insertError);
-      return;
-    }
+    addNewReviewMutation.mutate({ userId, reviewTitle, reviewContents, imageUrls, show_nickname });
 
     alert('리뷰가 등록되었습니다.');
     window.location.reload();
