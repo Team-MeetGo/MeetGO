@@ -3,8 +3,9 @@ import { useEffect, useState } from 'react';
 import { favoriteOptions } from '(@/utils/FavoriteData)';
 import { clientSupabase } from '(@/utils/supabase/client)';
 import { userStore } from '(@/store/userStore)';
+import { IsEditingType } from '(@/types/userTypes)';
 
-const Favorite = (isEdting: boolean) => {
+const Favorite: React.FC<IsEditingType> = (isEdting) => {
   const [selected, setSelected] = useState<Set<string>>(new Set([]));
   const { user, setUser } = userStore((state) => state);
 
