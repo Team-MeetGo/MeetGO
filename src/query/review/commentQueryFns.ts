@@ -24,6 +24,20 @@ export const fetchCommentData = async (review_id: string) => {
   return commentData;
 };
 
+export const fetchCommentCount = async (review_id: string) => {
+  let { data: commentCount, error } = await clientSupabase
+    .from('review_comment')
+    .select('*')
+    .eq('review_id', review_id);
+
+  if (error) {
+    console.error('댓글 수를 가져오는 중 오류가 발생했습니다.', error);
+    return 0;
+  }
+
+  return commentCount;
+};
+
 export const useNewCommentMutation = (review_id: string) => {
   const queryClient = useQueryClient();
   const addComment = useCommentStore((state) => state.addComment);

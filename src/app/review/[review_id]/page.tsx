@@ -13,12 +13,14 @@ const ReviewDetailPage = () => {
     setCommentCount(count);
   };
   return (
-    <div>
-      <div>
-        <ReviewDetail review_id={id} commentCount={commentCount} />
-      </div>
-      <div>
-        <CommentList review_id={id} onUpdateCommentCount={handleUpdateCommentCount} />
+    <div className="flex flex-col bg-gray-200 justify-center items-center">
+      <div className="flex flex-col max-w-[1111px] bg-red-200 w-full">
+        <div>
+          <ReviewDetail review_id={id} commentCount={commentCount} />
+        </div>
+        <div>
+          <CommentList review_id={id} onUpdateCommentCount={handleUpdateCommentCount} />
+        </div>
       </div>
     </div>
   );

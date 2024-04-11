@@ -1,6 +1,6 @@
 import { clientSupabase } from '(@/utils/supabase/client)';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { DELETE_REVIEW_QUERY_KEY, NEW_REVIEW_QUERY_KEY } from './reviewQueryKeys';
+import { DELETE_REVIEW_QUERY_KEY, EDIT_REVIEW_QUERY_KEY, NEW_REVIEW_QUERY_KEY } from './reviewQueryKeys';
 
 export const fetchAuthorData = async (review_id: string) => {
   const { data: reviewDetail, error } = await clientSupabase
@@ -108,6 +108,46 @@ export const useNewReviewMutation = () => {
     }
   });
   return newReviewMutation;
+};
+
+export const useEditReviewMutation = () => {
+  const queryClient = useQueryClient();
+  const editReviewMutation = useMutation({
+    mutationFn: async ({
+      editedTitle,
+      editedContent,
+      allImages,
+      review_id
+    }: {
+      editedTitle: string;
+      editedContent: string;
+      allImages: string[];
+      review_id: string;
+    }) => {
+      const { data: updateReview, error: editReviewError } = await clientSupabase
+        .from('review')
+        .update({ review_title: editedTitle, review_contents: editedContent, image_urls: allImages })
+        .eq('review_id', review_id);
+      if (editReviewError) {
+        console.error('insert error', editReviewError);
+        return;
+      }
+      return updateReview;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: EDIT_REVIEW_QUERY_KEY });
+    }
+  });
+  return editReviewMutation;
+};
+
+export const useEditImgsMutation = () => {
+  const queryClient = useQueryClient();
+  const editImgsMutation = useMutation({
+    mutationFn: async({
+      filePath
+    })
+  });
 };
 
 // export const useNewImgsMutation = () => {

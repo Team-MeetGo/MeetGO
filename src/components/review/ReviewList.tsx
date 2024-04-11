@@ -11,6 +11,7 @@ import { userStore } from '(@/store/userStore)';
 import { useQuery } from '@tanstack/react-query';
 import { fetchLikedReviewList, fetchReviewList } from '(@/query/review/reviewQueryFns)';
 import { LIKED_REVIEWLIST_QUERY_KEY, REVIEWLIST_QUERY_KEY } from '(@/query/review/reviewQueryKeys)';
+import { IoIosArrowDown, IoIosArrowUp } from 'react-icons/io';
 
 export type reviewData = {
   user_id: string | null;
@@ -28,6 +29,7 @@ const ReviewList: React.FC = () => {
   const [reviewData, setReviewData] = useState<reviewData[]>([]);
   const [totalReviews, setTotalReviews] = useState<number>(0);
   const reviewsPerPage = 9;
+  const [isOpen, setIsOpen] = useState(false);
   const [selected, setSelected] = React.useState<Selection>(new Set(['최신 순']));
   const { isLoggedIn, setIsLoggedIn } = userStore((state) => state);
 
@@ -88,6 +90,8 @@ const ReviewList: React.FC = () => {
     } else if (keys instanceof Set && keys.has('좋아요 순')) {
       getMostLikedReview(currentPageNumber);
     }
+
+    setIsOpen(false);
   };
 
   useEffect(() => {
@@ -122,10 +126,11 @@ const ReviewList: React.FC = () => {
     <div>
       <div className="flex justify-between">
         <div>
-          <Dropdown>
+          <Dropdown onOpenChange={setIsOpen} isOpen={isOpen}>
             <DropdownTrigger>
               <Button variant="bordered" className="capitalize">
-                {selectedValue}
+                {/* {selectedValue} */}
+                {isOpen ? <IoIosArrowUp /> : <IoIosArrowDown />} {selectedValue}
               </Button>
             </DropdownTrigger>
             <DropdownMenu
@@ -138,6 +143,8 @@ const ReviewList: React.FC = () => {
             >
               <DropdownItem key="최신 순" onClick={() => getRecentReview(currentPageNumber)}>
                 최신 순
+                {/* <IoIosArrowDown />
+                <IoIosArrowUp /> */}
               </DropdownItem>
               <DropdownItem key="좋아요 순" onClick={() => getMostLikedReview(currentPageNumber)}>
                 좋아요 순

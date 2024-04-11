@@ -1,6 +1,5 @@
 import { reviewData } from '(@/components/review/ReviewList)';
 import { userStore } from '(@/store/userStore)';
-import { clientSupabase } from '(@/utils/supabase/client)';
 import { useEffect, useState } from 'react';
 import ReviewCard from '../review/ReviewCard';
 import { useQuery } from '@tanstack/react-query';

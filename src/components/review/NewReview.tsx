@@ -7,6 +7,7 @@ import { MdCancel } from 'react-icons/md';
 import { userStore } from '(@/store/userStore)';
 import { LuImagePlus } from 'react-icons/lu';
 import { useNewReviewMutation } from '(@/query/review/reviewQueryFns)';
+import { FaCheck } from 'react-icons/fa6';
 
 const NewReview = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -162,13 +163,6 @@ const NewReview = () => {
                       </label>
                     </div>
                   </div>
-                  <Checkbox
-                    defaultSelected={showNickname}
-                    onChange={() => setShowNickname(!showNickname)}
-                    className="text-black"
-                  >
-                    닉네임 표시
-                  </Checkbox>
                   <textarea
                     autoFocus
                     id="review_title"
@@ -186,16 +180,24 @@ const NewReview = () => {
                     rows={6}
                     maxLength={200}
                   />
+                  <Checkbox
+                    defaultSelected={showNickname}
+                    onChange={() => setShowNickname(!showNickname)}
+                    className="text-black"
+                    icon={<FaCheck />}
+                  >
+                    익명으로 게시
+                  </Checkbox>
                   <div className="flex gap-2 justify-end">
                     <Button
                       onClick={handleClose}
-                      className="w-[50px] h-[50px] rounded-[10px] mt-[30px] flex justify-center items-center bg-white text-[#A1A1AA] border-1 border-[#A1A1AA]"
+                      className="w-[50px] h-[50px] rounded-[10px] flex justify-center items-center bg-white text-[#A1A1AA] border-1 border-[#A1A1AA]"
                     >
                       취소
                     </Button>
                     <Button
                       type="submit"
-                      className="w-[50px] h-[50px] rounded-[10px] mt-[30px] flex justify-center items-center bg-[#8F5DF4] text-white"
+                      className="w-[50px] h-[50px] rounded-[10px] flex justify-center items-center bg-[#8F5DF4] text-white"
                     >
                       등록
                     </Button>
