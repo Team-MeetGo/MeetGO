@@ -21,6 +21,7 @@ export type CommentListType = {
 };
 
 const CommentList = ({ review_id, onUpdateCommentCount }: Props) => {
+  // TODO: useQuery로 변경
   const commentsFromStore = useCommentStore((state) => state.comments);
   const [updatedComment, setUpdatedComment] = useState<CommentListType[]>([]);
 
