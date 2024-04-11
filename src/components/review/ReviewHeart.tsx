@@ -4,10 +4,10 @@ import React, { useEffect, useState } from 'react';
 import ToggleButton from './ToggleButton';
 import HeartFillIcon from '(@/utils/icons/HeartFillIcon)';
 import HeartIcon from '(@/utils/icons/HeartIcon)';
-import { userStore } from '(@/store/userStore)';
-import { useQuery, useSuspenseQuery } from '@tanstack/react-query';
+import { useQuery } from '@tanstack/react-query';
 import { LIKED_COUNT_QUERY_KEY, LIKED_QUERY_KEY } from '(@/query/review/likeQueryKeys)';
 import { fetchLikeCount, fetchLikestatus, useToggleLikeMutation } from '(@/query/review/likeQueryFns)';
+import { useGetUserDataQuery } from '(@/hooks/useQueries/useUserQuery)';
 
 type Props = {
   review_id: string;
@@ -18,7 +18,7 @@ const ReviewHeart = ({ review_id }: Props) => {
   const [likeCount, setLikeCount] = useState(0);
   const [likeUser, setLikeUser] = useState<string[]>([]);
 
-  const { user, setUser } = userStore((state) => state);
+  const { data: user, isPending, isError, error, isLoggedIn } = useGetUserDataQuery();
   const userId = user?.user_id;
 
   //좋아요 status

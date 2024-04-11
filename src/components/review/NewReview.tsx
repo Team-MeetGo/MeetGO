@@ -3,10 +3,10 @@ import Image from 'next/image';
 import { Button, Checkbox, Modal, ModalBody, ModalContent, useDisclosure } from '@nextui-org/react';
 import { useRouter } from 'next/navigation';
 import { MdCancel } from 'react-icons/md';
-import { userStore } from '(@/store/userStore)';
 import { LuImagePlus } from 'react-icons/lu';
 import { useNewReviewMutation, useUploadImgsMutation } from '(@/query/review/reviewQueryFns)';
 import { FaCheck } from 'react-icons/fa6';
+import { useGetUserDataQuery } from '(@/hooks/useQueries/useUserQuery)';
 
 const NewReview = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -15,8 +15,9 @@ const NewReview = () => {
   const [showNickname, setShowNickname] = useState(true);
   const router = useRouter();
 
-  const { user, setUser } = userStore((state) => state);
-  const userId = (user && user.user_id) as string;
+  const { data: user } = useGetUserDataQuery();
+  const userId = (user && user.user_id) || '';
+
   const show_nickname = showNickname;
 
   const handleClose = () => {

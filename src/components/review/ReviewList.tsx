@@ -7,11 +7,11 @@ import Link from 'next/link';
 import { useParams } from 'next/navigation';
 import { Dropdown, DropdownTrigger, DropdownMenu, DropdownItem, Button } from '@nextui-org/react';
 import { Selection } from '@react-types/shared';
-import { userStore } from '(@/store/userStore)';
 import { useQuery } from '@tanstack/react-query';
 import { fetchLikedReviewList, fetchReviewList } from '(@/query/review/reviewQueryFns)';
 import { LIKED_REVIEWLIST_QUERY_KEY, REVIEWLIST_QUERY_KEY } from '(@/query/review/reviewQueryKeys)';
 import { IoIosArrowDown, IoIosArrowUp } from 'react-icons/io';
+import { useGetUserDataQuery } from '(@/hooks/useQueries/useUserQuery)';
 
 export type reviewData = {
   user_id: string | null;
@@ -31,27 +31,10 @@ const ReviewList: React.FC = () => {
   const reviewsPerPage = 9;
   const [isOpen, setIsOpen] = useState(false);
   const [selected, setSelected] = React.useState<Selection>(new Set(['최신 순']));
-  const { isLoggedIn, setIsLoggedIn } = userStore((state) => state);
 
   const selectedValue = React.useMemo(() => Array.from(selected).join(', ').replaceAll('_', ' '), [selected]);
 
-  const getUserId = async () => {
-    const userData = userStore.getState().user;
-    return userData && userData.user_id;
-  };
-
-  const checkLoginStatus = async () => {
-    const userId = await getUserId();
-    if (userId !== null) {
-      setIsLoggedIn(true);
-    } else {
-      setIsLoggedIn(false);
-    }
-  };
-
-  useEffect(() => {
-    checkLoginStatus();
-  }, []);
+  const { data: user, isPending, isError, error, isLoggedIn } = useGetUserDataQuery();
 
   const { data: likedReviewList } = useQuery({
     queryKey: [LIKED_REVIEWLIST_QUERY_KEY],

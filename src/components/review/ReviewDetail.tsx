@@ -6,15 +6,15 @@ import AvatarDefault from '(@/utils/icons/AvatarDefault)';
 import ImageGallery from './ImageGallery';
 import { HiOutlineChatBubbleOvalLeftEllipsis } from 'react-icons/hi2';
 import defaultImg from '../../../public/defaultImg.jpg';
-import { userStore } from '(@/store/userStore)';
 import { AUTHOR_QUERY_KEY, REVIEW_QUERY_KEY } from '(@/query/review/reviewQueryKeys)';
 import { useQuery } from '@tanstack/react-query';
 import { fetchAuthorData, fetchReviewData, useDeleteReviewMutation } from '(@/query/review/reviewQueryFns)';
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
-import { Button, Dropdown, DropdownItem, DropdownMenu, DropdownTrigger, useDisclosure } from '@nextui-org/react';
-import { HiOutlineDotsHorizontal, HiOutlineDotsVertical } from 'react-icons/hi';
+import { Dropdown, DropdownItem, DropdownMenu, DropdownTrigger, useDisclosure } from '@nextui-org/react';
+import { HiOutlineDotsVertical } from 'react-icons/hi';
 import { IoIosList } from 'react-icons/io';
+import { useGetUserDataQuery } from '(@/hooks/useQueries/useUserQuery)';
 
 export type ReviewDetailType = {
   review_title: string | null;
@@ -37,12 +37,11 @@ type Props = {
 
 const ReviewDetail = ({ review_id, commentCount }: Props) => {
   const editModal = useDisclosure();
-  const [isModalOpen, setIsModalOpen] = useState(false);
   const [reviewDetailData, setReviewDetailData] = useState<ReviewDetailType | null>(null);
   const [authorData, setAuthorData] = useState<AuthorDataType | null>(null);
   const router = useRouter();
 
-  const { user, setUser } = userStore((state) => state);
+  const { data: user } = useGetUserDataQuery();
   const userId = user && user.user_id;
 
   const useAuthorDataQuery = (review_id: string) => {
@@ -138,8 +137,6 @@ const ReviewDetail = ({ review_id, commentCount }: Props) => {
         <div className="flex justify-end">
           {userId === reviewDetailData?.user_id && (
             <div>
-              {/* <ReviewEditModal review_id={review_id} /> */}
-              {/* <button onClick={handleDeleteReview}>삭제</button> */}
               <Dropdown>
                 <DropdownTrigger>
                   <button>

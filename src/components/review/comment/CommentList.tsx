@@ -5,7 +5,7 @@ import { useQuery } from '@tanstack/react-query';
 import { COMMENT_QUERY_KEY } from '(@/query/review/commentQueryKeys)';
 import { fetchCommentData, useDeleteCommentMutation } from '(@/query/review/commentQueryFns)';
 import NewComment from './NewComment';
-import { userStore } from '(@/store/userStore)';
+import { useGetUserDataQuery } from '(@/hooks/useQueries/useUserQuery)';
 
 type Props = {
   review_id: string;
@@ -25,7 +25,7 @@ const CommentList = ({ review_id, onUpdateCommentCount }: Props) => {
   const [updatedComment, setUpdatedComment] = useState<CommentListType[]>([]);
   const deleteComment = useCommentStore((state) => state.deleteComment);
 
-  const { user } = userStore((state) => state);
+  const { data: user } = useGetUserDataQuery();
   const userId = user && user.user_id;
 
   const { data: commentData, isLoading: isCommentDataLoading } = useQuery({

@@ -267,11 +267,9 @@
 
 'use client';
 
-import { clientSupabase } from '(@/utils/supabase/client)';
-import { Modal, ModalContent, ModalBody, Button, useDisclosure } from '@nextui-org/react';
+import { Modal, ModalContent, ModalBody, Button } from '@nextui-org/react';
 import Image from 'next/image';
 import { ChangeEvent, FormEvent, useEffect, useState } from 'react';
-import { ReviewDetailType } from './ReviewDetail';
 import { MdCancel } from 'react-icons/md';
 import { LuImagePlus } from 'react-icons/lu';
 import type { UseDisclosureReturn } from '@nextui-org/use-disclosure';
@@ -382,29 +380,16 @@ export default function ReviewEditModal({ review_id, disclosure }: Props) {
       })
     );
 
-    const updatedImageUrls = uploadResults.filter((url) => url !== null);
+    const updatedImageUrls = uploadResults.filter((url): url is string => url !== null);
 
     if (updatedImageUrls.length > 0) {
-      const reviewTitle = document.getElementById('review_title')?.value;
-      const reviewContents = document.getElementById('review_contents')?.value;
+      const editedTitle = (document.getElementById('review_title') as HTMLInputElement)?.value;
+      const editedContent = (document.getElementById('review_contents') as HTMLInputElement)?.value;
 
-      addNewReviewMutation.mutate({
-        userId,
-        reviewTitle,
-        reviewContents,
-        imageUrls: updatedImageUrls,
-        show_nickname
-      });
+      const allImages = [...previewImages, ...updatedImageUrls];
 
-      alert('리뷰가 업데이트되었습니다.');
-      window.location.reload();
-    } else {
-      console.error('이미지 업로드에 실패했습니다.');
+      editReviewMutation.mutate({ editedTitle, editedContent, allImages, review_id });
     }
-
-    const allImages = [...previewImages, ...updatedImages];
-
-    editReviewMutation.mutate({ editedTitle, editedContent, allImages, review_id });
 
     alert('리뷰가 수정되었습니다.');
     onClose();
