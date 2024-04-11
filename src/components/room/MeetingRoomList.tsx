@@ -106,14 +106,14 @@ function MeetingRoomList() {
       </div>
       <div className="gap-2 grid grid-cols-3 m-4 w-100%">
         {selectRegion &&
-          !selectMemberNumber &&
           selectRegion !== '지역' &&
           selectRegion !== '전국' &&
+          (!selectMemberNumber || selectMemberNumber === '인원' || selectMemberNumber === '전체') &&
           regionSelectedOtherRooms?.map((room) => <MeetingRoom key={room?.room_id} room={room} />)}
         {selectMemberNumber &&
-          !selectRegion &&
           selectMemberNumber !== '인원' &&
           selectMemberNumber !== '전체' &&
+          (!selectRegion || selectRegion === '지역' || selectRegion === '전국') &&
           memberNumberSelectedOtherRooms?.map((room) => <MeetingRoom key={room?.room_id} room={room} />)}
 
         {selectMemberNumber &&
