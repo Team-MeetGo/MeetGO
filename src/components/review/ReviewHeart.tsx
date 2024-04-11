@@ -5,7 +5,7 @@ import ToggleButton from './ToggleButton';
 import HeartFillIcon from '(@/utils/icons/HeartFillIcon)';
 import HeartIcon from '(@/utils/icons/HeartIcon)';
 import { userStore } from '(@/store/userStore)';
-import { useSuspenseQuery } from '@tanstack/react-query';
+import { useQuery, useSuspenseQuery } from '@tanstack/react-query';
 import { LIKED_COUNT_QUERY_KEY, LIKED_QUERY_KEY } from '(@/query/review/likeQueryKeys)';
 import { fetchLikeCount, fetchLikestatus, useToggleLikeMutation } from '(@/query/review/likeQueryFns)';
 
@@ -23,7 +23,7 @@ const ReviewHeart = ({ review_id }: Props) => {
 
   //좋아요 status
   const useLikedReviewDataQuery = (review_id: string) => {
-    const { data: likedUsers } = useSuspenseQuery({
+    const { data: likedUsers } = useQuery({
       queryKey: [LIKED_QUERY_KEY, review_id],
       queryFn: async () => await fetchLikestatus(review_id)
     });
@@ -43,7 +43,7 @@ const ReviewHeart = ({ review_id }: Props) => {
 
   //좋아요 count
   const useLikedReviewCountQuery = (review_id: string) => {
-    const { data: likeCountData, error } = useSuspenseQuery({
+    const { data: likeCountData, error } = useQuery({
       queryKey: [LIKED_COUNT_QUERY_KEY, review_id],
       queryFn: async () => await fetchLikeCount(review_id)
     });
