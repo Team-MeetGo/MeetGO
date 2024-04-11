@@ -1,13 +1,13 @@
 'use client';
 
-import { useTagStore } from '(@/store/roomStore)';
+import { useRoomStore } from '(@/store/roomStore)';
 import { favoriteOptions } from '(@/utils/FavoriteData)';
 import { Chip, Select, SelectItem } from '@nextui-org/react';
 import { useState } from 'react';
 
 const TagList = () => {
   const [selected, setSelected] = useState<Set<string>>(new Set([]));
-  const { setTags } = useTagStore();
+  const { setTags } = useRoomStore();
 
   const handleSelect = (value: string[]) => {
     if (selected.size > 5) {
