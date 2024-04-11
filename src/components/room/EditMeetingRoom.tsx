@@ -2,7 +2,7 @@
 import { Button, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, useDisclosure } from '@nextui-org/react';
 import { useState } from 'react';
 import TagList from './MeetingRoomFeatureTags';
-import { useTagStore } from '(@/store/roomStore)';
+import { useRoomStore } from '(@/store/roomStore)';
 import { useUpdateRoom } from '(@/hooks/useMutation/useMeetingMutation)';
 
 import type { MeetingRoomType } from '(@/types/roomTypes)';
@@ -12,7 +12,7 @@ function EditMeetingRoom({ room }: { room: MeetingRoomType }) {
   const [title, setTitle] = useState(room.room_title);
   const [location, setLocation] = useState(room.location);
   const [memberNumber, setMemberNumber] = useState(room.member_number);
-  const { tags, resetTags } = useTagStore();
+  const { tags, resetTags } = useRoomStore();
   const room_id = room.room_id;
   const roomUpdateMutation = useUpdateRoom({ title, tags, location, memberNumber, room_id });
 
