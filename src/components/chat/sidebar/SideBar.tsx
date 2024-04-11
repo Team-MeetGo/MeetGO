@@ -5,6 +5,7 @@ import Map from '(@/components/chat/sidebar/Map)';
 import { useChatDataQuery, useRoomDataQuery } from '(@/hooks/useQueries/useChattingQuery)';
 import { GiHamburgerMenu } from 'react-icons/gi';
 import { Card, CardBody } from '@nextui-org/react';
+import { useGetUserDataQuery } from '(@/hooks/useQueries/useUserQuery)';
 
 interface SideBarProps {
   chatRoomId: string;
@@ -21,6 +22,12 @@ const SideBar: React.FC<SideBarProps> = ({ chatRoomId }) => {
   const chat = useChatDataQuery(chatRoomId);
   const meetingTime = chat?.[0]?.meeting_time;
 
+  // 유저 정보 가져오기
+  const { data: userData } = useGetUserDataQuery();
+  const userId = userData?.user_id;
+
+  console.log('test', meetingTime);
+
   const options: Intl.DateTimeFormatOptions = {
     year: 'numeric',
     month: 'long',
@@ -31,19 +38,12 @@ const SideBar: React.FC<SideBarProps> = ({ chatRoomId }) => {
     timeZone: 'Asia/Seoul'
   };
 
-  useEffect(() => {
-    if (meetingTime) {
-      const convertedTime = new Intl.DateTimeFormat('ko-KR', options).format(new Date(meetingTime));
-      setFinalDateTime(convertedTime);
-    }
-  }, [meetingTime]);
-
   const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);
   };
 
   return (
-    <div className="absolute w-[377px] flex flex-col ml-8 z-0 transition-all duration-300 ease-in-out">
+    <div className=" w-[377px] flex flex-col ml-8 z-0 transition-all duration-300 ease-in-out">
       <div className={`flex ${isSidebarOpen ? 'justify-end' : 'justify-end'}`}>
         <GiHamburgerMenu onClick={toggleSidebar} />
       </div>

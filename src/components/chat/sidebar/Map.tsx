@@ -189,7 +189,7 @@ const Map: React.FC<MapProps> = ({ chatRoomId }) => {
     setCurrentPage(pageNumber);
     searchBarsNearby(mapRef.current, pageNumber);
   };
-
+  // useMutation 호출
   const updateMeetingLocationMutation = useUpdateMeetingLocationMutation();
 
   // 장소 선택 함수
@@ -200,7 +200,7 @@ const Map: React.FC<MapProps> = ({ chatRoomId }) => {
       return;
     }
 
-    if (selectedMeetingLocation === barName) {
+    if (barName === selectedMeetingLocation) {
       const clearMutation = useClearMeetingLocationMutation({ chatRoomId });
       try {
         await clearMutation.mutateAsync();

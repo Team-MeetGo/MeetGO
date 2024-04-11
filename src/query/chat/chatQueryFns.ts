@@ -102,3 +102,16 @@ export const updateMyLastMsg = async (user_id: string, chatRoomId: string, msg_i
     return updateMyLastMsg;
   } else return null;
 };
+
+// 미팅 장소 추가
+export const addMeetingLocation = async ({ chatRoomId, barName }: { chatRoomId: string; barName: string }) => {
+  if (!chatRoomId) {
+    console.log('유저가 없어요');
+  }
+  await clientSupabase.from('chatting_room').update({ meeting_location: barName }).eq('chatting_room_id', chatRoomId);
+};
+
+// 미팅 장소 제거
+export const deleteMeetingLocation = async (chatRoomId: string) => {
+  await clientSupabase.from('chatting_room').update({ meeting_location: null }).eq('chatting_room_id', chatRoomId);
+};
