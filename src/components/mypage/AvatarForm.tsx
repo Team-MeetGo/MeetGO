@@ -1,3 +1,4 @@
+import { useGetUserDataQuery } from '(@/hooks/useQueries/useUserQuery)';
 import { userStore } from '(@/store/userStore)';
 import { clientSupabase } from '(@/utils/supabase/client)';
 import { Avatar, avatar } from '@nextui-org/react';
@@ -5,7 +6,7 @@ import Image from 'next/image';
 import { useEffect, useState } from 'react';
 
 const AvatarForm = () => {
-  const { user, setUser } = userStore((state) => state);
+  const { data: user, isPending, isError, error, isLoggedIn } = useGetUserDataQuery();
   const [file, setFile] = useState(null as File | null);
   const [avatarView, setAvatarView] = useState<string | null>(null);
   const [isEditing, setIsEditing] = useState(false);

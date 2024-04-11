@@ -1,11 +1,11 @@
 'use client';
+import { useGetUserDataQuery } from '(@/hooks/useQueries/useUserQuery)';
 import { chatStore } from '(@/store/chatStore)';
-import { userStore } from '(@/store/userStore)';
 import { clientSupabase } from '(@/utils/supabase/client)';
 import { useEffect, useState } from 'react';
 
 const ChatPresence = () => {
-  const user = userStore((state) => state.user);
+  const { data: user } = useGetUserDataQuery();
   const [onlineUsers, setOnlineUsers] = useState(0);
   const chatRoomId = chatStore((state) => state.chatRoomId);
 

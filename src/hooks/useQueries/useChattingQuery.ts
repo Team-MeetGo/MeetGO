@@ -41,7 +41,7 @@ export const useChatDataQuery = (chatRoomId: string) => {
 export const useMyChatRoomIdsQuery = (userId: string) => {
   const { data: myChatRoomIds } = useSuspenseQuery({
     queryKey: [MYCHAT_ROOMIDS, userId],
-    queryFn: async () => await fetchMyChatRoomIds(userId)
+    queryFn: () => fetchMyChatRoomIds(userId)
   });
   return myChatRoomIds;
 };
@@ -49,7 +49,7 @@ export const useMyChatRoomIdsQuery = (userId: string) => {
 export const useMyLastMsgs = (user_id: string, chatRoomId: string) => {
   const { data: myLastMsgs } = useSuspenseQuery({
     queryKey: [MY_LAST_MSGS, user_id, chatRoomId],
-    queryFn: async () => await fetchMyLastMsgs(user_id, chatRoomId)
+    queryFn: () => fetchMyLastMsgs(user_id, chatRoomId)
   });
   return myLastMsgs;
 };

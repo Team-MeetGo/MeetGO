@@ -29,6 +29,7 @@ const ChatList = ({ user, chatRoomId }: { user: User | null; chatRoomId: string 
   const roomId = room?.roomId;
   const lastMsgId = useMyLastMsgs(user?.id!, chatRoomId);
   const prevMsgsLengthRef = useRef(messages.length);
+  const lastDivRefs = useRef(messages);
 
   const pathname = usePathname();
   const { mutate: mutateToUpdate } = useUpdateLastMsg(
@@ -80,19 +81,24 @@ const ChatList = ({ user, chatRoomId }: { user: User | null; chatRoomId: string 
     const scrollBox = scrollRef.current;
     if (scrollBox && !isScrolling) {
       // 처음에 로드 시 스크롤 중이 아닐 때
-      if (lastMsgId && lastMsgId.length) {
+      if (lastMsgId && lastMsgId.length && lastMsgId[0].last_msg_id !== messages[messages.length - 1].message_id) {
         // 이전에 저장된 마지막 메세지가 있으면 그 메세지 강조처리
-        let lastDiv = document.getElementById(`${lastMsgId[0].last_msg_id}`);
+        // let lastDiv = document.getElementById(`${lastMsgId[0].last_msg_id}`);
+        let ref = lastDivRefs.current.find((ref) => ref.message_id === lastMsgId[0].last_msg_id);
+        console.log(lastDivRefs.current);
+        let lastDiv = ref && ref.current;
         if (lastDiv) {
           console.log(lastDiv);
           setLastCheckedDiv(lastDiv);
           makeHereText(lastDiv);
           setCheckedLastMsg(true);
         }
+      } else {
+        scrollBox.scrollTop = scrollBox.scrollHeight;
       }
     }
     // 처음 로드 시에만 실행(의존성배열 = [])
-  }, [lastMsgId]);
+  }, []);
 
   useEffect(() => {
     const scrollBox = scrollRef.current;
@@ -159,11 +165,11 @@ const ChatList = ({ user, chatRoomId }: { user: User | null; chatRoomId: string 
         <ChatSearch isScrollTop={isScrollTop} />
 
         {hasMore ? <LoadChatMore chatRoomId={chatRoomId} count={count} setCount={setCount} /> : <></>}
-        {messages?.map((msg) => {
+        {messages?.map((msg, idx) => {
           if (msg.send_from === user?.id) {
-            return <MyChat msg={msg} key={msg.message_id} />;
+            return <MyChat msg={msg} key={msg.message_id} idx={idx} lastDivRefs={lastDivRefs} />;
           } else {
-            return <OthersChat msg={msg} key={msg.message_id} />;
+            return <OthersChat msg={msg} key={msg.message_id} idx={idx} lastDivRefs={lastDivRefs} />;
           }
         })}
       </div>
@@ -186,9 +192,9 @@ const ChatList = ({ user, chatRoomId }: { user: User | null; chatRoomId: string 
 
 export default ChatList;
 
-const MyChat = ({ msg }: { msg: Message }) => {
+const MyChat = ({ msg, idx, lastDivRefs }: { msg: Message; idx: number; lastDivRefs: any }) => {
   return (
-    <div id={msg.message_id} className="flex gap-4 ml-auto">
+    <div id={msg.message_id} ref={lastDivRefs.current[idx]} className="flex gap-4 ml-auto">
       <div className="w-80 h-24 flex flex-col gap-1">
         <div className="font-bold ml-auto">{msg.nickname}</div>
         <div className="flex gap-2 ml-auto">

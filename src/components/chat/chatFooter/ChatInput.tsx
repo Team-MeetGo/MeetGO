@@ -1,6 +1,6 @@
 'use client';
+import { useGetUserDataQuery } from '(@/hooks/useQueries/useUserQuery)';
 import { chatStore } from '(@/store/chatStore)';
-import { userStore } from '(@/store/userStore)';
 import { clientSupabase } from '(@/utils/supabase/client)';
 import { Input } from '@nextui-org/react';
 import { useState } from 'react';
@@ -8,7 +8,7 @@ import { FaRegArrowAltCircleUp } from 'react-icons/fa';
 
 const ChatInput = () => {
   const [message, setMessage] = useState('');
-  const user = userStore((state) => state.user);
+  const { data: user } = useGetUserDataQuery();
   const chatRoomId = chatStore((state) => state.chatRoomId);
 
   const handleSubmit = async () => {
