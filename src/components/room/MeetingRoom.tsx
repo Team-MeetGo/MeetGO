@@ -69,6 +69,7 @@ function MeetingRoom({ room }: { room: MeetingRoomType }) {
         <div className="">
           <div className="flex flex-row justify-between align-middle text-sm">
             <div>정보 </div>
+            <div></div>
             {userInformation?.user_id === leader_id ? (
               <div>
                 <DeleteMeetingRoom id={room_id} />
