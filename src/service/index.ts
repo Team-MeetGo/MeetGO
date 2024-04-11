@@ -21,9 +21,9 @@ export const updateRequestStatus = async (requestId: string, responseId: string,
 
   if (error) {
     console.error('상태 업데이트 실패:', error);
-    return false;
+    return;
   }
 
   console.log('상태 업데이트 성공:', data);
-  return true;
+  return;
 };

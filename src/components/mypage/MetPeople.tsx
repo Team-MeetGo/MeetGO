@@ -73,11 +73,11 @@ const MetPeople = () => {
     );
   };
 
-  const handleKakaoIdResponse = (responseId: string, newStatus: '수락' | '거절') => {
+  const handleKakaoIdResponse = (requestId: string, newStatus: '수락' | '거절') => {
     acceptKakaoIdMutate(
       {
-        requestId: userId,
-        responseId,
+        requestId,
+        responseId: userId,
         newStatus
       },
       {
@@ -90,8 +90,6 @@ const MetPeople = () => {
       }
     );
   };
-
-  console.log('metPeopleList', metPeopleList);
 
   return (
     <div className="mb-6">

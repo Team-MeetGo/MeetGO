@@ -10,3 +10,7 @@ export interface LoginData {
   userId: string;
   password: string;
 }
+
+export type IsEditingType = {
+  isEditing: boolean;
+};

@@ -63,18 +63,6 @@ const Profile = () => {
         gender: inputGender.value
       })
       .eq('user_id', userId);
-    // if (error) {
-    //   console.error('Error updating:', error);
-    // } else {
-    //   setUser({
-    //     ...user,
-    //     intro: inputIntro.value,
-    //     kakaoId: inputKakaoId.value,
-    //     nickname: inputNickname.value,
-    //     gender: inputGender.value
-    //   });
-    //   setIsEditing(false);
-    // }
   };
 
   return (

@@ -7,8 +7,6 @@ export const fetchUserData = async () => {
     data: { user }
   } = await clientSupabase.auth.getUser();
 
-  console.log('userQueryFns => ', user);
-
   if (user) {
     const { data: userData } = await clientSupabase.from('users').select('*').eq('user_id', String(user.id));
     if (userData) return userData[0];
