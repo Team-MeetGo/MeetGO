@@ -14,3 +14,11 @@ export interface LoginData {
 export type IsEditingType = {
   isEditing: boolean;
 };
+
+export interface UpdateProfileType {
+  userId: string;
+  inputNickname: string;
+  inputIntro: string;
+  inputKakaoId: string;
+  inputGender: string;
+}
