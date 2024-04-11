@@ -9,6 +9,9 @@ import { useParams } from 'next/navigation';
 import { Dropdown, DropdownTrigger, DropdownMenu, DropdownItem, Button } from '@nextui-org/react';
 import { Selection } from '@react-types/shared';
 import { userStore } from '(@/store/userStore)';
+import { useQuery } from '@tanstack/react-query';
+import { REVIEWLIST_QUERY_KEY } from '(@/query/review/reviewQueryKeys)';
+import { fetchReviewList } from '(@/query/review/reviewQueryFns)';
 
 export type reviewData = {
   user_id: string | null;
@@ -95,16 +98,24 @@ const ReviewList: React.FC = () => {
     }
   }, []);
 
-  async function getRecentReview(page: number) {
-    let { data, count } = await clientSupabase.from('review').select('*', { count: 'estimated' });
+  const useGetReviewsQuery = () => {
+    const { data: ReviewListData } = useQuery({
+      queryKey: [REVIEWLIST_QUERY_KEY],
+      queryFn: async () => await fetchReviewList()
+    });
+    return ReviewListData;
+  };
 
-    if (data) {
-      data.sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
+  const ReviewListData = useGetReviewsQuery();
+
+  async function getRecentReview(page: number) {
+    if (ReviewListData) {
+      ReviewListData.sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
       const startIdx = (page - 1) * reviewsPerPage;
       const endIdx = page * reviewsPerPage;
-      const slicedData = data.slice(startIdx, endIdx);
+      const slicedData = ReviewListData.slice(startIdx, endIdx);
       setReviewData(slicedData);
-      setTotalReviews(count || 0);
+      setTotalReviews(ReviewListData.length || 0);
     }
   }
 

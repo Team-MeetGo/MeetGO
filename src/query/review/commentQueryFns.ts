@@ -1,6 +1,6 @@
 import { clientSupabase } from '(@/utils/supabase/client)';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { NEW_COMMENT_QUERY_KEY } from './commentQueryKeys';
+import { DELETE_COMMENT_QUERY_KEY, NEW_COMMENT_QUERY_KEY } from './commentQueryKeys';
 import { useCommentStore } from '(@/store/commentStore)';
 
 export const fetchCommentAuthor = async (commentAuthorId: string) => {
@@ -67,9 +67,15 @@ export const useNewCommentMutation = () => {
 };
 
 export const useDeleteCommentMutation = () => {
+  const queryClient = useQueryClient();
+  const deleteComment = useCommentStore((state) => state.deleteComment);
   const deleteCommentMutation = useMutation({
     mutationFn: async (commentId: string) => {
       const { error } = await clientSupabase.from('review_comment').delete().eq('comment_id', commentId);
+      deleteComment(commentId as string);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: DELETE_COMMENT_QUERY_KEY });
     }
   });
   return deleteCommentMutation;

@@ -1,4 +1,3 @@
-import { clientSupabase } from '(@/utils/supabase/client)';
 import Image from 'next/image';
 import ReviewEditModal from './ReviewEditModal';
 import { useRouter } from 'next/navigation';

@@ -1,6 +1,6 @@
 import { clientSupabase } from '(@/utils/supabase/client)';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { NEW_REVIEW_QUERY_KEY } from './reviewQueryKeys';
+import { NEW_IMAGES_UPLOAD_QUERY_KEY, NEW_REVIEW_QUERY_KEY } from './reviewQueryKeys';
 
 export const fetchAuthorData = async (review_id: string) => {
   const { data: reviewDetail, error } = await clientSupabase
@@ -40,6 +40,15 @@ export const fetchReviewData = async (review_id: string) => {
     console.error('리뷰를 불러오지 못함', error);
   } else {
     return reviewDetail;
+  }
+};
+
+export const fetchReviewList = async () => {
+  let { data: reviewData, error } = await clientSupabase.from('review').select('*');
+  if (error) {
+    console.error('리뷰를 불러오지 못함', error);
+  } else {
+    return reviewData;
   }
 };
 
@@ -94,3 +103,48 @@ export const useNewReviewMutation = () => {
   });
   return newReviewMutation;
 };
+
+// export const useNewImgsMutation = () => {
+//   const queryClient = useQueryClient();
+
+//   const newImgsMutation = useMutation({
+//     mutationFn: async (files: File[]) => {
+//       const imageUrls: string[] = [];
+
+//       for (const file of files) {
+//         const uuid = crypto.randomUUID();
+//         const filePath = `reviewImage/${uuid}`;
+
+//         const uploadImage = async (filePath: string, file: File) => {
+//           const { data, error } = await clientSupabase.storage.from('reviewImage').upload(filePath, file, {
+//             cacheControl: '3600',
+//             upsert: true
+//           });
+
+//           if (error) {
+//             console.error('업로드 오류', error.message);
+//             throw error;
+//           }
+
+//           return data;
+//         };
+
+//         try {
+//           const data = await uploadImage(filePath, file);
+//           const { data: imageUrl } = await clientSupabase.storage.from('reviewImage').getPublicUrl(data.path);
+//           imageUrls.push(imageUrl.publicUrl);
+//         } catch (error) {
+//           console.error('이미지 업로드 오류:', error);
+//           throw error;
+//         }
+//       }
+
+//       return imageUrls;
+//     },
+//     onSuccess: () => {
+//       queryClient.invalidateQueries({ queryKey: NEW_IMAGES_UPLOAD_QUERY_KEY });
+//     }
+//   });
+
+//   return newImgsMutation;
+// };

@@ -95,21 +95,6 @@ const NewReview = () => {
 
     addNewReviewMutation.mutate({ userId, reviewTitle, reviewContents, imageUrls, show_nickname });
 
-    // const { data: insertedData, error: insertError } = await clientSupabase.from('review').insert([
-    //   {
-    //     review_title: reviewTitle,
-    //     review_contents: reviewContents,
-    //     image_urls: imageUrls,
-    //     user_id: userId,
-    //     show_nickname
-    //   }
-    // ]);
-
-    // if (insertError) {
-    //   console.error('insert error', insertError);
-    //   return;
-    // }
-
     alert('리뷰가 등록되었습니다.');
     window.location.reload();
   };
