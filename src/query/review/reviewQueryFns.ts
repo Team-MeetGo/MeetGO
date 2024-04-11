@@ -133,10 +133,6 @@ export const useUploadImgsMutation = () => {
         throw uploadImgError;
       }
       const { data: imageUrlData } = await clientSupabase.storage.from('reviewImage').getPublicUrl(uploadImgsData.path);
-      // if (getImageUrlError) {
-      //   console.error('Error getting image URL', getImageUrlError);
-      //   throw getImageUrlError;
-      // }
 
       return imageUrlData.publicUrl;
     },
