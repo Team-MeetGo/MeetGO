@@ -1,6 +1,6 @@
 'use client';
 import { Message } from '(@/types/chatTypes)';
-import { getformattedDate } from '(@/utils)';
+import { getformattedDate, showingDate } from '(@/utils)';
 import { clientSupabase } from '(@/utils/supabase/client)';
 import { useEffect, useRef, useState } from 'react';
 import { User } from '@supabase/supabase-js';
@@ -31,6 +31,12 @@ const ChatList = ({ user, chatRoomId }: { user: User | null; chatRoomId: string 
   // console.log('lastMsgId => ', lastMsgId && lastMsgId[0].last_msg_id);
   const prevMsgsLengthRef = useRef(messages.length);
   const lastDivRefs = useRef(messages);
+
+  console.log('쌩 날짜 =>', messages[0].created_at);
+  const date = new Date(messages[0].created_at);
+  console.log('만진 날짜 =>', date);
+  console.log(typeof date);
+  console.log(date.getDate());
 
   const pathname = usePathname();
   const { mutate: mutateToUpdate } = useUpdateLastMsg(
@@ -164,6 +170,11 @@ const ChatList = ({ user, chatRoomId }: { user: User | null; chatRoomId: string 
         {hasMore ? <LoadChatMore chatRoomId={chatRoomId} count={count} setCount={setCount} /> : <></>}
         {messages?.map((msg, idx) => (
           <>
+            {idx >= 1 && new Date(msg.created_at).getDate() > new Date(messages[idx - 1].created_at).getDate() ? (
+              <div className="mx-auto">
+                <p>{showingDate(msg.created_at)}</p>
+              </div>
+            ) : null}
             {msg.send_from === user?.id ? (
               <MyChat msg={msg} key={msg.message_id} idx={idx} lastDivRefs={lastDivRefs} />
             ) : (
