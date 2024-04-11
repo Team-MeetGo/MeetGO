@@ -312,30 +312,33 @@ export type Database = {
       room: {
         Row: {
           created_at: string;
-          feature: string[] | null;
+          feature: string[];
           leader_id: string;
           location: string;
           member_number: string;
+          region: string;
           room_id: string;
           room_status: string;
           room_title: string;
         };
         Insert: {
           created_at?: string;
-          feature?: string[] | null;
+          feature: string[];
           leader_id: string;
           location?: string;
           member_number?: string;
+          region: string;
           room_id?: string;
           room_status?: string;
           room_title?: string;
         };
         Update: {
           created_at?: string;
-          feature?: string[] | null;
+          feature?: string[];
           leader_id?: string;
           location?: string;
           member_number?: string;
+          region?: string;
           room_id?: string;
           room_status?: string;
           room_title?: string;

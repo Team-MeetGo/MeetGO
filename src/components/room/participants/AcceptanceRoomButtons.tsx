@@ -19,12 +19,12 @@ const AcceptanceRoomButtons = ({ roomId }: { roomId: UUID }) => {
   const user_id = String(user?.user_id!);
   const room_id = String(roomId);
   const participants = useParticipantsQuery(roomId);
-  const deleteMemberMutation = useDeleteMember(user_id);
+  const deleteMemberMutation = useDeleteMember({ user_id, room_id });
   const updateRoomStatusOpenMutation = useUpdateRoomStatusOpen({ room_id });
   const deleteRoomMutation = useDeleteRoom({ room_id });
 
   const roomInformation = useRoomInfoWithRoomIdQuery(roomId);
-  const leader = String(roomInformation ? roomInformation[0].leader_id : null);
+  const leader = String(roomInformation && roomInformation[0].leader_id);
   const otherParticipants = participants.filter((person) => person.user_id !== leader);
   const updateLeaderMemeberMutation = useUpdateLeaderMemberMutation({ otherParticipants, room_id });
 
@@ -71,6 +71,10 @@ const AcceptanceRoomButtons = ({ roomId }: { roomId: UUID }) => {
       await deleteRoomMutation.mutateAsync();
     }
     router.push(`/meetingRoom`);
+  };
+
+  window.onpopstate = () => {
+    gotoLobby();
   };
 
   return (

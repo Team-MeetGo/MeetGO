@@ -64,13 +64,7 @@ export const useDeleteRoom = ({ room_id }: { room_id: string }) => {
   return roomDeleteMutation;
 };
 
-export const useAddRoom = ({
-  nextMeetingRoom,
-  user_id
-}: {
-  nextMeetingRoom: NextMeetingRoomType;
-  user_id: string | null;
-}) => {
+export const useAddRoom = ({ nextMeetingRoom, user_id }: { nextMeetingRoom: NextMeetingRoomType; user_id: string }) => {
   const queryClient = useQueryClient();
 
   const roomDeleteMutation = useMutation({
@@ -96,11 +90,11 @@ export const useAddRoomMemberMutation = ({ user_id, room_id }: { user_id: string
   return roomMemberMutation;
 };
 
-export const useDeleteMember = (user_id: string) => {
+export const useDeleteMember = ({ user_id, room_id }: { user_id: string; room_id: string }) => {
   const queryClient = useQueryClient();
 
   const deleteMemberMutation = useMutation({
-    mutationFn: async () => await deleteMember({ user_id }),
+    mutationFn: async () => await deleteMember({ user_id, room_id }),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ROOM_MEMBER });
     }
