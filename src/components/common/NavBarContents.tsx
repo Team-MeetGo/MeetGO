@@ -13,15 +13,15 @@ import {
 } from '@nextui-org/react';
 import MeetGoLogo from '(@/utils/icons/meetgo-logo.png)';
 import Image from 'next/image';
-import { userStore } from '(@/store/userStore)';
 import { useRouter } from 'next/navigation';
 import { clientSupabase } from '(@/utils/supabase/client)';
 import { useGetUserDataQuery } from '(@/hooks/useQueries/useUserQuery)';
-import { useEffect } from 'react';
+import { useQueryClient } from '@tanstack/react-query';
+import { USER_DATA_QUERY_KEY } from '(@/query/user/userQueryKeys)';
 
 const NavBarContents = () => {
-  const { isLoggedIn, setIsLoggedIn, setUser, user } = userStore((state) => state);
-  const { data: userData, isPending, isError, error } = useGetUserDataQuery();
+  const queryClient = useQueryClient();
+  const { data: user, isPending, isError, error, isLoggedIn } = useGetUserDataQuery();
   const router = useRouter();
 
   if (isPending) {
@@ -33,7 +33,9 @@ const NavBarContents = () => {
 
   const signOut = async () => {
     await clientSupabase.auth.signOut();
-    setIsLoggedIn(false);
+    queryClient.invalidateQueries({
+      queryKey: [USER_DATA_QUERY_KEY]
+    });
     router.replace('/'); // 로그아웃 후 메인 페이지로 이동. 뒤로가기 방지.
     alert('로그아웃 성공');
   };
@@ -74,17 +76,17 @@ const NavBarContents = () => {
       <NavbarContent as="div" justify="end">
         {isLoggedIn ? (
           <div className="flex items-center gap-4">
-            <p>{userData?.nickname}</p>
+            <p>{user?.nickname}</p>
             <Dropdown placement="bottom-end">
               <DropdownTrigger>
-                {userData?.avatar ? (
+                {user?.avatar ? (
                   <Avatar
                     isBordered
                     as="button"
                     className="transition-transform"
                     color="secondary"
                     name="profile"
-                    src={`${userData?.avatar}?${new Date().getTime()}`}
+                    src={`${user?.avatar}?${new Date().getTime()}`}
                   />
                 ) : (
                   <Avatar

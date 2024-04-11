@@ -365,27 +365,42 @@ export default function ReviewEditModal({ review_id, disclosure }: Props) {
   const handleEditReview = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    const updatedImages = await Promise.all(
+    const uploadResults = await Promise.all(
       files.map(async (file) => {
         const uuid = crypto.randomUUID();
         const filePath = `reviewImage/${uuid}`;
-
-        // const { data, error } = await clientSupabase.storage.from('reviewImage').upload(filePath, file, {
-        //   cacheControl: '3600',
-        //   upsert: true
-        // });
-
-        // if (error) {
-        //   console.error('업로드 오류', error.message);
-        //   throw error;
-        // }
-
-        // const { data: imageUrl } = await clientSupabase.storage.from('reviewImage').getPublicUrl(data.path);
-        // return imageUrl.publicUrl;
-
-        editImgsMutation.mutate({ filePath, file });
+        try {
+          const publicUrl = await editImgsMutation.mutateAsync({
+            filePath,
+            file
+          });
+          return publicUrl;
+        } catch (error) {
+          console.error('업로드 실패:', error);
+          return null;
+        }
       })
     );
+
+    const updatedImageUrls = uploadResults.filter((url) => url !== null);
+
+    if (updatedImageUrls.length > 0) {
+      const reviewTitle = document.getElementById('review_title')?.value;
+      const reviewContents = document.getElementById('review_contents')?.value;
+
+      addNewReviewMutation.mutate({
+        userId,
+        reviewTitle,
+        reviewContents,
+        imageUrls: updatedImageUrls,
+        show_nickname
+      });
+
+      alert('리뷰가 업데이트되었습니다.');
+      window.location.reload();
+    } else {
+      console.error('이미지 업로드에 실패했습니다.');
+    }
 
     const allImages = [...previewImages, ...updatedImages];
 
