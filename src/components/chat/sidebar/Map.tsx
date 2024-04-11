@@ -7,8 +7,10 @@ import { Card, CardBody, Pagination } from '@nextui-org/react';
 import { IoMdSearch } from 'react-icons/io';
 import DateTimePicker from './DateTimePicker';
 import { userStore } from '(@/store/userStore)';
-import { useUpdateMeetingLocationMutation } from '(@/hooks/useMutation/useUpdateMeetingLocationMutation)';
-import { useClearMeetingLocationMutation } from '(@/hooks/useMutation/useClearMettingLocation)';
+import {
+  useClearMeetingLocationMutation,
+  useUpdateMeetingLocationMutation
+} from '(@/hooks/useMutation/useMeetingLocationMutation)';
 
 declare global {
   interface Window {

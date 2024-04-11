@@ -11,7 +11,7 @@ const memberList = ({ params }: { params: { id: UUID } }) => {
   return (
     <>
       <Suspense>
-        {/* <InitParticipants roomId={roomId} /> */}
+        <InitParticipants roomId={roomId} />
         <div className="flex flex-col justify-center w-full align-middle">
           <RoomInformation roomId={roomId} />
           <AcceptanceRoomButtons roomId={roomId} />
