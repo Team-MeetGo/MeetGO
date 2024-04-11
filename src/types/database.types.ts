@@ -127,19 +127,19 @@ export type Database = {
           created_at: string;
           part_id: string;
           room_id: string;
-          user_id: string | null;
+          user_id: string;
         };
         Insert: {
           created_at?: string;
           part_id?: string;
           room_id?: string;
-          user_id?: string | null;
+          user_id: string;
         };
         Update: {
           created_at?: string;
           part_id?: string;
           room_id?: string;
-          user_id?: string | null;
+          user_id?: string;
         };
         Relationships: [
           {
@@ -155,6 +155,52 @@ export type Database = {
             isOneToOne: false;
             referencedRelation: 'users';
             referencedColumns: ['user_id'];
+          }
+        ];
+      };
+      remember_last_msg: {
+        Row: {
+          chatting_room_id: string;
+          created_at: string;
+          id: string;
+          last_msg_id: string;
+          user_id: string;
+        };
+        Insert: {
+          chatting_room_id?: string;
+          created_at?: string;
+          id?: string;
+          last_msg_id: string;
+          user_id?: string;
+        };
+        Update: {
+          chatting_room_id?: string;
+          created_at?: string;
+          id?: string;
+          last_msg_id?: string;
+          user_id?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: 'public_remember_last_msg_chatting_room_id_fkey';
+            columns: ['chatting_room_id'];
+            isOneToOne: false;
+            referencedRelation: 'chatting_room';
+            referencedColumns: ['chatting_room_id'];
+          },
+          {
+            foreignKeyName: 'public_remember_last_msg_last_msg_id_fkey';
+            columns: ['last_msg_id'];
+            isOneToOne: false;
+            referencedRelation: 'messages';
+            referencedColumns: ['message_id'];
+          },
+          {
+            foreignKeyName: 'public_remember_last_msg_user_id_fkey';
+            columns: ['user_id'];
+            isOneToOne: false;
+            referencedRelation: 'users';
+            referencedColumns: ['id'];
           }
         ];
       };

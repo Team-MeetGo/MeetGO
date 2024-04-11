@@ -16,7 +16,7 @@ import { useRoomInfoWithRoomIdQuery } from '(@/hooks/useQueries/useMeetingQuery)
 const AcceptanceRoomButtons = ({ roomId }: { roomId: UUID }) => {
   const router = useRouter();
   const { user } = userStore((state) => state);
-  const user_id = String(user ? user[0].user_id : null);
+  const user_id = String(user?.user_id!);
   const room_id = String(roomId);
   const participants = useParticipantsQuery(roomId);
   const deleteMemberMutation = useDeleteMember(user_id);
@@ -74,7 +74,7 @@ const AcceptanceRoomButtons = ({ roomId }: { roomId: UUID }) => {
   };
 
   return (
-    <div className="h-100 w-16 flex flex-col justify-end gap-8">
+    <div className="h-100 w-40 flex flex-row justify-end gap-8">
       <button
         onClick={() => {
           gotoLobby();
