@@ -3,6 +3,9 @@
 import { useChatDataQuery, useRoomDataQuery } from '(@/hooks/useQueries/useChattingQuery)';
 import { clientSupabase } from '(@/utils/supabase/client)';
 import React, { useEffect, useRef, useState } from 'react';
+import { Card, CardBody, Pagination } from '@nextui-org/react';
+import { IoMdSearch } from 'react-icons/io';
+import DateTimePicker from './DateTimePicker';
 
 declare global {
   interface Window {
@@ -137,6 +140,7 @@ const Map: React.FC<MapProps> = ({ userId, chatRoomId }) => {
     const places = new window.kakao.maps.services.Places();
     if (searchText === '') {
       alert('검색어를 입력해 주세요.');
+      return;
     }
     places.keywordSearch(searchText, (data: any, status: any, pagination: any) => {
       if (status === window.kakao.maps.services.Status.OK) {
@@ -167,7 +171,7 @@ const Map: React.FC<MapProps> = ({ userId, chatRoomId }) => {
         setSearchText('');
       } else {
         alert('검색 결과가 없습니다.');
-        console.error('실패', status);
+        setSearchText('');
       }
     });
   };
@@ -186,97 +190,104 @@ const Map: React.FC<MapProps> = ({ userId, chatRoomId }) => {
       return;
     }
 
-    if (!isLocationSelected) {
-      // 장소 선택 안되었을 때
-      const { error } = await clientSupabase
-        .from('chatting_room')
-        .update({ meeting_location: barName })
-        .eq('chatting_room_id', chatRoomId);
-      if (error) {
-        console.log('서버에 미팅 장소 추가 에러', error);
+    try {
+      // 선택한 장소의 이름이 이미 선택된 장소와 같다면, 선택을 해제
+      if (selectedMeetingLocation === barName) {
+        setSelectedMeetingLocation('');
+        setisLocationSelected(false);
+        await clientSupabase
+          .from('chatting_room')
+          .update({ meeting_location: null })
+          .eq('chatting_room_id', chatRoomId);
+      } else {
+        // 선택한 장소의 이름을 선택된 장소로 업데이트합니다.
+        setSelectedMeetingLocation(barName);
+        setisLocationSelected(true);
+        await clientSupabase
+          .from('chatting_room')
+          .update({ meeting_location: barName })
+          .eq('chatting_room_id', chatRoomId);
       }
-    } else {
-      const { error } = await clientSupabase
-        .from('chatting_room')
-        .update({ meeting_location: null })
-        .eq('chatting_room_id', chatRoomId);
-      if (error) {
-        console.log('서버에 미팅 장소 제거 에러', error);
-      }
+    } catch (error) {
+      console.error('서버에 미팅 장소 업데이트 에러:', error);
     }
   };
 
   return (
-    <div>
-      <p>미팅 장소 : {selectedMeetingLocation}</p>
-      <form
-        onSubmit={(e) => {
-          e.preventDefault();
-          searchNewPlaces();
-        }}
-      >
-        장소 검색:
-        <input type="text" className="border" value={searchText} onChange={(e) => setSearchText(e.target.value)} />
-        <button type="submit">검색</button>
-      </form>
-      <div id="map" className="w-96 h-96"></div>
-      <div style={{ maxHeight: '500px', overflowY: 'auto' }}>
+    <div className="z-10">
+      <h1 className="font-semibold text-2xl mb-2.5">미팅 장소</h1>
+      <Card className="border border-mainColor shadow-none mb-6">
+        <CardBody className=" h-[60px]">
+          <p className="text-lg">{selectedMeetingLocation}</p>
+        </CardBody>
+      </Card>
+
+      <div className="border-t border-gray2 mb-[26px]"></div>
+
+      <DateTimePicker chatRoomId={chatRoomId} />
+
+      <h1 className="font-semibold text-2xl mb-2.5 mt-7">장소 검색</h1>
+      <Card className="border border-gray2 shadow-none mb-6">
+        <CardBody className=" h-[60px]">
+          <form
+            onSubmit={(e) => {
+              e.preventDefault();
+              searchNewPlaces();
+            }}
+            className="flex flex-row justify-between"
+          >
+            <input
+              type="text"
+              className="outline-none"
+              value={searchText}
+              placeholder="장소 검색하기"
+              onChange={(e) => setSearchText(e.target.value)}
+            />
+            <button type="submit" className="bg-transparent border-none p-0">
+              <IoMdSearch size={25} color="#A1A1AA" />
+            </button>
+          </form>
+        </CardBody>
+      </Card>
+
+      <div id="map" className="w-70 h-80"></div>
+      <div className="flex flex-col justify-center place-item-center">
         {bars.map((bar, index) => (
-          <div key={index} className="border">
-            <div className="flex flex-row justify-between">
-              <h1>{bar.place_name}</h1>
-              {/* {userId === leaderId &&
-                (selectedMeetingLocation === '' ? (
-                  <button
-                    onClick={() => {
-                      handleSelectLocation(bar.place_name);
-                    }}
-                  >
-                    {isLocationSelected ? '취소' : '선택'}
-                  </button>
-                ) : selectedMeetingLocation === bar.place_name ? (
-                  <button
-                    onClick={() => {
-                      handleSelectLocation('');
-                    }}
-                  >
-                    {isLocationSelected ? '취소' : '선택'}
-                  </button>
-                ) : (
-                  <div></div>
-                ))} */}
-              {selectedMeetingLocation === '' ? (
-                <button
-                  onClick={() => {
-                    handleSelectLocation(bar.place_name);
-                  }}
-                >
-                  {isLocationSelected ? '취소' : '선택'}
-                </button>
-              ) : selectedMeetingLocation === bar.place_name ? (
-                <button
-                  onClick={() => {
-                    handleSelectLocation('');
-                  }}
-                >
-                  {isLocationSelected ? '취소' : '선택'}
-                </button>
-              ) : (
-                <div></div>
-              )}
+          <div
+            key={index}
+            className={`flex flex-col justify-center border-b-1 border-gray2 py-4 ${
+              selectedMeetingLocation === bar.place_name ? 'bg-purpleSecondary' : ''
+            }`}
+            // onClick={() => {
+            //   if (userId === leaderId) {
+            //     handleSelectLocation(selectedMeetingLocation === bar.place_name ? '' : bar.place_name);
+            //   }
+            // }}
+            onClick={() => {
+              handleSelectLocation(selectedMeetingLocation === bar.place_name ? '' : bar.place_name);
+            }}
+            style={{ cursor: 'pointer', alignItems: 'center' }}
+          >
+            <div className="flex flex-col text-left">
+              <h1 className="text-base mb-2.5">{bar.place_name}</h1>
+              <div className="text-sm">
+                <p>{bar.address_name}</p>
+                <p>{bar.place_url}</p>
+                <p>{bar.phone}</p>
+              </div>
             </div>
-            <p>{bar.address_name}</p>
-            <p>{bar.place_url}</p>
-            <p>{bar.phone}</p>
           </div>
         ))}
       </div>
-      <div className="flex justify-center">
-        {Array.from({ length: totalPages }, (_, index) => (
-          <button className=" px-3" key={index} onClick={() => handlePageClick(index + 1)}>
-            {index + 1}
-          </button>
-        ))}
+      <div className="flex justify-center mt-5">
+        <Pagination
+          showControls
+          total={totalPages}
+          initialPage={currentPage}
+          variant="bordered"
+          color="secondary"
+          onChange={(pageNumber: number) => handlePageClick(pageNumber)}
+        />
       </div>
     </div>
   );
