@@ -143,21 +143,6 @@ export const useUploadImgsMutation = () => {
   return uploadImgsMutation;
 };
 
-// export const useGetFilePathMutation = () => {
-//   const queryClient = useQueryClient();
-//   const getFilePathMutation = useMutation({
-//     mutationFn: async (uploadImgsData) => {
-//       const { data: imageUrl } = clientSupabase.storage.from('reviewImage').getPublicUrl(uploadImgsData.path);
-
-//       return imageUrl.publicUrl;
-//     },
-//     onSuccess: () => {
-//       queryClient.invalidateQueries({ queryKey: GET_IMGS_URL_QUERY_KEY });
-//     }
-//   });
-//   return getFilePathMutation;
-// };
-
 export const useEditReviewMutation = () => {
   const queryClient = useQueryClient();
   const editReviewMutation = useMutation({
@@ -193,7 +178,7 @@ export const useEditImgsMutation = () => {
   const queryClient = useQueryClient();
   const editImgsMutation = useMutation({
     mutationFn: async ({ filePath, file }: { filePath: string; file: File }) => {
-      const { data, error } = await clientSupabase.storage.from('reviewImage').upload(filePath, file, {
+      const { data: editImgsData, error } = await clientSupabase.storage.from('reviewImage').upload(filePath, file, {
         cacheControl: '3600',
         upsert: true
       });
@@ -203,8 +188,8 @@ export const useEditImgsMutation = () => {
         throw error;
       }
 
-      const { data: imageUrl } = await clientSupabase.storage.from('reviewImage').getPublicUrl(data.path);
-      return imageUrl.publicUrl;
+      const { data: imageUrlData } = await clientSupabase.storage.from('reviewImage').getPublicUrl(editImgsData.path);
+      return imageUrlData.publicUrl;
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: EDIT_IMGS_QUERY_KEY });
