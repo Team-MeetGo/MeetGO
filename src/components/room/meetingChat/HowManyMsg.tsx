@@ -1,12 +1,12 @@
 'use client';
 
 import { useMyChatRoomIdsQuery } from '(@/hooks/useQueries/useChattingQuery)';
-import { userStore } from '(@/store/userStore)';
+import { useGetUserDataQuery } from '(@/hooks/useQueries/useUserQuery)';
 import { clientSupabase } from '(@/utils/supabase/client)';
 import { useCallback, useEffect, useState } from 'react';
 
 const HowManyMsg = () => {
-  const { user } = userStore((state) => state);
+  const { data: user } = useGetUserDataQuery();
   const myChatRoomIds = useMyChatRoomIdsQuery(user?.user_id!);
   console.log(myChatRoomIds);
   const [countArr, setCountArr] = useState(Array(myChatRoomIds.length).fill(0));
