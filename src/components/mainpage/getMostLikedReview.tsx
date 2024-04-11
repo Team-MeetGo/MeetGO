@@ -10,7 +10,7 @@ const GetMostLikedReivew = () => {
 
   const getUserId = async () => {
     const userData = userStore.getState().user;
-    return userData && userData[0].user_id;
+    return userData && userData.user_id;
   };
 
   const checkLoginStatus = async () => {

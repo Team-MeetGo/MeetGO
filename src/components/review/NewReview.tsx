@@ -16,7 +16,7 @@ const NewReview = () => {
   const router = useRouter();
 
   const { user, setUser } = userStore((state) => state);
-  const userId = (user && user[0].user_id) as string;
+  const userId = (user && user.user_id) as string;
   const show_nickname = showNickname;
 
   const handleClose = () => {

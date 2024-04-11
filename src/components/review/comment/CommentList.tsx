@@ -25,7 +25,7 @@ const CommentList = ({ review_id, onUpdateCommentCount }: Props) => {
   const [updatedComment, setUpdatedComment] = useState<CommentListType[]>([]);
 
   const { user } = userStore((state) => state);
-  const userId = user && user[0].user_id;
+  const userId = user && user.user_id;
 
   const useCommentDataQuery = (review_id: string) => {
     const { data: commentData } = useQuery({
