@@ -41,7 +41,7 @@ const NavBarContents = () => {
   };
 
   return (
-    <Navbar className="py-[20px]">
+    <Navbar className="py-[20px] h-auto">
       <NavbarBrand>
         <Link href="/" className="max-w-[150px]">
           <Image
@@ -55,7 +55,7 @@ const NavBarContents = () => {
           />
         </Link>
       </NavbarBrand>
-      <NavbarContent className="hidden sm:flex gap-4" justify="center">
+      <NavbarContent className="hidden sm:flex gap-4 h-auto" justify="center">
         <NavbarItem>
           <Link color="foreground" href="/meetingRoom">
             로비
@@ -73,7 +73,7 @@ const NavBarContents = () => {
           </NavbarItem> */}
       </NavbarContent>
 
-      <NavbarContent as="div" justify="end">
+      <NavbarContent className="h-auto" as="div" justify="end">
         {isLoggedIn ? (
           <div className="flex items-center gap-4">
             <p>{user?.nickname}</p>
@@ -81,22 +81,13 @@ const NavBarContents = () => {
               <DropdownTrigger>
                 {user?.avatar ? (
                   <Avatar
-                    isBordered
                     as="button"
                     className="transition-transform"
                     color="secondary"
-                    name="profile"
                     src={`${user?.avatar}?${new Date().getTime()}`}
                   />
                 ) : (
-                  <Avatar
-                    isBordered
-                    showFallback
-                    as="button"
-                    className="transition-transform"
-                    color="secondary"
-                    size="sm"
-                  />
+                  <Avatar showFallback as="button" className="transition-transform" color="secondary" size="sm" />
                 )}
               </DropdownTrigger>
               <DropdownMenu aria-label="Profile Actions" variant="flat">

@@ -78,7 +78,6 @@ const AvatarForm = () => {
     } else {
       // 사용자 상태 업데이트 - 스토어를 업데이트 해야 됨
       if (user) {
-        setUser({ ...user, avatar: publicURL });
         alert('프로필 사진이 업데이트되었습니다.');
         setIsEditing(!isEditing);
       } else {
