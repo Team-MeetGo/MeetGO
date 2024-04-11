@@ -14,12 +14,13 @@ const GetMostLikedReivew = () => {
   };
 
   const checkLoginStatus = async () => {
+    // console.log('오류테스트 2');
     const userId = await getUserId();
-    if (userId !== null) {
-      setIsLoggedIn(true);
-    } else {
-      setIsLoggedIn(false);
-    }
+    // if (userId !== null) {
+    //   setIsLoggedIn(true);
+    // } else {
+    //   setIsLoggedIn(false);
+    // }
   };
 
   useEffect(() => {

@@ -10,6 +10,8 @@ import { useModalStore } from '(@/store/modalStore)';
 import { authValidation } from '(@/utils/Validation)';
 import { IsValidateShow, LoginData } from '(@/types/userTypes)';
 import { userStore } from '(@/store/userStore)';
+import { useQueryClient } from '@tanstack/react-query';
+import { USER_DATA_QUERY_KEY } from '(@/query/user/userQueryKeys)';
 
 const LOGIN_FORM_LIST = [
   {
@@ -27,6 +29,8 @@ const LOGIN_FORM_LIST = [
 ];
 
 const LoginForm = () => {
+  const queryClient = useQueryClient();
+
   const [loginData, setLoginData] = useState<LoginData>({ userId: '', password: '' });
   const [isValidateShow, setIsValidateShow] = useState<IsValidateShow>({
     userId: true,
@@ -68,8 +72,15 @@ const LoginForm = () => {
         password: loginData.password
       });
       if (session) {
-        showModal();
         setIsLoggedIn(true);
+
+        // 캐시 무효화
+        // 맨 처음에 메인 페이지 -> 로그인
+        queryClient.invalidateQueries({
+          queryKey: [USER_DATA_QUERY_KEY]
+        });
+
+        showModal();
         console.log('로그인 성공: ', session);
       } else if (error) throw error;
     } catch (error: any) {

@@ -21,7 +21,7 @@ import { use, useEffect } from 'react';
 
 const MetPeople = () => {
   const queryClient = useQueryClient();
-  const { user, setUser } = userStore((state) => state);
+  const { data: user, isPending, isError, error } = useGetUserDataQuery();
   const userId = user?.user_id ?? '';
   const userGender = user?.gender ?? '';
   const metPeopleList = useMetPeople(userId, userGender);
@@ -34,7 +34,7 @@ const MetPeople = () => {
         .channel('kakaoId_channel')
         .on(
           'postgres_changes',
-          { event: 'INSERT', schema: 'public', table: 'kakaoId_request', filter: `request_Id=eq.${userId}` },
+          { event: '*', schema: 'public', table: 'kakaoId_request', filter: `request_Id=eq.${userId}` },
           (payload) => {
             console.log('요청 보내서 바뀜', payload);
             queryClient.invalidateQueries({ queryKey: [KAKAOID_REQUEST_QUERY_KEY, userId, userGender] });
@@ -42,28 +42,13 @@ const MetPeople = () => {
         )
         .on(
           'postgres_changes',
-          { event: 'INSERT', schema: 'public', table: 'kakaoId_request', filter: `response_Id=eq.${userId}` },
+          { event: '*', schema: 'public', table: 'kakaoId_request', filter: `response_Id=eq.${userId}` },
           (payload) => {
-            console.log('요청 보내서 바뀜', payload);
+            console.log('요청받아서 바뀜', payload);
             queryClient.invalidateQueries({ queryKey: [KAKAOID_REQUEST_QUERY_KEY, userId, userGender] });
           }
         )
-        .on(
-          'postgres_changes',
-          { event: 'UPDATE', schema: 'public', table: 'kakaoId_request', filter: `request_Id=eq.${userId}` },
-          (payload) => {
-            console.log('수락 또는 거절해서 바뀜', payload);
-            queryClient.invalidateQueries({ queryKey: [KAKAOID_REQUEST_QUERY_KEY, userId, userGender] });
-          }
-        )
-        .on(
-          'postgres_changes',
-          { event: 'UPDATE', schema: 'public', table: 'kakaoId_request', filter: `response_Id=eq.${userId}` },
-          (payload) => {
-            console.log('수락 또는 거절해서 바뀜', payload);
-            queryClient.invalidateQueries({ queryKey: [KAKAOID_REQUEST_QUERY_KEY, userId, userGender] });
-          }
-        );
+        .subscribe();
 
       return () => {
         clientSupabase.removeChannel(channel);
@@ -88,34 +73,16 @@ const MetPeople = () => {
     );
   };
 
-  const handleAcceptKakaoId = (responseId: string, newStatus: string) => {
+  const handleKakaoIdResponse = (responseId: string, newStatus: '수락' | '거절') => {
     acceptKakaoIdMutate(
       {
         requestId: userId,
         responseId,
-        newStatus: '수락'
+        newStatus
       },
       {
         onSuccess: () => {
-          alert('카톡ID 요청을 수락했습니다.');
-          queryClient.invalidateQueries({
-            queryKey: [KAKAOID_REQUEST_QUERY_KEY, userId, userGender]
-          });
-        }
-      }
-    );
-  };
-
-  const handleRejectKakaoId = (responseId: string, newStatus: string) => {
-    acceptKakaoIdMutate(
-      {
-        requestId: userId,
-        responseId,
-        newStatus: '거절'
-      },
-      {
-        onSuccess: () => {
-          alert('카톡ID 요청을 거절했습니다.');
+          alert(`카톡ID 요청을 ${newStatus === '수락' ? '수락했습니다.' : '거절했습니다.'}`);
           queryClient.invalidateQueries({
             queryKey: [KAKAOID_REQUEST_QUERY_KEY, userId, userGender]
           });
@@ -142,10 +109,10 @@ const MetPeople = () => {
             {userId === person.request_Id && person.requestStatus === '요청중' && <p className="text-xs">요청중</p>}
             {userId === person.response_Id && person.requestStatus === '요청중' && (
               <>
-                <button className="text-xs" onClick={() => handleAcceptKakaoId(person.user_id, '수락')}>
+                <button className="text-xs" onClick={() => handleKakaoIdResponse(person.user_id, '수락')}>
                   수락
                 </button>
-                <button className="text-xs" onClick={() => handleRejectKakaoId(person.user_id, '거절')}>
+                <button className="text-xs" onClick={() => handleKakaoIdResponse(person.user_id, '거절')}>
                   거절
                 </button>
               </>
