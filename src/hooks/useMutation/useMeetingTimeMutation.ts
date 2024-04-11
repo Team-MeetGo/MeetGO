@@ -1,15 +1,18 @@
+import { addMeetingTime } from '(@/query/chat/chatQueryFns)';
+import { MEETING_TIME_QUERY_KEY } from '(@/query/chat/chatQueryKeys)';
 import { clientSupabase } from '(@/utils/supabase/client)';
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 export const useUpdateMeetingTimeMutation = () => {
-  return useMutation({
-    mutationFn: async ({ chatRoomId, isoStringMeetingTime }: { chatRoomId: string; isoStringMeetingTime: string }) => {
-      const { data: updatedMeetingTime, error } = await clientSupabase
-        .from('chatting_room')
-        .update({ meeting_time: isoStringMeetingTime })
-        .eq('chatting_room_id', chatRoomId);
+  const queryClient = useQueryClient();
 
-      return { updatedMeetingTime, error };
+  const updateMeetingRoomMutation = useMutation({
+    mutationFn: async ({ chatRoomId, isoStringMeetingTime }: { chatRoomId: string; isoStringMeetingTime: string }) =>
+      await addMeetingTime({ chatRoomId, isoStringMeetingTime }),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: MEETING_TIME_QUERY_KEY });
     }
   });
+
+  return updateMeetingRoomMutation;
 };

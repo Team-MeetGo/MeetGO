@@ -28,18 +28,30 @@ export async function getMetPeople(userId: string, userGender: string) {
   // 상대방의 요청 상태 정보 포함하여 반환
   const metPeopleWithStatus = await Promise.all(
     metPeopleDetails.map(async (personDetails) => {
-      const { data: requestsMade } = await clientSupabase
+      // (1) requestId가 나이면서 responseId는 만났던 사람인 경우
+      const { data: requestsMade1 } = await clientSupabase
         .from('kakaoId_request')
         .select('request_status, created_at, request_Id, response_Id')
         .eq('request_Id', userId)
         .eq('response_Id', personDetails.user_id)
+        .order('created_at', { ascending: false });
+      //imit(1);
+
+      // (2) requestId가 만났던 사람이면서 responseId는 나인 경우
+      const { data: requestsMade2 } = await clientSupabase
+        .from('kakaoId_request')
+        .select('request_status, created_at, request_Id, response_Id')
+        .eq('request_Id', personDetails.user_id)
+        .eq('response_Id', userId)
         .order('created_at', { ascending: false })
-        .limit(1);
+        .limit(1); // .limit(1);
 
       let requestStatus = '요청전';
-      if (requestsMade && requestsMade.length > 0) {
-        requestStatus = requestsMade[0].request_status;
-        const { request_Id, response_Id } = requestsMade[0];
+
+      // (1)이 있는 경우
+      if (requestsMade1 && requestsMade1.length > 0) {
+        requestStatus = requestsMade1[0].request_status;
+        const { request_Id, response_Id } = requestsMade1[0];
 
         return {
           ...personDetails,
@@ -48,6 +60,20 @@ export async function getMetPeople(userId: string, userGender: string) {
           response_Id
         };
       }
+
+      // (2)이 있는 경우
+      if (requestsMade2 && requestsMade2.length > 0) {
+        requestStatus = requestsMade2[0].request_status;
+        const { request_Id, response_Id } = requestsMade2[0];
+
+        return {
+          ...personDetails,
+          requestStatus,
+          request_Id,
+          response_Id
+        };
+      }
+
       return {
         ...personDetails,
         requestStatus,

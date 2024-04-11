@@ -1,7 +1,6 @@
 'use client';
 
 import { useChatDataQuery, useRoomDataQuery } from '(@/hooks/useQueries/useChattingQuery)';
-import { clientSupabase } from '(@/utils/supabase/client)';
 import React, { useEffect, useRef, useState } from 'react';
 import { Card, CardBody, Pagination } from '@nextui-org/react';
 import { IoMdSearch } from 'react-icons/io';

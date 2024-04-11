@@ -115,3 +115,17 @@ export const addMeetingLocation = async ({ chatRoomId, barName }: { chatRoomId: 
 export const deleteMeetingLocation = async (chatRoomId: string) => {
   await clientSupabase.from('chatting_room').update({ meeting_location: null }).eq('chatting_room_id', chatRoomId);
 };
+
+// 미팅 장소 추가
+export const addMeetingTime = async ({
+  chatRoomId,
+  isoStringMeetingTime
+}: {
+  chatRoomId: string;
+  isoStringMeetingTime: string;
+}) => {
+  await clientSupabase
+    .from('chatting_room')
+    .update({ meeting_time: isoStringMeetingTime })
+    .eq('chatting_room_id', chatRoomId);
+};
