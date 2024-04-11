@@ -7,11 +7,10 @@ import { GiHamburgerMenu } from 'react-icons/gi';
 import { Card, CardBody } from '@nextui-org/react';
 
 interface SideBarProps {
-  userId: string | null | undefined;
   chatRoomId: string;
 }
 
-const SideBar: React.FC<SideBarProps> = ({ userId, chatRoomId }) => {
+const SideBar: React.FC<SideBarProps> = ({ chatRoomId }) => {
   const [isSidebarOpen, setIsSidebarOpen] = useState<boolean>(false);
   const [finalDateTime, setFinalDateTime] = useState<string>();
 
@@ -57,7 +56,7 @@ const SideBar: React.FC<SideBarProps> = ({ userId, chatRoomId }) => {
                 <p className=" justify-start items-center text-lg">{finalDateTime}</p>
               </CardBody>
             </Card>
-            <Map userId={userId} chatRoomId={chatRoomId} />
+            <Map chatRoomId={chatRoomId} />
           </div>
         )}
       </div>

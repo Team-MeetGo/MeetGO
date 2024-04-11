@@ -7,6 +7,7 @@ import { getMonth, getYear } from 'date-fns';
 import { IoChevronBackSharp } from 'react-icons/io5';
 import { IoChevronForwardSharp } from 'react-icons/io5';
 import { clientSupabase } from '(@/utils/supabase/client)';
+import { userStore } from '(@/store/userStore)';
 
 interface DateTimePickerProps {
   chatRoomId: string;
@@ -16,6 +17,10 @@ const DateTimePicker: React.FC<DateTimePickerProps> = forwardRef(({ chatRoomId }
   const [selectedMeetingTime, setSelectedMeetingTime] = useState<Date>(new Date());
   const [isCalendarOpen, setIsCalendarOpen] = useState<boolean>(false);
   const datePickerRef = useRef<DatePicker>(null);
+
+  // userStore에서 userId 받아오기
+  const { user } = userStore((state) => state);
+  const userId = user?.user_id;
 
   const toggleCalendar = () => {
     setIsCalendarOpen(!isCalendarOpen);

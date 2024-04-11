@@ -6,6 +6,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { Card, CardBody, Pagination } from '@nextui-org/react';
 import { IoMdSearch } from 'react-icons/io';
 import DateTimePicker from './DateTimePicker';
+import { userStore } from '(@/store/userStore)';
 
 declare global {
   interface Window {
@@ -14,11 +15,10 @@ declare global {
 }
 
 interface MapProps {
-  userId: string | null | undefined;
   chatRoomId: string;
 }
 
-const Map: React.FC<MapProps> = ({ userId, chatRoomId }) => {
+const Map: React.FC<MapProps> = ({ chatRoomId }) => {
   const mapRef = useRef<string>();
   const [map, setMap] = useState<any>();
   const [markers, setMarkers] = useState<any>();
@@ -29,6 +29,10 @@ const Map: React.FC<MapProps> = ({ userId, chatRoomId }) => {
   const [searchText, setSearchText] = useState<string>('');
   const [isLocationSelected, setisLocationSelected] = useState<boolean>(false);
   const [selectedMeetingLocation, setSelectedMeetingLocation] = useState<string>();
+
+  // userStore에서 userId 받아오기
+  const { user } = userStore((state) => state);
+  const userId = user?.user_id;
 
   // useRoomDataQuery로 리더 아이디 가져오기
   const room = useRoomDataQuery(chatRoomId);
