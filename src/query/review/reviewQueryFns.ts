@@ -4,6 +4,8 @@ import {
   DELETE_REVIEW_QUERY_KEY,
   EDIT_IMGS_QUERY_KEY,
   EDIT_REVIEW_QUERY_KEY,
+  GET_IMGS_URL_QUERY_KEY,
+  NEW_IMGS_QUERY_KEY,
   NEW_REVIEW_QUERY_KEY
 } from './reviewQueryKeys';
 
@@ -115,6 +117,51 @@ export const useNewReviewMutation = () => {
   return newReviewMutation;
 };
 
+export const useUploadImgsMutation = () => {
+  const queryClient = useQueryClient();
+  const uploadImgsMutation = useMutation({
+    mutationFn: async ({ filePath, file }: { filePath: string; file: File }) => {
+      const { data: uploadImgsData, error: uploadImgError } = await clientSupabase.storage
+        .from('reviewImage')
+        .upload(filePath, file, {
+          cacheControl: '3600',
+          upsert: true
+        });
+
+      if (uploadImgError) {
+        console.error('insert error', uploadImgError);
+        throw uploadImgError;
+      }
+      const { data: imageUrlData } = await clientSupabase.storage.from('reviewImage').getPublicUrl(uploadImgsData.path);
+      // if (getImageUrlError) {
+      //   console.error('Error getting image URL', getImageUrlError);
+      //   throw getImageUrlError;
+      // }
+
+      return imageUrlData.publicUrl;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: NEW_IMGS_QUERY_KEY });
+    }
+  });
+  return uploadImgsMutation;
+};
+
+// export const useGetFilePathMutation = () => {
+//   const queryClient = useQueryClient();
+//   const getFilePathMutation = useMutation({
+//     mutationFn: async (uploadImgsData) => {
+//       const { data: imageUrl } = clientSupabase.storage.from('reviewImage').getPublicUrl(uploadImgsData.path);
+
+//       return imageUrl.publicUrl;
+//     },
+//     onSuccess: () => {
+//       queryClient.invalidateQueries({ queryKey: GET_IMGS_URL_QUERY_KEY });
+//     }
+//   });
+//   return getFilePathMutation;
+// };
+
 export const useEditReviewMutation = () => {
   const queryClient = useQueryClient();
   const editReviewMutation = useMutation({
@@ -126,7 +173,7 @@ export const useEditReviewMutation = () => {
     }: {
       editedTitle: string;
       editedContent: string;
-      allImages: (string | void)[];
+      allImages: string[];
       review_id: string;
     }) => {
       const { data: updateReview, error: editReviewError } = await clientSupabase

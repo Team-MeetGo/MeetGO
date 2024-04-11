@@ -1,12 +1,11 @@
 import { useState, ChangeEvent, FormEvent } from 'react';
 import Image from 'next/image';
 import { Button, Checkbox, Modal, ModalBody, ModalContent, useDisclosure } from '@nextui-org/react';
-import { clientSupabase } from '(@/utils/supabase/client)';
 import { useRouter } from 'next/navigation';
 import { MdCancel } from 'react-icons/md';
 import { userStore } from '(@/store/userStore)';
 import { LuImagePlus } from 'react-icons/lu';
-import { useNewReviewMutation } from '(@/query/review/reviewQueryFns)';
+import { useNewReviewMutation, useUploadImgsMutation } from '(@/query/review/reviewQueryFns)';
 import { FaCheck } from 'react-icons/fa6';
 
 const NewReview = () => {
@@ -63,6 +62,7 @@ const NewReview = () => {
   };
 
   const addNewReviewMutation = useNewReviewMutation();
+  const addUploadImgsMutation = useUploadImgsMutation();
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -72,32 +72,34 @@ const NewReview = () => {
       const uuid = crypto.randomUUID();
       const filePath = `reviewImage/${uuid}`;
 
-      const uploadImage = async (filePath: string, file: File) => {
-        const { data, error } = await clientSupabase.storage.from('reviewImage').upload(filePath, file, {
-          cacheControl: '3600',
-          upsert: true
+      try {
+        const publicUrl = await addUploadImgsMutation.mutateAsync({
+          filePath,
+          file
         });
 
-        if (error) {
-          console.error('업로드 오류', error.message);
-          throw error;
-        }
-
-        return data;
-      };
-
-      const data = await uploadImage(filePath, file);
-      const { data: imageUrl } = clientSupabase.storage.from('reviewImage').getPublicUrl(data.path);
-      imageUrls.push(imageUrl.publicUrl);
+        imageUrls.push(publicUrl);
+      } catch (error) {
+        console.error('업로드 실패:', error);
+      }
     }
+    if (imageUrls.length > 0) {
+      const reviewTitle = (document.getElementById('review_title') as HTMLInputElement)?.value;
+      const reviewContents = (document.getElementById('review_contents') as HTMLInputElement)?.value;
 
-    const reviewTitle = (document.getElementById('review_title') as HTMLInputElement)?.value;
-    const reviewContents = (document.getElementById('review_contents') as HTMLInputElement)?.value;
+      addNewReviewMutation.mutate({
+        userId,
+        reviewTitle,
+        reviewContents,
+        imageUrls,
+        show_nickname
+      });
 
-    addNewReviewMutation.mutate({ userId, reviewTitle, reviewContents, imageUrls, show_nickname });
-
-    alert('리뷰가 등록되었습니다.');
-    window.location.reload();
+      alert('리뷰가 등록되었습니다.');
+      window.location.reload();
+    } else {
+      console.error('이미지 업로드에 실패했습니다.');
+    }
   };
 
   return (
