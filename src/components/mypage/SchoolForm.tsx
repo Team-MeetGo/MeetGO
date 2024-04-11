@@ -3,8 +3,8 @@
 import { emailCodeAPI, emailConfirmAPI, schoolConfirmAPI } from '(@/utils/api/emailConfirmAPI)';
 import { useState } from 'react';
 import { schoolValidation } from '(@/utils/Validation)';
-import { userStore } from '(@/store/userStore)';
 import { clientSupabase } from '(@/utils/supabase/client)';
+import { useGetUserDataQuery } from '(@/hooks/useQueries/useUserQuery)';
 
 const SchoolForm = () => {
   const [schoolEmail, setSchoolEmail] = useState('');
@@ -17,7 +17,7 @@ const SchoolForm = () => {
     univName: ''
   });
 
-  const { user, setUser } = userStore((state) => state);
+  const { data: user } = useGetUserDataQuery();
 
   /** 학교 업데이트하는 로직 */
   const updateSchool = async () => {

@@ -1,5 +1,4 @@
 import { useGetUserDataQuery } from '(@/hooks/useQueries/useUserQuery)';
-import { userStore } from '(@/store/userStore)';
 import { clientSupabase } from '(@/utils/supabase/client)';
 import { Avatar, avatar } from '@nextui-org/react';
 import Image from 'next/image';

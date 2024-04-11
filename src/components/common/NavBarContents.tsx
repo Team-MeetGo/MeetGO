@@ -41,7 +41,7 @@ const NavBarContents = () => {
   };
 
   return (
-    <Navbar>
+    <Navbar className="py-[20px]">
       <NavbarBrand>
         <Link href="/" className="max-w-[150px]">
           <Image
@@ -112,9 +112,18 @@ const NavBarContents = () => {
           </div>
         ) : (
           <div>
-            <Link href="/users/login">로그인</Link>
-            <Link href="/users/join">회원가입</Link>
-            <button onClick={signOut}>로그아웃</button>
+            <Link
+              href="/users/login"
+              className="bg-white rounded-[12px] px-[20px] py-[12px] text-[18px] text-[#252642] font-medium"
+            >
+              로그인
+            </Link>
+            <Link
+              href="/users/join"
+              className="bg-mainColor rounded-[12px] px-[20px] py-[12px] text-[18px] text-white font-medium"
+            >
+              회원가입
+            </Link>
           </div>
         )}
       </NavbarContent>
