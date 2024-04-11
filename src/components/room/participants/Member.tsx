@@ -10,8 +10,8 @@ type UserType = Database['public']['Tables']['users']['Row'];
 const Member = ({ params }: { params: { id: string } }) => {
   const { participants, setParticipants } = userStore((state) => state);
   const [leaderMember, setLeaderMember] = useState('');
-  const user_id = params.id;
-  const roomInformation = useRoomInfoWithRoomIdQuery(user_id);
+  const room_id = params.id;
+  const roomInformation = useRoomInfoWithRoomIdQuery(room_id);
 
   useEffect(() => {
     //리더를 찾아 표시
