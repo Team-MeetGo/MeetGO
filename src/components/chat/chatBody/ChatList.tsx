@@ -21,27 +21,17 @@ const ChatList = ({ user, chatRoomId }: { user: User | null; chatRoomId: string 
   const { hasMore, messages, setMessages } = chatStore((state) => state);
   const [isScrolling, setIsScrolling] = useState(false);
   const [isScrollTop, setIsScrollTop] = useState(true);
-  const [newAddedMsgNum, setNewAddedMsgNum] = useState(0);
   const [count, setCount] = useState(1);
+  const [newAddedMsgNum, setNewAddedMsgNum] = useState(0);
   const [lastCheckedDiv, setLastCheckedDiv] = useState<HTMLElement | null>();
-
+  const [checkedLastMsg, setCheckedLastMsg] = useState(false);
   const room = useRoomDataQuery(chatRoomId);
   const roomId = room?.roomId;
-
   const lastMsgId = useMyLastMsgs(user?.id!, chatRoomId);
-  console.log(lastMsgId);
-
-  const rememberLastMsg = () => {
-    const lastDiv = document.getElementById(` ${messages[messages.length - 1].message_id}`);
-  };
-
-  // useEffect(() => {
-  //   if (lastMsgId) setLastCheckedDiv(document.getElementById(`${lastMsgId[0].last_msg_id}`));
-  // }, []);
 
   useEffect(() => {
     if (roomId && chatRoomId) {
-      // INSERT, DELETE 구독
+      // "messages" table Realtime INSERT, DELETE 구독로직
       const channel = clientSupabase
         .channel(chatRoomId)
         .on(
@@ -74,87 +64,59 @@ const ChatList = ({ user, chatRoomId }: { user: User | null; chatRoomId: string 
   }, [messages, setMessages, isScrolling, roomId, chatRoomId]);
 
   useEffect(() => {
-    const scrollBox = scrollRef.current;
-    if (scrollBox && isScrolling === false) {
-      scrollBox.scrollTop = scrollBox.scrollHeight;
-    }
-  }, [isScrolling]);
-
-  // 처음에 로드될 시 스크롤 조정
-  useEffect(() => {
+    // 이전에 저장된 마지막 메세지가 있으면 그 메세지 강조처리 -> 처음 로드 시에만 실행(의존성배열 = [])
     const scrollBox = scrollRef.current;
     if (lastMsgId && lastMsgId.length) {
       let lastDiv = document.getElementById(`${lastMsgId[0].last_msg_id}`);
-      // if (lastCheckedDiv) {
       if (lastDiv) {
-        setLastCheckedDiv(lastDiv);
-        if (scrollBox && isScrolling === false && lastCheckedDiv) {
-          lastCheckedDiv.style.backgroundColor = 'pink';
-          lastCheckedDiv.scrollIntoView({ block: 'center' });
-        }
-        if (isScrolling) {
-          console.log('이제 스크롤중');
-          // setLastCheckedDiv(null);
-          lastDiv.style.backgroundColor = 'transparent';
-          lastDiv.scrollIntoView(false);
+        if (scrollBox && isScrolling === false) {
+          setLastCheckedDiv(lastDiv);
+          lastDiv.style.backgroundColor = 'pink';
+          lastDiv.scrollIntoView({ block: 'center' });
+          setCheckedLastMsg(true);
         }
       }
     }
-    // else if (isScrolling) setLastCheckedDiv(null);
-    // } else {
-    //   if (scrollBox && isScrolling === false) {
-    //     scrollBox.scrollTop = scrollBox.scrollHeight;
-    //   }
-    // }
-    //   if (scrollBox && isScrolling === false) {
-    //     // 스크롤 중이 아닐 때,
-    //     if (lastMsgId.length && lastDiv) {
-    //       // 저장된 마지막 메세지가 있고 + 그 div가 뷰포트에 있으면
-    //       if (lastCheckedDiv) lastCheckedDiv.style.backgroundColor = 'pink';
-    //       lastDiv.scrollIntoView({ block: 'center' });
-    //       if (isScrolling) setLastCheckedDiv(null);
-    //     } else {
-    //       // 저장된 마지막 메세지가 없거나 + 그 div가 뷰포트에 없으면
-    //       scrollBox.scrollTop = scrollBox.scrollHeight;
-    //     }
-    //   }
-    //   if (isScrolling && lastDiv) {
-    //     // 그 div가 뷰포트에 있는데 스크롤을 하면
-    //   }
-    // } else {
-    //   if (scrollBox && isScrolling === false) {
-    //     scrollBox.scrollTop = scrollBox.scrollHeight;
-    //   }
-  }, [isScrolling, lastCheckedDiv]);
+  }, []);
 
+  useEffect(() => {
+    const scrollBox = scrollRef.current;
+    if (scrollBox && !isScrolling) {
+      // 처음에 로드 시 스크롤 중이 아닐 때
+      if (!lastMsgId || !lastMsgId?.length) {
+        // 이전에 저장된 마지막 메세지가 없으면 그냥 스크롤 다운
+        scrollBox.scrollTop = scrollBox.scrollHeight;
+      } else {
+        // 이전에 저장된 마지막 메세지가 있고 그게 강조처리 되어있다가, 스크롤다운(마지막 메세지를 확인)되면 투명으로 변경
+        if (checkedLastMsg && lastCheckedDiv) {
+          lastCheckedDiv.style.backgroundColor = 'transparent';
+        }
+      }
+    }
+  }, [messages, isScrolling]);
+
+  // 마지막으로 읽은 메세지 기억하기
   const pathname = usePathname();
-
   const { mutate: mutateToUpdate } = useUpdateLastMsg(
     user?.id as string,
     chatRoomId as string,
     messages && messages.length > 0 ? messages[messages.length - 1].message_id : undefined
   );
-
   const { mutate: mutateToAdd } = useAddLastMsg(
     chatRoomId,
     user?.id as string,
     messages && messages.length > 0 ? messages[messages.length - 1].message_id : undefined
   );
 
-  // 마지막으로 읽은 메세지 기억하기
   useEffect(() => {
     return () => {
-      if (lastMsgId?.length) {
-        // 이전에 저장된 마지막 메세지가 있을 때
-        if (messages.length) {
-          // 채팅방에 메세지가 있으면
-          mutateToUpdate(); // 마지막 메세지 업데이트
-        }
-      } else {
-        // 이전에 저장된 마지막 메세지가 없을 때(처음 채팅방이 시작되었을 때)
-        mutateToAdd();
+      // 현재 나누는 메세지가 있을 때
+      if (messages.length) {
+        // 이전에 저장된 마지막 메세지가 있으면 현재 메세지 중 마지막 걸로 업데이트, 없으면 현재 메세지 중 마지막 메세지 추가하기
+        lastMsgId?.length ? mutateToUpdate() : mutateToAdd();
       }
     };
+    // 주소가 바뀔 때만 감지해서 저장 또는 업데이트
   }, [pathname]);
 
   // 스크롤 이벤트가 발생할 때
