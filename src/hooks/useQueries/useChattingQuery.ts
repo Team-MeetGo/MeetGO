@@ -8,7 +8,7 @@ import {
 import {
   CHATDATA_QUERY_KEY,
   MYCHAT_ROOMIDS,
-  MY_LAST_MSGS,
+  MY_LAST_MSGS_BEFORE,
   PARTICIPANTS_QUERY_KEY,
   ROOMDATA_QUERY_KEY
 } from '(@/query/chat/chatQueryKeys)';
@@ -48,7 +48,7 @@ export const useMyChatRoomIdsQuery = (userId: string) => {
 
 export const useMyLastMsgs = (user_id: string, chatRoomId: string) => {
   const { data: myLastMsgs } = useSuspenseQuery({
-    queryKey: [MY_LAST_MSGS, user_id, chatRoomId],
+    queryKey: [MY_LAST_MSGS_BEFORE, user_id, chatRoomId],
     queryFn: () => fetchMyLastMsgs(user_id, chatRoomId)
   });
   return myLastMsgs;

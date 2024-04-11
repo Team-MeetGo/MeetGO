@@ -28,6 +28,7 @@ const ChatList = ({ user, chatRoomId }: { user: User | null; chatRoomId: string 
   const room = useRoomDataQuery(chatRoomId);
   const roomId = room?.roomId;
   const lastMsgId = useMyLastMsgs(user?.id!, chatRoomId);
+  console.log('lastMsgId => ', lastMsgId && lastMsgId[0].last_msg_id);
   const prevMsgsLengthRef = useRef(messages.length);
   const lastDivRefs = useRef(messages);
 
@@ -85,10 +86,8 @@ const ChatList = ({ user, chatRoomId }: { user: User | null; chatRoomId: string 
         // 이전에 저장된 마지막 메세지가 있으면 그 메세지 강조처리
         // let lastDiv = document.getElementById(`${lastMsgId[0].last_msg_id}`);
         let ref = lastDivRefs.current.find((ref) => ref.message_id === lastMsgId[0].last_msg_id);
-        console.log(lastDivRefs.current);
         let lastDiv = ref && ref.current;
         if (lastDiv) {
-          console.log(lastDiv);
           setLastCheckedDiv(lastDiv);
           makeHereText(lastDiv);
           setCheckedLastMsg(true);
@@ -111,6 +110,7 @@ const ChatList = ({ user, chatRoomId }: { user: User | null; chatRoomId: string 
       } else {
         // 이전에 저장된 마지막 메세지가 있고 그게 강조처리 되어있다가, 스크롤다운(마지막 메세지를 확인)되면 투명으로 변경
         if (checkedLastMsg && lastCheckedDiv) {
+          setCheckedLastMsg(false);
           lastCheckedDiv.style.display = 'none';
         }
       }
@@ -148,9 +148,6 @@ const ChatList = ({ user, chatRoomId }: { user: User | null; chatRoomId: string 
   // insert 할 때 없어졌으면 좋겠는데..
 
   const makeHereText = (lastDiv: HTMLElement) => {
-    const hereText = document.createElement('p');
-    hereText.textContent = '여기까지 읽으셨습니다.';
-    lastDiv.appendChild(hereText);
     lastDiv.style.backgroundColor = 'pink';
     lastDiv.scrollIntoView({ block: 'center' });
   };
@@ -165,13 +162,23 @@ const ChatList = ({ user, chatRoomId }: { user: User | null; chatRoomId: string 
         <ChatSearch isScrollTop={isScrollTop} />
 
         {hasMore ? <LoadChatMore chatRoomId={chatRoomId} count={count} setCount={setCount} /> : <></>}
-        {messages?.map((msg, idx) => {
-          if (msg.send_from === user?.id) {
-            return <MyChat msg={msg} key={msg.message_id} idx={idx} lastDivRefs={lastDivRefs} />;
-          } else {
-            return <OthersChat msg={msg} key={msg.message_id} idx={idx} lastDivRefs={lastDivRefs} />;
-          }
-        })}
+        {messages?.map((msg, idx) => (
+          <>
+            {msg.send_from === user?.id ? (
+              <MyChat msg={msg} key={msg.message_id} idx={idx} lastDivRefs={lastDivRefs} />
+            ) : (
+              <OthersChat msg={msg} key={msg.message_id} idx={idx} lastDivRefs={lastDivRefs} />
+            )}
+            {lastMsgId &&
+            lastMsgId?.length &&
+            lastMsgId[0]?.last_msg_id !== messages[messages.length - 1].message_id &&
+            lastMsgId[0]?.last_msg_id === msg.message_id &&
+            isScrolling &&
+            checkedLastMsg ? (
+              <p>여기까지 읽으셨습니다.</p>
+            ) : null}
+          </>
+        ))}
       </div>
       {isScrolling ? (
         newAddedMsgNum === 0 ? (
