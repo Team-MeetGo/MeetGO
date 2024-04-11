@@ -8,6 +8,7 @@ import { IoChevronBackSharp } from 'react-icons/io5';
 import { IoChevronForwardSharp } from 'react-icons/io5';
 import { clientSupabase } from '(@/utils/supabase/client)';
 import { userStore } from '(@/store/userStore)';
+import { useUpdateMeetingTimeMutation } from '(@/hooks/useMutation/useMeetingTimeMutation)';
 
 interface DateTimePickerProps {
   chatRoomId: string;
@@ -27,21 +28,15 @@ const DateTimePicker: React.FC<DateTimePickerProps> = forwardRef(({ chatRoomId }
     console.log(selectedMeetingTime);
   };
 
+  const updateMeetingTimeMutation = useUpdateMeetingTimeMutation();
+
   useEffect(() => {
     const isoStringMeetingTime = selectedMeetingTime.toISOString();
-
-    // 슈퍼베이스에 시간 추가
-    const updateMeetingTime = async () => {
-      const { error } = await clientSupabase
-        .from('chatting_room')
-        .update({ meeting_time: isoStringMeetingTime })
-        .eq('chatting_room_id', chatRoomId);
-      if (error) {
-        console.log('서버에 미팅 시간 추가 에러', error);
-      }
-    };
-
-    updateMeetingTime();
+    try {
+      updateMeetingTimeMutation.mutateAsync({ chatRoomId, isoStringMeetingTime });
+    } catch (error) {
+      console.log('미팅시간 업데이트 오류:', error);
+    }
   }, [selectedMeetingTime]);
 
   // months 배열을 선언
