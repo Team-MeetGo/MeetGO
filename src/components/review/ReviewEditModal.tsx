@@ -277,7 +277,7 @@ import { LuImagePlus } from 'react-icons/lu';
 import type { UseDisclosureReturn } from '@nextui-org/use-disclosure';
 import { useQuery } from '@tanstack/react-query';
 import { REVIEW_QUERY_KEY } from '(@/query/review/reviewQueryKeys)';
-import { fetchReviewData, useEditReviewMutation } from '(@/query/review/reviewQueryFns)';
+import { fetchReviewData, useEditImgsMutation, useEditReviewMutation } from '(@/query/review/reviewQueryFns)';
 
 type Props = {
   review_id: string;
@@ -360,6 +360,7 @@ export default function ReviewEditModal({ review_id, disclosure }: Props) {
   };
 
   const editReviewMutation = useEditReviewMutation();
+  const editImgsMutation = useEditImgsMutation();
 
   const handleEditReview = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -369,18 +370,20 @@ export default function ReviewEditModal({ review_id, disclosure }: Props) {
         const uuid = crypto.randomUUID();
         const filePath = `reviewImage/${uuid}`;
 
-        const { data, error } = await clientSupabase.storage.from('reviewImage').upload(filePath, file, {
-          cacheControl: '3600',
-          upsert: true
-        });
+        // const { data, error } = await clientSupabase.storage.from('reviewImage').upload(filePath, file, {
+        //   cacheControl: '3600',
+        //   upsert: true
+        // });
 
-        if (error) {
-          console.error('업로드 오류', error.message);
-          throw error;
-        }
+        // if (error) {
+        //   console.error('업로드 오류', error.message);
+        //   throw error;
+        // }
 
-        const { data: imageUrl } = await clientSupabase.storage.from('reviewImage').getPublicUrl(data.path);
-        return imageUrl.publicUrl;
+        // const { data: imageUrl } = await clientSupabase.storage.from('reviewImage').getPublicUrl(data.path);
+        // return imageUrl.publicUrl;
+
+        editImgsMutation.mutate({ filePath, file });
       })
     );
 

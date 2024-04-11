@@ -1,6 +1,11 @@
 import { clientSupabase } from '(@/utils/supabase/client)';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { DELETE_REVIEW_QUERY_KEY, EDIT_REVIEW_QUERY_KEY, NEW_REVIEW_QUERY_KEY } from './reviewQueryKeys';
+import {
+  DELETE_REVIEW_QUERY_KEY,
+  EDIT_IMGS_QUERY_KEY,
+  EDIT_REVIEW_QUERY_KEY,
+  NEW_REVIEW_QUERY_KEY
+} from './reviewQueryKeys';
 
 export const fetchAuthorData = async (review_id: string) => {
   const { data: reviewDetail, error } = await clientSupabase
@@ -121,7 +126,7 @@ export const useEditReviewMutation = () => {
     }: {
       editedTitle: string;
       editedContent: string;
-      allImages: string[];
+      allImages: (string | void)[];
       review_id: string;
     }) => {
       const { data: updateReview, error: editReviewError } = await clientSupabase
@@ -144,10 +149,25 @@ export const useEditReviewMutation = () => {
 export const useEditImgsMutation = () => {
   const queryClient = useQueryClient();
   const editImgsMutation = useMutation({
-    mutationFn: async({
-      filePath
-    })
+    mutationFn: async ({ filePath, file }: { filePath: string; file: File }) => {
+      const { data, error } = await clientSupabase.storage.from('reviewImage').upload(filePath, file, {
+        cacheControl: '3600',
+        upsert: true
+      });
+
+      if (error) {
+        console.error('업로드 오류', error.message);
+        throw error;
+      }
+
+      const { data: imageUrl } = await clientSupabase.storage.from('reviewImage').getPublicUrl(data.path);
+      return imageUrl.publicUrl;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: EDIT_IMGS_QUERY_KEY });
+    }
   });
+  return editImgsMutation;
 };
 
 // export const useNewImgsMutation = () => {
