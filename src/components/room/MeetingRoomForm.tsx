@@ -1,6 +1,6 @@
 'use client';
 import TagList from './MeetingRoomFeatureTags';
-import { useTagStore } from '(@/store/roomStore)';
+import { useRoomStore } from '(@/store/roomStore)';
 import { Button, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, useDisclosure } from '@nextui-org/react';
 import { useState } from 'react';
 import { useAddRoom } from '(@/hooks/useMutation/useMeetingMutation)';
@@ -8,19 +8,22 @@ import { userStore } from '(@/store/userStore)';
 import { useRouter } from 'next/navigation';
 
 import type { NextMeetingRoomType } from '(@/types/roomTypes)';
+import RegionSelection from './RegionSelection';
+import MemberNumberSelection from './MemberNumberSelection';
 
 function MeetingRoomForm() {
   const router = useRouter();
-  const { tags, resetTags } = useTagStore();
+  const { tags, resetTags } = useRoomStore();
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const { user } = userStore((state) => state);
   const [title, setTitle] = useState('');
   const [location, setLocation] = useState('');
-  const [memberNumber, setMemberNumber] = useState('');
+  const { memberNumber, resetMemberNumber, roomRegion, resetRoomRegion } = useRoomStore((state) => state);
   const cancelMakingMeetingRoom = () => {
     setTitle('');
     setLocation('');
-    setMemberNumber('');
+    resetMemberNumber();
+    resetRoomRegion();
     resetTags();
   };
 
@@ -29,6 +32,7 @@ function MeetingRoomForm() {
     feature: tags,
     leader_id: String(user_id),
     location,
+    region: String(roomRegion),
     member_number: memberNumber,
     room_status: '모집중',
     room_title: title
@@ -37,7 +41,7 @@ function MeetingRoomForm() {
 
   const addMeetingRoom = async (e: any) => {
     e.preventDefault();
-    if (!title || !tags || !location || memberNumber === '인원수') {
+    if (!title || !tags || !location || memberNumber === '인원수' || !roomRegion) {
       return alert('모든 항목은 필수입니다.');
     }
     const newRoom = await addRoomMutation.mutateAsync();
@@ -84,18 +88,18 @@ function MeetingRoomForm() {
                 <ModalBody>
                   <input value={title} onChange={(e) => setTitle(e.target.value)} placeholder="title" maxLength={15} />
                   <TagList />
-                  <input
-                    value={location}
-                    onChange={(e) => setLocation(e.target.value)}
-                    placeholder="place"
-                    maxLength={15}
-                  />
-                  <select value={memberNumber} onChange={(e) => setMemberNumber(e.target.value)}>
-                    <option> 인원수 </option>
-                    <option> 2:2 </option>
-                    <option> 3:3 </option>
-                    <option> 4:4 </option>
-                  </select>
+                  <div className="flex flex-row gap-4">
+                    <MemberNumberSelection text={'member'} />
+                    <div className="w-20">
+                      <RegionSelection text={'room'} />
+                    </div>
+                    <input
+                      value={location}
+                      onChange={(e) => setLocation(e.target.value)}
+                      placeholder="place"
+                      maxLength={15}
+                    />
+                  </div>
                 </ModalBody>
                 <ModalFooter>
                   <Button color="danger" variant="light" onPress={onClose} onClick={() => cancelMakingMeetingRoom()}>

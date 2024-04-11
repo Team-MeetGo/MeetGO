@@ -1,13 +1,14 @@
 export const regionList = [
+  '전국',
   '서울',
+  '경기',
+  '인천',
   '부산',
   '대구',
-  '인천',
   '광주',
   '대전',
   '울산',
   '세종',
-  '겅기',
   '강원',
   '충북',
   '충남',
@@ -18,4 +19,4 @@ export const regionList = [
   '제주'
 ];
 
-export const member_number = ['2:2', '3:3', '4:4'];
+export const member_number = ['전체', '2:2', '3:3', '4:4'];
