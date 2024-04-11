@@ -11,23 +11,23 @@ const GetMostLikedReivew = () => {
   const [reviewData, setReviewData] = useState<reviewData[]>([]);
   const { isLoggedIn, setIsLoggedIn } = userStore((state) => state);
 
-  const getUserId = async () => {
-    const userData = userStore.getState().user;
-    return userData && userData.user_id;
-  };
+  // const getUserId = async () => {
+  //   const userData = userStore.getState().user;
+  //   return userData && userData.user_id;
+  // };
 
-  const checkLoginStatus = async () => {
-    const userId = await getUserId();
-    if (userId !== null) {
-      setIsLoggedIn(true);
-    } else {
-      setIsLoggedIn(false);
-    }
-  };
+  // const checkLoginStatus = async () => {
+  //   const userId = await getUserId();
+  //   if (userId !== null) {
+  //     setIsLoggedIn(true);
+  //   } else {
+  //     setIsLoggedIn(false);
+  //   }
+  // };
 
-  useEffect(() => {
-    checkLoginStatus();
-  }, []);
+  // useEffect(() => {
+  //   checkLoginStatus();
+  // }, []);
 
   const { data: likedReviewList } = useQuery({
     queryKey: [LIKED_REVIEWLIST_QUERY_KEY],

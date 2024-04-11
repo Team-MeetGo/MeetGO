@@ -23,45 +23,58 @@ export type CommentListType = {
 const CommentList = ({ review_id, onUpdateCommentCount }: Props) => {
   const commentsFromStore = useCommentStore((state) => state.comments);
   const [updatedComment, setUpdatedComment] = useState<CommentListType[]>([]);
+  const deleteComment = useCommentStore((state) => state.deleteComment);
 
   const { user } = userStore((state) => state);
   const userId = user && user.user_id;
 
-  const useCommentDataQuery = (review_id: string) => {
-    const { data: commentData } = useQuery({
-      queryKey: [COMMENT_QUERY_KEY, review_id],
-      queryFn: async () => await fetchCommentData(review_id)
-    });
-    return commentData;
-  };
+  const { data: commentData, isLoading: isCommentDataLoading } = useQuery({
+    queryKey: [COMMENT_QUERY_KEY, review_id],
+    queryFn: async () => await fetchCommentData(review_id)
+  });
 
-  const commentData = useCommentDataQuery(review_id as string);
+  const deleteCommentMutation = useDeleteCommentMutation(review_id);
 
-  const deleteCommentMutation = useDeleteCommentMutation();
+  // const handleDeleteComment = async (commentId: string) => {
+  //   if (window.confirm('댓글을 삭제하시겠습니까?')) {
+  //     await deleteCommentMutation.mutate(commentId, {
+  //       onSuccess: () => {
+  //         setUpdatedComment((currentComments) => currentComments.filter((comment) => comment.comment_id !== commentId));
+  //         deleteComment(commentId as string);
+  //       }
+  //     });
+  //   }
+  // };
 
   const handleDeleteComment = async (commentId: string) => {
     if (window.confirm('댓글을 삭제하시겠습니까?')) {
-      try {
-        await deleteCommentMutation.mutate(commentId);
-      } catch (error) {
-        console.error('댓글 삭제 오류:', error);
-      }
+      await deleteCommentMutation.mutate(commentId);
+      await deleteComment(commentId as string);
+      // await setUpdatedComment((currentComments) =>
+      //   currentComments.filter((comment) => comment.comment_id !== commentId)
+      // );
     }
   };
 
   useEffect(() => {
-    const mergedComments = [
-      ...(commentData ?? []),
-      ...commentsFromStore
-        .filter((comment) => comment.review_id === review_id)
-        .filter((comment) => {
-          const isExist = commentData?.some((dataComment) => dataComment.comment_id === comment.comment_id);
-          return !isExist && comment.review_id === review_id;
-        })
-    ];
-    setUpdatedComment(mergedComments);
-    onUpdateCommentCount(mergedComments.length);
-  }, [commentData, onUpdateCommentCount, commentsFromStore, review_id]);
+    if (!isCommentDataLoading) {
+      const mergedComments = [
+        ...(commentData ?? []),
+        ...commentsFromStore
+          .filter((comment) => comment.review_id === review_id)
+          .filter((comment) => {
+            const isExist = commentData?.some((dataComment) => dataComment.comment_id === comment.comment_id);
+            return !isExist && comment.review_id === review_id;
+          })
+      ];
+      setUpdatedComment(mergedComments);
+      onUpdateCommentCount(mergedComments.length);
+    }
+  }, [commentData, onUpdateCommentCount, commentsFromStore, isCommentDataLoading]);
+
+  if (isCommentDataLoading) {
+    return <div>Loading comments...</div>;
+  }
 
   return (
     <div>

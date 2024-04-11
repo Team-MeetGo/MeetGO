@@ -2,6 +2,7 @@ import { clientSupabase } from '(@/utils/supabase/client)';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { COMMENT_QUERY_KEY, DELETE_COMMENT_QUERY_KEY, NEW_COMMENT_QUERY_KEY } from './commentQueryKeys';
 import { useCommentStore } from '(@/store/commentStore)';
+import { CommentListType } from '(@/components/review/comment/CommentList)';
 
 export const fetchCommentAuthor = async (commentAuthorId: string) => {
   const { data: commentAuthorData, error: userError } = await clientSupabase
@@ -23,7 +24,7 @@ export const fetchCommentData = async (review_id: string) => {
   return commentData;
 };
 
-export const useNewCommentMutation = () => {
+export const useNewCommentMutation = (review_id: string) => {
   const queryClient = useQueryClient();
   const addComment = useCommentStore((state) => state.addComment);
   const uuid = crypto.randomUUID();
@@ -59,7 +60,7 @@ export const useNewCommentMutation = () => {
     },
 
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: NEW_COMMENT_QUERY_KEY });
+      queryClient.invalidateQueries({ queryKey: [COMMENT_QUERY_KEY, review_id] });
     }
   });
 
@@ -81,21 +82,19 @@ export const useNewCommentMutation = () => {
 //   return deleteCommentMutation;
 // };
 
-export const useDeleteCommentMutation = () => {
+export const useDeleteCommentMutation = (review_id: string) => {
   const queryClient = useQueryClient();
+
   const deleteCommentMutation = useMutation({
     mutationFn: async (commentId: string) => {
-      return clientSupabase.from('review_comment').delete().eq('comment_id', commentId);
+      return await clientSupabase.from('review_comment').delete().eq('comment_id', commentId);
     },
-    // onSuccess 내에서 코멘트 상태를 업데이트
-    onSuccess: (_, commentId) => {
-      queryClient.setQueryData([COMMENT_QUERY_KEY], (oldData) => {
-        return {
-          ...oldData,
-          data: oldData.data.filter((comment) => comment.comment_id !== commentId)
-        };
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: [COMMENT_QUERY_KEY, review_id]
       });
     }
   });
+
   return deleteCommentMutation;
 };

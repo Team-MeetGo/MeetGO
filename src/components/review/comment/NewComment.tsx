@@ -83,7 +83,7 @@ const NewComment = ({ review_id }: Props) => {
   const { user, setUser } = userStore((state) => state);
   const userId = user && user.user_id;
 
-  const addCommentMutation = useNewCommentMutation();
+  const addCommentMutation = useNewCommentMutation(review_id);
 
   const handleNewComment = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
