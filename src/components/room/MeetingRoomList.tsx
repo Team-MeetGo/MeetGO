@@ -87,7 +87,6 @@ function MeetingRoomList() {
                 if (index < 3 * page && index >= 3 * (page - 1))
                   return (
                     <div key={index}>
-                      {index}
                       <MeetingRoom room={room} />
                     </div>
                   );

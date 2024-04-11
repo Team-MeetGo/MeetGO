@@ -3,8 +3,7 @@
 import { useDeleteRoom } from '(@/hooks/useMutation/useMeetingMutation)';
 import { clientSupabase } from '(@/utils/supabase/client)';
 
-function DeleteMeetingRoom({ id }: { id: string }) {
-  const room_id = id;
+function DeleteMeetingRoom({ room_id }: { room_id: string }) {
   const deleteRoomMutation = useDeleteRoom({ room_id });
   const DeleteMeetingRoomHandler = async () => {
     await deleteRoomMutation.mutateAsync();

@@ -5,12 +5,12 @@ import { Chip } from '@nextui-org/react';
 import { useRoomInfoWithRoomIdQuery } from '(@/hooks/useQueries/useMeetingQuery)';
 import type { UUID } from 'crypto';
 
-function RoomInformation({ roomId }: { roomId: UUID }) {
+function RoomInformation({ roomId }: { roomId: string }) {
   const roomInformation = useRoomInfoWithRoomIdQuery(roomId);
   const { room_title, member_number, location, feature } = roomInformation![0];
-
+  console.log(roomId);
   return (
-    roomInformation && (
+    roomInformation! && (
       <div className="h-28 m-8 text-center border-4 flex flex-row justify-start gap-4 p-6">
         <div className="text-5xl ">{room_title}</div>
         <div>

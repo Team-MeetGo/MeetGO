@@ -30,6 +30,15 @@ export const fetchRoomInfoWithRoomId = async (room_id: string) => {
   return roominformation;
 };
 
+export const fetchAlreadyChatRoom = async (room_id: string) => {
+  const { data: alreadyChat } = await clientSupabase
+    .from('chatting_room')
+    .select('*')
+    .eq('room_id', room_id)
+    .eq('isActive', true);
+  return alreadyChat;
+};
+
 export const addRoom = async ({
   nextMeetingRoom,
   user_id
@@ -39,7 +48,7 @@ export const addRoom = async ({
 }) => {
   const { data: insertMeetingRoom } = await clientSupabase.from('room').upsert([nextMeetingRoom]).select();
   if (insertMeetingRoom) {
-    await clientSupabase.from('participants').insert([{ room_id: insertMeetingRoom[0].room_id }, { user_id: user_id }]);
+    await clientSupabase.from('participants').insert([{ room_id: insertMeetingRoom[0].room_id, user_id: user_id }]);
     const room_id = insertMeetingRoom[0].room_id;
     await clientSupabase.from('participants').insert([{ user_id, room_id }]);
     return insertMeetingRoom[0].room_id;
@@ -74,7 +83,7 @@ export const updateLeaderMember = async ({
   await clientSupabase.from('room').update({ leader_id: otherParticipants[0].user_id }).eq('room_id', room_id);
 };
 
-export const addMember = async ({ user_id, room_id }: { user_id: string | undefined; room_id: string }) => {
+export const addMember = async ({ user_id, room_id }: { user_id: string; room_id: string }) => {
   if (!user_id) {
     console.log('유저가 없어요');
   }

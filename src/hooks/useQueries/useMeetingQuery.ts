@@ -1,4 +1,9 @@
-import { fetchMyRoom, fetchRecruitingRoom, fetchRoomInfoWithRoomId } from '(@/query/meetingRoom/meetingQueryFns)';
+import {
+  fetchAlreadyChatRoom,
+  fetchMyRoom,
+  fetchRecruitingRoom,
+  fetchRoomInfoWithRoomId
+} from '(@/query/meetingRoom/meetingQueryFns)';
 import { MY_ROOM, RECRUTING_ROOMDATA, ROOMDATA_WITH_ROOMID } from '(@/query/meetingRoom/meetingQueryKeys)';
 import { useSuspenseQueries, useSuspenseQuery } from '@tanstack/react-query';
 
@@ -24,5 +29,13 @@ export const useRoomInfoWithRoomIdQuery = (room_id: string) => {
     queryFn: async () => await fetchRoomInfoWithRoomId(room_id)
   });
   console.log(roomData);
+  return roomData;
+};
+
+export const useAlreadyChatRoomQuery = (room_id: string) => {
+  const { data: roomData } = useSuspenseQuery({
+    queryKey: [ROOMDATA_WITH_ROOMID, room_id],
+    queryFn: async () => await fetchAlreadyChatRoom(room_id)
+  });
   return roomData;
 };
