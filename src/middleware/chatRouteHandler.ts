@@ -2,7 +2,7 @@ import { NextFetchEvent, NextRequest, NextResponse } from 'next/server';
 import { CustomMiddleware } from './middlewareType';
 import { serverSupabase } from '(@/utils/supabase/server)';
 
-export const chatRoomHandler = (middleware: CustomMiddleware) => {
+export const meetingNchatRoomHandler = (middleware: CustomMiddleware) => {
   return async (request: NextRequest, event: NextFetchEvent) => {
     const referer = request.headers.get('Referer');
     // 새로고침하거나 직접 타이핑 해서 채팅방에 들어가려고 할 때,
@@ -27,7 +27,6 @@ export const chatRoomHandler = (middleware: CustomMiddleware) => {
           }
         }
       }
-      console.log(myChatRooms);
       if (myChatRooms.includes(request.nextUrl.pathname.replace('/chat/', ''))) {
         // 내가 들어가있는 방이면 OK
         return NextResponse.next();
