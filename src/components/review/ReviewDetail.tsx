@@ -1,13 +1,9 @@
 import Image from 'next/image';
 import ReviewEditModal from './ReviewEditModal';
 import { useRouter } from 'next/navigation';
-import ReviewHeart from './ReviewHeart';
 import AvatarDefault from '(@/utils/icons/AvatarDefault)';
 import ImageGallery from './ImageGallery';
 import defaultImg from '../../../public/defaultImg.jpg';
-import { AUTHOR_QUERY_KEY, REVIEW_QUERY_KEY } from '(@/query/review/reviewQueryKeys)';
-import { useQuery } from '@tanstack/react-query';
-import { fetchAuthorData, fetchReviewData, useDeleteReviewMutation } from '(@/query/review/reviewQueryFns)';
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { Dropdown, DropdownItem, DropdownMenu, DropdownTrigger, useDisclosure } from '@nextui-org/react';
@@ -15,6 +11,9 @@ import { HiOutlineDotsVertical } from 'react-icons/hi';
 import { IoIosList } from 'react-icons/io';
 import { useGetUserDataQuery } from '(@/hooks/useQueries/useUserQuery)';
 import ReviewComment from './ReviewComment';
+import ReviewLike from './ReviewLike';
+import { useDeleteReviewMutation } from '(@/hooks/useMutation/useReviewMutations)';
+import { useAuthorDataQuery, useReviewDataQuery } from '(@/hooks/useQueries/useReviewQuery)';
 
 export type ReviewDetailType = {
   review_title: string | null;
@@ -43,23 +42,7 @@ const ReviewDetail = ({ review_id }: Props) => {
   const { data: user } = useGetUserDataQuery();
   const userId = user && user.user_id;
 
-  const useAuthorDataQuery = (review_id: string) => {
-    const { data: userData } = useQuery({
-      queryKey: [AUTHOR_QUERY_KEY, review_id],
-      queryFn: async () => await fetchAuthorData(review_id)
-    });
-    return userData;
-  };
-
   const userData = useAuthorDataQuery(review_id);
-
-  const useReviewDataQuery = (review_id: string) => {
-    const { data: reviewDetail } = useQuery({
-      queryKey: [REVIEW_QUERY_KEY, review_id],
-      queryFn: async () => await fetchReviewData(review_id)
-    });
-    return reviewDetail;
-  };
 
   const reviewDetail = useReviewDataQuery(review_id);
 
@@ -124,7 +107,7 @@ const ReviewDetail = ({ review_id }: Props) => {
               : null}
           </div>
           <div className="flex gap-1">
-            <ReviewHeart review_id={review_id} />
+            <ReviewLike review_id={review_id} />
             <div className="flex gap-1">
               <ReviewComment review_id={review_id} />
             </div>

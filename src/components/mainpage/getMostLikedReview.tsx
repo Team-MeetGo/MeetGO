@@ -1,18 +1,9 @@
 import ReviewCard from '../review/ReviewCard';
-import { useQuery } from '@tanstack/react-query';
-import { LIKED_REVIEWLIST_QUERY_KEY, REVIEWLIST_QUERY_KEY } from '(@/query/review/reviewQueryKeys)';
-import { fetchLikedReviewList, fetchReviewList } from '(@/query/review/reviewQueryFns)';
+import { useLikedReviewDataQuery, useReviewListDataQuery } from '(@/hooks/useQueries/useReviewQuery)';
 
 const GetMostLikedReivew = () => {
-  const { data: likedReviewList } = useQuery({
-    queryKey: [LIKED_REVIEWLIST_QUERY_KEY],
-    queryFn: fetchLikedReviewList
-  });
-
-  const { data: fetchReviewsData } = useQuery({
-    queryKey: [REVIEWLIST_QUERY_KEY],
-    queryFn: fetchReviewList
-  });
+  const likedReviewList = useLikedReviewDataQuery();
+  const fetchReviewsData = useReviewListDataQuery();
 
   const likedReviewIds = likedReviewList?.map((item) => item.review_id);
   const zeroLikedReviews = fetchReviewsData?.data?.filter((review) => !likedReviewIds?.includes(review.review_id));

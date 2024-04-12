@@ -6,9 +6,8 @@ import { ChangeEvent, FormEvent, useEffect, useState } from 'react';
 import { MdCancel } from 'react-icons/md';
 import { LuImagePlus } from 'react-icons/lu';
 import type { UseDisclosureReturn } from '@nextui-org/use-disclosure';
-import { useQuery } from '@tanstack/react-query';
-import { REVIEW_QUERY_KEY } from '(@/query/review/reviewQueryKeys)';
-import { fetchReviewData, useEditImgsMutation, useEditReviewMutation } from '(@/query/review/reviewQueryFns)';
+import { useEditImgsMutation, useEditReviewMutation } from '(@/hooks/useMutation/useReviewMutations)';
+import { useReviewDataQuery } from '(@/hooks/useQueries/useReviewQuery)';
 
 type Props = {
   review_id: string;
@@ -24,14 +23,6 @@ export default function ReviewEditModal({ review_id, disclosure }: Props) {
   const [previewImages, setPreviewImages] = useState<string[]>([]);
 
   const totalFiles = files.length + previewImages.length;
-
-  const useReviewDataQuery = (review_id: string) => {
-    const { data: reviewDetail } = useQuery({
-      queryKey: [REVIEW_QUERY_KEY, review_id],
-      queryFn: async () => await fetchReviewData(review_id)
-    });
-    return reviewDetail;
-  };
 
   const reviewDetail = useReviewDataQuery(review_id);
 

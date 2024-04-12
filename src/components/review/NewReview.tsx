@@ -1,19 +1,17 @@
 import { useState, ChangeEvent, FormEvent } from 'react';
 import Image from 'next/image';
 import { Button, Checkbox, Modal, ModalBody, ModalContent, useDisclosure } from '@nextui-org/react';
-import { useRouter } from 'next/navigation';
 import { MdCancel } from 'react-icons/md';
 import { LuImagePlus } from 'react-icons/lu';
-import { useNewReviewMutation, useUploadImgsMutation } from '(@/query/review/reviewQueryFns)';
 import { FaCheck } from 'react-icons/fa6';
 import { useGetUserDataQuery } from '(@/hooks/useQueries/useUserQuery)';
+import { useNewReviewMutation, useUploadImgsMutation } from '(@/hooks/useMutation/useReviewMutations)';
 
 const NewReview = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [files, setFiles] = useState<File[]>([]);
   const [dragging, setDragging] = useState(false);
   const [showNickname, setShowNickname] = useState(true);
-  const router = useRouter();
 
   const { data: user } = useGetUserDataQuery();
   const userId = (user && user.user_id) || '';
@@ -84,23 +82,20 @@ const NewReview = () => {
         console.error('업로드 실패:', error);
       }
     }
-    if (imageUrls.length > 0) {
-      const reviewTitle = (document.getElementById('review_title') as HTMLInputElement)?.value;
-      const reviewContents = (document.getElementById('review_contents') as HTMLInputElement)?.value;
+    const reviewTitle = (document.getElementById('review_title') as HTMLInputElement)?.value;
+    const reviewContents = (document.getElementById('review_contents') as HTMLInputElement)?.value;
 
-      addNewReviewMutation.mutate({
-        userId,
-        reviewTitle,
-        reviewContents,
-        imageUrls,
-        show_nickname
-      });
+    addNewReviewMutation.mutate({
+      userId,
+      reviewTitle,
+      reviewContents,
+      imageUrls,
+      show_nickname
+    });
 
-      alert('리뷰가 등록되었습니다.');
-      window.location.reload();
-    } else {
-      console.error('이미지 업로드에 실패했습니다.');
-    }
+    alert('리뷰가 등록되었습니다.');
+    window.location.reload();
+    console.error('이미지 업로드에 실패했습니다.');
   };
 
   return (

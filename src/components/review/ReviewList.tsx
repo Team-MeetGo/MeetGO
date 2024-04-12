@@ -7,11 +7,9 @@ import Link from 'next/link';
 import { useParams } from 'next/navigation';
 import { Dropdown, DropdownTrigger, DropdownMenu, DropdownItem, Button } from '@nextui-org/react';
 import { Selection } from '@react-types/shared';
-import { useQuery } from '@tanstack/react-query';
-import { fetchLikedReviewList, fetchReviewList } from '(@/query/review/reviewQueryFns)';
-import { LIKED_REVIEWLIST_QUERY_KEY, REVIEWLIST_QUERY_KEY } from '(@/query/review/reviewQueryKeys)';
 import { IoIosArrowDown, IoIosArrowUp } from 'react-icons/io';
 import { useGetUserDataQuery } from '(@/hooks/useQueries/useUserQuery)';
+import { useLikedReviewDataQuery, useReviewListDataQuery } from '(@/hooks/useQueries/useReviewQuery)';
 
 export type reviewData = {
   user_id: string | null;
@@ -34,12 +32,9 @@ const ReviewList: React.FC = () => {
 
   const selectedValue = React.useMemo(() => Array.from(selected).join(', ').replaceAll('_', ' '), [selected]);
 
-  const { data: user, isPending, isError, error, isLoggedIn } = useGetUserDataQuery();
+  const { data: isLoggedIn } = useGetUserDataQuery();
 
-  const { data: likedReviewList } = useQuery({
-    queryKey: [LIKED_REVIEWLIST_QUERY_KEY],
-    queryFn: fetchLikedReviewList
-  });
+  const likedReviewList = useLikedReviewDataQuery();
 
   async function getMostLikedReview(page: number) {
     const likedReviewIds = likedReviewList?.map((item) => item.review_id);
@@ -85,10 +80,7 @@ const ReviewList: React.FC = () => {
     }
   }, []);
 
-  const { data: fetchReviewsData } = useQuery({
-    queryKey: [REVIEWLIST_QUERY_KEY],
-    queryFn: fetchReviewList
-  });
+  const fetchReviewsData = useReviewListDataQuery();
 
   async function getRecentReview(page: number) {
     if (fetchReviewsData) {
@@ -126,8 +118,6 @@ const ReviewList: React.FC = () => {
             >
               <DropdownItem key="최신 순" onClick={() => getRecentReview(currentPageNumber)}>
                 최신 순
-                {/* <IoIosArrowDown />
-                <IoIosArrowUp /> */}
               </DropdownItem>
               <DropdownItem key="좋아요 순" onClick={() => getMostLikedReview(currentPageNumber)}>
                 좋아요 순

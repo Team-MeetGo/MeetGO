@@ -1,19 +1,14 @@
 'use client';
 
 import { HiOutlineChatBubbleOvalLeftEllipsis } from 'react-icons/hi2';
-import { useQuery } from '@tanstack/react-query';
-import { COMMENT_QUERY_KEY } from '(@/query/review/commentQueryKeys)';
-import { fetchCommentData } from '(@/query/review/commentQueryFns)';
+import { useFetchCommentData } from '(@/hooks/useQueries/useCommentQuery)';
 
 type Props = {
   review_id: string;
 };
 
 const ReviewComment = ({ review_id }: Props) => {
-  const { data: commentData, isLoading: isCommentDataLoading } = useQuery({
-    queryKey: [COMMENT_QUERY_KEY, review_id],
-    queryFn: async () => await fetchCommentData(review_id)
-  });
+  const { commentData } = useFetchCommentData(review_id);
 
   return (
     <div className="flex gap-1 items-center">

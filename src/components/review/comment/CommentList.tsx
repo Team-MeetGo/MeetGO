@@ -1,9 +1,8 @@
 import CommentCard from './CommentCard';
-import { useQuery } from '@tanstack/react-query';
-import { COMMENT_QUERY_KEY } from '(@/query/review/commentQueryKeys)';
-import { fetchCommentData, useDeleteCommentMutation } from '(@/query/review/commentQueryFns)';
 import NewComment from './NewComment';
 import { useGetUserDataQuery } from '(@/hooks/useQueries/useUserQuery)';
+import { useFetchCommentData } from '(@/hooks/useQueries/useCommentQuery)';
+import { useDeleteCommentMutation } from '(@/hooks/useMutation/useCommentMutations)';
 
 type Props = {
   review_id: string;
@@ -21,10 +20,7 @@ const CommentList = ({ review_id }: Props) => {
   const { data: user } = useGetUserDataQuery();
   const userId = user && user.user_id;
 
-  const { data: commentData, isLoading: isCommentDataLoading } = useQuery({
-    queryKey: [COMMENT_QUERY_KEY, review_id],
-    queryFn: async () => await fetchCommentData(review_id)
-  });
+  const { commentData, isCommentDataLoading } = useFetchCommentData(review_id);
 
   const deleteCommentMutation = useDeleteCommentMutation(review_id);
 
