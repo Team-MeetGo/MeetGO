@@ -81,9 +81,6 @@ export const fetchMyChatRoomIds = async (userId: string) => {
 
 // 내가 본 마지막 메세지들의 아이디
 export const fetchMyLastMsgs = async (user_id: string, chatRoomId: string) => {
-  const queryClinet = useQueryClient();
-  await queryClinet.invalidateQueries({ queryKey: [MY_LAST_MSGS_BEFORE, user_id, chatRoomId] });
-
   const { data: lastMsgs, error } = await clientSupabase
     .from('remember_last_msg')
     .select('last_msg_id')
@@ -91,7 +88,10 @@ export const fetchMyLastMsgs = async (user_id: string, chatRoomId: string) => {
     .eq('chatting_room_id', chatRoomId);
   if (error) console.error('마지막 메세지를 가져오는 데 실패했습니다.', error.message);
   // console.log('잘 가져오는 거 맞아?', lastMsgs && lastMsgs[0].last_msg_id);
-  return lastMsgs;
+  if (lastMsgs && lastMsgs.length) {
+    return lastMsgs[0].last_msg_id;
+  }
+  return null;
 };
 
 export const addNewLastMsg = async (chatRoomId: string, user_id: string, last_msg_id: string | undefined) => {

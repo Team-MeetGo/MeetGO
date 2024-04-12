@@ -1,38 +1,53 @@
 'use client';
 
 import HowManyMsg from '(@/components/room/meetingChat/HowManyMsg)';
-import { Suspense, useEffect } from 'react';
+import { Suspense, useEffect, useRef, useState } from 'react';
 
 const Page = () => {
+  const [the, setThe] = useState(false);
+  const [daa, setDaa] = useState(false);
+  const check = useRef(false);
+
+  console.log('the', the);
+  console.log('daa', daa);
+  console.log(check.current);
+
   // useEffect(() => {
-  //   function noBack() {
-  //     window.history.forward();
-  //   }
+  //   setThe(true);
+  // }, [daa]);
 
-  //   window.onload = noBack;
-  //   window.onpageshow = function (event) {
-  //     if (event.persisted) noBack();
-  //   };
+  useEffect(() => {
+    console.log('check.current =>', check.current);
+    if (the) {
+      console.log('clean up 함수 안');
+      // if (check.current) {
+      //   console.log('abc');
+      // }
+    }
+  }, [daa]);
 
-  //   return () => {
-  //     window.onload = null;
-  //     window.onpageshow = null;
-  //   };
+  // useEffect(() => {
+  //   check.current = true;
   // }, []);
-
-  // const noBack = () => {
-  //   history.pushState(null, '', location.href);
-  //   window.onpopstate = function () {
-  //     history.go(1);
-  //   };
-  // };
 
   return (
     <div>
       여기는 테스트 페이지
-      <Suspense>
-        <HowManyMsg />
-      </Suspense>
+      <button
+        onClick={() => {
+          setDaa(true);
+        }}
+      >
+        클릭
+      </button>
+      <button
+        onClick={() => {
+          setThe(true);
+          check.current = true;
+        }}
+      >
+        이거이거
+      </button>
     </div>
   );
 };

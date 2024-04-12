@@ -25,6 +25,8 @@ const ChatList = ({ user, chatRoomId }: { user: User | null; chatRoomId: string 
   const [newAddedMsgNum, setNewAddedMsgNum] = useState(0);
   const [lastCheckedDiv, setLastCheckedDiv] = useState<HTMLElement | null>();
   const [checkedLastMsg, setCheckedLastMsg] = useState(false);
+  console.log('checkedLastMsg =>', checkedLastMsg);
+  console.log('메세지 있어? =>', messages.length > 0);
   const room = useRoomDataQuery(chatRoomId);
   const roomId = room?.roomId;
 
@@ -32,7 +34,8 @@ const ChatList = ({ user, chatRoomId }: { user: User | null; chatRoomId: string 
   const lastDivRefs = useRef(messages);
 
   const lastMsgId = useMyLastMsgs(user?.id!, chatRoomId);
-  console.log('lastMsgId => ', lastMsgId && lastMsgId[0].last_msg_id);
+
+  console.log('lastMsgId =>', lastMsgId);
 
   const pathname = usePathname();
   const { mutate: mutateToUpdate } = useUpdateLastMsg(
@@ -45,18 +48,6 @@ const ChatList = ({ user, chatRoomId }: { user: User | null; chatRoomId: string 
     user?.id as string,
     messages && messages.length > 0 ? messages[messages.length - 1].message_id : undefined
   );
-
-  // 마지막으로 읽은 메세지 기억하기
-  useEffect(() => {
-    return () => {
-      // 현재 나누는 메세지가 있을 때
-      if (messages.length) {
-        // 이전에 저장된 마지막 메세지가 있으면 현재 메세지 중 마지막 걸로 업데이트, 없으면 현재 메세지 중 마지막 메세지 추가하기
-        lastMsgId?.length ? mutateToUpdate() : mutateToAdd();
-      }
-    };
-    // 주소가 바뀔 때만 감지해서 저장 또는 업데이트
-  }, [pathname]);
 
   useEffect(() => {
     if (roomId && chatRoomId) {
@@ -96,15 +87,15 @@ const ChatList = ({ user, chatRoomId }: { user: User | null; chatRoomId: string 
     const scrollBox = scrollRef.current;
     if (scrollBox && !isScrolling) {
       // 처음에 로드 시 스크롤 중이 아닐 때
-      if (lastMsgId && lastMsgId.length && lastMsgId[0].last_msg_id !== messages[messages.length - 1].message_id) {
+      if (lastMsgId && lastMsgId !== messages[messages.length - 1].message_id) {
         // 이전에 저장된 마지막 메세지가 있으면 그 메세지 강조처리
         // let lastDiv = document.getElementById(`${lastMsgId[0].last_msg_id}`);
-        let ref = lastDivRefs.current.find((ref) => ref.message_id === lastMsgId[0].last_msg_id);
+        let ref = lastDivRefs.current.find((ref) => ref.message_id === lastMsgId);
         let lastDiv = ref && ref.current;
         if (lastDiv) {
           setLastCheckedDiv(lastDiv);
           makeHereText(lastDiv);
-          setCheckedLastMsg(true);
+          // setCheckedLastMsg(true);
         }
       } else {
         scrollBox.scrollTop = scrollBox.scrollHeight;
@@ -117,19 +108,33 @@ const ChatList = ({ user, chatRoomId }: { user: User | null; chatRoomId: string 
     const scrollBox = scrollRef.current;
     if (scrollBox && !isScrolling) {
       // 처음에 로드 시 스크롤 중이 아닐 때
-      if (!lastMsgId || !lastMsgId?.length || prevMsgsLengthRef.current !== messages.length) {
+      if (!lastMsgId || prevMsgsLengthRef.current !== messages.length) {
         // 이전에 저장된 마지막 메세지가 없으면 그냥 스크롤 다운
         scrollBox.scrollTop = scrollBox.scrollHeight;
         prevMsgsLengthRef.current = messages.length;
       } else {
         // 이전에 저장된 마지막 메세지가 있고 그게 강조처리 되어있다가, 스크롤다운(마지막 메세지를 확인)되면 투명으로 변경
-        if (checkedLastMsg && lastCheckedDiv) {
-          setCheckedLastMsg(false);
+        if (lastCheckedDiv) {
+          setCheckedLastMsg(true);
           lastCheckedDiv.style.display = 'none';
         }
       }
     }
   }, [messages, isScrolling]);
+
+  // 마지막으로 읽은 메세지 기억하기
+  useEffect(() => {
+    console.log('실행되는 건 맞아?');
+    // 현재 나누는 메세지가 있을 때
+
+    return () => {
+      console.log('실행은 되니');
+      if (checkedLastMsg && messages.length) {
+        // 이전에 저장된 마지막 메세지가 있으면 현재 메세지 중 마지막 걸로 업데이트, 없으면 현재 메세지 중 마지막 메세지 추가하기
+        lastMsgId ? mutateToUpdate() : mutateToAdd();
+      }
+    };
+  }, []);
 
   // 스크롤 이벤트가 발생할 때
   const handleScroll = () => {
@@ -177,11 +182,10 @@ const ChatList = ({ user, chatRoomId }: { user: User | null; chatRoomId: string 
               <OthersChat msg={msg} key={msg.message_id} idx={idx} lastDivRefs={lastDivRefs} />
             )}
             {lastMsgId &&
-            lastMsgId?.length &&
-            lastMsgId[0]?.last_msg_id !== messages[messages.length - 1].message_id &&
-            lastMsgId[0]?.last_msg_id === msg.message_id &&
+            lastMsgId !== messages[messages.length - 1].message_id &&
+            lastMsgId === msg.message_id &&
             isScrolling &&
-            checkedLastMsg ? (
+            !checkedLastMsg ? (
               <div className={`flex ${msg.send_from === user?.id ? 'ml-auto' : 'mr-auto'}`}>
                 <p>여기까지 읽으셨습니다.</p>
               </div>
