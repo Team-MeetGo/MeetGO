@@ -30,6 +30,9 @@ export const ValidationModal = () => {
                     if (type === 'alert' && text === '로그인 되었습니다.') {
                       closeModal();
                       router.replace('/');
+                    } else if (type === 'alert' && text === '회원가입 되었습니다.') {
+                      closeModal();
+                      router.replace('/');
                     } else {
                       closeModal();
                     }

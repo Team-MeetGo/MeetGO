@@ -33,11 +33,11 @@ const NavBarContents = () => {
 
   const signOut = async () => {
     await clientSupabase.auth.signOut();
-    router.replace('/'); // 로그아웃 후 메인 페이지로 이동. 뒤로가기 방지.
     alert('로그아웃 성공');
     queryClient.invalidateQueries({
       queryKey: [USER_DATA_QUERY_KEY]
     });
+    await router.replace('/'); // 로그아웃 후 메인 페이지로 이동. 뒤로가기 방지.
   };
 
   return (

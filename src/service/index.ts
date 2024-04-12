@@ -1,3 +1,4 @@
+import { UpdateSchoolType } from '(@/types/userTypes)';
 import { clientSupabase } from '(@/utils/supabase/client)';
 
 // supabase Insert, Delete, Update
@@ -60,4 +61,17 @@ export const updateProfile = async (
       gender: inputGender
     })
     .eq('user_id', userId);
+};
+
+/** 학교 업데이트하는 로직 */
+export const updateSchool = async ({ userId, schoolEmail, univName }: UpdateSchoolType) => {
+  const { error } = await clientSupabase
+    .from('users')
+    .update({ school_email: schoolEmail, school_name: univName, isValidate: true })
+    .eq('user_id', userId);
+  if (error) {
+    console.error('Error updating school:', error);
+  }
+  console.log('학생 인증 성공!');
+  return;
 };
