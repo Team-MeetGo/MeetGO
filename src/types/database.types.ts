@@ -128,6 +128,7 @@ export type Database = {
           part_id: string;
           room_id: string;
           user_id: string;
+          isDeleted?: boolean;
         };
         Insert: {
           created_at?: string;
@@ -140,6 +141,7 @@ export type Database = {
           part_id?: string;
           room_id?: string;
           user_id?: string;
+          isDeleted: boolean;
         };
         Relationships: [
           {

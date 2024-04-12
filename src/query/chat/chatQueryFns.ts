@@ -57,6 +57,19 @@ export const fetchChatData = async (chatRoomId: string) => {
   }
 };
 
+export const fetchUserData = async () => {
+  // 유저 데이터 가져오기
+  const {
+    data: { user }
+  } = await clientSupabase.auth.getUser();
+
+  if (user) {
+    const { data: userData } = await clientSupabase.from('users').select('*').eq('user_id', String(user.id));
+    if (userData) return userData[0];
+  }
+  return null;
+};
+
 // 내 채팅방들의 아이디
 export const fetchMyChatRoomIds = async (userId: string) => {
   const myChatRooms = [];
@@ -124,19 +137,3 @@ export const addMeetingLocation = async ({ chatRoomId, barName }: { chatRoomId: 
 export const deleteMeetingLocation = async (chatRoomId: string) => {
   await clientSupabase.from('chatting_room').update({ meeting_location: null }).eq('chatting_room_id', chatRoomId);
 };
-
-// // 미팅 시간 추가
-// export const addMeetingTime = async (chatRoomId: string, isoStringMeetingTime: string) => {
-//   const { data, error } = await clientSupabase
-//     .from('chatting_room')
-//     .update({ meeting_time: isoStringMeetingTime })
-//     .eq('chatting_room_id', chatRoomId);
-
-//   if (error) {
-//     console.error('미팅 시간 업데이트 실패:', error);
-//     return;
-//   }
-
-//   console.log('미팅 시간 업데이트 성공:', data);
-//   return;
-// };

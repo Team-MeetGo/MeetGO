@@ -6,6 +6,8 @@ import { useChatDataQuery, useRoomDataQuery } from '(@/hooks/useQueries/useChatt
 import { GiHamburgerMenu } from 'react-icons/gi';
 import { Card, CardBody } from '@nextui-org/react';
 import { useGetUserDataQuery } from '(@/hooks/useQueries/useUserQuery)';
+import { useQueryClient } from '@tanstack/react-query';
+import { CHATDATA_QUERY_KEY, MEETING_TIME_QUERY_KEY } from '(@/query/chat/chatQueryKeys)';
 
 interface SideBarProps {
   chatRoomId: string;
@@ -26,17 +28,12 @@ const SideBar: React.FC<SideBarProps> = ({ chatRoomId }) => {
   const chat = useChatDataQuery(chatRoomId);
   const meetingTime = chat?.[0]?.meeting_time;
 
-  console.log('미팅 시간이 바뀔까?', meetingTime);
-
-  // useEffect(() => {
-  //   console.log('미팅 시간', meetingTime);
-  // }, [meetingTime]);
-
   useEffect(() => {
+    const meetingTime = chat?.[0]?.meeting_time;
     if (meetingTime) {
       setFinalDateTime(meetingTime);
     }
-  }, [meetingTime]);
+  }, [chat]);
 
   const options: Intl.DateTimeFormatOptions = {
     year: 'numeric',

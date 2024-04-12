@@ -1,22 +1,21 @@
 import { useState, ChangeEvent, FormEvent } from 'react';
 import Image from 'next/image';
 import { Button, Checkbox, Modal, ModalBody, ModalContent, useDisclosure } from '@nextui-org/react';
-import { clientSupabase } from '(@/utils/supabase/client)';
-import { useRouter } from 'next/navigation';
 import { MdCancel } from 'react-icons/md';
-import { userStore } from '(@/store/userStore)';
 import { LuImagePlus } from 'react-icons/lu';
-import { useNewReviewMutation } from '(@/query/review/reviewQueryFns)';
+import { FaCheck } from 'react-icons/fa6';
+import { useGetUserDataQuery } from '(@/hooks/useQueries/useUserQuery)';
+import { useNewReviewMutation, useUploadImgsMutation } from '(@/hooks/useMutation/useReviewMutations)';
 
 const NewReview = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [files, setFiles] = useState<File[]>([]);
   const [dragging, setDragging] = useState(false);
   const [showNickname, setShowNickname] = useState(true);
-  const router = useRouter();
 
-  const { user, setUser } = userStore((state) => state);
-  const userId = (user && user.user_id) as string;
+  const { data: user } = useGetUserDataQuery();
+  const userId = (user && user.user_id) || '';
+
   const show_nickname = showNickname;
 
   const handleClose = () => {
@@ -62,6 +61,7 @@ const NewReview = () => {
   };
 
   const addNewReviewMutation = useNewReviewMutation();
+  const addUploadImgsMutation = useUploadImgsMutation();
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -71,32 +71,31 @@ const NewReview = () => {
       const uuid = crypto.randomUUID();
       const filePath = `reviewImage/${uuid}`;
 
-      const uploadImage = async (filePath: string, file: File) => {
-        const { data, error } = await clientSupabase.storage.from('reviewImage').upload(filePath, file, {
-          cacheControl: '3600',
-          upsert: true
+      try {
+        const publicUrl = await addUploadImgsMutation.mutateAsync({
+          filePath,
+          file
         });
 
-        if (error) {
-          console.error('업로드 오류', error.message);
-          throw error;
-        }
-
-        return data;
-      };
-
-      const data = await uploadImage(filePath, file);
-      const { data: imageUrl } = clientSupabase.storage.from('reviewImage').getPublicUrl(data.path);
-      imageUrls.push(imageUrl.publicUrl);
+        imageUrls.push(publicUrl);
+      } catch (error) {
+        console.error('업로드 실패:', error);
+      }
     }
-
     const reviewTitle = (document.getElementById('review_title') as HTMLInputElement)?.value;
     const reviewContents = (document.getElementById('review_contents') as HTMLInputElement)?.value;
 
-    addNewReviewMutation.mutate({ userId, reviewTitle, reviewContents, imageUrls, show_nickname });
+    addNewReviewMutation.mutate({
+      userId,
+      reviewTitle,
+      reviewContents,
+      imageUrls,
+      show_nickname
+    });
 
     alert('리뷰가 등록되었습니다.');
     window.location.reload();
+    console.error('이미지 업로드에 실패했습니다.');
   };
 
   return (
@@ -162,13 +161,6 @@ const NewReview = () => {
                       </label>
                     </div>
                   </div>
-                  <Checkbox
-                    defaultSelected={showNickname}
-                    onChange={() => setShowNickname(!showNickname)}
-                    className="text-black"
-                  >
-                    닉네임 표시
-                  </Checkbox>
                   <textarea
                     autoFocus
                     id="review_title"
@@ -186,16 +178,24 @@ const NewReview = () => {
                     rows={6}
                     maxLength={200}
                   />
+                  <Checkbox
+                    defaultSelected={showNickname}
+                    onChange={() => setShowNickname(!showNickname)}
+                    className="text-black"
+                    icon={<FaCheck />}
+                  >
+                    익명으로 게시
+                  </Checkbox>
                   <div className="flex gap-2 justify-end">
                     <Button
                       onClick={handleClose}
-                      className="w-[50px] h-[50px] rounded-[10px] mt-[30px] flex justify-center items-center bg-white text-[#A1A1AA] border-1 border-[#A1A1AA]"
+                      className="w-[50px] h-[50px] rounded-[10px] flex justify-center items-center bg-white text-[#A1A1AA] border-1 border-[#A1A1AA]"
                     >
                       취소
                     </Button>
                     <Button
                       type="submit"
-                      className="w-[50px] h-[50px] rounded-[10px] mt-[30px] flex justify-center items-center bg-[#8F5DF4] text-white"
+                      className="w-[50px] h-[50px] rounded-[10px] flex justify-center items-center bg-[#8F5DF4] text-white"
                     >
                       등록
                     </Button>

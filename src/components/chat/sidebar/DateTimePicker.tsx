@@ -37,11 +37,11 @@ const DateTimePicker: React.FC<DateTimePickerProps> = forwardRef(({ chatRoomId }
 
   const chat = useChatDataQuery(chatRoomId);
 
-  // 새로고침 시 현재시간으로 업데이트되는 오류 수정
+  // 처음 마운트될 때 서버에서 가져온 미팅 시간으로 초기화
   useEffect(() => {
     const meetingTime = chat?.[0]?.meeting_time;
     if (meetingTime) {
-      setSelectedMeetingTime(new Date(meetingTime)); // 처음 마운트될 때 서버에서 가져온 미팅 시간으로 초기화
+      setSelectedMeetingTime(new Date(meetingTime));
     }
   }, [chat]);
 

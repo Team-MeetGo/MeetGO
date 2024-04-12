@@ -6,4 +6,4 @@ export const ROOMDATA_WITH_ROOMID = ['roomDataWithRoomId'];
 
 export const ROOM_MEMBER = ['roomMember'];
 
-export const ROOM = ['room'];
+export const ROOMLIST = ['roomList'];

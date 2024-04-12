@@ -1,52 +1,10 @@
-import { reviewData } from '(@/components/review/ReviewList)';
-import { userStore } from '(@/store/userStore)';
-import { clientSupabase } from '(@/utils/supabase/client)';
-import { useEffect, useState } from 'react';
 import ReviewCard from '../review/ReviewCard';
-import { useQuery } from '@tanstack/react-query';
-import { LIKED_REVIEWLIST_QUERY_KEY, REVIEWLIST_QUERY_KEY } from '(@/query/review/reviewQueryKeys)';
-import { fetchLikedReviewList, fetchReviewList } from '(@/query/review/reviewQueryFns)';
-import { useGetUserDataQuery } from '(@/hooks/useQueries/useUserQuery)';
+import { useLikedReviewDataQuery, useReviewListDataQuery } from '(@/hooks/useQueries/useReviewQuery)';
 
 const GetMostLikedReivew = () => {
-  // const [reviewData, setReviewData] = useState<reviewData[]>([]);
-  // const { isLoggedIn, setIsLoggedIn } = userStore((state) => state);
+  const likedReviewList = useLikedReviewDataQuery();
+  const fetchReviewsData = useReviewListDataQuery();
 
-  const { data: userData, isError, isLoggedIn } = useGetUserDataQuery();
-
-  //   // const getUserId = async () => {
-  //   const userData = userStore.getState().user;
-  //   return userData && userData.user_id;
-  // };
-
-  //   // const checkLoginStatus = async () => {
-  //   const userId = await getUserId();
-  //   if (userId !== null) {
-  //     setIsLoggedIn(true);
-  //   } else {
-  //     setIsLoggedIn(false);
-  //   }
-  // };
-
-  //   // useEffect(() => {
-  //   checkLoginStatus();
-  // }, []);
-
-  // useEffect(() => {
-  //   getMostLikedReview();
-  // }, [likedReviewList, fetchReviewsData]);
-
-  const { data: likedReviewList } = useQuery({
-    queryKey: [LIKED_REVIEWLIST_QUERY_KEY],
-    queryFn: fetchLikedReviewList
-  });
-
-  const { data: fetchReviewsData } = useQuery({
-    queryKey: [REVIEWLIST_QUERY_KEY],
-    queryFn: fetchReviewList
-  });
-
-  //   async function getMostLikedReview() {
   const likedReviewIds = likedReviewList?.map((item) => item.review_id);
   const zeroLikedReviews = fetchReviewsData?.data?.filter((review) => !likedReviewIds?.includes(review.review_id));
 
@@ -59,9 +17,6 @@ const GetMostLikedReivew = () => {
   });
 
   const sliceReviews = [...(likedReviews || []), ...(zeroLikedReviews || [])].slice(0, 6);
-
-  //   //   setReviewData(sliceReviews);
-  // }
 
   return (
     <div>

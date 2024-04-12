@@ -1,9 +1,7 @@
 import Image from 'next/image';
 import AvatarDefault from '(@/utils/icons/AvatarDefault)';
 import { CommentListType } from './CommentList';
-import { useQuery } from '@tanstack/react-query';
-import { COMMENT_AUTHOR_QUERY_KEY } from '(@/query/review/commentQueryKeys)';
-import { fetchCommentAuthor } from '(@/query/review/commentQueryFns)';
+import { useCommentAuthorDataQuery } from '(@/hooks/useQueries/useCommentQuery)';
 
 type Props = {
   comment: CommentListType;
@@ -11,14 +9,6 @@ type Props = {
 
 const CommentCard = ({ comment }: Props) => {
   const commentAuthorId = comment.user_id;
-
-  const useCommentAuthorDataQuery = (commentAuthorId: string) => {
-    const { data: commentAuthorData } = useQuery({
-      queryKey: [COMMENT_AUTHOR_QUERY_KEY, commentAuthorId],
-      queryFn: async () => await fetchCommentAuthor(commentAuthorId)
-    });
-    return commentAuthorData;
-  };
 
   const commentAuthorData = useCommentAuthorDataQuery(commentAuthorId as string);
 
