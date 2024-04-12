@@ -32,8 +32,8 @@ const ChatList = ({ user, chatRoomId }: { user: User | null; chatRoomId: string 
   const lastDivRefs = useRef(messages);
   const lastMsgId = useMyLastMsgs(user?.id!, chatRoomId);
 
-  console.log('DB의 마지막 메세지 =>', lastMsgId);
-  console.log('찐 마지막 메세지 =>', messages[messages.length - 1].message_id);
+  // console.log('DB의 마지막 메세지 =>', lastMsgId);
+  // console.log('찐 마지막 메세지 =>', messages[messages.length - 1].message_id);
 
   useEffect(() => {
     if (roomId && chatRoomId) {
@@ -123,12 +123,12 @@ const ChatList = ({ user, chatRoomId }: { user: User | null; chatRoomId: string 
   useEffect(() => {
     console.log('useEffect 안 실행되는 건 맞아?');
     // 현재 나누는 메세지가 있을 때
-
     return () => {
       console.log('실행은 되니');
-      console.log(checkedLastMsg && messages.length);
       // 이전에 저장된 마지막 메세지가 있으면 현재 메세지 중 마지막 걸로 업데이트, 없으면 현재 메세지 중 마지막 메세지 추가하기
-      lastMsgId ? mutateToUpdate() : mutateToAdd();
+      if (messages.length) {
+        lastMsgId ? mutateToUpdate() : mutateToAdd();
+      }
     };
   }, [checkedLastMsg]);
 
