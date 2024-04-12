@@ -160,7 +160,8 @@ export const useEditReviewMutation = () => {
       const { data: updateReview, error: editReviewError } = await clientSupabase
         .from('review')
         .update({ review_title: editedTitle, review_contents: editedContent, image_urls: allImages })
-        .eq('review_id', review_id);
+        .eq('review_id', review_id)
+        .select();
       if (editReviewError) {
         console.error('insert error', editReviewError);
         return;
@@ -197,48 +198,3 @@ export const useEditImgsMutation = () => {
   });
   return editImgsMutation;
 };
-
-// export const useNewImgsMutation = () => {
-//   const queryClient = useQueryClient();
-
-//   const newImgsMutation = useMutation({
-//     mutationFn: async (files: File[]) => {
-//       const imageUrls: string[] = [];
-
-//       for (const file of files) {
-//         const uuid = crypto.randomUUID();
-//         const filePath = `reviewImage/${uuid}`;
-
-//         const uploadImage = async (filePath: string, file: File) => {
-//           const { data, error } = await clientSupabase.storage.from('reviewImage').upload(filePath, file, {
-//             cacheControl: '3600',
-//             upsert: true
-//           });
-
-//           if (error) {
-//             console.error('업로드 오류', error.message);
-//             throw error;
-//           }
-
-//           return data;
-//         };
-
-//         try {
-//           const data = await uploadImage(filePath, file);
-//           const { data: imageUrl } = await clientSupabase.storage.from('reviewImage').getPublicUrl(data.path);
-//           imageUrls.push(imageUrl.publicUrl);
-//         } catch (error) {
-//           console.error('이미지 업로드 오류:', error);
-//           throw error;
-//         }
-//       }
-
-//       return imageUrls;
-//     },
-//     onSuccess: () => {
-//       queryClient.invalidateQueries({ queryKey: NEW_IMAGES_UPLOAD_QUERY_KEY });
-//     }
-//   });
-
-//   return newImgsMutation;
-// };
