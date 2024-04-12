@@ -5,37 +5,32 @@ import {
   fetchRoomInfoWithRoomId
 } from '(@/query/meetingRoom/meetingQueryFns)';
 import { MY_ROOM, RECRUTING_ROOMDATA, ROOMDATA_WITH_ROOMID } from '(@/query/meetingRoom/meetingQueryKeys)';
-import { useSuspenseQueries, useSuspenseQuery } from '@tanstack/react-query';
+import { useQuery, useSuspenseQueries, useSuspenseQuery } from '@tanstack/react-query';
 
-export const useRecruitingMyroomQuery = (user_id: string) => {
-  const results = useSuspenseQueries({
-    queries: [
-      {
-        queryKey: RECRUTING_ROOMDATA,
-        queryFn: fetchRecruitingRoom
-      },
-      {
-        queryKey: [MY_ROOM, user_id],
-        queryFn: async () => await fetchMyRoom(user_id)
-      }
-    ]
+export const useRecruitingQuery = (user_id: string) => {
+  const results = useSuspenseQuery({
+    queryKey: RECRUTING_ROOMDATA,
+    queryFn: fetchRecruitingRoom
   });
-  return results.map((re) => re.data);
+  return results;
 };
 
-export const useRoomInfoWithRoomIdQuery = (room_id: string) => {
-  const { data: roomData } = useSuspenseQuery({
+export const useMyroomQuery = (user_id: string) => {
+  const results = useSuspenseQuery({
+    queryKey: [MY_ROOM, user_id],
+    queryFn: () => fetchMyRoom(user_id)
+  });
+  return results.data?.map((r) => r.room);
+};
+
+export const useRoomInfoWithRoomIdQuery = (room_id: string) =>
+  useQuery({
     queryKey: [ROOMDATA_WITH_ROOMID, room_id],
-    queryFn: async () => await fetchRoomInfoWithRoomId(room_id)
+    queryFn: () => fetchRoomInfoWithRoomId(room_id)
   });
-  console.log(roomData);
-  return roomData;
-};
 
-export const useAlreadyChatRoomQuery = (room_id: string) => {
-  const { data: roomData } = useSuspenseQuery({
+export const useAlreadyChatRoomQuery = (room_id: string) =>
+  useQuery({
     queryKey: [ROOMDATA_WITH_ROOMID, room_id],
-    queryFn: async () => await fetchAlreadyChatRoom(room_id)
+    queryFn: () => fetchAlreadyChatRoom(room_id)
   });
-  return roomData;
-};

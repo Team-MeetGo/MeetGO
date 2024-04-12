@@ -1,23 +1,22 @@
 'use client';
 import meetingRoomHandler from '(@/hooks/custom/room)';
-import { useRecruitingMyroomQuery } from '(@/hooks/useQueries/useMeetingQuery)';
+import { useMyroomQuery, useRecruitingQuery } from '(@/hooks/useQueries/useMeetingQuery)';
+import { useSearchRoomStore } from '(@/store/searchRoomStore)';
 import { useEffect, useState } from 'react';
-import { IoMdRefresh } from 'react-icons/io';
+import { IoIosArrowBack, IoIosArrowForward, IoMdRefresh } from 'react-icons/io';
 import MeetingRoom from './MeetingRoom';
 import MeetingRoomForm from './MeetingRoomForm';
-
-import { useSearchRoomStore } from '(@/store/searchRoomStore)';
-import { userStore } from '(@/store/userStore)';
-import type { MeetingRoomType, MeetingRoomTypes } from '(@/types/roomTypes)';
 import MemberNumberSelection from './MemberNumberSelection';
 import RegionSelection from './RegionSelection';
 
+import { useGetUserDataQuery } from '(@/hooks/useQueries/useUserQuery)';
+import type { MeetingRoomType, MeetingRoomTypes } from '(@/types/roomTypes)';
+
 function MeetingRoomList() {
   const [page, setPage] = useState(1);
-  const { user } = userStore((state) => state);
-  const result = useRecruitingMyroomQuery(user && user.user_id);
-  const recruitingRoom = result[0] as MeetingRoomTypes;
-  const myRoom = result[1]?.map((sample: any) => sample.room);
+  const { data: user, isPending, isError, error } = useGetUserDataQuery();
+  const { data: meetingRoomList } = useRecruitingQuery(String(user?.user_id));
+  const myRoomList = useMyroomQuery(String(user?.user_id));
   const { selectRegion, selectMemberNumber } = useSearchRoomStore();
 
   const [chattingRoomList, setChattingRoomList] = useState<MeetingRoomTypes>();
@@ -36,8 +35,8 @@ function MeetingRoomList() {
   };
 
   // meetingRoomList 중에서 myRoomList가 없는 것을 뽑아내기
-  const otherRooms = recruitingRoom?.filter(function (room: MeetingRoomType) {
-    const foundItem = myRoom?.find((r) => r.room_id === room?.room_id);
+  const otherRooms = meetingRoomList?.filter(function (room: MeetingRoomType) {
+    const foundItem = myRoomList?.find((r) => r.room_id === room?.room_id);
     if (foundItem) {
       return false;
     } else {
@@ -51,7 +50,7 @@ function MeetingRoomList() {
   );
 
   const nextPage = () => {
-    if (myRoom && myRoom.length / 3 < page) {
+    if (myRoomList && myRoomList.length / 3 < page) {
       return setPage(1);
     }
     setPage((page) => page + 1);
@@ -80,20 +79,25 @@ function MeetingRoomList() {
           </div>
         </div>
         <div className="w-full flex flex-row justify-center">
-          <button onClick={() => beforePage()}> - </button>
+          <button onClick={() => beforePage()}>
+            <IoIosArrowBack className="h-8 w-8 m-2" />
+          </button>
           {
             <div className="gap-8 grid grid-cols-3 m-4 w-full px-4">
-              {myRoom?.map((room, index) => {
-                if (index < 3 * page && index >= 3 * (page - 1))
-                  return (
-                    <div key={index}>
-                      <MeetingRoom room={room} />
-                    </div>
-                  );
-              })}
+              {myRoomList !== null &&
+                myRoomList?.map((room, index) => {
+                  if (index < 3 * page && index >= 3 * (page - 1))
+                    return (
+                      <div key={index}>
+                        <MeetingRoom room={room} />
+                      </div>
+                    );
+                })}
             </div>
           }
-          <button onClick={() => nextPage()}> + </button>
+          <button onClick={() => nextPage()}>
+            <IoIosArrowForward className="h-8 w-8 m-2" />
+          </button>
         </div>
       </header>
       <div className="flex flex-row justify-between">

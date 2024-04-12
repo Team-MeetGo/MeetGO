@@ -1,11 +1,11 @@
 'use client';
 
 import { useDeleteRoom } from '(@/hooks/useMutation/useMeetingMutation)';
-import { clientSupabase } from '(@/utils/supabase/client)';
 
 function DeleteMeetingRoom({ room_id }: { room_id: string }) {
   const deleteRoomMutation = useDeleteRoom({ room_id });
   const DeleteMeetingRoomHandler = async () => {
+    confirm('정말 삭제하시겠습니까?');
     await deleteRoomMutation.mutateAsync();
   };
 
