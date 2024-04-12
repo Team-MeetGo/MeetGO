@@ -3,7 +3,7 @@
 import { clientSupabase } from '(@/utils/supabase/client)';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
-import { Button } from '@nextui-org/react';
+import { Button, Checkbox } from '@nextui-org/react';
 import { googleLogin, kakaoLogin } from '(@/utils/api/authAPI)';
 import { ValidationModal } from '../common/ValidationModal';
 import { useModalStore } from '(@/store/modalStore)';
@@ -12,6 +12,7 @@ import { IsValidateShow, LoginData } from '(@/types/userTypes)';
 import { userStore } from '(@/store/userStore)';
 import { useQueryClient } from '@tanstack/react-query';
 import { USER_DATA_QUERY_KEY } from '(@/query/user/userQueryKeys)';
+import Link from 'next/link';
 
 const LOGIN_FORM_LIST = [
   {
@@ -76,11 +77,10 @@ const LoginForm = () => {
 
         // 캐시 무효화
         // 맨 처음에 메인 페이지 -> 로그인
+        showModal();
         queryClient.invalidateQueries({
           queryKey: [USER_DATA_QUERY_KEY]
         });
-
-        showModal();
         console.log('로그인 성공: ', session);
       } else if (error) throw error;
     } catch (error: any) {
@@ -95,22 +95,46 @@ const LoginForm = () => {
   return (
     <>
       <div className="max-w-[450px] w-full">
-        <form className="flex flex-col gap-[10px]" onSubmit={onSubmitForm}>
-          {LOGIN_FORM_LIST.map(({ type, name, placeholder, error }) => (
-            <label key={name}>
-              <input
-                className="p-5 border border-[#A1A1AA] placeholder:text-[#A1A1AA] placeholder:text-[14px] rounded-lg focus:outline-none focus:border-[#8F5DF4] w-full"
-                type={type}
-                name={name}
-                placeholder={placeholder}
-                onChange={onChangeInput}
-                required
-              />
-              {!isValidateShow[name] && <p className="text-red-500 text-[13px] mt-2">{error}</p>}
-            </label>
-          ))}
+        <form className="flex flex-col gap-[8px]" onSubmit={onSubmitForm}>
+          <div className="flex flex-col gap-[16px]">
+            {LOGIN_FORM_LIST.map(({ type, name, placeholder, error }) => (
+              <label key={name}>
+                <input
+                  className="p-5 border border-[#A1A1AA] placeholder:text-[#A1A1AA] placeholder:text-[14px] rounded-lg focus:outline-none focus:border-[#8F5DF4] w-full"
+                  type={type}
+                  name={name}
+                  placeholder={placeholder}
+                  onChange={onChangeInput}
+                  required
+                />
+                {!isValidateShow[name] && <p className="text-red-500 text-[13px] mt-2">{error}</p>}
+              </label>
+            ))}
+          </div>
+          <div className="flex items-center justify-between">
+            <Checkbox
+              className=""
+              color="default"
+              radius="sm"
+              classNames={{
+                label: 'text-[14px] text-gray3',
+                wrapper: ''
+              }}
+            >
+              이메일 저장
+            </Checkbox>
+            <div className="flex gap-[4px]">
+              <Link href="" className="text-gray3 text-[14px]">
+                아이디 찾기
+              </Link>
+              <p>|</p>
+              <Link href="" className="text-gray3 text-[14px]">
+                비밀번호 찾기
+              </Link>
+            </div>
+          </div>
           <Button
-            className="duration-200 bg-[#8F5DF4] text-white p-5 mt-[40px] rounded-lg font-semibold w-full py-[20px] h-auto text-[16px]"
+            className="duration-200 bg-[#8F5DF4] text-white p-5 mt-[24px] rounded-lg font-semibold w-full py-[20px] h-auto text-[16px]"
             type="submit"
           >
             로그인
@@ -119,7 +143,7 @@ const LoginForm = () => {
         {isError && <p className="text-red-500 text-[13px] mt-2">아이디 또는 비밀번호가 일치하지 않습니다.</p>}
         <Button
           onClick={() => router.push('/users/join')}
-          className="duration-200 bg-white text-[#27272A] border border-[#A1A1AA] p-5 mt-[20px] rounded-lg w-full py-[20px] h-auto text-[16px]"
+          className="duration-200 bg-white text-[#27272A] border border-[#A1A1AA] p-5 mt-[16px] rounded-lg w-full py-[20px] h-auto text-[16px]"
           type="button"
         >
           아직 아이디가 없다면? 회원가입하기

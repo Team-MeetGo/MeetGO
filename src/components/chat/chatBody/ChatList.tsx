@@ -15,30 +15,33 @@ import ChatSearch from './ChatSearch';
 import { useMyLastMsgs, useRoomDataQuery } from '(@/hooks/useQueries/useChattingQuery)';
 import { usePathname } from 'next/navigation';
 import { useAddLastMsg, useUpdateLastMsg } from '(@/hooks/useMutation/useChattingMutation)';
+import MyChat from './MyChat';
 
 const ChatList = ({ user, chatRoomId }: { user: User | null; chatRoomId: string }) => {
   const scrollRef = useRef() as React.MutableRefObject<HTMLDivElement>;
-  const { hasMore, messages, setMessages } = chatStore((state) => state);
-  const [isScrolling, setIsScrolling] = useState(false);
+  const { hasMore, messages, checkedLastMsg, isScrolling, setMessages, setCheckedLastMsg, setIsScrolling } = chatStore(
+    (state) => state
+  );
+  // const [isScrolling, setIsScrolling] = useState(false);
   const [isScrollTop, setIsScrollTop] = useState(true);
   const [count, setCount] = useState(1);
   const [newAddedMsgNum, setNewAddedMsgNum] = useState(0);
   const [lastCheckedDiv, setLastCheckedDiv] = useState<HTMLElement | null>();
-  const [checkedLastMsg, setCheckedLastMsg] = useState(false);
+  // const [checkedLastMsg, setCheckedLastMsg] = useState(false);
+  console.log('checkedLastMsg =>', checkedLastMsg);
+  console.log('메세지 있어? =>', messages.length > 0);
   const room = useRoomDataQuery(chatRoomId);
   const roomId = room?.roomId;
-  const lastMsgId = useMyLastMsgs(user?.id!, chatRoomId);
-  // console.log('lastMsgId => ', lastMsgId && lastMsgId[0].last_msg_id);
+
+  console.log('messages =>', messages);
   const prevMsgsLengthRef = useRef(messages.length);
   const lastDivRefs = useRef(messages);
 
-  console.log('쌩 날짜 =>', messages[0].created_at);
-  const date = new Date(messages[0].created_at);
-  console.log('만진 날짜 =>', date);
-  console.log(typeof date);
-  console.log(date.getDate());
+  const lastMsgId = useMyLastMsgs(user?.id!, chatRoomId);
 
-  const pathname = usePathname();
+  console.log('DB의 마지막 메세지 =>', lastMsgId);
+  console.log('찐 마지막 메세지 =>', messages[messages.length - 1].message_id);
+
   const { mutate: mutateToUpdate } = useUpdateLastMsg(
     user?.id as string,
     chatRoomId as string,
@@ -88,35 +91,33 @@ const ChatList = ({ user, chatRoomId }: { user: User | null; chatRoomId: string 
     const scrollBox = scrollRef.current;
     if (scrollBox && !isScrolling) {
       // 처음에 로드 시 스크롤 중이 아닐 때
-      if (lastMsgId && lastMsgId.length && lastMsgId[0].last_msg_id !== messages[messages.length - 1].message_id) {
+      if (lastMsgId && lastMsgId !== messages[messages.length - 1].message_id) {
         // 이전에 저장된 마지막 메세지가 있으면 그 메세지 강조처리
         // let lastDiv = document.getElementById(`${lastMsgId[0].last_msg_id}`);
-        let ref = lastDivRefs.current.find((ref) => ref.message_id === lastMsgId[0].last_msg_id);
+        let ref = lastDivRefs.current.find((ref) => ref.message_id === lastMsgId);
         let lastDiv = ref && ref.current;
         if (lastDiv) {
           setLastCheckedDiv(lastDiv);
-          makeHereText(lastDiv);
-          setCheckedLastMsg(true);
+          styleHere(lastDiv);
         }
       } else {
         scrollBox.scrollTop = scrollBox.scrollHeight;
       }
     }
-    // 처음 로드 시에만 실행(의존성배열 = [])
   }, []);
 
   useEffect(() => {
     const scrollBox = scrollRef.current;
     if (scrollBox && !isScrolling) {
       // 처음에 로드 시 스크롤 중이 아닐 때
-      if (!lastMsgId || !lastMsgId?.length || prevMsgsLengthRef.current !== messages.length) {
-        // 이전에 저장된 마지막 메세지가 없으면 그냥 스크롤 다운
+      if (!lastMsgId || !lastCheckedDiv || prevMsgsLengthRef.current !== messages.length) {
+        // 이전에 저장된 마지막 메세지가 없거나, DB에 저장된 메세지는 있는데 화면에 없거나, 새로운 메세지가 추가될 때 그냥 스크롤 다운
         scrollBox.scrollTop = scrollBox.scrollHeight;
         prevMsgsLengthRef.current = messages.length;
       } else {
         // 이전에 저장된 마지막 메세지가 있고 그게 강조처리 되어있다가, 스크롤다운(마지막 메세지를 확인)되면 투명으로 변경
-        if (checkedLastMsg && lastCheckedDiv) {
-          setCheckedLastMsg(false);
+        if (lastCheckedDiv) {
+          setCheckedLastMsg(true);
           lastCheckedDiv.style.display = 'none';
         }
       }
@@ -125,15 +126,18 @@ const ChatList = ({ user, chatRoomId }: { user: User | null; chatRoomId: string 
 
   // 마지막으로 읽은 메세지 기억하기
   useEffect(() => {
+    console.log('useEffect 안 실행되는 건 맞아?');
+    // 현재 나누는 메세지가 있을 때
+
     return () => {
-      // 현재 나누는 메세지가 있을 때
-      if (messages.length) {
-        // 이전에 저장된 마지막 메세지가 있으면 현재 메세지 중 마지막 걸로 업데이트, 없으면 현재 메세지 중 마지막 메세지 추가하기
-        lastMsgId?.length ? mutateToUpdate() : mutateToAdd();
-      }
+      console.log('실행은 되니');
+      console.log(checkedLastMsg && messages.length);
+      // if (checkedLastMsg && messages.length) {
+      // 이전에 저장된 마지막 메세지가 있으면 현재 메세지 중 마지막 걸로 업데이트, 없으면 현재 메세지 중 마지막 메세지 추가하기
+      // lastMsgId ? mutateToUpdate() : mutateToAdd();
+      // }
     };
-    // 주소가 바뀔 때만 감지해서 저장 또는 업데이트
-  }, [pathname]);
+  }, [checkedLastMsg]);
 
   // 스크롤 이벤트가 발생할 때
   const handleScroll = () => {
@@ -153,7 +157,7 @@ const ChatList = ({ user, chatRoomId }: { user: User | null; chatRoomId: string 
   };
   // insert 할 때 없어졌으면 좋겠는데..
 
-  const makeHereText = (lastDiv: HTMLElement) => {
+  const styleHere = (lastDiv: HTMLElement) => {
     lastDiv.style.backgroundColor = 'pink';
     lastDiv.scrollIntoView({ block: 'center' });
   };
@@ -166,32 +170,16 @@ const ChatList = ({ user, chatRoomId }: { user: User | null; chatRoomId: string 
         onScroll={handleScroll}
       >
         <ChatSearch isScrollTop={isScrollTop} />
-
         {hasMore ? <LoadChatMore chatRoomId={chatRoomId} count={count} setCount={setCount} /> : <></>}
-        {messages?.map((msg, idx) => (
-          <>
-            {idx >= 1 && new Date(msg.created_at).getDate() > new Date(messages[idx - 1].created_at).getDate() ? (
-              <div className="mx-auto">
-                <p>{showingDate(msg.created_at)}</p>
-              </div>
-            ) : null}
-            {msg.send_from === user?.id ? (
+        <>
+          {messages?.map((msg, idx) =>
+            msg.send_from === user?.id ? (
               <MyChat msg={msg} key={msg.message_id} idx={idx} lastDivRefs={lastDivRefs} />
             ) : (
               <OthersChat msg={msg} key={msg.message_id} idx={idx} lastDivRefs={lastDivRefs} />
-            )}
-            {lastMsgId &&
-            lastMsgId?.length &&
-            lastMsgId[0]?.last_msg_id !== messages[messages.length - 1].message_id &&
-            lastMsgId[0]?.last_msg_id === msg.message_id &&
-            isScrolling &&
-            checkedLastMsg ? (
-              <div className={`flex ${msg.send_from === user?.id ? 'ml-auto' : 'mr-auto'}`}>
-                <p>여기까지 읽으셨습니다.</p>
-              </div>
-            ) : null}
-          </>
-        ))}
+            )
+          )}
+        </>
       </div>
       {isScrolling ? (
         newAddedMsgNum === 0 ? (
@@ -211,23 +199,3 @@ const ChatList = ({ user, chatRoomId }: { user: User | null; chatRoomId: string 
 };
 
 export default ChatList;
-
-const MyChat = ({ msg, idx, lastDivRefs }: { msg: Message; idx: number; lastDivRefs: any }) => {
-  return (
-    <div id={msg.message_id} ref={lastDivRefs.current[idx]} className="flex gap-4 ml-auto">
-      <div className="w-80 h-24 flex flex-col gap-1">
-        <div className="font-bold ml-auto">{msg.nickname}</div>
-        <div className="flex gap-2 ml-auto">
-          <ChatDeleteDropDown msg={msg} />
-          <div className="border rounded-md py-3 px-5 h-full text-right">{msg.message}</div>
-        </div>
-        <div className="mt-auto text-slate-100 text-xs ml-auto">
-          <p>{getformattedDate(msg.created_at)}</p>
-        </div>
-      </div>
-      <Tooltip content="여기 컴포넌트">
-        <div className="h-14 w-14 bg-indigo-600 rounded-full my-auto">{msg.avatar}</div>
-      </Tooltip>
-    </div>
-  );
-};
