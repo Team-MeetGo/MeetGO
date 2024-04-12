@@ -2,8 +2,6 @@
 
 import { Suspense, useState } from 'react';
 import SchoolForm from './SchoolForm';
-import { clientSupabase } from '(@/utils/supabase/client)';
-import { userStore } from '(@/store/userStore)';
 import AvatarForm from './AvatarForm';
 import MyPost from './MyPost';
 import Favorite from './Favorite';
@@ -18,22 +16,22 @@ import { UpdateProfileType } from '(@/types/userTypes)';
 
 const Profile = () => {
   const queryClient = useQueryClient();
-  const { data: userData, isPending, isError, error } = useGetUserDataQuery();
+  const { data: user, isPending, isError, error } = useGetUserDataQuery();
   const [isEditing, setIsEditing] = useState(false);
-  const inputNickname = useInputChange(userData?.nickname ? userData?.nickname : '');
-  const inputIntro = useInputChange(userData?.intro ? userData?.intro : '');
-  const inputKakaoId = useInputChange(userData?.kakaoId ? userData?.kakaoId : '');
-  const inputGender = useInputChange(userData?.gender ? userData?.gender : '');
+  const inputNickname = useInputChange(user?.nickname ? user?.nickname : '');
+  const inputIntro = useInputChange(user?.intro ? user?.intro : '');
+  const inputKakaoId = useInputChange(user?.kakaoId ? user?.kakaoId : '');
+  const inputGender = useInputChange(user?.gender ? user?.gender : '');
 
   const { mutate: updateProfileMutate } = useProfileUpdateMutation();
 
   const toggleEditing = () => {
     setIsEditing(true);
-    if (userData) {
-      inputNickname.setValue(userData?.nickname);
-      inputIntro.setValue(userData?.intro);
-      inputKakaoId.setValue(userData?.kakaoId);
-      inputGender.setValue(userData?.gender);
+    if (user) {
+      inputNickname.setValue(user?.nickname);
+      inputIntro.setValue(user?.intro);
+      inputKakaoId.setValue(user?.kakaoId);
+      inputGender.setValue(user?.gender);
     }
   };
 
@@ -41,56 +39,69 @@ const Profile = () => {
     setIsEditing(false);
   };
 
-  /** 프로필 업데이트하는 로직 */
-  const updateProfile = async () => {
-    const userId = userData?.user_id;
-    if (!userId) return;
-    /** 닉네임 중복 검사 로직 */
-    const { data: nicknameData, error: nicknameError } = await clientSupabase
-      .from('users')
-      .select('nickname')
-      .eq('nickname', inputNickname.value)
-      .not('user_id', 'eq', userData?.user_id);
-    if (nicknameError) {
-      console.error('Error fetching:', nicknameError);
-      return;
-    }
-    if (nicknameData) {
-      alert('이미 사용중인 닉네임입니다. 다른 닉네임을 입력해주세요.');
-      return;
-    }
+  // /** 프로필 업데이트하는 로직 */
+  // const updateProfile = async () => {
+  //   const userId = user?.user_id;
+  //   if (!userId) return;
+  //   /** 닉네임 중복 검사 로직 */
+  //   const { data: nicknameData, error: nicknameError } = await clientSupabase
+  //     .from('users')
+  //     .select('nickname')
+  //     .eq('nickname', inputNickname.value)
+  //     .not('user_id', 'eq', user?.user_id);
+  //   if (nicknameError) {
+  //     console.error('Error fetching:', nicknameError);
+  //     return;
+  //   }
+  //   if (nicknameData) {
+  //     alert('이미 사용중인 닉네임입니다. 다른 닉네임을 입력해주세요.');
+  //     return;
+  //   }
 
-    const { error } = await clientSupabase
-      .from('users')
-      .update({
-        intro: inputIntro.value,
-        kakaoId: inputKakaoId.value,
-        nickname: inputNickname.value,
-        gender: inputGender.value
-      })
-      .eq('user_id', userId);
-  };
-
-  // /** 수정하고 저장버튼 클릭시 실행될 로직(상태 업데이트 및 갱신) */
-  // const handleProfileUpdate = ({ userId, inputNickname, inputIntro, inputKakaoId, inputGender }: UpdateProfileType) => {
-  //   updateProfileMutate(
-  //     { userId, inputNickname, inputIntro, inputKakaoId, inputGender },
-  //     {
-  //       onSuccess: () => {
-  //         queryClient.invalidateQueries({
-  //           queryKey: [USER_DATA_QUERY_KEY]
-  //         });
-  //       }
-  //     }
-  //   );
+  //   const { error } = await clientSupabase
+  //     .from('users')
+  //     .update({
+  //       intro: inputIntro.value,
+  //       kakaoId: inputKakaoId.value,
+  //       nickname: inputNickname.value,
+  //       gender: inputGender.value
+  //     })
+  //     .eq('user_id', userId);
   // };
+
+  /** 수정하고 저장버튼 클릭시 실행될 로직(상태 업데이트 및 갱신) */
+  const handleProfileUpdate = ({ userId, inputNickname, inputIntro, inputKakaoId, inputGender }: UpdateProfileType) => {
+    updateProfileMutate(
+      { userId, inputNickname, inputIntro, inputKakaoId, inputGender },
+      {
+        onSuccess: () => {
+          queryClient.invalidateQueries({
+            queryKey: [USER_DATA_QUERY_KEY]
+          });
+          setIsEditing(false);
+        }
+      }
+    );
+  };
 
   return (
     <div className="max-w-4xl mx-auto p-6 bg-white">
       <h1 className="text-2xl font-bold mb-4">프로필</h1>
+      <AvatarForm />
       {isEditing ? (
         <>
-          <button className="border p-4" onClick={updateProfile}>
+          <button
+            className="border p-4"
+            onClick={() =>
+              handleProfileUpdate({
+                userId: user!.user_id,
+                inputNickname: inputNickname.value,
+                inputIntro: inputIntro.value,
+                inputKakaoId: inputKakaoId.value,
+                inputGender: inputGender.value
+              })
+            }
+          >
             저장하기
           </button>
           <button className="border p-4" onClick={onCancelHandle}>
@@ -105,7 +116,7 @@ const Profile = () => {
       <div className="grid grid-cols-2 gap-6 mb-6">
         <div>
           {!isEditing ? (
-            <p className="block text-base font-medium mb-1">{userData?.nickname}</p>
+            <p className="block text-base font-medium mb-1">{user?.nickname}</p>
           ) : (
             <input
               className="w-full p-2 border border-gray-300 rounded-md"
@@ -116,12 +127,12 @@ const Profile = () => {
               onChange={inputNickname.onChange}
             />
           )}
-          <p className="block text-sm font-medium mb-1">{userData?.login_email}</p>
+          <p className="block text-sm font-medium mb-1">{user?.login_email}</p>
           <p className="block text-sm font-medium mb-1">
-            {userData
-              ? userData?.gender === 'female'
+            {user
+              ? user?.gender === 'female'
                 ? '여성'
-                : userData?.gender === 'male'
+                : user?.gender === 'male'
                 ? '남성'
                 : '성별을 골라주세요.'
               : '사용자 정보 없음'}
@@ -137,13 +148,12 @@ const Profile = () => {
             </Select>
           )}
         </div>
-        <AvatarForm />
       </div>
       <SchoolForm />
       <div className="mb-6">
         <label className="block text-sm font-medium mb-1">카카오톡ID</label>
         {!isEditing ? (
-          <p className="block text-sm font-medium mb-1">{userData?.kakaoId}</p>
+          <p className="block text-sm font-medium mb-1">{user?.kakaoId}</p>
         ) : (
           <input
             className="w-full p-2 border border-gray-300 rounded-md"
@@ -161,7 +171,7 @@ const Profile = () => {
           자기소개(최대 15자)
         </label>
         {!isEditing ? (
-          <p className="block text-sm font-medium mb-1">{userData?.intro}</p>
+          <p className="block text-sm font-medium mb-1">{user?.intro}</p>
         ) : (
           <textarea
             className="w-full p-2 border border-gray-300 rounded-md"
@@ -172,9 +182,7 @@ const Profile = () => {
           />
         )}
       </div>
-      <Suspense fallback={<div>Loading...</div>}>
-        <MetPeople />
-      </Suspense>
+      <MetPeople />
       <MyPost />
     </div>
   );
