@@ -45,26 +45,6 @@ const DateTimePicker: React.FC<DateTimePickerProps> = forwardRef(({ chatRoomId }
     }
   }, [chat]);
 
-  useEffect(() => {
-    if (selectedMeetingTime) {
-      // 선택된 미팅 시간이 있을 때에만 서버에 미팅 시간 업데이트
-      const isoStringMeetingTime = selectedMeetingTime.toISOString();
-      updateMeetingTime(
-        {
-          chatRoomId,
-          isoStringMeetingTime
-        },
-        {
-          onSuccess: () => {
-            queryClient.invalidateQueries({
-              queryKey: [MEETING_TIME_QUERY_KEY]
-            });
-          }
-        }
-      );
-    }
-  }, [selectedMeetingTime]);
-
   // months 배열을 선언
   const months = ['1월', '2월', '3월', '4월', '5월', '6월', '7월', '8월', '9월', '10월', '11월', '12월'];
 
@@ -78,6 +58,14 @@ const DateTimePicker: React.FC<DateTimePickerProps> = forwardRef(({ chatRoomId }
         selected={selectedMeetingTime}
         onChange={(date) => {
           setSelectedMeetingTime(date as Date);
+          if (selectedMeetingTime) {
+            // 선택된 미팅 시간이 있을 때에만 서버에 미팅 시간 업데이트
+            const isoStringMeetingTime = selectedMeetingTime.toISOString();
+            updateMeetingTime({
+              chatRoomId,
+              isoStringMeetingTime
+            });
+          }
         }}
         minDate={new Date()} // 오늘 이전의 날짜 선택 불가능
         showTimeSelect

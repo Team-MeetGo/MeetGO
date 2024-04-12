@@ -4,7 +4,6 @@ import { useAcceptKakaoIdMutation, useMetPeopleMutation } from '(@/hooks/useMuta
 import { useMetPeople } from '(@/hooks/useQueries/useMetPeopleQuery)';
 import { useGetUserDataQuery } from '(@/hooks/useQueries/useUserQuery)';
 import { KAKAOID_REQUEST_QUERY_KEY } from '(@/query/user/metPeopleQueryKeys)';
-import { userStore } from '(@/store/userStore)';
 import { clientSupabase } from '(@/utils/supabase/client)';
 import { useQueryClient } from '@tanstack/react-query';
 import { use, useEffect } from 'react';

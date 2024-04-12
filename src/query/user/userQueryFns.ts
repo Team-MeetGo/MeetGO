@@ -1,4 +1,3 @@
-import { userStore } from '(@/store/userStore)';
 import { clientSupabase } from '(@/utils/supabase/client)';
 
 export const fetchUserData = async () => {
