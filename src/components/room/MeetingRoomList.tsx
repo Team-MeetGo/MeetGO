@@ -2,7 +2,7 @@
 import meetingRoomHandler from '(@/hooks/custom/room)';
 import { useMyroomQuery, useRecruitingQuery } from '(@/hooks/useQueries/useMeetingQuery)';
 import { useSearchRoomStore } from '(@/store/searchRoomStore)';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { IoIosArrowBack, IoIosArrowForward, IoMdRefresh } from 'react-icons/io';
 import MeetingRoom from './MeetingRoom';
 import MeetingRoomForm from './MeetingRoomForm';
@@ -11,6 +11,8 @@ import RegionSelection from './RegionSelection';
 
 import { useGetUserDataQuery } from '(@/hooks/useQueries/useUserQuery)';
 import type { MeetingRoomType, MeetingRoomTypes } from '(@/types/roomTypes)';
+import { clientSupabase } from '(@/utils/supabase/client)';
+import { useMyChatRoomIdsQuery } from '(@/hooks/useQueries/useChattingQuery)';
 
 function MeetingRoomList() {
   const [page, setPage] = useState(1);
@@ -21,6 +23,52 @@ function MeetingRoomList() {
 
   const [chattingRoomList, setChattingRoomList] = useState<MeetingRoomTypes>();
   const { getChattingRoom } = meetingRoomHandler();
+
+  const myChatRoomIds = useMyChatRoomIdsQuery(user?.user_id!);
+  console.log(myChatRoomIds);
+  const [msgCountArr, setMsgCountArr] = useState(Array(myChatRoomIds.length).fill(0));
+  console.log(msgCountArr);
+
+  const handlePlusMsgCount = useCallback(
+    (idx: number) => {
+      const newCountArr = [...msgCountArr];
+      newCountArr[idx] = msgCountArr[idx] + 1;
+      setMsgCountArr(newCountArr);
+    },
+    [msgCountArr]
+  );
+
+  const clearMsgCount = (idx: number) => {
+    const newCountArr = [...msgCountArr];
+    newCountArr[idx] = 0;
+    setMsgCountArr(newCountArr);
+  };
+
+  useEffect(() => {
+    myChatRoomIds.forEach((id, idx) => {
+      const channel = clientSupabase
+        .channel(id)
+        .on(
+          'postgres_changes',
+          {
+            event: 'INSERT',
+            schema: 'public',
+            table: 'messages',
+            filter: `chatting_room_id=eq.${id}`
+          },
+          (payload) => {
+            console.log('payload', payload);
+            handlePlusMsgCount(idx);
+          }
+        )
+        .subscribe();
+
+      return () => {
+        clientSupabase.removeChannel(channel);
+      };
+    });
+  }, [myChatRoomIds, handlePlusMsgCount]);
+
   useEffect(() => {
     const getMeetingRoomList = async () => {
       const chattingroom = (await getChattingRoom()) as MeetingRoomTypes;
@@ -36,7 +84,7 @@ function MeetingRoomList() {
 
   // meetingRoomList 중에서 myRoomList가 없는 것을 뽑아내기
   const otherRooms = meetingRoomList?.filter(function (room: MeetingRoomType) {
-    const foundItem = myRoomList?.find((r) => r.room_id === room?.room_id);
+    const foundItem = myRoomList?.find((r) => r?.room_id === room?.room_id);
     if (foundItem) {
       return false;
     } else {
@@ -64,6 +112,8 @@ function MeetingRoomList() {
 
   return (
     <article>
+      <button onClick={() => handlePlusMsgCount(1)}>플러스</button>
+      <button onClick={() => clearMsgCount(1)}>clear</button>
       <header className="h-72">
         <div className="flex flex-row justify-between">
           <div className="m-4 text-xl	font-semibold">들어가 있는 방</div>
@@ -89,7 +139,13 @@ function MeetingRoomList() {
                   if (index < 3 * page && index >= 3 * (page - 1))
                     return (
                       <div key={index}>
-                        <MeetingRoom room={room} />
+                        {index}
+                        {/* 새로운 메세지 수! - ㅇㅈ */}
+                        <div className="flex gap-2">
+                          <h1>새로운 메세지 수</h1>
+                          {msgCountArr[index]}
+                        </div>
+                        {room && <MeetingRoom room={room} />}
                       </div>
                     );
                 })}

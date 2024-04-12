@@ -1,1 +1,1 @@
-export const ITEM_INTERVAL = 2;
+export const ITEM_INTERVAL = 10;

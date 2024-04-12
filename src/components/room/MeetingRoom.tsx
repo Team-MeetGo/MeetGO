@@ -21,14 +21,14 @@ function MeetingRoom({ room }: { room: MeetingRoomType }) {
   const router = useRouter();
   const [open, setOpen] = useState(false);
   const { data: user } = useGetUserDataQuery();
-  const user_id = user?.user_id;
+  const user_id = String(user?.user_id);
   const { getmaxGenderMemberNumber } = meetingRoomHandler();
   const participants = useParticipantsQuery(room.room_id);
   const roomMemberMutation = useAddRoomMemberMutation({ user_id, room_id });
   const updateRoomStatusCloseMutation = useUpdateRoomStatusClose({ room_id });
   const { data: alreadyChatRoom, error: alreadyChatRoomError } = useAlreadyChatRoomQuery(room_id);
   const genderMaxNumber = getmaxGenderMemberNumber(member_number);
-  const emptySeat = genderMaxNumber * 2 - participants.length;
+  const emptySeat = genderMaxNumber! * 2 - participants.length;
 
   const countFemale = participants.filter((member) => member.gender === 'female').length;
   const countMale = participants.filter((member) => member.gender === 'male').length;
