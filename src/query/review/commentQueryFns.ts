@@ -1,8 +1,6 @@
 import { clientSupabase } from '(@/utils/supabase/client)';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { COMMENT_QUERY_KEY, DELETE_COMMENT_QUERY_KEY, NEW_COMMENT_QUERY_KEY } from './commentQueryKeys';
-import { useCommentStore } from '(@/store/commentStore)';
-import { CommentListType } from '(@/components/review/comment/CommentList)';
+import { COMMENT_QUERY_KEY } from './commentQueryKeys';
 
 export const fetchCommentAuthor = async (commentAuthorId: string) => {
   const { data: commentAuthorData, error: userError } = await clientSupabase
@@ -24,25 +22,8 @@ export const fetchCommentData = async (review_id: string) => {
   return commentData;
 };
 
-export const fetchCommentCount = async (review_id: string) => {
-  let { data: commentCount, error } = await clientSupabase
-    .from('review_comment')
-    .select('*')
-    .eq('review_id', review_id);
-
-  if (error) {
-    console.error('댓글 수를 가져오는 중 오류가 발생했습니다.', error);
-    return 0;
-  }
-
-  return commentCount;
-};
-
 export const useNewCommentMutation = (review_id: string) => {
   const queryClient = useQueryClient();
-  const addComment = useCommentStore((state) => state.addComment);
-  const uuid = crypto.randomUUID();
-  const currentDate = new Date().toISOString();
 
   const newCommentMutation = useMutation({
     mutationFn: async ({
@@ -56,15 +37,7 @@ export const useNewCommentMutation = (review_id: string) => {
     }) => {
       const { data: newComment, error } = await clientSupabase
         .from('review_comment')
-        .insert([{ comment_content: comment_content, user_id: userId, review_id: review_id, comment_id: uuid }]);
-
-      addComment({
-        comment_id: uuid,
-        comment_content: comment_content,
-        user_id: userId,
-        review_id: review_id,
-        created_at: currentDate
-      });
+        .insert([{ comment_content: comment_content, user_id: userId, review_id: review_id }]);
 
       if (error) {
         console.error('insert error', error);
@@ -80,21 +53,6 @@ export const useNewCommentMutation = (review_id: string) => {
 
   return newCommentMutation;
 };
-
-// export const useDeleteCommentMutation = () => {
-//   const queryClient = useQueryClient();
-//   const deleteComment = useCommentStore((state) => state.deleteComment);
-//   const deleteCommentMutation = useMutation({
-//     mutationFn: async (commentId: string) => {
-//       const { error } = await clientSupabase.from('review_comment').delete().eq('comment_id', commentId);
-//       deleteComment(commentId as string);
-//     },
-//     onSuccess: () => {
-//       queryClient.invalidateQueries({ queryKey: COMMENT_QUERY_KEY });
-//     }
-//   });
-//   return deleteCommentMutation;
-// };
 
 export const useDeleteCommentMutation = (review_id: string) => {
   const queryClient = useQueryClient();

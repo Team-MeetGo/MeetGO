@@ -17,5 +17,3 @@ export const DELETE_REVIEW_QUERY_KEY = ['delete_review'];
 export const REVIEWLIST_QUERY_KEY = ['reviewlist'];
 
 export const LIKED_REVIEWLIST_QUERY_KEY = ['liked_reviewist'];
-
-// export const NEW_IMAGES_UPLOAD_QUERY_KEY = ['new_imgs'];

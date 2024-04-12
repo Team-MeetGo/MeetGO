@@ -4,7 +4,6 @@ import { useRouter } from 'next/navigation';
 import ReviewHeart from './ReviewHeart';
 import AvatarDefault from '(@/utils/icons/AvatarDefault)';
 import ImageGallery from './ImageGallery';
-import { HiOutlineChatBubbleOvalLeftEllipsis } from 'react-icons/hi2';
 import defaultImg from '../../../public/defaultImg.jpg';
 import { AUTHOR_QUERY_KEY, REVIEW_QUERY_KEY } from '(@/query/review/reviewQueryKeys)';
 import { useQuery } from '@tanstack/react-query';
@@ -15,6 +14,7 @@ import { Dropdown, DropdownItem, DropdownMenu, DropdownTrigger, useDisclosure } 
 import { HiOutlineDotsVertical } from 'react-icons/hi';
 import { IoIosList } from 'react-icons/io';
 import { useGetUserDataQuery } from '(@/hooks/useQueries/useUserQuery)';
+import ReviewComment from './ReviewComment';
 
 export type ReviewDetailType = {
   review_title: string | null;
@@ -32,10 +32,9 @@ export type AuthorDataType = {
 
 type Props = {
   review_id: string;
-  commentCount: number;
 };
 
-const ReviewDetail = ({ review_id, commentCount }: Props) => {
+const ReviewDetail = ({ review_id }: Props) => {
   const editModal = useDisclosure();
   const [reviewDetailData, setReviewDetailData] = useState<ReviewDetailType | null>(null);
   const [authorData, setAuthorData] = useState<AuthorDataType | null>(null);
@@ -127,10 +126,7 @@ const ReviewDetail = ({ review_id, commentCount }: Props) => {
           <div className="flex gap-1">
             <ReviewHeart review_id={review_id} />
             <div className="flex gap-1">
-              <div className="pt-[2px]" style={{ fontSize: '1.1rem' }}>
-                <HiOutlineChatBubbleOvalLeftEllipsis />
-              </div>
-              <div className="pb-1">{commentCount}</div>
+              <ReviewComment review_id={review_id} />
             </div>
           </div>
         </div>
