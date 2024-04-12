@@ -28,15 +28,9 @@ const ChatList = ({ user, chatRoomId }: { user: User | null; chatRoomId: string 
   const room = useRoomDataQuery(chatRoomId);
   const roomId = room?.roomId;
   const lastMsgId = useMyLastMsgs(user?.id!, chatRoomId);
-  // console.log('lastMsgId => ', lastMsgId && lastMsgId[0].last_msg_id);
+  console.log('lastMsgId => ', lastMsgId && lastMsgId[0].last_msg_id);
   const prevMsgsLengthRef = useRef(messages.length);
   const lastDivRefs = useRef(messages);
-
-  console.log('쌩 날짜 =>', messages[0].created_at);
-  const date = new Date(messages[0].created_at);
-  console.log('만진 날짜 =>', date);
-  console.log(typeof date);
-  console.log(date.getDate());
 
   const pathname = usePathname();
   const { mutate: mutateToUpdate } = useUpdateLastMsg(
