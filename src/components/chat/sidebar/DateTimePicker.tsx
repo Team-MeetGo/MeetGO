@@ -12,14 +12,16 @@ import { userStore } from '(@/store/userStore)';
 import { useChatDataQuery } from '(@/hooks/useQueries/useChattingQuery)';
 import { useQueryClient } from '@tanstack/react-query';
 import { MEETING_TIME_QUERY_KEY } from '(@/query/chat/chatQueryKeys)';
-import { updateMeetingTimeMutation } from '(@/hooks/useMutation/useMeetingTimeMutation)';
+import { useUpdateMeetingTimeMutation } from '(@/hooks/useMutation/useMeetingTimeMutation)';
 
 interface DateTimePickerProps {
   chatRoomId: string;
 }
 
 const DateTimePicker: React.FC<DateTimePickerProps> = forwardRef(({ chatRoomId }, ref) => {
-  const [selectedMeetingTime, setSelectedMeetingTime] = useState<Date | null>(null);
+  const chat = useChatDataQuery(chatRoomId);
+  const meetingTime = new Date(String(chat?.[0]?.meeting_time));
+  const [selectedMeetingTime, setSelectedMeetingTime] = useState<Date | null>(meetingTime);
   const [isCalendarOpen, setIsCalendarOpen] = useState<boolean>(false);
   const datePickerRef = useRef<DatePicker>(null);
   const queryClient = useQueryClient();
@@ -33,17 +35,16 @@ const DateTimePicker: React.FC<DateTimePickerProps> = forwardRef(({ chatRoomId }
     console.log(selectedMeetingTime);
   };
 
-  const { mutate: updateMeetingTime } = updateMeetingTimeMutation();
-
-  const chat = useChatDataQuery(chatRoomId);
+  const { mutate: updateMeetingTime } = useUpdateMeetingTimeMutation();
 
   // 처음 마운트될 때 서버에서 가져온 미팅 시간으로 초기화
-  useEffect(() => {
-    const meetingTime = chat?.[0]?.meeting_time;
-    if (meetingTime) {
-      setSelectedMeetingTime(new Date(meetingTime));
-    }
-  }, [chat]);
+  // useEffect(() => {
+  //   const meetingTime = chat?.[0]?.meeting_time;
+  //   if (meetingTime) {
+  //     setSelectedMeetingTime(new Date(meetingTime));
+  //   }
+  // }, [chat]);
+  console.log('DateTimePicker 미팅타임 =>', meetingTime);
 
   // months 배열을 선언
   const months = ['1월', '2월', '3월', '4월', '5월', '6월', '7월', '8월', '9월', '10월', '11월', '12월'];
@@ -58,9 +59,9 @@ const DateTimePicker: React.FC<DateTimePickerProps> = forwardRef(({ chatRoomId }
         selected={selectedMeetingTime}
         onChange={(date) => {
           setSelectedMeetingTime(date as Date);
-          if (selectedMeetingTime) {
+          if (date) {
             // 선택된 미팅 시간이 있을 때에만 서버에 미팅 시간 업데이트
-            const isoStringMeetingTime = selectedMeetingTime.toISOString();
+            const isoStringMeetingTime = date.toISOString();
             updateMeetingTime({
               chatRoomId,
               isoStringMeetingTime
@@ -104,5 +105,7 @@ const DateTimePicker: React.FC<DateTimePickerProps> = forwardRef(({ chatRoomId }
     </div>
   );
 });
+
+DateTimePicker.displayName = 'DateTimePicker';
 
 export default DateTimePicker;

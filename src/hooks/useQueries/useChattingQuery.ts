@@ -8,6 +8,7 @@ import {
 import {
   CHATDATA_QUERY_KEY,
   MYCHAT_ROOMIDS,
+  MY_LAST_MSGS_AFTER,
   MY_LAST_MSGS_BEFORE,
   PARTICIPANTS_QUERY_KEY,
   ROOMDATA_QUERY_KEY
@@ -32,10 +33,10 @@ export const useParticipantsQuery = (roomId: string) => {
 
 export const useChatDataQuery = (chatRoomId: string) => {
   const { data: chat } = useSuspenseQuery({
-    queryKey: CHATDATA_QUERY_KEY,
+    queryKey: [CHATDATA_QUERY_KEY],
     queryFn: async () => await fetchChatData(chatRoomId)
   });
-  console.log(chat);
+  console.log('chat => ', chat);
   return chat;
 };
 
@@ -47,9 +48,9 @@ export const useMyChatRoomIdsQuery = (userId: string) => {
   return myChatRoomIds;
 };
 
-export const useMyLastMsgs = (user_id: string, chatRoomId: string) => {
+export const useMyLastMsgs = (user_id: string, chatRoomId: string | null) => {
   const { data: myLastMsgs } = useSuspenseQuery({
-    queryKey: [MY_LAST_MSGS_BEFORE, user_id, chatRoomId],
+    queryKey: [MY_LAST_MSGS_AFTER, user_id, chatRoomId],
     queryFn: () => fetchMyLastMsgs(user_id, chatRoomId)
   });
   return myLastMsgs;

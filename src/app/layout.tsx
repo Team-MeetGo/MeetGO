@@ -4,7 +4,7 @@ import './globals.css';
 import QueryProvider from '(@/app/provider/QueryProvider)';
 import { NextProvider } from './provider/NextUIProvider';
 import NavBar from '(@/components/common/NavBar)';
-import RouteChangeListener from '(@/components/chat/RouteChangeListener)';
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -23,9 +23,9 @@ export default function RootLayout({
       <body className={inter.className}>
         <NextProvider>
           <QueryProvider>
-            {/* <RouteChangeListener /> */}
             <NavBar />
             {children}
+            <ReactQueryDevtools initialIsOpen={false} />
           </QueryProvider>
         </NextProvider>
       </body>

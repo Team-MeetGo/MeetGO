@@ -27,10 +27,11 @@ const SideBar: React.FC<SideBarProps> = ({ chatRoomId }) => {
   //채팅방 정보 가져오기
   const chat = useChatDataQuery(chatRoomId);
   const meetingTime = chat?.[0]?.meeting_time;
+  console.log('meetingTime =>', meetingTime);
 
-  useEffect(() => {
-    setFinalDateTime(meetingTime || '');
-  }, [meetingTime]);
+  // useEffect(() => {
+  //   setFinalDateTime(meetingTime || '');
+  // }, [meetingTime]);
 
   // meetingTime
   //   useEffect(() => {
