@@ -66,11 +66,11 @@ const NavBarContents = () => {
             리뷰게시판
           </Link>
         </NavbarItem>
-        {/* <NavbarItem>
-            <Link color="foreground" href="#">
-              메뉴더있었으면..
-            </Link>
-          </NavbarItem> */}
+        <NavbarItem>
+          <Link color="foreground" href="/test">
+            test
+          </Link>
+        </NavbarItem>
       </NavbarContent>
 
       <NavbarContent className="h-auto" as="div" justify="end">
