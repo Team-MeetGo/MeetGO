@@ -1,19 +1,15 @@
 'use client';
 import { Message } from '(@/types/chatTypes)';
-import { getformattedDate, showingDate } from '(@/utils)';
 import { clientSupabase } from '(@/utils/supabase/client)';
 import { useEffect, useRef, useState } from 'react';
 import { User } from '@supabase/supabase-js';
 import ChatScroll from './ChatScroll';
 import NewChatAlert from './NewChatAlert';
 import LoadChatMore from './LoadChatMore';
-import ChatDeleteDropDown from './ChatDeleteDropDown';
 import { chatStore } from '(@/store/chatStore)';
-import { Tooltip } from '@nextui-org/react';
 import OthersChat from './OthersChat';
 import ChatSearch from './ChatSearch';
 import { useMyLastMsgs, useRoomDataQuery } from '(@/hooks/useQueries/useChattingQuery)';
-import { usePathname } from 'next/navigation';
 import { useAddLastMsg, useUpdateLastMsg } from '(@/hooks/useMutation/useChattingMutation)';
 import MyChat from './MyChat';
 
