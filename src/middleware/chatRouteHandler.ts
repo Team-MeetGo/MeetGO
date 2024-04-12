@@ -6,15 +6,14 @@ export const meetingNchatRoomHandler = (middleware: CustomMiddleware) => {
   return async (request: NextRequest, event: NextFetchEvent) => {
     const referer = request.headers.get('Referer');
     // 새로고침하거나 직접 타이핑 해서 채팅방에 들어가려고 할 때,
-    if (!referer && request.nextUrl.pathname.startsWith('/chat/')) {
+    if (request.nextUrl.pathname.startsWith('/chat/')) {
       const supabase = serverSupabase();
       const {
         data: { user }
       } = await supabase.auth.getUser();
+      // 내가 들어가있는 방들
       const myChatRooms = [];
-
       const { data: myRooms } = await supabase.from('participants').select('room_id').eq('user_id', String(user?.id));
-
       if (myRooms) {
         for (let room of myRooms) {
           const { data: myChatRoomId } = await supabase

@@ -1,5 +1,5 @@
 import { chain } from './middleware/chain';
-import { chatRoomHandler } from './middleware/chatRouteHandler';
+import { meetingNchatRoomHandler } from './middleware/chatRouteHandler';
 import { routeHandlerMiddleware } from './middleware/routeHandlerMiddleware';
 import { schoolValidateMiddleware } from './middleware/schoolValidateMiddleware';
 import { updateSessionMiddleware } from './middleware/updateSessionMiddleware';
@@ -8,7 +8,7 @@ const middlewareList = [
   updateSessionMiddleware,
   routeHandlerMiddleware,
   schoolValidateMiddleware,
-  chatRoomHandler
+  meetingNchatRoomHandler
   // checkSchoolMiddleware
 ];
 
