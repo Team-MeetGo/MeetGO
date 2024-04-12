@@ -22,13 +22,15 @@ const SideBar: React.FC<SideBarProps> = ({ chatRoomId }) => {
   const room = useRoomDataQuery(chatRoomId);
   const leaderId = room?.roomData.leader_id;
 
-  // 채팅방 정보 가져오기
+  //채팅방 정보 가져오기
   const chat = useChatDataQuery(chatRoomId);
   const meetingTime = chat?.[0]?.meeting_time;
 
-  useEffect(() => {
-    console.log('미팅타임이 바뀔까?', meetingTime);
-  }, []);
+  console.log('미팅 시간이 바뀔까?', meetingTime);
+
+  // useEffect(() => {
+  //   console.log('미팅 시간', meetingTime);
+  // }, [meetingTime]);
 
   const options: Intl.DateTimeFormatOptions = {
     year: 'numeric',

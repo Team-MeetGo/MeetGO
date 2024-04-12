@@ -1,8 +1,8 @@
 'use client';
 import { Message } from '(@/types/chatTypes)';
-import { getFromTo, getformattedDate } from '(@/utils)';
+import { getformattedDate, showingDate } from '(@/utils)';
 import { clientSupabase } from '(@/utils/supabase/client)';
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { User } from '@supabase/supabase-js';
 import ChatScroll from './ChatScroll';
 import NewChatAlert from './NewChatAlert';
@@ -12,31 +12,47 @@ import { chatStore } from '(@/store/chatStore)';
 import { Tooltip } from '@nextui-org/react';
 import OthersChat from './OthersChat';
 import ChatSearch from './ChatSearch';
-import { useRoomDataQuery, useUpdateLastMsg } from '(@/hooks/useQueries/useChattingQuery)';
-import { usePathname, useRouter, useSearchParams } from 'next/navigation';
-import path from 'path';
-import FinishChat from '../chatFooter/FinishChat';
+import { useMyLastMsgs, useRoomDataQuery } from '(@/hooks/useQueries/useChattingQuery)';
+import { usePathname } from 'next/navigation';
+import { useAddLastMsg, useUpdateLastMsg } from '(@/hooks/useMutation/useChattingMutation)';
 
 const ChatList = ({ user, chatRoomId }: { user: User | null; chatRoomId: string }) => {
   const scrollRef = useRef() as React.MutableRefObject<HTMLDivElement>;
   const { hasMore, messages, setMessages } = chatStore((state) => state);
   const [isScrolling, setIsScrolling] = useState(false);
   const [isScrollTop, setIsScrollTop] = useState(true);
-  const [newAddedMsgNum, setNewAddedMsgNum] = useState(0);
   const [count, setCount] = useState(1);
-  const [lastCheckedMsg, setLastCheckedMsg] = useState();
+  const [newAddedMsgNum, setNewAddedMsgNum] = useState(0);
+  const [lastCheckedDiv, setLastCheckedDiv] = useState<HTMLElement | null>();
+  const [checkedLastMsg, setCheckedLastMsg] = useState(false);
   const room = useRoomDataQuery(chatRoomId);
   const roomId = room?.roomId;
+  const lastMsgId = useMyLastMsgs(user?.id!, chatRoomId);
+  // console.log('lastMsgId => ', lastMsgId && lastMsgId[0].last_msg_id);
+  const prevMsgsLengthRef = useRef(messages.length);
+  const lastDivRefs = useRef(messages);
 
-  console.log(hasMore);
+  console.log('쌩 날짜 =>', messages[0]?.created_at);
+  const date = new Date(messages[0]?.created_at);
+  console.log('만진 날짜 =>', date);
+  console.log(typeof date);
+  console.log(date.getDate());
 
-  const rememberLastMsg = () => {
-    const lastDiv = document.getElementById(`${messages[messages.length - 1].message_id}`);
-  };
+  const pathname = usePathname();
+  const { mutate: mutateToUpdate } = useUpdateLastMsg(
+    user?.id as string,
+    chatRoomId as string,
+    messages && messages.length > 0 ? messages[messages.length - 1].message_id : undefined
+  );
+  const { mutate: mutateToAdd } = useAddLastMsg(
+    chatRoomId,
+    user?.id as string,
+    messages && messages.length > 0 ? messages[messages.length - 1].message_id : undefined
+  );
 
   useEffect(() => {
     if (roomId && chatRoomId) {
-      // INSERT, DELETE 구독
+      // "messages" table Realtime INSERT, DELETE 구독로직
       const channel = clientSupabase
         .channel(chatRoomId)
         .on(
@@ -68,28 +84,55 @@ const ChatList = ({ user, chatRoomId }: { user: User | null; chatRoomId: string 
     }
   }, [messages, setMessages, isScrolling, roomId, chatRoomId]);
 
-  // 처음에 로드될 시
   useEffect(() => {
-    // 스크롤 중이 아니면 기본적으로 스크롤 다운
     const scrollBox = scrollRef.current;
-    if (scrollBox && isScrolling === false) {
-      scrollBox.scrollTop = scrollBox.scrollHeight;
+    if (scrollBox && !isScrolling) {
+      // 처음에 로드 시 스크롤 중이 아닐 때
+      if (lastMsgId && lastMsgId.length && lastMsgId[0].last_msg_id !== messages[messages.length - 1].message_id) {
+        // 이전에 저장된 마지막 메세지가 있으면 그 메세지 강조처리
+        // let lastDiv = document.getElementById(`${lastMsgId[0].last_msg_id}`);
+        let ref = lastDivRefs.current.find((ref) => ref.message_id === lastMsgId[0].last_msg_id);
+        let lastDiv = ref && ref.current;
+        if (lastDiv) {
+          setLastCheckedDiv(lastDiv);
+          makeHereText(lastDiv);
+          setCheckedLastMsg(true);
+        }
+      } else {
+        scrollBox.scrollTop = scrollBox.scrollHeight;
+      }
+    }
+    // 처음 로드 시에만 실행(의존성배열 = [])
+  }, []);
+
+  useEffect(() => {
+    const scrollBox = scrollRef.current;
+    if (scrollBox && !isScrolling) {
+      // 처음에 로드 시 스크롤 중이 아닐 때
+      if (!lastMsgId || !lastMsgId?.length || prevMsgsLengthRef.current !== messages.length) {
+        // 이전에 저장된 마지막 메세지가 없으면 그냥 스크롤 다운
+        scrollBox.scrollTop = scrollBox.scrollHeight;
+        prevMsgsLengthRef.current = messages.length;
+      } else {
+        // 이전에 저장된 마지막 메세지가 있고 그게 강조처리 되어있다가, 스크롤다운(마지막 메세지를 확인)되면 투명으로 변경
+        if (checkedLastMsg && lastCheckedDiv) {
+          setCheckedLastMsg(false);
+          lastCheckedDiv.style.display = 'none';
+        }
+      }
     }
   }, [messages, isScrolling]);
 
-  const pathname = usePathname();
-
-  const { mutate: mutateToUpdate } = useUpdateLastMsg(
-    user?.id as string,
-    chatRoomId as string,
-    messages && messages.length > 0 ? messages[messages.length - 1].message_id : undefined
-  );
-
+  // 마지막으로 읽은 메세지 기억하기
   useEffect(() => {
     return () => {
-      console.log('나갈 때');
-      mutateToUpdate();
+      // 현재 나누는 메세지가 있을 때
+      if (messages.length) {
+        // 이전에 저장된 마지막 메세지가 있으면 현재 메세지 중 마지막 걸로 업데이트, 없으면 현재 메세지 중 마지막 메세지 추가하기
+        lastMsgId?.length ? mutateToUpdate() : mutateToAdd();
+      }
     };
+    // 주소가 바뀔 때만 감지해서 저장 또는 업데이트
   }, [pathname]);
 
   // 스크롤 이벤트가 발생할 때
@@ -110,6 +153,11 @@ const ChatList = ({ user, chatRoomId }: { user: User | null; chatRoomId: string 
   };
   // insert 할 때 없어졌으면 좋겠는데..
 
+  const makeHereText = (lastDiv: HTMLElement) => {
+    lastDiv.style.backgroundColor = 'pink';
+    lastDiv.scrollIntoView({ block: 'center' });
+  };
+
   return (
     <>
       <div
@@ -120,13 +168,30 @@ const ChatList = ({ user, chatRoomId }: { user: User | null; chatRoomId: string 
         <ChatSearch isScrollTop={isScrollTop} />
 
         {hasMore ? <LoadChatMore chatRoomId={chatRoomId} count={count} setCount={setCount} /> : <></>}
-        {messages?.map((msg) => {
-          if (msg.send_from === user?.id) {
-            return <MyChat msg={msg} key={msg.message_id} />;
-          } else {
-            return <OthersChat msg={msg} key={msg.message_id} />;
-          }
-        })}
+        {messages?.map((msg, idx) => (
+          <>
+            {idx >= 1 && new Date(msg.created_at).getDate() > new Date(messages[idx - 1].created_at).getDate() ? (
+              <div className="mx-auto">
+                <p>{showingDate(msg.created_at)}</p>
+              </div>
+            ) : null}
+            {msg.send_from === user?.id ? (
+              <MyChat msg={msg} key={msg.message_id} idx={idx} lastDivRefs={lastDivRefs} />
+            ) : (
+              <OthersChat msg={msg} key={msg.message_id} idx={idx} lastDivRefs={lastDivRefs} />
+            )}
+            {lastMsgId &&
+            lastMsgId?.length &&
+            lastMsgId[0]?.last_msg_id !== messages[messages.length - 1].message_id &&
+            lastMsgId[0]?.last_msg_id === msg.message_id &&
+            isScrolling &&
+            checkedLastMsg ? (
+              <div className={`flex ${msg.send_from === user?.id ? 'ml-auto' : 'mr-auto'}`}>
+                <p>여기까지 읽으셨습니다.</p>
+              </div>
+            ) : null}
+          </>
+        ))}
       </div>
       {isScrolling ? (
         newAddedMsgNum === 0 ? (
@@ -147,9 +212,9 @@ const ChatList = ({ user, chatRoomId }: { user: User | null; chatRoomId: string 
 
 export default ChatList;
 
-const MyChat = ({ msg }: { msg: Message }) => {
+const MyChat = ({ msg, idx, lastDivRefs }: { msg: Message; idx: number; lastDivRefs: any }) => {
   return (
-    <div id={msg.message_id} className="flex gap-4 ml-auto">
+    <div id={msg.message_id} ref={lastDivRefs.current[idx]} className="flex gap-4 ml-auto">
       <div className="w-80 h-24 flex flex-col gap-1">
         <div className="font-bold ml-auto">{msg.nickname}</div>
         <div className="flex gap-2 ml-auto">

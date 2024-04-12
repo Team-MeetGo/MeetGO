@@ -1,3 +1,5 @@
+'use client';
+
 import React, { forwardRef, useEffect, useRef, useState } from 'react';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
@@ -6,18 +8,21 @@ import { ko } from 'date-fns/locale';
 import { getMonth, getYear } from 'date-fns';
 import { IoChevronBackSharp } from 'react-icons/io5';
 import { IoChevronForwardSharp } from 'react-icons/io5';
-import { clientSupabase } from '(@/utils/supabase/client)';
 import { userStore } from '(@/store/userStore)';
-import { useUpdateMeetingTimeMutation } from '(@/hooks/useMutation/useMeetingTimeMutation)';
+import { useChatDataQuery } from '(@/hooks/useQueries/useChattingQuery)';
+import { useQueryClient } from '@tanstack/react-query';
+import { MEETING_TIME_QUERY_KEY } from '(@/query/chat/chatQueryKeys)';
+import { updateMeetingTimeMutation } from '(@/hooks/useMutation/useMeetingTimeMutation)';
 
 interface DateTimePickerProps {
   chatRoomId: string;
 }
 
 const DateTimePicker: React.FC<DateTimePickerProps> = forwardRef(({ chatRoomId }, ref) => {
-  const [selectedMeetingTime, setSelectedMeetingTime] = useState<Date>(new Date());
+  const [selectedMeetingTime, setSelectedMeetingTime] = useState<Date | null>(null);
   const [isCalendarOpen, setIsCalendarOpen] = useState<boolean>(false);
   const datePickerRef = useRef<DatePicker>(null);
+  const queryClient = useQueryClient();
 
   // userStore에서 userId 받아오기
   const { user } = userStore((state) => state);
@@ -28,14 +33,34 @@ const DateTimePicker: React.FC<DateTimePickerProps> = forwardRef(({ chatRoomId }
     console.log(selectedMeetingTime);
   };
 
-  const updateMeetingTimeMutation = useUpdateMeetingTimeMutation();
+  const { mutate: updateMeetingTime } = updateMeetingTimeMutation();
+
+  const chat = useChatDataQuery(chatRoomId);
 
   useEffect(() => {
-    const isoStringMeetingTime = selectedMeetingTime.toISOString();
-    try {
-      updateMeetingTimeMutation.mutateAsync({ chatRoomId, isoStringMeetingTime });
-    } catch (error) {
-      console.log('미팅시간 업데이트 오류:', error);
+    const meetingTime = chat?.[0]?.meeting_time;
+    if (meetingTime) {
+      setSelectedMeetingTime(new Date(meetingTime)); // 처음 마운트될 때 서버에서 가져온 미팅 시간으로 초기화
+    }
+  }, [chat]);
+
+  useEffect(() => {
+    if (selectedMeetingTime) {
+      // 선택된 미팅 시간이 있을 때에만 서버에 미팅 시간 업데이트
+      const isoStringMeetingTime = selectedMeetingTime.toISOString();
+      updateMeetingTime(
+        {
+          chatRoomId,
+          isoStringMeetingTime
+        },
+        {
+          onSuccess: () => {
+            queryClient.invalidateQueries({
+              queryKey: [MEETING_TIME_QUERY_KEY]
+            });
+          }
+        }
+      );
     }
   }, [selectedMeetingTime]);
 

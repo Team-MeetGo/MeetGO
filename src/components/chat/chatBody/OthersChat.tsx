@@ -4,7 +4,7 @@ import { Message } from '(@/types/chatTypes)';
 import { getformattedDate } from '(@/utils)';
 import { Tooltip } from '@nextui-org/react';
 
-const OthersChat = ({ msg }: { msg: Message }) => {
+const OthersChat = ({ msg, idx, lastDivRefs }: { msg: Message; idx: number; lastDivRefs: any }) => {
   const chatRoomId = chatStore((state) => state.chatRoomId);
   const room = useRoomDataQuery(chatRoomId as string);
   const roomId = room?.roomId;
@@ -16,7 +16,7 @@ const OthersChat = ({ msg }: { msg: Message }) => {
   };
 
   return (
-    <div id={msg.message_id} className="flex gap-4">
+    <div id={msg.message_id} ref={lastDivRefs.current[idx]} className="flex gap-4">
       <Tooltip content={<div>{users && showThatUser(msg.send_from)?.nickname}</div>}>
         <div className="h-14 w-14 bg-indigo-600 rounded-full my-auto">
           <img src={msg.avatar} alt="유저 이미지"></img>

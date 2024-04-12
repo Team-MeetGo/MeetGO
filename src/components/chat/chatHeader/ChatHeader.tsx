@@ -2,13 +2,13 @@
 import { clientSupabase } from '(@/utils/supabase/client)';
 import ChatPresence from './ChatPresence';
 import { chatStore } from '(@/store/chatStore)';
-import { userStore } from '(@/store/userStore)';
 import { IoIosSearch } from 'react-icons/io';
 import { useRoomDataQuery } from '(@/hooks/useQueries/useChattingQuery)';
+import { useGetUserDataQuery } from '(@/hooks/useQueries/useUserQuery)';
 
 const ChatHeader = ({ chatRoomId }: { chatRoomId: string }) => {
   const { setMessages, setisRest, setSearchMode } = chatStore((state) => state);
-  const user = userStore((state) => state.user);
+  const { data: user } = useGetUserDataQuery();
   const room = useRoomDataQuery(chatRoomId);
   const roomId = room?.roomId;
   const roomData = room?.roomData;
