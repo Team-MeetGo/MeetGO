@@ -1,16 +1,19 @@
 import Image from 'next/image';
 import ReviewEditModal from './ReviewEditModal';
 import { useRouter } from 'next/navigation';
-import ReviewHeart from './ReviewHeart';
 import AvatarDefault from '(@/utils/icons/AvatarDefault)';
 import ImageGallery from './ImageGallery';
-import { HiOutlineChatBubbleOvalLeftEllipsis } from 'react-icons/hi2';
 import defaultImg from '../../../public/defaultImg.jpg';
-import { userStore } from '(@/store/userStore)';
-import { AUTHOR_QUERY_KEY, REVIEW_QUERY_KEY } from '(@/query/review/reviewQueryKeys)';
-import { useQuery } from '@tanstack/react-query';
-import { fetchAuthorData, fetchReviewData, useDeleteReviewMutation } from '(@/query/review/reviewQueryFns)';
 import { useEffect, useState } from 'react';
+import Link from 'next/link';
+import { Dropdown, DropdownItem, DropdownMenu, DropdownTrigger, useDisclosure } from '@nextui-org/react';
+import { HiOutlineDotsVertical } from 'react-icons/hi';
+import { IoIosList } from 'react-icons/io';
+import { useGetUserDataQuery } from '(@/hooks/useQueries/useUserQuery)';
+import ReviewComment from './ReviewComment';
+import ReviewLike from './ReviewLike';
+import { useDeleteReviewMutation } from '(@/hooks/useMutation/useReviewMutations)';
+import { useAuthorDataQuery, useReviewDataQuery } from '(@/hooks/useQueries/useReviewQuery)';
 
 export type ReviewDetailType = {
   review_title: string | null;
@@ -28,34 +31,18 @@ export type AuthorDataType = {
 
 type Props = {
   review_id: string;
-  commentCount: number;
 };
 
-const ReviewDetail = ({ review_id, commentCount }: Props) => {
+const ReviewDetail = ({ review_id }: Props) => {
+  const editModal = useDisclosure();
   const [reviewDetailData, setReviewDetailData] = useState<ReviewDetailType | null>(null);
   const [authorData, setAuthorData] = useState<AuthorDataType | null>(null);
   const router = useRouter();
 
-  const { user, setUser } = userStore((state) => state);
+  const { data: user } = useGetUserDataQuery();
   const userId = user && user.user_id;
 
-  const useAuthorDataQuery = (review_id: string) => {
-    const { data: userData } = useQuery({
-      queryKey: [AUTHOR_QUERY_KEY, review_id],
-      queryFn: async () => await fetchAuthorData(review_id)
-    });
-    return userData;
-  };
-
   const userData = useAuthorDataQuery(review_id);
-
-  const useReviewDataQuery = (review_id: string) => {
-    const { data: reviewDetail } = useQuery({
-      queryKey: [REVIEW_QUERY_KEY, review_id],
-      queryFn: async () => await fetchReviewData(review_id)
-    });
-    return reviewDetail;
-  };
 
   const reviewDetail = useReviewDataQuery(review_id);
 
@@ -77,27 +64,20 @@ const ReviewDetail = ({ review_id, commentCount }: Props) => {
       } catch (error) {
         console.error('리뷰 삭제 오류:', error);
       }
-      // const { error: commentDeleteError } = await clientSupabase
-      //   .from('review_comment')
-      //   .delete()
-      //   .eq('review_id', review_id);
-      // const { error: likeDeleteError } = await clientSupabase.from('review_like').delete().eq('review_id', review_id);
-      // const { error: reviewDeleteError } = await clientSupabase.from('review').delete().eq('review_id', review_id);
-      // if (reviewDeleteError) {
-      //   console.log('리뷰 삭제 오류:', reviewDeleteError.message);
-      // } else if (commentDeleteError) {
-      //   console.log('댓글 삭제 오류:', commentDeleteError.message);
-      // } else if (likeDeleteError) {
-      //   console.log('댓글 삭제 오류:', likeDeleteError.message);
-      // } else {
+      router.push(`/review/pageNumber/1`);
     }
-    router.push(`/review/pageNumber/1`);
+    return;
   };
 
   return (
     <div>
       <div>
-        <div>{reviewDetailData?.review_title}</div>
+        <div className="flex justify-between">
+          <div>{reviewDetailData?.review_title}</div>
+          <Link href="/review/pageNumber/1">
+            <IoIosList />
+          </Link>
+        </div>
         <div className="flex items-center">
           {authorData?.avatar ? (
             <Image
@@ -112,27 +92,55 @@ const ReviewDetail = ({ review_id, commentCount }: Props) => {
           )}
           <div>{reviewDetailData?.show_nickname ? userData?.nickname || '익명유저' : '익명유저'}</div>
         </div>
-        <div className="text-[#A1A1AA]">
-          {reviewDetailData?.created_at
-            ? new Intl.DateTimeFormat('ko-KR', {
-                year: 'numeric',
-                month: '2-digit',
-                day: '2-digit',
-                hour: '2-digit',
-                minute: '2-digit',
-                second: '2-digit',
-                hour12: false
-              }).format(new Date(reviewDetailData?.created_at))
-            : null}
-        </div>
-        <div className="flex gap-1">
-          <ReviewHeart review_id={review_id} />
-          <div className="flex gap-1">
-            <div className="pt-[2px]" style={{ fontSize: '1.1rem' }}>
-              <HiOutlineChatBubbleOvalLeftEllipsis />
-            </div>
-            <div className="pb-1">{commentCount}</div>
+        <div className="flex">
+          <div className="text-[#A1A1AA]">
+            {reviewDetailData?.created_at
+              ? new Intl.DateTimeFormat('ko-KR', {
+                  year: 'numeric',
+                  month: '2-digit',
+                  day: '2-digit',
+                  hour: '2-digit',
+                  minute: '2-digit',
+                  second: '2-digit',
+                  hour12: false
+                }).format(new Date(reviewDetailData?.created_at))
+              : null}
           </div>
+          <div className="flex gap-1">
+            <ReviewLike review_id={review_id} />
+            <div className="flex gap-1">
+              <ReviewComment review_id={review_id} />
+            </div>
+          </div>
+        </div>
+        <div className="flex justify-end">
+          {userId === reviewDetailData?.user_id && (
+            <div>
+              <Dropdown>
+                <DropdownTrigger>
+                  <button>
+                    <HiOutlineDotsVertical />
+                  </button>
+                </DropdownTrigger>
+                <DropdownMenu
+                  aria-label="Action event example"
+                  onAction={(key) => {
+                    if (key === 'delete') {
+                      handleDeleteReview();
+                    } else if (key === 'edit') {
+                      editModal.onOpen();
+                    }
+                  }}
+                >
+                  <DropdownItem key="edit">수정</DropdownItem>
+                  <DropdownItem key="delete" className="text-danger" color="danger">
+                    <button>삭제</button>
+                  </DropdownItem>
+                </DropdownMenu>
+              </Dropdown>
+              <ReviewEditModal disclosure={editModal} review_id={review_id} />
+            </div>
+          )}
         </div>
         <div>
           {reviewDetailData?.image_urls && reviewDetailData?.image_urls.length > 0 ? (
@@ -148,14 +156,6 @@ const ReviewDetail = ({ review_id, commentCount }: Props) => {
           )}
         </div>
         <div>{reviewDetailData?.review_contents}</div>
-      </div>
-      <div>
-        {userId === reviewDetailData?.user_id && (
-          <div>
-            <ReviewEditModal review_id={review_id} />
-            <button onClick={handleDeleteReview}>삭제</button>
-          </div>
-        )}
       </div>
     </div>
   );

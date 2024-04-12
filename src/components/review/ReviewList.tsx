@@ -7,10 +7,9 @@ import Link from 'next/link';
 import { useParams } from 'next/navigation';
 import { Dropdown, DropdownTrigger, DropdownMenu, DropdownItem, Button } from '@nextui-org/react';
 import { Selection } from '@react-types/shared';
-import { userStore } from '(@/store/userStore)';
-import { useQuery } from '@tanstack/react-query';
-import { fetchLikedReviewList, fetchReviewList } from '(@/query/review/reviewQueryFns)';
-import { LIKED_REVIEWLIST_QUERY_KEY, REVIEWLIST_QUERY_KEY } from '(@/query/review/reviewQueryKeys)';
+import { IoIosArrowDown, IoIosArrowUp } from 'react-icons/io';
+import { useGetUserDataQuery } from '(@/hooks/useQueries/useUserQuery)';
+import { useLikedReviewDataQuery, useReviewListDataQuery } from '(@/hooks/useQueries/useReviewQuery)';
 
 export type reviewData = {
   user_id: string | null;
@@ -28,33 +27,14 @@ const ReviewList: React.FC = () => {
   const [reviewData, setReviewData] = useState<reviewData[]>([]);
   const [totalReviews, setTotalReviews] = useState<number>(0);
   const reviewsPerPage = 9;
+  const [isOpen, setIsOpen] = useState(false);
   const [selected, setSelected] = React.useState<Selection>(new Set(['최신 순']));
-  const { isLoggedIn, setIsLoggedIn } = userStore((state) => state);
 
   const selectedValue = React.useMemo(() => Array.from(selected).join(', ').replaceAll('_', ' '), [selected]);
 
-  const getUserId = async () => {
-    const userData = userStore.getState().user;
-    return userData && userData.user_id;
-  };
+  const { data: isLoggedIn } = useGetUserDataQuery();
 
-  const checkLoginStatus = async () => {
-    const userId = await getUserId();
-    if (userId !== null) {
-      setIsLoggedIn(true);
-    } else {
-      setIsLoggedIn(false);
-    }
-  };
-
-  useEffect(() => {
-    checkLoginStatus();
-  }, []);
-
-  const { data: likedReviewList } = useQuery({
-    queryKey: [LIKED_REVIEWLIST_QUERY_KEY],
-    queryFn: fetchLikedReviewList
-  });
+  const likedReviewList = useLikedReviewDataQuery();
 
   async function getMostLikedReview(page: number) {
     const likedReviewIds = likedReviewList?.map((item) => item.review_id);
@@ -88,6 +68,8 @@ const ReviewList: React.FC = () => {
     } else if (keys instanceof Set && keys.has('좋아요 순')) {
       getMostLikedReview(currentPageNumber);
     }
+
+    setIsOpen(false);
   };
 
   useEffect(() => {
@@ -98,10 +80,7 @@ const ReviewList: React.FC = () => {
     }
   }, []);
 
-  const { data: fetchReviewsData } = useQuery({
-    queryKey: [REVIEWLIST_QUERY_KEY],
-    queryFn: fetchReviewList
-  });
+  const fetchReviewsData = useReviewListDataQuery();
 
   async function getRecentReview(page: number) {
     if (fetchReviewsData) {
@@ -122,10 +101,11 @@ const ReviewList: React.FC = () => {
     <div>
       <div className="flex justify-between">
         <div>
-          <Dropdown>
+          <Dropdown onOpenChange={setIsOpen} isOpen={isOpen}>
             <DropdownTrigger>
               <Button variant="bordered" className="capitalize">
-                {selectedValue}
+                {/* {selectedValue} */}
+                {isOpen ? <IoIosArrowUp /> : <IoIosArrowDown />} {selectedValue}
               </Button>
             </DropdownTrigger>
             <DropdownMenu

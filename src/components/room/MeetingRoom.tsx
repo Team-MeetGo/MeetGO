@@ -1,8 +1,6 @@
 'use client';
 import meetingRoomHandler from '(@/hooks/custom/room)';
-import { userStore } from '(@/store/userStore)';
 import { favoriteOptions } from '(@/utils/FavoriteData)';
-import { clientSupabase } from '(@/utils/supabase/client)';
 import { Chip } from '@nextui-org/react';
 import { useRouter } from 'next/navigation';
 import DeleteMeetingRoom from './DeleteMeetingRoom';
@@ -10,43 +8,51 @@ import EditMeetingRoom from './EditMeetingRoom';
 
 import { useAddRoomMemberMutation, useUpdateRoomStatusClose } from '(@/hooks/useMutation/useMeetingMutation)';
 import { useParticipantsQuery } from '(@/hooks/useQueries/useChattingQuery)';
+import { useAlreadyChatRoomQuery } from '(@/hooks/useQueries/useMeetingQuery)';
 import type { MeetingRoomType } from '(@/types/roomTypes)';
+import { BsFire } from 'react-icons/bs';
+import { IoChatbubblesOutline, IoFemale } from 'react-icons/io5';
+import { HiOutlineDotsVertical } from 'react-icons/hi';
+import { useState } from 'react';
+import { useGetUserDataQuery } from '(@/hooks/useQueries/useUserQuery)';
+import { color } from 'framer-motion';
 
 function MeetingRoom({ room }: { room: MeetingRoomType }) {
-  const { user } = userStore((state) => state);
+  const { room_id, room_status, room_title, member_number, location, feature, leader_id, region } = room;
   const router = useRouter();
+  const [open, setOpen] = useState(false);
+  const { data: user } = useGetUserDataQuery();
+  const user_id = String(user?.user_id);
   const { getmaxGenderMemberNumber } = meetingRoomHandler();
   const participants = useParticipantsQuery(room.room_id);
-
-  const { room_id, room_status, room_title, member_number, location, feature, leader_id } = room;
-  const userInformation = user;
-  const user_id = userInformation?.user_id;
   const roomMemberMutation = useAddRoomMemberMutation({ user_id, room_id });
   const updateRoomStatusCloseMutation = useUpdateRoomStatusClose({ room_id });
+  const { data: alreadyChatRoom, error: alreadyChatRoomError } = useAlreadyChatRoomQuery(room_id);
+  const genderMaxNumber = getmaxGenderMemberNumber(member_number);
+  const emptySeat = genderMaxNumber! * 2 - participants.length;
 
-  const addMember = async ({ room_id, member_number }: { room_id: string; member_number: string }) => {
-    //채팅창으로 넘어갔을 경우에는 채팅창으로 이동
-    const { data: alreadyChat } = await clientSupabase
-      .from('chatting_room')
-      .select('*')
-      .eq('room_id', room_id)
-      .eq('isActive', true);
-    if (alreadyChat && alreadyChat?.length) {
-      // 만약 isActive인 채팅방이 이미 있다면 그 방으로 보내기
-      router.replace(`/chat/${alreadyChat[0].chatting_room_id}`);
+  const countFemale = participants.filter((member) => member.gender === 'female').length;
+  const countMale = participants.filter((member) => member.gender === 'male').length;
+
+  const addMember = async ({ room_id }: { room_id: string }) => {
+    //채팅창: 채팅창으로 이동
+    if (alreadyChatRoom?.[0]) {
+      router.replace(`/chat/${alreadyChatRoom[0].chatting_room_id}`);
     }
 
-    //수락창인 단계에서 내가 이미 방에 참여하고 있는 경우
-    const alreadyParticipants = participants?.find((member) => member.user_id === userInformation?.user_id);
+    //수락창: 이미 참여한 방
+    const alreadyParticipants = participants?.find((member) => member.user_id === user_id);
     if (alreadyParticipants) {
       router.push(`/meetingRoom/${room_id}`);
     }
 
     //성별에 할당된 인원이 참여자 정보보다 적을 때 입장
-    const genderMaxNumber = await getmaxGenderMemberNumber(member_number);
-    const participatedGenderMember = participants.filter((member) => member.gender === userInformation?.gender).length;
+    const participatedGenderMember = participants.filter((member) => member.gender === user?.gender).length;
 
-    if ((genderMaxNumber && genderMaxNumber > participatedGenderMember) || !participatedGenderMember) {
+    if (
+      (!alreadyParticipants && genderMaxNumber && genderMaxNumber > participatedGenderMember) ||
+      !participatedGenderMember
+    ) {
       await roomMemberMutation.mutateAsync();
       router.push(`/meetingRoom/${room_id}`);
     }
@@ -64,39 +70,70 @@ function MeetingRoom({ room }: { room: MeetingRoomType }) {
   };
 
   return (
-    <div>
-      <div className="border-gray-950 border-1 w-100% h-full rounded-xl">
-        <div className="">
-          <div className="flex flex-row justify-between align-middle text-sm">
-            <div>정보 </div>
-            <div></div>
-            {userInformation?.user_id === leader_id ? (
-              <div>
-                <DeleteMeetingRoom id={room_id} />
-                <EditMeetingRoom room={room} />
-              </div>
-            ) : null}
-          </div>
-          <main className="m-2 p-2 h-100%" onClick={(e) => addMember({ room_id, member_number })}>
-            <div className="flex flex-row justify-between">
-              <div> {room_title} </div>
-              <div className="text-sm"> {location} </div>
+    <div
+      className={
+        room.room_status === '모집중'
+          ? `bg-white rounded-xl`
+          : alreadyChatRoom && alreadyChatRoom.length > 0
+          ? `bg-purpleThird rounded-xl`
+          : `bg-slate-300 rounded-xl`
+      }
+    >
+      <div className="border-mainColor border-1 w-[354px] h-[241px] rounded-xl flex flex-col justify-start">
+        <div className="px-[24px]">
+          <div className="h-[24px]"></div>
+          <div className="flex flex-row justify-between align-middle justify-items-center relative">
+            <div className="text-[16px]">
+              {`여자 ${countFemale}/${genderMaxNumber} | 남자 ${countMale}/${genderMaxNumber} | ${room_status}`}
             </div>
-            <div className="text-sm">
-              <div> {room_status} </div>
-              <div> {member_number}</div>
-            </div>
-            <div>
-              {feature &&
-                Array.from(feature).map((value) => (
-                  <Chip
-                    key={value}
-                    color="default"
-                    style={{ backgroundColor: favoriteOptions.find((option) => option.value === value)?.color }}
+            <div className="absolute right-[10px]">
+              {alreadyChatRoom && alreadyChatRoom.length > 0 ? (
+                <IoChatbubblesOutline className="h-6 w-6 m-2 fill-gray2" />
+              ) : emptySeat === 1 ? (
+                <BsFire className="h-6 w-6 m-2 fill-hotPink" />
+              ) : user_id === leader_id ? (
+                <div>
+                  <button
+                    onClick={() => {
+                      setOpen((open) => !open);
+                    }}
                   >
-                    {value}
-                  </Chip>
-                ))}
+                    <HiOutlineDotsVertical className="h-6 w-6 m-2" />
+                  </button>
+
+                  {open && (
+                    <div>
+                      <DeleteMeetingRoom room_id={room_id} />
+                      <EditMeetingRoom room={room} />
+                    </div>
+                  )}
+                </div>
+              ) : null}
+            </div>
+          </div>
+
+          <main className="flex flex-col justify-start" onClick={(e) => addMember({ room_id })}>
+            <div className="h-[16px]"></div>
+            <div className="text-[26px]"> {room_title} </div>
+            <div className="flex flex-row justify-start gap-2">
+              <div className="text-[14px]">{region}</div>
+              <div className="text-[14px]"> {location} </div>
+            </div>
+            <div className="h-[40px]"></div>
+            <div>하트</div>
+            <div className="h-[8px]"></div>
+
+            <div className="text-[14px] flex flex-row gap-[8px]">
+              {Array.from(feature).map((value) => (
+                <Chip
+                  key={value}
+                  color="default"
+                  style={{ backgroundColor: '#F2EAFA', color: '#8F5DF4', borderRadius: '8px' }}
+                >
+                  {value}
+                </Chip>
+              ))}
+              <div className="h-[24px]"></div>
             </div>
           </main>
         </div>

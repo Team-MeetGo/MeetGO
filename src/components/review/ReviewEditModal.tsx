@@ -1,33 +1,30 @@
 'use client';
 
-import { clientSupabase } from '(@/utils/supabase/client)';
-import { Modal, ModalContent, ModalBody, Button, useDisclosure } from '@nextui-org/react';
+import { Modal, ModalContent, ModalBody, Button } from '@nextui-org/react';
 import Image from 'next/image';
 import { ChangeEvent, FormEvent, useEffect, useState } from 'react';
-import { ReviewDetailType } from './ReviewDetail';
 import { MdCancel } from 'react-icons/md';
 import { LuImagePlus } from 'react-icons/lu';
+import type { UseDisclosureReturn } from '@nextui-org/use-disclosure';
+import { useEditImgsMutation, useEditReviewMutation } from '(@/hooks/useMutation/useReviewMutations)';
+import { useReviewDataQuery } from '(@/hooks/useQueries/useReviewQuery)';
 
 type Props = {
   review_id: string;
+  disclosure: UseDisclosureReturn;
 };
 
-export default function ReviewEditModal({ review_id }: Props) {
-  const { isOpen, onOpen, onClose } = useDisclosure();
+export default function ReviewEditModal({ review_id, disclosure }: Props) {
+  const { isOpen, onClose } = disclosure;
   const [dragging, setDragging] = useState(false);
   const [files, setFiles] = useState<File[]>([]);
-  const [reviewDetail, setReviewDetail] = useState<ReviewDetailType | null>(null);
   const [editedTitle, setEditedTitle] = useState<string>('');
   const [editedContent, setEditedContent] = useState<string>('');
   const [previewImages, setPreviewImages] = useState<string[]>([]);
 
   const totalFiles = files.length + previewImages.length;
 
-  useEffect(() => {
-    if (review_id && !reviewDetail) {
-      getReviewDetail(review_id);
-    }
-  }, []);
+  const reviewDetail = useReviewDataQuery(review_id);
 
   useEffect(() => {
     if (reviewDetail) {
@@ -36,21 +33,6 @@ export default function ReviewEditModal({ review_id }: Props) {
       setPreviewImages(reviewDetail.image_urls || []);
     }
   }, [reviewDetail]);
-
-  async function getReviewDetail(review_id: string) {
-    let { data: reviewDetail, error } = await clientSupabase
-      .from('review')
-      .select('review_title, review_contents, created_at, user_id, image_urls, show_nickname')
-      .eq('review_id', review_id);
-
-    if (error) {
-      console.error('리뷰 가져오는 중 에러 발생', error);
-    }
-
-    if (reviewDetail && reviewDetail.length > 0) {
-      setReviewDetail(reviewDetail[0]);
-    }
-  }
 
   const handleClose = () => {
     if (window.confirm('리뷰 수정을 취소하시겠습니까?')) {
@@ -99,6 +81,9 @@ export default function ReviewEditModal({ review_id }: Props) {
     }
   };
 
+  const editReviewMutation = useEditReviewMutation();
+  const editImgsMutation = useEditImgsMutation();
+
   const handleEditReview = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
@@ -106,42 +91,31 @@ export default function ReviewEditModal({ review_id }: Props) {
       files.map(async (file) => {
         const uuid = crypto.randomUUID();
         const filePath = `reviewImage/${uuid}`;
-        const { data, error } = await clientSupabase.storage.from('reviewImage').upload(filePath, file, {
-          cacheControl: '3600',
-          upsert: true
-        });
-
-        if (error) {
-          console.error('업로드 오류', error.message);
-          throw error;
+        try {
+          const publicUrl = await editImgsMutation.mutateAsync({
+            filePath,
+            file
+          });
+          return publicUrl;
+        } catch (error) {
+          console.error('업로드 실패:', error);
+          return null;
         }
-
-        const { data: imageUrl } = await clientSupabase.storage.from('reviewImage').getPublicUrl(data.path);
-        return imageUrl.publicUrl;
       })
     );
 
-    const allImages = [...previewImages, ...updatedImages];
+    const updatedImageUrls = updatedImages.filter((url): url is string => url !== null);
+    const allImages = [...previewImages, ...updatedImageUrls];
 
-    const { data: updateReview, error } = await clientSupabase
-      .from('review')
-      .update({ review_title: editedTitle, review_contents: editedContent, image_urls: allImages })
-      .eq('review_id', review_id);
+    editReviewMutation.mutate({ editedTitle, editedContent, allImages, review_id });
 
-    if (error) {
-      console.log('리뷰 수정 오류', error.message);
-    } else {
-      alert('리뷰가 수정되었습니다.');
-      onClose();
-      window.location.reload();
-    }
+    alert('리뷰가 수정되었습니다.');
+    onClose();
+    window.location.reload();
   };
 
   return (
     <>
-      <Button onPress={onOpen} color="primary">
-        수정
-      </Button>
       <Modal isOpen={isOpen} onClose={handleClose} placement="top-center" className="bg-[#F2EAFA]">
         <ModalContent className="w-full flex justify-center items-center" style={{ maxWidth: '1000px' }}>
           {(onClose) => (

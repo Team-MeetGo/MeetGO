@@ -7,6 +7,13 @@ export const getformattedDate = (date: string) =>
     minute: '2-digit'
   });
 
+export const showingDate = (date: string) =>
+  new Date(date).toLocaleDateString('ko-KR', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric'
+  });
+
 export const getFromTo = (loadCount: number, idx: number) => {
   let from = loadCount * (idx + 1);
   let to = from + idx;
