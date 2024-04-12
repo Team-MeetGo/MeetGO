@@ -24,7 +24,7 @@ function RegionSelection({ text }: { text: string }) {
   return (
     <>
       <Dropdown>
-        <DropdownTrigger>
+        <DropdownTrigger className="w-[120px] h-[43px]">
           <Button variant="bordered" className="capitalize">
             {selectedValue}
           </Button>

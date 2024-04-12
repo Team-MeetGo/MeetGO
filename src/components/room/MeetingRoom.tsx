@@ -11,13 +11,14 @@ import { useParticipantsQuery } from '(@/hooks/useQueries/useChattingQuery)';
 import { useAlreadyChatRoomQuery } from '(@/hooks/useQueries/useMeetingQuery)';
 import type { MeetingRoomType } from '(@/types/roomTypes)';
 import { BsFire } from 'react-icons/bs';
-import { IoChatbubblesOutline } from 'react-icons/io5';
+import { IoChatbubblesOutline, IoFemale } from 'react-icons/io5';
 import { HiOutlineDotsVertical } from 'react-icons/hi';
 import { useState } from 'react';
 import { useGetUserDataQuery } from '(@/hooks/useQueries/useUserQuery)';
+import { color } from 'framer-motion';
 
 function MeetingRoom({ room }: { room: MeetingRoomType }) {
-  const { room_id, room_status, room_title, member_number, location, feature, leader_id } = room;
+  const { room_id, room_status, room_title, member_number, location, feature, leader_id, region } = room;
   const router = useRouter();
   const [open, setOpen] = useState(false);
   const { data: user } = useGetUserDataQuery();
@@ -69,68 +70,75 @@ function MeetingRoom({ room }: { room: MeetingRoomType }) {
   };
 
   return (
-    <>
-      <div
-        className={
-          room.room_status === '모집중'
-            ? `bg-white rounded-xl`
-            : alreadyChatRoom && alreadyChatRoom.length > 0
-            ? `bg-purpleThird rounded-xl`
-            : `bg-slate-300 rounded-xl`
-        }
-      >
-        <div className="border-gray-950 border-1 w-100% h-full rounded-xl">
-          <div className="flex flex-row justify-between align-middle text-sm">
-            <div>{`여자 ${countFemale}/${genderMaxNumber} | 남자 ${countMale}/${genderMaxNumber}`} </div>
-            {alreadyChatRoom && alreadyChatRoom.length > 0 ? (
-              <IoChatbubblesOutline className="h-6 w-6 m-2" />
-            ) : emptySeat === 1 ? (
-              <BsFire className="h-6 w-6 m-2" />
-            ) : null}
-            {user_id === leader_id ? (
-              <div>
-                <button
-                  onClick={() => {
-                    setOpen((open) => !open);
-                  }}
-                >
-                  <HiOutlineDotsVertical className="h-6 w-6 mr-12" />
-                </button>
-
-                {open && (
-                  <div>
-                    <DeleteMeetingRoom room_id={room_id} />
-                    <EditMeetingRoom room={room} />
-                  </div>
-                )}
-              </div>
-            ) : null}
-          </div>
-          <main className="m-2 p-2 h-100%" onClick={(e) => addMember({ room_id })}>
-            <div className="flex flex-row justify-between">
-              <div> {room_title} </div>
-              <div className="text-sm"> {location} </div>
+    <div
+      className={
+        room.room_status === '모집중'
+          ? `bg-white rounded-xl`
+          : alreadyChatRoom && alreadyChatRoom.length > 0
+          ? `bg-purpleThird rounded-xl`
+          : `bg-slate-300 rounded-xl`
+      }
+    >
+      <div className="border-mainColor border-1 w-[354px] h-[241px] rounded-xl flex flex-col justify-start">
+        <div className="px-[24px]">
+          <div className="h-[24px]"></div>
+          <div className="flex flex-row justify-between align-middle justify-items-center relative">
+            <div className="text-[16px]">
+              {`여자 ${countFemale}/${genderMaxNumber} | 남자 ${countMale}/${genderMaxNumber} | ${room_status}`}
             </div>
-            <div className="text-sm">
-              <div> {room_status} </div>
-              <div> {member_number}</div>
-            </div>
-            <div>
-              {feature &&
-                Array.from(feature).map((value) => (
-                  <Chip
-                    key={value}
-                    color="default"
-                    style={{ backgroundColor: favoriteOptions.find((option) => option.value === value)?.color }}
+            <div className="absolute right-[10px]">
+              {alreadyChatRoom && alreadyChatRoom.length > 0 ? (
+                <IoChatbubblesOutline className="h-6 w-6 m-2 fill-gray2" />
+              ) : emptySeat === 1 ? (
+                <BsFire className="h-6 w-6 m-2 fill-hotPink" />
+              ) : user_id === leader_id ? (
+                <div>
+                  <button
+                    onClick={() => {
+                      setOpen((open) => !open);
+                    }}
                   >
-                    {value}
-                  </Chip>
-                ))}
+                    <HiOutlineDotsVertical className="h-6 w-6 m-2" />
+                  </button>
+
+                  {open && (
+                    <div>
+                      <DeleteMeetingRoom room_id={room_id} />
+                      <EditMeetingRoom room={room} />
+                    </div>
+                  )}
+                </div>
+              ) : null}
+            </div>
+          </div>
+
+          <main className="flex flex-col justify-start" onClick={(e) => addMember({ room_id })}>
+            <div className="h-[16px]"></div>
+            <div className="text-[26px]"> {room_title} </div>
+            <div className="flex flex-row justify-start gap-2">
+              <div className="text-[14px]">{region}</div>
+              <div className="text-[14px]"> {location} </div>
+            </div>
+            <div className="h-[40px]"></div>
+            <div>하트</div>
+            <div className="h-[8px]"></div>
+
+            <div className="text-[14px] flex flex-row gap-[8px]">
+              {Array.from(feature).map((value) => (
+                <Chip
+                  key={value}
+                  color="default"
+                  style={{ backgroundColor: '#F2EAFA', color: '#8F5DF4', borderRadius: '8px' }}
+                >
+                  {value}
+                </Chip>
+              ))}
+              <div className="h-[24px]"></div>
             </div>
           </main>
         </div>
       </div>
-    </>
+    </div>
   );
 }
 

@@ -80,7 +80,7 @@ function MeetingRoomForm() {
 
   return (
     <>
-      <Button onPress={onOpen} className="bg-violet-300 m-4">
+      <Button onPress={onOpen} className="w-[92px] h-[51px] bg-mainColor text-white">
         방 만들기
       </Button>
       <Modal
