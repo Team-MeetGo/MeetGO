@@ -1,15 +1,15 @@
-import { MEETING_TIME_QUERY_KEY } from '(@/query/chat/chatQueryKeys)';
+import { CHATDATA_QUERY_KEY, MEETING_TIME_QUERY_KEY } from '(@/query/chat/chatQueryKeys)';
 import { addMeetingTime } from '(@/service/sidebar)';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
-export const updateMeetingTimeMutation = () => {
+export const useUpdateMeetingTimeMutation = () => {
   const queryClient = useQueryClient();
   const { mutate: updateMeetingTime } = useMutation({
     mutationFn: ({ chatRoomId, isoStringMeetingTime }: { chatRoomId: string; isoStringMeetingTime: string }) =>
       addMeetingTime(chatRoomId, isoStringMeetingTime),
     onSuccess: async () => {
       await queryClient.invalidateQueries({
-        queryKey: [MEETING_TIME_QUERY_KEY]
+        queryKey: [CHATDATA_QUERY_KEY]
       });
     }
   });
