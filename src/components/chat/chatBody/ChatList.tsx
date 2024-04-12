@@ -79,7 +79,6 @@ const ChatList = ({ user, chatRoomId }: { user: User | null; chatRoomId: string 
         )
         .subscribe();
       return () => {
-        alert('채널에서 alert 띄움!!');
         clientSupabase.removeChannel(channel);
       };
     }
@@ -130,12 +129,11 @@ const ChatList = ({ user, chatRoomId }: { user: User | null; chatRoomId: string 
 
     return () => {
       console.log('실행은 되니');
-      alert('실행?');
       console.log(checkedLastMsg && messages.length);
-      if (checkedLastMsg && messages.length) {
-        // 이전에 저장된 마지막 메세지가 있으면 현재 메세지 중 마지막 걸로 업데이트, 없으면 현재 메세지 중 마지막 메세지 추가하기
-        lastMsgId ? mutateToUpdate() : mutateToAdd();
-      }
+      // if (checkedLastMsg && messages.length) {
+      // 이전에 저장된 마지막 메세지가 있으면 현재 메세지 중 마지막 걸로 업데이트, 없으면 현재 메세지 중 마지막 메세지 추가하기
+      lastMsgId ? mutateToUpdate() : mutateToAdd();
+      // }
     };
   }, []);
 
