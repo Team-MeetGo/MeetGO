@@ -4,32 +4,23 @@ import React, { useEffect, useState } from 'react';
 import ToggleButton from './ToggleButton';
 import HeartFillIcon from '(@/utils/icons/HeartFillIcon)';
 import HeartIcon from '(@/utils/icons/HeartIcon)';
-import { userStore } from '(@/store/userStore)';
-import { useQuery, useSuspenseQuery } from '@tanstack/react-query';
-import { LIKED_COUNT_QUERY_KEY, LIKED_QUERY_KEY } from '(@/query/review/likeQueryKeys)';
-import { fetchLikeCount, fetchLikestatus, useToggleLikeMutation } from '(@/query/review/likeQueryFns)';
+import { useGetUserDataQuery } from '(@/hooks/useQueries/useUserQuery)';
+import { useLikedReviewCountQuery, useLikedReviewDataQuery } from '(@/hooks/useQueries/useLikeQuery)';
+import { useToggleLikeMutation } from '(@/hooks/useMutation/useLikeMutation)';
 
 type Props = {
   review_id: string;
 };
 
-const ReviewHeart = ({ review_id }: Props) => {
+const ReviewLike = ({ review_id }: Props) => {
   const [likes, setLikes] = useState<boolean | null>(null);
   const [likeCount, setLikeCount] = useState(0);
   const [likeUser, setLikeUser] = useState<string[]>([]);
 
-  const { user, setUser } = userStore((state) => state);
+  const { data: user } = useGetUserDataQuery();
   const userId = user?.user_id;
 
   //좋아요 status
-  const useLikedReviewDataQuery = (review_id: string) => {
-    const { data: likedUsers } = useQuery({
-      queryKey: [LIKED_QUERY_KEY, review_id],
-      queryFn: async () => await fetchLikestatus(review_id)
-    });
-    return likedUsers;
-  };
-
   const likedUsers = useLikedReviewDataQuery(review_id);
 
   useEffect(() => {
@@ -42,18 +33,6 @@ const ReviewHeart = ({ review_id }: Props) => {
   }, [likedUsers, userId]);
 
   //좋아요 count
-  const useLikedReviewCountQuery = (review_id: string) => {
-    const { data: likeCountData, error } = useQuery({
-      queryKey: [LIKED_COUNT_QUERY_KEY, review_id],
-      queryFn: async () => await fetchLikeCount(review_id)
-    });
-    if (error) {
-      console.error('데이터를 불러오는 중 오류가 발생했습니다.', error);
-      return 0;
-    }
-    return likeCountData;
-  };
-
   const likeCountData = useLikedReviewCountQuery(review_id);
 
   useEffect(() => {
@@ -103,4 +82,4 @@ const ReviewHeart = ({ review_id }: Props) => {
   );
 };
 
-export default ReviewHeart;
+export default ReviewLike;

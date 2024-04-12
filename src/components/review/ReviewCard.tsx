@@ -1,11 +1,9 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import ReviewComment from './ReviewComment';
-import ReviewHeart from './ReviewHeart';
 import defaultImg from '../../../public/defaultImg.jpg';
-import { useSuspenseQuery } from '@tanstack/react-query';
-import { AUTHOR_QUERY_KEY } from '(@/query/review/reviewQueryKeys)';
-import { fetchAuthorData } from '(@/query/review/reviewQueryFns)';
+import ReviewLike from './ReviewLike';
+import { useAuthorDataQuery } from '(@/hooks/useQueries/useReviewQuery)';
 
 export type ReviewType = {
   user_id: string | null;
@@ -18,14 +16,6 @@ export type ReviewType = {
 };
 
 const ReviewCard = ({ review }: { review: ReviewType }) => {
-  const useAuthorDataQuery = (review_id: string) => {
-    const { data: userData } = useSuspenseQuery({
-      queryKey: [AUTHOR_QUERY_KEY, review_id],
-      queryFn: async () => await fetchAuthorData(review_id)
-    });
-    return userData;
-  };
-
   const userData = useAuthorDataQuery(review.review_id);
   const authorNickname = userData?.nickname || null;
 
@@ -59,7 +49,7 @@ const ReviewCard = ({ review }: { review: ReviewType }) => {
         <div>{review.show_nickname ? authorNickname || '익명유저' : '익명유저'}</div>
       </Link>
       <div className="flex gap-2">
-        <ReviewHeart review_id={review.review_id} />
+        <ReviewLike review_id={review.review_id} />
         <ReviewComment review_id={review.review_id} />
       </div>
     </div>
