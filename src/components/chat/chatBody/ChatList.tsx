@@ -27,10 +27,12 @@ const ChatList = ({ user, chatRoomId }: { user: User | null; chatRoomId: string 
   const [checkedLastMsg, setCheckedLastMsg] = useState(false);
   const room = useRoomDataQuery(chatRoomId);
   const roomId = room?.roomId;
-  const lastMsgId = useMyLastMsgs(user?.id!, chatRoomId);
-  console.log('lastMsgId => ', lastMsgId && lastMsgId[0].last_msg_id);
+
   const prevMsgsLengthRef = useRef(messages.length);
   const lastDivRefs = useRef(messages);
+
+  const lastMsgId = useMyLastMsgs(user?.id!, chatRoomId);
+  console.log('lastMsgId => ', lastMsgId && lastMsgId[0].last_msg_id);
 
   const pathname = usePathname();
   const { mutate: mutateToUpdate } = useUpdateLastMsg(
@@ -43,6 +45,18 @@ const ChatList = ({ user, chatRoomId }: { user: User | null; chatRoomId: string 
     user?.id as string,
     messages && messages.length > 0 ? messages[messages.length - 1].message_id : undefined
   );
+
+  // 마지막으로 읽은 메세지 기억하기
+  useEffect(() => {
+    return () => {
+      // 현재 나누는 메세지가 있을 때
+      if (messages.length) {
+        // 이전에 저장된 마지막 메세지가 있으면 현재 메세지 중 마지막 걸로 업데이트, 없으면 현재 메세지 중 마지막 메세지 추가하기
+        lastMsgId?.length ? mutateToUpdate() : mutateToAdd();
+      }
+    };
+    // 주소가 바뀔 때만 감지해서 저장 또는 업데이트
+  }, [pathname]);
 
   useEffect(() => {
     if (roomId && chatRoomId) {
@@ -116,18 +130,6 @@ const ChatList = ({ user, chatRoomId }: { user: User | null; chatRoomId: string 
       }
     }
   }, [messages, isScrolling]);
-
-  // 마지막으로 읽은 메세지 기억하기
-  useEffect(() => {
-    return () => {
-      // 현재 나누는 메세지가 있을 때
-      if (messages.length) {
-        // 이전에 저장된 마지막 메세지가 있으면 현재 메세지 중 마지막 걸로 업데이트, 없으면 현재 메세지 중 마지막 메세지 추가하기
-        lastMsgId?.length ? mutateToUpdate() : mutateToAdd();
-      }
-    };
-    // 주소가 바뀔 때만 감지해서 저장 또는 업데이트
-  }, [pathname]);
 
   // 스크롤 이벤트가 발생할 때
   const handleScroll = () => {

@@ -1,4 +1,6 @@
 import { clientSupabase } from '(@/utils/supabase/client)';
+import { useQueryClient } from '@tanstack/react-query';
+import { MY_LAST_MSGS_BEFORE } from './chatQueryKeys';
 
 export const fetchRoomDataWithChatRoomId = async (chatRoomId: string) => {
   // roomId 불러오기
@@ -79,6 +81,9 @@ export const fetchMyChatRoomIds = async (userId: string) => {
 
 // 내가 본 마지막 메세지들의 아이디
 export const fetchMyLastMsgs = async (user_id: string, chatRoomId: string) => {
+  const queryClinet = useQueryClient();
+  await queryClinet.invalidateQueries({ queryKey: [MY_LAST_MSGS_BEFORE, user_id, chatRoomId] });
+
   const { data: lastMsgs, error } = await clientSupabase
     .from('remember_last_msg')
     .select('last_msg_id')
