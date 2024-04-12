@@ -1,14 +1,11 @@
-import { useMyLastMsgs } from '(@/hooks/useQueries/useChattingQuery)';
-import { useGetUserDataQuery } from '(@/hooks/useQueries/useUserQuery)';
 import { chatStore } from '(@/store/chatStore)';
 import { Message } from '(@/types/chatTypes)';
 import { getformattedDate, showingDate } from '(@/utils)';
 import ChatDeleteDropDown from './ChatDeleteDropDown';
 
 const MyChat = ({ msg, idx, lastDivRefs }: { msg: Message; idx: number; lastDivRefs: any }) => {
-  const { messages, chatRoomId, checkedLastMsg, isScrolling } = chatStore((state) => state);
-  const { data: user } = useGetUserDataQuery();
-  const lastMsgId = useMyLastMsgs(user?.user_id!, chatRoomId);
+  const { messages } = chatStore((state) => state);
+
   return (
     <>
       {idx >= 1 && new Date(msg.created_at).getDate() > new Date(messages[idx - 1].created_at).getDate() ? (

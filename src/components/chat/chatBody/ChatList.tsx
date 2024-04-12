@@ -126,7 +126,7 @@ const ChatList = ({ user, chatRoomId }: { user: User | null; chatRoomId: string 
         lastMsgId ? mutateToUpdate() : mutateToAdd();
       }
     };
-  }, [checkedLastMsg]);
+  }, []);
 
   // 스크롤 이벤트가 발생할 때
   const handleScroll = () => {
@@ -159,7 +159,6 @@ const ChatList = ({ user, chatRoomId }: { user: User | null; chatRoomId: string 
         onScroll={handleScroll}
       >
         <ChatSearch isScrollTop={isScrollTop} />
-
         {hasMore ? <LoadChatMore chatRoomId={chatRoomId} count={count} setCount={setCount} /> : <></>}
         {messages?.map((msg, idx) => (
           <>
