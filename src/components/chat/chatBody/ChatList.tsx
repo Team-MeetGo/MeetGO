@@ -30,6 +30,7 @@ const ChatList = ({ user, chatRoomId }: { user: User | null; chatRoomId: string 
   const room = useRoomDataQuery(chatRoomId);
   const roomId = room?.roomId;
 
+  console.log('messages =>', messages);
   const prevMsgsLengthRef = useRef(messages.length);
   const lastDivRefs = useRef(messages);
 
@@ -106,8 +107,8 @@ const ChatList = ({ user, chatRoomId }: { user: User | null; chatRoomId: string 
     const scrollBox = scrollRef.current;
     if (scrollBox && !isScrolling) {
       // 처음에 로드 시 스크롤 중이 아닐 때
-      if (!lastMsgId || prevMsgsLengthRef.current !== messages.length || !lastCheckedDiv) {
-        // 이전에 저장된 마지막 메세지가 없으면 그냥 스크롤 다운
+      if (!lastMsgId || !lastCheckedDiv || prevMsgsLengthRef.current !== messages.length) {
+        // 이전에 저장된 마지막 메세지가 없거나, DB에 저장된 메세지는 있는데 화면에 없거나, 새로운 메세지가 추가될 때 그냥 스크롤 다운
         scrollBox.scrollTop = scrollBox.scrollHeight;
         prevMsgsLengthRef.current = messages.length;
       } else {
@@ -130,10 +131,10 @@ const ChatList = ({ user, chatRoomId }: { user: User | null; chatRoomId: string 
       console.log(checkedLastMsg && messages.length);
       // if (checkedLastMsg && messages.length) {
       // 이전에 저장된 마지막 메세지가 있으면 현재 메세지 중 마지막 걸로 업데이트, 없으면 현재 메세지 중 마지막 메세지 추가하기
-      lastMsgId ? mutateToUpdate() : mutateToAdd();
+      // lastMsgId ? mutateToUpdate() : mutateToAdd();
       // }
     };
-  }, []);
+  }, [checkedLastMsg]);
 
   // 스크롤 이벤트가 발생할 때
   const handleScroll = () => {
@@ -171,7 +172,7 @@ const ChatList = ({ user, chatRoomId }: { user: User | null; chatRoomId: string 
         {messages?.map((msg, idx) => (
           <>
             {idx >= 1 && new Date(msg.created_at).getDate() > new Date(messages[idx - 1].created_at).getDate() ? (
-              <div className="mx-auto" key={msg.message_id}>
+              <div className="mx-auto" key={idx}>
                 <p>{showingDate(msg.created_at)}</p>
               </div>
             ) : null}
@@ -185,7 +186,7 @@ const ChatList = ({ user, chatRoomId }: { user: User | null; chatRoomId: string 
             lastMsgId === msg.message_id &&
             isScrolling &&
             !checkedLastMsg ? (
-              <div key={msg.message_id} className={`flex ${msg.send_from === user?.id ? 'ml-auto' : 'mr-auto'}`}>
+              <div key={idx} className={`flex ${msg.send_from === user?.id ? 'ml-auto' : 'mr-auto'}`}>
                 <p>여기까지 읽으셨습니다.</p>
               </div>
             ) : null}
