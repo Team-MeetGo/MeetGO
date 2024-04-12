@@ -14,7 +14,6 @@ export const meetingNchatRoomHandler = (middleware: CustomMiddleware) => {
     // 내가 들어가있는 방들
     const myChatRooms = [];
     const { data: myRooms } = await supabase.from('participants').select('room_id').eq('user_id', String(user?.id));
-
     // 수락창
     if (myRooms && request.nextUrl.pathname.startsWith('/meetingRoom/')) {
       if (myRooms.map((room) => room.room_id).includes(request.nextUrl.pathname.replace('/meetingRoom/', ''))) {
@@ -23,7 +22,6 @@ export const meetingNchatRoomHandler = (middleware: CustomMiddleware) => {
         return NextResponse.redirect(new URL('/', request.nextUrl.origin));
       }
     }
-
     // 채팅창
     if (myRooms && request.nextUrl.pathname.startsWith('/chat/')) {
       for (let room of myRooms) {
