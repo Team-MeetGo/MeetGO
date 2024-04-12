@@ -57,7 +57,13 @@ const NavBarContents = () => {
       </NavbarBrand>
       <NavbarContent className="hidden sm:flex gap-4 h-auto" justify="center">
         <NavbarItem>
-          <Link color="foreground" href="/meetingRoom">
+          <Link
+            color="foreground"
+            href="/meetingRoom"
+            onClick={() => {
+              console.log('first');
+            }}
+          >
             로비
           </Link>
         </NavbarItem>

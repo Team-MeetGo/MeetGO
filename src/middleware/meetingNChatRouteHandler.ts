@@ -6,24 +6,34 @@ export const meetingNchatRoomHandler = (middleware: CustomMiddleware) => {
   return async (request: NextRequest, event: NextFetchEvent) => {
     const referer = request.headers.get('Referer');
     // 새로고침하거나 직접 타이핑 해서 채팅방에 들어가려고 할 때,
-    if (request.nextUrl.pathname.startsWith('/chat/')) {
-      const supabase = serverSupabase();
-      const {
-        data: { user }
-      } = await supabase.auth.getUser();
-      // 내가 들어가있는 방들
-      const myChatRooms = [];
-      const { data: myRooms } = await supabase.from('participants').select('room_id').eq('user_id', String(user?.id));
-      if (myRooms) {
-        for (let room of myRooms) {
-          const { data: myChatRoomId } = await supabase
-            .from('chatting_room')
-            .select('chatting_room_id')
-            .eq('room_id', room.room_id)
-            .eq('isActive', true);
-          if (myChatRoomId && myChatRoomId.length) {
-            myChatRooms.push(myChatRoomId[0].chatting_room_id);
-          }
+
+    const supabase = serverSupabase();
+    const {
+      data: { user }
+    } = await supabase.auth.getUser();
+    // 내가 들어가있는 방들
+    const myChatRooms = [];
+    const { data: myRooms } = await supabase.from('participants').select('room_id').eq('user_id', String(user?.id));
+
+    // 수락창
+    if (myRooms && request.nextUrl.pathname.startsWith('/meetingRoom/')) {
+      if (myRooms.map((room) => room.room_id).includes(request.nextUrl.pathname.replace('/meetingRoom/', ''))) {
+        return NextResponse.next();
+      } else {
+        return NextResponse.redirect(new URL('/', request.nextUrl.origin));
+      }
+    }
+
+    // 채팅창
+    if (myRooms && request.nextUrl.pathname.startsWith('/chat/')) {
+      for (let room of myRooms) {
+        const { data: myChatRoomId } = await supabase
+          .from('chatting_room')
+          .select('chatting_room_id')
+          .eq('room_id', room.room_id)
+          .eq('isActive', true);
+        if (myChatRoomId && myChatRoomId.length) {
+          myChatRooms.push(myChatRoomId[0].chatting_room_id);
         }
       }
       if (myChatRooms.includes(request.nextUrl.pathname.replace('/chat/', ''))) {
@@ -35,14 +45,6 @@ export const meetingNchatRoomHandler = (middleware: CustomMiddleware) => {
       }
     }
 
-    // if (
-    //   // 다른 페이지에서(/meetingRoom/~~ + /chat/~~(현재창) 외의 모든 페이지)에서 뒤로가기로 채팅방으로 들어오려고 하는 경우
-    //   !referer?.startsWith('http://localhost:3000/meetingRoom/') &&
-    //   // !referer?.startsWith('http://localhost:3000/chat/') &&
-    //   request.nextUrl.pathname.startsWith('/chat/')
-    // ) {
-    //   return NextResponse.redirect(new URL('/meetingRoom', request.url));
-    // }
     console.log('어디서 왔니', referer);
     console.log('어디로 가니', request.nextUrl.pathname);
     return middleware(request, event, NextResponse.next());
