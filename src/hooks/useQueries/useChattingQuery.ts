@@ -35,6 +35,7 @@ export const useChatDataQuery = (chatRoomId: string) => {
     queryKey: CHATDATA_QUERY_KEY,
     queryFn: async () => await fetchChatData(chatRoomId)
   });
+  console.log(chat);
   return chat;
 };
 

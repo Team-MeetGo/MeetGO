@@ -32,8 +32,8 @@ const ChatList = ({ user, chatRoomId }: { user: User | null; chatRoomId: string 
   const prevMsgsLengthRef = useRef(messages.length);
   const lastDivRefs = useRef(messages);
 
-  console.log('쌩 날짜 =>', messages[0].created_at);
-  const date = new Date(messages[0].created_at);
+  console.log('쌩 날짜 =>', messages[0]?.created_at);
+  const date = new Date(messages[0]?.created_at);
   console.log('만진 날짜 =>', date);
   console.log(typeof date);
   console.log(date.getDate());
