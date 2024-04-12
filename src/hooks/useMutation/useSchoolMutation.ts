@@ -1,5 +1,5 @@
-import { updateProfile, updateSchool } from '(@/service)';
-import { UpdateProfileType, UpdateSchoolType } from '(@/types/userTypes)';
+import { updateSchool } from '(@/service)';
+import { UpdateSchoolType } from '(@/types/userTypes)';
 import { useMutation } from '@tanstack/react-query';
 
 export const useSchoolUpdateMutation = () =>

@@ -107,9 +107,9 @@ const SchoolForm = () => {
   };
 
   return (
-    <div className="mb-6 flex ">
-      <div className="flex flex-col">
-        <label className="block text-sm font-medium mb-1" htmlFor="schoolEmail">
+    <div className="mb-6 flex flex-col gap-6">
+      <div className="flex gap-6">
+        <label className="block text-lg font-semibold w-[90px]" htmlFor="schoolEmail">
           학교 이메일
         </label>
         {user?.isValidate ? (
@@ -131,8 +131,8 @@ const SchoolForm = () => {
           </>
         )}
       </div>
-      <div className="flex flex-col">
-        <label className="block text-sm font-medium mb-1" htmlFor="univName">
+      <div className="flex gap-6">
+        <label className="block text-lg font-semibold w-[90px]" htmlFor="univName">
           학교명
         </label>
         {user?.isValidate ? (
@@ -153,14 +153,14 @@ const SchoolForm = () => {
             )}
           </>
         )}
+        {user?.isValidate ? (
+          <p>인증완료✔️</p>
+        ) : (
+          <button onClick={onSubmitEmailConfirm} disabled={isCodeSent}>
+            인증
+          </button>
+        )}
       </div>
-      {user?.isValidate ? (
-        <p>인증완료✔️</p>
-      ) : (
-        <button onClick={onSubmitEmailConfirm} disabled={isCodeSent}>
-          인증
-        </button>
-      )}
       {user?.isValidate
         ? null
         : isCodeSent && (
