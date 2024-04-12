@@ -6,7 +6,6 @@ export const routeHandlerMiddleware = (middleware: CustomMiddleware) => {
   return async (request: NextRequest, event: NextFetchEvent, response: NextResponse) => {
     const supabase = serverSupabase();
     const { data } = await supabase.auth.getUser();
-    // console.log(data);
 
     if (data.user) {
       // 로그인 한 유저
@@ -25,18 +24,6 @@ export const routeHandlerMiddleware = (middleware: CustomMiddleware) => {
         return NextResponse.redirect(new URL('/users/login', request.url));
       }
     }
-
-    // 직접 쳐서 들어가려는 경우
-    // const referer = request.headers.get('Referer');
-    // // if (!referer && request.nextUrl.pathname.startsWith('/meetingRoom/')) {
-    // //   // 직접 타이핑 해서 수락창에 들어가려고 하는 경우
-    // //   return NextResponse.redirect(new URL('/meetingRoom', request.url));
-    // // }
-    // // if (referer?.startsWith('http://localhost:3000/chat') && request.nextUrl.pathname.startsWith('/meetingRoom/')) {
-    // //   //
-    // //   return NextResponse.redirect(new URL('/', request.url));
-    // // }
-
     return middleware(request, event, response);
   };
 };
