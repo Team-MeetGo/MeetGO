@@ -47,7 +47,7 @@ export const useMyChatRoomIdsQuery = (userId: string) => {
   return myChatRoomIds;
 };
 
-export const useMyLastMsgs = (user_id: string, chatRoomId: string) => {
+export const useMyLastMsgs = (user_id: string, chatRoomId: string | null) => {
   const { data: myLastMsgs } = useSuspenseQuery({
     queryKey: [MY_LAST_MSGS_AFTER, user_id, chatRoomId],
     queryFn: () => fetchMyLastMsgs(user_id, chatRoomId)

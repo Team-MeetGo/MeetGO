@@ -58,20 +58,20 @@ const NavBarContents = () => {
       <NavbarContent className="hidden sm:flex gap-4 h-auto" justify="center">
         <NavbarItem>
           <Link color="foreground" href="/meetingRoom">
-            로비 */}
-      <button onClick={() => router.push('/meetingRoom')}>로비</button>
-      {/* </Link> */}
-      {/* </NavbarItem>
-        <NavbarItem isActive> */}
-      {/* <Link href="/review/pageNumber/1" aria-current="page" color="secondary"> */}
-      <button onClick={() => router.push('/test')}>리뷰게시판..</button>
-
-      {/* </Link>
-        </NavbarItem> */}
-      {/* <NavbarItem> */}
-      <button onClick={() => router.push('/test')}>메뉴더있었으면..</button>
-      {/* </NavbarItem> */}
-      {/* </NavbarContent> */}
+            로비
+          </Link>
+        </NavbarItem>
+        <NavbarItem isActive>
+          <Link href="/review/pageNumber/1" aria-current="page" color="secondary">
+            리뷰게시판
+          </Link>
+        </NavbarItem>
+        {/* <NavbarItem>
+            <Link color="foreground" href="#">
+              메뉴더있었으면..
+            </Link>
+          </NavbarItem> */}
+      </NavbarContent>
 
       <NavbarContent className="h-auto" as="div" justify="end">
         {isLoggedIn ? (

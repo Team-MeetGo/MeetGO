@@ -15,16 +15,19 @@ import ChatSearch from './ChatSearch';
 import { useMyLastMsgs, useRoomDataQuery } from '(@/hooks/useQueries/useChattingQuery)';
 import { usePathname } from 'next/navigation';
 import { useAddLastMsg, useUpdateLastMsg } from '(@/hooks/useMutation/useChattingMutation)';
+import MyChat from './MyChat';
 
 const ChatList = ({ user, chatRoomId }: { user: User | null; chatRoomId: string }) => {
   const scrollRef = useRef() as React.MutableRefObject<HTMLDivElement>;
-  const { hasMore, messages, setMessages } = chatStore((state) => state);
-  const [isScrolling, setIsScrolling] = useState(false);
+  const { hasMore, messages, checkedLastMsg, isScrolling, setMessages, setCheckedLastMsg, setIsScrolling } = chatStore(
+    (state) => state
+  );
+  // const [isScrolling, setIsScrolling] = useState(false);
   const [isScrollTop, setIsScrollTop] = useState(true);
   const [count, setCount] = useState(1);
   const [newAddedMsgNum, setNewAddedMsgNum] = useState(0);
   const [lastCheckedDiv, setLastCheckedDiv] = useState<HTMLElement | null>();
-  const [checkedLastMsg, setCheckedLastMsg] = useState(false);
+  // const [checkedLastMsg, setCheckedLastMsg] = useState(false);
   console.log('checkedLastMsg =>', checkedLastMsg);
   console.log('메세지 있어? =>', messages.length > 0);
   const room = useRoomDataQuery(chatRoomId);
@@ -167,31 +170,16 @@ const ChatList = ({ user, chatRoomId }: { user: User | null; chatRoomId: string 
         onScroll={handleScroll}
       >
         <ChatSearch isScrollTop={isScrollTop} />
-
         {hasMore ? <LoadChatMore chatRoomId={chatRoomId} count={count} setCount={setCount} /> : <></>}
-        {messages?.map((msg, idx) => (
-          <>
-            {idx >= 1 && new Date(msg.created_at).getDate() > new Date(messages[idx - 1].created_at).getDate() ? (
-              <div className="mx-auto" key={idx}>
-                <p>{showingDate(msg.created_at)}</p>
-              </div>
-            ) : null}
-            {msg.send_from === user?.id ? (
+        <>
+          {messages?.map((msg, idx) =>
+            msg.send_from === user?.id ? (
               <MyChat msg={msg} key={msg.message_id} idx={idx} lastDivRefs={lastDivRefs} />
             ) : (
               <OthersChat msg={msg} key={msg.message_id} idx={idx} lastDivRefs={lastDivRefs} />
-            )}
-            {lastMsgId &&
-            lastMsgId !== messages[messages.length - 1].message_id &&
-            lastMsgId === msg.message_id &&
-            isScrolling &&
-            !checkedLastMsg ? (
-              <div key={idx} className={`flex ${msg.send_from === user?.id ? 'ml-auto' : 'mr-auto'}`}>
-                <p>여기까지 읽으셨습니다.</p>
-              </div>
-            ) : null}
-          </>
-        ))}
+            )
+          )}
+        </>
       </div>
       {isScrolling ? (
         newAddedMsgNum === 0 ? (
@@ -211,23 +199,3 @@ const ChatList = ({ user, chatRoomId }: { user: User | null; chatRoomId: string 
 };
 
 export default ChatList;
-
-const MyChat = ({ msg, idx, lastDivRefs }: { msg: Message; idx: number; lastDivRefs: any }) => {
-  return (
-    <div id={msg.message_id} ref={lastDivRefs.current[idx]} className="flex gap-4 ml-auto">
-      <div className="w-80 h-24 flex flex-col gap-1">
-        <div className="font-bold ml-auto">{msg.nickname}</div>
-        <div className="flex gap-2 ml-auto">
-          <ChatDeleteDropDown msg={msg} />
-          <div className="border rounded-md py-3 px-5 h-full text-right">{msg.message}</div>
-        </div>
-        <div className="mt-auto text-slate-100 text-xs ml-auto">
-          <p>{getformattedDate(msg.created_at)}</p>
-        </div>
-      </div>
-      <Tooltip content="여기 컴포넌트">
-        <div className="h-14 w-14 bg-indigo-600 rounded-full my-auto">{msg.avatar}</div>
-      </Tooltip>
-    </div>
-  );
-};

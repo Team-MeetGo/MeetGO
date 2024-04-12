@@ -80,12 +80,12 @@ export const fetchMyChatRoomIds = async (userId: string) => {
 };
 
 // 내가 본 마지막 메세지들의 아이디
-export const fetchMyLastMsgs = async (user_id: string, chatRoomId: string) => {
+export const fetchMyLastMsgs = async (user_id: string, chatRoomId: string | null) => {
   const { data: lastMsgs, error } = await clientSupabase
     .from('remember_last_msg')
     .select('last_msg_id')
     .eq('user_id', user_id)
-    .eq('chatting_room_id', chatRoomId);
+    .eq('chatting_room_id', String(chatRoomId));
   if (error) console.error('마지막 메세지를 가져오는 데 실패했습니다.', error.message);
   // console.log('잘 가져오는 거 맞아?', lastMsgs && lastMsgs[0].last_msg_id);
   if (lastMsgs && lastMsgs.length) {
