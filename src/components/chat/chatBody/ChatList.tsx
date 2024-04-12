@@ -35,7 +35,8 @@ const ChatList = ({ user, chatRoomId }: { user: User | null; chatRoomId: string 
 
   const lastMsgId = useMyLastMsgs(user?.id!, chatRoomId);
 
-  console.log('lastMsgId =>', lastMsgId);
+  console.log('DB의 마지막 메세지 =>', lastMsgId);
+  console.log('찐 마지막 메세지 =>', messages[messages.length - 1].message_id);
 
   const pathname = usePathname();
   const { mutate: mutateToUpdate } = useUpdateLastMsg(
@@ -78,6 +79,7 @@ const ChatList = ({ user, chatRoomId }: { user: User | null; chatRoomId: string 
         )
         .subscribe();
       return () => {
+        alert('채널에서 alert 띄움!!');
         clientSupabase.removeChannel(channel);
       };
     }
@@ -101,7 +103,6 @@ const ChatList = ({ user, chatRoomId }: { user: User | null; chatRoomId: string 
         scrollBox.scrollTop = scrollBox.scrollHeight;
       }
     }
-    // 처음 로드 시에만 실행(의존성배열 = [])
   }, []);
 
   useEffect(() => {
@@ -124,11 +125,13 @@ const ChatList = ({ user, chatRoomId }: { user: User | null; chatRoomId: string 
 
   // 마지막으로 읽은 메세지 기억하기
   useEffect(() => {
-    console.log('실행되는 건 맞아?');
+    console.log('useEffect 안 실행되는 건 맞아?');
     // 현재 나누는 메세지가 있을 때
 
     return () => {
       console.log('실행은 되니');
+      alert('실행?');
+      console.log(checkedLastMsg && messages.length);
       if (checkedLastMsg && messages.length) {
         // 이전에 저장된 마지막 메세지가 있으면 현재 메세지 중 마지막 걸로 업데이트, 없으면 현재 메세지 중 마지막 메세지 추가하기
         lastMsgId ? mutateToUpdate() : mutateToAdd();

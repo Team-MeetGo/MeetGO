@@ -1,7 +1,5 @@
 'use client';
-
-import HowManyMsg from '(@/components/room/meetingChat/HowManyMsg)';
-import { Suspense, useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 const Page = () => {
   const [the, setThe] = useState(false);
@@ -12,23 +10,12 @@ const Page = () => {
   console.log('daa', daa);
   console.log(check.current);
 
-  // useEffect(() => {
-  //   setThe(true);
-  // }, [daa]);
-
   useEffect(() => {
-    console.log('check.current =>', check.current);
-    if (the) {
+    console.log('이거는 위에 함수');
+    return () => {
       console.log('clean up 함수 안');
-      // if (check.current) {
-      //   console.log('abc');
-      // }
-    }
-  }, [daa]);
-
-  // useEffect(() => {
-  //   check.current = true;
-  // }, []);
+    };
+  }, []);
 
   return (
     <div>

@@ -66,11 +66,9 @@ const NavBarContents = () => {
             리뷰게시판
           </Link>
         </NavbarItem>
-        {/* <NavbarItem>
-            <Link color="foreground" href="#">
-              메뉴더있었으면..
-            </Link>
-          </NavbarItem> */}
+        {/* <NavbarItem> */}
+        <button onClick={() => router.push('/test')}>메뉴더있었으면..</button>
+        {/* </NavbarItem> */}
       </NavbarContent>
 
       <NavbarContent as="div" justify="end">
