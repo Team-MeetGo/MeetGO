@@ -38,7 +38,6 @@ const ChatList = ({ user, chatRoomId }: { user: User | null; chatRoomId: string 
   console.log('DB의 마지막 메세지 =>', lastMsgId);
   console.log('찐 마지막 메세지 =>', messages[messages.length - 1].message_id);
 
-  const pathname = usePathname();
   const { mutate: mutateToUpdate } = useUpdateLastMsg(
     user?.id as string,
     chatRoomId as string,
@@ -95,8 +94,7 @@ const ChatList = ({ user, chatRoomId }: { user: User | null; chatRoomId: string 
         let lastDiv = ref && ref.current;
         if (lastDiv) {
           setLastCheckedDiv(lastDiv);
-          makeHereText(lastDiv);
-          // setCheckedLastMsg(true);
+          styleHere(lastDiv);
         }
       } else {
         scrollBox.scrollTop = scrollBox.scrollHeight;
@@ -108,7 +106,7 @@ const ChatList = ({ user, chatRoomId }: { user: User | null; chatRoomId: string 
     const scrollBox = scrollRef.current;
     if (scrollBox && !isScrolling) {
       // 처음에 로드 시 스크롤 중이 아닐 때
-      if (!lastMsgId || prevMsgsLengthRef.current !== messages.length) {
+      if (!lastMsgId || prevMsgsLengthRef.current !== messages.length || !lastCheckedDiv) {
         // 이전에 저장된 마지막 메세지가 없으면 그냥 스크롤 다운
         scrollBox.scrollTop = scrollBox.scrollHeight;
         prevMsgsLengthRef.current = messages.length;
@@ -155,7 +153,7 @@ const ChatList = ({ user, chatRoomId }: { user: User | null; chatRoomId: string 
   };
   // insert 할 때 없어졌으면 좋겠는데..
 
-  const makeHereText = (lastDiv: HTMLElement) => {
+  const styleHere = (lastDiv: HTMLElement) => {
     lastDiv.style.backgroundColor = 'pink';
     lastDiv.scrollIntoView({ block: 'center' });
   };
@@ -173,7 +171,7 @@ const ChatList = ({ user, chatRoomId }: { user: User | null; chatRoomId: string 
         {messages?.map((msg, idx) => (
           <>
             {idx >= 1 && new Date(msg.created_at).getDate() > new Date(messages[idx - 1].created_at).getDate() ? (
-              <div className="mx-auto">
+              <div className="mx-auto" key={msg.message_id}>
                 <p>{showingDate(msg.created_at)}</p>
               </div>
             ) : null}
@@ -187,7 +185,7 @@ const ChatList = ({ user, chatRoomId }: { user: User | null; chatRoomId: string 
             lastMsgId === msg.message_id &&
             isScrolling &&
             !checkedLastMsg ? (
-              <div className={`flex ${msg.send_from === user?.id ? 'ml-auto' : 'mr-auto'}`}>
+              <div key={msg.message_id} className={`flex ${msg.send_from === user?.id ? 'ml-auto' : 'mr-auto'}`}>
                 <p>여기까지 읽으셨습니다.</p>
               </div>
             ) : null}
