@@ -15,6 +15,10 @@ const SideBar: React.FC<SideBarProps> = ({ chatRoomId }) => {
   const [isSidebarOpen, setIsSidebarOpen] = useState<boolean>(false);
   const [finalDateTime, setFinalDateTime] = useState<string>();
 
+  // 유저 정보 가져오기
+  const { data: userData } = useGetUserDataQuery();
+  const userId = userData?.user_id;
+
   const room = useRoomDataQuery(chatRoomId);
   const leaderId = room?.roomData.leader_id;
 
@@ -22,11 +26,9 @@ const SideBar: React.FC<SideBarProps> = ({ chatRoomId }) => {
   const chat = useChatDataQuery(chatRoomId);
   const meetingTime = chat?.[0]?.meeting_time;
 
-  // 유저 정보 가져오기
-  const { data: userData } = useGetUserDataQuery();
-  const userId = userData?.user_id;
-
-  console.log('test', meetingTime);
+  useEffect(() => {
+    console.log('미팅타임이 바뀔까?', meetingTime);
+  }, []);
 
   const options: Intl.DateTimeFormatOptions = {
     year: 'numeric',
