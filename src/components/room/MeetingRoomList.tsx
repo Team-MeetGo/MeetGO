@@ -1,6 +1,7 @@
 'use client';
 import meetingRoomHandler from '(@/hooks/custom/room)';
 import { useMyroomQuery, useRecruitingQuery } from '(@/hooks/useQueries/useMeetingQuery)';
+import { useGetUserDataQuery } from '(@/hooks/useQueries/useUserQuery)';
 import { useSearchRoomStore } from '(@/store/searchRoomStore)';
 import { useCallback, useEffect, useState } from 'react';
 import { IoIosArrowBack, IoIosArrowForward, IoMdRefresh } from 'react-icons/io';
@@ -8,11 +9,10 @@ import MeetingRoom from './MeetingRoom';
 import MeetingRoomForm from './MeetingRoomForm';
 import MemberNumberSelection from './MemberNumberSelection';
 import RegionSelection from './RegionSelection';
-
-import { useGetUserDataQuery } from '(@/hooks/useQueries/useUserQuery)';
-import type { MeetingRoomType, MeetingRoomTypes } from '(@/types/roomTypes)';
 import { clientSupabase } from '(@/utils/supabase/client)';
 import { useMyChatRoomIdsQuery } from '(@/hooks/useQueries/useChattingQuery)';
+
+import type { MeetingRoomType, MeetingRoomTypes } from '(@/types/roomTypes)';
 
 function MeetingRoomList() {
   const [page, setPage] = useState(1);
@@ -113,8 +113,8 @@ function MeetingRoomList() {
   return (
     <div className="flex flex-col items-center justify-content">
       <main className="flex flex-col items-center justify-content min-w-[1116px] max-w-[1440px]">
-        {/* <button onClick={() => handlePlusMsgCount(1)}>플러스</button>
-      <button onClick={() => clearMsgCount(1)}>clear</button> */}
+        <button onClick={() => handlePlusMsgCount(1)}>플러스</button>
+        <button onClick={() => clearMsgCount(1)}>clear</button>
         <article className="h-[366px] mt-[88px] border-b border-gray2">
           <div className="flex flex-row justify-between">
             <div className="text-[40px] font-semibold">참여 중</div>

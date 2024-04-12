@@ -1,5 +1,6 @@
 'use client';
 import { useAddRoom } from '(@/hooks/useMutation/useMeetingMutation)';
+import { useGetUserDataQuery } from '(@/hooks/useQueries/useUserQuery)';
 import { useRoomStore } from '(@/store/roomStore)';
 import { favoriteOptions } from '(@/utils/FavoriteData)';
 import {
@@ -18,9 +19,8 @@ import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import MemberNumberSelection from './MemberNumberSelection';
 import RegionSelection from './RegionSelection';
-import { useGetUserDataQuery } from '(@/hooks/useQueries/useUserQuery)';
 
-import type { MeetingRoomType } from '(@/types/roomTypes)';
+import type { NewRoomType } from '(@/types/roomTypes)';
 
 function MeetingRoomForm() {
   const router = useRouter();
@@ -40,12 +40,12 @@ function MeetingRoomForm() {
   };
   const favoriteArray = Array.from(selected);
   const user_id = user?.user_id!;
-  const nextMeetingRoom: MeetingRoomType = {
+  const nextMeetingRoom: NewRoomType = {
     feature: favoriteArray,
     leader_id: String(user_id),
     location,
     region: String(roomRegion),
-    member_number: memberNumber,
+    member_number: String(memberNumber),
     room_status: '모집중',
     room_title: title
   };

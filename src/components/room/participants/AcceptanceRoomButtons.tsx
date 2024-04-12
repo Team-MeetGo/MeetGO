@@ -1,30 +1,29 @@
 'use client';
 import { clientSupabase } from '(@/utils/supabase/client)';
 import { useRouter } from 'next/navigation';
-
 import {
   useDeleteMember,
   useDeleteRoom,
   useUpdateLeaderMemberMutation,
   useUpdateRoomStatusOpen
 } from '(@/hooks/useMutation/useMeetingMutation)';
-import { useParticipantsQuery } from '(@/hooks/useQueries/useChattingQuery)';
-import { useRoomInfoWithRoomIdQuery } from '(@/hooks/useQueries/useMeetingQuery)';
+import { useRoomInfoWithRoomIdQuery, useRoomParticipantsQuery } from '(@/hooks/useQueries/useMeetingQuery)';
 import { useGetUserDataQuery } from '(@/hooks/useQueries/useUserQuery)';
-import type { UUID } from 'crypto';
+
+import type { UserType } from '(@/types/roomTypes)';
 
 const AcceptanceRoomButtons = ({ room_id }: { room_id: string }) => {
   const router = useRouter();
   const { data: user, isPending, isError } = useGetUserDataQuery();
   const user_id = user?.user_id!;
-  const participants = useParticipantsQuery(room_id);
+  const participants = useRoomParticipantsQuery(room_id);
   const { mutate: deleteMemberMutation } = useDeleteMember({ user_id, room_id });
-  const updateRoomStatusOpenMutation = useUpdateRoomStatusOpen({ room_id });
-  const { mutate: deleteRoomMutation } = useDeleteRoom({ room_id });
+  const updateRoomStatusOpenMutation = useUpdateRoomStatusOpen({ room_id, user_id });
+  const { mutate: deleteRoomMutation } = useDeleteRoom({ room_id, user_id });
 
   const { data: roomInformation } = useRoomInfoWithRoomIdQuery(room_id);
   const leader = roomInformation?.leader_id;
-  const otherParticipants = participants.filter((person) => person.user_id !== leader);
+  const otherParticipants = participants?.filter((person: UserType) => person?.user_id !== leader);
   const updateLeaderMemeberMutation = useUpdateLeaderMemberMutation({ otherParticipants, room_id });
 
   const gotoChattingRoom = async () => {
@@ -63,14 +62,13 @@ const AcceptanceRoomButtons = ({ room_id }: { room_id: string }) => {
     await updateRoomStatusOpenMutation.mutateAsync();
     await deleteMemberMutation();
     //유저가 리더였다면 다른 사람에게 리더 역할이 승계됩니다.
-    if (leader && leader === user_id && participants.length !== 1) {
+    if (leader && leader === user_id && participants?.length !== 1) {
       await updateLeaderMemeberMutation.mutateAsync();
     }
     //만약 유일한 참여자라면 나감과 동시에 방은 삭제됩니다.
-    if (participants.length === 1) {
+    if (participants?.length === 1) {
       await deleteRoomMutation();
     }
-    console.log('participants', participants);
     router.push(`/meetingRoom`);
   };
   //뒤로가기: 로비로

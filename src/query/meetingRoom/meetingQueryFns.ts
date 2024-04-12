@@ -1,4 +1,4 @@
-import { MeetingRoomType, UpdateRoomType, UserType } from '(@/types/roomTypes)';
+import { MeetingRoomType, NewRoomType, UpdateRoomType, UserType } from '(@/types/roomTypes)';
 import { clientSupabase } from '(@/utils/supabase/client)';
 
 export const fetchRecruitingRoom = async () => {
@@ -15,6 +15,7 @@ export const fetchMyRoom = async (user_id: string) => {
     .from('participants')
     .select(`*`)
     .eq('user_id', user_id)
+    .eq('isDeleted', false)
     .select('user_id, room(*)')
     .order('created_at', { ascending: false });
   return myRoom;
@@ -42,7 +43,7 @@ export const fetchAlreadyChatRoom = async (room_id: string) => {
   return alreadyChat;
 };
 
-export const addRoom = async ({ nextMeetingRoom, user_id }: { nextMeetingRoom: MeetingRoomType; user_id: string }) => {
+export const addRoom = async ({ nextMeetingRoom, user_id }: { nextMeetingRoom: NewRoomType; user_id: string }) => {
   const { data: insertMeetingRoom } = await clientSupabase.from('room').upsert([nextMeetingRoom]).select();
   if (insertMeetingRoom) {
     await clientSupabase.from('participants').insert([{ room_id: insertMeetingRoom[0].room_id, user_id: user_id }]);
@@ -50,14 +51,24 @@ export const addRoom = async ({ nextMeetingRoom, user_id }: { nextMeetingRoom: M
   }
 };
 
-export const updateRoomStatusClose = async (room_id: string) =>
-  await clientSupabase.from('room').update({ room_status: '모집종료' }).eq('room_id', room_id);
+export const updateRoomStatusClose = async (room_id: string) => {
+  const { data, error } = await clientSupabase.from('room').update({ room_status: '모집종료' }).eq('room_id', room_id);
+  if (error) console.error('방 닫힘 오류', error.message);
+  return data;
+};
 
-export const updateRoomStatusOpen = async (room_id: string) =>
-  await clientSupabase.from('room').update({ room_status: '모집중' }).eq('room_id', room_id);
+export const updateRoomStatusOpen = async (room_id: string) => {
+  const { data, error } = await clientSupabase.from('room').update({ room_status: '모집중' }).eq('room_id', room_id);
+  if (error) console.error('방 열림 오류', error.message);
+  return data;
+};
 
 export const updateRoom = async (editedMeetingRoom: UpdateRoomType) => {
-  const { data } = await clientSupabase.from('room').update(editedMeetingRoom).eq('room_id', editedMeetingRoom.room_id);
+  const { data, error } = await clientSupabase
+    .from('room')
+    .update(editedMeetingRoom)
+    .eq('room_id', editedMeetingRoom.room_id);
+  if (error) console.log('방 수정 오류', error.message);
   return data;
 };
 
@@ -73,7 +84,11 @@ export const updateLeaderMember = async ({
   otherParticipants: UserType[];
   room_id: string;
 }) => {
-  await clientSupabase.from('room').update({ leader_id: otherParticipants[0].user_id }).eq('room_id', room_id);
+  const { data: leaderUpdate } = await clientSupabase
+    .from('room')
+    .update({ leader_id: otherParticipants[0].user_id })
+    .eq('room_id', room_id);
+  return leaderUpdate;
 };
 
 export const addMember = async ({ user_id, room_id }: { user_id: string; room_id: string }) => {
@@ -90,4 +105,14 @@ export const deleteMember = async ({ user_id, room_id }: { user_id: string; room
     .eq('user_id', user_id)
     .eq('room_id', room_id)
     .select();
+};
+
+export const fetchRoomParticipants = async (roomId: string) => {
+  const { data: userInformations, error: userInformatinsError } = await clientSupabase
+    .from('participants')
+    .select(`*`)
+    .eq('room_id', roomId)
+    .eq('isDeleted', false)
+    .select('user_id, users(*)');
+  return userInformations?.map((user) => user.users);
 };
