@@ -118,7 +118,6 @@ export default function ReviewEditModal({ review_id, disclosure }: Props) {
 
     editReviewMutation.mutate({ editedTitle, editedContent, allImages, review_id });
 
-    console.log('editReviewMutation: ', editedTitle, editedContent, allImages, review_id);
     alert('리뷰가 수정되었습니다.');
     onClose();
     window.location.reload();
