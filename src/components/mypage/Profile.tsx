@@ -87,6 +87,7 @@ const Profile = () => {
   return (
     <div className="max-w-4xl mx-auto p-6 bg-white">
       <h1 className="text-2xl font-bold mb-4">프로필</h1>
+      <AvatarForm />
       {isEditing ? (
         <>
           <button
@@ -147,7 +148,6 @@ const Profile = () => {
             </Select>
           )}
         </div>
-        <AvatarForm />
       </div>
       <SchoolForm />
       <div className="mb-6">

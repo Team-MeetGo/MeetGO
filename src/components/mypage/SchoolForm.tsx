@@ -30,7 +30,6 @@ const SchoolForm = () => {
     if (error) {
       console.error('Error updating school:', error);
     } else {
-      setUser({ ...user, school_email: schoolEmail, school_name: univName, isValidate: true });
     }
   };
 

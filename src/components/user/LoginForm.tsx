@@ -77,11 +77,10 @@ const LoginForm = () => {
 
         // 캐시 무효화
         // 맨 처음에 메인 페이지 -> 로그인
+        showModal();
         queryClient.invalidateQueries({
           queryKey: [USER_DATA_QUERY_KEY]
         });
-
-        showModal();
         console.log('로그인 성공: ', session);
       } else if (error) throw error;
     } catch (error: any) {

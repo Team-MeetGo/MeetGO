@@ -4,7 +4,6 @@ import {
   NavbarBrand,
   NavbarContent,
   NavbarItem,
-  Link,
   DropdownItem,
   Dropdown,
   DropdownTrigger,
@@ -18,6 +17,7 @@ import { clientSupabase } from '(@/utils/supabase/client)';
 import { useGetUserDataQuery } from '(@/hooks/useQueries/useUserQuery)';
 import { useQueryClient } from '@tanstack/react-query';
 import { USER_DATA_QUERY_KEY } from '(@/query/user/userQueryKeys)';
+import Link from 'next/link';
 
 const NavBarContents = () => {
   const queryClient = useQueryClient();
@@ -33,11 +33,11 @@ const NavBarContents = () => {
 
   const signOut = async () => {
     await clientSupabase.auth.signOut();
+    router.replace('/'); // 로그아웃 후 메인 페이지로 이동. 뒤로가기 방지.
+    alert('로그아웃 성공');
     queryClient.invalidateQueries({
       queryKey: [USER_DATA_QUERY_KEY]
     });
-    router.replace('/'); // 로그아웃 후 메인 페이지로 이동. 뒤로가기 방지.
-    alert('로그아웃 성공');
   };
 
   return (
@@ -91,10 +91,11 @@ const NavBarContents = () => {
                 )}
               </DropdownTrigger>
               <DropdownMenu aria-label="Profile Actions" variant="flat">
-                <DropdownItem key="mypage" href="/mypage">
-                  마이페이지
+                <DropdownItem key="mypage" textValue="mypage">
+                  <Link href="/mypage" className="flex">
+                    마이페이지
+                  </Link>
                 </DropdownItem>
-                <DropdownItem key="helpdesk">고객센터</DropdownItem>
                 <DropdownItem key="logout" color="danger" onClick={signOut}>
                   LOGOUT
                 </DropdownItem>
