@@ -7,12 +7,13 @@ import MyPost from './MyPost';
 import Favorite from './Favorite';
 import MetPeople from './MetPeople';
 import useInputChange from '(@/hooks/custom/useInputChange)';
-import { Select, SelectItem } from '@nextui-org/react';
+import { Avatar, Select, SelectItem } from '@nextui-org/react';
 import { useGetUserDataQuery } from '(@/hooks/useQueries/useUserQuery)';
 import { useProfileUpdateMutation } from '(@/hooks/useMutation/useProfileMutation)';
 import { useQueryClient } from '@tanstack/react-query';
 import { USER_DATA_QUERY_KEY } from '(@/query/user/userQueryKeys)';
 import { UpdateProfileType } from '(@/types/userTypes)';
+import Image from 'next/image';
 
 const Profile = () => {
   const queryClient = useQueryClient();
@@ -39,36 +40,6 @@ const Profile = () => {
     setIsEditing(false);
   };
 
-  // /** 프로필 업데이트하는 로직 */
-  // const updateProfile = async () => {
-  //   const userId = user?.user_id;
-  //   if (!userId) return;
-  //   /** 닉네임 중복 검사 로직 */
-  //   const { data: nicknameData, error: nicknameError } = await clientSupabase
-  //     .from('users')
-  //     .select('nickname')
-  //     .eq('nickname', inputNickname.value)
-  //     .not('user_id', 'eq', user?.user_id);
-  //   if (nicknameError) {
-  //     console.error('Error fetching:', nicknameError);
-  //     return;
-  //   }
-  //   if (nicknameData) {
-  //     alert('이미 사용중인 닉네임입니다. 다른 닉네임을 입력해주세요.');
-  //     return;
-  //   }
-
-  //   const { error } = await clientSupabase
-  //     .from('users')
-  //     .update({
-  //       intro: inputIntro.value,
-  //       kakaoId: inputKakaoId.value,
-  //       nickname: inputNickname.value,
-  //       gender: inputGender.value
-  //     })
-  //     .eq('user_id', userId);
-  // };
-
   /** 수정하고 저장버튼 클릭시 실행될 로직(상태 업데이트 및 갱신) */
   const handleProfileUpdate = ({ userId, inputNickname, inputIntro, inputKakaoId, inputGender }: UpdateProfileType) => {
     updateProfileMutate(
@@ -84,51 +55,76 @@ const Profile = () => {
     );
   };
 
+  const joinDateTime = user?.created_at;
+  const joinTime = user?.created_at?.toString().slice(0, 10);
+
   return (
-    <div className="max-w-4xl mx-auto p-6 bg-white">
-      <h1 className="text-2xl font-bold mb-4">프로필</h1>
-      <AvatarForm />
-      {isEditing ? (
-        <>
-          <button
-            className="border p-4"
-            onClick={() =>
-              handleProfileUpdate({
-                userId: user!.user_id,
-                inputNickname: inputNickname.value,
-                inputIntro: inputIntro.value,
-                inputKakaoId: inputKakaoId.value,
-                inputGender: inputGender.value
-              })
-            }
-          >
-            저장하기
-          </button>
-          <button className="border p-4" onClick={onCancelHandle}>
-            취소
-          </button>
-        </>
-      ) : (
-        <button className="border p-4" onClick={toggleEditing}>
-          수정하기
-        </button>
-      )}
-      <div className="grid grid-cols-2 gap-6 mb-6">
-        <div>
-          {!isEditing ? (
-            <p className="block text-base font-medium mb-1">{user?.nickname}</p>
-          ) : (
-            <input
-              className="w-full p-2 border border-gray-300 rounded-md"
-              id="nickname"
-              placeholder="닉네임 입력 (최대 10자)"
-              type="text"
-              value={inputNickname.value}
-              onChange={inputNickname.onChange}
-            />
-          )}
-          <p className="block text-sm font-medium mb-1">{user?.login_email}</p>
-          <p className="block text-sm font-medium mb-1">
+    <div className="mx-auto bg-white">
+      <div className="bg-purpleSecondary w-full py-[40px]">
+        <div className="flex flex-col gap-4 max-w-[1116px] m-auto">
+          <span className="text-[42px] font-bold">프로필</span>
+          <div className="flex justify-between items-center">
+            <div className="flex gap-6 items-center">
+              <div className="w-[180px] h-[180px] overflow-hidden flex justify-center items-center rounded-full relative">
+                {user?.avatar ? (
+                  <Image
+                    src={`${user?.avatar}?${new Date().getTime()}`}
+                    alt="Avatar"
+                    style={{ objectFit: 'cover' }}
+                    fill={true}
+                    sizes="500px"
+                    priority={true}
+                  />
+                ) : (
+                  <Avatar color="secondary" className="w-32 h-32" />
+                )}
+              </div>
+              <div className="flex flex-col gap-2">
+                <p className="block text-2xl font-semibold">{user?.nickname}</p>
+                <p className="block text-lg font-medium">{user?.login_email}</p>
+                <p className="font-medium text-gray3 text-sm">가입일 : {joinTime}</p>
+              </div>
+            </div>
+            <div className="flex gap-6">
+              <button className="font-semibold">스쳐간 인연</button>
+              <button className="font-semibold">참여한 미팅방</button>
+              <button className="font-semibold">작성 리뷰</button>
+              <button className="font-semibold">좋아요 리뷰</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div className="max-w-[600px] m-auto pt-[40px] flex flex-col gap-6">
+        <div className="flex gap-6">
+          <p className="text-lg font-semibold w-[90px]">사진</p>
+          <div className="flex flex-col items-start">
+            <AvatarForm />
+            <p className="text-sm text-[#A1A1AA] mt-2">프로필 사진의 권장 크기는 100MB입니다.</p>
+            <p className="text-sm text-[#A1A1AA]">지원하는 파일 형식 : jpg, png, gif</p>
+          </div>
+        </div>
+        {!isEditing ? (
+          <div className="flex items-center gap-6">
+            <p className="block text-lg font-semibold w-[90px]">닉네임</p>
+            <p className="block text-base font-medium">{user?.nickname}</p>
+          </div>
+        ) : (
+          <input
+            className="w-full p-2 border border-gray-300 rounded-md"
+            id="nickname"
+            placeholder="닉네임 입력 (최대 10자)"
+            type="text"
+            value={inputNickname.value}
+            onChange={inputNickname.onChange}
+          />
+        )}
+        <div className="flex items-center gap-6">
+          <p className="block text-lg font-semibold w-[90px]">이메일</p>
+          <p className="block text-base font-medium">{user?.login_email}</p>
+        </div>
+        <div className="flex items-center gap-6">
+          <p className="block text-lg font-semibold w-[90px]">성별</p>
+          <p className="block text-base font-medium">
             {user
               ? user?.gender === 'female'
                 ? '여성'
@@ -137,53 +133,83 @@ const Profile = () => {
                 : '성별을 골라주세요.'
               : '사용자 정보 없음'}
           </p>
-          {isEditing && (
-            <Select label="성별" className="max-w-xs" value={inputGender.value} onChange={inputGender.onChange}>
-              <SelectItem key="female" value="female">
-                여성
-              </SelectItem>
-              <SelectItem key="male" value="male">
-                남성
-              </SelectItem>
-            </Select>
+        </div>
+        {isEditing && (
+          <Select label="성별" className="max-w-xs" value={inputGender.value} onChange={inputGender.onChange}>
+            <SelectItem key="female" value="female">
+              여성
+            </SelectItem>
+            <SelectItem key="male" value="male">
+              남성
+            </SelectItem>
+          </Select>
+        )}
+        <SchoolForm />
+        <div className="mb-6 flex items-center gap-6">
+          <label className="block text-lg font-semibold w-[90px]">카카오톡ID</label>
+          {!isEditing ? (
+            <p className="block text-sm font-medium mb-1">{user?.kakaoId}</p>
+          ) : (
+            <input
+              className="w-full p-2 border border-gray-300 rounded-md"
+              id="kakaoId"
+              placeholder=""
+              type="text"
+              value={inputKakaoId.value}
+              onChange={inputKakaoId.onChange}
+            />
           )}
         </div>
+        <Favorite isEditing={isEditing} />
+        <div className="flex gap-6 items-center">
+          <label className="block text-lg font-semibold w-[90px]" htmlFor="introduction">
+            자기소개
+          </label>
+          {!isEditing ? (
+            <p className="block text-sm font-medium mb-1">{user?.intro}</p>
+          ) : (
+            <textarea
+              className="w-full p-2 border border-gray-300 rounded-md"
+              id="introduction"
+              placeholder="자기소개를 입력해주세요. 예)MBTI, 취미, 관심사 등"
+              value={inputIntro.value}
+              onChange={inputIntro.onChange}
+            />
+          )}
+        </div>
+        <div className="flex justify-center">
+          {isEditing ? (
+            <>
+              <button
+                className="border p-4"
+                onClick={() =>
+                  handleProfileUpdate({
+                    userId: user!.user_id,
+                    inputNickname: inputNickname.value,
+                    inputIntro: inputIntro.value,
+                    inputKakaoId: inputKakaoId.value,
+                    inputGender: inputGender.value
+                  })
+                }
+              >
+                저장하기
+              </button>
+              <button className="border p-4" onClick={onCancelHandle}>
+                취소
+              </button>
+            </>
+          ) : (
+            <button
+              className="bg-mainColor rounded-[12px] px-[20px] py-[12px] text-[18px] text-white font-medium"
+              onClick={toggleEditing}
+            >
+              수정하기
+            </button>
+          )}
+        </div>
+        <MetPeople />
+        <MyPost />
       </div>
-      <SchoolForm />
-      <div className="mb-6">
-        <label className="block text-sm font-medium mb-1">카카오톡ID</label>
-        {!isEditing ? (
-          <p className="block text-sm font-medium mb-1">{user?.kakaoId}</p>
-        ) : (
-          <input
-            className="w-full p-2 border border-gray-300 rounded-md"
-            id="kakaoId"
-            placeholder=""
-            type="text"
-            value={inputKakaoId.value}
-            onChange={inputKakaoId.onChange}
-          />
-        )}
-      </div>
-      <Favorite isEditing={isEditing} />
-      <div className="mb-6">
-        <label className="block text-sm font-medium mb-1" htmlFor="introduction">
-          자기소개(최대 15자)
-        </label>
-        {!isEditing ? (
-          <p className="block text-sm font-medium mb-1">{user?.intro}</p>
-        ) : (
-          <textarea
-            className="w-full p-2 border border-gray-300 rounded-md"
-            id="introduction"
-            placeholder="자기소개를 입력해주세요. 예)MBTI, 취미, 관심사 등"
-            value={inputIntro.value}
-            onChange={inputIntro.onChange}
-          />
-        )}
-      </div>
-      <MetPeople />
-      <MyPost />
     </div>
   );
 };
