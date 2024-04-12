@@ -43,15 +43,6 @@ const OthersChat = ({ msg, idx, lastDivRefs }: { msg: Message; idx: number; last
           </div>
         </div>
       </div>
-      {lastMsgId &&
-      lastMsgId !== messages[messages.length - 1].message_id &&
-      lastMsgId === msg.message_id &&
-      isScrolling &&
-      !checkedLastMsg ? (
-        <div className={`flex ${msg.send_from === user?.user_id ? 'ml-auto' : 'mr-auto'}`}>
-          <p>여기까지 읽으셨습니다.</p>
-        </div>
-      ) : null}
     </div>
   );
 };
