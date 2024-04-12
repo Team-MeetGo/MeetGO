@@ -1,5 +1,4 @@
 import JoinForm from '(@/components/user/JoinForm)';
-
 const JoinPage = () => {
   return (
     <div className="w-full m-auto flex flex-col justify-center items-center min-h-screen absolute top-0">
