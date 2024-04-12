@@ -5,8 +5,12 @@ import { useState } from 'react';
 import { schoolValidation } from '(@/utils/Validation)';
 import { clientSupabase } from '(@/utils/supabase/client)';
 import { useGetUserDataQuery } from '(@/hooks/useQueries/useUserQuery)';
+import { useQueryClient } from '@tanstack/react-query';
+import { useSchoolUpdateMutation } from '(@/hooks/useMutation/useSchoolMutation)';
+import { USER_DATA_QUERY_KEY } from '(@/query/user/userQueryKeys)';
 
 const SchoolForm = () => {
+  const queryClient = useQueryClient();
   const [schoolEmail, setSchoolEmail] = useState('');
   const [univName, setUnivName] = useState('');
   const [code, setCode] = useState('');
@@ -18,20 +22,21 @@ const SchoolForm = () => {
   });
 
   const { data: user } = useGetUserDataQuery();
+  const { mutate: updateSchoolMutate } = useSchoolUpdateMutation();
 
-  /** 학교 업데이트하는 로직 */
-  const updateSchool = async () => {
-    const userId = user?.user_id;
-    if (!userId) return;
-    const { error } = await clientSupabase
-      .from('users')
-      .update({ school_email: schoolEmail, school_name: univName, isValidate: true })
-      .eq('user_id', userId);
-    if (error) {
-      console.error('Error updating school:', error);
-    } else {
-    }
-  };
+  // /** 학교 업데이트하는 로직 */
+  // const updateSchool = async () => {
+  //   const userId = user?.user_id;
+  //   if (!userId) return;
+  //   const { error } = await clientSupabase
+  //     .from('users')
+  //     .update({ school_email: schoolEmail, school_name: univName, isValidate: true })
+  //     .eq('user_id', userId);
+  //   if (error) {
+  //     console.error('Error updating school:', error);
+  //   } else {
+  //   }
+  // };
 
   const onChangeInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -82,7 +87,16 @@ const SchoolForm = () => {
       if (response.success) {
         setIsCodeValid(true); // 인증 코드 유효성 검사 결과 상태 업데이트
         alert('인증 완료');
-        updateSchool();
+        updateSchoolMutate(
+          { userId: user!.user_id, schoolEmail, univName },
+          {
+            onSuccess: () => {
+              queryClient.invalidateQueries({
+                queryKey: [USER_DATA_QUERY_KEY]
+              });
+            }
+          }
+        );
       } else {
         setIsCodeValid(false);
         alert('인증 코드가 유효하지 않습니다.');
