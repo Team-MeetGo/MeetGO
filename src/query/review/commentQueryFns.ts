@@ -22,7 +22,6 @@ export const fetchCommentData = async (review_id: string) => {
   return commentData;
 };
 
-//댓글 추가
 export const useNewCommentMutation = (review_id: string) => {
   const queryClient = useQueryClient();
 
