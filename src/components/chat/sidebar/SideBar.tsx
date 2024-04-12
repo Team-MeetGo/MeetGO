@@ -32,6 +32,12 @@ const SideBar: React.FC<SideBarProps> = ({ chatRoomId }) => {
   //   console.log('미팅 시간', meetingTime);
   // }, [meetingTime]);
 
+  useEffect(() => {
+    if (meetingTime) {
+      setFinalDateTime(meetingTime);
+    }
+  }, [meetingTime]);
+
   const options: Intl.DateTimeFormatOptions = {
     year: 'numeric',
     month: 'long',
