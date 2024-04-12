@@ -53,10 +53,23 @@ export const fetchChatData = async (chatRoomId: string) => {
     .select('*')
     .eq('chatting_room_id', chatRoomId);
   if (chatDataErr) {
-    console.error('chat 데이터 불러오는 중 오류 발생');
+    throw new Error('Error fetching chat data');
   } else {
     return chatData;
   }
+};
+
+export const fetchUserData = async () => {
+  // 유저 데이터 가져오기
+  const {
+    data: { user }
+  } = await clientSupabase.auth.getUser();
+
+  if (user) {
+    const { data: userData } = await clientSupabase.from('users').select('*').eq('user_id', String(user.id));
+    if (userData) return userData[0];
+  }
+  return null;
 };
 
 // 내 채팅방들의 아이디
@@ -115,4 +128,17 @@ export const updateMyLastMsg = async (user_id: string, chatRoomId: string, msg_i
   console.log('업데이트 된 메세지 아이디 => ', updatedLastMsg && updatedLastMsg[0].last_msg_id);
   if (error) console.error('마지막 메세지 업데이트 실패 =>', error.message);
   return updateMyLastMsg;
+};
+
+// 미팅 장소 추가
+export const addMeetingLocation = async ({ chatRoomId, barName }: { chatRoomId: string; barName: string }) => {
+  if (!chatRoomId) {
+    console.log('유저가 없어요');
+  }
+  await clientSupabase.from('chatting_room').update({ meeting_location: barName }).eq('chatting_room_id', chatRoomId);
+};
+
+// 미팅 장소 제거
+export const deleteMeetingLocation = async (chatRoomId: string) => {
+  await clientSupabase.from('chatting_room').update({ meeting_location: null }).eq('chatting_room_id', chatRoomId);
 };
