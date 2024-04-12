@@ -26,7 +26,7 @@ export const useRoomDataQuery = (chatRoomId: string) => {
 export const useParticipantsQuery = (roomId: string) => {
   const { data: users } = useSuspenseQuery({
     queryKey: [PARTICIPANTS_QUERY_KEY, roomId],
-    queryFn: async () => await fetchParticipants(roomId)
+    queryFn: () => fetchParticipants(roomId)
   });
   return users;
 };

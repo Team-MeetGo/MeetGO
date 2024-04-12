@@ -1,5 +1,4 @@
 import { useGetUserDataQuery } from '(@/hooks/useQueries/useUserQuery)';
-import { userStore } from '(@/store/userStore)';
 import { clientSupabase } from '(@/utils/supabase/client)';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -8,7 +7,7 @@ import { useEffect, useState } from 'react';
 const MyPost = () => {
   const [myPost, setMyPost] = useState([] as any);
   const [likePost, setLikePost] = useState([] as any);
-  const { data: user, isPending, isError, error } = useGetUserDataQuery();
+  const { data: user } = useGetUserDataQuery();
 
   const getMyPost = async () => {
     const userId = user?.user_id;

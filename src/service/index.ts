@@ -46,7 +46,7 @@ export const updateProfile = async (
     console.error('Error fetching:', nicknameError);
     return;
   }
-  if (nicknameData) {
+  if (nicknameData && nicknameData.length > 0) {
     alert('이미 사용중인 닉네임입니다. 다른 닉네임을 입력해주세요.');
     return;
   }

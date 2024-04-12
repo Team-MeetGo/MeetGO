@@ -1,24 +1,19 @@
 'use client';
-import { userStore } from '(@/store/userStore)';
-import { Database } from '(@/types/database.types)';
+
 import { clientSupabase } from '(@/utils/supabase/client)';
 import { useEffect, useState } from 'react';
-
 import { useRoomInfoWithRoomIdQuery } from '(@/hooks/useQueries/useMeetingQuery)';
-type UserType = Database['public']['Tables']['users']['Row'];
+import { useParticipantsQuery } from '(@/hooks/useQueries/useChattingQuery)';
 
-const Member = ({ params }: { params: { id: string } }) => {
-  const { participants, setParticipants } = userStore((state) => state);
-  const [leaderMember, setLeaderMember] = useState('');
-  const room_id = params.id;
-  const roomInformation = useRoomInfoWithRoomIdQuery(room_id);
+import type { UserType } from '(@/types/roomTypes)';
+
+const Member = ({ room_id }: { room_id: string }) => {
+  const [members, setMembers] = useState<UserType[]>([]);
+  const participants = useParticipantsQuery(room_id);
+  const { data: roomInformation } = useRoomInfoWithRoomIdQuery(room_id);
+  const leaderMember = roomInformation?.leader_id;
 
   useEffect(() => {
-    //리더를 찾아 표시
-    const leaderSelector = async () => {
-      setLeaderMember(roomInformation ? (roomInformation[0].leader_id as string) : '');
-    };
-
     const channle = clientSupabase
       .channel('custom-insert-channel')
       .on(
@@ -29,37 +24,51 @@ const Member = ({ params }: { params: { id: string } }) => {
           table: 'participants'
         },
         (payload) => {
-          setParticipants(participants ? [...participants, payload.new as UserType] : []);
+          setMembers(participants ? [...members, payload.new as UserType] : []);
         }
       )
       .on(
         'postgres_changes',
         {
-          event: 'DELETE',
+          event: 'UPDATE',
           schema: 'public',
           table: 'participants'
         },
         (payload) => {
-          const deletePartId = payload.old;
+          console.log('payload => ', payload);
+          const { user_id } = payload.new;
           type test = Awaited<typeof payload.old>;
           const deleteMemeberUserId = async ({ deletePartId }: { deletePartId: test }) => {
-            const { data: userData } = await clientSupabase
+            console.log('deletePartId ==> ', deletePartId);
+
+            const { data: userData, error } = await clientSupabase
               .from('participants')
-              .select('*')
-              .eq('user_id', deletePartId);
+              .select(
+                `
+                *,
+                users (
+                  nickname,
+                  gender
+                )
+              `
+              )
+              .eq('user_id', user_id);
+
+            console.log('유저데이터 확인 => ', userData);
+            console.log('오류 확인 => ', error);
+
             if (!participants || participants.length < 1) return;
             if (!userData || userData.length < 1) return;
-            setParticipants(participants?.filter((member) => member.user_id !== userData[0].user_id));
+            setMembers(participants?.filter((member) => member.user_id !== userData[0].user_id));
           };
-          deleteMemeberUserId({ deletePartId });
+          deleteMemeberUserId({ deletePartId: user_id });
         }
       )
       .subscribe();
-    leaderSelector();
     return () => {
       clientSupabase.removeChannel(channle);
     };
-  }, [params, participants]);
+  }, [members, participants]);
   if (!participants) return;
 
   return (

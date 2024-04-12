@@ -5,18 +5,18 @@ import RoomInformation from '(@/components/room/participants/RoomInformation)';
 import { UUID } from 'crypto';
 import { Suspense } from 'react';
 
-const memberList = ({ params }: { params: { id: UUID } }) => {
-  const roomId = params.id;
+const memberList = ({ params }: { params: { id: string } }) => {
+  const room_id = params.id;
 
   return (
     <>
       <Suspense>
-        <InitParticipants roomId={roomId} />
+        {/* <InitParticipants room_id={room_id} /> */}
         <div className="flex flex-col justify-center w-full align-middle">
-          <RoomInformation roomId={roomId} />
-          <AcceptanceRoomButtons roomId={roomId} />
+          <RoomInformation room_id={room_id} />
+          <AcceptanceRoomButtons room_id={room_id} />
           <div className="w-100 h-100 flex flex-row justify-evenly">
-            <Member params={params} />
+            <Member room_id={room_id} />
           </div>
         </div>
       </Suspense>
