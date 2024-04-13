@@ -4,16 +4,15 @@ import { chatStore } from '(@/store/chatStore)';
 import { Message } from '(@/types/chatTypes)';
 import { getformattedDate, showingDate } from '(@/utils)';
 import ChatDeleteDropDown from './ChatDeleteDropDown';
-import { Tooltip } from '@nextui-org/react';
 
 const MyChat = ({ msg, idx, lastDivRefs }: { msg: Message; idx: number; lastDivRefs: any }) => {
   const { messages, chatRoomId, checkedLastMsg, isScrolling } = chatStore((state) => state);
   const { data: user } = useGetUserDataQuery();
   const lastMsgId = useMyLastMsgs(user?.user_id!, chatRoomId);
   return (
-    <div key={msg.message_id}>
+    <>
       {idx >= 1 && new Date(msg.created_at).getDate() > new Date(messages[idx - 1].created_at).getDate() ? (
-        <div className="mx-auto">
+        <div className="mx-auto" key={msg.message_id}>
           <p>{showingDate(msg.created_at)}</p>
         </div>
       ) : null}
@@ -29,20 +28,9 @@ const MyChat = ({ msg, idx, lastDivRefs }: { msg: Message; idx: number; lastDivR
             <p>{getformattedDate(msg.created_at)}</p>
           </div>
         </div>
-        <Tooltip content="여기 컴포넌트">
-          <div className="h-14 w-14 bg-indigo-600 rounded-full my-auto">{msg.avatar}</div>
-        </Tooltip>
+        <div className="h-14 w-14 bg-indigo-600 rounded-full my-auto">{msg.avatar}</div>
       </div>
-      {lastMsgId &&
-      lastMsgId !== messages[messages.length - 1].message_id &&
-      lastMsgId === msg.message_id &&
-      isScrolling &&
-      !checkedLastMsg ? (
-        <div className={`flex ${msg.send_from === user?.user_id ? 'ml-auto' : 'mr-auto'}`}>
-          <p>여기까지 읽으셨습니다.</p>
-        </div>
-      ) : null}
-    </div>
+    </>
   );
 };
 

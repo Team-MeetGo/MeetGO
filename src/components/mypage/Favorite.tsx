@@ -42,8 +42,8 @@ const Favorite: React.FC<IsEditingType> = ({ isEditing }) => {
   }, [user]);
 
   return (
-    <div className="flex w-full max-w-xs flex-col gap-2">
-      <label>이상형</label>
+    <div className="flex w-full gap-6">
+      <label className="block text-lg font-semibold w-[90px]">이상형</label>
       {isEditing ? (
         <div className="flex whitespace-nowrap">
           <Select
