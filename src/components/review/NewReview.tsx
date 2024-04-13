@@ -100,8 +100,9 @@ const NewReview = () => {
 
   return (
     <>
-      <Button onPress={onOpen} color="primary">
-        새 리뷰 등록
+      {/* <Button onPress={onOpen} color="primary"> */}
+      <Button onPress={onOpen} color="primary" className="text-[16px] p-[16px] bg-mainColor w-[128px] h-[51px]">
+        리뷰 작성하기
       </Button>
       <Modal isOpen={isOpen} onClose={handleClose} placement="top-center" className="bg-[#F2EAFA]">
         <ModalContent className="w-full flex justify-center items-center" style={{ maxWidth: '1000px' }}>
@@ -182,6 +183,8 @@ const NewReview = () => {
                     defaultSelected={showNickname}
                     onChange={() => setShowNickname(!showNickname)}
                     className="text-black"
+                    color="secondary"
+                    radius="none"
                     icon={<FaCheck />}
                   >
                     익명으로 게시

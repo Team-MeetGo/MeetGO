@@ -68,7 +68,7 @@ const ReviewLike = ({ review_id }: Props) => {
   };
 
   return (
-    <div className="flex gap-1 items-center">
+    <div className="flex gap-1 items-center bg-blue-400">
       <div>
         <ToggleButton
           toggled={likes ?? false}

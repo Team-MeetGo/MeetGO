@@ -28,7 +28,7 @@ const ReviewList: React.FC = () => {
   const [totalReviews, setTotalReviews] = useState<number>(0);
   const reviewsPerPage = 9;
   const [isOpen, setIsOpen] = useState(false);
-  const [selected, setSelected] = React.useState<Selection>(new Set(['최신 순']));
+  const [selected, setSelected] = React.useState<Selection>(new Set(['최신순']));
 
   const selectedValue = React.useMemo(() => Array.from(selected).join(', ').replaceAll('_', ' '), [selected]);
 
@@ -63,9 +63,9 @@ const ReviewList: React.FC = () => {
   const handleSelectionChange = (keys: Selection) => {
     setSelected(keys);
 
-    if (keys instanceof Set && keys.has('최신 순')) {
+    if (keys instanceof Set && keys.has('최신순')) {
       getRecentReview(currentPageNumber);
-    } else if (keys instanceof Set && keys.has('좋아요 순')) {
+    } else if (keys instanceof Set && keys.has('인기순')) {
       getMostLikedReview(currentPageNumber);
     }
 
@@ -73,9 +73,9 @@ const ReviewList: React.FC = () => {
   };
 
   useEffect(() => {
-    if (selected instanceof Set && selected.has('최신 순')) {
+    if (selected instanceof Set && selected.has('최신순')) {
       getRecentReview(currentPageNumber);
-    } else if (selected instanceof Set && selected.has('좋아요 순')) {
+    } else if (selected instanceof Set && selected.has('인기순')) {
       getMostLikedReview(currentPageNumber);
     }
   }, []);
@@ -98,14 +98,14 @@ const ReviewList: React.FC = () => {
   }, [currentPageNumber, fetchReviewsData]);
 
   return (
-    <div>
-      <div className="flex justify-between">
+    <div className="flex flex-col justify-center items-center">
+      <div className="flex justify-between w-full max-w-[1160px] mb-[24px]">
         <div>
           <Dropdown onOpenChange={setIsOpen} isOpen={isOpen}>
             <DropdownTrigger>
-              <Button variant="bordered" className="capitalize">
-                {/* {selectedValue} */}
-                {isOpen ? <IoIosArrowUp /> : <IoIosArrowDown />} {selectedValue}
+              <Button variant="bordered" className="capitalize p-[12px] w-[106px] h-[51px]">
+                <div className="text-[16px] bg-gray-200">{selectedValue}</div>
+                <div className="bg-blue-200">{isOpen ? <IoIosArrowUp /> : <IoIosArrowDown />}</div>
               </Button>
             </DropdownTrigger>
             <DropdownMenu
@@ -115,12 +115,23 @@ const ReviewList: React.FC = () => {
               selectionMode="single"
               selectedKeys={selected}
               onSelectionChange={handleSelectionChange}
+              className="text-[16px]"
             >
-              <DropdownItem key="최신 순" onClick={() => getRecentReview(currentPageNumber)}>
-                최신 순
+              <DropdownItem
+                key="최신순"
+                color="secondary"
+                className="text-[16px]"
+                onClick={() => getRecentReview(currentPageNumber)}
+              >
+                최신순
               </DropdownItem>
-              <DropdownItem key="좋아요 순" onClick={() => getMostLikedReview(currentPageNumber)}>
-                좋아요 순
+              <DropdownItem
+                key="인기순"
+                color="secondary"
+                className="text-[16px]"
+                onClick={() => getMostLikedReview(currentPageNumber)}
+              >
+                인기순
               </DropdownItem>
             </DropdownMenu>
           </Dropdown>
@@ -129,12 +140,12 @@ const ReviewList: React.FC = () => {
           <div>{isLoggedIn ? <NewReview /> : null}</div>
         </div>
       </div>
-      <ul className="grid grid-cols-3 gap-2 gap-y-4">
+      <ul className="max-w-[1160px] grid grid-cols-3 gap-x-[24px] gap-y-[32px] bg-green-200 mb-[64px]">
         {reviewData.map((item, index) => (
           <ReviewCard key={index} review={item} />
         ))}
       </ul>
-      <div className="flex justify-center mt-4">
+      <div className="flex justify-center mb-[88px] bg-gray-200">
         {(() => {
           const totalPages = Math.ceil(totalReviews / reviewsPerPage);
           const pageNumbers = [];
