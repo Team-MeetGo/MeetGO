@@ -40,15 +40,15 @@ const SideBar: React.FC<SideBarProps> = ({ chatRoomId }) => {
   };
 
   return (
-    <div className=" w-[377px] flex flex-col ml-8 z-0 transition-all duration-300 ease-in-out">
+    <div className=" absolute w-[377px] flex justify-center mx-auto flex-col z-0 transition-all duration-300 ease-in-out">
       <div className={`flex ${isSidebarOpen ? 'justify-end' : 'justify-end'}`}>
         <GiHamburgerMenu onClick={toggleSidebar} />
       </div>
       <div style={{ maxHeight: '100vh', overflowY: 'auto', paddingRight: '24px' }}>
         {isSidebarOpen && (
-          <div>
-            <h1 className="font-semibold text-2xl mb-2.5">미팅 날짜/시간</h1>
-            <Card className="border border-mainColor shadow-none mb-6 h-[60px]">
+          <div className="pt-8">
+            <h1 className="font-semibold text-2xl mb-2">미팅 날짜/시간</h1>
+            <Card className="border border-mainColor shadow-none h-[60px]">
               <CardBody>
                 <p className=" justify-start items-center text-lg">{convertedTime}</p>
               </CardBody>

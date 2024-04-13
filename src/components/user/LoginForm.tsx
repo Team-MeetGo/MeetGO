@@ -13,6 +13,9 @@ import { userStore } from '(@/store/userStore)';
 import { useQueryClient } from '@tanstack/react-query';
 import { USER_DATA_QUERY_KEY } from '(@/query/user/userQueryKeys)';
 import Link from 'next/link';
+import Image from 'next/image';
+import kakaoLoginLogo from '(@/utils/icons/login_kakao.png)';
+import googleLoginLogo from '(@/utils/icons/logo_google.png)';
 
 const LOGIN_FORM_LIST = [
   {
@@ -151,12 +154,12 @@ const LoginForm = () => {
         <p className="duration-200 bg-white text-[#27272A] p-5 mt-[50px] rounded-lg w-full py-[20px] h-auto text-[16px] text-center">
           소셜 계정으로 로그인하기
         </p>
-        <div className="flex items-center justify-center gap-[10px]">
-          <button className="border rounded-full p-4" onClick={googleLogin}>
-            구글
+        <div className="flex items-center justify-center gap-[16px]">
+          <button className="rounded-full" onClick={googleLogin}>
+            <Image src={googleLoginLogo} alt="google login" />
           </button>
-          <button className="border rounded-full p-4" onClick={kakaoLogin}>
-            카톡
+          <button className="rounded-full" onClick={kakaoLogin}>
+            <Image src={kakaoLoginLogo} alt="kakao login" />
           </button>
         </div>
       </div>

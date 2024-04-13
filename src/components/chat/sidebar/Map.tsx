@@ -217,19 +217,21 @@ const Map: React.FC<MapProps> = ({ chatRoomId }) => {
 
   return (
     <div className="z-10">
-      <h1 className="font-semibold text-2xl mb-2.5">미팅 장소</h1>
-      <Card className="border border-mainColor shadow-none mb-6">
-        <CardBody className=" h-[60px]">
-          <p className="text-lg">{selectedMeetingLocation}</p>
-        </CardBody>
-      </Card>
+      <div className="py-6">
+        <h1 className="font-semibold text-2xl mb-2">미팅 장소</h1>
+        <Card className="border border-mainColor shadow-none ">
+          <CardBody className=" h-[60px]">
+            <p className="text-lg">{selectedMeetingLocation}</p>
+          </CardBody>
+        </Card>
+      </div>
 
-      <div className="border-t border-gray2 mb-[26px]"></div>
+      <div className="border-t border-gray2 "></div>
 
       <DateTimePicker chatRoomId={chatRoomId} />
 
-      <h1 className="font-semibold text-2xl mb-2.5 mt-7">장소 검색</h1>
-      <Card className="border border-gray2 shadow-none mb-6">
+      <h1 className="font-semibold text-2xl mb-2">장소 검색</h1>
+      <Card className="border border-gray2 shadow-none mb-4">
         <CardBody className=" h-[60px]">
           <form
             onSubmit={(e) => {

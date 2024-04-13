@@ -1,17 +1,14 @@
-import { useMyLastMsgs, useParticipantsQuery, useRoomDataQuery } from '(@/hooks/useQueries/useChattingQuery)';
-import { useGetUserDataQuery } from '(@/hooks/useQueries/useUserQuery)';
+import { useParticipantsQuery, useRoomDataQuery } from '(@/hooks/useQueries/useChattingQuery)';
 import { chatStore } from '(@/store/chatStore)';
 import { Message } from '(@/types/chatTypes)';
 import { getformattedDate, showingDate } from '(@/utils)';
 import { Tooltip } from '@nextui-org/react';
 
 const OthersChat = ({ msg, idx, lastDivRefs }: { msg: Message; idx: number; lastDivRefs: any }) => {
-  const { chatRoomId, messages, isScrolling, checkedLastMsg } = chatStore((state) => state);
+  const { chatRoomId, messages } = chatStore((state) => state);
   const room = useRoomDataQuery(chatRoomId as string);
   const roomId = room?.roomId;
   const users = useParticipantsQuery(roomId as string);
-  const { data: user } = useGetUserDataQuery();
-  const lastMsgId = useMyLastMsgs(user?.user_id!, chatRoomId);
 
   const showThatUser = (userId: string | null) => {
     const thatUserData = users?.find((p) => p.user_id === userId);
@@ -43,15 +40,6 @@ const OthersChat = ({ msg, idx, lastDivRefs }: { msg: Message; idx: number; last
           </div>
         </div>
       </div>
-      {lastMsgId &&
-      lastMsgId !== messages[messages.length - 1].message_id &&
-      lastMsgId === msg.message_id &&
-      isScrolling &&
-      !checkedLastMsg ? (
-        <div className={`flex ${msg.send_from === user?.user_id ? 'ml-auto' : 'mr-auto'}`}>
-          <p>여기까지 읽으셨습니다.</p>
-        </div>
-      ) : null}
     </div>
   );
 };

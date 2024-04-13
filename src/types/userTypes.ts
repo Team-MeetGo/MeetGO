@@ -22,3 +22,9 @@ export interface UpdateProfileType {
   inputKakaoId: string;
   inputGender: string;
 }
+
+export interface UpdateSchoolType {
+  userId: string;
+  schoolEmail: string;
+  univName: string;
+}

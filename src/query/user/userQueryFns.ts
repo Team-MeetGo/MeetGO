@@ -12,3 +12,24 @@ export const fetchUserData = async () => {
   }
   return null;
 };
+
+/** 유저의 작성 글 가져오기 */
+export const fetchUserPost = async (userId: string) => {
+  if (userId) {
+    const { data } = await clientSupabase.from('review').select('*').eq('user_id', userId);
+    if (data) return data;
+  }
+  return null;
+};
+
+export const fetchUserLikePost = async (userId: string) => {
+  if (userId) {
+    const { data } = await clientSupabase.from('review_like').select('review_id').eq('user_id', userId);
+    if (data) {
+      const likePostId = data.map((like: any) => like.review_id);
+      const { data: reviewData } = await clientSupabase.from('review').select('*').in('review_id', likePostId);
+      return reviewData;
+    }
+  }
+  return null;
+};

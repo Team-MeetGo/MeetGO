@@ -38,7 +38,7 @@ const DateTimePicker: React.FC<DateTimePickerProps> = forwardRef(({ chatRoomId }
   const months = ['1월', '2월', '3월', '4월', '5월', '6월', '7월', '8월', '9월', '10월', '11월', '12월'];
 
   return (
-    <div className="relative z-50 w-full max-w-lg">
+    <div className="relative z-50 w-full max-w-lg py-6">
       <DatePicker
         calendarStartDay={1} // 시작을 월요일로
         locale={ko} // 한국어
