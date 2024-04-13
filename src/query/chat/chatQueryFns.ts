@@ -95,6 +95,21 @@ export const fetchMyLastMsgs = async (user_id: string, chatRoomId: string | null
   return null;
 };
 
+export const fetchMyMsgData = async (user_id: string | undefined) => {
+  const { data: msgData, error } = await clientSupabase
+    .from('remember_last_msg')
+    .select('chatting_room_id, room_id, newMsgCount')
+    .eq('user_id', String(user_id));
+  if (error) console.error('마지막 메세지를 가져오는 데 실패했습니다.', error.message);
+  // console.log('잘 가져오는 거 맞아?', lastMsgs && lastMsgs[0].last_msg_id);
+  if (msgData && msgData.length) {
+    return msgData;
+  }
+  return null;
+};
+
+////
+
 // DB에 마지막 메세지 추가하기
 export const addNewLastMsg = async (
   chatRoomId: string,
@@ -111,6 +126,7 @@ export const addNewLastMsg = async (
       last_msg_id: String(last_msg_id)
     })
     .select('*');
+  console.log('addedlastMsg =>', addedlastMsg);
   console.log('새로 추가된 마지막 메세지', addedlastMsg && addedlastMsg[0].last_msg_id);
   if (error) console.error('마지막 메세지 추가하기 실패 => ', error.message);
   return addedlastMsg;
@@ -127,6 +143,23 @@ export const updateMyLastMsg = async (user_id: string, chatRoomId: string, msg_i
   console.log('업데이트 된 메세지 아이디 => ', updatedLastMsg && updatedLastMsg[0].last_msg_id);
   if (error) console.error('마지막 메세지 업데이트 실패 =>', error.message);
   return updateMyLastMsg;
+};
+
+export const updateNewMsgNum = async (chatting_room_id: string) => {
+  const { data: oldCount } = await clientSupabase
+    .from('remember_last_msg')
+    .select('newMsgCount')
+    .eq('chatting_room_id', chatting_room_id);
+  if (oldCount && oldCount[0]) {
+    const { data: updatedNewMsgNum, error } = await clientSupabase
+      .from('remember_last_msg')
+      .update({ newMsgCount: oldCount[0].newMsgCount + 1 })
+      .eq('chatting_room_id', chatting_room_id)
+      .select('*');
+    console.log('이거 왜 출력이 안돼 =>', updatedNewMsgNum && updatedNewMsgNum[0].newMsgCount);
+    if (error) console.error('새로운 메세지 count UP 실패', error.message);
+    return updatedNewMsgNum;
+  }
 };
 
 // 미팅 장소 추가

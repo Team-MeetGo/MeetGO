@@ -1,5 +1,5 @@
-import { addNewLastMsg, updateMyLastMsg } from '(@/query/chat/chatQueryFns)';
-import { MY_LAST_MSGS_AFTER } from '(@/query/chat/chatQueryKeys)';
+import { addNewLastMsg, fetchMyMsgData, updateMyLastMsg, updateNewMsgNum } from '(@/query/chat/chatQueryFns)';
+import { MY_LAST_MSGS_AFTER, MY_MSG_DATA } from '(@/query/chat/chatQueryKeys)';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 export const useAddLastMsg = (chatRoomId: string, roomId: string, user_id: string, last_msg_id: string | undefined) => {
@@ -22,4 +22,17 @@ export const useUpdateLastMsg = (user_id: string, chatRoomId: string, msg_id: st
     }
   });
   return { mutate: mutateToUpdate };
+};
+
+export const useUpdateNewMsg = () => {
+  const queryClient = useQueryClient();
+  const { mutate: mutateNewMsgNum } = useMutation({
+    mutationFn: (chatting_room_id: string) => updateNewMsgNum(chatting_room_id),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: [MY_MSG_DATA] });
+    }
+  });
+  return {
+    mutate: mutateNewMsgNum
+  };
 };

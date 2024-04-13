@@ -1,7 +1,5 @@
-import { MYCHATROOMS } from '(@/query/chat/chatQueryKeys)';
 import {
   fetchAlreadyChatRoom,
-  fetchMyChatRooms,
   fetchMyRoom,
   fetchRecruitingRoom,
   fetchRoomInfoWithRoomId
@@ -37,10 +35,10 @@ export const useAlreadyChatRoomQuery = (room_id: string) =>
     queryFn: () => fetchAlreadyChatRoom(room_id)
   });
 
-export const useMyChatRoomsQuery = (user_id: string | undefined) => {
-  const data = useSuspenseQuery({
-    queryKey: [MYCHATROOMS],
-    queryFn: () => fetchMyChatRooms(user_id)
-  });
-  return data;
-};
+// export const useMyChatRoomsQuery = (user_id: string | undefined) => {
+//   const data = useSuspenseQuery({
+//     queryKey: [MYCHATROOMS],
+//     queryFn: () => fetchMyChatRooms(user_id)
+//   });
+//   return data;
+// };

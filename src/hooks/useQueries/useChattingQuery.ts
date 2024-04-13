@@ -2,6 +2,7 @@ import {
   fetchChatData,
   fetchMyChatRoomIds,
   fetchMyLastMsgs,
+  fetchMyMsgData,
   fetchParticipants,
   fetchRoomDataWithChatRoomId
 } from '(@/query/chat/chatQueryFns)';
@@ -10,10 +11,11 @@ import {
   MYCHAT_ROOMIDS,
   MY_LAST_MSGS_AFTER,
   MY_LAST_MSGS_BEFORE,
+  MY_MSG_DATA,
   PARTICIPANTS_QUERY_KEY,
   ROOMDATA_QUERY_KEY
 } from '(@/query/chat/chatQueryKeys)';
-import { useSuspenseQuery } from '@tanstack/react-query';
+import { useQuery, useSuspenseQuery } from '@tanstack/react-query';
 
 export const useRoomDataQuery = (chatRoomId: string) => {
   const { data: room } = useSuspenseQuery({
@@ -36,7 +38,7 @@ export const useChatDataQuery = (chatRoomId: string) => {
     queryKey: [CHATDATA_QUERY_KEY],
     queryFn: async () => await fetchChatData(chatRoomId)
   });
-  console.log('chat => ', chat);
+  // console.log('chat => ', chat);
   return chat;
 };
 
@@ -54,4 +56,13 @@ export const useMyLastMsgs = (user_id: string, chatRoomId: string | null) => {
     queryFn: () => fetchMyLastMsgs(user_id, chatRoomId)
   });
   return myLastMsgs;
+};
+
+export const useMyMsgData = (user_id: string | undefined) => {
+  const { data: myMsgData } = useQuery({
+    queryKey: [MY_MSG_DATA],
+    queryFn: () => fetchMyMsgData(user_id),
+    enabled: !!user_id
+  });
+  return myMsgData;
 };

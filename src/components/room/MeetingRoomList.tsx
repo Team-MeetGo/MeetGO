@@ -1,6 +1,6 @@
 'use client';
 import meetingRoomHandler from '(@/hooks/custom/room)';
-import { useMyChatRoomsQuery, useMyroomQuery, useRecruitingQuery } from '(@/hooks/useQueries/useMeetingQuery)';
+import { useMyroomQuery, useRecruitingQuery } from '(@/hooks/useQueries/useMeetingQuery)';
 import { useSearchRoomStore } from '(@/store/searchRoomStore)';
 import { useCallback, useEffect, useState } from 'react';
 import { IoIosArrowBack, IoIosArrowForward, IoMdRefresh } from 'react-icons/io';
@@ -12,9 +12,10 @@ import RegionSelection from './RegionSelection';
 import { useGetUserDataQuery } from '(@/hooks/useQueries/useUserQuery)';
 import type { MeetingRoomType, MeetingRoomTypes } from '(@/types/roomTypes)';
 import { clientSupabase } from '(@/utils/supabase/client)';
-import { useMyChatRoomIdsQuery } from '(@/hooks/useQueries/useChattingQuery)';
+import { useMyChatRoomIdsQuery, useMyMsgData } from '(@/hooks/useQueries/useChattingQuery)';
 import { fetchAlreadyChatRoom } from '(@/query/meetingRoom/meetingQueryFns)';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useUpdateNewMsg } from '(@/hooks/useMutation/useChattingMutation)';
 
 function MeetingRoomList() {
   const [page, setPage] = useState(1);
@@ -23,11 +24,37 @@ function MeetingRoomList() {
   const { data: meetingRoomList } = useRecruitingQuery(String(user?.user_id));
   const myRoomList = useMyroomQuery(String(user?.user_id));
   const { selectRegion, selectMemberNumber } = useSearchRoomStore();
+  const myMsgData = useMyMsgData(user?.user_id!);
+  console.log('myMsgData =>', myMsgData);
+  console.log(myMsgData?.map((m) => m.newMsgCount));
 
+  const { mutate: mutateNewMsgNum } = useUpdateNewMsg();
   const [chattingRoomList, setChattingRoomList] = useState<MeetingRoomTypes>();
   const { getChattingRoom } = meetingRoomHandler();
 
-  const { data: chatCountArr } = useMyChatRoomsQuery(user?.user_id);
+  useEffect(() => {
+    const channel = clientSupabase
+      .channel('abc')
+      .on(
+        'postgres_changes',
+        {
+          event: 'INSERT',
+          schema: 'public',
+          table: 'messages'
+        },
+        (payload) => {
+          console.log('payload', payload);
+          mutateNewMsgNum(payload.new.chatting_room_id);
+        }
+      )
+      .subscribe();
+
+    return () => {
+      clientSupabase.removeChannel(channel);
+    };
+  }, [mutateNewMsgNum]);
+
+  // const { data: chatCountArr } = useMyChatRoomsQuery(user?.user_id);
   // const [msgCountArr, setMsgCountArr] = useState(
   //   myChatRooms?.map((room) => {
   //     return { roomId: room?.roomId, chatRoomId: room.chatRoomId, newMsgCount: 0 };
@@ -46,11 +73,13 @@ function MeetingRoomList() {
   //   },
   //   [msgCountArr]
   // );
-  const useHandlePlusMsgCount = (id: string) => {
-    useMutation({
-      mutationFn: () => handlePlusCount(id)
-    });
-  };
+
+  // const;
+  // const useHandlePlusMsgCount = (id: string) => {
+  //   useMutation({
+  //     mutationFn: () => handlePlusCount(id)
+  //   });
+  // };
 
   // const { date: handlePlusCount } = useHandlePlusMsgCount();
 
@@ -68,32 +97,6 @@ function MeetingRoomList() {
   //     setMsgCountArr(newCountArr);
   //   }
   // };
-
-  // useEffect(() => {
-  //   chatCountArr &&
-  //     chatCountArr.forEach((item) => {
-  //       const channel = clientSupabase
-  //         .channel(item.chatRoomId)
-  //         .on(
-  //           'postgres_changes',
-  //           {
-  //             event: 'INSERT',
-  //             schema: 'public',
-  //             table: 'messages',
-  //             filter: `chatting_room_id=eq.${item.chatRoomId}}`
-  //           },
-  //           (payload) => {
-  //             console.log('payload', payload);
-  //             // handlePlusMsgCount(item.chatRoomId);
-  //           }
-  //         )
-  //         .subscribe();
-
-  //       return () => {
-  //         clientSupabase.removeChannel(channel);
-  //       };
-  //     });
-  // }, []);
 
   useEffect(() => {
     const getMeetingRoomList = async () => {
@@ -142,6 +145,7 @@ function MeetingRoomList() {
       <main className="flex flex-col items-center justify-content min-w-[1116px] max-w-[1440px]">
         {/* <button onClick={() => handlePlusMsgCount('d2bf4d7e-6338-47f5-8cf9-a5ae054f59da')}>플러스</button>
         <button onClick={() => clearMsgCount('d2bf4d7e-6338-47f5-8cf9-a5ae054f59da')}>clear</button> */}
+        <button onClick={() => mutateNewMsgNum(myMsgData && myMsgData[0])}>버튼버튼</button>
         <article className="h-[366px] mt-[88px] border-b border-gray2">
           <div className="flex flex-row justify-between">
             <div className="text-[40px] font-semibold">참여 중</div>

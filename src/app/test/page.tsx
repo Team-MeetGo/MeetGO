@@ -1,14 +1,16 @@
 'use client';
-import { useEffect, useRef, useState } from 'react';
+
+import ChatTest from '(@/components/chat/ChatTest)';
+import { Suspense, useEffect, useRef, useState } from 'react';
 
 const Page = () => {
   const [the, setThe] = useState(false);
   const [daa, setDaa] = useState(false);
   const check = useRef(false);
 
-  console.log('the', the);
-  console.log('daa', daa);
-  console.log(check.current);
+  // console.log('the', the);
+  // console.log('daa', daa);
+  // console.log(check.current);
 
   useEffect(() => {
     console.log('이거는 위에 함수');
@@ -35,6 +37,9 @@ const Page = () => {
       >
         이거이거
       </button>
+      <Suspense>
+        <ChatTest />
+      </Suspense>
     </div>
   );
 };

@@ -28,7 +28,7 @@ const ChatList = ({ user, chatRoomId }: { user: User | null; chatRoomId: string 
   const lastDivRefs = useRef(messages);
   const lastMsgId = useMyLastMsgs(user?.id!, chatRoomId);
 
-  // console.log('DB의 마지막 메세지 =>', lastMsgId);
+  console.log('DB의 마지막 메세지 =>', lastMsgId);
   // console.log('찐 마지막 메세지 =>', messages[messages.length - 1].message_id);
 
   useEffect(() => {

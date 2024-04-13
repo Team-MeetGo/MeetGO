@@ -1,4 +1,3 @@
-import { Suspense } from 'react';
 import InitUser from '../user/InitUser';
 import NavBarContents from './NavBarContents';
 
