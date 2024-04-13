@@ -5,6 +5,7 @@ import { clientSupabase } from '(@/utils/supabase/client)';
 import { useEffect, useState } from 'react';
 
 import type { UserType } from '(@/types/roomTypes)';
+import { FaCrown } from 'react-icons/fa6';
 
 const Member = ({ room_id }: { room_id: string }) => {
   const participants = useRoomParticipantsQuery(room_id);
@@ -86,25 +87,41 @@ const Member = ({ room_id }: { room_id: string }) => {
 
   return (
     <>
-      <div className="gap-2 grid grid-cols-2 m-4 w-100% gap-8">
-        {members.map((member) => (
-          <div key={member.user_id}>
-            <div className="flex flex-row h-32 w-unit-7xl border-4 rounded-2xl">
-              <div className="flex flex-col align-middle justify-start m-1">
-                <div className="w-24 h-24 border-4">
-                  {leader === member.user_id ? <div>왕관모양</div> : ''}
-                  {member.avatar ? <img src={member.avatar as string} alt="유저" /> : ''}
-                </div>
-                <div className="px-2">{member.nickname}</div>
-              </div>
-              <div className="flex flex-col w-unit-6xl justify-center align-top gap-1 border-4 px-3">
-                <div>{member.school_name}</div>
-                <div>{member.favorite}</div>
-                <div>{member.intro}</div>
-              </div>
+      <div className="flex flex-col items-center justify-content">
+        <div className="flex flex-col items-center justify-content min-w-[1116px] max-w-[1440px]">
+          <main className="mt-[40px] grid grid-cols-4 grid-rows-2 w-100%">
+            <div>
+              {members.map((member) => (
+                <article
+                  key={member.user_id}
+                  className="border-purpleThird border-[2px] mb-[50px] flex flex-row w-[506px] h-[166px] rounded-2xl"
+                >
+                  {/* 카드 왼쪽 */}
+                  <div className="mx-[40px] justify-items-center align-middle items-center">
+                    <div className="w-[86px] h-[86px] mt-[32px] border-4 mr-[48px] ">
+                      {leader === member.user_id ? (
+                        <div>
+                          <FaCrown />
+                        </div>
+                      ) : (
+                        ''
+                      )}
+                      {member.avatar ? <img src={member.avatar as string} alt="유저" /> : ''}
+                    </div>
+                    <div className="pt-[8px] w-[84px] text-center">{member.nickname}</div>
+                  </div>
+
+                  {/* 카드 오른쪽 */}
+                  <div className="flex flex-col mt-[32px] mb-[32px]">
+                    <div>{member.school_name}</div>
+                    <div className="py-[16px]">{member.favorite}</div>
+                    <div>{member.intro}</div>
+                  </div>
+                </article>
+              ))}
             </div>
-          </div>
-        ))}
+          </main>
+        </div>
       </div>
     </>
   );

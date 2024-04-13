@@ -10,7 +10,7 @@ import { useGetUserDataQuery } from '(@/hooks/useQueries/useUserQuery)';
 import { useState } from 'react';
 import { BsFire } from 'react-icons/bs';
 import { HiOutlineDotsVertical } from 'react-icons/hi';
-import { IoChatbubblesOutline } from 'react-icons/io5';
+import { IoChatbubblesOutline, IoFemale, IoMale } from 'react-icons/io5';
 
 import type { MeetingRoomType, UserType } from '(@/types/roomTypes)';
 function MeetingRoom({ room }: { room: MeetingRoomType }) {
@@ -78,10 +78,11 @@ function MeetingRoom({ room }: { room: MeetingRoomType }) {
         <div className="px-[24px]">
           <div className="h-[24px]"></div>
           <div className="flex flex-row justify-between align-middle justify-items-center relative">
-            <div className="text-[16px]">
-              {`여자 ${countFemale}/${genderMaxNumber} | 남자 ${countMale}/${genderMaxNumber} | ${room_status}`}
+            <div className="text-[16px] flex flex-row justify-between align-middle justify-items-center">
+              <IoFemale className="w-[16px] fill-blue" /> {`${countFemale}/${genderMaxNumber} |`}
+              <IoMale className="w-[16px] fill-hotPink" /> {`${countMale}/${genderMaxNumber} | ${room_status}`}
             </div>
-            <div className="absolute right-[10px]">
+            <div className="absolute right-[10px] flex justify-items-end">
               {alreadyChatRoom && alreadyChatRoom.length > 0 ? (
                 <IoChatbubblesOutline className="h-6 w-6 m-2 fill-gray2" />
               ) : emptySeat === 1 ? (
@@ -97,7 +98,7 @@ function MeetingRoom({ room }: { room: MeetingRoomType }) {
                   </button>
 
                   {open && (
-                    <div className="flex flex-col w-[92px] h-[78px] p-[px] justify-items-center border-gray2 border-1 rounded-xl">
+                    <div className="flex flex-col w-[92px] h-[78px] p-[5px] justify-items-center border-gray2 border-1 rounded-xl">
                       <div className="flex flex-col justify-items-center w-[92px]">
                         <DeleteMeetingRoom room_id={room_id} />
                       </div>

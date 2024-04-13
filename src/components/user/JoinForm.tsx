@@ -8,6 +8,7 @@ import { authValidation } from '(@/utils/Validation)';
 import { IsValidateShow } from '(@/types/userTypes)';
 import { ValidationModal } from '../common/ValidationModal';
 import { useModalStore } from '(@/store/modalStore)';
+import { IoFemale, IoMale } from 'react-icons/io5';
 
 type Gender = 'male' | 'female' | '';
 
@@ -122,7 +123,7 @@ const JoinForm = () => {
                 type="button"
                 onClick={() => onGenderSelect('female')}
               >
-                여자
+                <IoFemale />
               </Button>
               <Button
                 className={
@@ -134,7 +135,7 @@ const JoinForm = () => {
                 type="button"
                 onClick={() => onGenderSelect('male')}
               >
-                남자
+                <IoMale className="w-[4px]" />
               </Button>
             </div>
           </div>
