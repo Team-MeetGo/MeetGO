@@ -14,17 +14,19 @@ export const useGetUserDataQuery = () => {
 };
 
 export const useGetUserPostQuery = (userId: string) => {
-  const { data, isPending, isError, error } = useQuery({
+  const { data } = useQuery({
     queryKey: [USER_POST_QUERY_KEY],
-    queryFn: () => fetchUserPost(userId)
+    queryFn: () => fetchUserPost(userId),
+    enabled: !!userId
   });
-  return { data, isPending, isError, error };
+  return data;
 };
 
 export const useGetUserLikePostQuery = (userId: string) => {
-  const { data, isPending, isError, error } = useQuery({
+  const { data } = useQuery({
     queryKey: [USER_LIKE_POST_QUERY_KEY],
-    queryFn: () => fetchUserLikePost(userId)
+    queryFn: () => fetchUserLikePost(userId),
+    enabled: !!userId
   });
-  return { data, isPending, isError, error };
+  return data;
 };
