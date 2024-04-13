@@ -12,6 +12,7 @@ import ChatSearch from './ChatSearch';
 import { useMyLastMsgs, useRoomDataQuery } from '(@/hooks/useQueries/useChattingQuery)';
 import { useAddLastMsg, useClearNewMsgNum, useUpdateLastMsg } from '(@/hooks/useMutation/useChattingMutation)';
 import MyChat from './MyChat';
+import RememberLastChat from '../chatFooter/RememberLastChat';
 
 const ChatList = ({ user, chatRoomId }: { user: User | null; chatRoomId: string }) => {
   const scrollRef = useRef() as React.MutableRefObject<HTMLDivElement>;
@@ -28,11 +29,12 @@ const ChatList = ({ user, chatRoomId }: { user: User | null; chatRoomId: string 
   const lastDivRefs = useRef(messages);
   const lastMsgId = useMyLastMsgs(user?.id!, chatRoomId);
   const { mutate: mutateClearUnread } = useClearNewMsgNum();
+  console.log(messages);
 
   console.log('DB의 마지막 메세지 =>', lastMsgId);
   // console.log('찐 마지막 메세지 =>', messages[messages.length - 1].message_id);
 
-  // "messages" INSERT, DELETE 구독로직
+  // "messages" table Realtime INSERT, DELETE 구독로직
   useEffect(() => {
     if (roomId && chatRoomId) {
       const channel = clientSupabase
@@ -107,35 +109,6 @@ const ChatList = ({ user, chatRoomId }: { user: User | null; chatRoomId: string 
     }
   }, [messages, isScrolling]);
 
-  const { mutate: mutateToUpdate } = useUpdateLastMsg(
-    user?.id as string,
-    chatRoomId as string,
-    messages && messages.length > 0 ? messages[messages.length - 1].message_id : undefined
-  );
-  const { mutate: mutateToAdd } = useAddLastMsg(
-    chatRoomId,
-    roomId as string,
-    user?.id as string,
-    messages && messages.length > 0 ? messages[messages.length - 1].message_id : undefined
-  );
-
-  // 마지막으로 읽은 메세지 기억하기(채팅방에서 나갈 때 적용)
-  useEffect(() => {
-    console.log('useEffect 자체가 실행되는 건 맞아?');
-    return () => {
-      console.log('clean up 함수 실행되니');
-      // 왜 처음에 방을 만들어서 들어간 뒤, 메세지를 남기면 나오기 직전에는 아닌데 나올때는 messages.length가 0이 출력될까?
-      console.log(messages.length);
-      console.log(lastMsgId);
-      // 현재 나누는 메세지가 있을 때
-      // 이전에 저장된 마지막 메세지가 있으면 현재 메세지 중 마지막 걸로 업데이트, 없으면 현재 메세지 중 마지막 메세지 추가하기
-      if (messages.length) {
-        lastMsgId ? mutateToUpdate() : mutateToAdd();
-        mutateClearUnread(chatRoomId);
-      }
-    };
-  }, []);
-
   // 스크롤 이벤트가 발생할 때
   const handleScroll = () => {
     const scrollBox = scrollRef.current;
@@ -200,6 +173,7 @@ const ChatList = ({ user, chatRoomId }: { user: User | null; chatRoomId: string 
       ) : (
         <></>
       )}
+      <RememberLastChat />
     </>
   );
 };
