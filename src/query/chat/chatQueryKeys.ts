@@ -10,8 +10,6 @@ export const MY_LAST_MSGS = ['myLastMsgs'];
 
 export const MEETING_LOCATION_QUERY_KEY = ['meetingLocation'];
 
-export const MEETING_TIME_QUERY_KEY = ['meetingTime'];
-
 export const MY_LAST_MSGS_BEFORE = ['myLastMsgs_before'];
 
 export const MY_LAST_MSGS_AFTER = ['myLastMsgs_after'];
