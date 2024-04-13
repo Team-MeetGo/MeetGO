@@ -54,14 +54,15 @@ function MeetingRoomForm() {
   const addMeetingRoom = async (e: any) => {
     e.preventDefault();
     if (!title || !selected || !location || memberNumber === '인원수' || !roomRegion) {
-      return alert('모든 항목은 필수입니다.');
+      alert('모든 항목은 필수입니다.');
+    } else {
+      const data = await addRoomMutation.mutateAsync();
+      alert('모임이 생성되었습니다.');
+      setSelected(new Set([]));
+      resetMemberNumber();
+      resetRoomRegion();
+      router.push(`/meetingRoom/${data}`);
     }
-    const data = await addRoomMutation.mutateAsync();
-    alert('모임이 생성되었습니다.');
-    setSelected(new Set([]));
-    resetMemberNumber();
-    resetRoomRegion();
-    router.push(`/meetingRoom/${data}`);
   };
 
   const handleSelect = (value: string[]) => {
@@ -114,7 +115,13 @@ function MeetingRoomForm() {
               <ModalHeader className="flex flex-col gap-1">방 만들기</ModalHeader>
               <form onSubmit={(e) => addMeetingRoom(e)}>
                 <ModalBody>
-                  <input value={title} onChange={(e) => setTitle(e.target.value)} placeholder="title" maxLength={15} />
+                  <input
+                    value={title}
+                    onChange={(e) => setTitle(e.target.value)}
+                    placeholder="방 제목 (15자 이내)"
+                    maxLength={15}
+                    className="border-gray2 border-b-2"
+                  />
                   <div className="flex w-full max-w-xs flex-col gap-2">
                     <label>방의 컨셉을 골라주세요!</label>
                     <div className="flex whitespace-nowrap">
@@ -155,8 +162,9 @@ function MeetingRoomForm() {
                     <input
                       value={location}
                       onChange={(e) => setLocation(e.target.value)}
-                      placeholder="place"
+                      placeholder="자세한 주소 (15자 이내)"
                       maxLength={15}
+                      className="border-gray2 border-b-2"
                     />
                   </div>
                 </ModalBody>
@@ -164,7 +172,13 @@ function MeetingRoomForm() {
                   <Button color="danger" variant="light" onPress={onClose} onClick={() => cancelMakingMeetingRoom()}>
                     취소
                   </Button>
-                  <Button type="submit" className="bg-violet-300" onPress={onClose}>
+                  <Button
+                    type="submit"
+                    className="bg-violet-300"
+                    onPress={
+                      !title || !selected || !location || memberNumber === '인원수' || !roomRegion ? onOpen : onClose
+                    }
+                  >
                     등록
                   </Button>
                 </ModalFooter>
