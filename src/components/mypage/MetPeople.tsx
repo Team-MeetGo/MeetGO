@@ -6,7 +6,8 @@ import { useGetUserDataQuery } from '(@/hooks/useQueries/useUserQuery)';
 import { KAKAOID_REQUEST_QUERY_KEY } from '(@/query/user/metPeopleQueryKeys)';
 import { clientSupabase } from '(@/utils/supabase/client)';
 import { useQueryClient } from '@tanstack/react-query';
-import { use, useEffect } from 'react';
+import Image from 'next/image';
+import { useEffect } from 'react';
 
 /**
  * useMutation을 이용한 데이터 처리 사용 방법
@@ -96,7 +97,11 @@ const MetPeople = () => {
       <div className="flex items-center gap-4 flex-wrap">
         {metPeopleList?.map((person: any, index: any) => (
           <div key={index} className="flex flex-col items-center p-2 gap-2">
-            <div className="w-24 h-24 rounded-full bg-gray-300" />
+            <div className="w-24 h-24 rounded-full bg-gray-300">
+              {person.avatar && (
+                <Image src={person.avatar} alt="avatar" width={100} height={100} className="rounded-full" />
+              )}
+            </div>
             <p className="text-sm">{person.nickname}</p>
             {(!person.requestStatus || person.requestStatus === '요청전') && (
               <button
