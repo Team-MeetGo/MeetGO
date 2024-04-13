@@ -10,12 +10,7 @@ import { chatStore } from '(@/store/chatStore)';
 import OthersChat from './OthersChat';
 import ChatSearch from './ChatSearch';
 import { useMyLastMsgs, useRoomDataQuery } from '(@/hooks/useQueries/useChattingQuery)';
-import {
-  useAddLastMsg,
-  useClearNewMsgNum,
-  useUpdateLastMsg,
-  useUpdateNewMsg
-} from '(@/hooks/useMutation/useChattingMutation)';
+import { useAddLastMsg, useClearNewMsgNum, useUpdateLastMsg } from '(@/hooks/useMutation/useChattingMutation)';
 import MyChat from './MyChat';
 
 const ChatList = ({ user, chatRoomId }: { user: User | null; chatRoomId: string }) => {
@@ -32,16 +27,14 @@ const ChatList = ({ user, chatRoomId }: { user: User | null; chatRoomId: string 
   const prevMsgsLengthRef = useRef(messages.length);
   const lastDivRefs = useRef(messages);
   const lastMsgId = useMyLastMsgs(user?.id!, chatRoomId);
-  // const queryClient = useQueryClient();
   const { mutate: mutateClearUnread } = useClearNewMsgNum();
-  console.log(messages);
 
   console.log('DB의 마지막 메세지 =>', lastMsgId);
   // console.log('찐 마지막 메세지 =>', messages[messages.length - 1].message_id);
 
+  // "messages" INSERT, DELETE 구독로직
   useEffect(() => {
     if (roomId && chatRoomId) {
-      // "messages" table Realtime INSERT, DELETE 구독로직
       const channel = clientSupabase
         .channel(chatRoomId)
         .on(
@@ -73,6 +66,7 @@ const ChatList = ({ user, chatRoomId }: { user: User | null; chatRoomId: string 
     }
   }, [messages, setMessages, isScrolling, roomId, chatRoomId]);
 
+  // 여기까지 읽으셨습니다
   useEffect(() => {
     const scrollBox = scrollRef.current;
     if (scrollBox && !isScrolling) {
@@ -92,6 +86,7 @@ const ChatList = ({ user, chatRoomId }: { user: User | null; chatRoomId: string 
     }
   }, []);
 
+  // 스크롤 다운
   useEffect(() => {
     const scrollBox = scrollRef.current;
     if (scrollBox && !isScrolling) {
@@ -124,12 +119,11 @@ const ChatList = ({ user, chatRoomId }: { user: User | null; chatRoomId: string 
     messages && messages.length > 0 ? messages[messages.length - 1].message_id : undefined
   );
 
-  // 마지막으로 읽은 메세지 기억하기
+  // 마지막으로 읽은 메세지 기억하기(채팅방에서 나갈 때 적용)
   useEffect(() => {
-    console.log('useEffect 안 실행되는 건 맞아?');
-
+    console.log('useEffect 자체가 실행되는 건 맞아?');
     return () => {
-      console.log('실행은 되니');
+      console.log('clean up 함수 실행되니');
       // 왜 처음에 방을 만들어서 들어간 뒤, 메세지를 남기면 나오기 직전에는 아닌데 나올때는 messages.length가 0이 출력될까?
       console.log(messages.length);
       console.log(lastMsgId);

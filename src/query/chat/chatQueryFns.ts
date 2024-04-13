@@ -171,7 +171,6 @@ export const clearUnReadMsgNum = async (chatting_room_id: string) => {
     .select('*');
   if (error) console.error('안 읽은 메세지 수 초기화 실패', error.message);
   console.log('안 읽은 메세지 수 초기화 0으로 잘 됨? =>', clearedNewMsgNum);
-  // return clearedNewMsgNum
 };
 
 // 미팅 장소 추가

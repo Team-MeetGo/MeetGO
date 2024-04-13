@@ -1,3 +1,4 @@
+import { useGetUserDataQuery } from '(@/hooks/useQueries/useUserQuery)';
 import { chatStore } from '(@/store/chatStore)';
 import { Message } from '(@/types/chatTypes)';
 import { getformattedDate, showingDate } from '(@/utils)';
@@ -5,6 +6,7 @@ import ChatDeleteDropDown from './ChatDeleteDropDown';
 
 const MyChat = ({ msg, idx, lastDivRefs }: { msg: Message; idx: number; lastDivRefs: any }) => {
   const { messages } = chatStore((state) => state);
+  const { data: user } = useGetUserDataQuery();
 
   return (
     <>
@@ -26,7 +28,7 @@ const MyChat = ({ msg, idx, lastDivRefs }: { msg: Message; idx: number; lastDivR
           </div>
         </div>
         <div className="h-14 w-14 bg-indigo-600 rounded-full my-auto">
-          <img src={msg.avatar} alt="유저 이미지"></img>
+          <img src={user?.avatar as string} alt="유저 이미지"></img>
         </div>
       </div>
     </>
