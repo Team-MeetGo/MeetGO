@@ -95,26 +95,39 @@ const MetPeople = () => {
       <h2 className="text-lg font-semibold mb-4">스쳐간 인연 리스트</h2>
       <div className="flex items-center gap-4 flex-wrap">
         {metPeopleList?.map((person: any, index: any) => (
-          <div key={index} className="flex flex-col items-center p-2">
-            <div className="w-24 h-24 rounded-full bg-gray-300 mb-2" />
+          <div key={index} className="flex flex-col items-center p-2 gap-2">
+            <div className="w-24 h-24 rounded-full bg-gray-300" />
             <p className="text-sm">{person.nickname}</p>
             {(!person.requestStatus || person.requestStatus === '요청전') && (
-              <button className="text-xs" onClick={() => handleKakaoIdRequestClick(person.user_id)}>
+              <button
+                className="text-xs px-4 py-2 rounded-lg bg-gray3 text-white"
+                onClick={() => handleKakaoIdRequestClick(person.user_id)}
+              >
                 카톡ID 요청
               </button>
             )}
-            {userId === person.request_Id && person.requestStatus === '요청중' && <p className="text-xs">요청중</p>}
+            {userId === person.request_Id && person.requestStatus === '요청중' && (
+              <p className="text-xs px-4 py-2 rounded-lg bg-[#D4D4D8]">요청중</p>
+            )}
             {userId === person.response_Id && person.requestStatus === '요청중' && (
               <>
-                <button className="text-xs" onClick={() => handleKakaoIdResponse(person.user_id, '수락')}>
+                <button
+                  className="text-xs border px-4 py-2 rounded-lg"
+                  onClick={() => handleKakaoIdResponse(person.user_id, '수락')}
+                >
                   수락
                 </button>
-                <button className="text-xs" onClick={() => handleKakaoIdResponse(person.user_id, '거절')}>
+                <button
+                  className="text-xs border px-4 py-2 rounded-lg"
+                  onClick={() => handleKakaoIdResponse(person.user_id, '거절')}
+                >
                   거절
                 </button>
               </>
             )}
-            {person.requestStatus === '수락' && <p className="text-xs">카톡ID : {person.kakaoId}</p>}
+            {person.requestStatus === '수락' && (
+              <p className="text-xs border px-4 py-2 rounded-lg border-mainColor text-mainColor">{person.kakaoId}</p>
+            )}
             {userId === person.request_Id && person.requestStatus === '거절' && <p className="text-xs">거절됨</p>}
             {userId === person.response_Id && person.requestStatus === '거절' && <p className="text-xs">거절</p>}
           </div>

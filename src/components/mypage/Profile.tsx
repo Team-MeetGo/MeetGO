@@ -61,7 +61,7 @@ const Profile = () => {
   return (
     <div className="mx-auto bg-white">
       <div className="bg-purpleSecondary w-full py-[40px]">
-        <div className="flex flex-col gap-4 max-w-[1116px] m-auto">
+        <div className="flex flex-col gap-4 max-w-[1161px] m-auto">
           <span className="text-[42px] font-bold">프로필</span>
           <div className="flex justify-between items-center">
             <div className="flex gap-6 items-center">
@@ -94,36 +94,36 @@ const Profile = () => {
           </div>
         </div>
       </div>
-      <div className="max-w-[600px] m-auto pt-[40px] flex flex-col gap-6">
+      <div className="max-w-[800px] m-auto pt-[40px] flex flex-col gap-6">
         <div className="flex gap-6">
-          <p className="text-lg font-semibold w-[90px]">사진</p>
+          <p className="text-lg font-semibold w-[100px]">사진</p>
           <div className="flex flex-col items-start">
             <AvatarForm />
             <p className="text-sm text-[#A1A1AA] mt-2">프로필 사진의 권장 크기는 100MB입니다.</p>
             <p className="text-sm text-[#A1A1AA]">지원하는 파일 형식 : jpg, png, gif</p>
           </div>
         </div>
-        {!isEditing ? (
-          <div className="flex items-center gap-6">
-            <p className="block text-lg font-semibold w-[90px]">닉네임</p>
-            <p className="block text-base font-medium">{user?.nickname}</p>
-          </div>
-        ) : (
-          <input
-            className="w-full p-2 border border-gray-300 rounded-md"
-            id="nickname"
-            placeholder="닉네임 입력 (최대 10자)"
-            type="text"
-            value={inputNickname.value}
-            onChange={inputNickname.onChange}
-          />
-        )}
         <div className="flex items-center gap-6">
-          <p className="block text-lg font-semibold w-[90px]">이메일</p>
+          <p className="block text-lg font-semibold w-[100px]">닉네임</p>
+          {!isEditing ? (
+            <p className="block text-base font-medium">{user?.nickname}</p>
+          ) : (
+            <input
+              className="max-w-full p-2 border border-gray-300 rounded-md"
+              id="nickname"
+              placeholder="닉네임 입력 (최대 10자)"
+              type="text"
+              value={inputNickname.value}
+              onChange={inputNickname.onChange}
+            />
+          )}
+        </div>
+        <div className="flex items-center gap-6">
+          <p className="block text-lg font-semibold w-[100px]">이메일</p>
           <p className="block text-base font-medium">{user?.login_email}</p>
         </div>
         <div className="flex items-center gap-6">
-          <p className="block text-lg font-semibold w-[90px]">성별</p>
+          <p className="block text-lg font-semibold w-[100px]">성별</p>
           <p className="block text-base font-medium">
             {user
               ? user?.gender === 'female'
@@ -146,12 +146,12 @@ const Profile = () => {
         )}
         <SchoolForm />
         <div className="mb-6 flex items-center gap-6">
-          <label className="block text-lg font-semibold w-[90px]">카카오톡ID</label>
+          <label className="block text-lg font-semibold w-[100px]">카카오톡ID</label>
           {!isEditing ? (
             <p className="block text-sm font-medium mb-1">{user?.kakaoId}</p>
           ) : (
             <input
-              className="w-full p-2 border border-gray-300 rounded-md"
+              className="max-w-full p-2 border border-gray-300 rounded-md"
               id="kakaoId"
               placeholder=""
               type="text"
@@ -162,7 +162,7 @@ const Profile = () => {
         </div>
         <Favorite isEditing={isEditing} />
         <div className="flex gap-6 items-center">
-          <label className="block text-lg font-semibold w-[90px]" htmlFor="introduction">
+          <label className="block text-lg font-semibold w-[100px]" htmlFor="introduction">
             자기소개
           </label>
           {!isEditing ? (
