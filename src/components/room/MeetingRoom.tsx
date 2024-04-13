@@ -79,8 +79,8 @@ function MeetingRoom({ room }: { room: MeetingRoomType }) {
           <div className="h-[24px]"></div>
           <div className="flex flex-row justify-between align-middle justify-items-center relative">
             <div className="text-[16px] flex flex-row justify-between align-middle justify-items-center">
-              <IoFemale className="w-[16px] fill-blue" /> {`${countFemale}/${genderMaxNumber} |`}
-              <IoMale className="w-[16px] fill-hotPink" /> {`${countMale}/${genderMaxNumber} | ${room_status}`}
+              <IoFemale className="w-[16px] fill-hotPink" /> {`${countFemale}/${genderMaxNumber} |`}
+              <IoMale className="w-[16px] fill-blue" /> {`${countMale}/${genderMaxNumber} | ${room_status}`}
             </div>
             <div className="absolute right-[10px] flex justify-items-end">
               {alreadyChatRoom && alreadyChatRoom.length > 0 ? (

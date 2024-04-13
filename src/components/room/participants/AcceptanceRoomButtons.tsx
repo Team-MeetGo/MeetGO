@@ -73,7 +73,7 @@ const AcceptanceRoomButtons = ({ room_id }: { room_id: string }) => {
   };
   //뒤로가기: 로비로
   window.onpopstate = () => {
-    gotoLobby();
+    if (confirm('로비로 이동하시겠습니까?')) router.replace('/meetingRoom');
   };
 
   return (
