@@ -14,6 +14,7 @@ import { useQueryClient } from '@tanstack/react-query';
 import { USER_DATA_QUERY_KEY } from '(@/query/user/userQueryKeys)';
 import { UpdateProfileType } from '(@/types/userTypes)';
 import Image from 'next/image';
+import { profileCount } from '(@/store/userStore)';
 
 const Profile = () => {
   const queryClient = useQueryClient();
@@ -23,6 +24,7 @@ const Profile = () => {
   const inputIntro = useInputChange(user?.intro ? user?.intro : '');
   const inputKakaoId = useInputChange(user?.kakaoId ? user?.kakaoId : '');
   const inputGender = useInputChange(user?.gender ? user?.gender : '');
+  const { postCount, likedPostCount, metPeopleCount, meetingRoomCount } = profileCount();
 
   const { mutate: updateProfileMutate } = useProfileUpdateMutation();
 
@@ -55,8 +57,14 @@ const Profile = () => {
     );
   };
 
-  const joinDateTime = user?.created_at;
   const joinTime = user?.created_at?.toString().slice(0, 10);
+
+  const buttonData = [
+    { title: '스쳐간 인연', count: metPeopleCount },
+    { title: '참여한 미팅방', count: meetingRoomCount },
+    { title: '작성 글', count: postCount },
+    { title: '좋아요한 글', count: likedPostCount }
+  ];
 
   return (
     <div className="mx-auto bg-white">
@@ -86,10 +94,12 @@ const Profile = () => {
               </div>
             </div>
             <div className="flex gap-6">
-              <button className="font-semibold">스쳐간 인연</button>
-              <button className="font-semibold">참여한 미팅방</button>
-              <button className="font-semibold">작성 리뷰</button>
-              <button className="font-semibold">좋아요 리뷰</button>
+              {buttonData.map((item, index) => (
+                <button key={index} className="font-semibold">
+                  <p>{item.title}</p>
+                  <p className="font-bold text-3xl">{item.count}</p>
+                </button>
+              ))}
             </div>
           </div>
         </div>
