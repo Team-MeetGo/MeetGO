@@ -23,12 +23,13 @@ export const fetchRoomDataWithChatRoomId = async (chatRoomId: string) => {
   return null;
 };
 
+// 채팅방 참여자들 불러오기
 export const fetchParticipants = async (roomId: string) => {
   const { data: userIds, error: userIdErr } = await clientSupabase
     .from('participants')
     .select('user_id')
     .eq('room_id', String(roomId));
-  console.log('채팅방 멤버들', userIds);
+  // console.log('채팅방 멤버들', userIds);
   if (userIdErr) console.error('채팅방 멤버들 ID를 불러오는 데에 실패했습니다.', userIdErr.message);
   const users = [];
   if (userIds) {
@@ -57,19 +58,6 @@ export const fetchChatData = async (chatRoomId: string) => {
   } else {
     return chatData;
   }
-};
-
-export const fetchUserData = async () => {
-  // 유저 데이터 가져오기
-  const {
-    data: { user }
-  } = await clientSupabase.auth.getUser();
-
-  if (user) {
-    const { data: userData } = await clientSupabase.from('users').select('*').eq('user_id', String(user.id));
-    if (userData) return userData[0];
-  }
-  return null;
 };
 
 // 내 채팅방들의 아이디
@@ -107,17 +95,28 @@ export const fetchMyLastMsgs = async (user_id: string, chatRoomId: string | null
   return null;
 };
 
-export const addNewLastMsg = async (chatRoomId: string, user_id: string, last_msg_id: string | undefined) => {
+// DB에 마지막 메세지 추가하기
+export const addNewLastMsg = async (
+  chatRoomId: string,
+  roomId: string,
+  user_id: string,
+  last_msg_id: string | undefined
+) => {
   const { data: addedlastMsg, error } = await clientSupabase
     .from('remember_last_msg')
-    .insert({ chatting_room_id: String(chatRoomId), user_id: String(user_id), last_msg_id: String(last_msg_id) })
+    .insert({
+      chatting_room_id: String(chatRoomId),
+      room_id: String(roomId),
+      user_id: String(user_id),
+      last_msg_id: String(last_msg_id)
+    })
     .select('*');
   console.log('새로 추가된 마지막 메세지', addedlastMsg && addedlastMsg[0].last_msg_id);
   if (error) console.error('마지막 메세지 추가하기 실패 => ', error.message);
   return addedlastMsg;
 };
 
-// 마지막 메세지 업데이트
+// DB에 마지막 메세지 업데이트
 export const updateMyLastMsg = async (user_id: string, chatRoomId: string, msg_id: string | undefined) => {
   const { data: updatedLastMsg, error } = await clientSupabase
     .from('remember_last_msg')

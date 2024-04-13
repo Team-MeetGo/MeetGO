@@ -38,7 +38,7 @@ export const useDeleteRoom = ({ room_id }: { room_id: string }) =>
   });
 
 export const useAddRoom = ({ nextMeetingRoom, user_id }: { nextMeetingRoom: MeetingRoomType; user_id: string }) => {
-  const queryClient = useQueryClient();
+  // const queryClient = useQueryClient();
 
   const roomAddMutation = useMutation({
     mutationFn: async () => await addRoom({ nextMeetingRoom, user_id })

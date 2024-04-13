@@ -125,23 +125,24 @@ export type Database = {
       participants: {
         Row: {
           created_at: string;
+          isDeleted: boolean;
           part_id: string;
           room_id: string;
           user_id: string;
-          isDeleted?: boolean;
         };
         Insert: {
           created_at?: string;
+          isDeleted?: boolean;
           part_id?: string;
           room_id?: string;
           user_id: string;
         };
         Update: {
           created_at?: string;
+          isDeleted?: boolean;
           part_id?: string;
           room_id?: string;
           user_id?: string;
-          isDeleted: boolean;
         };
         Relationships: [
           {
@@ -166,6 +167,8 @@ export type Database = {
           created_at: string;
           id: string;
           last_msg_id: string;
+          newMsgCount: number;
+          room_id: string;
           user_id: string;
         };
         Insert: {
@@ -173,6 +176,8 @@ export type Database = {
           created_at?: string;
           id?: string;
           last_msg_id: string;
+          newMsgCount?: number;
+          room_id: string;
           user_id?: string;
         };
         Update: {
@@ -180,6 +185,8 @@ export type Database = {
           created_at?: string;
           id?: string;
           last_msg_id?: string;
+          newMsgCount?: number;
+          room_id?: string;
           user_id?: string;
         };
         Relationships: [
@@ -196,6 +203,13 @@ export type Database = {
             isOneToOne: false;
             referencedRelation: 'messages';
             referencedColumns: ['message_id'];
+          },
+          {
+            foreignKeyName: 'public_remember_last_msg_room_id_fkey';
+            columns: ['room_id'];
+            isOneToOne: false;
+            referencedRelation: 'room';
+            referencedColumns: ['room_id'];
           },
           {
             foreignKeyName: 'public_remember_last_msg_user_id_fkey';
@@ -403,6 +417,7 @@ export type Database = {
       users: {
         Row: {
           avatar: string | null;
+          created_at: string | null;
           favorite: string[] | null;
           gender: string | null;
           intro: string | null;
@@ -416,6 +431,7 @@ export type Database = {
         };
         Insert: {
           avatar?: string | null;
+          created_at?: string | null;
           favorite?: string[] | null;
           gender?: string | null;
           intro?: string | null;
@@ -429,6 +445,7 @@ export type Database = {
         };
         Update: {
           avatar?: string | null;
+          created_at?: string | null;
           favorite?: string[] | null;
           gender?: string | null;
           intro?: string | null;
@@ -442,7 +459,7 @@ export type Database = {
         };
         Relationships: [
           {
-            foreignKeyName: 'users_user_id_fkey';
+            foreignKeyName: 'public_users_user_id_fkey';
             columns: ['user_id'];
             isOneToOne: true;
             referencedRelation: 'users';

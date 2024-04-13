@@ -111,6 +111,7 @@ const ChatList = ({ user, chatRoomId }: { user: User | null; chatRoomId: string 
   );
   const { mutate: mutateToAdd } = useAddLastMsg(
     chatRoomId,
+    roomId as string,
     user?.id as string,
     messages && messages.length > 0 ? messages[messages.length - 1].message_id : undefined
   );
