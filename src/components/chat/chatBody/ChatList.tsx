@@ -12,6 +12,8 @@ import ChatSearch from './ChatSearch';
 import { useMyLastMsgs, useRoomDataQuery } from '(@/hooks/useQueries/useChattingQuery)';
 import { useAddLastMsg, useUpdateLastMsg } from '(@/hooks/useMutation/useChattingMutation)';
 import MyChat from './MyChat';
+import { useQueryClient } from '@tanstack/react-query';
+import { MY_MSG_DATA } from '(@/query/chat/chatQueryKeys)';
 
 const ChatList = ({ user, chatRoomId }: { user: User | null; chatRoomId: string }) => {
   const scrollRef = useRef() as React.MutableRefObject<HTMLDivElement>;
@@ -27,6 +29,7 @@ const ChatList = ({ user, chatRoomId }: { user: User | null; chatRoomId: string 
   const prevMsgsLengthRef = useRef(messages.length);
   const lastDivRefs = useRef(messages);
   const lastMsgId = useMyLastMsgs(user?.id!, chatRoomId);
+  const queryClient = useQueryClient();
 
   console.log('DB의 마지막 메세지 =>', lastMsgId);
   // console.log('찐 마지막 메세지 =>', messages[messages.length - 1].message_id);
@@ -125,6 +128,7 @@ const ChatList = ({ user, chatRoomId }: { user: User | null; chatRoomId: string 
       // 이전에 저장된 마지막 메세지가 있으면 현재 메세지 중 마지막 걸로 업데이트, 없으면 현재 메세지 중 마지막 메세지 추가하기
       if (messages.length) {
         lastMsgId ? mutateToUpdate() : mutateToAdd();
+        queryClient.invalidateQueries({ queryKey: [MY_MSG_DATA] });
       }
     };
   }, []);

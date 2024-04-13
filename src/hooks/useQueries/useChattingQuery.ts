@@ -64,5 +64,5 @@ export const useMyMsgData = (user_id: string | undefined) => {
     queryFn: () => fetchMyMsgData(user_id),
     enabled: !!user_id
   });
-  return myMsgData;
+  if (myMsgData) return myMsgData;
 };

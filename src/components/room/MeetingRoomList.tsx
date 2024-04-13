@@ -24,17 +24,18 @@ function MeetingRoomList() {
   const { data: meetingRoomList } = useRecruitingQuery(String(user?.user_id));
   const myRoomList = useMyroomQuery(String(user?.user_id));
   const { selectRegion, selectMemberNumber } = useSearchRoomStore();
+
   const myMsgData = useMyMsgData(user?.user_id!);
   console.log('myMsgData =>', myMsgData);
   console.log(myMsgData?.map((m) => m.newMsgCount));
-
   const { mutate: mutateNewMsgNum } = useUpdateNewMsg();
+
   const [chattingRoomList, setChattingRoomList] = useState<MeetingRoomTypes>();
   const { getChattingRoom } = meetingRoomHandler();
 
   useEffect(() => {
     const channel = clientSupabase
-      .channel('abc')
+      .channel('new_Message_Count')
       .on(
         'postgres_changes',
         {
@@ -143,9 +144,10 @@ function MeetingRoomList() {
   return (
     <div className="flex flex-col items-center justify-content">
       <main className="flex flex-col items-center justify-content min-w-[1116px] max-w-[1440px]">
-        {/* <button onClick={() => handlePlusMsgCount('d2bf4d7e-6338-47f5-8cf9-a5ae054f59da')}>플러스</button>
-        <button onClick={() => clearMsgCount('d2bf4d7e-6338-47f5-8cf9-a5ae054f59da')}>clear</button> */}
-        <button onClick={() => mutateNewMsgNum(myMsgData && myMsgData[0])}>버튼버튼</button>
+        <div>
+          <button onClick={() => mutateNewMsgNum('d2bf4d7e-6338-47f5-8cf9-a5ae054f59da')}>버튼버튼</button>
+          <h1>{myMsgData && myMsgData[0].newMsgCount}</h1>
+        </div>
         <article className="h-[366px] mt-[88px] border-b border-gray2">
           <div className="flex flex-row justify-between">
             <div className="text-[40px] font-semibold">참여 중</div>
@@ -176,14 +178,13 @@ function MeetingRoomList() {
                     if (index < 3 * page && index >= 3 * (page - 1))
                       return (
                         <div key={index}>
-                          {/* <div className="flex gap-2">
-                            {msgCountArr.find((item) => item.roomId === room?.room_id) ? (
+                          <div className="flex gap-2">
+                            {myMsgData && myMsgData.find((item) => item.room_id === room?.room_id) ? (
                               <h1>
-                                {msgCountArr.find((item) => item.roomId === room?.room_id)?.newMsgCount} 새로운 메세지
-                                수
+                                {myMsgData.find((item) => item.room_id === room?.room_id)?.newMsgCount} 새로운 메세지 수
                               </h1>
                             ) : null}
-                          </div> */}
+                          </div>
                           {room && <MeetingRoom room={room} />}
                         </div>
                       );

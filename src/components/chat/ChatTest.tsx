@@ -11,7 +11,7 @@ const ChatTest = () => {
   console.log(user);
   const myMsgData = useMyMsgData(user?.user_id);
   console.log('myMsgData =>', myMsgData);
-  console.log(myMsgData?.map((m) => m.newMsgCount));
+  // console.log(myMsgData?.map((m) => m.newMsgCount));
 
   const { mutate: mutateNewMsgNum } = useUpdateNewMsg();
   const [count, setCount] = useState([
@@ -54,29 +54,6 @@ const ChatTest = () => {
   //     };
   //   });
   // }, []);
-  useEffect(() => {
-    const channel = clientSupabase
-      .channel('abc')
-      .on(
-        'postgres_changes',
-        {
-          event: 'INSERT',
-          schema: 'public',
-          table: 'messages',
-          filter: `chatting_room_id=eq.d2bf4d7e-6338-47f5-8cf9-a5ae054f59da`
-        },
-        (payload) => {
-          console.log('payload', payload);
-          console.log(payload.new.chatting_room_id);
-          mutateNewMsgNum(payload.new.chatting_room_id);
-        }
-      )
-      .subscribe();
-
-    return () => {
-      clientSupabase.removeChannel(channel);
-    };
-  }, []);
 
   return (
     <div>
