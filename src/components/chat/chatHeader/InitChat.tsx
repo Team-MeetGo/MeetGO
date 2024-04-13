@@ -6,20 +6,16 @@ import { ITEM_INTERVAL } from '(@/utils/constant)';
 import { clientSupabase } from '(@/utils/supabase/client)';
 import { User } from '@supabase/supabase-js';
 import { useRouter } from 'next/navigation';
-import { Suspense, useEffect } from 'react';
-import ChatHeader from './ChatHeader';
-import ChatList from '../chatBody/ChatList';
-import ChatInput from '../chatFooter/ChatInput';
-import RememberLastChat from '../chatFooter/RememberLastChat';
+import { useEffect } from 'react';
 
-const InitChat = ({ user, chatRoomId, allMsgs }: { user: User | null; chatRoomId: string; allMsgs: Message[] }) => {
+const InitChat = ({ chatRoomId, allMsgs }: { user: User | null; chatRoomId: string; allMsgs: Message[] }) => {
   const router = useRouter();
   const { messages, chatState, isRest, setChatState, setMessages, setChatRoomId, setHasMore } = chatStore(
     (state) => state
   );
   const room = useRoomDataQuery(chatRoomId);
   const roomId = room?.roomId;
-
+  console.log('allMsgs => ', allMsgs);
   useEffect(() => {
     // 채팅방 isActive 상태 구독
     const channel = clientSupabase
@@ -50,6 +46,7 @@ const InitChat = ({ user, chatRoomId, allMsgs }: { user: User | null; chatRoomId
         router.push('/meetingRoom');
       }
     } else {
+      console.log('지금 메세지', messages);
       // **채팅방에 있는다면
       if (messages.length === 0) {
         setMessages([...allMsgs].reverse()); // 현재 메세지가 없을 때만(처음시작 or 메세지 한개일 때)
@@ -57,7 +54,19 @@ const InitChat = ({ user, chatRoomId, allMsgs }: { user: User | null; chatRoomId
       }
       setChatRoomId(chatRoomId);
     }
-  }, [setChatRoomId, allMsgs, chatRoomId, setMessages, setHasMore, messages.length, chatState, isRest, router, roomId]);
+  }, [
+    setChatRoomId,
+    allMsgs,
+    chatRoomId,
+    setMessages,
+    setHasMore,
+    messages.length,
+    chatState,
+    isRest,
+    router,
+    roomId,
+    messages
+  ]);
   // 왜 요청이 2번이나 되징
 
   return <></>;

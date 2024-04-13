@@ -1,18 +1,16 @@
 import { clientSupabase } from '(@/utils/supabase/client)';
-import { useQueryClient } from '@tanstack/react-query';
-import { MY_LAST_MSGS_BEFORE } from './chatQueryKeys';
 
+// 채팅룸 아이디로 룸 정보 가져오기
 export const fetchRoomDataWithChatRoomId = async (chatRoomId: string) => {
   // roomId 불러오기
   const { data: roomId, error: roomIdErr } = await clientSupabase
     .from('chatting_room')
     .select('room_id')
     .eq('chatting_room_id', chatRoomId);
-
   if (roomIdErr) console.error('roomId 불러오는 중 오류 발생', roomIdErr.message);
 
+  // 룸 정보 가져오기
   if (roomId?.length) {
-    // 룸 정보 가져오기
     const { data: roomData, error: roomDataErr } = await clientSupabase
       .from('room')
       .select('*')
@@ -80,7 +78,7 @@ export const fetchMyChatRoomIds = async (userId: string) => {
   return myChatRooms;
 };
 
-// 내가 본 마지막 메세지들의 아이디
+// user_id로 특정 채팅방의 마지막 메세지 가져오기
 export const fetchMyLastMsgs = async (user_id: string, chatRoomId: string | null) => {
   const { data: lastMsgs, error } = await clientSupabase
     .from('remember_last_msg')
@@ -95,6 +93,7 @@ export const fetchMyLastMsgs = async (user_id: string, chatRoomId: string | null
   return null;
 };
 
+// user_id로 현재 들어가있는 방들 정보 가져오기
 export const fetchMyMsgData = async (user_id: string | undefined) => {
   const { data: msgData, error } = await clientSupabase
     .from('remember_last_msg')

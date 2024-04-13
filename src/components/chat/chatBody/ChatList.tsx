@@ -10,7 +10,6 @@ import { chatStore } from '(@/store/chatStore)';
 import OthersChat from './OthersChat';
 import ChatSearch from './ChatSearch';
 import { useMyLastMsgs, useRoomDataQuery } from '(@/hooks/useQueries/useChattingQuery)';
-import { useClearNewMsgNum } from '(@/hooks/useMutation/useChattingMutation)';
 import MyChat from './MyChat';
 import RememberLastChat from '../chatFooter/RememberLastChat';
 
@@ -28,7 +27,6 @@ const ChatList = ({ user, chatRoomId }: { user: User | null; chatRoomId: string 
   const prevMsgsLengthRef = useRef(messages.length);
   const lastDivRefs = useRef(messages);
   const lastMsgId = useMyLastMsgs(user?.id!, chatRoomId);
-  const { mutate: mutateClearUnread } = useClearNewMsgNum();
   console.log(messages);
 
   console.log('DB의 마지막 메세지 =>', lastMsgId);
