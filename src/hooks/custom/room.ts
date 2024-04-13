@@ -12,7 +12,7 @@ function meetingRoomHandler() {
     return chattingRoom;
   };
 
-  const getmaxGenderMemberNumber = async (memberNumber: string) => {
+  const getmaxGenderMemberNumber = (memberNumber: string) => {
     if (memberNumber === '1:1') {
       return 1;
     } else if (memberNumber === '2:2') {

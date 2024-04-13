@@ -4,7 +4,6 @@ import {
   NavbarBrand,
   NavbarContent,
   NavbarItem,
-  Link,
   DropdownItem,
   Dropdown,
   DropdownTrigger,
@@ -18,11 +17,14 @@ import { clientSupabase } from '(@/utils/supabase/client)';
 import { useGetUserDataQuery } from '(@/hooks/useQueries/useUserQuery)';
 import { useQueryClient } from '@tanstack/react-query';
 import { USER_DATA_QUERY_KEY } from '(@/query/user/userQueryKeys)';
+import Link from 'next/link';
+import { useState } from 'react';
 
 const NavBarContents = () => {
   const queryClient = useQueryClient();
   const { data: user, isPending, isError, error, isLoggedIn } = useGetUserDataQuery();
   const router = useRouter();
+  const isValidate = user?.isValidate;
 
   if (isPending) {
     return <span>Loading...</span>;
@@ -36,12 +38,18 @@ const NavBarContents = () => {
     queryClient.invalidateQueries({
       queryKey: [USER_DATA_QUERY_KEY]
     });
-    router.replace('/'); // 로그아웃 후 메인 페이지로 이동. 뒤로가기 방지.
     alert('로그아웃 성공');
+    await router.replace('/'); // 로그아웃 후 메인 페이지로 이동. 뒤로가기 방지.
+  };
+
+  const checkIsValidate = () => {
+    if (!isValidate) {
+      alert('미팅을 하고 싶다면 학교 인증 ㄱㄱ');
+    }
   };
 
   return (
-    <Navbar>
+    <Navbar className="py-[20px] h-auto">
       <NavbarBrand>
         <Link href="/" className="max-w-[150px]">
           <Image
@@ -55,9 +63,9 @@ const NavBarContents = () => {
           />
         </Link>
       </NavbarBrand>
-      <NavbarContent className="hidden sm:flex gap-4" justify="center">
+      <NavbarContent className="hidden sm:flex gap-4 h-auto" justify="center">
         <NavbarItem>
-          <Link color="foreground" href="/meetingRoom">
+          <Link color="foreground" href="/meetingRoom" onClick={() => {}}>
             로비
           </Link>
         </NavbarItem>
@@ -66,14 +74,20 @@ const NavBarContents = () => {
             리뷰게시판
           </Link>
         </NavbarItem>
-        {/* <NavbarItem>
-            <Link color="foreground" href="#">
-              메뉴더있었으면..
-            </Link>
-          </NavbarItem> */}
+        <NavbarItem>
+          <Link
+            color="foreground"
+            href={isValidate ? 'test' : 'mypage'}
+            onClick={() => {
+              checkIsValidate();
+            }}
+          >
+            test
+          </Link>
+        </NavbarItem>
       </NavbarContent>
 
-      <NavbarContent as="div" justify="end">
+      <NavbarContent className="h-auto" as="div" justify="end">
         {isLoggedIn ? (
           <div className="flex items-center gap-4">
             <p>{user?.nickname}</p>
@@ -81,29 +95,21 @@ const NavBarContents = () => {
               <DropdownTrigger>
                 {user?.avatar ? (
                   <Avatar
-                    isBordered
                     as="button"
                     className="transition-transform"
                     color="secondary"
-                    name="profile"
                     src={`${user?.avatar}?${new Date().getTime()}`}
                   />
                 ) : (
-                  <Avatar
-                    isBordered
-                    showFallback
-                    as="button"
-                    className="transition-transform"
-                    color="secondary"
-                    size="sm"
-                  />
+                  <Avatar showFallback as="button" className="transition-transform" color="secondary" size="sm" />
                 )}
               </DropdownTrigger>
               <DropdownMenu aria-label="Profile Actions" variant="flat">
-                <DropdownItem key="mypage" href="/mypage">
-                  마이페이지
+                <DropdownItem key="mypage" textValue="mypage">
+                  <Link href="/mypage" className="flex">
+                    마이페이지
+                  </Link>
                 </DropdownItem>
-                <DropdownItem key="helpdesk">고객센터</DropdownItem>
                 <DropdownItem key="logout" color="danger" onClick={signOut}>
                   LOGOUT
                 </DropdownItem>
@@ -112,9 +118,18 @@ const NavBarContents = () => {
           </div>
         ) : (
           <div>
-            <Link href="/users/login">로그인</Link>
-            <Link href="/users/join">회원가입</Link>
-            <button onClick={signOut}>로그아웃</button>
+            <Link
+              href="/users/login"
+              className="bg-white rounded-[12px] px-[20px] py-[12px] text-[18px] text-[#252642] font-medium"
+            >
+              로그인
+            </Link>
+            <Link
+              href="/users/join"
+              className="bg-mainColor rounded-[12px] px-[20px] py-[12px] text-[18px] text-white font-medium"
+            >
+              회원가입
+            </Link>
           </div>
         )}
       </NavbarContent>

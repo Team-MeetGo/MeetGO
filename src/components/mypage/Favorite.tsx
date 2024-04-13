@@ -2,14 +2,14 @@ import { Chip, Select, SelectItem } from '@nextui-org/react';
 import { useEffect, useState } from 'react';
 import { favoriteOptions } from '(@/utils/FavoriteData)';
 import { clientSupabase } from '(@/utils/supabase/client)';
-import { userStore } from '(@/store/userStore)';
 import { IsEditingType } from '(@/types/userTypes)';
+import { useGetUserDataQuery } from '(@/hooks/useQueries/useUserQuery)';
 
-const Favorite: React.FC<IsEditingType> = (isEdting) => {
+const Favorite: React.FC<IsEditingType> = ({ isEditing }) => {
   const [selected, setSelected] = useState<Set<string>>(new Set([]));
-  const { user, setUser } = userStore((state) => state);
+  const { data: user } = useGetUserDataQuery();
 
-  const handleSelect = (value: string[]) => {
+  const handleSelect = (value: string) => {
     if (selected.size >= 5) {
       alert('최대 5개까지 선택 가능합니다.');
       return;
@@ -37,41 +37,42 @@ const Favorite: React.FC<IsEditingType> = (isEdting) => {
   };
 
   useEffect(() => {
-    // userStore에서 favorite 정보를 가져와서 selected 상태에 설정
     const initialFavorites = new Set(user?.favorite || []);
     setSelected(initialFavorites);
   }, [user]);
 
   return (
-    <div className="flex w-full max-w-xs flex-col gap-2">
-      <label>이상형</label>
-      <div className="flex whitespace-nowrap">
-        <Select
-          label="이상형 선택(최대 5개)"
-          selectionMode="multiple"
-          variant="bordered"
-          selectedKeys={selected}
-          className="max-w-xs"
-          aria-label="이상형 선택"
-          onSelectionChange={(value) => handleSelect(value as string[])}
-        >
-          {favoriteOptions.map((option) => (
-            <SelectItem key={option.value} value={option.value}>
-              {option.value}
-            </SelectItem>
-          ))}
-        </Select>
-        <button className="p-4 border" onClick={updateFavorite}>
-          저장
-        </button>
-      </div>
+    <div className="flex w-full gap-6">
+      <label className="block text-lg font-semibold w-[90px]">이상형</label>
+      {isEditing ? (
+        <div className="flex whitespace-nowrap">
+          <Select
+            label="이상형 선택(최대 5개)"
+            selectionMode="multiple"
+            variant="bordered"
+            selectedKeys={selected}
+            className="max-w-xs"
+            aria-label="이상형 선택"
+            onSelectionChange={(value) => handleSelect(value as string)}
+          >
+            {favoriteOptions.map((option) => (
+              <SelectItem key={option.value} value={option.value}>
+                {option.value}
+              </SelectItem>
+            ))}
+          </Select>
+          <button className="p-4 border" onClick={updateFavorite}>
+            저장
+          </button>
+        </div>
+      ) : null}
       <div className="flex flex-wrap gap-2">
         {Array.from(selected).map((value) => (
           <Chip
             key={value}
             color="default"
             style={{ backgroundColor: favoriteOptions.find((option) => option.value === value)?.color }}
-            {...(isEdting ? { onClose: () => handleDelete(value) } : {})}
+            {...(isEditing ? { onClose: () => handleDelete(value) } : {})}
           >
             {value}
           </Chip>

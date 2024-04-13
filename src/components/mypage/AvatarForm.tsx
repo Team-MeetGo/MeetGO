@@ -1,15 +1,20 @@
+import { useAvatarUpdateMutation } from '(@/hooks/useMutation/useProfileMutation)';
 import { useGetUserDataQuery } from '(@/hooks/useQueries/useUserQuery)';
-import { userStore } from '(@/store/userStore)';
+import { USER_DATA_QUERY_KEY } from '(@/query/user/userQueryKeys)';
 import { clientSupabase } from '(@/utils/supabase/client)';
 import { Avatar, avatar } from '@nextui-org/react';
+import { useQueryClient } from '@tanstack/react-query';
 import Image from 'next/image';
 import { useEffect, useState } from 'react';
+import { IoCamera } from 'react-icons/io5';
 
 const AvatarForm = () => {
-  const { data: user, isPending, isError, error, isLoggedIn } = useGetUserDataQuery();
+  const { data: user, isPending } = useGetUserDataQuery();
   const [file, setFile] = useState(null as File | null);
   const [avatarView, setAvatarView] = useState<string | null>(null);
   const [isEditing, setIsEditing] = useState(false);
+  const { mutate: updateAvatarMutate } = useAvatarUpdateMutation();
+  const queryClient = useQueryClient();
 
   useEffect(() => {
     if (!file) {
@@ -46,88 +51,63 @@ const AvatarForm = () => {
     }
   };
 
-  const uploadAvatar = async () => {
-    const userId = user?.user_id;
-    if (!userId) return;
-    if (!file) return;
-
-    const fileExt = file.name.split('.').pop();
-    const fileName = `avatar.${fileExt}`; // 사용자별 폴더 내에 저장될 파일 이름
-    const filePath = `${userId}/${fileName}`; // 'userId/avatarImg/' 폴더 안에 파일 저장
-
-    // 파일을 Supabase Storage에 업로드
-    let { error: uploadError } = await clientSupabase.storage.from('avatarImg').upload(filePath, file, {
-      cacheControl: '3600',
-      upsert: true
-    });
-
-    if (uploadError) {
-      console.error('Error uploading file:', uploadError);
-      return;
-    }
-
-    // 업로드한 파일의 URL을 가져옴
-    const { data } = clientSupabase.storage.from('avatarImg').getPublicUrl(filePath);
-
-    const publicURL = data.publicUrl;
-
-    // 사용자 프로필을 업데이트하여 새 프로필 사진 URL을 참조하도록 함
-    const { error } = await clientSupabase.from('users').update({ avatar: publicURL }).eq('user_id', userId);
-
-    if (error) {
-      console.error('Error updating user profile:', error);
-    } else {
-      // 사용자 상태 업데이트 - 스토어를 업데이트 해야 됨
-      if (user) {
-        setUser({ ...user, avatar: publicURL });
-        alert('프로필 사진이 업데이트되었습니다.');
-        setIsEditing(!isEditing);
-      } else {
-        console.error('User data is null or empty.');
+  /** 프로필 사진 업데이트 로직 */
+  const handleAvatarUpdate = ({ userId, file }: any) => {
+    updateAvatarMutate(
+      { userId, file },
+      {
+        onSuccess: () => {
+          queryClient.invalidateQueries({
+            queryKey: [USER_DATA_QUERY_KEY]
+          });
+          setIsEditing(false);
+        }
       }
-    }
+    );
   };
 
   return (
-    <div className="flex flex-col justify-center items-center gap-2">
+    <div className="flex flex-col justify-center items-start gap-2 relative">
       {isEditing && <input type="file" onChange={onFileChange} accept="image/*" />}
-      <div className="w-[180px] h-[180px] overflow-hidden flex justify-center items-center rounded-full relative">
-        {avatarView ? (
-          <Image
-            src={avatarView}
-            alt="Avatar Preview"
-            style={{ objectFit: 'cover' }}
-            fill={true}
-            sizes="500px"
-            priority={false}
-          />
-        ) : user?.avatar ? (
-          <Image
-            src={`${user.avatar}?${new Date().getTime()}`}
-            alt="Avatar"
-            style={{ objectFit: 'cover' }}
-            fill={true}
-            sizes="500px"
-            priority={true}
-          />
+      <div className="flex flex-col items-center gap-2">
+        <div className="w-[80px] h-[80px] overflow-hidden flex justify-center items-center rounded-full relative">
+          {avatarView ? (
+            <Image
+              src={avatarView}
+              alt="Avatar Preview"
+              style={{ objectFit: 'cover' }}
+              fill={true}
+              sizes="500px"
+              priority={false}
+            />
+          ) : user?.avatar ? (
+            <Image
+              src={`${user.avatar}?${new Date().getTime()}`}
+              alt="Avatar"
+              style={{ objectFit: 'cover' }}
+              fill={true}
+              sizes="500px"
+              priority={true}
+            />
+          ) : (
+            <Avatar color="secondary" className="w-32 h-32" />
+          )}
+        </div>
+        {isEditing ? (
+          <div className="flex gap-2">
+            <button className="text-xs" onClick={() => handleAvatarUpdate({ userId: user!.user_id, file })}>
+              수정
+            </button>
+            <button className="text-xs" onClick={onFileCancel}>
+              취소
+            </button>
+          </div>
         ) : (
-          <Avatar color="secondary" className="w-32 h-32" />
+          <button className="text-lg rounded-full bg-[#D4D4D8] p-1 right-0 absolute bottom-0" onClick={toggleEdit}>
+            <IoCamera />
+          </button>
         )}
       </div>
-      {isEditing ? (
-        <>
-          <button className="text-xs" onClick={uploadAvatar}>
-            수정
-          </button>
-          <button className="text-xs" onClick={onFileCancel}>
-            취소
-          </button>
-        </>
-      ) : (
-        <button className="text-xs" onClick={toggleEdit}>
-          사진 등록하기
-        </button>
-      )}
     </div>
   );
 };

@@ -19,7 +19,6 @@ export const useUpdateLastMsg = (user_id: string, chatRoomId: string, msg_id: st
     mutationFn: () => updateMyLastMsg(user_id, chatRoomId, msg_id),
     onSuccess: async () => {
       await queryClient.invalidateQueries({ queryKey: [MY_LAST_MSGS_AFTER, user_id, chatRoomId] });
-      console.log('마지막 아이디 업데이트 성공!');
     }
   });
   return { mutate: mutateToUpdate };

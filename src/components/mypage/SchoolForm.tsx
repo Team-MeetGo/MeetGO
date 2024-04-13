@@ -3,10 +3,14 @@
 import { emailCodeAPI, emailConfirmAPI, schoolConfirmAPI } from '(@/utils/api/emailConfirmAPI)';
 import { useState } from 'react';
 import { schoolValidation } from '(@/utils/Validation)';
-import { userStore } from '(@/store/userStore)';
 import { clientSupabase } from '(@/utils/supabase/client)';
+import { useGetUserDataQuery } from '(@/hooks/useQueries/useUserQuery)';
+import { useQueryClient } from '@tanstack/react-query';
+import { useSchoolUpdateMutation } from '(@/hooks/useMutation/useSchoolMutation)';
+import { USER_DATA_QUERY_KEY } from '(@/query/user/userQueryKeys)';
 
 const SchoolForm = () => {
+  const queryClient = useQueryClient();
   const [schoolEmail, setSchoolEmail] = useState('');
   const [univName, setUnivName] = useState('');
   const [code, setCode] = useState('');
@@ -17,22 +21,22 @@ const SchoolForm = () => {
     univName: ''
   });
 
-  const { user, setUser } = userStore((state) => state);
+  const { data: user } = useGetUserDataQuery();
+  const { mutate: updateSchoolMutate } = useSchoolUpdateMutation();
 
-  /** 학교 업데이트하는 로직 */
-  const updateSchool = async () => {
-    const userId = user?.user_id;
-    if (!userId) return;
-    const { error } = await clientSupabase
-      .from('users')
-      .update({ school_email: schoolEmail, school_name: univName, isValidate: true })
-      .eq('user_id', userId);
-    if (error) {
-      console.error('Error updating school:', error);
-    } else {
-      setUser({ ...user, school_email: schoolEmail, school_name: univName, isValidate: true });
-    }
-  };
+  // /** 학교 업데이트하는 로직 */
+  // const updateSchool = async () => {
+  //   const userId = user?.user_id;
+  //   if (!userId) return;
+  //   const { error } = await clientSupabase
+  //     .from('users')
+  //     .update({ school_email: schoolEmail, school_name: univName, isValidate: true })
+  //     .eq('user_id', userId);
+  //   if (error) {
+  //     console.error('Error updating school:', error);
+  //   } else {
+  //   }
+  // };
 
   const onChangeInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -83,7 +87,16 @@ const SchoolForm = () => {
       if (response.success) {
         setIsCodeValid(true); // 인증 코드 유효성 검사 결과 상태 업데이트
         alert('인증 완료');
-        updateSchool();
+        updateSchoolMutate(
+          { userId: user!.user_id, schoolEmail, univName },
+          {
+            onSuccess: () => {
+              queryClient.invalidateQueries({
+                queryKey: [USER_DATA_QUERY_KEY]
+              });
+            }
+          }
+        );
       } else {
         setIsCodeValid(false);
         alert('인증 코드가 유효하지 않습니다.');
@@ -94,9 +107,9 @@ const SchoolForm = () => {
   };
 
   return (
-    <div className="mb-6 flex ">
-      <div className="flex flex-col">
-        <label className="block text-sm font-medium mb-1" htmlFor="schoolEmail">
+    <div className="mb-6 flex flex-col gap-6">
+      <div className="flex gap-6">
+        <label className="block text-lg font-semibold w-[90px]" htmlFor="schoolEmail">
           학교 이메일
         </label>
         {user?.isValidate ? (
@@ -118,8 +131,8 @@ const SchoolForm = () => {
           </>
         )}
       </div>
-      <div className="flex flex-col">
-        <label className="block text-sm font-medium mb-1" htmlFor="univName">
+      <div className="flex gap-6">
+        <label className="block text-lg font-semibold w-[90px]" htmlFor="univName">
           학교명
         </label>
         {user?.isValidate ? (
@@ -140,14 +153,14 @@ const SchoolForm = () => {
             )}
           </>
         )}
+        {user?.isValidate ? (
+          <p>인증완료✔️</p>
+        ) : (
+          <button onClick={onSubmitEmailConfirm} disabled={isCodeSent}>
+            인증
+          </button>
+        )}
       </div>
-      {user?.isValidate ? (
-        <p>인증완료✔️</p>
-      ) : (
-        <button onClick={onSubmitEmailConfirm} disabled={isCodeSent}>
-          인증
-        </button>
-      )}
       {user?.isValidate
         ? null
         : isCodeSent && (

@@ -1,4 +1,6 @@
 import { clientSupabase } from '(@/utils/supabase/client)';
+import { useQueryClient } from '@tanstack/react-query';
+import { MY_LAST_MSGS_BEFORE } from './chatQueryKeys';
 
 export const fetchRoomDataWithChatRoomId = async (chatRoomId: string) => {
   // roomId 불러오기
@@ -51,10 +53,23 @@ export const fetchChatData = async (chatRoomId: string) => {
     .select('*')
     .eq('chatting_room_id', chatRoomId);
   if (chatDataErr) {
-    console.error('chat 데이터 불러오는 중 오류 발생');
+    throw new Error('Error fetching chat data');
   } else {
     return chatData;
   }
+};
+
+export const fetchUserData = async () => {
+  // 유저 데이터 가져오기
+  const {
+    data: { user }
+  } = await clientSupabase.auth.getUser();
+
+  if (user) {
+    const { data: userData } = await clientSupabase.from('users').select('*').eq('user_id', String(user.id));
+    if (userData) return userData[0];
+  }
+  return null;
 };
 
 // 내 채팅방들의 아이디
@@ -78,15 +93,18 @@ export const fetchMyChatRoomIds = async (userId: string) => {
 };
 
 // 내가 본 마지막 메세지들의 아이디
-export const fetchMyLastMsgs = async (user_id: string, chatRoomId: string) => {
+export const fetchMyLastMsgs = async (user_id: string, chatRoomId: string | null) => {
   const { data: lastMsgs, error } = await clientSupabase
     .from('remember_last_msg')
     .select('last_msg_id')
     .eq('user_id', user_id)
-    .eq('chatting_room_id', chatRoomId);
+    .eq('chatting_room_id', String(chatRoomId));
   if (error) console.error('마지막 메세지를 가져오는 데 실패했습니다.', error.message);
   // console.log('잘 가져오는 거 맞아?', lastMsgs && lastMsgs[0].last_msg_id);
-  return lastMsgs;
+  if (lastMsgs && lastMsgs.length) {
+    return lastMsgs[0].last_msg_id;
+  }
+  return null;
 };
 
 export const addNewLastMsg = async (chatRoomId: string, user_id: string, last_msg_id: string | undefined) => {
@@ -110,4 +128,17 @@ export const updateMyLastMsg = async (user_id: string, chatRoomId: string, msg_i
   console.log('업데이트 된 메세지 아이디 => ', updatedLastMsg && updatedLastMsg[0].last_msg_id);
   if (error) console.error('마지막 메세지 업데이트 실패 =>', error.message);
   return updateMyLastMsg;
+};
+
+// 미팅 장소 추가
+export const addMeetingLocation = async ({ chatRoomId, barName }: { chatRoomId: string; barName: string }) => {
+  if (!chatRoomId) {
+    console.log('유저가 없어요');
+  }
+  await clientSupabase.from('chatting_room').update({ meeting_location: barName }).eq('chatting_room_id', chatRoomId);
+};
+
+// 미팅 장소 제거
+export const deleteMeetingLocation = async (chatRoomId: string) => {
+  await clientSupabase.from('chatting_room').update({ meeting_location: null }).eq('chatting_room_id', chatRoomId);
 };

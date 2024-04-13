@@ -1,3 +1,4 @@
+import { UpdateSchoolType } from '(@/types/userTypes)';
 import { clientSupabase } from '(@/utils/supabase/client)';
 
 // supabase Insert, Delete, Update
@@ -46,7 +47,7 @@ export const updateProfile = async (
     console.error('Error fetching:', nicknameError);
     return;
   }
-  if (nicknameData) {
+  if (nicknameData && nicknameData.length > 0) {
     alert('이미 사용중인 닉네임입니다. 다른 닉네임을 입력해주세요.');
     return;
   }
@@ -60,4 +61,53 @@ export const updateProfile = async (
       gender: inputGender
     })
     .eq('user_id', userId);
+};
+
+/** 학교 업데이트하는 로직 */
+export const updateSchool = async ({ userId, schoolEmail, univName }: UpdateSchoolType) => {
+  const { error } = await clientSupabase
+    .from('users')
+    .update({ school_email: schoolEmail, school_name: univName, isValidate: true })
+    .eq('user_id', userId);
+  if (error) {
+    console.error('Error updating school:', error);
+  }
+  console.log('학생 인증 성공!');
+  return;
+};
+
+/** 프로필 사진 업데이트 */
+export const updateAvatar = async (userId: string, file: File) => {
+  if (!userId || !file) {
+    console.error('Invalid user ID or file');
+    return;
+  }
+
+  const fileExt = file.name.split('.').pop();
+  const fileName = `avatar.${fileExt}`;
+  const filePath = `${userId}/${fileName}`;
+
+  // 파일 업로드
+  let { error: uploadError, data: uploadData } = await clientSupabase.storage.from('avatarImg').upload(filePath, file, {
+    cacheControl: '3600',
+    upsert: true
+  });
+
+  if (uploadError) throw new Error('Error uploading file');
+
+  // 파일 URL 가져오기
+  const { data: urlData } = await clientSupabase.storage.from('avatarImg').getPublicUrl(filePath);
+  const publicURL = urlData.publicUrl;
+
+  // 사용자 프로필 업데이트
+  const { error: updateUserError } = await clientSupabase
+    .from('users')
+    .update({ avatar: publicURL })
+    .eq('user_id', userId);
+
+  if (updateUserError) {
+    console.error('Error updating user profile:', updateUserError);
+    return;
+  }
+  return publicURL;
 };
