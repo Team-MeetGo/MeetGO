@@ -139,7 +139,6 @@ const ChatList = ({ user, chatRoomId }: { user: User | null; chatRoomId: string 
         lastMsgId ? mutateToUpdate() : mutateToAdd();
         mutateClearUnread(chatRoomId);
       }
-      setMessages([]);
     };
   }, []);
 

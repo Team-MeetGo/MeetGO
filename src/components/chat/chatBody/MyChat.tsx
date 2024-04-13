@@ -25,7 +25,9 @@ const MyChat = ({ msg, idx, lastDivRefs }: { msg: Message; idx: number; lastDivR
             <p>{getformattedDate(msg.created_at)}</p>
           </div>
         </div>
-        <div className="h-14 w-14 bg-indigo-600 rounded-full my-auto">{msg.avatar}</div>
+        <div className="h-14 w-14 bg-indigo-600 rounded-full my-auto">
+          <img src={msg.avatar} alt="유저 이미지"></img>
+        </div>
       </div>
     </>
   );

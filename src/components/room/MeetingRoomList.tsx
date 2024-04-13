@@ -2,20 +2,15 @@
 import meetingRoomHandler from '(@/hooks/custom/room)';
 import { useMyroomQuery, useRecruitingQuery } from '(@/hooks/useQueries/useMeetingQuery)';
 import { useSearchRoomStore } from '(@/store/searchRoomStore)';
-import { useCallback, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { IoIosArrowBack, IoIosArrowForward, IoMdRefresh } from 'react-icons/io';
 import MeetingRoom from './MeetingRoom';
 import MeetingRoomForm from './MeetingRoomForm';
 import MemberNumberSelection from './MemberNumberSelection';
 import RegionSelection from './RegionSelection';
-
 import { useGetUserDataQuery } from '(@/hooks/useQueries/useUserQuery)';
 import type { MeetingRoomType, MeetingRoomTypes } from '(@/types/roomTypes)';
-import { clientSupabase } from '(@/utils/supabase/client)';
-import { useMyChatRoomIdsQuery, useMyMsgData } from '(@/hooks/useQueries/useChattingQuery)';
-import { fetchAlreadyChatRoom } from '(@/query/meetingRoom/meetingQueryFns)';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { useUpdateNewMsg } from '(@/hooks/useMutation/useChattingMutation)';
+import { useMyMsgData } from '(@/hooks/useQueries/useChattingQuery)';
 
 function MeetingRoomList() {
   const [page, setPage] = useState(1);

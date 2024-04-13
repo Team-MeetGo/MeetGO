@@ -12,6 +12,7 @@ const InitChatRealTime = () => {
   console.log('myMsgData =>', myMsgData);
   console.log(myMsgData?.map((m) => m.newMsgCount));
   const { mutate: mutateNewMsgNum } = useUpdateNewMsg();
+
   useEffect(() => {
     const channel = clientSupabase
       .channel('new_Message_Count')
