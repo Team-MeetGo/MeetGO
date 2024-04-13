@@ -20,84 +20,15 @@ import { useUpdateNewMsg } from '(@/hooks/useMutation/useChattingMutation)';
 function MeetingRoomList() {
   const [page, setPage] = useState(1);
   const { data: user, isPending, isError, error } = useGetUserDataQuery();
-  console.log(user);
   const { data: meetingRoomList } = useRecruitingQuery(String(user?.user_id));
   const myRoomList = useMyroomQuery(String(user?.user_id));
   const { selectRegion, selectMemberNumber } = useSearchRoomStore();
 
   const myMsgData = useMyMsgData(user?.user_id!);
   console.log('myMsgData =>', myMsgData);
-  console.log(myMsgData?.map((m) => m.newMsgCount));
-  const { mutate: mutateNewMsgNum } = useUpdateNewMsg();
 
   const [chattingRoomList, setChattingRoomList] = useState<MeetingRoomTypes>();
   const { getChattingRoom } = meetingRoomHandler();
-
-  useEffect(() => {
-    const channel = clientSupabase
-      .channel('new_Message_Count')
-      .on(
-        'postgres_changes',
-        {
-          event: 'INSERT',
-          schema: 'public',
-          table: 'messages'
-        },
-        (payload) => {
-          console.log('payload', payload);
-          mutateNewMsgNum(payload.new.chatting_room_id);
-        }
-      )
-      .subscribe();
-
-    return () => {
-      clientSupabase.removeChannel(channel);
-    };
-  }, [mutateNewMsgNum]);
-
-  // const { data: chatCountArr } = useMyChatRoomsQuery(user?.user_id);
-  // const [msgCountArr, setMsgCountArr] = useState(
-  //   myChatRooms?.map((room) => {
-  //     return { roomId: room?.roomId, chatRoomId: room.chatRoomId, newMsgCount: 0 };
-  //   })
-  // );
-  // console.log('이거 변하는지 봐바 =>', msgCountArr);
-
-  // const handlePlusMsgCount = useCallback(
-  //   (id: string) => {
-  //     if (msgCountArr) {
-  //       const newCountArr = [...msgCountArr];
-  //       const theItem = newCountArr.find((item) => item.chatRoomId === id);
-  //       if (theItem) theItem.newMsgCount += 1;
-  //       setMsgCountArr(newCountArr);
-  //     }
-  //   },
-  //   [msgCountArr]
-  // );
-
-  // const;
-  // const useHandlePlusMsgCount = (id: string) => {
-  //   useMutation({
-  //     mutationFn: () => handlePlusCount(id)
-  //   });
-  // };
-
-  // const { date: handlePlusCount } = useHandlePlusMsgCount();
-
-  // const handlePlusCount = async (id: string) => {
-  //   const foundItem = chatCountArr && chatCountArr.find((item) => item.chatRoomId === id);
-  //   foundItem && (await foundItem?.newMsgCount) + 1;
-  //   return;
-  // };
-
-  // const clearMsgCount = (id: string) => {
-  //   if (msgCountArr) {
-  //     const newCountArr = [...msgCountArr];
-  //     const theItem = newCountArr.find((item) => item.chatRoomId === id);
-  //     if (theItem) theItem.newMsgCount = 0;
-  //     setMsgCountArr(newCountArr);
-  //   }
-  // };
 
   useEffect(() => {
     const getMeetingRoomList = async () => {
@@ -144,10 +75,6 @@ function MeetingRoomList() {
   return (
     <div className="flex flex-col items-center justify-content">
       <main className="flex flex-col items-center justify-content min-w-[1116px] max-w-[1440px]">
-        <div>
-          <button onClick={() => mutateNewMsgNum('d2bf4d7e-6338-47f5-8cf9-a5ae054f59da')}>버튼버튼</button>
-          <h1>{myMsgData && myMsgData[0].newMsgCount}</h1>
-        </div>
         <article className="h-[366px] mt-[88px] border-b border-gray2">
           <div className="flex flex-row justify-between">
             <div className="text-[40px] font-semibold">참여 중</div>

@@ -126,7 +126,6 @@ export const addNewLastMsg = async (
       last_msg_id: String(last_msg_id)
     })
     .select('*');
-  console.log('addedlastMsg =>', addedlastMsg);
   console.log('새로 추가된 마지막 메세지', addedlastMsg && addedlastMsg[0].last_msg_id);
   if (error) console.error('마지막 메세지 추가하기 실패 => ', error.message);
   return addedlastMsg;
@@ -145,6 +144,7 @@ export const updateMyLastMsg = async (user_id: string, chatRoomId: string, msg_i
   return updateMyLastMsg;
 };
 
+// 안 읽은 메세지 수 추가
 export const updateNewMsgNum = async (chatting_room_id: string) => {
   const { data: oldCount } = await clientSupabase
     .from('remember_last_msg')
@@ -156,10 +156,22 @@ export const updateNewMsgNum = async (chatting_room_id: string) => {
       .update({ newMsgCount: oldCount[0].newMsgCount + 1 })
       .eq('chatting_room_id', chatting_room_id)
       .select('*');
-    console.log('이거 왜 출력이 안돼 =>', updatedNewMsgNum && updatedNewMsgNum[0].newMsgCount);
+    console.log('업데이트 된 안 읽은 메세지 수 =>', updatedNewMsgNum && updatedNewMsgNum[0].newMsgCount);
     if (error) console.error('새로운 메세지 count UP 실패', error.message);
     return updatedNewMsgNum;
   }
+};
+
+// 안 읽은 메세지 수 초기화
+export const clearUnReadMsgNum = async (chatting_room_id: string) => {
+  const { data: clearedNewMsgNum, error } = await clientSupabase
+    .from('remember_last_msg')
+    .update({ newMsgCount: 0 })
+    .eq('chatting_room_id', chatting_room_id)
+    .select('*');
+  if (error) console.error('안 읽은 메세지 수 초기화 실패', error.message);
+  console.log('안 읽은 메세지 수 초기화 0으로 잘 됨? =>', clearedNewMsgNum);
+  // return clearedNewMsgNum
 };
 
 // 미팅 장소 추가

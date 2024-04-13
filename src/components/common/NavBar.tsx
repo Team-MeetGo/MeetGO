@@ -1,4 +1,5 @@
 import InitUser from '../user/InitUser';
+import InitChatRealTime from './InitChatRealTime';
 import NavBarContents from './NavBarContents';
 
 const NavBar = async () => {
@@ -6,6 +7,7 @@ const NavBar = async () => {
     <>
       {/* <InitUser /> */}
       <NavBarContents />
+      <InitChatRealTime />
     </>
   );
 };

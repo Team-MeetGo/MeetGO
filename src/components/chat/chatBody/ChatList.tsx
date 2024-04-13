@@ -10,10 +10,13 @@ import { chatStore } from '(@/store/chatStore)';
 import OthersChat from './OthersChat';
 import ChatSearch from './ChatSearch';
 import { useMyLastMsgs, useRoomDataQuery } from '(@/hooks/useQueries/useChattingQuery)';
-import { useAddLastMsg, useUpdateLastMsg } from '(@/hooks/useMutation/useChattingMutation)';
+import {
+  useAddLastMsg,
+  useClearNewMsgNum,
+  useUpdateLastMsg,
+  useUpdateNewMsg
+} from '(@/hooks/useMutation/useChattingMutation)';
 import MyChat from './MyChat';
-import { useQueryClient } from '@tanstack/react-query';
-import { MY_MSG_DATA } from '(@/query/chat/chatQueryKeys)';
 
 const ChatList = ({ user, chatRoomId }: { user: User | null; chatRoomId: string }) => {
   const scrollRef = useRef() as React.MutableRefObject<HTMLDivElement>;
@@ -29,7 +32,9 @@ const ChatList = ({ user, chatRoomId }: { user: User | null; chatRoomId: string 
   const prevMsgsLengthRef = useRef(messages.length);
   const lastDivRefs = useRef(messages);
   const lastMsgId = useMyLastMsgs(user?.id!, chatRoomId);
-  const queryClient = useQueryClient();
+  // const queryClient = useQueryClient();
+  const { mutate: mutateClearUnread } = useClearNewMsgNum();
+  console.log(messages);
 
   console.log('DB의 마지막 메세지 =>', lastMsgId);
   // console.log('찐 마지막 메세지 =>', messages[messages.length - 1].message_id);
@@ -122,14 +127,19 @@ const ChatList = ({ user, chatRoomId }: { user: User | null; chatRoomId: string 
   // 마지막으로 읽은 메세지 기억하기
   useEffect(() => {
     console.log('useEffect 안 실행되는 건 맞아?');
-    // 현재 나누는 메세지가 있을 때
+
     return () => {
       console.log('실행은 되니');
+      // 왜 처음에 방을 만들어서 들어간 뒤, 메세지를 남기면 나오기 직전에는 아닌데 나올때는 messages.length가 0이 출력될까?
+      console.log(messages.length);
+      console.log(lastMsgId);
+      // 현재 나누는 메세지가 있을 때
       // 이전에 저장된 마지막 메세지가 있으면 현재 메세지 중 마지막 걸로 업데이트, 없으면 현재 메세지 중 마지막 메세지 추가하기
       if (messages.length) {
         lastMsgId ? mutateToUpdate() : mutateToAdd();
-        queryClient.invalidateQueries({ queryKey: [MY_MSG_DATA] });
+        mutateClearUnread(chatRoomId);
       }
+      setMessages([]);
     };
   }, []);
 
