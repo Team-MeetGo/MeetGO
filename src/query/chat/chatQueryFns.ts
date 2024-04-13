@@ -117,18 +117,25 @@ export const addNewLastMsg = async (
   user_id: string,
   last_msg_id: string | undefined
 ) => {
-  const { data: addedlastMsg, error } = await clientSupabase
+  const { data: alreadyRow } = await clientSupabase
     .from('remember_last_msg')
-    .insert({
-      chatting_room_id: String(chatRoomId),
-      room_id: String(roomId),
-      user_id: String(user_id),
-      last_msg_id: String(last_msg_id)
-    })
-    .select('*');
-  console.log('새로 추가된 마지막 메세지', addedlastMsg && addedlastMsg[0].last_msg_id);
-  if (error) console.error('마지막 메세지 추가하기 실패 => ', error.message);
-  return addedlastMsg;
+    .select('chatting_room_id')
+    .eq('chatting_room_id', chatRoomId)
+    .eq('user_id', user_id);
+  if (!alreadyRow) {
+    const { data: addedlastMsg, error } = await clientSupabase
+      .from('remember_last_msg')
+      .insert({
+        chatting_room_id: String(chatRoomId),
+        room_id: String(roomId),
+        user_id: String(user_id),
+        last_msg_id: String(last_msg_id)
+      })
+      .select('*');
+    console.log('새로 추가된 마지막 메세지', addedlastMsg && addedlastMsg[0].last_msg_id);
+    if (error) console.error('마지막 메세지 추가하기 실패 => ', error.message);
+    return addedlastMsg;
+  }
 };
 
 // DB에 마지막 메세지 업데이트

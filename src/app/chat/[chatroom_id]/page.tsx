@@ -8,7 +8,6 @@ import ChatLoading from '(@/components/chat/ChatLoading)';
 import { getFromTo } from '(@/utils)';
 import { ITEM_INTERVAL } from '(@/utils/constant)';
 import ChatList from '(@/components/chat/chatBody/ChatList)';
-import RememberLastChat from '(@/components/chat/chatFooter/RememberLastChat)';
 
 const ChatPage = async ({ params }: { params: { chatroom_id: string } }) => {
   const chatRoomId = params.chatroom_id;
@@ -35,7 +34,6 @@ const ChatPage = async ({ params }: { params: { chatroom_id: string } }) => {
               <ChatList user={user} chatRoomId={chatRoomId} />
             </Suspense>
             <ChatInput />
-            {/* <RememberLastChat user={user} chatRoomId={chatRoomId} /> */}
           </div>
         </div>
       </div>

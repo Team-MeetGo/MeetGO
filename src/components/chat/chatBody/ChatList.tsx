@@ -10,7 +10,7 @@ import { chatStore } from '(@/store/chatStore)';
 import OthersChat from './OthersChat';
 import ChatSearch from './ChatSearch';
 import { useMyLastMsgs, useRoomDataQuery } from '(@/hooks/useQueries/useChattingQuery)';
-import { useAddLastMsg, useClearNewMsgNum, useUpdateLastMsg } from '(@/hooks/useMutation/useChattingMutation)';
+import { useClearNewMsgNum } from '(@/hooks/useMutation/useChattingMutation)';
 import MyChat from './MyChat';
 import RememberLastChat from '../chatFooter/RememberLastChat';
 
