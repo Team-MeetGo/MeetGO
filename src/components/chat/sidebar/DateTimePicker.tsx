@@ -6,8 +6,7 @@ import 'react-datepicker/dist/react-datepicker.css';
 import DateCustomeInput from './DateCustomeInput';
 import { ko } from 'date-fns/locale';
 import { getMonth, getYear } from 'date-fns';
-import { IoChevronBackSharp } from 'react-icons/io5';
-import { IoChevronForwardSharp } from 'react-icons/io5';
+import { IoIosArrowForward, IoIosArrowBack } from 'react-icons/io';
 import { userStore } from '(@/store/userStore)';
 import { useChatDataQuery, useRoomDataQuery } from '(@/hooks/useQueries/useChattingQuery)';
 import { useUpdateMeetingTimeMutation } from '(@/hooks/useMutation/useMeetingTimeMutation)';
@@ -88,16 +87,16 @@ const DateTimePicker: React.FC<DateTimePickerProps> = forwardRef(({ chatRoomId }
           <div className="flex flex-row justify-center">
             <button onClick={decreaseMonth} disabled={prevMonthButtonDisabled}>
               {prevMonthButtonDisabled ? (
-                <IoChevronBackSharp className="text-white" />
+                <IoIosArrowBack className="text-white" />
               ) : (
-                <IoChevronBackSharp className="text-gray-500" />
+                <IoIosArrowBack className="text-gray-500" />
               )}
             </button>
             <div className="px-4 text-black text-base">
               {getYear(date)}년 {months[getMonth(date)]}
             </div>
             <button onClick={increaseMonth} disabled={nextMonthButtonDisabled}>
-              <IoChevronForwardSharp className="text-gray-500" />
+              <IoIosArrowForward className="text-gray-500" />
             </button>
           </div>
         )}
