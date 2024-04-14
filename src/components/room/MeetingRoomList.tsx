@@ -162,8 +162,8 @@ function MeetingRoomList() {
     <>
       <article className="h-[366px] mt-[88px] border-b border-gray2 min-w-[1116px] max-w-[1440px]">
         <div className="flex flex-row w-full justify-between">
-          <div className="text-[40px] font-semibold ml-[12px]">참여 중</div>
-          <div className="flex flex-row align-middle justify-center gap-4 mr-[12px]">
+          <div className="text-[40px] font-semibold ml-[56px]">참여 중</div>
+          <div className="flex flex-row align-middle justify-center gap-4 mr-[56px]">
             <div className="flex flex-col align-middle justify-center text-gray2">
               <button
                 className="h-full"
@@ -181,7 +181,7 @@ function MeetingRoomList() {
         <div className="h-[24px]"></div>
         <div className="w-full flex flex-row items-center justify-content">
           <button onClick={() => beforePage()}>
-            <IoIosArrowBack className="h-8 w-8" />
+            <IoIosArrowBack className="h-[40px] w-[40px] m-[8px]" />
           </button>
           {
             <div className="h-[241px] gap-[24px] grid grid-cols-3 w-full px-4">
@@ -202,7 +202,7 @@ function MeetingRoomList() {
             </div>
           }
           <button onClick={() => nextPage()}>
-            <IoIosArrowForward className="h-8 w-8 m-2" />
+            <IoIosArrowForward className="h-[40px] w-[40px] m-[8px]" />
           </button>
         </div>
         <div className="h-[40px]"></div>

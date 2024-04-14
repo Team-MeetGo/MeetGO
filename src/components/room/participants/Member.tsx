@@ -89,7 +89,7 @@ const Member = ({ room_id }: { room_id: string }) => {
     <>
       <div className="flex flex-col items-center justify-content">
         <div className="flex flex-col items-center justify-content min-w-[1116px] max-w-[1440px]">
-          <main className="mt-[40px] grid grid-cols-4 grid-rows-2 w-100%">
+          <main className="mt-[40px] grid grid-cols-2 grid-rows-4 w-100%">
             <div>
               {members.map((member) => (
                 <article
@@ -99,9 +99,9 @@ const Member = ({ room_id }: { room_id: string }) => {
                   {/* 카드 왼쪽 */}
                   <div className="mx-[40px] justify-items-center align-middle items-center">
                     <div className="w-[86px] h-[86px] mt-[32px] border-4 mr-[48px] ">
-                      {leader === member.user_id ? (
+                      {leaderMember === member.user_id ? (
                         <div>
-                          <FaCrown />
+                          <FaCrown className="h-[20px] w-[20px] m-[2px] fill-mainColor" />
                         </div>
                       ) : (
                         ''
@@ -114,7 +114,7 @@ const Member = ({ room_id }: { room_id: string }) => {
                   {/* 카드 오른쪽 */}
                   <div className="flex flex-col mt-[32px] mb-[32px]">
                     <div>{member.school_name}</div>
-                    <div className="py-[16px]">{member.favorite}</div>
+                    <div className="py-[16px] ">{member.favorite}</div>
                     <div>{member.intro}</div>
                   </div>
                 </article>
