@@ -65,7 +65,7 @@ const NavBarContents = () => {
       </NavbarBrand>
       <NavbarContent className="hidden sm:flex gap-4 h-auto" justify="center">
         <NavbarItem>
-          <Link color="foreground" href="/meetingRoom" onClick={() => {}}>
+          <Link color="foreground" href={isValidate ? '/meetingRoom' : '/mypage'} onClick={() => checkIsValidate()}>
             로비
           </Link>
         </NavbarItem>

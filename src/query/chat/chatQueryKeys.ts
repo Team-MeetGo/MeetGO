@@ -8,6 +8,8 @@ export const MYCHAT_ROOMIDS = ['myChatRoomIds'];
 
 export const MY_LAST_MSGS = ['myLastMsgs'];
 
+export const MY_MSG_DATA = ['myMsgData'];
+
 export const MEETING_LOCATION_QUERY_KEY = ['meetingLocation'];
 
 export const MY_LAST_MSGS_BEFORE = ['myLastMsgs_before'];
