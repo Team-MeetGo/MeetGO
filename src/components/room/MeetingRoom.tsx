@@ -32,8 +32,8 @@ function MeetingRoom({ room }: { room: MeetingRoomType }) {
 
   const addMember = async ({ room_id }: { room_id: string }) => {
     //채팅창: 채팅창으로 이동
-    if (alreadyChatRoom) {
-      console.log(alreadyChatRoom);
+    if (alreadyChatRoom?.length === 1) {
+      console.log('alreadyChatRoom', alreadyChatRoom);
       return router.replace(`/chat/${alreadyChatRoom[0].chatting_room_id}`);
     }
     //수락창: 이미 참여한 방

@@ -22,7 +22,6 @@ function MeetingRoomList() {
   const { selectRegion, selectMemberNumber } = useSearchRoomStore();
 
   const myMsgData = useMyMsgData(user?.user_id!);
-  console.log('myMsgData =>', myMsgData);
 
   // meetingRoomList 중에서 myRoomList가 없는 것을 뽑아내기
   const otherRooms = meetingRoomList?.filter(function (room: MeetingRoomType) {
@@ -104,9 +103,7 @@ function MeetingRoomList() {
       observer.unobserve(currentRef);
     }
   }, [currentRef, scrollPage]);
-  const onReload = () => {
-    window.location.reload();
-  };
+  const onReload = () => {};
 
   return (
     <>
