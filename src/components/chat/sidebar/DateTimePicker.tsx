@@ -1,6 +1,6 @@
 'use client';
 
-import React, { forwardRef, useRef, useState } from 'react';
+import React, { forwardRef, useEffect, useRef, useState } from 'react';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import DateCustomeInput from './DateCustomeInput';
@@ -18,8 +18,7 @@ interface DateTimePickerProps {
 
 const DateTimePicker: React.FC<DateTimePickerProps> = forwardRef(({ chatRoomId }, ref) => {
   const chat = useChatDataQuery(chatRoomId);
-  const meetingTime = new Date(String(chat?.[0]?.meeting_time));
-  const [selectedMeetingTime, setSelectedMeetingTime] = useState<Date | null>(meetingTime);
+  const [selectedMeetingTime, setSelectedMeetingTime] = useState<Date | null>();
   const [isCalendarOpen, setIsCalendarOpen] = useState<boolean>(false);
   const datePickerRef = useRef<DatePicker>(null);
 
@@ -29,8 +28,12 @@ const DateTimePicker: React.FC<DateTimePickerProps> = forwardRef(({ chatRoomId }
 
   const toggleCalendar = () => {
     setIsCalendarOpen(!isCalendarOpen);
-    console.log(selectedMeetingTime);
   };
+
+  useEffect(() => {
+    const meetingTime = new Date(String(chat?.[0]?.meeting_time));
+    setSelectedMeetingTime(meetingTime);
+  }, []);
 
   const { mutate: updateMeetingTime } = useUpdateMeetingTimeMutation();
 
@@ -44,7 +47,7 @@ const DateTimePicker: React.FC<DateTimePickerProps> = forwardRef(({ chatRoomId }
         locale={ko} // 한국어
         showPopperArrow={false} // 위에 삼각형 제거
         wrapperClassName="w-full z-100"
-        selected={selectedMeetingTime}
+        selected={selectedMeetingTime ? selectedMeetingTime : new Date()}
         onChange={(date) => {
           setSelectedMeetingTime(date as Date);
           if (date) {
