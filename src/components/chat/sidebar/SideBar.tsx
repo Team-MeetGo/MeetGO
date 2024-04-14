@@ -48,9 +48,9 @@ const SideBar: React.FC<SideBarProps> = ({ chatRoomId }) => {
         {isSidebarOpen && (
           <div className="pt-8">
             <h1 className="font-semibold text-2xl mb-2">미팅 날짜/시간</h1>
-            <Card className="border border-mainColor shadow-none h-[60px]">
-              <CardBody>
-                <p className=" justify-start items-center text-lg">{convertedTime}</p>
+            <Card className="h-[60px] border border-mainColor rounded-[9px] shadow-none h-[60px]">
+              <CardBody className="flex flex-row justify-start items-center text-lg">
+                <p>{convertedTime}</p>
               </CardBody>
             </Card>
             <Map chatRoomId={chatRoomId} />
