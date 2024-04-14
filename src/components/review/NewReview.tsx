@@ -1,6 +1,6 @@
 import { useState, ChangeEvent, FormEvent } from 'react';
 import Image from 'next/image';
-import { Button, Checkbox, Modal, ModalBody, ModalContent, useDisclosure } from '@nextui-org/react';
+import { Button, Checkbox, Modal, ModalBody, ModalContent, ModalHeader, useDisclosure } from '@nextui-org/react';
 import { MdCancel } from 'react-icons/md';
 import { LuImagePlus } from 'react-icons/lu';
 import { FaCheck } from 'react-icons/fa6';
@@ -100,109 +100,118 @@ const NewReview = () => {
 
   return (
     <>
-      <Button onPress={onOpen} color="primary">
-        새 리뷰 등록
+      <Button onPress={onOpen} color="primary" className="text-[16px] p-[16px] bg-mainColor w-[128px] h-[51px]">
+        리뷰 작성하기
       </Button>
-      <Modal isOpen={isOpen} onClose={handleClose} placement="top-center" className="bg-[#F2EAFA]">
-        <ModalContent className="w-full flex justify-center items-center" style={{ maxWidth: '1000px' }}>
+      <Modal isOpen={isOpen} onClose={handleClose} placement="top-center" className="bg-purpleSecondary">
+        <ModalContent
+          className="w-full flex justify-center items-center"
+          style={{ maxWidth: '1116px', minHeight: '830px' }}
+        >
           {(onClose) => (
-            <form className="w-full flex flex-col mt-2 bg-[#F2EAFA]" onSubmit={handleSubmit}>
-              <div className=" p-8 rounded-[30px]">
-                <ModalBody>
-                  <div className="flex gap-2 mt-[10px] mb-[10px] relative">
-                    {files.length <= 4 && (
-                      <div className="flex justify-center gap-2">
-                        {files.map((file, index) => (
-                          <div key={index} className="relative absolute w-[150px] h-[150px] aspect-square">
-                            <Image
-                              className="object-cover rounded-[20px]"
-                              src={URL.createObjectURL(file)}
-                              alt={`local file ${index}`}
-                              fill
-                            />
-                            <button
-                              className="absolute top-0 right-0 p-2  rounded-full w-8 h-8"
-                              onClick={(e) => {
-                                e.preventDefault();
-                                handleDeleteImage(index);
-                              }}
-                            >
-                              <MdCancel />
-                            </button>
-                          </div>
-                        ))}
+            <>
+              <ModalHeader className="flex w-full h-[112px] justify-center items-center flex-col gap-1 bg-purpleSecondary">
+                <p className="w-full text-[40px]">리뷰 작성하기</p>
+              </ModalHeader>
+              <form className="w-full p-[32px] flex flex-col bg-white" onSubmit={handleSubmit}>
+                <div className="rounded-[30px]">
+                  <ModalBody>
+                    <div className="flex gap-2 mb-[32px] relative">
+                      {files.length <= 4 && (
+                        <div className="flex justify-center gap-2">
+                          {files.map((file, index) => (
+                            <div key={index} className="relative absolute w-[140px] h-[140px] aspect-square">
+                              <Image
+                                className="object-cover rounded-[10px]"
+                                src={URL.createObjectURL(file)}
+                                alt={`local file ${index}`}
+                                fill
+                              />
+                              <button
+                                className="absolute top-0 right-0 p-2  rounded-full w-8 h-8"
+                                onClick={(e) => {
+                                  e.preventDefault();
+                                  handleDeleteImage(index);
+                                }}
+                              >
+                                <MdCancel />
+                              </button>
+                            </div>
+                          ))}
+                        </div>
+                      )}
+                      <div>
+                        <input
+                          className="hidden items-center justify-center"
+                          name="input"
+                          id="input-upload"
+                          type="file"
+                          accept="image/*"
+                          multiple
+                          onChange={handleChange}
+                        />
+                        <label
+                          className={`flex items-center ${files.length === 0 && 'rounded-[10px]'}`}
+                          htmlFor="input-upload"
+                          onDragEnter={handleDrag}
+                          onDragLeave={handleDrag}
+                          onDragOver={handleDragOver}
+                          onDrop={handleDrop}
+                        >
+                          {dragging && <div className="inset-0 z-10 bg-sky-500/20 pointer-events-none" />}
+                          {files.length < 4 && (
+                            <div className="flex items-center justify-center pointer-events-none rounded-[10px] w-[140px] h-[140px] bg-gray-300">
+                              <LuImagePlus className="w-20 h-20 text-[#A1A1AA]" />
+                            </div>
+                          )}
+                        </label>
                       </div>
-                    )}
-
-                    <div>
-                      <input
-                        className="hidden items-center justify-center"
-                        name="input"
-                        id="input-upload"
-                        type="file"
-                        accept="image/*"
-                        multiple
-                        onChange={handleChange}
-                      />
-                      <label
-                        className={`flex items-center ${files.length === 0 && 'rounded-[10px]'}`}
-                        htmlFor="input-upload"
-                        onDragEnter={handleDrag}
-                        onDragLeave={handleDrag}
-                        onDragOver={handleDragOver}
-                        onDrop={handleDrop}
-                      >
-                        {dragging && <div className="inset-0 z-10 bg-sky-500/20 pointer-events-none" />}
-                        {files.length < 4 && (
-                          <div className="flex items-center justify-center pointer-events-none rounded-[20px] w-[150px] h-[150px] bg-gray-300">
-                            <LuImagePlus className="w-20 h-20 text-[#A1A1AA]" />
-                          </div>
-                        )}
-                      </label>
                     </div>
-                  </div>
-                  <textarea
-                    autoFocus
-                    id="review_title"
-                    required
-                    rows={1}
-                    placeholder="제목을 입력해주세요."
-                    className="outline-none text-lg border-1 rounded-[10px] resize-none border-[#8F5DF4] p-[8px] pl-4 mb-2"
-                    maxLength={20}
-                  />
-                  <textarea
-                    id="review_contents"
-                    required
-                    placeholder="내용을 입력해주세요.(200자 이내)"
-                    className="outline-none text-lg resize-none border-1 rounded-[10px] p-[15px] border-[#8F5DF4]"
-                    rows={6}
-                    maxLength={200}
-                  />
-                  <Checkbox
-                    defaultSelected={showNickname}
-                    onChange={() => setShowNickname(!showNickname)}
-                    className="text-black"
-                    icon={<FaCheck />}
-                  >
-                    익명으로 게시
-                  </Checkbox>
-                  <div className="flex gap-2 justify-end">
-                    <Button
-                      onClick={handleClose}
-                      className="w-[50px] h-[50px] rounded-[10px] flex justify-center items-center bg-white text-[#A1A1AA] border-1 border-[#A1A1AA]"
+                    <textarea
+                      autoFocus
+                      id="review_title"
+                      required
+                      rows={1}
+                      placeholder="제목을 입력해주세요."
+                      className="outline-none border-1 rounded-[10px] resize-none border-mainColor pt-[16px] pb-[16px] pl-[24px] mb-2 max-w-[1050px] text-[30px]"
+                      maxLength={20}
+                    />
+                    <textarea
+                      id="review_contents"
+                      required
+                      placeholder="내용을 입력해주세요.(200자 이내)"
+                      className="outline-none text-[16px] resize-none border-1 rounded-[10px] p-[15px] border-mainColor pt-[16px] pb-[16px] pl-[24px] max-w-[1050px] max-h-[280px]"
+                      rows={8}
+                      maxLength={200}
+                    />
+                    <Checkbox
+                      defaultSelected={!showNickname}
+                      onChange={() => setShowNickname(!showNickname)}
+                      className="text-black"
+                      color="secondary"
+                      radius="sm"
+                      icon={<FaCheck />}
                     >
-                      취소
-                    </Button>
-                    <Button
-                      type="submit"
-                      className="w-[50px] h-[50px] rounded-[10px] flex justify-center items-center bg-[#8F5DF4] text-white"
-                    >
-                      등록
-                    </Button>
-                  </div>
-                </ModalBody>
-              </div>
-            </form>
+                      익명으로 게시
+                    </Checkbox>
+                    <div className="flex gap-2 justify-end mt-[45px]">
+                      <Button
+                        onClick={handleClose}
+                        className="w-[50px] h-[50px] rounded-[10px] flex justify-center items-center bg-white text-[#A1A1AA] border-1 border-[#A1A1AA]"
+                      >
+                        취소
+                      </Button>
+                      <Button
+                        type="submit"
+                        className="w-[50px] h-[50px] rounded-[10px] flex justify-center items-center bg-mainColor text-white"
+                      >
+                        등록
+                      </Button>
+                    </div>
+                  </ModalBody>
+                </div>
+              </form>
+            </>
           )}
         </ModalContent>
       </Modal>

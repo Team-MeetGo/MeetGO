@@ -10,11 +10,17 @@ type Props = {
 
 const NewComment = ({ review_id }: Props) => {
   const [comments, setComments] = useState('');
+  const [isActive, setIsActive] = useState(false);
 
   const { data: user } = useGetUserDataQuery();
   const userId = user && user.user_id;
 
   const addCommentMutation = useNewCommentMutation(review_id);
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    setComments(e.target.value);
+    setIsActive(e.target.value !== '');
+  };
 
   const handleNewComment = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -31,19 +37,23 @@ const NewComment = ({ review_id }: Props) => {
     setComments('');
   };
   return (
-    <div>
-      <form onSubmit={handleNewComment}>
-        <div className="flex">
+    <div className="max-w-[1116px] w-full h-[136px] mb-[24px]">
+      <form onSubmit={handleNewComment} className="flex flex-col max-w-[1116px] w-full">
+        <div className="flex max-w-[1116px] w-full h-[136px]">
           <textarea
             id="comment_content"
             required
             placeholder="댓글을 입력해주세요."
             maxLength={200}
             value={comments}
-            onChange={(e) => setComments(e.target.value)}
-            className="outline-none border-2 rounded-[20px] resize-none p-[8px] pl-4 mb-2"
+            onChange={handleInputChange}
+            className={`max-w-[1116px] w-full h-[136px] outline-none border-1 rounded-[10px] resize-none p-[24px] pl-4 mb-2 ${
+              isActive ? 'border-mainColor' : 'border-gray-300'
+            }`}
           />
-          <Button type="submit" className="bg-[#8F5DF4] text-white">
+        </div>
+        <div className="flex w-full justify-end mt-[16px]">
+          <Button type="submit" className="bg-mainColor text-white flex">
             등록
           </Button>
         </div>
