@@ -21,3 +21,26 @@ export const userStore = create<UserState>()((set) => ({
   clearUser: () => set({ user: null }),
   setIsLoggedIn: (isLoggedIn) => set({ isLoggedIn })
 }));
+
+type ProfileState = {
+  postCount: number | undefined;
+  likedPostCount: number | undefined;
+  metPeopleCount: number | undefined;
+  meetingRoomCount: number | undefined;
+
+  setPostCount: (count: number) => void;
+  setLikedPostCount: (count: number) => void;
+  setMetPeopleCount: (count: number) => void;
+  setMeetingRoomCount: (count: number) => void;
+};
+
+export const profileCount = create<ProfileState>()((set) => ({
+  postCount: 0,
+  likedPostCount: 0,
+  metPeopleCount: 0,
+  meetingRoomCount: 0,
+  setPostCount: (count) => set({ postCount: count }),
+  setLikedPostCount: (count) => set({ likedPostCount: count }),
+  setMetPeopleCount: (count) => set({ metPeopleCount: count }),
+  setMeetingRoomCount: (count) => set({ meetingRoomCount: count })
+}));

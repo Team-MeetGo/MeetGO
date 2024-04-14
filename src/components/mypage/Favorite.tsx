@@ -42,8 +42,22 @@ const Favorite: React.FC<IsEditingType> = ({ isEditing }) => {
   }, [user]);
 
   return (
-    <div className="flex w-full max-w-xs flex-col gap-2">
-      <label>이상형</label>
+    <div className="flex flex-col gap-4">
+      <div className="flex w-full gap-6">
+        <label className="block text-lg font-semibold w-[100px]">이상형</label>
+        <div className="flex gap-2">
+          {Array.from(selected).map((value) => (
+            <Chip
+              key={value}
+              color="default"
+              style={{ backgroundColor: favoriteOptions.find((option) => option.value === value)?.color }}
+              {...(isEditing ? { onClose: () => handleDelete(value) } : {})}
+            >
+              {value}
+            </Chip>
+          ))}
+        </div>
+      </div>
       {isEditing ? (
         <div className="flex whitespace-nowrap">
           <Select
@@ -66,18 +80,6 @@ const Favorite: React.FC<IsEditingType> = ({ isEditing }) => {
           </button>
         </div>
       ) : null}
-      <div className="flex flex-wrap gap-2">
-        {Array.from(selected).map((value) => (
-          <Chip
-            key={value}
-            color="default"
-            style={{ backgroundColor: favoriteOptions.find((option) => option.value === value)?.color }}
-            {...(isEditing ? { onClose: () => handleDelete(value) } : {})}
-          >
-            {value}
-          </Chip>
-        ))}
-      </div>
     </div>
   );
 };

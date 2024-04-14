@@ -35,7 +35,6 @@ export async function getMetPeople(userId: string, userGender: string) {
         .eq('request_Id', userId)
         .eq('response_Id', personDetails.user_id)
         .order('created_at', { ascending: false });
-      //imit(1);
 
       // (2) requestId가 만났던 사람이면서 responseId는 나인 경우
       const { data: requestsMade2 } = await clientSupabase
@@ -43,8 +42,7 @@ export async function getMetPeople(userId: string, userGender: string) {
         .select('request_status, created_at, request_Id, response_Id')
         .eq('request_Id', personDetails.user_id)
         .eq('response_Id', userId)
-        .order('created_at', { ascending: false })
-        .limit(1); // .limit(1);
+        .order('created_at', { ascending: false });
 
       let requestStatus = '요청전';
 
