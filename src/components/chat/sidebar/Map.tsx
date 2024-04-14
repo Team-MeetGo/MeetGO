@@ -1,9 +1,9 @@
 'use client';
 
 import { useChatDataQuery, useRoomDataQuery } from '(@/hooks/useQueries/useChattingQuery)';
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Card, CardBody, Pagination } from '@nextui-org/react';
-import { IoMdSearch } from 'react-icons/io';
+import { HiMiniMagnifyingGlass } from 'react-icons/hi2';
 import DateTimePicker from './DateTimePicker';
 import { userStore } from '(@/store/userStore)';
 import {
@@ -192,7 +192,6 @@ const Map: React.FC<MapProps> = ({ chatRoomId }) => {
   const updateMeetingLocationMutation = useUpdateMeetingLocationMutation();
   const clearMeetingLocationMutation = useClearMeetingLocationMutation();
 
-  const clearMutation = useClearMeetingLocationMutation({ chatRoomId });
   // 장소 선택 함수
   const handleSelectLocation = async (barName: string) => {
     setSelectedMeetingLocation(barName);
@@ -242,7 +241,7 @@ const Map: React.FC<MapProps> = ({ chatRoomId }) => {
             className="flex flex-row justify-between"
           >
             <button type="submit" className="bg-transparent border-none mr-1">
-              <IoMdSearch size={24} color="#A1A1AA" />
+              <HiMiniMagnifyingGlass size={24} color="#A1A1AA" />
             </button>
             <input
               type="text"
