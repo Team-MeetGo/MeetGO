@@ -12,11 +12,8 @@ import ChatSearch from './ChatSearch';
 import { useMyLastMsgs, useRoomDataQuery } from '(@/hooks/useQueries/useChattingQuery)';
 import MyChat from './MyChat';
 import RememberLastChat from '../chatFooter/RememberLastChat';
-import { useQueryClient } from '@tanstack/react-query';
-import { MY_LAST_MSGS_AFTER } from '(@/query/chat/chatQueryKeys)';
 
 const ChatList = ({ user, chatRoomId }: { user: User | null; chatRoomId: string }) => {
-  const queryClient = useQueryClient();
   const scrollRef = useRef() as React.MutableRefObject<HTMLDivElement>;
   const { hasMore, messages, setMessages } = chatStore((state) => state);
   const [isScrolling, setIsScrolling] = useState(true);
@@ -73,6 +70,7 @@ const ChatList = ({ user, chatRoomId }: { user: User | null; chatRoomId: string 
       let ref = lastDivRefs.current.find((ref) => ref.message_id === lastMsgId);
       let lastDiv = ref && ref.current;
       if (lastMsgId && lastMsgId !== messages[messages.length - 1].message_id && lastDiv) {
+        console.log('lastMsgId =>', lastMsgId);
         setLastCheckedDiv(lastDiv);
         styleHere(lastDiv);
       } else {
