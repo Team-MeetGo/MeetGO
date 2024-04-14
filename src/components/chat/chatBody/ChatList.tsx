@@ -12,8 +12,11 @@ import ChatSearch from './ChatSearch';
 import { useMyLastMsgs, useRoomDataQuery } from '(@/hooks/useQueries/useChattingQuery)';
 import MyChat from './MyChat';
 import RememberLastChat from '../chatFooter/RememberLastChat';
+import { useQueryClient } from '@tanstack/react-query';
+import { MY_LAST_MSGS_AFTER } from '(@/query/chat/chatQueryKeys)';
 
 const ChatList = ({ user, chatRoomId }: { user: User | null; chatRoomId: string }) => {
+  const queryClient = useQueryClient();
   const scrollRef = useRef() as React.MutableRefObject<HTMLDivElement>;
   const { hasMore, messages, setMessages } = chatStore((state) => state);
   const [isScrolling, setIsScrolling] = useState(false);
@@ -83,7 +86,7 @@ const ChatList = ({ user, chatRoomId }: { user: User | null; chatRoomId: string 
         // let lastDiv = document.getElementById(`${lastMsgId[0].last_msg_id}`);
         if (lastDiv) {
           console.log('2');
-          setLastCheckedDiv(lastDiv);
+          // setLastCheckedDiv(lastDiv);
           styleHere(lastDiv);
         }
       }
@@ -101,15 +104,17 @@ const ChatList = ({ user, chatRoomId }: { user: User | null; chatRoomId: string 
   // 스크롤 다운
   useEffect(() => {
     const scrollBox = scrollRef.current;
-    if (lastCheckedDiv && !isScrolling) {
+    let ref = lastDivRefs.current.find((ref) => ref.message_id === lastMsgId);
+    let lastDiv = ref && ref.current;
+    if (lastCheckedDiv && !isScrolling && lastDiv) {
       console.log('5');
       setCheckedLastMsg(true);
+      // setLastCheckedDiv(lastDiv);
       lastCheckedDiv.style.backgroundColor = '';
     }
     // if (scrollBox && !isScrolling) {
     // 처음에 로드 시 스크롤 중이 아닐 때
-    // let ref = lastDivRefs.current.find((ref) => ref.message_id === lastMsgId);
-    // let lastDiv = ref && ref.current;
+
     // if (!lastMsgId || prevMsgsLengthRef.current !== messages.length || !lastDiv) {
     //   console.log('3');
     //   // 이전에 저장된 마지막 메세지가 없거나, DB에 저장된 메세지는 있는데 화면에 없거나, 새로운 메세지가 추가될 때 그냥 스크롤 다운
@@ -127,6 +132,13 @@ const ChatList = ({ user, chatRoomId }: { user: User | null; chatRoomId: string 
     // }
     // }
   }, [messages, isScrolling]);
+
+  // useEffect(() => {
+  //   return () => {
+  //     console.log('클린업~');
+  //     // queryClient.invalidateQueries({ queryKey: [MY_LAST_MSGS_AFTER, user?.id, chatRoomId] });
+  //   };
+  // }, []);
 
   // 스크롤 이벤트가 발생할 때
   const handleScroll = () => {
