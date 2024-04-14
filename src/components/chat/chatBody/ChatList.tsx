@@ -76,11 +76,13 @@ const ChatList = ({ user, chatRoomId }: { user: User | null; chatRoomId: string 
         styleHere(lastDiv);
         setIsScrolling(true);
       } else {
+        // 그 외의 경우 기본적으로 스크롤 다운
         console.log('*');
         scrollBox.scrollTop = scrollBox.scrollHeight;
+        setCheckedLastMsg(true);
       }
     }
-  }, []);
+  }, [lastMsgId]);
 
   // 스크롤 다운
   useEffect(() => {
@@ -145,7 +147,7 @@ const ChatList = ({ user, chatRoomId }: { user: User | null; chatRoomId: string 
             {lastMsgId &&
             lastMsgId !== messages[messages.length - 1].message_id &&
             lastMsgId === msg.message_id &&
-            // isScrolling &&
+            isScrolling &&
             !checkedLastMsg ? (
               <div className={`flex ${msg.send_from === user?.id ? 'ml-auto' : 'mr-auto'}`}>
                 <p>여기까지 읽으셨습니다.</p>
