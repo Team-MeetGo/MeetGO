@@ -28,6 +28,8 @@ const ChatList = ({ user, chatRoomId }: { user: User | null; chatRoomId: string 
   const lastDivRefs = useRef(messages);
   const lastMsgId = useMyLastMsgs(user?.id!, chatRoomId);
 
+  console.log('isScrolling =>', isScrolling);
+
   // "messages" table Realtime INSERT, DELETE 구독로직
   useEffect(() => {
     if (roomId && chatRoomId) {
@@ -153,7 +155,7 @@ const ChatList = ({ user, chatRoomId }: { user: User | null; chatRoomId: string 
           </>
         ))}
       </div>
-      {isScrolling ? (
+      {messages.length && isScrolling ? (
         newAddedMsgNum === 0 ? (
           <ChatScroll handleScrollDown={handleScrollDown} />
         ) : (
