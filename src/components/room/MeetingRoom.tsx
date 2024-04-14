@@ -12,7 +12,7 @@ import { BsFire } from 'react-icons/bs';
 import { HiOutlineDotsVertical } from 'react-icons/hi';
 import { IoChatbubblesOutline, IoFemale, IoMale } from 'react-icons/io5';
 
-import type { MeetingRoomType, UserType } from '(@/types/roomTypes)';
+import type { MeetingRoomType } from '(@/types/roomTypes)';
 function MeetingRoom({ room }: { room: MeetingRoomType }) {
   const { room_id, room_status, room_title, member_number, location, feature, leader_id, region } = room;
   const router = useRouter();
@@ -32,14 +32,14 @@ function MeetingRoom({ room }: { room: MeetingRoomType }) {
 
   const addMember = async ({ room_id }: { room_id: string }) => {
     //채팅창: 채팅창으로 이동
-    if (alreadyChatRoom?.[0]) {
-      router.replace(`/chat/${alreadyChatRoom[0].chatting_room_id}`);
+    if (alreadyChatRoom) {
+      console.log(alreadyChatRoom);
+      return router.replace(`/chat/${alreadyChatRoom[0].chatting_room_id}`);
     }
-
     //수락창: 이미 참여한 방
     const alreadyParticipants = participants?.find((member) => member?.user_id === user_id);
     if (alreadyParticipants) {
-      router.push(`/meetingRoom/${room_id}`);
+      return router.push(`/meetingRoom/${room_id}`);
     }
 
     //성별에 할당된 인원이 참여자 정보보다 적을 때 입장
@@ -49,13 +49,13 @@ function MeetingRoom({ room }: { room: MeetingRoomType }) {
       !participatedGenderMember
     ) {
       await roomMemberMutation.mutateAsync();
-      router.push(`/meetingRoom/${room_id}`);
+      return router.push(`/meetingRoom/${room_id}`);
     }
 
     //성별에 할당된 인원이 다 찼으면 알람
     if (genderMaxNumber === participatedGenderMember && room_status === '모집중' && !alreadyParticipants) {
       alert('해당 성별은 모두 참여가 완료되었습니다.');
-      router.push('/meetingRoom');
+      return router.push('/meetingRoom');
     }
 
     //모든 인원이 다 찼을 경우 모집종료로 변경
@@ -112,7 +112,7 @@ function MeetingRoom({ room }: { room: MeetingRoomType }) {
             </div>
           </div>
 
-          <main className="flex flex-col justify-start" onClick={(e) => addMember({ room_id })}>
+          <main className="flex flex-col justify-start" onClick={() => addMember({ room_id })}>
             <div className="h-[16px]"></div>
             <div className="text-[26px]"> {room_title} </div>
             <div className="flex flex-row justify-start gap-2">
