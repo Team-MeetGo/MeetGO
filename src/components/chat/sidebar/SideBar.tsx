@@ -1,13 +1,11 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import Map from '(@/components/chat/sidebar/Map)';
 import { useChatDataQuery, useRoomDataQuery } from '(@/hooks/useQueries/useChattingQuery)';
 import { GiHamburgerMenu } from 'react-icons/gi';
 import { Card, CardBody } from '@nextui-org/react';
 import { useGetUserDataQuery } from '(@/hooks/useQueries/useUserQuery)';
-import { useQueryClient } from '@tanstack/react-query';
-import { CHATDATA_QUERY_KEY, MEETING_TIME_QUERY_KEY } from '(@/query/chat/chatQueryKeys)';
 
 interface SideBarProps {
   chatRoomId: string;
@@ -15,7 +13,6 @@ interface SideBarProps {
 
 const SideBar: React.FC<SideBarProps> = ({ chatRoomId }) => {
   const [isSidebarOpen, setIsSidebarOpen] = useState<boolean>(false);
-  const [finalDateTime, setFinalDateTime] = useState<string>();
 
   // 유저 정보 가져오기
   const { data: userData } = useGetUserDataQuery();
@@ -27,20 +24,6 @@ const SideBar: React.FC<SideBarProps> = ({ chatRoomId }) => {
   //채팅방 정보 가져오기
   const chat = useChatDataQuery(chatRoomId);
   const meetingTime = chat?.[0]?.meeting_time;
-  console.log('meetingTime =>', meetingTime);
-
-  // useEffect(() => {
-  //   setFinalDateTime(meetingTime || '');
-  // }, [meetingTime]);
-
-  // meetingTime
-  //   useEffect(() => {
-  //     const meetingTime = chat?.[0]?.meeting_time;
-  //     if (meetingTime) {
-  //       setFinalDateTime(meetingTime);
-  //     }
-  //   }, [chat]);
-
   const options: Intl.DateTimeFormatOptions = {
     year: 'numeric',
     month: 'long',
@@ -50,28 +33,34 @@ const SideBar: React.FC<SideBarProps> = ({ chatRoomId }) => {
     hour12: true,
     timeZone: 'Asia/Seoul'
   };
+  const convertedTime = meetingTime ? new Intl.DateTimeFormat('ko-KR', options).format(new Date(meetingTime)) : '';
 
   const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);
   };
 
   return (
-    <div className=" w-[377px] flex flex-col ml-8 z-0 transition-all duration-300 ease-in-out">
+    <div
+      className={`${
+        isSidebarOpen ? 'w-[377px]' : 'w-[30px]'
+      } flex justify-start ml-auto flex-col z-0 transition-all duration-300 ease-in-out`}
+    >
       <div className={`flex ${isSidebarOpen ? 'justify-end' : 'justify-end'}`}>
         <GiHamburgerMenu onClick={toggleSidebar} />
       </div>
-      <div style={{ maxHeight: '100vh', overflowY: 'auto', paddingRight: '24px' }}>
-        {isSidebarOpen && (
-          <div>
-            <h1 className="font-semibold text-2xl mb-2.5">미팅 날짜/시간</h1>
-            <Card className="border border-mainColor shadow-none mb-6 h-[60px]">
-              <CardBody>
-                <p className=" justify-start items-center text-lg">{meetingTime}</p>
-              </CardBody>
-            </Card>
-            <Map chatRoomId={chatRoomId} />
-          </div>
-        )}
+      <div
+        style={{ maxHeight: '100vh', overflowY: 'auto', paddingRight: '24px' }}
+        className={`${isSidebarOpen ? 'opacity-100' : 'opacity-0'} transition-all duration-300 ease-in-out`}
+      >
+        <div className={`pt-8`}>
+          <h1 className="font-semibold text-2xl mb-2">미팅 날짜/시간</h1>
+          <Card className="h-[60px] border border-mainColor rounded-[9px] shadow-none ">
+            <CardBody className="flex flex-row justify-start items-center text-lg">
+              <p>{convertedTime}</p>
+            </CardBody>
+          </Card>
+          <Map chatRoomId={chatRoomId} />
+        </div>
       </div>
     </div>
   );

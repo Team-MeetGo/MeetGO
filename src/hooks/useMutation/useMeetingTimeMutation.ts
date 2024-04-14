@@ -1,4 +1,4 @@
-import { CHATDATA_QUERY_KEY, MEETING_TIME_QUERY_KEY } from '(@/query/chat/chatQueryKeys)';
+import { CHATDATA_QUERY_KEY } from '(@/query/chat/chatQueryKeys)';
 import { addMeetingTime } from '(@/service/sidebar)';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
