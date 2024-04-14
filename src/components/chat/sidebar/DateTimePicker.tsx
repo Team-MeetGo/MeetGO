@@ -6,11 +6,11 @@ import 'react-datepicker/dist/react-datepicker.css';
 import DateCustomeInput from './DateCustomeInput';
 import { ko } from 'date-fns/locale';
 import { getMonth, getYear } from 'date-fns';
-import { IoChevronBackSharp } from 'react-icons/io5';
-import { IoChevronForwardSharp } from 'react-icons/io5';
+import { IoIosArrowForward, IoIosArrowBack } from 'react-icons/io';
 import { userStore } from '(@/store/userStore)';
 import { useChatDataQuery, useRoomDataQuery } from '(@/hooks/useQueries/useChattingQuery)';
 import { useUpdateMeetingTimeMutation } from '(@/hooks/useMutation/useMeetingTimeMutation)';
+import { useGetUserDataQuery } from '(@/hooks/useQueries/useUserQuery)';
 
 interface DateTimePickerProps {
   chatRoomId: string;
@@ -21,9 +21,9 @@ const DateTimePicker: React.FC<DateTimePickerProps> = forwardRef(({ chatRoomId }
   const [isCalendarOpen, setIsCalendarOpen] = useState<boolean>(false);
   const datePickerRef = useRef<DatePicker>(null);
 
-  // userStore에서 userId 받아오기
-  const { user } = userStore((state) => state);
-  const userId = user?.user_id;
+  // 유저 정보 가져오기
+  const { data: userData } = useGetUserDataQuery();
+  const userId = userData?.user_id;
 
   // useRoomDataQuery로 리더 아이디 가져오기
   const room = useRoomDataQuery(chatRoomId);
@@ -88,16 +88,16 @@ const DateTimePicker: React.FC<DateTimePickerProps> = forwardRef(({ chatRoomId }
           <div className="flex flex-row justify-center">
             <button onClick={decreaseMonth} disabled={prevMonthButtonDisabled}>
               {prevMonthButtonDisabled ? (
-                <IoChevronBackSharp className="text-white" />
+                <IoIosArrowBack className="text-white" />
               ) : (
-                <IoChevronBackSharp className="text-gray-500" />
+                <IoIosArrowBack className="text-gray-500" />
               )}
             </button>
             <div className="px-4 text-black text-base">
               {getYear(date)}년 {months[getMonth(date)]}
             </div>
             <button onClick={increaseMonth} disabled={nextMonthButtonDisabled}>
-              <IoChevronForwardSharp className="text-gray-500" />
+              <IoIosArrowForward className="text-gray-500" />
             </button>
           </div>
         )}

@@ -1,15 +1,16 @@
 'use client';
 
 import { useChatDataQuery, useRoomDataQuery } from '(@/hooks/useQueries/useChattingQuery)';
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Card, CardBody, Pagination } from '@nextui-org/react';
-import { IoMdSearch } from 'react-icons/io';
+import { HiMiniMagnifyingGlass } from 'react-icons/hi2';
 import DateTimePicker from './DateTimePicker';
 import { userStore } from '(@/store/userStore)';
 import {
   useClearMeetingLocationMutation,
   useUpdateMeetingLocationMutation
 } from '(@/hooks/useMutation/useMeetingLocationMutation)';
+import { useGetUserDataQuery } from '(@/hooks/useQueries/useUserQuery)';
 
 declare global {
   interface Window {
@@ -33,13 +34,15 @@ const Map: React.FC<MapProps> = ({ chatRoomId }) => {
   const [isLocationSelected, setIsLocationSelected] = useState<boolean>(false);
   const [selectedMeetingLocation, setSelectedMeetingLocation] = useState<string>();
 
-  // userStore에서 userId 받아오기
-  const { user } = userStore((state) => state);
-  const userId = user?.user_id;
+  // 유저 정보 가져오기
+  const { data: userData } = useGetUserDataQuery();
+  const userId = userData?.user_id;
 
   // useRoomDataQuery로 리더 아이디 가져오기
   const room = useRoomDataQuery(chatRoomId);
   const leaderId = room?.roomData.leader_id;
+
+  console.log(userId, leaderId);
 
   // 채팅방 정보 가져오기
   const chat = useChatDataQuery(chatRoomId);
@@ -140,7 +143,7 @@ const Map: React.FC<MapProps> = ({ chatRoomId }) => {
     } else {
       searchBarsNearby(currentPos);
     }
-  }, [currentPos, map, searchBarsNearby]);
+  }, [map]);
 
   // 지도 검색 함수
   const searchNewPlaces = (page?: number) => {
@@ -192,7 +195,6 @@ const Map: React.FC<MapProps> = ({ chatRoomId }) => {
   const updateMeetingLocationMutation = useUpdateMeetingLocationMutation();
   const clearMeetingLocationMutation = useClearMeetingLocationMutation();
 
-  const clearMutation = useClearMeetingLocationMutation({ chatRoomId });
   // 장소 선택 함수
   const handleSelectLocation = async (barName: string) => {
     setSelectedMeetingLocation(barName);
@@ -242,7 +244,7 @@ const Map: React.FC<MapProps> = ({ chatRoomId }) => {
             className="flex flex-row justify-between"
           >
             <button type="submit" className="bg-transparent border-none mr-1">
-              <IoMdSearch size={24} color="#A1A1AA" />
+              <HiMiniMagnifyingGlass size={24} color="#A1A1AA" />
             </button>
             <input
               type="text"
