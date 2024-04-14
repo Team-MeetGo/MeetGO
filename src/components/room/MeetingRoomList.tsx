@@ -169,22 +169,22 @@ function MeetingRoomList() {
             {selectRegion &&
               selectRegion !== ('지역' || '전국') &&
               (!selectMemberNumber || selectMemberNumber === ('인원' || '전체')) &&
-              regionSelectedRoomScroll?.map((room) => <MeetingRoom key={room?.room_id} room={room} />)}
+              regionSelectedOtherRooms?.map((room) => <MeetingRoom key={room?.room_id} room={room} />)}
 
             {selectMemberNumber &&
               selectMemberNumber !== ('인원' && '전체') &&
               (!selectRegion || selectRegion === ('지역' || '전국')) &&
-              memberSelectedRoomScroll?.map((room) => <MeetingRoom key={room?.room_id} room={room} />)}
+              memberNumberSelectedOtherRooms?.map((room) => <MeetingRoom key={room?.room_id} room={room} />)}
 
             {selectMemberNumber &&
               selectMemberNumber !== ('인원' && '전체') &&
               selectRegion &&
               selectRegion !== ('지역' && '전국') &&
-              regionMemberSelectedRoomScroll?.map((room) => <MeetingRoom key={room?.room_id} room={room} />)}
+              regionMemberNumberSelectedOtherRooms?.map((room) => <MeetingRoom key={room?.room_id} room={room} />)}
 
             {(!selectMemberNumber || selectMemberNumber === '인원' || selectMemberNumber === '전체') &&
               (!selectRegion || selectRegion === '지역' || selectRegion === '전국') &&
-              otherRoomScroll?.map((room) => <MeetingRoom key={room?.room_id} room={room} />)}
+              otherRooms?.map((room) => <MeetingRoom key={room?.room_id} room={room} />)}
             <div className="w-full h-8"></div>
           </div>
         </div>
