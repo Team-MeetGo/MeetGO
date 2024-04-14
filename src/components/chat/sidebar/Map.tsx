@@ -98,7 +98,7 @@ const Map: React.FC<MapProps> = ({ chatRoomId }) => {
     } else {
       searchBarsNearby(currentPos);
     }
-  }, [map]);
+  }, [currentPos, map]);
 
   const searchBarsNearby = (currentPosition: any, page?: number) => {
     const places = new window.kakao.maps.services.Places();
