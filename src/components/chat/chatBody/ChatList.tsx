@@ -23,6 +23,7 @@ const ChatList = ({ user, chatRoomId }: { user: User | null; chatRoomId: string 
   const [lastCheckedDiv, setLastCheckedDiv] = useState<HTMLElement | null>();
   const [checkedLastMsg, setCheckedLastMsg] = useState(false);
   const room = useRoomDataQuery(chatRoomId);
+  console.log('room =>', room?.roomData.leader_id);
   const roomId = room?.roomId;
   const prevMsgsLengthRef = useRef(messages.length);
   const lastDivRefs = useRef(messages);
@@ -133,18 +134,18 @@ const ChatList = ({ user, chatRoomId }: { user: User | null; chatRoomId: string 
   return (
     <>
       <div
-        className="w-full h-full flex-1 p-5 flex flex-col gap-6 overflow-y-auto scroll-smooth"
+        className={`w-full h-full flex-1 p-5 flex flex-col overflow-y-auto scroll-smooth`}
         ref={scrollRef}
         onScroll={handleScroll}
       >
         <ChatSearch isScrollTop={isScrollTop} />
         {hasMore ? <LoadChatMore chatRoomId={chatRoomId} count={count} setCount={setCount} /> : <></>}
         {messages?.map((msg, idx) => (
-          <>
+          <div key={msg.message_id} className="w-full">
             {msg.send_from === user?.id ? (
-              <MyChat msg={msg} key={msg.message_id} idx={idx} lastDivRefs={lastDivRefs} />
+              <MyChat msg={msg} idx={idx} lastDivRefs={lastDivRefs} />
             ) : (
-              <OthersChat msg={msg} key={msg.message_id} idx={idx} lastDivRefs={lastDivRefs} />
+              <OthersChat msg={msg} idx={idx} lastDivRefs={lastDivRefs} />
             )}
             {lastMsgId &&
             lastMsgId !== messages[messages.length - 1].message_id &&
@@ -155,7 +156,7 @@ const ChatList = ({ user, chatRoomId }: { user: User | null; chatRoomId: string 
                 <p>여기까지 읽으셨습니다.</p>
               </div>
             ) : null}
-          </>
+          </div>
         ))}
       </div>
       {isScrolling ? (
