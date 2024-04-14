@@ -1,5 +1,6 @@
 'use client';
 import meetingRoomHandler from '(@/hooks/custom/room)';
+import MeetGoLogo from '../../utils/icons/meetgo-logo.png';
 import { Chip } from '@nextui-org/react';
 import { useRouter } from 'next/navigation';
 import DeleteMeetingRoom from './DeleteMeetingRoom';
@@ -13,6 +14,7 @@ import { HiOutlineDotsVertical } from 'react-icons/hi';
 import { IoChatbubblesOutline, IoFemale, IoMale } from 'react-icons/io5';
 
 import type { MeetingRoomType } from '(@/types/roomTypes)';
+import Image from 'next/image';
 function MeetingRoom({ room }: { room: MeetingRoomType }) {
   const { room_id, room_status, room_title, member_number, location, feature, leader_id, region } = room;
   const router = useRouter();
@@ -120,7 +122,17 @@ function MeetingRoom({ room }: { room: MeetingRoomType }) {
               <div className="text-[14px]"> {location} </div>
             </div>
             <div className="h-[40px]"></div>
-            <div>하트</div>
+            <div>
+              <Image
+                src={MeetGoLogo}
+                alt="MeetGo Logo"
+                style={{
+                  width: 'auto',
+                  height: '18px'
+                }}
+                priority={true}
+              />
+            </div>
             <div className="h-[8px]"></div>
 
             <div className="text-[14px] flex flex-row gap-[8px]">

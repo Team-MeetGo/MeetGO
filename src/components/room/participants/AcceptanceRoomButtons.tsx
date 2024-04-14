@@ -17,27 +17,28 @@ const AcceptanceRoomButtons = ({ room_id }: { room_id: string }) => {
       alert('로그인 후에 이용하세요.');
       router.push('/users/login');
     }
-
-    const { data: alreadyChat } = await clientSupabase
-      .from('chatting_room')
-      .select('*')
-      .eq('room_id', room_id)
-      .eq('isActive', true);
-    if (alreadyChat && alreadyChat?.length) {
-      // 만약 isActive인 채팅방이 이미 있다면 그 방으로 보내기
-      router.replace(`/chat/${alreadyChat[0].chatting_room_id}`);
-    } else {
-      // 없으면 새로 만들어주기
-      const { data: chat_room, error } = await clientSupabase
+    if (user_id === leader) {
+      const { data: alreadyChat } = await clientSupabase
         .from('chatting_room')
-        .insert({
-          room_id: room_id,
-          isActive: true
-        })
-        .select('chatting_room_id');
+        .select('*')
+        .eq('room_id', room_id)
+        .eq('isActive', true);
+      if (alreadyChat && alreadyChat?.length) {
+        // 만약 isActive인 채팅방이 이미 있다면 그 방으로 보내기
+        router.replace(`/chat/${alreadyChat[0].chatting_room_id}`);
+      } else {
+        // 없으면 새로 만들어주기
+        const { data: chat_room, error } = await clientSupabase
+          .from('chatting_room')
+          .insert({
+            room_id: room_id,
+            isActive: true
+          })
+          .select('chatting_room_id');
 
-      if (chat_room) router.replace(`/chat/${chat_room[0].chatting_room_id}`);
-    } // "/chatting_room_id" 로 주소값 변경
+        if (chat_room) router.replace(`/chat/${chat_room[0].chatting_room_id}`);
+      } // "/chatting_room_id" 로 주소값 변경
+    }
   };
 
   return (
