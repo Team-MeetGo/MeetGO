@@ -105,15 +105,25 @@ const Member = ({ room_id }: { room_id: string }) => {
                 >
                   {/* 카드 왼쪽 */}
                   <div className="mx-[40px] justify-items-center align-middle items-center">
-                    <div className="w-[86px] h-[86px] mt-[32px] border-4 mr-[48px] rounded-full">
+                    <div className="w-[86px] h-[86px] mt-[32px] border-4 mr-[48px] rounded-full relative">
                       {leaderMember === member.user_id ? (
                         <div>
-                          <FaCrown className="h-[20px] w-[20px] m-[2px] fill-mainColor" />
+                          <FaCrown className="absolute h-[20px] w-[20px] m-[2px] fill-mainColor" />
                         </div>
                       ) : (
                         ''
                       )}
-                      {member.avatar ? <img src={member.avatar as string} alt="유저" /> : ''}
+                      <div className="object-cover my-auto">
+                        {member.avatar ? (
+                          <img
+                            className="w-full h-full object-cover object-center"
+                            src={member.avatar as string}
+                            alt="유저"
+                          />
+                        ) : (
+                          ''
+                        )}
+                      </div>
                     </div>
                     <div className="pt-[8px] w-[84px] text-center">{member.nickname}</div>
                   </div>

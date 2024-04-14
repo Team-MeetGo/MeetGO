@@ -11,7 +11,6 @@ const memberList = ({ params }: { params: { id: string } }) => {
       <Suspense>
         <div className="flex flex-col justify-center w-full align-middle">
           <RoomInformation room_id={room_id} />
-          <AcceptanceRoomButtons room_id={room_id} />
           <div className="w-100 h-100 flex flex-row justify-evenly">
             <Member room_id={room_id} />
           </div>

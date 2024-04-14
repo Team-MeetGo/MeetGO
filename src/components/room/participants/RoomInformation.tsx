@@ -15,6 +15,7 @@ import { useRoomInfoWithRoomIdQuery, useRoomParticipantsQuery } from '(@/hooks/u
 import { useGetUserDataQuery } from '(@/hooks/useQueries/useUserQuery)';
 
 import type { UserType } from '(@/types/roomTypes)';
+import AcceptanceRoomButtons from './AcceptanceRoomButtons';
 
 function RoomInformation({ room_id }: { room_id: UUID }) {
   const router = useRouter();
@@ -104,6 +105,9 @@ function RoomInformation({ room_id }: { room_id: UUID }) {
               </button>
             </div>
           </div>
+        </div>
+        <div className="w-100% h">
+          <AcceptanceRoomButtons room_id={room_id} />
         </div>
       </div>
     </div>
