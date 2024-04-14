@@ -27,6 +27,15 @@ export const useMyroomQuery = (user_id: string) => {
     queryKey: [ROOMLIST, user_id],
     queryFn: () => fetchMyRoom(user_id)
   });
+
+  // 희라가 참여한 방 숫자 가져오려고 추가하는 로직
+  const { setMeetingRoomCount } = profileCount();
+  useEffect(() => {
+    if (results.data) {
+      setMeetingRoomCount(results.data?.length);
+    }
+  }, [results.data]);
+
   return results.data?.map((r) => r.room);
 };
 //room_id로 하나의 방 얻기

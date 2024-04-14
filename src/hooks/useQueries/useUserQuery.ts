@@ -1,6 +1,8 @@
 import { fetchUserData, fetchUserLikePost, fetchUserPost } from '(@/query/user/userQueryFns)';
 import { USER_DATA_QUERY_KEY, USER_LIKE_POST_QUERY_KEY, USER_POST_QUERY_KEY } from '(@/query/user/userQueryKeys)';
+import { profileCount } from '(@/store/userStore)';
 import { useQuery } from '@tanstack/react-query';
+import { useEffect } from 'react';
 
 export const useGetUserDataQuery = () => {
   const { data, isPending, isError, error } = useQuery({
@@ -14,17 +16,35 @@ export const useGetUserDataQuery = () => {
 };
 
 export const useGetUserPostQuery = (userId: string) => {
-  const { data, isPending, isError, error } = useQuery({
+  const { data } = useQuery({
     queryKey: [USER_POST_QUERY_KEY],
-    queryFn: () => fetchUserPost(userId)
+    queryFn: () => fetchUserPost(userId),
+    enabled: !!userId
   });
-  return { data, isPending, isError, error };
+
+  const { setPostCount } = profileCount();
+  useEffect(() => {
+    if (data) {
+      setPostCount(data.length);
+    }
+  }, [data]);
+
+  return data;
 };
 
 export const useGetUserLikePostQuery = (userId: string) => {
-  const { data, isPending, isError, error } = useQuery({
+  const { data } = useQuery({
     queryKey: [USER_LIKE_POST_QUERY_KEY],
-    queryFn: () => fetchUserLikePost(userId)
+    queryFn: () => fetchUserLikePost(userId),
+    enabled: !!userId
   });
-  return { data, isPending, isError, error };
+
+  const { setLikedPostCount } = profileCount();
+  useEffect(() => {
+    if (data) {
+      setLikedPostCount(data.length);
+    }
+  }, [data]);
+
+  return data;
 };

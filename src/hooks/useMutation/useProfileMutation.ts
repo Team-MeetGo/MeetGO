@@ -1,5 +1,5 @@
 import { updateAvatar, updateProfile } from '(@/service)';
-import { UpdateProfileType } from '(@/types/userTypes)';
+import { UpdateAvatarType, UpdateProfileType } from '(@/types/userTypes)';
 import { useMutation } from '@tanstack/react-query';
 
 export const useProfileUpdateMutation = () =>
@@ -10,5 +10,5 @@ export const useProfileUpdateMutation = () =>
 
 export const useAvatarUpdateMutation = () =>
   useMutation({
-    mutationFn: ({ userId, file }: any) => updateAvatar(userId, file)
+    mutationFn: ({ userId, file }: UpdateAvatarType) => updateAvatar(userId, file)
   });

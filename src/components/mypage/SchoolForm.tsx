@@ -8,6 +8,16 @@ import { useGetUserDataQuery } from '(@/hooks/useQueries/useUserQuery)';
 import { useQueryClient } from '@tanstack/react-query';
 import { useSchoolUpdateMutation } from '(@/hooks/useMutation/useSchoolMutation)';
 import { USER_DATA_QUERY_KEY } from '(@/query/user/userQueryKeys)';
+import {
+  Button,
+  Input,
+  Modal,
+  ModalBody,
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
+  useDisclosure
+} from '@nextui-org/react';
 
 const SchoolForm = () => {
   const queryClient = useQueryClient();
@@ -20,23 +30,10 @@ const SchoolForm = () => {
     schoolEmail: '',
     univName: ''
   });
+  const { isOpen, onOpen, onOpenChange } = useDisclosure();
 
   const { data: user } = useGetUserDataQuery();
   const { mutate: updateSchoolMutate } = useSchoolUpdateMutation();
-
-  // /** 학교 업데이트하는 로직 */
-  // const updateSchool = async () => {
-  //   const userId = user?.user_id;
-  //   if (!userId) return;
-  //   const { error } = await clientSupabase
-  //     .from('users')
-  //     .update({ school_email: schoolEmail, school_name: univName, isValidate: true })
-  //     .eq('user_id', userId);
-  //   if (error) {
-  //     console.error('Error updating school:', error);
-  //   } else {
-  //   }
-  // };
 
   const onChangeInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -52,6 +49,7 @@ const SchoolForm = () => {
     }
   };
 
+  /**인증메일 보내는 로직 */
   const onSubmitEmailConfirm = async () => {
     if (!schoolEmail || !univName) {
       alert('이메일과 학교명을 모두 입력해주세요.');
@@ -69,6 +67,7 @@ const SchoolForm = () => {
       // 학교명이 유효한 경우, 인증 메일 발송
       const emailConfirmResult = await emailConfirmAPI(schoolEmail, univName, true);
       if (emailConfirmResult.success) {
+        onOpen();
         alert('인증메일 전송 완료');
         setIsCodeSent(true); // 인증 메일 발송 성공 상태를 true로 변경
       } else {
@@ -81,12 +80,14 @@ const SchoolForm = () => {
     }
   };
 
+  /**인증코드 확인하는 로직 */
   const onSubmitCodeConfirm = async () => {
     try {
       const response = await emailCodeAPI(schoolEmail, univName, Number(code));
       if (response.success) {
         setIsCodeValid(true); // 인증 코드 유효성 검사 결과 상태 업데이트
         alert('인증 완료');
+        onOpenChange();
         updateSchoolMutate(
           { userId: user!.user_id, schoolEmail, univName },
           {
@@ -109,13 +110,13 @@ const SchoolForm = () => {
   return (
     <div className="mb-6 flex flex-col gap-6">
       <div className="flex gap-6">
-        <label className="block text-lg font-semibold w-[90px]" htmlFor="schoolEmail">
+        <label className="block text-lg font-semibold w-[100px]" htmlFor="schoolEmail">
           학교 이메일
         </label>
         {user?.isValidate ? (
           <p>{user?.school_email}</p>
         ) : (
-          <>
+          <div className="flex items-center">
             <input
               className="mr-2 border p-3 rounded-md"
               name="schoolEmail"
@@ -128,17 +129,17 @@ const SchoolForm = () => {
             {validationMessages.schoolEmail && (
               <p className="text-red-500 text-[13px] mt-2">{validationMessages.schoolEmail}</p>
             )}
-          </>
+          </div>
         )}
       </div>
       <div className="flex gap-6">
-        <label className="block text-lg font-semibold w-[90px]" htmlFor="univName">
+        <label className="block text-lg font-semibold w-[100px]" htmlFor="univName">
           학교명
         </label>
         {user?.isValidate ? (
           <p>{user?.school_name}</p>
         ) : (
-          <>
+          <div className="flex items-center">
             <input
               className="mr-2 border p-3 rounded-md"
               name="univName"
@@ -151,17 +152,44 @@ const SchoolForm = () => {
             {validationMessages.univName && (
               <p className="text-red-500 text-[13px] mt-2">{validationMessages.univName}</p>
             )}
-          </>
+          </div>
         )}
         {user?.isValidate ? (
           <p>인증완료✔️</p>
         ) : (
-          <button onClick={onSubmitEmailConfirm} disabled={isCodeSent}>
+          <button className="text-sm border px-4 py-2 rounded-lg" onClick={onSubmitEmailConfirm} disabled={isCodeSent}>
             인증
           </button>
         )}
       </div>
-      {user?.isValidate
+      <Modal isOpen={isOpen} onOpenChange={onOpenChange} placement="auto">
+        <ModalContent>
+          {(onClose) => (
+            <>
+              <ModalHeader className="flex flex-col gap-1">학교 이메일 인증코드</ModalHeader>
+              <ModalBody>
+                <Input
+                  autoFocus
+                  label="Code"
+                  placeholder="인증코드를 입력해주세요"
+                  variant="bordered"
+                  value={code}
+                  onChange={(e) => setCode(e.target.value)}
+                />
+              </ModalBody>
+              <ModalFooter>
+                <Button color="danger" variant="flat" onPress={onClose} className="bg-white">
+                  취소
+                </Button>
+                <Button color="primary" onPress={onSubmitCodeConfirm}>
+                  확인
+                </Button>
+              </ModalFooter>
+            </>
+          )}
+        </ModalContent>
+      </Modal>
+      {/* {user?.isValidate
         ? null
         : isCodeSent && (
             <div className="flex flex-col">
@@ -180,7 +208,7 @@ const SchoolForm = () => {
                 <button onClick={onSubmitCodeConfirm}>확인</button>
               </div>
             </div>
-          )}
+          )} */}
     </div>
   );
 };
