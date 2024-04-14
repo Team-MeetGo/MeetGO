@@ -10,7 +10,6 @@ const InitChatRealTime = () => {
   const { data: user } = useGetUserDataQuery();
   const myMsgData = useMyMsgData(user?.user_id!);
   console.log('myMsgData =>', myMsgData);
-  console.log(myMsgData?.map((m) => m.newMsgCount));
   const { mutate: mutateNewMsgNum } = useUpdateNewMsg();
 
   useEffect(() => {
@@ -24,7 +23,6 @@ const InitChatRealTime = () => {
           table: 'messages'
         },
         (payload) => {
-          console.log('payload', payload);
           mutateNewMsgNum(payload.new.chatting_room_id);
         }
       )

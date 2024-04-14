@@ -21,7 +21,7 @@ export const useUpdateLastMsg = (user_id: string, chatRoomId: string, msg_id: st
   const queryClient = useQueryClient();
   const { mutate: mutateToUpdate } = useMutation({
     mutationFn: () => updateMyLastMsg(user_id, chatRoomId, msg_id),
-    onSuccess: async () => await queryClient.invalidateQueries({ queryKey: [MY_LAST_MSGS_AFTER, user_id, chatRoomId] })
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: [MY_LAST_MSGS_AFTER, user_id, chatRoomId] })
   });
   return { mutate: mutateToUpdate };
 };

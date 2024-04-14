@@ -192,6 +192,7 @@ const Map: React.FC<MapProps> = ({ chatRoomId }) => {
   const updateMeetingLocationMutation = useUpdateMeetingLocationMutation();
   const clearMeetingLocationMutation = useClearMeetingLocationMutation();
 
+  const clearMutation = useClearMeetingLocationMutation({ chatRoomId });
   // 장소 선택 함수
   const handleSelectLocation = async (barName: string) => {
     setSelectedMeetingLocation(barName);

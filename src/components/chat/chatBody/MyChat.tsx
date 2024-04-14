@@ -21,9 +21,11 @@ const MyChat = ({ msg, idx, lastDivRefs }: { msg: Message; idx: number; lastDivR
           <div className="font-bold ml-auto">{msg.nickname}</div>
           <div className="flex gap-2 ml-auto">
             <ChatDeleteDropDown msg={msg} />
-            <div className="border rounded-md py-3 px-5 h-full text-right">{msg.message}</div>
+            <div className="rounded-md bg-mainColor py-1.5 px-5 h-full text-right text-white font-extralight">
+              {msg.message}
+            </div>
           </div>
-          <div className="mt-auto text-slate-100 text-xs ml-auto">
+          <div className="mt-auto text-xs text-gray-400 ml-auto">
             <p>{getformattedDate(msg.created_at)}</p>
           </div>
         </div>
