@@ -64,3 +64,11 @@ export const useRoomParticipantsQuery = (room_id: string) => {
   });
   return users;
 };
+
+// export const useMyChatRoomsQuery = (user_id: string | undefined) => {
+//   const data = useSuspenseQuery({
+//     queryKey: [MYCHATROOMS],
+//     queryFn: () => fetchMyChatRooms(user_id)
+//   });
+//   return data;
+// };

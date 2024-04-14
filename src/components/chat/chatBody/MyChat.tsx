@@ -1,4 +1,3 @@
-import { useMyLastMsgs } from '(@/hooks/useQueries/useChattingQuery)';
 import { useGetUserDataQuery } from '(@/hooks/useQueries/useUserQuery)';
 import { chatStore } from '(@/store/chatStore)';
 import { Message } from '(@/types/chatTypes)';
@@ -6,9 +5,9 @@ import { getformattedDate, showingDate } from '(@/utils)';
 import ChatDeleteDropDown from './ChatDeleteDropDown';
 
 const MyChat = ({ msg, idx, lastDivRefs }: { msg: Message; idx: number; lastDivRefs: any }) => {
-  const { messages, chatRoomId, checkedLastMsg, isScrolling } = chatStore((state) => state);
+  const { messages } = chatStore((state) => state);
   const { data: user } = useGetUserDataQuery();
-  const lastMsgId = useMyLastMsgs(user?.user_id!, chatRoomId);
+
   return (
     <>
       {idx >= 1 && new Date(msg.created_at).getDate() > new Date(messages[idx - 1].created_at).getDate() ? (
@@ -28,7 +27,9 @@ const MyChat = ({ msg, idx, lastDivRefs }: { msg: Message; idx: number; lastDivR
             <p>{getformattedDate(msg.created_at)}</p>
           </div>
         </div>
-        <div className="h-14 w-14 bg-indigo-600 rounded-full my-auto">{msg.avatar}</div>
+        <div className="h-14 w-14 bg-indigo-600 rounded-full my-auto">
+          <img src={user?.avatar as string} alt="유저 이미지"></img>
+        </div>
       </div>
     </>
   );

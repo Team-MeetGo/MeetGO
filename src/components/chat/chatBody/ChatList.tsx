@@ -10,13 +10,13 @@ import { chatStore } from '(@/store/chatStore)';
 import OthersChat from './OthersChat';
 import ChatSearch from './ChatSearch';
 import { useMyLastMsgs, useRoomDataQuery } from '(@/hooks/useQueries/useChattingQuery)';
-import { useAddLastMsg, useUpdateLastMsg } from '(@/hooks/useMutation/useChattingMutation)';
 import MyChat from './MyChat';
+import RememberLastChat from '../chatFooter/RememberLastChat';
 
 const ChatList = ({ user, chatRoomId }: { user: User | null; chatRoomId: string }) => {
   const scrollRef = useRef() as React.MutableRefObject<HTMLDivElement>;
   const { hasMore, messages, setMessages } = chatStore((state) => state);
-  const [isScrolling, setIsScrolling] = useState(false);
+  const [isScrolling, setIsScrolling] = useState(true);
   const [isScrollTop, setIsScrollTop] = useState(true);
   const [count, setCount] = useState(1);
   const [newAddedMsgNum, setNewAddedMsgNum] = useState(0);
@@ -28,12 +28,9 @@ const ChatList = ({ user, chatRoomId }: { user: User | null; chatRoomId: string 
   const lastDivRefs = useRef(messages);
   const lastMsgId = useMyLastMsgs(user?.id!, chatRoomId);
 
-  // console.log('DB의 마지막 메세지 =>', lastMsgId);
-  // console.log('찐 마지막 메세지 =>', messages[messages.length - 1].message_id);
-
+  // "messages" table Realtime INSERT, DELETE 구독로직
   useEffect(() => {
     if (roomId && chatRoomId) {
-      // "messages" table Realtime INSERT, DELETE 구독로직
       const channel = clientSupabase
         .channel(chatRoomId)
         .on(
@@ -65,74 +62,51 @@ const ChatList = ({ user, chatRoomId }: { user: User | null; chatRoomId: string 
     }
   }, [messages, setMessages, isScrolling, roomId, chatRoomId]);
 
+  // 여기까지 읽으셨습니다(처음 마운트 시에만 실행)
   useEffect(() => {
     const scrollBox = scrollRef.current;
-    if (scrollBox && !isScrolling) {
-      // 처음에 로드 시 스크롤 중이 아닐 때
-      if (lastMsgId && lastMsgId !== messages[messages.length - 1].message_id) {
-        // 이전에 저장된 마지막 메세지가 있으면 그 메세지 강조처리
-        // let lastDiv = document.getElementById(`${lastMsgId[0].last_msg_id}`);
-        let ref = lastDivRefs.current.find((ref) => ref.message_id === lastMsgId);
-        let lastDiv = ref && ref.current;
-        if (lastDiv) {
-          setLastCheckedDiv(lastDiv);
-          styleHere(lastDiv);
-        }
+    if (scrollBox) {
+      // DB에 마지막 메세지로 저장된 메세지와 id가 동일한 div 가 있다면 강조처리
+      let ref = lastDivRefs.current.find((ref) => ref.message_id === lastMsgId);
+      let lastDiv = ref && ref.current;
+      if (lastMsgId && lastMsgId !== messages[messages.length - 1].message_id && lastDiv) {
+        console.log('lastMsgId =>', lastMsgId);
+        setLastCheckedDiv(lastDiv);
+        styleHere(lastDiv);
       } else {
         scrollBox.scrollTop = scrollBox.scrollHeight;
       }
     }
   }, []);
 
+  // 스크롤 다운
   useEffect(() => {
     const scrollBox = scrollRef.current;
-    if (scrollBox && !isScrolling) {
-      // 처음에 로드 시 스크롤 중이 아닐 때
-      let ref = lastDivRefs.current.find((ref) => ref.message_id === lastMsgId);
-      let lastDiv = ref && ref.current;
-      if (!lastMsgId || prevMsgsLengthRef.current !== messages.length || !lastDiv) {
-        // 이전에 저장된 마지막 메세지가 없거나, DB에 저장된 메세지는 있는데 화면에 없거나, 새로운 메세지가 추가될 때 그냥 스크롤 다운
+    // 이전 메세지가 화면에 있을 때
+    if (lastCheckedDiv) {
+      // 강조처리를 보고난 뒤 스크롤을 맨 아래로 내리면 강조처리 해제
+      if (!isScrolling) {
+        console.log('5');
+        setCheckedLastMsg(true);
+        lastCheckedDiv.style.backgroundColor = '';
+      }
+      // 강조처리를 보고나야만 타인으로부터 새로운 메세지가 추가되었을 때 스크롤 다운되도록
+      if (checkedLastMsg && prevMsgsLengthRef.current !== messages.length) {
         scrollBox.scrollTop = scrollBox.scrollHeight;
         prevMsgsLengthRef.current = messages.length;
-      } else {
-        // 이전에 저장된 마지막 메세지가 있고 그게 강조처리 되어있다가, 스크롤다운(마지막 메세지를 확인)되면 투명으로 변경
-        if (lastCheckedDiv) {
-          setCheckedLastMsg(true);
-          lastCheckedDiv.style.backgroundColor = '';
-        }
       }
+    } else if (prevMsgsLengthRef.current !== messages.length) {
+      // 이전 메세지가 화면에 없고 + 새로운 메세지가 추가되면 스크롤 다운이 따라가도록
+      scrollBox.scrollTop = scrollBox.scrollHeight;
+      prevMsgsLengthRef.current = messages.length;
     }
   }, [messages, isScrolling]);
-
-  const { mutate: mutateToUpdate } = useUpdateLastMsg(
-    user?.id as string,
-    chatRoomId as string,
-    messages && messages.length > 0 ? messages[messages.length - 1].message_id : undefined
-  );
-  const { mutate: mutateToAdd } = useAddLastMsg(
-    chatRoomId,
-    user?.id as string,
-    messages && messages.length > 0 ? messages[messages.length - 1].message_id : undefined
-  );
-
-  // 마지막으로 읽은 메세지 기억하기
-  useEffect(() => {
-    console.log('useEffect 안 실행되는 건 맞아?');
-    // 현재 나누는 메세지가 있을 때
-    return () => {
-      console.log('실행은 되니');
-      // 이전에 저장된 마지막 메세지가 있으면 현재 메세지 중 마지막 걸로 업데이트, 없으면 현재 메세지 중 마지막 메세지 추가하기
-      if (messages.length) {
-        lastMsgId ? mutateToUpdate() : mutateToAdd();
-      }
-    };
-  }, [checkedLastMsg]);
 
   // 스크롤 이벤트가 발생할 때
   const handleScroll = () => {
     const scrollBox = scrollRef.current;
     if (scrollBox) {
-      const isScroll = scrollBox.scrollTop < scrollBox.scrollHeight - scrollBox.clientHeight - 10;
+      const isScroll = scrollBox.scrollTop < scrollBox.scrollHeight - scrollBox.clientHeight - 5;
       setIsScrolling(isScroll);
       if (!isScroll) {
         setNewAddedMsgNum(0);
@@ -159,7 +133,6 @@ const ChatList = ({ user, chatRoomId }: { user: User | null; chatRoomId: string 
         onScroll={handleScroll}
       >
         <ChatSearch isScrollTop={isScrollTop} />
-
         {hasMore ? <LoadChatMore chatRoomId={chatRoomId} count={count} setCount={setCount} /> : <></>}
         {messages?.map((msg, idx) => (
           <>
@@ -193,6 +166,7 @@ const ChatList = ({ user, chatRoomId }: { user: User | null; chatRoomId: string 
       ) : (
         <></>
       )}
+      <RememberLastChat />
     </>
   );
 };

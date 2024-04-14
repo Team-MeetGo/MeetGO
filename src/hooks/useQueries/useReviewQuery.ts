@@ -37,9 +37,9 @@ export const useLikedReviewDataQuery = () => {
 };
 
 export const useReviewListDataQuery = () => {
-  const { data: fetchReviewsData } = useQuery({
+  const { data: fetchReviewsData, isLoading } = useQuery({
     queryKey: [REVIEWLIST_QUERY_KEY],
     queryFn: async () => await fetchReviewList()
   });
-  return fetchReviewsData;
+  return { data: fetchReviewsData?.data, count: fetchReviewsData?.count, isLoading };
 };

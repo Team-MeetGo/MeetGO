@@ -112,7 +112,6 @@ export const deleteMember = async ({ user_id, room_id }: { user_id: string; room
     .eq('room_id', room_id)
     .select();
 };
-
 export const fetchRoomParticipants = async (roomId: string) => {
   const { data: userInformations, error: userInformatinsError } = await clientSupabase
     .from('participants')
@@ -122,3 +121,25 @@ export const fetchRoomParticipants = async (roomId: string) => {
     .select('user_id, users(*)');
   return userInformations?.map((user) => user.users);
 };
+
+// // 내가 들어가 있는 채팅방과 그 채팅방에 엮여있는 roomId
+// export const fetchMyChatRooms = async (userId: string | undefined) => {
+// const {data: myMsgInfo} = await clientSupabase.from("remember_last_msg").select("chatting_room_id")
+
+// const myChatRooms = [];
+// const { data: myRooms } = await clientSupabase.from('participants').select('room_id').eq('user_id', String(userId));
+
+// if (myRooms) {
+//   for (let room of myRooms) {
+//     const { data: myChatRoomId } = await clientSupabase
+//       .from('chatting_room')
+//       .select('chatting_room_id')
+//       .eq('room_id', room.room_id)
+//       .eq('isActive', true);
+//     if (myChatRoomId && myChatRoomId.length) {
+//       myChatRooms.push({ roomId: room.room_id, chatRoomId: myChatRoomId[0].chatting_room_id, newMsgCount: 0 });
+//     }
+//   }
+// }
+// return myChatRooms;
+// };

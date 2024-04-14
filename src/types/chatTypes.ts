@@ -1,12 +1,13 @@
 import { Tables } from './database.types';
 
 export type Message = {
-  message_id: string;
-  send_from: string | null;
-  message: string;
-  nickname: string;
   avatar: string;
+  chatting_room_id: string;
   created_at: string;
+  message: string;
+  message_id: string;
+  nickname: string;
+  send_from: string;
 };
 
 export type UserData =
