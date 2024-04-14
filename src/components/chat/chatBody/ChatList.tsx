@@ -19,7 +19,7 @@ const ChatList = ({ user, chatRoomId }: { user: User | null; chatRoomId: string 
   const queryClient = useQueryClient();
   const scrollRef = useRef() as React.MutableRefObject<HTMLDivElement>;
   const { hasMore, messages, setMessages } = chatStore((state) => state);
-  const [isScrolling, setIsScrolling] = useState(false);
+  const [isScrolling, setIsScrolling] = useState(true);
   const [isScrollTop, setIsScrollTop] = useState(true);
   const [count, setCount] = useState(1);
   const [newAddedMsgNum, setNewAddedMsgNum] = useState(0);
@@ -30,12 +30,10 @@ const ChatList = ({ user, chatRoomId }: { user: User | null; chatRoomId: string 
   const prevMsgsLengthRef = useRef(messages.length);
   const lastDivRefs = useRef(messages);
   const lastMsgId = useMyLastMsgs(user?.id!, chatRoomId);
-  // console.log('messages => ', messages);
 
   console.log('isScrolling =>', isScrolling);
   console.log('lastMsgId =>', lastMsgId);
   console.log('lastCheckedDiv =>', lastCheckedDiv);
-  // console.log('찐 마지막 메세지 =>', messages[messages.length - 1].message_id);
 
   // "messages" table Realtime INSERT, DELETE 구독로직
   useEffect(() => {
@@ -74,27 +72,17 @@ const ChatList = ({ user, chatRoomId }: { user: User | null; chatRoomId: string 
   // 여기까지 읽으셨습니다
   useEffect(() => {
     const scrollBox = scrollRef.current;
-    if (scrollBox && !isScrolling) {
-      console.log('0');
-      // 처음에 로드 시 스크롤 중이 아닐 때
+    if (scrollBox) {
       let ref = lastDivRefs.current.find((ref) => ref.message_id === lastMsgId);
       let lastDiv = ref && ref.current;
 
       if (lastMsgId && lastMsgId !== messages[messages.length - 1].message_id) {
-        console.log('1');
-        // 이전에 저장된 마지막 메세지가 있으면 그 메세지 강조처리
-        // let lastDiv = document.getElementById(`${lastMsgId[0].last_msg_id}`);
         if (lastDiv) {
           console.log('2');
-          // setLastCheckedDiv(lastDiv);
+          setLastCheckedDiv(lastDiv);
           styleHere(lastDiv);
         }
-      }
-      // else if (!lastMsgId || !lastDiv) {
-      //   console.log('3');
-      //   // 이전에 저장된 마지막 메세지가 없거나, DB에 저장된 메세지는 있는데 화면에 없거나, 새로운 메세지가 추가될 때 그냥 스크롤 다운
-      // }
-      else {
+      } else {
         console.log('*');
         scrollBox.scrollTop = scrollBox.scrollHeight;
       }
@@ -104,41 +92,16 @@ const ChatList = ({ user, chatRoomId }: { user: User | null; chatRoomId: string 
   // 스크롤 다운
   useEffect(() => {
     const scrollBox = scrollRef.current;
-    let ref = lastDivRefs.current.find((ref) => ref.message_id === lastMsgId);
-    let lastDiv = ref && ref.current;
-    if (lastCheckedDiv && !isScrolling && lastDiv) {
+    if (lastCheckedDiv && !isScrolling) {
       console.log('5');
       setCheckedLastMsg(true);
-      // setLastCheckedDiv(lastDiv);
       lastCheckedDiv.style.backgroundColor = '';
     }
-    // if (scrollBox && !isScrolling) {
-    // 처음에 로드 시 스크롤 중이 아닐 때
-
-    // if (!lastMsgId || prevMsgsLengthRef.current !== messages.length || !lastDiv) {
-    //   console.log('3');
-    //   // 이전에 저장된 마지막 메세지가 없거나, DB에 저장된 메세지는 있는데 화면에 없거나, 새로운 메세지가 추가될 때 그냥 스크롤 다운
-    //   scrollBox.scrollTop = scrollBox.scrollHeight;
-    //   prevMsgsLengthRef.current = messages.length;
-    // }
-    // else {
     if (checkedLastMsg && prevMsgsLengthRef.current !== messages.length) {
       scrollBox.scrollTop = scrollBox.scrollHeight;
       prevMsgsLengthRef.current = messages.length;
     }
-    // console.log('4');
-    // 이전에 저장된 마지막 메세지가 있고 그게 강조처리 되어있다가, 스크롤다운(마지막 메세지를 확인)되면 투명으로 변경
-
-    // }
-    // }
   }, [messages, isScrolling]);
-
-  // useEffect(() => {
-  //   return () => {
-  //     console.log('클린업~');
-  //     // queryClient.invalidateQueries({ queryKey: [MY_LAST_MSGS_AFTER, user?.id, chatRoomId] });
-  //   };
-  // }, []);
 
   // 스크롤 이벤트가 발생할 때
   const handleScroll = () => {
