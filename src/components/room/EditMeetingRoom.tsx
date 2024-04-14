@@ -1,4 +1,6 @@
 'use client';
+import { useUpdateRoom } from '(@/hooks/useMutation/useMeetingMutation)';
+import { useRoomStore } from '(@/store/roomStore)';
 import { favoriteOptions } from '(@/utils/FavoriteData)';
 import {
   Button,
@@ -13,14 +15,15 @@ import {
   useDisclosure
 } from '@nextui-org/react';
 import { useState } from 'react';
-import { useUpdateRoom } from '(@/hooks/useMutation/useMeetingMutation)';
-
-import type { MeetingRoomType, UpdateRoomType } from '(@/types/roomTypes)';
-import RegionSelection from './RegionSelection';
 import MemberNumberSelection from './MemberNumberSelection';
-import { useRoomStore } from '(@/store/roomStore)';
+import RegionSelection from './RegionSelection';
+
+import { useGetUserDataQuery } from '(@/hooks/useQueries/useUserQuery)';
+import type { MeetingRoomType, UpdateRoomType } from '(@/types/roomTypes)';
 
 function EditMeetingRoom({ room }: { room: MeetingRoomType }) {
+  const { data: user } = useGetUserDataQuery();
+  const user_id = user?.user_id;
   const { memberNumber, setMemberNumber, resetMemberNumber, roomRegion, setRoomRegion, resetRoomRegion } =
     useRoomStore();
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
@@ -30,26 +33,27 @@ function EditMeetingRoom({ room }: { room: MeetingRoomType }) {
   const room_id = room.room_id;
   const favoriteArray = Array.from(selected);
   const editedMeetingRoom: UpdateRoomType = {
-    title,
-    favoriteArray,
+    room_title: title,
+    feature: favoriteArray,
     location,
-    memberNumber: String(memberNumber),
+    member_number: String(memberNumber),
     room_id,
     region: String(roomRegion)
   };
-  const roomUpdateMutation = useUpdateRoom();
+  const roomUpdateMutation = useUpdateRoom({ editedMeetingRoom, user_id });
 
-  const editMeetingRoom = async () => {
+  const editMeetingRoom = async (e: any) => {
+    e.preventDefault();
     if (!title || !selected || !location || memberNumber === '인원' || roomRegion === '지역') {
       alert('모든 항목은 필수입니다.');
-    } else {
-      await roomUpdateMutation.mutate(editedMeetingRoom);
-      setTitle('');
-      setLocation('');
-      resetMemberNumber();
-      resetRoomRegion();
-      setSelected(new Set([]));
+      return;
     }
+    await roomUpdateMutation.mutateAsync();
+    setTitle('');
+    setLocation('');
+    resetMemberNumber();
+    resetRoomRegion();
+    setSelected(new Set([]));
   };
 
   const cancelMakingMeetingRoom = () => {
@@ -87,7 +91,7 @@ function EditMeetingRoom({ room }: { room: MeetingRoomType }) {
           beforeData();
         }}
         onPress={onOpen}
-        className="gap-0 p-0 m-0 h-4 w-4"
+        className="gap-0 p-0 m-0 h-[31px] w-[76px] bg-mainColor text-white text-[16px] rounded-xl"
       >
         수정
       </Button>
@@ -120,7 +124,7 @@ function EditMeetingRoom({ room }: { room: MeetingRoomType }) {
           {(onClose) => (
             <>
               <ModalHeader className="flex flex-col gap-1">방 내용 수정</ModalHeader>
-              <form onSubmit={() => editMeetingRoom()}>
+              <form onSubmit={(e: any) => editMeetingRoom(e)}>
                 <ModalBody>
                   <input value={title} onChange={(e) => setTitle(e.target.value)} placeholder="title" maxLength={15} />
                   <div className="flex w-full max-w-xs flex-col gap-2">
@@ -142,12 +146,12 @@ function EditMeetingRoom({ room }: { room: MeetingRoomType }) {
                         ))}
                       </Select>
                     </div>
-                    <div className="flex flex-wrap gap-2">
+                    <div className="text-[14px] flex flex-row gap-[8px]">
                       {Array.from(selected).map((value) => (
                         <Chip
                           key={value}
                           color="default"
-                          style={{ backgroundColor: favoriteOptions.find((option) => option.value === value)?.color }}
+                          style={{ backgroundColor: '#F2EAFA', color: '#8F5DF4', borderRadius: '8px' }}
                           onClose={() => handleDelete(value)}
                         >
                           {value}

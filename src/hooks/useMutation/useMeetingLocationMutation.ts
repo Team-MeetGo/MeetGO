@@ -1,5 +1,5 @@
 import { addMeetingLocation, deleteMeetingLocation } from '(@/query/chat/chatQueryFns)';
-import { MEETING_LOCATION_QUERY_KEY } from '(@/query/chat/chatQueryKeys)';
+import { CHATDATA_QUERY_KEY } from '(@/query/chat/chatQueryKeys)';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 export const useClearMeetingLocationMutation = ({ chatRoomId }: { chatRoomId: string }) => {
@@ -8,7 +8,7 @@ export const useClearMeetingLocationMutation = ({ chatRoomId }: { chatRoomId: st
   const clearMeetingRoomMutation = useMutation({
     mutationFn: async () => await deleteMeetingLocation(chatRoomId),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: MEETING_LOCATION_QUERY_KEY });
+      queryClient.invalidateQueries({ queryKey: CHATDATA_QUERY_KEY });
     }
   });
 
@@ -22,7 +22,7 @@ export const useUpdateMeetingLocationMutation = () => {
     mutationFn: async ({ chatRoomId, barName }: { chatRoomId: string; barName: string }) =>
       await addMeetingLocation({ chatRoomId, barName }),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: MEETING_LOCATION_QUERY_KEY });
+      queryClient.invalidateQueries({ queryKey: CHATDATA_QUERY_KEY });
     }
   });
 

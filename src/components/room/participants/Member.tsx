@@ -1,17 +1,19 @@
 'use client';
 
+import { useRoomInfoWithRoomIdQuery, useRoomParticipantsQuery } from '(@/hooks/useQueries/useMeetingQuery)';
 import { clientSupabase } from '(@/utils/supabase/client)';
 import { useEffect, useState } from 'react';
-import { useRoomInfoWithRoomIdQuery } from '(@/hooks/useQueries/useMeetingQuery)';
-import { useParticipantsQuery } from '(@/hooks/useQueries/useChattingQuery)';
 
 import type { UserType } from '(@/types/roomTypes)';
+import { FaCrown } from 'react-icons/fa6';
+import { IoFemale, IoMale } from 'react-icons/io5';
 
 const Member = ({ room_id }: { room_id: string }) => {
-  const [members, setMembers] = useState<UserType[]>([]);
-  const participants = useParticipantsQuery(room_id);
+  const participants = useRoomParticipantsQuery(room_id);
+  const [members, setMembers] = useState<UserType[]>(participants);
   const { data: roomInformation } = useRoomInfoWithRoomIdQuery(room_id);
   const leaderMember = roomInformation?.leader_id;
+  const [leader, setLeader] = useState(leaderMember);
 
   useEffect(() => {
     const channle = clientSupabase
@@ -24,7 +26,25 @@ const Member = ({ room_id }: { room_id: string }) => {
           table: 'participants'
         },
         (payload) => {
-          setMembers(participants ? [...members, payload.new as UserType] : []);
+          console.log('payload', payload);
+          const { user_id } = payload.new;
+          type test = Awaited<typeof payload.new>;
+          const addMemeberUserId = async ({ addPartId }: { addPartId: test }) => {
+            const { data: newUserData, error } = await clientSupabase
+              .from('participants')
+              .select(`*`)
+              .eq('isDeleted', false)
+              .eq('user_id', user_id)
+              .select('user_id, users(*)');
+
+            console.log('유저데이터 확인 => ', newUserData);
+            console.log('오류 확인 => ', error);
+
+            if (!participants || participants.length < 1) return;
+            if (!newUserData || newUserData.length < 1) return;
+            setMembers(() => [...participants, newUserData[0].users as UserType]);
+          };
+          addMemeberUserId({ addPartId: user_id });
         }
       )
       .on(
@@ -35,33 +55,28 @@ const Member = ({ room_id }: { room_id: string }) => {
           table: 'participants'
         },
         (payload) => {
-          console.log('payload => ', payload);
           const { user_id } = payload.new;
-          type test = Awaited<typeof payload.old>;
-          const deleteMemeberUserId = async ({ deletePartId }: { deletePartId: test }) => {
-            console.log('deletePartId ==> ', deletePartId);
+          setMembers(members.filter((member) => member.user_id !== user_id));
+          if (user_id === leaderMember) {
+          }
+          const updateLeaderUser = async () => {
+            const { data: leader_id, error } = await clientSupabase
+              .from('room')
+              .select(`*`)
+              .eq('room_id', room_id)
+              .select('leader_id');
 
-            const { data: userData, error } = await clientSupabase
-              .from('participants')
-              .select(
-                `
-                *,
-                users (
-                  nickname,
-                  gender
-                )
-              `
-              )
-              .eq('user_id', user_id);
-
-            console.log('유저데이터 확인 => ', userData);
+            console.log('유저데이터 확인 => ', leader_id);
             console.log('오류 확인 => ', error);
 
             if (!participants || participants.length < 1) return;
-            if (!userData || userData.length < 1) return;
-            setMembers(participants?.filter((member) => member.user_id !== userData[0].user_id));
+            if (!leader_id || leader_id.length < 1) return;
+            if (leader) {
+              const newLeader = leader_id[0].leader_id;
+              setLeader(newLeader);
+            }
           };
-          deleteMemeberUserId({ deletePartId: user_id });
+          updateLeaderUser();
         }
       )
       .subscribe();
@@ -73,25 +88,58 @@ const Member = ({ room_id }: { room_id: string }) => {
 
   return (
     <>
-      <div className="gap-2 grid grid-cols-2 m-4 w-100% gap-8">
-        {participants.map((member) => (
-          <div key={member.user_id}>
-            <div className="flex flex-row h-32 w-unit-7xl border-4 rounded-2xl">
-              <div className="flex flex-col align-middle justify-start m-1">
-                <div className="w-24 h-24 border-4">
-                  {leaderMember === member.user_id ? <div>왕관모양</div> : ''}
-                  {member.avatar ? <img src={member.avatar as string} alt="유저" /> : ''}
-                </div>
-                <div className="px-2">{member.nickname}</div>
+      <div className="flex flex-col items-center justify-content">
+        <div className="flex flex-col items-center justify-content min-w-[1116px] max-w-[1440px]">
+          <main className="mt-[40px] grid grid-cols-2 grid-rows-4 w-100% gap-x-[100px] gap-y-[25px]">
+            {members.map((member) => (
+              <div
+                key={member.user_id}
+                className={member.gender === 'female' ? `grid col-start-1` : `grid col-start-2`}
+              >
+                <article
+                  className={
+                    member.gender === 'female'
+                      ? `border-purpleThird border-[2px] mb-[50px] flex flex-row w-[506px] h-[166px] rounded-2xl`
+                      : `bg-purpleSecondary mb-[50px] flex flex-row w-[506px] h-[166px] rounded-2xl`
+                  }
+                >
+                  {/* 카드 왼쪽 */}
+                  <div className="mx-[40px] justify-items-center align-middle items-center">
+                    <div className="w-[86px] h-[86px] mt-[32px] border-4 mr-[48px] rounded-full">
+                      {leaderMember === member.user_id ? (
+                        <div>
+                          <FaCrown className="h-[20px] w-[20px] m-[2px] fill-mainColor" />
+                        </div>
+                      ) : (
+                        ''
+                      )}
+                      {member.avatar ? <img src={member.avatar as string} alt="유저" /> : ''}
+                    </div>
+                    <div className="pt-[8px] w-[84px] text-center">{member.nickname}</div>
+                  </div>
+
+                  {/* 카드 오른쪽 */}
+                  <div className="flex flex-col mt-[32px] mb-[32px]">
+                    <div className="flex flex-row gap text-[16px]">
+                      <div>{member.school_name}</div>
+                      {member.gender === 'female' ? (
+                        <IoFemale className="w-[16px] fill-hotPink" />
+                      ) : (
+                        <IoMale className="w-[16px] fill-blue" />
+                      )}
+                    </div>
+                    <div className="flex flex-row w-100% text-[14px] gap-[8px] w-[200px]">
+                      <div className="my-[16px] bg-purpleSecondary color: text-mainColor rounded-xl ">
+                        {member.favorite}
+                      </div>
+                    </div>
+                    <div className="text-[14px]">{member.intro}</div>
+                  </div>
+                </article>
               </div>
-              <div className="flex flex-col w-unit-6xl justify-center align-top gap-1 border-4 px-3">
-                <div>{member.school_name}</div>
-                <div>{member.favorite}</div>
-                <div>{member.intro}</div>
-              </div>
-            </div>
-          </div>
-        ))}
+            ))}
+          </main>
+        </div>
       </div>
     </>
   );
