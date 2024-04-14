@@ -189,26 +189,6 @@ const SchoolForm = () => {
           )}
         </ModalContent>
       </Modal>
-      {/* {user?.isValidate
-        ? null
-        : isCodeSent && (
-            <div className="flex flex-col">
-              <label className="block text-sm font-medium mb-1" htmlFor="schoolEmail">
-                인증 코드
-              </label>
-              <div>
-                <input
-                  className="mr-2 border p-3 rounded-md"
-                  name="code"
-                  type="text"
-                  placeholder=""
-                  value={code}
-                  onChange={(e) => setCode(e.target.value)}
-                />
-                <button onClick={onSubmitCodeConfirm}>확인</button>
-              </div>
-            </div>
-          )} */}
     </div>
   );
 };

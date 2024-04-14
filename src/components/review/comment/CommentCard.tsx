@@ -38,7 +38,7 @@ const CommentCard = ({ comment }: Props) => {
               {userAvatar ? (
                 <Image
                   className="rounded-full w-[52px] h-[52px]"
-                  src={userAvatar}
+                  src={`${userAvatar}?${new Date().getTime()}`}
                   alt="유저 아바타"
                   height={50}
                   width={50}

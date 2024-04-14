@@ -184,6 +184,7 @@ const Profile = () => {
               placeholder="자기소개를 입력해주세요. 예)MBTI, 취미, 관심사 등"
               value={inputIntro.value}
               onChange={inputIntro.onChange}
+              maxLength={15}
             />
           )}
         </div>
