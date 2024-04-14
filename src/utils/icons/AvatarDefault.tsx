@@ -14,6 +14,7 @@ export default function AvatarDefault() {
           backgroundColor: '#E4D4F4',
           color: 'white'
         }}
+        size="lg"
       />
     </div>
   );

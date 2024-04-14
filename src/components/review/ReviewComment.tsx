@@ -15,7 +15,7 @@ const ReviewComment = ({ review_id }: Props) => {
       <div className="pb-[7px]" style={{ fontSize: '1.1rem' }}>
         <HiOutlineChatBubbleOvalLeftEllipsis />
       </div>
-      <div className="pb-1">{commentData?.length}</div>
+      <div className="pb-1 text-[16px]">{commentData?.length}</div>
     </div>
   );
 };
