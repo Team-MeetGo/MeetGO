@@ -14,7 +14,8 @@ const config: Config = {
         'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
         'gradient-conic': 'conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))',
         'gradient-to-review': 'linear-gradient(90deg, rgba(208,161,255,1) 35%, rgba(174,226,255,1) 100%)',
-        'gradient-to-main': 'linear-gradient(180deg, rgba(255,202,220,1) 0%, rgba(196,191,255,1) 100%)'
+        'gradient-to-main': 'linear-gradient(180deg, rgba(255,202,220,1) 0%, rgba(196,191,255,1) 100%)',
+        'gradient-to-main2': 'linear-gradient(90deg, rgba(199,140,234,1) 0%, rgba(133,87,252,1) 100%)'
       },
       colors: {
         mainColor: '#8F5DF4',
