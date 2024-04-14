@@ -81,14 +81,20 @@ export const updateLeaderMember = async ({
   otherParticipants,
   room_id
 }: {
-  otherParticipants: UserType[];
+  otherParticipants: UserType[] | undefined | null;
   room_id: string;
 }) => {
-  const { data: leaderUpdate } = await clientSupabase
-    .from('room')
-    .update({ leader_id: otherParticipants[0].user_id })
-    .eq('room_id', room_id);
-  return leaderUpdate;
+  try {
+    if (otherParticipants) {
+      const { data: leaderUpdate, error } = await clientSupabase
+        .from('room')
+        .update({ leader_id: otherParticipants[0].user_id })
+        .eq('room_id', room_id);
+      return leaderUpdate;
+    }
+  } catch (error) {
+    console.log(error);
+  }
 };
 
 export const addMember = async ({ user_id, room_id }: { user_id: string; room_id: string }) => {

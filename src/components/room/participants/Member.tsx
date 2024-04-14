@@ -6,6 +6,7 @@ import { useEffect, useState } from 'react';
 
 import type { UserType } from '(@/types/roomTypes)';
 import { FaCrown } from 'react-icons/fa6';
+import { IoFemale, IoMale } from 'react-icons/io5';
 
 const Member = ({ room_id }: { room_id: string }) => {
   const participants = useRoomParticipantsQuery(room_id);
@@ -89,16 +90,22 @@ const Member = ({ room_id }: { room_id: string }) => {
     <>
       <div className="flex flex-col items-center justify-content">
         <div className="flex flex-col items-center justify-content min-w-[1116px] max-w-[1440px]">
-          <main className="mt-[40px] grid grid-cols-2 grid-rows-4 w-100%">
-            <div>
-              {members.map((member) => (
+          <main className="mt-[40px] grid grid-cols-2 grid-rows-4 w-100% gap-x-[100px] gap-y-[25px]">
+            {members.map((member) => (
+              <div
+                key={member.user_id}
+                className={member.gender === 'female' ? `grid col-start-1` : `grid col-start-2`}
+              >
                 <article
-                  key={member.user_id}
-                  className="border-purpleThird border-[2px] mb-[50px] flex flex-row w-[506px] h-[166px] rounded-2xl"
+                  className={
+                    member.gender === 'female'
+                      ? `border-purpleThird border-[2px] mb-[50px] flex flex-row w-[506px] h-[166px] rounded-2xl`
+                      : `bg-purpleSecondary mb-[50px] flex flex-row w-[506px] h-[166px] rounded-2xl`
+                  }
                 >
                   {/* 카드 왼쪽 */}
                   <div className="mx-[40px] justify-items-center align-middle items-center">
-                    <div className="w-[86px] h-[86px] mt-[32px] border-4 mr-[48px] ">
+                    <div className="w-[86px] h-[86px] mt-[32px] border-4 mr-[48px] rounded-full">
                       {leaderMember === member.user_id ? (
                         <div>
                           <FaCrown className="h-[20px] w-[20px] m-[2px] fill-mainColor" />
@@ -113,13 +120,24 @@ const Member = ({ room_id }: { room_id: string }) => {
 
                   {/* 카드 오른쪽 */}
                   <div className="flex flex-col mt-[32px] mb-[32px]">
-                    <div>{member.school_name}</div>
-                    <div className="py-[16px] ">{member.favorite}</div>
-                    <div>{member.intro}</div>
+                    <div className="flex flex-row gap text-[16px]">
+                      <div>{member.school_name}</div>
+                      {member.gender === 'female' ? (
+                        <IoFemale className="w-[16px] fill-hotPink" />
+                      ) : (
+                        <IoMale className="w-[16px] fill-blue" />
+                      )}
+                    </div>
+                    <div className="flex flex-row w-100% text-[14px] gap-[8px] w-[200px]">
+                      <div className="my-[16px] bg-purpleSecondary color: text-mainColor rounded-xl ">
+                        {member.favorite}
+                      </div>
+                    </div>
+                    <div className="text-[14px]">{member.intro}</div>
                   </div>
                 </article>
-              ))}
-            </div>
+              </div>
+            ))}
           </main>
         </div>
       </div>

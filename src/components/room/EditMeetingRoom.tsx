@@ -146,12 +146,12 @@ function EditMeetingRoom({ room }: { room: MeetingRoomType }) {
                         ))}
                       </Select>
                     </div>
-                    <div className="flex flex-wrap gap-2">
+                    <div className="text-[14px] flex flex-row gap-[8px]">
                       {Array.from(selected).map((value) => (
                         <Chip
                           key={value}
                           color="default"
-                          style={{ backgroundColor: favoriteOptions.find((option) => option.value === value)?.color }}
+                          style={{ backgroundColor: '#F2EAFA', color: '#8F5DF4', borderRadius: '8px' }}
                           onClose={() => handleDelete(value)}
                         >
                           {value}
