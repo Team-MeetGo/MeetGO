@@ -74,7 +74,7 @@ function MeetingRoom({ room }: { room: MeetingRoomType }) {
           : `bg-slate-300 rounded-xl`
       }
     >
-      <div className="border-mainColor border-1 w-[354px] h-[241px] rounded-xl flex flex-col justify-start">
+      <div className="border-mainColor border-1 w-[354px] h-[241px] rounded-xl flex flex-col justify-start hover:cursor-pointer">
         <div className="px-[24px]">
           <div className="h-[24px]"></div>
           <div className="flex flex-row justify-between align-middle justify-items-center relative">
