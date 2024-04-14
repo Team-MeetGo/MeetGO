@@ -97,7 +97,6 @@ const NavBarContents = () => {
                   <Avatar
                     as="button"
                     className="transition-transform"
-                    color="secondary"
                     src={`${user?.avatar}?${new Date().getTime()}`}
                   />
                 ) : (
@@ -119,13 +118,13 @@ const NavBarContents = () => {
         ) : (
           <div>
             <Link
-              href="/users/login"
+              href="/login"
               className="bg-white rounded-[12px] px-[20px] py-[12px] text-[18px] text-[#252642] font-medium"
             >
               로그인
             </Link>
             <Link
-              href="/users/join"
+              href="/join"
               className="bg-mainColor rounded-[12px] px-[20px] py-[12px] text-[18px] text-white font-medium"
             >
               회원가입

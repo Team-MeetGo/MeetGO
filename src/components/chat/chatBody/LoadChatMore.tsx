@@ -30,8 +30,9 @@ const LoadChatMore = ({
     } else {
       setMessages([...(newMsgs ? newMsgs.reverse() : []), ...messages]);
       if (newMsgs.length < ITEM_INTERVAL + 1) {
-        alert('더 이상 불러올 메세지가 없습니다.');
         setHasMore(false);
+      } else if (!newMsgs.length) {
+        alert('더 이상 불러올 메세지가 없습니다.');
       } else {
         setCount((prev) => prev + 1);
       }

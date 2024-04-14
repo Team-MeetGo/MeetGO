@@ -15,7 +15,7 @@ const AcceptanceRoomButtons = ({ room_id }: { room_id: string }) => {
   const gotoChattingRoom = async () => {
     if (!user) {
       alert('로그인 후에 이용하세요.');
-      router.push('/users/login');
+      router.push('/login');
     }
     if (user_id === leader) {
       const { data: alreadyChat } = await clientSupabase
