@@ -31,10 +31,6 @@ const ChatList = ({ user, chatRoomId }: { user: User | null; chatRoomId: string 
   const lastDivRefs = useRef(messages);
   const lastMsgId = useMyLastMsgs(user?.id!, chatRoomId);
 
-  console.log('isScrolling =>', isScrolling);
-  console.log('lastMsgId =>', lastMsgId);
-  console.log('lastCheckedDiv =>', lastCheckedDiv);
-
   // "messages" table Realtime INSERT, DELETE 구독로직
   useEffect(() => {
     if (roomId && chatRoomId) {
@@ -73,17 +69,13 @@ const ChatList = ({ user, chatRoomId }: { user: User | null; chatRoomId: string 
   useEffect(() => {
     const scrollBox = scrollRef.current;
     if (scrollBox) {
+      // DB에 마지막 메세지로 저장된 메세지와 id가 동일한 div 가 있다면 강조처리
       let ref = lastDivRefs.current.find((ref) => ref.message_id === lastMsgId);
       let lastDiv = ref && ref.current;
-
-      if (lastMsgId && lastMsgId !== messages[messages.length - 1].message_id) {
-        if (lastDiv) {
-          console.log('2');
-          setLastCheckedDiv(lastDiv);
-          styleHere(lastDiv);
-        }
+      if (lastMsgId && lastMsgId !== messages[messages.length - 1].message_id && lastDiv) {
+        setLastCheckedDiv(lastDiv);
+        styleHere(lastDiv);
       } else {
-        console.log('*');
         scrollBox.scrollTop = scrollBox.scrollHeight;
       }
     }
@@ -92,15 +84,26 @@ const ChatList = ({ user, chatRoomId }: { user: User | null; chatRoomId: string 
   // 스크롤 다운
   useEffect(() => {
     const scrollBox = scrollRef.current;
-    if (lastCheckedDiv && !isScrolling) {
-      console.log('5');
-      setCheckedLastMsg(true);
-      lastCheckedDiv.style.backgroundColor = '';
-    }
-    if (checkedLastMsg && prevMsgsLengthRef.current !== messages.length) {
+    if (lastCheckedDiv) {
+      if (!isScrolling) {
+        console.log('5');
+        setCheckedLastMsg(true);
+        lastCheckedDiv.style.backgroundColor = '';
+      }
+      if (checkedLastMsg && prevMsgsLengthRef.current !== messages.length) {
+        scrollBox.scrollTop = scrollBox.scrollHeight;
+        prevMsgsLengthRef.current = messages.length;
+      }
+    } else if (prevMsgsLengthRef.current !== messages.length) {
       scrollBox.scrollTop = scrollBox.scrollHeight;
       prevMsgsLengthRef.current = messages.length;
     }
+    // if (lastCheckedDiv && !isScrolling) {
+    // }
+    // if (checkedLastMsg && prevMsgsLengthRef.current !== messages.length) {
+    //   scrollBox.scrollTop = scrollBox.scrollHeight;
+    //   prevMsgsLengthRef.current = messages.length;
+    // }
   }, [messages, isScrolling]);
 
   // 스크롤 이벤트가 발생할 때
