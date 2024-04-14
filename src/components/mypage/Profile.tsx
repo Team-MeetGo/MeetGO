@@ -14,6 +14,7 @@ import { useQueryClient } from '@tanstack/react-query';
 import { USER_DATA_QUERY_KEY } from '(@/query/user/userQueryKeys)';
 import { UpdateProfileType } from '(@/types/userTypes)';
 import Image from 'next/image';
+import { profileCount } from '(@/store/userStore)';
 
 const Profile = () => {
   const queryClient = useQueryClient();
@@ -23,6 +24,7 @@ const Profile = () => {
   const inputIntro = useInputChange(user?.intro ? user?.intro : '');
   const inputKakaoId = useInputChange(user?.kakaoId ? user?.kakaoId : '');
   const inputGender = useInputChange(user?.gender ? user?.gender : '');
+  const { postCount, likedPostCount, metPeopleCount, meetingRoomCount } = profileCount();
 
   const { mutate: updateProfileMutate } = useProfileUpdateMutation();
 
@@ -55,13 +57,19 @@ const Profile = () => {
     );
   };
 
-  const joinDateTime = user?.created_at;
   const joinTime = user?.created_at?.toString().slice(0, 10);
+
+  const buttonData = [
+    { title: '스쳐간 인연', count: metPeopleCount },
+    { title: '참여한 미팅방', count: meetingRoomCount },
+    { title: '작성 글', count: postCount },
+    { title: '좋아요한 글', count: likedPostCount }
+  ];
 
   return (
     <div className="mx-auto bg-white">
       <div className="bg-purpleSecondary w-full py-[40px]">
-        <div className="flex flex-col gap-4 max-w-[1116px] m-auto">
+        <div className="flex flex-col gap-4 max-w-[1161px] m-auto">
           <span className="text-[42px] font-bold">프로필</span>
           <div className="flex justify-between items-center">
             <div className="flex gap-6 items-center">
@@ -86,44 +94,46 @@ const Profile = () => {
               </div>
             </div>
             <div className="flex gap-6">
-              <button className="font-semibold">스쳐간 인연</button>
-              <button className="font-semibold">참여한 미팅방</button>
-              <button className="font-semibold">작성 리뷰</button>
-              <button className="font-semibold">좋아요 리뷰</button>
+              {buttonData.map((item, index) => (
+                <button key={index} className="font-semibold">
+                  <p>{item.title}</p>
+                  <p className="font-bold text-3xl">{item.count}</p>
+                </button>
+              ))}
             </div>
           </div>
         </div>
       </div>
-      <div className="max-w-[600px] m-auto pt-[40px] flex flex-col gap-6">
+      <div className="max-w-[800px] m-auto pt-[40px] flex flex-col gap-6">
         <div className="flex gap-6">
-          <p className="text-lg font-semibold w-[90px]">사진</p>
+          <p className="text-lg font-semibold w-[100px]">사진</p>
           <div className="flex flex-col items-start">
             <AvatarForm />
             <p className="text-sm text-[#A1A1AA] mt-2">프로필 사진의 권장 크기는 100MB입니다.</p>
             <p className="text-sm text-[#A1A1AA]">지원하는 파일 형식 : jpg, png, gif</p>
           </div>
         </div>
-        {!isEditing ? (
-          <div className="flex items-center gap-6">
-            <p className="block text-lg font-semibold w-[90px]">닉네임</p>
-            <p className="block text-base font-medium">{user?.nickname}</p>
-          </div>
-        ) : (
-          <input
-            className="w-full p-2 border border-gray-300 rounded-md"
-            id="nickname"
-            placeholder="닉네임 입력 (최대 10자)"
-            type="text"
-            value={inputNickname.value}
-            onChange={inputNickname.onChange}
-          />
-        )}
         <div className="flex items-center gap-6">
-          <p className="block text-lg font-semibold w-[90px]">이메일</p>
+          <p className="block text-lg font-semibold w-[100px]">닉네임</p>
+          {!isEditing ? (
+            <p className="block text-base font-medium">{user?.nickname}</p>
+          ) : (
+            <input
+              className="max-w-full p-2 border border-gray-300 rounded-md"
+              id="nickname"
+              placeholder="닉네임 입력 (최대 10자)"
+              type="text"
+              value={inputNickname.value}
+              onChange={inputNickname.onChange}
+            />
+          )}
+        </div>
+        <div className="flex items-center gap-6">
+          <p className="block text-lg font-semibold w-[100px]">이메일</p>
           <p className="block text-base font-medium">{user?.login_email}</p>
         </div>
         <div className="flex items-center gap-6">
-          <p className="block text-lg font-semibold w-[90px]">성별</p>
+          <p className="block text-lg font-semibold w-[100px]">성별</p>
           <p className="block text-base font-medium">
             {user
               ? user?.gender === 'female'
@@ -146,12 +156,12 @@ const Profile = () => {
         )}
         <SchoolForm />
         <div className="mb-6 flex items-center gap-6">
-          <label className="block text-lg font-semibold w-[90px]">카카오톡ID</label>
+          <label className="block text-lg font-semibold w-[100px]">카카오톡ID</label>
           {!isEditing ? (
             <p className="block text-sm font-medium mb-1">{user?.kakaoId}</p>
           ) : (
             <input
-              className="w-full p-2 border border-gray-300 rounded-md"
+              className="max-w-full p-2 border border-gray-300 rounded-md"
               id="kakaoId"
               placeholder=""
               type="text"
@@ -162,7 +172,7 @@ const Profile = () => {
         </div>
         <Favorite isEditing={isEditing} />
         <div className="flex gap-6 items-center">
-          <label className="block text-lg font-semibold w-[90px]" htmlFor="introduction">
+          <label className="block text-lg font-semibold w-[100px]" htmlFor="introduction">
             자기소개
           </label>
           {!isEditing ? (

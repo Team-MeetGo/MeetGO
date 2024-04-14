@@ -40,7 +40,7 @@ const SideBar: React.FC<SideBarProps> = ({ chatRoomId }) => {
   };
 
   return (
-    <div className=" absolute w-[377px] flex justify-center mx-auto flex-col z-0 transition-all duration-300 ease-in-out">
+    <div className=" w-[377px] flex justify-start ml-auto flex-col z-0 transition-all duration-300 ease-in-out">
       <div className={`flex ${isSidebarOpen ? 'justify-end' : 'justify-end'}`}>
         <GiHamburgerMenu onClick={toggleSidebar} />
       </div>

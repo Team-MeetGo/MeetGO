@@ -28,3 +28,8 @@ export interface UpdateSchoolType {
   schoolEmail: string;
   univName: string;
 }
+
+export interface UpdateAvatarType {
+  userId: string;
+  file: File;
+}

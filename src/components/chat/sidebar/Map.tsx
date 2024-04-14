@@ -276,7 +276,9 @@ const Map: React.FC<MapProps> = ({ chatRoomId }) => {
               <h1 className="text-base mb-2.5">{bar.place_name}</h1>
               <div className="text-sm">
                 <p>{bar.address_name}</p>
-                <p>{bar.place_url}</p>
+                <a href={bar.place_url} className="text-mainColor hover:text-blue-700 underline">
+                  {bar.place_url}
+                </a>
                 <p>{bar.phone}</p>
               </div>
             </div>
