@@ -91,15 +91,6 @@ const Map: React.FC<MapProps> = ({ chatRoomId }) => {
     );
   };
 
-  // 맵 나타난 후 searchBarsNearby로 마커 표시
-  useEffect(() => {
-    if (!currentPos) {
-      return;
-    } else {
-      searchBarsNearby(currentPos);
-    }
-  }, [currentPos, map]);
-
   const searchBarsNearby = (currentPosition: any, page?: number) => {
     const places = new window.kakao.maps.services.Places();
 
@@ -141,6 +132,15 @@ const Map: React.FC<MapProps> = ({ chatRoomId }) => {
       }
     );
   };
+
+  // 맵 나타난 후 searchBarsNearby로 마커 표시
+  useEffect(() => {
+    if (!currentPos) {
+      return;
+    } else {
+      searchBarsNearby(currentPos);
+    }
+  }, [currentPos, map, searchBarsNearby]);
 
   // 지도 검색 함수
   const searchNewPlaces = (page?: number) => {
@@ -190,6 +190,7 @@ const Map: React.FC<MapProps> = ({ chatRoomId }) => {
   };
   // useMutation 호출
   const updateMeetingLocationMutation = useUpdateMeetingLocationMutation();
+  const clearMeetingLocationMutation = useClearMeetingLocationMutation();
 
   // 장소 선택 함수
   const handleSelectLocation = async (barName: string) => {
@@ -200,9 +201,8 @@ const Map: React.FC<MapProps> = ({ chatRoomId }) => {
     }
 
     if (barName === selectedMeetingLocation) {
-      const clearMutation = useClearMeetingLocationMutation({ chatRoomId });
       try {
-        await clearMutation.mutateAsync();
+        await clearMeetingLocationMutation.mutateAsync(chatRoomId);
       } catch (error) {
         console.error('미팅장소 삭제 오류:', error);
       }
