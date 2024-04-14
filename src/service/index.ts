@@ -35,7 +35,8 @@ export const updateProfile = async (
   inputNickname: string,
   inputIntro: string,
   inputKakaoId: string,
-  inputGender: string
+  inputGender: string,
+  favorite: string[]
 ) => {
   // 닉네임 중복 유효성 검사
   const { data: nicknameData, error: nicknameError } = await clientSupabase
@@ -58,7 +59,8 @@ export const updateProfile = async (
       intro: inputIntro,
       kakaoId: inputKakaoId,
       nickname: inputNickname,
-      gender: inputGender
+      gender: inputGender,
+      favorite: favorite
     })
     .eq('user_id', userId);
 };

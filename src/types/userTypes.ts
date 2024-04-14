@@ -22,13 +22,12 @@ export interface UpdateProfileType {
   inputIntro: string;
   inputKakaoId: string;
   inputGender: string;
-  // favorite: string[];
+  favorite: string[];
 }
 
-export interface FavoriteProps {
-  isEditing: boolean;
-  favorite: string[];
-  setFavorite: Dispatch<SetStateAction<string[]>>;
+export interface FavoriteType {
+  selected: Set<string>;
+  setSelected: (newSet: Set<string>) => void;
 }
 
 export interface UpdateSchoolType {

@@ -14,7 +14,7 @@ import { useQueryClient } from '@tanstack/react-query';
 import { USER_DATA_QUERY_KEY } from '(@/query/user/userQueryKeys)';
 import { UpdateProfileType } from '(@/types/userTypes)';
 import Image from 'next/image';
-import { profileCount } from '(@/store/userStore)';
+import { profileCount, useFavoriteStore } from '(@/store/userStore)';
 
 const Profile = () => {
   const queryClient = useQueryClient();
@@ -25,6 +25,7 @@ const Profile = () => {
   const inputKakaoId = useInputChange(user?.kakaoId ? user?.kakaoId : '');
   const inputGender = useInputChange(user?.gender ? user?.gender : '');
   const { postCount, likedPostCount, metPeopleCount, meetingRoomCount } = profileCount();
+  const { selected } = useFavoriteStore();
 
   const { mutate: updateProfileMutate } = useProfileUpdateMutation();
 
@@ -45,7 +46,7 @@ const Profile = () => {
   /** 수정하고 저장버튼 클릭시 실행될 로직(상태 업데이트 및 갱신) */
   const handleProfileUpdate = ({ userId, inputNickname, inputIntro, inputKakaoId, inputGender }: UpdateProfileType) => {
     updateProfileMutate(
-      { userId, inputNickname, inputIntro, inputKakaoId, inputGender },
+      { userId, inputNickname, inputIntro, inputKakaoId, inputGender, favorite: Array.from(selected) },
       {
         onSuccess: () => {
           queryClient.invalidateQueries({

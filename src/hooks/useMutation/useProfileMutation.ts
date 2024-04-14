@@ -4,8 +4,8 @@ import { useMutation } from '@tanstack/react-query';
 
 export const useProfileUpdateMutation = () =>
   useMutation({
-    mutationFn: ({ userId, inputNickname, inputIntro, inputKakaoId, inputGender }: UpdateProfileType) =>
-      updateProfile(userId, inputNickname, inputIntro, inputKakaoId, inputGender)
+    mutationFn: ({ userId, inputNickname, inputIntro, inputKakaoId, inputGender, favorite }: UpdateProfileType) =>
+      updateProfile(userId, inputNickname, inputIntro, inputKakaoId, inputGender, favorite)
   });
 
 export const useAvatarUpdateMutation = () =>
