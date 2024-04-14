@@ -1,4 +1,3 @@
-import AcceptanceRoomButtons from '(@/components/room/participants/AcceptanceRoomButtons)';
 import Member from '(@/components/room/participants/Member)';
 import RoomInformation from '(@/components/room/participants/RoomInformation)';
 import { Suspense } from 'react';

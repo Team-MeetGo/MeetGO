@@ -62,8 +62,7 @@ function MeetingRoomList() {
       //     setRegionMemberSelectedRoomScroll(regionMemberNumberSelectedOtherRoomsViewCards);
     }
   };
-  console.log('scrollPage', scrollPage);
-  console.log(scrollPage);
+
   const nextPage = () => {
     if (myRoomList && myRoomList.length / 3 <= page) {
       return setPage(1);
@@ -88,9 +87,7 @@ function MeetingRoomList() {
     const observer = new IntersectionObserver((entries) => {
       entries.forEach((entry) => {
         if (entry.isIntersecting) {
-          console.log('entry', entry);
           const rect = entry.boundingClientRect;
-          console.log(rect);
           // if (rect.y <= (window.innerHeight || document.documentElement.clientHeight)) {
           viewCards();
           setScrollPage((scrollPage) => scrollPage + 1);
@@ -98,7 +95,6 @@ function MeetingRoomList() {
         }
       }, observerOptions);
     });
-    console.log('currentRef', currentRef);
     const N = otherRooms?.length;
     if (N === undefined) return;
     const totalPage = Math.ceil(N / 3);
@@ -108,12 +104,10 @@ function MeetingRoomList() {
       observer.unobserve(currentRef);
     }
   }, [currentRef, scrollPage]);
-  console.log(otherRooms);
   const onReload = () => {
     window.location.reload();
   };
-  console.log('otherRoomScroll', otherRoomScroll);
-  console.log('nextpage', nextpage);
+
   return (
     <>
       <article className="h-[366px] mt-[88px] border-b border-gray2 min-w-[1116px] max-w-[1440px]">

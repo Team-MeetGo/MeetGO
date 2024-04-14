@@ -26,7 +26,6 @@ const Member = ({ room_id }: { room_id: string }) => {
           table: 'participants'
         },
         (payload) => {
-          console.log('payload', payload);
           const { user_id } = payload.new;
           type test = Awaited<typeof payload.new>;
           const addMemeberUserId = async ({ addPartId }: { addPartId: test }) => {
@@ -36,10 +35,7 @@ const Member = ({ room_id }: { room_id: string }) => {
               .eq('isDeleted', false)
               .eq('user_id', user_id)
               .select('user_id, users(*)');
-
-            console.log('유저데이터 확인 => ', newUserData);
             console.log('오류 확인 => ', error);
-
             if (!participants || participants.length < 1) return;
             if (!newUserData || newUserData.length < 1) return;
             setMembers(() => [...participants, newUserData[0].users as UserType]);
@@ -65,10 +61,7 @@ const Member = ({ room_id }: { room_id: string }) => {
               .select(`*`)
               .eq('room_id', room_id)
               .select('leader_id');
-
-            console.log('유저데이터 확인 => ', leader_id);
             console.log('오류 확인 => ', error);
-
             if (!participants || participants.length < 1) return;
             if (!leader_id || leader_id.length < 1) return;
             if (leader) {

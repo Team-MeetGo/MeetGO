@@ -38,7 +38,6 @@ function RoomInformation({ room_id }: { room_id: UUID }) {
   const { room_title, member_number, location, feature, region } = room;
   const { getmaxGenderMemberNumber } = meetingRoomHandler();
   const genderMaxNumber = getmaxGenderMemberNumber(member_number);
-  console.log(participants);
 
   const countFemale = participants?.filter((member) => member?.gender === 'female').length;
   const countMale = participants?.filter((member) => member?.gender === 'male').length;
