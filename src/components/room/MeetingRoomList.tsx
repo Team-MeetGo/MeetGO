@@ -2,17 +2,15 @@
 import meetingRoomHandler from '(@/hooks/custom/room)';
 import { useMyroomQuery, useRecruitingQuery } from '(@/hooks/useQueries/useMeetingQuery)';
 import { useSearchRoomStore } from '(@/store/searchRoomStore)';
-import { useCallback, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { IoIosArrowBack, IoIosArrowForward, IoMdRefresh } from 'react-icons/io';
 import MeetingRoom from './MeetingRoom';
 import MeetingRoomForm from './MeetingRoomForm';
 import MemberNumberSelection from './MemberNumberSelection';
 import RegionSelection from './RegionSelection';
-
 import { useGetUserDataQuery } from '(@/hooks/useQueries/useUserQuery)';
 import type { MeetingRoomType, MeetingRoomTypes } from '(@/types/roomTypes)';
-import { clientSupabase } from '(@/utils/supabase/client)';
-import { useMyChatRoomIdsQuery } from '(@/hooks/useQueries/useChattingQuery)';
+import { useMyMsgData } from '(@/hooks/useQueries/useChattingQuery)';
 
 function MeetingRoomList() {
   const [page, setPage] = useState(1);
@@ -21,53 +19,11 @@ function MeetingRoomList() {
   const myRoomList = useMyroomQuery(String(user?.user_id));
   const { selectRegion, selectMemberNumber } = useSearchRoomStore();
 
+  const myMsgData = useMyMsgData(user?.user_id!);
+  console.log('myMsgData =>', myMsgData);
+
   const [chattingRoomList, setChattingRoomList] = useState<MeetingRoomTypes>();
   const { getChattingRoom } = meetingRoomHandler();
-
-  const myChatRoomIds = useMyChatRoomIdsQuery(user?.user_id!);
-  console.log(myChatRoomIds);
-  const [msgCountArr, setMsgCountArr] = useState(Array(myChatRoomIds.length).fill(0));
-  console.log(msgCountArr);
-
-  const handlePlusMsgCount = useCallback(
-    (idx: number) => {
-      const newCountArr = [...msgCountArr];
-      newCountArr[idx] = msgCountArr[idx] + 1;
-      setMsgCountArr(newCountArr);
-    },
-    [msgCountArr]
-  );
-
-  const clearMsgCount = (idx: number) => {
-    const newCountArr = [...msgCountArr];
-    newCountArr[idx] = 0;
-    setMsgCountArr(newCountArr);
-  };
-
-  useEffect(() => {
-    myChatRoomIds.forEach((id, idx) => {
-      const channel = clientSupabase
-        .channel(id)
-        .on(
-          'postgres_changes',
-          {
-            event: 'INSERT',
-            schema: 'public',
-            table: 'messages',
-            filter: `chatting_room_id=eq.${id}`
-          },
-          (payload) => {
-            console.log('payload', payload);
-            handlePlusMsgCount(idx);
-          }
-        )
-        .subscribe();
-
-      return () => {
-        clientSupabase.removeChannel(channel);
-      };
-    });
-  }, [myChatRoomIds, handlePlusMsgCount]);
 
   useEffect(() => {
     const getMeetingRoomList = async () => {
@@ -76,6 +32,7 @@ function MeetingRoomList() {
     };
     getMeetingRoomList();
   }, []);
+
   if (chattingRoomList === undefined) return;
 
   const onReload = () => {
@@ -113,8 +70,6 @@ function MeetingRoomList() {
   return (
     <div className="flex flex-col items-center justify-content">
       <main className="flex flex-col items-center justify-content min-w-[1116px] max-w-[1440px]">
-        {/* <button onClick={() => handlePlusMsgCount(1)}>플러스</button>
-      <button onClick={() => clearMsgCount(1)}>clear</button> */}
         <article className="h-[366px] mt-[88px] border-b border-gray2">
           <div className="flex flex-row justify-between">
             <div className="text-[40px] font-semibold">참여 중</div>
@@ -145,10 +100,12 @@ function MeetingRoomList() {
                     if (index < 3 * page && index >= 3 * (page - 1))
                       return (
                         <div key={index}>
-                          {/* 새로운 메세지 수! - ㅇㅈ */}
                           <div className="flex gap-2">
-                            <h1>새로운 메세지 수</h1>
-                            {msgCountArr[index]}
+                            {myMsgData && myMsgData.find((item) => item.room_id === room?.room_id) ? (
+                              <h1>
+                                {myMsgData.find((item) => item.room_id === room?.room_id)?.newMsgCount} 새로운 메세지 수
+                              </h1>
+                            ) : null}
                           </div>
                           {room && <MeetingRoom room={room} />}
                         </div>

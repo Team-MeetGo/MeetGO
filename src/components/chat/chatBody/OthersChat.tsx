@@ -8,10 +8,10 @@ const OthersChat = ({ msg, idx, lastDivRefs }: { msg: Message; idx: number; last
   const { chatRoomId, messages } = chatStore((state) => state);
   const room = useRoomDataQuery(chatRoomId as string);
   const roomId = room?.roomId;
-  const users = useParticipantsQuery(roomId as string);
+  const participants = useParticipantsQuery(roomId as string);
 
   const showThatUser = (userId: string | null) => {
-    const thatUserData = users?.find((p) => p.user_id === userId);
+    const thatUserData = participants?.find((p) => p.user_id === userId);
     return thatUserData;
   };
 
@@ -24,9 +24,9 @@ const OthersChat = ({ msg, idx, lastDivRefs }: { msg: Message; idx: number; last
       ) : null}
 
       <div id={msg.message_id} ref={lastDivRefs.current[idx]} className="flex gap-4">
-        <Tooltip content={<div>{users && showThatUser(msg.send_from)?.nickname}</div>}>
+        <Tooltip content={<div>{participants && showThatUser(msg.send_from)?.nickname}</div>}>
           <div className="h-14 w-14 bg-indigo-600 rounded-full my-auto">
-            <img src={msg.avatar} alt="유저 이미지"></img>
+            <img src={showThatUser(msg.send_from)?.avatar as string} alt="유저 이미지"></img>
           </div>
         </Tooltip>
 
