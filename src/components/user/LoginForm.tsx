@@ -145,7 +145,7 @@ const LoginForm = () => {
         </form>
         {isError && <p className="text-red-500 text-[13px] mt-2">아이디 또는 비밀번호가 일치하지 않습니다.</p>}
         <Button
-          onClick={() => router.push('/users/join')}
+          onClick={() => router.push('/join')}
           className="duration-200 bg-white text-[#27272A] border border-[#A1A1AA] p-5 mt-[16px] rounded-lg w-full py-[20px] h-auto text-[16px]"
           type="button"
         >
