@@ -98,7 +98,7 @@ const Map: React.FC<MapProps> = ({ chatRoomId }) => {
     } else {
       searchBarsNearby(currentPos);
     }
-  }, [map]);
+  }, [currentPos, map]);
 
   const searchBarsNearby = (currentPosition: any, page?: number) => {
     const places = new window.kakao.maps.services.Places();
@@ -217,20 +217,22 @@ const Map: React.FC<MapProps> = ({ chatRoomId }) => {
 
   return (
     <div className="z-10">
-      <h1 className="font-semibold text-2xl mb-2.5">미팅 장소</h1>
-      <Card className="border border-mainColor shadow-none mb-6">
-        <CardBody className=" h-[60px]">
-          <p className="text-lg">{selectedMeetingLocation}</p>
-        </CardBody>
-      </Card>
+      <div className="py-6">
+        <h1 className="font-semibold text-2xl mb-2">미팅 장소</h1>
+        <Card className="h-[60px] border border-mainColor rounded-[9px] shadow-none ">
+          <CardBody className=" flex flex-row justify-start items-center text-lg">
+            <p className="text-lg">{selectedMeetingLocation}</p>
+          </CardBody>
+        </Card>
+      </div>
 
-      <div className="border-t border-gray2 mb-[26px]"></div>
+      <div className="border-t border-gray2 "></div>
 
       <DateTimePicker chatRoomId={chatRoomId} />
 
-      <h1 className="font-semibold text-2xl mb-2.5 mt-7">장소 검색</h1>
-      <Card className="border border-gray2 shadow-none mb-6">
-        <CardBody className=" h-[60px]">
+      <h1 className="font-semibold text-2xl mb-2">장소 검색</h1>
+      <Card className="h-[60px] border border-gray2 rounded-[9px] shadow-none mb-4">
+        <CardBody className=" flex flex-row justify-start items-center text-lg">
           <form
             onSubmit={(e) => {
               e.preventDefault();
@@ -238,6 +240,9 @@ const Map: React.FC<MapProps> = ({ chatRoomId }) => {
             }}
             className="flex flex-row justify-between"
           >
+            <button type="submit" className="bg-transparent border-none mr-1">
+              <IoMdSearch size={24} color="#A1A1AA" />
+            </button>
             <input
               type="text"
               className="outline-none"
@@ -245,37 +250,40 @@ const Map: React.FC<MapProps> = ({ chatRoomId }) => {
               placeholder="장소 검색하기"
               onChange={(e) => setSearchText(e.target.value)}
             />
-            <button type="submit" className="bg-transparent border-none p-0">
-              <IoMdSearch size={25} color="#A1A1AA" />
-            </button>
           </form>
         </CardBody>
       </Card>
 
       <div id="map" className="w-70 h-80"></div>
-      <div className="flex flex-col justify-center place-item-center">
+      <div className=" flex flex-col justify-start items-start mx-auto">
         {bars.map((bar, index) => (
           <div
             key={index}
-            className={`flex flex-col justify-center border-b-1 border-gray2 py-4 ${
+            className={`w-full flex flex-col justify-start items-start border-b-1 border-gray2 ${
               selectedMeetingLocation === bar.place_name ? 'bg-purpleSecondary' : ''
             }`}
-            // onClick={() => {
-            //   if (userId === leaderId) {
-            //     handleSelectLocation(selectedMeetingLocation === bar.place_name ? '' : bar.place_name);
-            //   }
-            // }}
-            onClick={() => {
-              handleSelectLocation(selectedMeetingLocation === bar.place_name ? '' : bar.place_name);
-            }}
-            style={{ cursor: 'pointer', alignItems: 'center' }}
           >
-            <div className="flex flex-col text-left">
-              <h1 className="text-base mb-2.5">{bar.place_name}</h1>
-              <div className="text-sm">
-                <p>{bar.address_name}</p>
-                <p>{bar.place_url}</p>
-                <p>{bar.phone}</p>
+            <div
+              className="py-4 px-9"
+              // onClick={() => {
+              //   if (userId === leaderId) {
+              //     handleSelectLocation(selectedMeetingLocation === bar.place_name ? '' : bar.place_name);
+              //   }
+              // }}
+              onClick={() => {
+                handleSelectLocation(selectedMeetingLocation === bar.place_name ? '' : bar.place_name);
+              }}
+              style={{ cursor: 'pointer', alignItems: 'center' }}
+            >
+              <div className="flex flex-col items-start justify-start">
+                <h1 className="text-base mb-2.5">{bar.place_name}</h1>
+                <div className="text-sm">
+                  <p>{bar.address_name}</p>
+                  <a href={bar.place_url} className="text-mainColor hover:text-blue-700 underline">
+                    {bar.place_url}
+                  </a>
+                  <p>{bar.phone}</p>
+                </div>
               </div>
             </div>
           </div>
