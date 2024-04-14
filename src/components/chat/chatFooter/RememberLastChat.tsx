@@ -7,7 +7,7 @@ import { useEffect } from 'react';
 
 const RememberLastChat = () => {
   const { data: user } = useGetUserDataQuery();
-  const { chatRoomId, messages } = chatStore((state) => state);
+  const { chatRoomId, messages, setMessages } = chatStore((state) => state);
   const room = useRoomDataQuery(chatRoomId as string);
   const roomId = room?.roomId;
   const lastMsgId = useMyLastMsgs(user?.user_id!, chatRoomId);

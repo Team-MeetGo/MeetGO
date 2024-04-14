@@ -121,7 +121,7 @@ export const addNewLastMsg = async (
     .select('chatting_room_id')
     .eq('chatting_room_id', chatRoomId)
     .eq('user_id', user_id);
-  if (!alreadyRow) {
+  if (!alreadyRow?.length) {
     const { data: addedlastMsg, error } = await clientSupabase
       .from('remember_last_msg')
       .insert({

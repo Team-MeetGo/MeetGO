@@ -6,16 +6,19 @@ import { ITEM_INTERVAL } from '(@/utils/constant)';
 import { clientSupabase } from '(@/utils/supabase/client)';
 import { User } from '@supabase/supabase-js';
 import { useRouter } from 'next/navigation';
-import { useEffect } from 'react';
+import { Suspense, useEffect } from 'react';
+import ChatHeader from './ChatHeader';
+import ChatList from '../chatBody/ChatList';
+import ChatInput from '../chatFooter/ChatInput';
 
-const InitChat = ({ chatRoomId, allMsgs }: { user: User | null; chatRoomId: string; allMsgs: Message[] }) => {
+const InitChat = ({ user, chatRoomId, allMsgs }: { user: User | null; chatRoomId: string; allMsgs: Message[] }) => {
   const router = useRouter();
   const { messages, chatState, isRest, setChatState, setMessages, setChatRoomId, setHasMore } = chatStore(
     (state) => state
   );
   const room = useRoomDataQuery(chatRoomId);
   const roomId = room?.roomId;
-  console.log('allMsgs => ', allMsgs);
+  // console.log('allMsgs => ', allMsgs);
   useEffect(() => {
     // 채팅방 isActive 상태 구독
     const channel = clientSupabase
@@ -46,30 +49,29 @@ const InitChat = ({ chatRoomId, allMsgs }: { user: User | null; chatRoomId: stri
         router.push('/meetingRoom');
       }
     } else {
-      console.log('지금 메세지', messages);
       // **채팅방에 있는다면
-      if (messages.length === 0) {
-        setMessages([...allMsgs].reverse()); // 현재 메세지가 없을 때만(처음시작 or 메세지 한개일 때)
-        setHasMore(allMsgs?.length >= ITEM_INTERVAL + 1);
-      }
+      console.log('지금 메세지', messages);
+      setMessages([...allMsgs].reverse());
+      setHasMore(allMsgs?.length >= ITEM_INTERVAL + 1);
+
       setChatRoomId(chatRoomId);
     }
-  }, [
-    setChatRoomId,
-    allMsgs,
-    chatRoomId,
-    setMessages,
-    setHasMore,
-    messages.length,
-    chatState,
-    isRest,
-    router,
-    roomId,
-    messages
-  ]);
+  }, [chatState, isRest, router]);
   // 왜 요청이 2번이나 되징
 
-  return <></>;
+  return (
+    <>
+      {/* <div className="w-full max-w-2xl mx-auto md:py-10 h-screen">
+        <div className="h-full border rounded-md flex flex-col border-indigo-600 relative">
+          <ChatHeader chatRoomId={chatRoomId} />
+          <Suspense fallback="skeleton 들어갈 자리">
+            <ChatList user={user} chatRoomId={chatRoomId} />
+          </Suspense>
+          <ChatInput />
+        </div>
+      </div> */}
+    </>
+  );
 };
 
 export default InitChat;
