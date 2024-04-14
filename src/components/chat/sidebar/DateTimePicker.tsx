@@ -10,6 +10,7 @@ import { IoIosArrowForward, IoIosArrowBack } from 'react-icons/io';
 import { userStore } from '(@/store/userStore)';
 import { useChatDataQuery, useRoomDataQuery } from '(@/hooks/useQueries/useChattingQuery)';
 import { useUpdateMeetingTimeMutation } from '(@/hooks/useMutation/useMeetingTimeMutation)';
+import { useGetUserDataQuery } from '(@/hooks/useQueries/useUserQuery)';
 
 interface DateTimePickerProps {
   chatRoomId: string;
@@ -20,9 +21,9 @@ const DateTimePicker: React.FC<DateTimePickerProps> = forwardRef(({ chatRoomId }
   const [isCalendarOpen, setIsCalendarOpen] = useState<boolean>(false);
   const datePickerRef = useRef<DatePicker>(null);
 
-  // userStore에서 userId 받아오기
-  const { user } = userStore((state) => state);
-  const userId = user?.user_id;
+  // 유저 정보 가져오기
+  const { data: userData } = useGetUserDataQuery();
+  const userId = userData?.user_id;
 
   // useRoomDataQuery로 리더 아이디 가져오기
   const room = useRoomDataQuery(chatRoomId);

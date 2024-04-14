@@ -10,6 +10,7 @@ import {
   useClearMeetingLocationMutation,
   useUpdateMeetingLocationMutation
 } from '(@/hooks/useMutation/useMeetingLocationMutation)';
+import { useGetUserDataQuery } from '(@/hooks/useQueries/useUserQuery)';
 
 declare global {
   interface Window {
@@ -33,13 +34,15 @@ const Map: React.FC<MapProps> = ({ chatRoomId }) => {
   const [isLocationSelected, setIsLocationSelected] = useState<boolean>(false);
   const [selectedMeetingLocation, setSelectedMeetingLocation] = useState<string>();
 
-  // userStore에서 userId 받아오기
-  const { user } = userStore((state) => state);
-  const userId = user?.user_id;
+  // 유저 정보 가져오기
+  const { data: userData } = useGetUserDataQuery();
+  const userId = userData?.user_id;
 
   // useRoomDataQuery로 리더 아이디 가져오기
   const room = useRoomDataQuery(chatRoomId);
   const leaderId = room?.roomData.leader_id;
+
+  console.log(userId, leaderId);
 
   // 채팅방 정보 가져오기
   const chat = useChatDataQuery(chatRoomId);
@@ -140,7 +143,7 @@ const Map: React.FC<MapProps> = ({ chatRoomId }) => {
     } else {
       searchBarsNearby(currentPos);
     }
-  }, [currentPos, map, searchBarsNearby]);
+  }, [map]);
 
   // 지도 검색 함수
   const searchNewPlaces = (page?: number) => {
