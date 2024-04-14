@@ -17,7 +17,6 @@ interface DateTimePickerProps {
 }
 
 const DateTimePicker: React.FC<DateTimePickerProps> = forwardRef(({ chatRoomId }, ref) => {
-  const chat = useChatDataQuery(chatRoomId);
   const [selectedMeetingTime, setSelectedMeetingTime] = useState<Date | null>();
   const [isCalendarOpen, setIsCalendarOpen] = useState<boolean>(false);
   const datePickerRef = useRef<DatePicker>(null);
@@ -30,10 +29,14 @@ const DateTimePicker: React.FC<DateTimePickerProps> = forwardRef(({ chatRoomId }
     setIsCalendarOpen(!isCalendarOpen);
   };
 
+  const chat = useChatDataQuery(chatRoomId); // useChatDataQuery 호출 위치 변경
+
   useEffect(() => {
-    const meetingTime = new Date(String(chat?.[0]?.meeting_time));
-    setSelectedMeetingTime(meetingTime);
-  }, []);
+    if (chat) {
+      const meetingTime = new Date(String(chat?.[0]?.meeting_time));
+      setSelectedMeetingTime(meetingTime);
+    }
+  }, [chatRoomId, chat]);
 
   const { mutate: updateMeetingTime } = useUpdateMeetingTimeMutation();
 
