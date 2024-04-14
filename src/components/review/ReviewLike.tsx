@@ -77,7 +77,7 @@ const ReviewLike = ({ review_id }: Props) => {
           offIcon={<HeartIcon />}
         />
       </div>
-      <div className="pb-1">{likeCount}</div>
+      <div className="pb-1 text-[16px]">{likeCount}</div>
     </div>
   );
 };

@@ -12,7 +12,9 @@ const config: Config = {
     extend: {
       backgroundImage: {
         'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
-        'gradient-conic': 'conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))'
+        'gradient-conic': 'conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))',
+        'gradient-to-review': 'linear-gradient(90deg, rgba(208,161,255,1) 35%, rgba(174,226,255,1) 100%)',
+        'gradient-to-main': 'linear-gradient(180deg, rgba(255,202,220,1) 0%, rgba(196,191,255,1) 100%)'
       },
       colors: {
         mainColor: '#8F5DF4',
@@ -22,7 +24,9 @@ const config: Config = {
         gray2: '#A1A1AA',
         gray3: '#52525B',
         hotPink: '#F31260',
-        blue: '#006FEE'
+        blue: '#006FEE',
+        lightPurple: '#D0A1FF',
+        lightBlue: '#AEE2FF'
       }
     }
   },
