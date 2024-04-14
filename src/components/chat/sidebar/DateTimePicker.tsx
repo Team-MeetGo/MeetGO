@@ -9,7 +9,7 @@ import { getMonth, getYear } from 'date-fns';
 import { IoChevronBackSharp } from 'react-icons/io5';
 import { IoChevronForwardSharp } from 'react-icons/io5';
 import { userStore } from '(@/store/userStore)';
-import { useChatDataQuery } from '(@/hooks/useQueries/useChattingQuery)';
+import { useChatDataQuery, useRoomDataQuery } from '(@/hooks/useQueries/useChattingQuery)';
 import { useUpdateMeetingTimeMutation } from '(@/hooks/useMutation/useMeetingTimeMutation)';
 
 interface DateTimePickerProps {
@@ -17,7 +17,6 @@ interface DateTimePickerProps {
 }
 
 const DateTimePicker: React.FC<DateTimePickerProps> = forwardRef(({ chatRoomId }, ref) => {
-  const chat = useChatDataQuery(chatRoomId);
   const [selectedMeetingTime, setSelectedMeetingTime] = useState<Date | null>();
   const [isCalendarOpen, setIsCalendarOpen] = useState<boolean>(false);
   const datePickerRef = useRef<DatePicker>(null);
@@ -26,14 +25,22 @@ const DateTimePicker: React.FC<DateTimePickerProps> = forwardRef(({ chatRoomId }
   const { user } = userStore((state) => state);
   const userId = user?.user_id;
 
+  // useRoomDataQuery로 리더 아이디 가져오기
+  const room = useRoomDataQuery(chatRoomId);
+  const leaderId = room?.roomData.leader_id;
+
   const toggleCalendar = () => {
     setIsCalendarOpen(!isCalendarOpen);
   };
 
+  const chat = useChatDataQuery(chatRoomId); // useChatDataQuery 호출 위치 변경
+
   useEffect(() => {
-    const meetingTime = new Date(String(chat?.[0]?.meeting_time));
-    setSelectedMeetingTime(meetingTime);
-  }, []);
+    if (chat) {
+      const meetingTime = new Date(String(chat?.[0]?.meeting_time));
+      setSelectedMeetingTime(meetingTime);
+    }
+  }, [chatRoomId, chat]);
 
   const { mutate: updateMeetingTime } = useUpdateMeetingTimeMutation();
 
@@ -49,14 +56,16 @@ const DateTimePicker: React.FC<DateTimePickerProps> = forwardRef(({ chatRoomId }
         wrapperClassName="w-full z-100"
         selected={selectedMeetingTime ? selectedMeetingTime : new Date()}
         onChange={(date) => {
-          setSelectedMeetingTime(date as Date);
-          if (date) {
-            // 선택된 미팅 시간이 있을 때에만 서버에 미팅 시간 업데이트
-            const isoStringMeetingTime = date.toISOString();
-            updateMeetingTime({
-              chatRoomId,
-              isoStringMeetingTime
-            });
+          if (leaderId == userId) {
+            setSelectedMeetingTime(date as Date);
+            if (date) {
+              // 선택된 미팅 시간이 있을 때에만 서버에 미팅 시간 업데이트
+              const isoStringMeetingTime = date.toISOString();
+              updateMeetingTime({
+                chatRoomId,
+                isoStringMeetingTime
+              });
+            }
           }
         }}
         minDate={new Date()} // 오늘 이전의 날짜 선택 불가능
