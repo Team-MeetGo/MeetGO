@@ -1,22 +1,18 @@
 'use client';
 import meetingRoomHandler from '(@/hooks/custom/room)';
-import { favoriteOptions } from '(@/utils/FavoriteData)';
 import { Chip } from '@nextui-org/react';
 import { useRouter } from 'next/navigation';
 import DeleteMeetingRoom from './DeleteMeetingRoom';
 import EditMeetingRoom from './EditMeetingRoom';
-
 import { useAddRoomMemberMutation, useUpdateRoomStatusClose } from '(@/hooks/useMutation/useMeetingMutation)';
-import { useParticipantsQuery } from '(@/hooks/useQueries/useChattingQuery)';
-import { useAlreadyChatRoomQuery } from '(@/hooks/useQueries/useMeetingQuery)';
-import type { MeetingRoomType } from '(@/types/roomTypes)';
-import { BsFire } from 'react-icons/bs';
-import { IoChatbubblesOutline, IoFemale } from 'react-icons/io5';
-import { HiOutlineDotsVertical } from 'react-icons/hi';
-import { useState } from 'react';
+import { useAlreadyChatRoomQuery, useRoomParticipantsQuery } from '(@/hooks/useQueries/useMeetingQuery)';
 import { useGetUserDataQuery } from '(@/hooks/useQueries/useUserQuery)';
-import { color } from 'framer-motion';
+import { useState } from 'react';
+import { BsFire } from 'react-icons/bs';
+import { HiOutlineDotsVertical } from 'react-icons/hi';
+import { IoChatbubblesOutline, IoFemale, IoMale } from 'react-icons/io5';
 
+import type { MeetingRoomType, UserType } from '(@/types/roomTypes)';
 function MeetingRoom({ room }: { room: MeetingRoomType }) {
   const { room_id, room_status, room_title, member_number, location, feature, leader_id, region } = room;
   const router = useRouter();
@@ -24,15 +20,15 @@ function MeetingRoom({ room }: { room: MeetingRoomType }) {
   const { data: user } = useGetUserDataQuery();
   const user_id = String(user?.user_id);
   const { getmaxGenderMemberNumber } = meetingRoomHandler();
-  const participants = useParticipantsQuery(room.room_id);
+  const participants = useRoomParticipantsQuery(room_id);
   const roomMemberMutation = useAddRoomMemberMutation({ user_id, room_id });
-  const updateRoomStatusCloseMutation = useUpdateRoomStatusClose({ room_id });
+  const updateRoomStatusCloseMutation = useUpdateRoomStatusClose({ room_id, user_id });
   const { data: alreadyChatRoom, error: alreadyChatRoomError } = useAlreadyChatRoomQuery(room_id);
   const genderMaxNumber = getmaxGenderMemberNumber(member_number);
-  const emptySeat = genderMaxNumber! * 2 - participants.length;
 
-  const countFemale = participants.filter((member) => member.gender === 'female').length;
-  const countMale = participants.filter((member) => member.gender === 'male').length;
+  const emptySeat = genderMaxNumber! * 2 - participants?.length;
+  const countFemale = participants?.filter((member) => member?.gender === 'female').length;
+  const countMale = participants?.filter((member) => member?.gender === 'male').length;
 
   const addMember = async ({ room_id }: { room_id: string }) => {
     //채팅창: 채팅창으로 이동
@@ -41,16 +37,15 @@ function MeetingRoom({ room }: { room: MeetingRoomType }) {
     }
 
     //수락창: 이미 참여한 방
-    const alreadyParticipants = participants?.find((member) => member.user_id === user_id);
+    const alreadyParticipants = participants?.find((member) => member?.user_id === user_id);
     if (alreadyParticipants) {
       router.push(`/meetingRoom/${room_id}`);
     }
 
     //성별에 할당된 인원이 참여자 정보보다 적을 때 입장
-    const participatedGenderMember = participants.filter((member) => member.gender === user?.gender).length;
-
+    const participatedGenderMember = participants?.filter((member) => member?.gender === user?.gender).length;
     if (
-      (!alreadyParticipants && genderMaxNumber && genderMaxNumber > participatedGenderMember) ||
+      (!alreadyParticipants && genderMaxNumber && genderMaxNumber > participatedGenderMember!) ||
       !participatedGenderMember
     ) {
       await roomMemberMutation.mutateAsync();
@@ -79,14 +74,15 @@ function MeetingRoom({ room }: { room: MeetingRoomType }) {
           : `bg-slate-300 rounded-xl`
       }
     >
-      <div className="border-mainColor border-1 w-[354px] h-[241px] rounded-xl flex flex-col justify-start">
+      <div className="border-mainColor border-1 w-[354px] h-[241px] rounded-xl flex flex-col justify-start hover:cursor-pointer">
         <div className="px-[24px]">
           <div className="h-[24px]"></div>
           <div className="flex flex-row justify-between align-middle justify-items-center relative">
-            <div className="text-[16px]">
-              {`여자 ${countFemale}/${genderMaxNumber} | 남자 ${countMale}/${genderMaxNumber} | ${room_status}`}
+            <div className="text-[16px] flex flex-row justify-between align-middle justify-items-center">
+              <IoFemale className="w-[16px] fill-hotPink" /> {`${countFemale}/${genderMaxNumber} |`}
+              <IoMale className="w-[16px] fill-blue" /> {`${countMale}/${genderMaxNumber} | ${room_status}`}
             </div>
-            <div className="absolute right-[10px]">
+            <div className="absolute right-[10px] flex justify-items-end">
               {alreadyChatRoom && alreadyChatRoom.length > 0 ? (
                 <IoChatbubblesOutline className="h-6 w-6 m-2 fill-gray2" />
               ) : emptySeat === 1 ? (
@@ -102,9 +98,13 @@ function MeetingRoom({ room }: { room: MeetingRoomType }) {
                   </button>
 
                   {open && (
-                    <div>
-                      <DeleteMeetingRoom room_id={room_id} />
-                      <EditMeetingRoom room={room} />
+                    <div className="flex flex-col w-[92px] h-[78px] p-[5px] justify-items-center border-gray2 border-1 rounded-xl">
+                      <div className="flex flex-col justify-items-center w-[92px]">
+                        <DeleteMeetingRoom room_id={room_id} />
+                      </div>
+                      <div className="flex flex-col justify-items-center w-[92px]">
+                        <EditMeetingRoom room={room} />
+                      </div>
                     </div>
                   )}
                 </div>

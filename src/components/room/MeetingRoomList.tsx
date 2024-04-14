@@ -1,43 +1,28 @@
 'use client';
-import meetingRoomHandler from '(@/hooks/custom/room)';
+import { useMyMsgData } from '(@/hooks/useQueries/useChattingQuery)';
 import { useMyroomQuery, useRecruitingQuery } from '(@/hooks/useQueries/useMeetingQuery)';
+import { useGetUserDataQuery } from '(@/hooks/useQueries/useUserQuery)';
 import { useSearchRoomStore } from '(@/store/searchRoomStore)';
-import { useEffect, useState } from 'react';
+import type { MeetingRoomType, MeetingRoomTypes } from '(@/types/roomTypes)';
+import { useEffect, useRef, useState } from 'react';
 import { IoIosArrowBack, IoIosArrowForward, IoMdRefresh } from 'react-icons/io';
 import MeetingRoom from './MeetingRoom';
 import MeetingRoomForm from './MeetingRoomForm';
 import MemberNumberSelection from './MemberNumberSelection';
 import RegionSelection from './RegionSelection';
-import { useGetUserDataQuery } from '(@/hooks/useQueries/useUserQuery)';
-import type { MeetingRoomType, MeetingRoomTypes } from '(@/types/roomTypes)';
-import { useMyMsgData } from '(@/hooks/useQueries/useChattingQuery)';
 
 function MeetingRoomList() {
   const [page, setPage] = useState(1);
+  const [scrollPage, setScrollPage] = useState(0);
   const { data: user, isPending, isError, error } = useGetUserDataQuery();
   const { data: meetingRoomList } = useRecruitingQuery(String(user?.user_id));
+  const scrollRef = useRef<HTMLInputElement>(null);
+
   const myRoomList = useMyroomQuery(String(user?.user_id));
   const { selectRegion, selectMemberNumber } = useSearchRoomStore();
 
   const myMsgData = useMyMsgData(user?.user_id!);
   console.log('myMsgData =>', myMsgData);
-
-  const [chattingRoomList, setChattingRoomList] = useState<MeetingRoomTypes>();
-  const { getChattingRoom } = meetingRoomHandler();
-
-  useEffect(() => {
-    const getMeetingRoomList = async () => {
-      const chattingroom = (await getChattingRoom()) as MeetingRoomTypes;
-      setChattingRoomList(chattingroom);
-    };
-    getMeetingRoomList();
-  }, []);
-
-  if (chattingRoomList === undefined) return;
-
-  const onReload = () => {
-    window.location.reload();
-  };
 
   // meetingRoomList 중에서 myRoomList가 없는 것을 뽑아내기
   const otherRooms = meetingRoomList?.filter(function (room: MeetingRoomType) {
@@ -54,6 +39,31 @@ function MeetingRoomList() {
     (room) => room.member_number === selectMemberNumber && room.region === selectRegion
   );
 
+  const [otherRoomScroll, setOtherRoomScroll] = useState<MeetingRoomType[]>([]);
+  const [regionSelectedRoomScroll, setRegionSelectedRoomScroll] = useState<MeetingRoomType[]>([]);
+  const [memberSelectedRoomScroll, setMemberSelectedRoomScroll] = useState<MeetingRoomType[]>([]);
+  const [regionMemberSelectedRoomScroll, setRegionMemberSelectedRoomScroll] = useState<MeetingRoomType[]>([]);
+  const nextpage = scrollPage * 3 + 3;
+  const pagecondition = otherRooms.length > nextpage ? nextpage : otherRooms.length + 1;
+  console.log('pagecondition', pagecondition);
+  const viewCards = () => {
+    if (otherRooms) {
+      const otherRoomsViewCards = otherRooms.slice(0, pagecondition);
+      if (otherRoomsViewCards) setOtherRoomScroll(otherRoomsViewCards);
+      // const regionSelectedOtherRoomsViewCards = regionSelectedOtherRooms?.slice(0, scrollPage * 3 + 3);
+      // const memberNumberSelectedOtherRoomsViewCards = memberNumberSelectedOtherRooms?.slice(0, scrollPage * 3 + 3);
+      // const regionMemberNumberSelectedOtherRoomsViewCards = regionMemberNumberSelectedOtherRooms?.slice(
+      //   0,
+      //   scrollPage * 3 + 3
+      // );
+      //   if (regionSelectedOtherRoomsViewCards) setRegionSelectedRoomScroll(regionSelectedOtherRoomsViewCards);
+      //   if (memberNumberSelectedOtherRoomsViewCards) setMemberSelectedRoomScroll(memberNumberSelectedOtherRoomsViewCards);
+      //   if (regionMemberNumberSelectedOtherRoomsViewCards)
+      //     setRegionMemberSelectedRoomScroll(regionMemberNumberSelectedOtherRoomsViewCards);
+    }
+  };
+  console.log('scrollPage', scrollPage);
+  console.log(scrollPage);
   const nextPage = () => {
     if (myRoomList && myRoomList.length / 3 <= page) {
       return setPage(1);
@@ -67,105 +77,129 @@ function MeetingRoomList() {
     setPage((page) => page - 1);
   };
 
+  const currentRef = scrollRef.current;
+
+  useEffect(() => {
+    const observerOptions = {
+      root: null,
+      rootMargin: '0px',
+      threshold: 0.3
+    };
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          console.log('entry', entry);
+          const rect = entry.boundingClientRect;
+          console.log(rect);
+          // if (rect.y <= (window.innerHeight || document.documentElement.clientHeight)) {
+          viewCards();
+          setScrollPage((scrollPage) => scrollPage + 1);
+          // }
+        }
+      }, observerOptions);
+    });
+    console.log('currentRef', currentRef);
+    const N = otherRooms?.length;
+    if (N === undefined) return;
+    const totalPage = Math.ceil(N / 3);
+    if (currentRef && scrollPage < totalPage) {
+      observer.observe(currentRef);
+    } else if (totalPage < scrollPage && currentRef) {
+      observer.unobserve(currentRef);
+    }
+  }, [currentRef, scrollPage]);
+  console.log(otherRooms);
+  const onReload = () => {
+    window.location.reload();
+  };
+  console.log('otherRoomScroll', otherRoomScroll);
+  console.log('nextpage', nextpage);
   return (
-    <div className="flex flex-col items-center justify-content">
-      <main className="flex flex-col items-center justify-content min-w-[1116px] max-w-[1440px]">
-        <article className="h-[366px] mt-[88px] border-b border-gray2">
-          <div className="flex flex-row justify-between">
-            <div className="text-[40px] font-semibold">참여 중</div>
-            <div className="flex flex-row align-middle justify-center gap-4">
-              <div className="flex flex-col align-middle justify-center text-gray2">
-                <button
-                  className="h-full"
-                  onClick={() => {
-                    onReload();
-                  }}
-                >
-                  <IoMdRefresh className="h-6 w-6 m-2" />
-                </button>
-                <div className="text-[14px]">새로고침</div>
-              </div>
-              <MeetingRoomForm />
+    <>
+      <article className="h-[366px] mt-[88px] border-b border-gray2 min-w-[1116px] max-w-[1440px]">
+        <div className="flex flex-row w-full justify-between">
+          <div className="text-[40px] font-semibold ml-[56px]">참여 중</div>
+          <div className="flex flex-row align-middle justify-center gap-4 mr-[56px]">
+            <div className="flex flex-col align-middle justify-center text-gray2">
+              <button
+                className="h-full"
+                onClick={() => {
+                  onReload();
+                }}
+              >
+                <IoMdRefresh className="h-6 w-6 m-2" />
+              </button>
+              <div className="text-[14px]">새로고침</div>
             </div>
+            <MeetingRoomForm />
           </div>
-          <div className="h-[24px]"></div>
-          <div className="w-full flex flex-row items-center justify-content">
-            <button onClick={() => beforePage()}>
-              <IoIosArrowBack className="h-8 w-8" />
-            </button>
-            {
-              <div className="h-[241px] gap-[24px] grid grid-cols-3 w-full px-4">
-                {myRoomList !== null &&
-                  myRoomList?.map((room, index) => {
-                    if (index < 3 * page && index >= 3 * (page - 1))
-                      return (
-                        <div key={index}>
-                          <div className="flex gap-2">
-                            {myMsgData && myMsgData.find((item) => item.room_id === room?.room_id) ? (
-                              <h1>
-                                {myMsgData.find((item) => item.room_id === room?.room_id)?.newMsgCount} 새로운 메세지 수
-                              </h1>
-                            ) : null}
-                          </div>
-                          {room && <MeetingRoom room={room} />}
+        </div>
+        <div className="h-[24px]"></div>
+        <div className="w-full flex flex-row items-center justify-content">
+          <button onClick={() => beforePage()}>
+            <IoIosArrowBack className="h-[40px] w-[40px] m-[8px]" />
+          </button>
+          {
+            <div className="h-[241px] gap-[24px] grid grid-cols-3 w-full px-4">
+              {myRoomList !== null &&
+                myRoomList?.map((room, index) => {
+                  if (index < 3 * page && index >= 3 * (page - 1))
+                    return (
+                      <div key={index}>
+                        <div className="flex gap-2">
+                          {myMsgData && myMsgData.find((item) => item.room_id === room?.room_id) ? (
+                            <h1>
+                              {myMsgData.find((item) => item.room_id === room?.room_id)?.newMsgCount} 새로운 메세지 수
+                            </h1>
+                          ) : null}
                         </div>
-                      );
-                  })}
-              </div>
-            }
-            <button onClick={() => nextPage()}>
-              <IoIosArrowForward className="h-8 w-8 m-2" />
-            </button>
-          </div>
-          <div className="h-[40px]"></div>
-        </article>
-        <article className="flex flex-col items-center justify-content">
-          <div>
-            <div className="h-[40px]"></div>
-            <div className="flex flex-col justify-start">
-              <div className="text-[40px]	font-semibold">모집 중</div>
-              <div className="h-[24px]"></div>
-              <div className="flex flex-row gap-x-[16px]">
-                <RegionSelection text={'selectRegion'} />
-                <MemberNumberSelection text={'selectMember'} />
-              </div>
+                        {room && <MeetingRoom room={room} />}
+                      </div>
+                    );
+                })}
             </div>
-            <div className="h-[24px]"></div>
-            <div className="gap-[24px] mb-[8px] grid grid-cols-3 w-100%">
-              {selectRegion &&
-                selectRegion !== '지역' &&
-                selectRegion !== '전국' &&
-                (!selectMemberNumber || selectMemberNumber === '인원' || selectMemberNumber === '전체') &&
-                regionSelectedOtherRooms?.map((room) => <MeetingRoom key={room?.room_id} room={room} />)}
-              {selectMemberNumber &&
-                selectMemberNumber !== '인원' &&
-                selectMemberNumber !== '전체' &&
-                (!selectRegion || selectRegion === '지역' || selectRegion === '전국') &&
-                memberNumberSelectedOtherRooms?.map((room) => <MeetingRoom key={room?.room_id} room={room} />)}
-
-              {selectMemberNumber &&
-                selectMemberNumber !== '인원' &&
-                selectMemberNumber !== '전체' &&
-                selectRegion &&
-                selectRegion !== '지역' &&
-                selectRegion !== '전국' &&
-                regionMemberNumberSelectedOtherRooms?.map((room) => <MeetingRoom key={room?.room_id} room={room} />)}
-
-              {(!selectMemberNumber || selectMemberNumber === '인원' || selectMemberNumber === '전체') &&
-                (!selectRegion || selectRegion === '지역' || selectRegion === '전국') &&
-                otherRooms?.map((room) => <MeetingRoom key={room?.room_id} room={room} />)}
+          }
+          <button onClick={() => nextPage()}>
+            <IoIosArrowForward className="h-[40px] w-[40px] m-[8px]" />
+          </button>
+        </div>
+        <div className="h-[40px]"></div>
+      </article>
+      <article className="flex flex-col items-center justify-content">
+        <div>
+          <div className="flex flex-col justify-start min-w-[1116px] max-w-[1440px] mt-[40px]">
+            <div className="text-[40px]	font-semibold">모집 중</div>
+            <div className="flex flex-row gap-x-[16px] mt-[24px]">
+              <RegionSelection text={'selectRegion'} />
+              <MemberNumberSelection text={'selectMember'} />
             </div>
           </div>
-          {/* 이 부분은 채팅룸이 형성된 전체 방으로, 마지막에는 삭제 예정입니다. */}
-          <div>========여기부터는 채팅방========</div>
-          <div className="gap-[24px] grid grid-cols-2 sm:grid-cols-3">
-            {chattingRoomList?.map((room) => (
-              <MeetingRoom key={room?.room_id} room={room} />
-            ))}
+          <div className="gap-[24px] mb-[8px] grid grid-cols-3 w-100% mt-[24px]">
+            {selectRegion &&
+              selectRegion !== ('지역' || '전국') &&
+              (!selectMemberNumber || selectMemberNumber === ('인원' || '전체')) &&
+              regionSelectedRoomScroll?.map((room) => <MeetingRoom key={room?.room_id} room={room} />)}
+
+            {selectMemberNumber &&
+              selectMemberNumber !== ('인원' && '전체') &&
+              (!selectRegion || selectRegion === ('지역' || '전국')) &&
+              memberSelectedRoomScroll?.map((room) => <MeetingRoom key={room?.room_id} room={room} />)}
+
+            {selectMemberNumber &&
+              selectMemberNumber !== ('인원' && '전체') &&
+              selectRegion &&
+              selectRegion !== ('지역' && '전국') &&
+              regionMemberSelectedRoomScroll?.map((room) => <MeetingRoom key={room?.room_id} room={room} />)}
+
+            {(!selectMemberNumber || selectMemberNumber === '인원' || selectMemberNumber === '전체') &&
+              (!selectRegion || selectRegion === '지역' || selectRegion === '전국') &&
+              otherRoomScroll?.map((room) => <MeetingRoom key={room?.room_id} room={room} />)}
+            <div className="w-full h-8"></div>
           </div>
-        </article>
-      </main>
-    </div>
+        </div>
+        <div ref={scrollRef}></div>
+      </article>
+    </>
   );
 }
 
