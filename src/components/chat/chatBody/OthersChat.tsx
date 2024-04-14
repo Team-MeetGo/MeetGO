@@ -33,9 +33,9 @@ const OthersChat = ({ msg, idx, lastDivRefs }: { msg: Message; idx: number; last
         <div className="w-80 h-24 flex flex-col gap-1">
           <div className="font-bold">{msg.nickname}</div>
           <div className="gap-2 mr-auto">
-            <div className="border rounded-md py-3 px-5 h-full">{msg.message}</div>
+            <div className="border border-gray1 rounded-md py-1.5 px-5 font-light">{msg.message}</div>
           </div>
-          <div className="mt-auto text-slate-100 text-xs">
+          <div className="mt-auto text-gray-400 text-xs">
             <p>{getformattedDate(msg.created_at)}</p>
           </div>
         </div>
