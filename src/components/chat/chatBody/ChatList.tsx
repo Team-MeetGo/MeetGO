@@ -16,7 +16,7 @@ import RememberLastChat from '../chatFooter/RememberLastChat';
 const ChatList = ({ user, chatRoomId }: { user: User | null; chatRoomId: string }) => {
   const scrollRef = useRef() as React.MutableRefObject<HTMLDivElement>;
   const { hasMore, messages, setMessages } = chatStore((state) => state);
-  const [isScrolling, setIsScrolling] = useState(true);
+  const [isScrolling, setIsScrolling] = useState(false);
   const [isScrollTop, setIsScrollTop] = useState(true);
   const [count, setCount] = useState(1);
   const [newAddedMsgNum, setNewAddedMsgNum] = useState(0);
@@ -72,10 +72,11 @@ const ChatList = ({ user, chatRoomId }: { user: User | null; chatRoomId: string 
       let ref = lastDivRefs.current.find((ref) => ref.message_id === lastMsgId);
       let lastDiv = ref && ref.current;
       if (lastMsgId && lastMsgId !== messages[messages.length - 1].message_id && lastDiv) {
-        console.log('lastMsgId =>', lastMsgId);
         setLastCheckedDiv(lastDiv);
         styleHere(lastDiv);
+        setIsScrolling(true);
       } else {
+        console.log('*');
         scrollBox.scrollTop = scrollBox.scrollHeight;
       }
     }
@@ -85,19 +86,17 @@ const ChatList = ({ user, chatRoomId }: { user: User | null; chatRoomId: string 
   useEffect(() => {
     const scrollBox = scrollRef.current;
     // 이전 메세지가 화면에 있을 때
-    if (lastCheckedDiv) {
+    if (lastCheckedDiv && !isScrolling) {
       // 강조처리를 보고난 뒤 스크롤을 맨 아래로 내리면 강조처리 해제
-      if (!isScrolling) {
-        console.log('5');
+      if (!checkedLastMsg) {
         setCheckedLastMsg(true);
         lastCheckedDiv.style.backgroundColor = '';
-      }
-      // 강조처리를 보고나야만 타인으로부터 새로운 메세지가 추가되었을 때 스크롤 다운되도록
-      if (checkedLastMsg && prevMsgsLengthRef.current !== messages.length) {
+      } else if (checkedLastMsg && prevMsgsLengthRef.current !== messages.length) {
+        // 강조처리를 보고나야만 타인으로부터 새로운 메세지가 추가되었을 때 스크롤 다운되도
         scrollBox.scrollTop = scrollBox.scrollHeight;
         prevMsgsLengthRef.current = messages.length;
       }
-    } else if (prevMsgsLengthRef.current !== messages.length) {
+    } else if (!isScrolling && prevMsgsLengthRef.current !== messages.length) {
       // 이전 메세지가 화면에 없고 + 새로운 메세지가 추가되면 스크롤 다운이 따라가도록
       scrollBox.scrollTop = scrollBox.scrollHeight;
       prevMsgsLengthRef.current = messages.length;
@@ -146,7 +145,7 @@ const ChatList = ({ user, chatRoomId }: { user: User | null; chatRoomId: string 
             {lastMsgId &&
             lastMsgId !== messages[messages.length - 1].message_id &&
             lastMsgId === msg.message_id &&
-            isScrolling &&
+            // isScrolling &&
             !checkedLastMsg ? (
               <div className={`flex ${msg.send_from === user?.id ? 'ml-auto' : 'mr-auto'}`}>
                 <p>여기까지 읽으셨습니다.</p>
@@ -155,7 +154,7 @@ const ChatList = ({ user, chatRoomId }: { user: User | null; chatRoomId: string 
           </>
         ))}
       </div>
-      {messages.length && isScrolling ? (
+      {isScrolling ? (
         newAddedMsgNum === 0 ? (
           <ChatScroll handleScrollDown={handleScrollDown} />
         ) : (
