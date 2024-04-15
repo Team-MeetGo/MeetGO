@@ -22,7 +22,6 @@ function MeetingRoomList() {
   const { selectRegion, selectMemberNumber } = useSearchRoomStore();
 
   const myMsgData = useMyMsgData(user?.user_id!);
-  console.log('myMsgData =>', myMsgData);
 
   // meetingRoomList 중에서 myRoomList가 없는 것을 뽑아내기
   const otherRooms = meetingRoomList?.filter(function (room: MeetingRoomType) {
@@ -62,8 +61,7 @@ function MeetingRoomList() {
       //     setRegionMemberSelectedRoomScroll(regionMemberNumberSelectedOtherRoomsViewCards);
     }
   };
-  console.log('scrollPage', scrollPage);
-  console.log(scrollPage);
+
   const nextPage = () => {
     if (myRoomList && myRoomList.length / 3 <= page) {
       return setPage(1);
@@ -88,9 +86,7 @@ function MeetingRoomList() {
     const observer = new IntersectionObserver((entries) => {
       entries.forEach((entry) => {
         if (entry.isIntersecting) {
-          console.log('entry', entry);
           const rect = entry.boundingClientRect;
-          console.log(rect);
           // if (rect.y <= (window.innerHeight || document.documentElement.clientHeight)) {
           viewCards();
           setScrollPage((scrollPage) => scrollPage + 1);
@@ -98,7 +94,6 @@ function MeetingRoomList() {
         }
       }, observerOptions);
     });
-    console.log('currentRef', currentRef);
     const N = otherRooms?.length;
     if (N === undefined) return;
     const totalPage = Math.ceil(N / 3);
@@ -108,12 +103,8 @@ function MeetingRoomList() {
       observer.unobserve(currentRef);
     }
   }, [currentRef, scrollPage]);
-  console.log(otherRooms);
-  const onReload = () => {
-    window.location.reload();
-  };
-  console.log('otherRoomScroll', otherRoomScroll);
-  console.log('nextpage', nextpage);
+  const onReload = () => {};
+
   return (
     <>
       <article className="h-[366px] mt-[88px] border-b border-gray2 min-w-[1116px] max-w-[1440px]">
@@ -178,22 +169,22 @@ function MeetingRoomList() {
             {selectRegion &&
               selectRegion !== ('지역' || '전국') &&
               (!selectMemberNumber || selectMemberNumber === ('인원' || '전체')) &&
-              regionSelectedRoomScroll?.map((room) => <MeetingRoom key={room?.room_id} room={room} />)}
+              regionSelectedOtherRooms?.map((room) => <MeetingRoom key={room?.room_id} room={room} />)}
 
             {selectMemberNumber &&
               selectMemberNumber !== ('인원' && '전체') &&
               (!selectRegion || selectRegion === ('지역' || '전국')) &&
-              memberSelectedRoomScroll?.map((room) => <MeetingRoom key={room?.room_id} room={room} />)}
+              memberNumberSelectedOtherRooms?.map((room) => <MeetingRoom key={room?.room_id} room={room} />)}
 
             {selectMemberNumber &&
               selectMemberNumber !== ('인원' && '전체') &&
               selectRegion &&
               selectRegion !== ('지역' && '전국') &&
-              regionMemberSelectedRoomScroll?.map((room) => <MeetingRoom key={room?.room_id} room={room} />)}
+              regionMemberNumberSelectedOtherRooms?.map((room) => <MeetingRoom key={room?.room_id} room={room} />)}
 
             {(!selectMemberNumber || selectMemberNumber === '인원' || selectMemberNumber === '전체') &&
               (!selectRegion || selectRegion === '지역' || selectRegion === '전국') &&
-              otherRoomScroll?.map((room) => <MeetingRoom key={room?.room_id} room={room} />)}
+              otherRooms?.map((room) => <MeetingRoom key={room?.room_id} room={room} />)}
             <div className="w-full h-8"></div>
           </div>
         </div>

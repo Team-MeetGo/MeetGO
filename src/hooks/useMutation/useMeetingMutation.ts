@@ -12,8 +12,9 @@ import { ROOMLIST, ROOM_MEMBER } from '(@/query/meetingRoom/meetingQueryKeys)';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 import type { NewRoomType, UpdateRoomType, UserType } from '(@/types/roomTypes)';
+import type { UUID } from 'crypto';
 
-export const useUpdateRoomStatusClose = ({ room_id, user_id }: { room_id: string; user_id: string }) => {
+export const useUpdateRoomStatusClose = ({ room_id, user_id }: { room_id: UUID; user_id: string }) => {
   const queryClient = useQueryClient();
   const roomStatusCloseMutation = useMutation({
     mutationFn: async () => await updateRoomStatusClose(room_id),
@@ -24,7 +25,7 @@ export const useUpdateRoomStatusClose = ({ room_id, user_id }: { room_id: string
   return roomStatusCloseMutation;
 };
 
-export const useUpdateRoomStatusOpen = ({ room_id, user_id }: { room_id: string; user_id: string }) => {
+export const useUpdateRoomStatusOpen = ({ room_id, user_id }: { room_id: UUID; user_id: string }) => {
   const queryClient = useQueryClient();
   const roomStatusOpenMutation = useMutation({
     mutationFn: async () => await updateRoomStatusOpen(room_id),
@@ -52,7 +53,7 @@ export const useUpdateRoom = ({
   return updateRoomMutation;
 };
 
-export const useDeleteRoom = ({ room_id, user_id }: { room_id: string; user_id: string }) => {
+export const useDeleteRoom = ({ room_id, user_id }: { room_id: UUID; user_id: string }) => {
   const queryClient = useQueryClient();
   const deleteRoomMutation = useMutation({
     mutationFn: async () => deleteRoom(room_id),
@@ -74,7 +75,7 @@ export const useAddRoom = ({ nextMeetingRoom, user_id }: { nextMeetingRoom: NewR
   return roomAddMutation;
 };
 
-export const useAddRoomMemberMutation = ({ user_id, room_id }: { user_id: string; room_id: string }) => {
+export const useAddRoomMemberMutation = ({ user_id, room_id }: { user_id: string; room_id: UUID }) => {
   const queryClient = useQueryClient();
 
   const roomMemberMutation = useMutation({
@@ -86,7 +87,7 @@ export const useAddRoomMemberMutation = ({ user_id, room_id }: { user_id: string
   return roomMemberMutation;
 };
 
-export const useDeleteMember = ({ user_id, room_id }: { user_id: string; room_id: string }) => {
+export const useDeleteMember = ({ user_id, room_id }: { user_id: string; room_id: UUID }) => {
   const queryClient = useQueryClient();
 
   const deleteMemberMutation = useMutation({
