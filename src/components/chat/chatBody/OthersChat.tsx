@@ -33,7 +33,7 @@ const OthersChat = ({ msg, idx, lastDivRefs }: { msg: Message; idx: number; last
           !isNextDay(idx, messages) ? (
             <div className="w-[60px]"></div>
           ) : (
-            <ParticipantsWrapper
+            <ParticipantsInfoWrapper
               participants={participants}
               showThatUser={showThatUser}
               msg={msg}
@@ -41,7 +41,12 @@ const OthersChat = ({ msg, idx, lastDivRefs }: { msg: Message; idx: number; last
             />
           )
         ) : (
-          <ParticipantsWrapper participants={participants} showThatUser={showThatUser} msg={msg} leaderId={leaderId} />
+          <ParticipantsInfoWrapper
+            participants={participants}
+            showThatUser={showThatUser}
+            msg={msg}
+            leaderId={leaderId}
+          />
         )}
 
         <div className="flex flex-col gap-1">
@@ -71,7 +76,7 @@ const OthersChat = ({ msg, idx, lastDivRefs }: { msg: Message; idx: number; last
 
 export default OthersChat;
 
-const ParticipantsWrapper = ({
+const ParticipantsInfoWrapper = ({
   participants,
   showThatUser,
   msg,

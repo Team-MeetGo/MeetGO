@@ -23,13 +23,10 @@ const ChatList = ({ user, chatRoomId }: { user: User | null; chatRoomId: string 
   const [lastCheckedDiv, setLastCheckedDiv] = useState<HTMLElement | null>();
   const [checkedLastMsg, setCheckedLastMsg] = useState(false);
   const room = useRoomDataQuery(chatRoomId);
-  console.log('room =>', room?.roomData.leader_id);
   const roomId = room?.roomId;
   const prevMsgsLengthRef = useRef(messages.length);
   const lastDivRefs = useRef(messages);
   const lastMsgId = useMyLastMsgs(user?.id!, chatRoomId);
-
-  console.log('isScrolling =>', isScrolling);
 
   // "messages" table Realtime INSERT, DELETE 구독로직
   useEffect(() => {
@@ -70,8 +67,10 @@ const ChatList = ({ user, chatRoomId }: { user: User | null; chatRoomId: string 
     const scrollBox = scrollRef.current;
     if (scrollBox) {
       // DB에 마지막 메세지로 저장된 메세지와 id가 동일한 div 가 있다면 강조처리
-      let ref = lastDivRefs.current.find((ref) => ref.message_id === lastMsgId);
-      let lastDiv = ref && ref.current;
+      let lastMsgValue = lastDivRefs.current.find((ref) => ref.message_id === lastMsgId);
+
+      let lastDiv = lastMsgValue && (lastMsgValue as any).current;
+      console.log('lastDiv =>', lastDiv);
       if (lastMsgId && lastMsgId !== messages[messages.length - 1].message_id && lastDiv) {
         setLastCheckedDiv(lastDiv);
         styleHere(lastDiv);
