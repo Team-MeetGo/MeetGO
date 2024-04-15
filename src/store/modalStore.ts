@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import { ModalActions, ModalState } from '(@/types/modalTypes)';
+import { ModalActions, ModalState } from '@/types/modalTypes';
 
 /** 모달 상태 관리를 담당하는 저장소 */
 export const useModalStore = create<ModalState & ModalActions>((set) => ({

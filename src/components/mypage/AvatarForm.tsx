@@ -1,7 +1,7 @@
-import { useAvatarUpdateMutation } from '(@/hooks/useMutation/useProfileMutation)';
-import { useGetUserDataQuery } from '(@/hooks/useQueries/useUserQuery)';
-import { USER_DATA_QUERY_KEY } from '(@/query/user/userQueryKeys)';
-import { clientSupabase } from '(@/utils/supabase/client)';
+import { useAvatarUpdateMutation } from '@/hooks/useMutation/useProfileMutation';
+import { useGetUserDataQuery } from '@/hooks/useQueries/useUserQuery';
+import { USER_DATA_QUERY_KEY } from '@/query/user/userQueryKeys';
+import { clientSupabase } from '@/utils/supabase/client';
 import { Avatar, avatar } from '@nextui-org/react';
 import { useQueryClient } from '@tanstack/react-query';
 import Image from 'next/image';

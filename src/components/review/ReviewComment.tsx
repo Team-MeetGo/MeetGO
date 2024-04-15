@@ -1,7 +1,7 @@
 'use client';
 
 import { HiOutlineChatBubbleOvalLeftEllipsis } from 'react-icons/hi2';
-import { useFetchCommentData } from '(@/hooks/useQueries/useCommentQuery)';
+import { useFetchCommentData } from '@/hooks/useQueries/useCommentQuery';
 
 type Props = {
   review_id: string;

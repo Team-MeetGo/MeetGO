@@ -1,4 +1,4 @@
-import { useGetUserDataQuery, useGetUserLikePostQuery, useGetUserPostQuery } from '(@/hooks/useQueries/useUserQuery)';
+import { useGetUserDataQuery, useGetUserLikePostQuery, useGetUserPostQuery } from '@/hooks/useQueries/useUserQuery';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useEffect } from 'react';

@@ -1,5 +1,5 @@
-import { UpdateSchoolType } from '(@/types/userTypes)';
-import { clientSupabase } from '(@/utils/supabase/client)';
+import { UpdateSchoolType } from '@/types/userTypes';
+import { clientSupabase } from '@/utils/supabase/client';
 
 // supabase Insert, Delete, Update
 export const requestKakaoId = async (requestId: string, responseId: string) => {

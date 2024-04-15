@@ -1,6 +1,6 @@
-import { USER_DATA_QUERY_KEY } from '(@/query/user/userQueryKeys)';
-import { updateAvatar, updateProfile } from '(@/service)';
-import { UpdateAvatarType, UpdateProfileType } from '(@/types/userTypes)';
+import { USER_DATA_QUERY_KEY } from '@/query/user/userQueryKeys';
+import { updateAvatar, updateProfile } from '@/service';
+import { UpdateAvatarType, UpdateProfileType } from '@/types/userTypes';
 import { QueryClient, useMutation } from '@tanstack/react-query';
 
 const queryClient = new QueryClient();

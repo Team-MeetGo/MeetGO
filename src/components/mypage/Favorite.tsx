@@ -1,10 +1,10 @@
 import { Chip, Select, SelectItem } from '@nextui-org/react';
 import { useEffect, useState } from 'react';
-import { favoriteOptions } from '(@/utils/FavoriteData)';
-import { clientSupabase } from '(@/utils/supabase/client)';
-import { IsEditingType } from '(@/types/userTypes)';
-import { useGetUserDataQuery } from '(@/hooks/useQueries/useUserQuery)';
-import { useFavoriteStore } from '(@/store/userStore)';
+import { favoriteOptions } from '@/utils/FavoriteData';
+import { clientSupabase } from '@/utils/supabase/client';
+import { IsEditingType } from '@/types/userTypes';
+import { useGetUserDataQuery } from '@/hooks/useQueries/useUserQuery';
+import { useFavoriteStore } from '@/store/userStore';
 
 const Favorite: React.FC<IsEditingType> = ({ isEditing }) => {
   const { selected, setSelected } = useFavoriteStore();

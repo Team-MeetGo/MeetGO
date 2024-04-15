@@ -1,5 +1,5 @@
-import { fetchCommentAuthor, fetchCommentData } from '(@/query/review/commentQueryFns)';
-import { COMMENT_AUTHOR_QUERY_KEY, COMMENT_QUERY_KEY } from '(@/query/review/commentQueryKeys)';
+import { fetchCommentAuthor, fetchCommentData } from '@/query/review/commentQueryFns';
+import { COMMENT_AUTHOR_QUERY_KEY, COMMENT_QUERY_KEY } from '@/query/review/commentQueryKeys';
 import { useQuery } from '@tanstack/react-query';
 
 export const useCommentAuthorDataQuery = (commentAuthorId: string) => {

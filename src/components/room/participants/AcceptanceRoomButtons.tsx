@@ -1,8 +1,8 @@
 'use client';
 
-import { useRoomInfoWithRoomIdQuery, useRoomParticipantsQuery } from '(@/hooks/useQueries/useMeetingQuery)';
-import { useGetUserDataQuery } from '(@/hooks/useQueries/useUserQuery)';
-import { clientSupabase } from '(@/utils/supabase/client)';
+import { useRoomInfoWithRoomIdQuery, useRoomParticipantsQuery } from '@/hooks/useQueries/useMeetingQuery';
+import { useGetUserDataQuery } from '@/hooks/useQueries/useUserQuery';
+import { clientSupabase } from '@/utils/supabase/client';
 import { useRouter } from 'next/navigation';
 
 import type { UUID } from 'crypto';

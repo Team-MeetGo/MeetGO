@@ -1,16 +1,16 @@
 'use client';
 
-import { useChatDataQuery, useRoomDataQuery } from '(@/hooks/useQueries/useChattingQuery)';
+import { useChatDataQuery, useRoomDataQuery } from '@/hooks/useQueries/useChattingQuery';
 import React, { useEffect, useRef, useState } from 'react';
 import { Card, CardBody, Pagination } from '@nextui-org/react';
 import { HiMiniMagnifyingGlass } from 'react-icons/hi2';
 import DateTimePicker from './DateTimePicker';
-import { userStore } from '(@/store/userStore)';
+import { userStore } from '@/store/userStore';
 import {
   useClearMeetingLocationMutation,
   useUpdateMeetingLocationMutation
-} from '(@/hooks/useMutation/useMeetingLocationMutation)';
-import { useGetUserDataQuery } from '(@/hooks/useQueries/useUserQuery)';
+} from '@/hooks/useMutation/useMeetingLocationMutation';
+import { useGetUserDataQuery } from '@/hooks/useQueries/useUserQuery';
 
 declare global {
   interface Window {

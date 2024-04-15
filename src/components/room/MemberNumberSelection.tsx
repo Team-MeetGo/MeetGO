@@ -1,7 +1,7 @@
 'use client';
-import { useRoomStore } from '(@/store/roomStore)';
-import { useSearchRoomStore } from '(@/store/searchRoomStore)';
-import { member_number } from '(@/utils/MeetingRoomSelector)';
+import { useRoomStore } from '@/store/roomStore';
+import { useSearchRoomStore } from '@/store/searchRoomStore';
+import { member_number } from '@/utils/MeetingRoomSelector';
 import { Button, Dropdown, DropdownItem, DropdownMenu, DropdownTrigger } from '@nextui-org/react';
 import { useEffect, useMemo, useRef, useState } from 'react';
 

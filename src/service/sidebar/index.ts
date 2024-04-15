@@ -1,4 +1,4 @@
-import { clientSupabase } from '(@/utils/supabase/client)';
+import { clientSupabase } from '@/utils/supabase/client';
 
 // 미팅 시간 추가
 export const addMeetingTime = async (chatRoomId: string, isoStringMeetingTime: string) => {

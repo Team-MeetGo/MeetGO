@@ -1,9 +1,9 @@
 'use client';
-import { useMyMsgData } from '(@/hooks/useQueries/useChattingQuery)';
-import { useMyroomQuery, useRecruitingQuery } from '(@/hooks/useQueries/useMeetingQuery)';
-import { useGetUserDataQuery } from '(@/hooks/useQueries/useUserQuery)';
-import { useSearchRoomStore } from '(@/store/searchRoomStore)';
-import type { MeetingRoomType, MeetingRoomTypes } from '(@/types/roomTypes)';
+import { useMyMsgData } from '@/hooks/useQueries/useChattingQuery';
+import { useMyroomQuery, useRecruitingQuery } from '@/hooks/useQueries/useMeetingQuery';
+import { useGetUserDataQuery } from '@/hooks/useQueries/useUserQuery';
+import { useSearchRoomStore } from '@/store/searchRoomStore';
+import type { MeetingRoomType, MeetingRoomTypes } from '@/types/roomTypes';
 import { useEffect, useRef, useState } from 'react';
 import { IoIosArrowBack, IoIosArrowForward, IoMdRefresh } from 'react-icons/io';
 import MeetingRoom from './MeetingRoom';

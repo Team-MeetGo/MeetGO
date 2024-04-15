@@ -1,4 +1,4 @@
-import { Tables } from '(@/types/database.types)';
+import { Tables } from '@/types/database.types';
 import { Dispatch, SetStateAction } from 'react';
 
 export type UsersType = Tables<'users'>;

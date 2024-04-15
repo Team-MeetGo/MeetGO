@@ -5,7 +5,7 @@ import {
   fetchMyMsgData,
   fetchParticipants,
   fetchRoomDataWithChatRoomId
-} from '(@/query/chat/chatQueryFns)';
+} from '@/query/chat/chatQueryFns';
 import {
   CHATDATA_QUERY_KEY,
   MYCHAT_ROOMIDS,
@@ -14,7 +14,7 @@ import {
   MY_MSG_DATA,
   PARTICIPANTS_QUERY_KEY,
   ROOMDATA_QUERY_KEY
-} from '(@/query/chat/chatQueryKeys)';
+} from '@/query/chat/chatQueryKeys';
 import { useQuery, useSuspenseQuery } from '@tanstack/react-query';
 
 export const useRoomDataQuery = (chatRoomId: string) => {

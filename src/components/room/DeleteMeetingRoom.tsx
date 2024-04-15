@@ -1,7 +1,7 @@
 'use client';
 
-import { useDeleteRoom } from '(@/hooks/useMutation/useMeetingMutation)';
-import { useGetUserDataQuery } from '(@/hooks/useQueries/useUserQuery)';
+import { useDeleteRoom } from '@/hooks/useMutation/useMeetingMutation';
+import { useGetUserDataQuery } from '@/hooks/useQueries/useUserQuery';
 
 import type { UUID } from 'crypto';
 function DeleteMeetingRoom({ room_id }: { room_id: UUID }) {

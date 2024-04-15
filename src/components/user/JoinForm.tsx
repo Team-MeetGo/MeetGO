@@ -1,14 +1,14 @@
 'use client';
 
-import { clientSupabase } from '(@/utils/supabase/client)';
+import { clientSupabase } from '@/utils/supabase/client';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { Button } from '@nextui-org/react';
-import { authValidation } from '(@/utils/Validation)';
-import { IsValidateShow } from '(@/types/userTypes)';
+import { authValidation } from '@/utils/Validation';
+import { IsValidateShow } from '@/types/userTypes';
 import { ValidationModal } from '../common/ValidationModal';
-import { useModalStore } from '(@/store/modalStore)';
-import { USER_DATA_QUERY_KEY } from '(@/query/user/userQueryKeys)';
+import { useModalStore } from '@/store/modalStore';
+import { USER_DATA_QUERY_KEY } from '@/query/user/userQueryKeys';
 import { useQueryClient } from '@tanstack/react-query';
 
 type Gender = 'male' | 'female' | '';

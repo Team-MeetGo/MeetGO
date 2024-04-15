@@ -4,15 +4,15 @@ import {
   fetchRecruitingRoom,
   fetchRoomInfoWithRoomId,
   fetchRoomParticipants
-} from '(@/query/meetingRoom/meetingQueryFns)';
+} from '@/query/meetingRoom/meetingQueryFns';
 import {
   MY_ROOM,
   RECRUTING_ROOMDATA,
   ROOMDATA_WITH_ROOMID,
   ROOMLIST,
   ROOM_MEMBER
-} from '(@/query/meetingRoom/meetingQueryKeys)';
-import { profileCount } from '(@/store/userStore)';
+} from '@/query/meetingRoom/meetingQueryKeys';
+import { profileCount } from '@/store/userStore';
 import { useQuery, useSuspenseQuery } from '@tanstack/react-query';
 import { useEffect } from 'react';
 

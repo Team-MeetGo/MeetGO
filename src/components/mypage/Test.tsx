@@ -1,5 +1,5 @@
 'use client';
-import { useGetUserDataQuery } from '(@/hooks/useQueries/useUserQuery)';
+import { useGetUserDataQuery } from '@/hooks/useQueries/useUserQuery';
 
 // 쿼리 테스트
 const Test = () => {

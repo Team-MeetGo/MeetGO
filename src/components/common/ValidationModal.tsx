@@ -1,5 +1,5 @@
 import { useRouter } from 'next/navigation';
-import { useModalStore } from '(@/store/modalStore)';
+import { useModalStore } from '@/store/modalStore';
 
 export const ValidationModal = () => {
   const router = useRouter();

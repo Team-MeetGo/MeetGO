@@ -1,8 +1,8 @@
 'use client';
-import { useAddRoom } from '(@/hooks/useMutation/useMeetingMutation)';
-import { useGetUserDataQuery } from '(@/hooks/useQueries/useUserQuery)';
-import { useRoomStore } from '(@/store/roomStore)';
-import { favoriteOptions } from '(@/utils/FavoriteData)';
+import { useAddRoom } from '@/hooks/useMutation/useMeetingMutation';
+import { useGetUserDataQuery } from '@/hooks/useQueries/useUserQuery';
+import { useRoomStore } from '@/store/roomStore';
+import { favoriteOptions } from '@/utils/FavoriteData';
 import {
   Button,
   Chip,
@@ -20,7 +20,7 @@ import { useState } from 'react';
 import MemberNumberSelection from './MemberNumberSelection';
 import RegionSelection from './RegionSelection';
 
-import type { NewRoomType } from '(@/types/roomTypes)';
+import type { NewRoomType } from '@/types/roomTypes';
 
 function MeetingRoomForm() {
   const router = useRouter();

@@ -4,8 +4,8 @@ import { Button, Checkbox, Modal, ModalBody, ModalContent, ModalHeader, useDiscl
 import { MdCancel } from 'react-icons/md';
 import { LuImagePlus } from 'react-icons/lu';
 import { FaCheck } from 'react-icons/fa6';
-import { useGetUserDataQuery } from '(@/hooks/useQueries/useUserQuery)';
-import { useNewReviewMutation, useUploadImgsMutation } from '(@/hooks/useMutation/useReviewMutations)';
+import { useGetUserDataQuery } from '@/hooks/useQueries/useUserQuery';
+import { useNewReviewMutation, useUploadImgsMutation } from '@/hooks/useMutation/useReviewMutations';
 
 const NewReview = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();

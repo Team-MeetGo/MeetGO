@@ -1,10 +1,10 @@
 import Image from 'next/image';
-import AvatarDefault from '(@/utils/icons/AvatarDefault)';
+import AvatarDefault from '@/utils/icons/AvatarDefault';
 import { CommentListType } from './CommentList';
-import { useCommentAuthorDataQuery } from '(@/hooks/useQueries/useCommentQuery)';
+import { useCommentAuthorDataQuery } from '@/hooks/useQueries/useCommentQuery';
 import { Button } from '@nextui-org/react';
-import { useGetUserDataQuery } from '(@/hooks/useQueries/useUserQuery)';
-import { useDeleteCommentMutation } from '(@/hooks/useMutation/useCommentMutations)';
+import { useGetUserDataQuery } from '@/hooks/useQueries/useUserQuery';
+import { useDeleteCommentMutation } from '@/hooks/useMutation/useCommentMutations';
 
 type Props = {
   comment: CommentListType;

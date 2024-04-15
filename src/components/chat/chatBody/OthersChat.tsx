@@ -1,7 +1,7 @@
-import { useParticipantsQuery, useRoomDataQuery } from '(@/hooks/useQueries/useChattingQuery)';
-import { chatStore } from '(@/store/chatStore)';
-import { Message } from '(@/types/chatTypes)';
-import { getformattedDate, showingDate } from '(@/utils)';
+import { useParticipantsQuery, useRoomDataQuery } from '@/hooks/useQueries/useChattingQuery';
+import { chatStore } from '@/store/chatStore';
+import { Message } from '@/types/chatTypes';
+import { getformattedDate, showingDate } from '@/utils';
 import { Tooltip } from '@nextui-org/react';
 
 const OthersChat = ({ msg, idx, lastDivRefs }: { msg: Message; idx: number; lastDivRefs: any }) => {

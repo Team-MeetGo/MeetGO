@@ -1,7 +1,7 @@
 'use client';
-import { useUpdateRoom } from '(@/hooks/useMutation/useMeetingMutation)';
-import { useRoomStore } from '(@/store/roomStore)';
-import { favoriteOptions } from '(@/utils/FavoriteData)';
+import { useUpdateRoom } from '@/hooks/useMutation/useMeetingMutation';
+import { useRoomStore } from '@/store/roomStore';
+import { favoriteOptions } from '@/utils/FavoriteData';
 import {
   Button,
   Chip,
@@ -18,8 +18,8 @@ import { useState } from 'react';
 import MemberNumberSelection from './MemberNumberSelection';
 import RegionSelection from './RegionSelection';
 
-import { useGetUserDataQuery } from '(@/hooks/useQueries/useUserQuery)';
-import type { MeetingRoomType, UpdateRoomType } from '(@/types/roomTypes)';
+import { useGetUserDataQuery } from '@/hooks/useQueries/useUserQuery';
+import type { MeetingRoomType, UpdateRoomType } from '@/types/roomTypes';
 
 function EditMeetingRoom({ room }: { room: MeetingRoomType }) {
   const { data: user } = useGetUserDataQuery();

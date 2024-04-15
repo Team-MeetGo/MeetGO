@@ -2,11 +2,11 @@
 
 import React, { useEffect, useState } from 'react';
 import ToggleButton from './ToggleButton';
-import HeartFillIcon from '(@/utils/icons/HeartFillIcon)';
-import HeartIcon from '(@/utils/icons/HeartIcon)';
-import { useGetUserDataQuery } from '(@/hooks/useQueries/useUserQuery)';
-import { useLikedReviewCountQuery, useLikedReviewDataQuery } from '(@/hooks/useQueries/useLikeQuery)';
-import { useToggleLikeMutation } from '(@/hooks/useMutation/useLikeMutation)';
+import HeartFillIcon from '@/utils/icons/HeartFillIcon';
+import HeartIcon from '@/utils/icons/HeartIcon';
+import { useGetUserDataQuery } from '@/hooks/useQueries/useUserQuery';
+import { useLikedReviewCountQuery, useLikedReviewDataQuery } from '@/hooks/useQueries/useLikeQuery';
+import { useToggleLikeMutation } from '@/hooks/useMutation/useLikeMutation';
 
 type Props = {
   review_id: string;

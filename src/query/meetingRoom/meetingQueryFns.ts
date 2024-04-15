@@ -1,5 +1,5 @@
-import { NewRoomType, UpdateRoomType, UserType } from '(@/types/roomTypes)';
-import { clientSupabase } from '(@/utils/supabase/client)';
+import { NewRoomType, UpdateRoomType, UserType } from '@/types/roomTypes';
+import { clientSupabase } from '@/utils/supabase/client';
 
 import type { UUID } from 'crypto';
 

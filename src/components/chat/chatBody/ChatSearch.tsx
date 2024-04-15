@@ -1,4 +1,4 @@
-import { chatStore } from '(@/store/chatStore)';
+import { chatStore } from '@/store/chatStore';
 import { useEffect, useState } from 'react';
 import { FaChevronDown, FaChevronUp } from 'react-icons/fa';
 import { FaX } from 'react-icons/fa6';

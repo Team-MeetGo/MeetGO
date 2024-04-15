@@ -1,5 +1,5 @@
-import { fetchLikeCount, fetchLikestatus } from '(@/query/review/likeQueryFns)';
-import { LIKED_COUNT_QUERY_KEY, LIKED_QUERY_KEY } from '(@/query/review/likeQueryKeys)';
+import { fetchLikeCount, fetchLikestatus } from '@/query/review/likeQueryFns';
+import { LIKED_COUNT_QUERY_KEY, LIKED_QUERY_KEY } from '@/query/review/likeQueryKeys';
 import { useQuery } from '@tanstack/react-query';
 
 export const useLikedReviewDataQuery = (review_id: string) => {

@@ -1,4 +1,4 @@
-import { serverSupabase } from '(@/utils/supabase/server)';
+import { serverSupabase } from '@/utils/supabase/server';
 import { NextFetchEvent, NextRequest, NextResponse } from 'next/server';
 import { CustomMiddleware } from './middlewareType';
 

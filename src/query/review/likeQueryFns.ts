@@ -1,4 +1,4 @@
-import { clientSupabase } from '(@/utils/supabase/client)';
+import { clientSupabase } from '@/utils/supabase/client';
 
 export const fetchLikestatus = async (review_id: string) => {
   const { data: likedUsers, error } = await clientSupabase

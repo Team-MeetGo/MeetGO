@@ -6,15 +6,15 @@ import AvatarForm from './AvatarForm';
 import MyPost from './MyPost';
 import Favorite from './Favorite';
 import MetPeople from './MetPeople';
-import useInputChange from '(@/hooks/custom/useInputChange)';
+import useInputChange from '@/hooks/custom/useInputChange';
 import { Avatar, Select, SelectItem } from '@nextui-org/react';
-import { useGetUserDataQuery } from '(@/hooks/useQueries/useUserQuery)';
-import { useProfileUpdateMutation } from '(@/hooks/useMutation/useProfileMutation)';
+import { useGetUserDataQuery } from '@/hooks/useQueries/useUserQuery';
+import { useProfileUpdateMutation } from '@/hooks/useMutation/useProfileMutation';
 import { useQueryClient } from '@tanstack/react-query';
-import { USER_DATA_QUERY_KEY } from '(@/query/user/userQueryKeys)';
-import { UpdateProfileType } from '(@/types/userTypes)';
+import { USER_DATA_QUERY_KEY } from '@/query/user/userQueryKeys';
+import { UpdateProfileType } from '@/types/userTypes';
 import Image from 'next/image';
-import { profileCount, useFavoriteStore } from '(@/store/userStore)';
+import { profileCount, useFavoriteStore } from '@/store/userStore';
 
 const Profile = () => {
   const queryClient = useQueryClient();

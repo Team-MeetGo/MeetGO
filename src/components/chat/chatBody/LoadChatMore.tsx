@@ -1,8 +1,8 @@
 'use client';
-import { chatStore } from '(@/store/chatStore)';
-import { getFromTo } from '(@/utils)';
-import { ITEM_INTERVAL } from '(@/utils/constant)';
-import { clientSupabase } from '(@/utils/supabase/client)';
+import { chatStore } from '@/store/chatStore';
+import { getFromTo } from '@/utils';
+import { ITEM_INTERVAL } from '@/utils/constant';
+import { clientSupabase } from '@/utils/supabase/client';
 import { Button } from '@nextui-org/react';
 import { Dispatch, SetStateAction, useEffect } from 'react';
 

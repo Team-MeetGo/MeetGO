@@ -7,11 +7,11 @@ import {
   updateRoom,
   updateRoomStatusClose,
   updateRoomStatusOpen
-} from '(@/query/meetingRoom/meetingQueryFns)';
-import { ROOMLIST, ROOM_MEMBER } from '(@/query/meetingRoom/meetingQueryKeys)';
+} from '@/query/meetingRoom/meetingQueryFns';
+import { ROOMLIST, ROOM_MEMBER } from '@/query/meetingRoom/meetingQueryKeys';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
-import type { NewRoomType, UpdateRoomType, UserType } from '(@/types/roomTypes)';
+import type { NewRoomType, UpdateRoomType, UserType } from '@/types/roomTypes';
 import type { UUID } from 'crypto';
 
 export const useUpdateRoomStatusClose = ({ room_id, user_id }: { room_id: UUID; user_id: string }) => {

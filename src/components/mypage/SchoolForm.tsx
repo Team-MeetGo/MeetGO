@@ -1,13 +1,13 @@
 'use client';
 
-import { emailCodeAPI, emailConfirmAPI, schoolConfirmAPI } from '(@/utils/api/emailConfirmAPI)';
+import { emailCodeAPI, emailConfirmAPI, schoolConfirmAPI } from '@/utils/api/emailConfirmAPI';
 import { useState } from 'react';
-import { schoolValidation } from '(@/utils/Validation)';
-import { clientSupabase } from '(@/utils/supabase/client)';
-import { useGetUserDataQuery } from '(@/hooks/useQueries/useUserQuery)';
+import { schoolValidation } from '@/utils/Validation';
+import { clientSupabase } from '@/utils/supabase/client';
+import { useGetUserDataQuery } from '@/hooks/useQueries/useUserQuery';
 import { useQueryClient } from '@tanstack/react-query';
-import { useSchoolUpdateMutation } from '(@/hooks/useMutation/useSchoolMutation)';
-import { USER_DATA_QUERY_KEY } from '(@/query/user/userQueryKeys)';
+import { useSchoolUpdateMutation } from '@/hooks/useMutation/useSchoolMutation';
+import { USER_DATA_QUERY_KEY } from '@/query/user/userQueryKeys';
 import {
   Button,
   Input,

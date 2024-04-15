@@ -1,6 +1,6 @@
 'use client';
 
-import ChatTest from '(@/components/chat/ChatTest)';
+import ChatTest from '@/components/chat/ChatTest';
 import { Suspense, useEffect, useRef, useState } from 'react';
 
 const Page = () => {

@@ -1,21 +1,21 @@
 'use client';
 
-import { clientSupabase } from '(@/utils/supabase/client)';
+import { clientSupabase } from '@/utils/supabase/client';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { Button, Checkbox } from '@nextui-org/react';
-import { googleLogin, kakaoLogin } from '(@/utils/api/authAPI)';
+import { googleLogin, kakaoLogin } from '@/utils/api/authAPI';
 import { ValidationModal } from '../common/ValidationModal';
-import { useModalStore } from '(@/store/modalStore)';
-import { authValidation } from '(@/utils/Validation)';
-import { IsValidateShow, LoginData } from '(@/types/userTypes)';
-import { userStore } from '(@/store/userStore)';
+import { useModalStore } from '@/store/modalStore';
+import { authValidation } from '@/utils/Validation';
+import { IsValidateShow, LoginData } from '@/types/userTypes';
+import { userStore } from '@/store/userStore';
 import { useQueryClient } from '@tanstack/react-query';
-import { USER_DATA_QUERY_KEY } from '(@/query/user/userQueryKeys)';
+import { USER_DATA_QUERY_KEY } from '@/query/user/userQueryKeys';
 import Link from 'next/link';
 import Image from 'next/image';
-import kakaoLoginLogo from '(@/utils/icons/login_kakao.png)';
-import googleLoginLogo from '(@/utils/icons/logo_google.png)';
+import kakaoLoginLogo from '@/utils/icons/login_kakao.png';
+import googleLoginLogo from '@/utils/icons/logo_google.png';
 
 const LOGIN_FORM_LIST = [
   {

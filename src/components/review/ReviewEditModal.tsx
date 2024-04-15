@@ -6,8 +6,8 @@ import { ChangeEvent, FormEvent, useEffect, useState } from 'react';
 import { MdCancel } from 'react-icons/md';
 import { LuImagePlus } from 'react-icons/lu';
 import type { UseDisclosureReturn } from '@nextui-org/use-disclosure';
-import { useEditImgsMutation, useEditReviewMutation } from '(@/hooks/useMutation/useReviewMutations)';
-import { useReviewDataQuery } from '(@/hooks/useQueries/useReviewQuery)';
+import { useEditImgsMutation, useEditReviewMutation } from '@/hooks/useMutation/useReviewMutations';
+import { useReviewDataQuery } from '@/hooks/useQueries/useReviewQuery';
 
 type Props = {
   review_id: string;

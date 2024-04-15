@@ -1,9 +1,9 @@
 'use client';
-import { useRoomDataQuery } from '(@/hooks/useQueries/useChattingQuery)';
-import { chatStore } from '(@/store/chatStore)';
-import { Message, chatRoomPayloadType } from '(@/types/chatTypes)';
-import { ITEM_INTERVAL } from '(@/utils/constant)';
-import { clientSupabase } from '(@/utils/supabase/client)';
+import { useRoomDataQuery } from '@/hooks/useQueries/useChattingQuery';
+import { chatStore } from '@/store/chatStore';
+import { Message, chatRoomPayloadType } from '@/types/chatTypes';
+import { ITEM_INTERVAL } from '@/utils/constant';
+import { clientSupabase } from '@/utils/supabase/client';
 import { User } from '@supabase/supabase-js';
 import { useRouter } from 'next/navigation';
 import { Suspense, useEffect } from 'react';

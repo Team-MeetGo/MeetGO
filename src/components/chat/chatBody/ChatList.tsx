@@ -1,15 +1,15 @@
 'use client';
-import { Message } from '(@/types/chatTypes)';
-import { clientSupabase } from '(@/utils/supabase/client)';
+import { Message } from '@/types/chatTypes';
+import { clientSupabase } from '@/utils/supabase/client';
 import { useEffect, useRef, useState } from 'react';
 import { User } from '@supabase/supabase-js';
 import ChatScroll from './ChatScroll';
 import NewChatAlert from './NewChatAlert';
 import LoadChatMore from './LoadChatMore';
-import { chatStore } from '(@/store/chatStore)';
+import { chatStore } from '@/store/chatStore';
 import OthersChat from './OthersChat';
 import ChatSearch from './ChatSearch';
-import { useMyLastMsgs, useRoomDataQuery } from '(@/hooks/useQueries/useChattingQuery)';
+import { useMyLastMsgs, useRoomDataQuery } from '@/hooks/useQueries/useChattingQuery';
 import MyChat from './MyChat';
 import RememberLastChat from '../chatFooter/RememberLastChat';
 
@@ -69,8 +69,8 @@ const ChatList = ({ user, chatRoomId }: { user: User | null; chatRoomId: string 
     const scrollBox = scrollRef.current;
     if (scrollBox) {
       // DB에 마지막 메세지로 저장된 메세지와 id가 동일한 div 가 있다면 강조처리
-      let ref = lastDivRefs.current.find((ref) => ref.message_id === lastMsgId);
-      let lastDiv = ref && ref.current;
+      const lastMsgValue = lastDivRefs.current.find((ref) => ref.message_id === lastMsgId);
+      const lastDiv = lastMsgValue && (lastMsgValue as any).current;
       if (lastMsgId && lastMsgId !== messages[messages.length - 1].message_id && lastDiv) {
         setLastCheckedDiv(lastDiv);
         styleHere(lastDiv);

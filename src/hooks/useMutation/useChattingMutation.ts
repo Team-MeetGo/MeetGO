@@ -4,8 +4,8 @@ import {
   fetchMyMsgData,
   updateMyLastMsg,
   updateNewMsgNum
-} from '(@/query/chat/chatQueryFns)';
-import { MY_LAST_MSGS_AFTER, MY_MSG_DATA } from '(@/query/chat/chatQueryKeys)';
+} from '@/query/chat/chatQueryFns';
+import { MY_LAST_MSGS_AFTER, MY_MSG_DATA } from '@/query/chat/chatQueryKeys';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 export const useAddLastMsg = (chatRoomId: string, roomId: string, user_id: string, last_msg_id: string | undefined) => {
