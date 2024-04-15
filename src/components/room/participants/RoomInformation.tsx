@@ -16,7 +16,7 @@ import { useGetUserDataQuery } from '(@/hooks/useQueries/useUserQuery)';
 
 import type { UserType } from '(@/types/roomTypes)';
 
-function RoomInformation({ room_id }: { room_id: UUID }) {
+function RoomInformation({ room_id }: { room_id: string }) {
   const router = useRouter();
   const { data: user, isPending, isError } = useGetUserDataQuery();
   const user_id = user?.user_id!;

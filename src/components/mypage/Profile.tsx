@@ -1,6 +1,6 @@
 'use client';
 
-import { Suspense, useState } from 'react';
+import { useState } from 'react';
 import SchoolForm from './SchoolForm';
 import AvatarForm from './AvatarForm';
 import MyPost from './MyPost';
@@ -200,7 +200,8 @@ const Profile = () => {
                     inputNickname: inputNickname.value,
                     inputIntro: inputIntro.value,
                     inputKakaoId: inputKakaoId.value,
-                    inputGender: inputGender.value
+                    inputGender: inputGender.value,
+                    favorite: Array.from(selected)
                   })
                 }
               >

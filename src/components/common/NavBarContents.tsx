@@ -18,7 +18,6 @@ import { useGetUserDataQuery } from '(@/hooks/useQueries/useUserQuery)';
 import { useQueryClient } from '@tanstack/react-query';
 import { USER_DATA_QUERY_KEY } from '(@/query/user/userQueryKeys)';
 import Link from 'next/link';
-import { useState } from 'react';
 
 const NavBarContents = () => {
   const queryClient = useQueryClient();
@@ -105,7 +104,7 @@ const NavBarContents = () => {
               </DropdownTrigger>
               <DropdownMenu aria-label="Profile Actions" variant="flat">
                 <DropdownItem key="mypage" textValue="mypage">
-                  <Link href="/mypage" className="flex">
+                  <Link href="/mypage" className="flex w-full h-full">
                     마이페이지
                   </Link>
                 </DropdownItem>

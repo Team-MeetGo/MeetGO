@@ -65,6 +65,7 @@ const AvatarForm = () => {
           queryClient.invalidateQueries({
             queryKey: [USER_DATA_QUERY_KEY]
           });
+          console.log(USER_DATA_QUERY_KEY, '쿼리키임');
           setIsEditing(false);
         }
       }
