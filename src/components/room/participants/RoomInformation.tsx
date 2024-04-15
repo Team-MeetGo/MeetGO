@@ -15,6 +15,7 @@ import { useRoomInfoWithRoomIdQuery, useRoomParticipantsQuery } from '(@/hooks/u
 import { useGetUserDataQuery } from '(@/hooks/useQueries/useUserQuery)';
 
 import type { UserType } from '(@/types/roomTypes)';
+import AcceptanceRoomButtons from './AcceptanceRoomButtons';
 
 function RoomInformation({ room_id }: { room_id: UUID }) {
   const router = useRouter();
@@ -37,7 +38,6 @@ function RoomInformation({ room_id }: { room_id: UUID }) {
   const { room_title, member_number, location, feature, region } = room;
   const { getmaxGenderMemberNumber } = meetingRoomHandler();
   const genderMaxNumber = getmaxGenderMemberNumber(member_number);
-  console.log(participants);
 
   const countFemale = participants?.filter((member) => member?.gender === 'female').length;
   const countMale = participants?.filter((member) => member?.gender === 'male').length;
@@ -104,6 +104,9 @@ function RoomInformation({ room_id }: { room_id: UUID }) {
               </button>
             </div>
           </div>
+        </div>
+        <div className="w-100% h">
+          <AcceptanceRoomButtons room_id={room_id} />
         </div>
       </div>
     </div>
