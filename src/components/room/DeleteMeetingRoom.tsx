@@ -3,7 +3,8 @@
 import { useDeleteRoom } from '(@/hooks/useMutation/useMeetingMutation)';
 import { useGetUserDataQuery } from '(@/hooks/useQueries/useUserQuery)';
 
-function DeleteMeetingRoom({ room_id }: { room_id: string }) {
+import type { UUID } from 'crypto';
+function DeleteMeetingRoom({ room_id }: { room_id: UUID }) {
   const { data: user, isPending, isError } = useGetUserDataQuery();
   const user_id = user?.user_id!;
   const deleteRoomMutation = useDeleteRoom({ room_id, user_id });

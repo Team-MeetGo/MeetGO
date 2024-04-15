@@ -8,8 +8,9 @@ import { IoFemale, IoMale } from 'react-icons/io5';
 import AvatarDefault from '(@/utils/icons/AvatarDefault)';
 
 import type { UserType } from '(@/types/roomTypes)';
+import type { UUID } from 'crypto';
 
-const Member = ({ room_id }: { room_id: string }) => {
+const Member = ({ room_id }: { room_id: UUID }) => {
   const participants = useRoomParticipantsQuery(room_id);
   const [members, setMembers] = useState<UserType[]>(participants);
   const { data: roomInformation } = useRoomInfoWithRoomIdQuery(room_id);
