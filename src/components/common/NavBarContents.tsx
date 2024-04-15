@@ -18,7 +18,6 @@ import { useGetUserDataQuery } from '(@/hooks/useQueries/useUserQuery)';
 import { useQueryClient } from '@tanstack/react-query';
 import { USER_DATA_QUERY_KEY } from '(@/query/user/userQueryKeys)';
 import Link from 'next/link';
-import { useState } from 'react';
 
 const NavBarContents = () => {
   const queryClient = useQueryClient();

@@ -134,7 +134,7 @@ const ChatList = ({ user, chatRoomId }: { user: User | null; chatRoomId: string 
   return (
     <>
       <div
-        className={`w-full h-full flex-1 p-5 flex flex-col overflow-y-auto scroll-smooth`}
+        className={`w-full h-full flex-1 p-5 flex flex-col gap-[8px] overflow-y-auto scroll-smooth`}
         ref={scrollRef}
         onScroll={handleScroll}
       >
