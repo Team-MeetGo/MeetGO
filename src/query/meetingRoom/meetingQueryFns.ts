@@ -84,7 +84,7 @@ export const updateLeaderMember = async ({
   room_id
 }: {
   otherParticipants: UserType[] | undefined | null;
-  room_id: UUID;
+  room_id: string;
 }) => {
   try {
     if (otherParticipants) {

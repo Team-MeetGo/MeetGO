@@ -38,7 +38,7 @@ function MemberNumberSelection({ text }: { text: string }) {
           disallowEmptySelection
           selectionMode="single"
           selectedKeys={selectedMemberKeys}
-          onSelectionChange={setSelectedMemberKeys}
+          onSelectionChange={() => setSelectedMemberKeys}
         >
           {member_number.map((member) => (
             <DropdownItem key={member}>{member}</DropdownItem>

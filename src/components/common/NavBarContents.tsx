@@ -10,7 +10,7 @@ import {
   DropdownMenu,
   Avatar
 } from '@nextui-org/react';
-import MeetGoLogo from '(@/utils/icons/meetgo-logo.png)';
+import MeetGoLogo from '@/utils/icons/meetgo-logo.png';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { clientSupabase } from '(@/utils/supabase/client)';
