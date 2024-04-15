@@ -36,7 +36,12 @@ const ChatInput = () => {
         setMessage('');
       }}
     >
-      <Input value={message} placeholder="send message" onChange={(e) => setMessage(e.target.value)} />
+      <Input
+        value={message}
+        className="focus:outline-none"
+        placeholder="send message"
+        onChange={(e) => setMessage(e.target.value)}
+      />
 
       <button>
         <FaRegArrowAltCircleUp className="h-8 w-8 my-auto" />

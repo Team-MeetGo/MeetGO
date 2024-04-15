@@ -43,7 +43,7 @@ function MeetingRoomList() {
   const [memberSelectedRoomScroll, setMemberSelectedRoomScroll] = useState<MeetingRoomType[]>([]);
   const [regionMemberSelectedRoomScroll, setRegionMemberSelectedRoomScroll] = useState<MeetingRoomType[]>([]);
   const nextpage = scrollPage * 3 + 3;
-  const pagecondition = otherRooms!.length > nextpage ? nextpage : otherRooms!.length + 1;
+  const pagecondition = otherRooms?.length! > nextpage ? nextpage : otherRooms?.length! + 1;
   console.log('pagecondition', pagecondition);
   const viewCards = () => {
     if (otherRooms) {

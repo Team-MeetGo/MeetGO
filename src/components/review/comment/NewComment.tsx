@@ -1,6 +1,6 @@
+'use client';
 import { useNewCommentMutation } from '@/hooks/useMutation/useCommentMutations';
 import { useGetUserDataQuery } from '@/hooks/useQueries/useUserQuery';
-
 import { Button } from '@nextui-org/react';
 import React, { FormEvent, useState } from 'react';
 

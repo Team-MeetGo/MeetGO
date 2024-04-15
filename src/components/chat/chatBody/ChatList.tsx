@@ -28,8 +28,6 @@ const ChatList = ({ user, chatRoomId }: { user: User | null; chatRoomId: string 
   const lastDivRefs = useRef(messages);
   const lastMsgId = useMyLastMsgs(user?.id!, chatRoomId);
 
-  console.log('isScrolling =>', isScrolling);
-
   // "messages" table Realtime INSERT, DELETE 구독로직
   useEffect(() => {
     if (roomId && chatRoomId) {
@@ -88,20 +86,22 @@ const ChatList = ({ user, chatRoomId }: { user: User | null; chatRoomId: string 
   useEffect(() => {
     const scrollBox = scrollRef.current;
     // 이전 메세지가 화면에 있을 때
-    if (lastCheckedDiv && !isScrolling) {
-      // 강조처리를 보고난 뒤 스크롤을 맨 아래로 내리면 강조처리 해제
-      if (!checkedLastMsg) {
-        setCheckedLastMsg(true);
-        lastCheckedDiv.style.backgroundColor = '';
-      } else if (checkedLastMsg && prevMsgsLengthRef.current !== messages.length) {
-        // 강조처리를 보고나야만 타인으로부터 새로운 메세지가 추가되었을 때 스크롤 다운되도
+    if (!isScrolling) {
+      if (lastCheckedDiv) {
+        // 강조처리를 보고난 뒤 스크롤을 맨 아래로 내리면 강조처리 해제
+        if (!checkedLastMsg) {
+          setCheckedLastMsg(true);
+          lastCheckedDiv.style.backgroundColor = '';
+        } else if (checkedLastMsg && prevMsgsLengthRef.current !== messages.length) {
+          // 강조처리를 보고나야만 타인으로부터 새로운 메세지가 추가되었을 때 스크롤 다운되도록
+          scrollBox.scrollTop = scrollBox.scrollHeight;
+          prevMsgsLengthRef.current = messages.length;
+        }
+      } else if (prevMsgsLengthRef.current !== messages.length) {
+        // 이전 메세지가 화면에 없고 + 새로운 메세지가 추가되면 스크롤 다운이 따라가도록
         scrollBox.scrollTop = scrollBox.scrollHeight;
         prevMsgsLengthRef.current = messages.length;
       }
-    } else if (!isScrolling && prevMsgsLengthRef.current !== messages.length) {
-      // 이전 메세지가 화면에 없고 + 새로운 메세지가 추가되면 스크롤 다운이 따라가도록
-      scrollBox.scrollTop = scrollBox.scrollHeight;
-      prevMsgsLengthRef.current = messages.length;
     }
   }, [messages, isScrolling]);
 
@@ -131,18 +131,18 @@ const ChatList = ({ user, chatRoomId }: { user: User | null; chatRoomId: string 
   return (
     <>
       <div
-        className="w-full h-full flex-1 p-5 flex flex-col gap-6 overflow-y-auto scroll-smooth"
+        className={`w-full h-full flex-1 p-5 flex flex-col gap-[8px] overflow-y-auto scroll-smooth`}
         ref={scrollRef}
         onScroll={handleScroll}
       >
         <ChatSearch isScrollTop={isScrollTop} />
         {hasMore ? <LoadChatMore chatRoomId={chatRoomId} count={count} setCount={setCount} /> : <></>}
         {messages?.map((msg, idx) => (
-          <>
+          <div key={msg.message_id} className="w-full">
             {msg.send_from === user?.id ? (
-              <MyChat msg={msg} key={msg.message_id} idx={idx} lastDivRefs={lastDivRefs} />
+              <MyChat msg={msg} idx={idx} lastDivRefs={lastDivRefs} />
             ) : (
-              <OthersChat msg={msg} key={msg.message_id} idx={idx} lastDivRefs={lastDivRefs} />
+              <OthersChat msg={msg} idx={idx} lastDivRefs={lastDivRefs} />
             )}
             {lastMsgId &&
             lastMsgId !== messages[messages.length - 1].message_id &&
@@ -153,7 +153,7 @@ const ChatList = ({ user, chatRoomId }: { user: User | null; chatRoomId: string 
                 <p>여기까지 읽으셨습니다.</p>
               </div>
             ) : null}
-          </>
+          </div>
         ))}
       </div>
       {isScrolling ? (
