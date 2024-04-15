@@ -44,7 +44,7 @@ const LoadChatMore = ({
 
   return (
     <div>
-      <Button className="w-full" onClick={fetchMoreMsg}>
+      <Button className="w-full bg-[#F2EAFA]" onClick={fetchMoreMsg}>
         더보기
       </Button>
     </div>

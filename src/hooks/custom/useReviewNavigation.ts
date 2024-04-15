@@ -51,27 +51,27 @@ interface Navigation {
   nextReviewId: string | null;
 }
 
-// export const useAsyncNavigation = (reviewId: string, fetchReviewsData: Review[]): [Navigation, boolean] => {
-//   const [navigation, setNavigation] = useState<Navigation>({ prevReviewId: null, nextReviewId: null });
-//   const [loading, setLoading] = useState(true);
+export const useAsyncNavigation = (reviewId: string, fetchReviewsData: Review[]): [Navigation, boolean] => {
+  const [navigation, setNavigation] = useState<Navigation>({ prevReviewId: null, nextReviewId: null });
+  const [loading, setLoading] = useState(true);
 
-//   useEffect(() => {
-//     if (fetchReviewsData && fetchReviewsData.length > 0) {
-//       const sortedData = fetchReviewsData.sort(
-//         (a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
-//       );
-//       const currentIndex = sortedData.findIndex((review) => review.review_id === reviewId);
-//       if (currentIndex !== -1) {
-//         const prevReview = sortedData[currentIndex - 1];
-//         const nextReview = sortedData[currentIndex + 1];
-//         setNavigation({
-//           prevReviewId: prevReview?.review_id || null,
-//           nextReviewId: nextReview?.review_id || null
-//         });
-//       }
-//     }
-//     setLoading(false);
-//   }, [reviewId, fetchReviewsData]);
+  useEffect(() => {
+    if (fetchReviewsData && fetchReviewsData.length > 0) {
+      const sortedData = fetchReviewsData.sort(
+        (a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
+      );
+      const currentIndex = sortedData.findIndex((review) => review.review_id === reviewId);
+      if (currentIndex !== -1) {
+        const prevReview = sortedData[currentIndex - 1];
+        const nextReview = sortedData[currentIndex + 1];
+        setNavigation({
+          prevReviewId: prevReview?.review_id || null,
+          nextReviewId: nextReview?.review_id || null
+        });
+      }
+    }
+    setLoading(false);
+  }, [reviewId, fetchReviewsData]);
 
-//   return [navigation, loading];
-// };
+  return [navigation, loading];
+};

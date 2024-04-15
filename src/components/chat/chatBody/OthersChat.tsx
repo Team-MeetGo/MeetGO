@@ -22,12 +22,6 @@ const OthersChat = ({ msg, idx, lastDivRefs }: { msg: Message; idx: number; last
 
   return (
     <div>
-      {isNextDay(idx, messages) ? (
-        <div className="flex justify-center my-[16px] bg-[#D4D4D8] mx-auto w-[150px] px-[16px] py-[6px] rounded-full text-white">
-          <p className="font-extralight tracking-wide text-sm">{showingDate(msg.created_at)}</p>
-        </div>
-      ) : null}
-
       <div id={msg.message_id} ref={lastDivRefs.current[idx]} className="flex gap-[12px]">
         {isItMe(idx, messages) ? (
           !isNextDay(idx, messages) ? (

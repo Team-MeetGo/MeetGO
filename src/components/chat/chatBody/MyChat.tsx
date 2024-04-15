@@ -17,12 +17,6 @@ const MyChat = ({ msg, idx, lastDivRefs }: { msg: Message; idx: number; lastDivR
 
   return (
     <div>
-      {isNextDay(idx, messages) ? (
-        <div className="flex justify-center my-[16px] bg-gray1" key={msg.message_id}>
-          <p>{showingDate(msg.created_at)}</p>
-        </div>
-      ) : null}
-
       <div id={msg.message_id} ref={lastDivRefs.current[idx]} className="flex gap-[8px] justify-end">
         <div className="w-80 flex flex-col gap-1">
           {isItMe(idx, messages) ? (
