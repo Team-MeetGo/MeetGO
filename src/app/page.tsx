@@ -1,17 +1,17 @@
 'use client';
 
-import GetMostLikedReivew from '@/components/mainpage/getMostLikedReview';
-import Image from 'next/image';
-import mainbanner_flower from '../../public/mainbanner_flower.png';
-import mainbanner_people from '../../public/mainbanner_people.png';
-import { Button } from '@nextui-org/react';
-import { useRouter } from 'next/navigation';
+// import GetMostLikedReivew from '@/components/mainpage/getMostLikedReview';
+// import Image from 'next/image';
+// import mainbanner_flower from '../../public/mainbanner_flower.png';
+// import mainbanner_people from '../../public/mainbanner_people.png';
+// import { Button } from '@nextui-org/react';
+// import { useRouter } from 'next/navigation';
 
 export default function Home() {
-  const route = useRouter();
+  // const route = useRouter();
   return (
     <main className="w-full flex flex-col items-center justify-content">
-      <div className="w-full h-[600px] max-h-[600px] bg-gradient-to-main flex justify-center items-center">
+      {/* <div className="w-full h-[600px] max-h-[600px] bg-gradient-to-main flex justify-center items-center">
         <Image src={mainbanner_flower} alt="메인페이지 배너_꽃" className="w-full h-[600px] absolute" />
         <div className="flex justify-center items-center">
           <Image src={mainbanner_people} alt="메인페이지 배너_사람" className="relative max-w-[432px] max-h-[432px]" />
@@ -37,7 +37,7 @@ export default function Home() {
           </Button>
         </div>
       </div>
-      <button onClick={() => location.replace('/test')}>test</button>
+      <button onClick={() => location.replace('/test')}>test</button> */}
     </main>
   );
 }

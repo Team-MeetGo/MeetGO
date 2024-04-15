@@ -19,19 +19,16 @@ function MeetingRoomList() {
   const scrollRef = useRef<HTMLInputElement>(null);
 
   const myRoomList = useMyroomQuery(String(user?.user_id));
+  const filteredMyRoomList = myRoomList?.map((r) => r.room);
   const { selectRegion, selectMemberNumber } = useSearchRoomStore();
 
   const myMsgData = useMyMsgData(user?.user_id!);
+  console.log('myRoomList', myRoomList);
 
-  // meetingRoomList 중에서 myRoomList가 없는 것을 뽑아내기
-  const otherRooms = meetingRoomList?.filter(function (room: MeetingRoomType) {
-    const foundItem = myRoomList?.find((r) => r?.room_id === room?.room_id);
-    if (foundItem) {
-      return false;
-    } else {
-      return true;
-    }
+  const otherRooms = meetingRoomList?.filter((m) => {
+    filteredMyRoomList?.filter((r) => r?.room_id === m.room_id);
   });
+
   const regionSelectedOtherRooms = otherRooms?.filter((room) => room.region === selectRegion);
   const memberNumberSelectedOtherRooms = otherRooms?.filter((room) => room.member_number === selectMemberNumber);
   const regionMemberNumberSelectedOtherRooms = otherRooms?.filter(
@@ -132,11 +129,11 @@ function MeetingRoomList() {
           </button>
           {
             <div className="h-[241px] gap-[24px] grid grid-cols-3 w-full px-4">
-              {myRoomList !== null &&
-                myRoomList?.map((room, index) => {
+              {filteredMyRoomList !== null &&
+                filteredMyRoomList?.map((room, index) => {
                   if (index < 3 * page && index >= 3 * (page - 1))
                     return (
-                      <div key={index}>
+                      <div key={room?.room_id}>
                         <div className="flex gap-2">
                           {myMsgData && myMsgData.find((item) => item.room_id === room?.room_id) ? (
                             <h1>

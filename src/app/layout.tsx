@@ -3,7 +3,6 @@ import { Inter } from 'next/font/google';
 import './globals.css';
 import QueryProvider from '@/app/provider/QueryProvider';
 import { NextProvider } from './provider/NextUIProvider';
-import NavBar from '@/components/common/NavBar';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 
 const inter = Inter({ subsets: ['latin'] });
@@ -23,7 +22,6 @@ export default function RootLayout({
       <body className={inter.className}>
         <NextProvider>
           <QueryProvider>
-            <NavBar />
             {children}
             <ReactQueryDevtools initialIsOpen={false} />
           </QueryProvider>
