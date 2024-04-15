@@ -1,5 +1,5 @@
-import { LIKE_TOGGLE_KEY } from '(@/query/review/likeQueryKeys)';
-import { clientSupabase } from '(@/utils/supabase/client)';
+import { LIKE_TOGGLE_KEY } from '@/query/review/likeQueryKeys';
+import { clientSupabase } from '@/utils/supabase/client';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 export const useToggleLikeMutation = () => {

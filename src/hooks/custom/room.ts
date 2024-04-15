@@ -1,5 +1,5 @@
 'use client';
-import { clientSupabase } from '(@/utils/supabase/client)';
+import { clientSupabase } from '@/utils/supabase/client';
 
 function meetingRoomHandler() {
   const getChattingRoom = async () => {

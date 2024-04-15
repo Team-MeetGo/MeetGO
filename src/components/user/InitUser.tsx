@@ -1,6 +1,6 @@
 'use client';
-import { userStore } from '(@/store/userStore)';
-import { clientSupabase } from '(@/utils/supabase/client)';
+import { userStore } from '@/store/userStore';
+import { clientSupabase } from '@/utils/supabase/client';
 import { useEffect } from 'react';
 
 const InitUser = () => {

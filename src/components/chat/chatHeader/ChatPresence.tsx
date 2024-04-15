@@ -1,7 +1,7 @@
 'use client';
-import { useGetUserDataQuery } from '(@/hooks/useQueries/useUserQuery)';
-import { chatStore } from '(@/store/chatStore)';
-import { clientSupabase } from '(@/utils/supabase/client)';
+import { useGetUserDataQuery } from '@/hooks/useQueries/useUserQuery';
+import { chatStore } from '@/store/chatStore';
+import { clientSupabase } from '@/utils/supabase/client';
 import { useEffect, useState } from 'react';
 
 const ChatPresence = () => {

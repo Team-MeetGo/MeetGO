@@ -1,4 +1,4 @@
-import { requestKakaoId, updateRequestStatus } from '(@/service)';
+import { requestKakaoId, updateRequestStatus } from '@/service';
 import { useMutation } from '@tanstack/react-query';
 
 export const useMetPeopleMutation = () =>

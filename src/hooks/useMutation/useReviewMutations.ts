@@ -1,4 +1,4 @@
-import { clientSupabase } from '(@/utils/supabase/client)';
+import { clientSupabase } from '@/utils/supabase/client';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import {
   DELETE_REVIEW_QUERY_KEY,

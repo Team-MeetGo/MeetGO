@@ -1,13 +1,13 @@
-import { useGetUserDataQuery } from '(@/hooks/useQueries/useUserQuery)';
-import { chatStore } from '(@/store/chatStore)';
-import { Message } from '(@/types/chatTypes)';
-import { getformattedDate, isItMe, isNextDay, showingDate } from '(@/utils)';
+import { useGetUserDataQuery } from '@/hooks/useQueries/useUserQuery';
+import { chatStore } from '@/store/chatStore';
+import { Message } from '@/types/chatTypes';
+import { getformattedDate, showingDate, isItMe, isNextDay } from '@/utils';
 import ChatDeleteDropDown from './ChatDeleteDropDown';
-import AvatarDefault from '(@/utils/icons/AvatarDefault)';
-import { useRoomDataQuery } from '(@/hooks/useQueries/useChattingQuery)';
+import AvatarDefault from '@/utils/icons/AvatarDefault';
+import { useRoomDataQuery } from '@/hooks/useQueries/useChattingQuery';
 import { FaCrown } from 'react-icons/fa6';
 import Image from 'next/image';
-import { UserTypeFromTable } from '(@/types/userTypes)';
+import { UserTypeFromTable } from '@/types/userTypes';
 
 const MyChat = ({ msg, idx, lastDivRefs }: { msg: Message; idx: number; lastDivRefs: any }) => {
   const { messages, chatRoomId } = chatStore((state) => state);

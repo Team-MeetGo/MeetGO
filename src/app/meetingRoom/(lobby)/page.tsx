@@ -1,4 +1,4 @@
-import MeetingRoomList from '(@/components/room/MeetingRoomList)';
+import MeetingRoomList from '@/components/room/MeetingRoomList';
 import { Suspense } from 'react';
 
 const LobbyPage = async () => {

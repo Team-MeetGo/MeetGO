@@ -1,12 +1,12 @@
 'use client';
-import { useRoomStore } from '(@/store/roomStore)';
-import { useSearchRoomStore } from '(@/store/searchRoomStore)';
-import { member_number } from '(@/utils/MeetingRoomSelector)';
-import { Button, Dropdown, DropdownItem, DropdownMenu, DropdownTrigger } from '@nextui-org/react';
+import { useRoomStore } from '@/store/roomStore';
+import { useSearchRoomStore } from '@/store/searchRoomStore';
+import { member_number } from '@/utils/MeetingRoomSelector';
+import { Button, Dropdown, DropdownItem, DropdownMenu, DropdownTrigger, Select, SelectItem } from '@nextui-org/react';
 import { useEffect, useMemo, useRef, useState } from 'react';
 
 function MemberNumberSelection({ text }: { text: string }) {
-  const [selectedMemberKeys, setSelectedMemberKeys] = useState(new Set(['인원']));
+  const [selectedMemberKeys, setSelectedMemberKeys] = useState(new Set(['']));
   const conditionalRef = useRef(text);
   const selectedMemberValue = useMemo(
     () => Array.from(selectedMemberKeys).join(', ').replaceAll('_', ' '),
@@ -24,27 +24,29 @@ function MemberNumberSelection({ text }: { text: string }) {
     }
   }, [selectedMemberValue]);
 
+  const handleSelectMember = (value: string) => {
+    setSelectedMemberKeys(new Set(value));
+  };
+
   return (
     <>
-      <Dropdown>
-        <DropdownTrigger>
-          <Button variant="bordered" className="capitalize">
-            {selectedMemberValue}
-          </Button>
-        </DropdownTrigger>
-        <DropdownMenu
-          aria-label="Single selection example"
+      <div className="w-full">
+        <Select
+          label="인원"
+          aria-label="members"
           variant="flat"
           disallowEmptySelection
           selectionMode="single"
           selectedKeys={selectedMemberKeys}
-          onSelectionChange={() => setSelectedMemberKeys}
+          onSelectionChange={(value) => handleSelectMember(value as string)}
         >
           {member_number.map((member) => (
-            <DropdownItem key={member}>{member}</DropdownItem>
+            <SelectItem key={member} value={member}>
+              {member}
+            </SelectItem>
           ))}
-        </DropdownMenu>
-      </Dropdown>
+        </Select>
+      </div>
     </>
   );
 }

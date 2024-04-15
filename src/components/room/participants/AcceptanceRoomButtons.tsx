@@ -1,12 +1,11 @@
 'use client';
 
-import { useRoomInfoWithRoomIdQuery, useRoomParticipantsQuery } from '(@/hooks/useQueries/useMeetingQuery)';
-import { useGetUserDataQuery } from '(@/hooks/useQueries/useUserQuery)';
-import { clientSupabase } from '(@/utils/supabase/client)';
+import { useRoomInfoWithRoomIdQuery, useRoomParticipantsQuery } from '@/hooks/useQueries/useMeetingQuery';
+import { useGetUserDataQuery } from '@/hooks/useQueries/useUserQuery';
+import { clientSupabase } from '@/utils/supabase/client';
 import { useRouter } from 'next/navigation';
 
-import type { UUID } from 'crypto';
-const AcceptanceRoomButtons = ({ room_id }: { room_id: UUID }) => {
+const AcceptanceRoomButtons = ({ room_id }: { room_id: string }) => {
   const router = useRouter();
   const { data: user, isPending, isError } = useGetUserDataQuery();
   const user_id = user?.user_id!;

@@ -1,4 +1,4 @@
-import { clientSupabase } from '(@/utils/supabase/client)';
+import { clientSupabase } from '@/utils/supabase/client';
 
 export const fetchCommentAuthor = async (commentAuthorId: string) => {
   const { data: commentAuthorData, error: userError } = await clientSupabase

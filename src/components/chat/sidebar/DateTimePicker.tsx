@@ -7,10 +7,10 @@ import DateCustomeInput from './DateCustomeInput';
 import { ko } from 'date-fns/locale';
 import { getMonth, getYear } from 'date-fns';
 import { IoIosArrowForward, IoIosArrowBack } from 'react-icons/io';
-import { userStore } from '(@/store/userStore)';
-import { useChatDataQuery, useRoomDataQuery } from '(@/hooks/useQueries/useChattingQuery)';
-import { useUpdateMeetingTimeMutation } from '(@/hooks/useMutation/useMeetingTimeMutation)';
-import { useGetUserDataQuery } from '(@/hooks/useQueries/useUserQuery)';
+import { userStore } from '@/store/userStore';
+import { useChatDataQuery, useRoomDataQuery } from '@/hooks/useQueries/useChattingQuery';
+import { useUpdateMeetingTimeMutation } from '@/hooks/useMutation/useMeetingTimeMutation';
+import { useGetUserDataQuery } from '@/hooks/useQueries/useUserQuery';
 
 interface DateTimePickerProps {
   chatRoomId: string;

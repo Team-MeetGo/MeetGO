@@ -1,8 +1,8 @@
 'use client';
-import { useAddRoom } from '(@/hooks/useMutation/useMeetingMutation)';
-import { useGetUserDataQuery } from '(@/hooks/useQueries/useUserQuery)';
-import { useRoomStore } from '(@/store/roomStore)';
-import { favoriteOptions } from '(@/utils/FavoriteData)';
+import { useAddRoom } from '@/hooks/useMutation/useMeetingMutation';
+import { useGetUserDataQuery } from '@/hooks/useQueries/useUserQuery';
+import { useRoomStore } from '@/store/roomStore';
+import { favoriteOptions } from '@/utils/FavoriteData';
 import {
   Button,
   Chip,
@@ -20,7 +20,7 @@ import { useState } from 'react';
 import MemberNumberSelection from './MemberNumberSelection';
 import RegionSelection from './RegionSelection';
 
-import type { NewRoomType } from '(@/types/roomTypes)';
+import type { NewRoomType } from '@/types/roomTypes';
 
 function MeetingRoomForm() {
   const router = useRouter();
@@ -65,7 +65,7 @@ function MeetingRoomForm() {
     }
   };
 
-  const handleSelect = (value: string[]) => {
+  const handleSelect = (value: string) => {
     if (selected.size > 5) {
       alert('최대 5개까지 선택 가능합니다.');
       return;
@@ -132,7 +132,7 @@ function MeetingRoomForm() {
                         selectedKeys={selected}
                         className="max-w-xs"
                         aria-label="방의 특성"
-                        onSelectionChange={(value) => handleSelect(value as string[])}
+                        onSelectionChange={(value) => handleSelect(value as string)}
                       >
                         {favoriteOptions.map((option) => (
                           <SelectItem key={option.value} value={option.value}>
@@ -154,9 +154,9 @@ function MeetingRoomForm() {
                       ))}
                     </div>
                   </div>
-                  <div className="flex flex-row gap-4">
+                  <div className="flex flex-col gap-4">
                     <MemberNumberSelection text={'member'} />
-                    <div className="w-20">
+                    <div className="">
                       <RegionSelection text={'room'} />
                     </div>
                     <input

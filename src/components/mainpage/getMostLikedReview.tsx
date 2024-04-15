@@ -1,5 +1,5 @@
 import ReviewCard from '../review/ReviewCard';
-import { useLikedReviewDataQuery, useReviewListDataQuery } from '(@/hooks/useQueries/useReviewQuery)';
+import { useLikedReviewDataQuery, useReviewListDataQuery } from '@/hooks/useQueries/useReviewQuery';
 import Link from 'next/link';
 import { IoIosArrowForward } from 'react-icons/io';
 

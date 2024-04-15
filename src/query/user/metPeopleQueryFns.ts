@@ -1,4 +1,4 @@
-import { clientSupabase } from '(@/utils/supabase/client)';
+import { clientSupabase } from '@/utils/supabase/client';
 
 // 요청상태 조회
 export async function getMetPeople(userId: string, userGender: string) {

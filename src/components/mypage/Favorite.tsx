@@ -1,12 +1,13 @@
 import { Chip, Select, SelectItem } from '@nextui-org/react';
 import { useEffect, useState } from 'react';
-import { favoriteOptions } from '(@/utils/FavoriteData)';
-import { clientSupabase } from '(@/utils/supabase/client)';
-import { IsEditingType } from '(@/types/userTypes)';
-import { useGetUserDataQuery } from '(@/hooks/useQueries/useUserQuery)';
+import { favoriteOptions } from '@/utils/FavoriteData';
+import { clientSupabase } from '@/utils/supabase/client';
+import { IsEditingType } from '@/types/userTypes';
+import { useGetUserDataQuery } from '@/hooks/useQueries/useUserQuery';
+import { useFavoriteStore } from '@/store/userStore';
 
 const Favorite: React.FC<IsEditingType> = ({ isEditing }) => {
-  const [selected, setSelected] = useState<Set<string>>(new Set([]));
+  const { selected, setSelected } = useFavoriteStore();
   const { data: user } = useGetUserDataQuery();
 
   const handleSelect = (value: string) => {
@@ -21,19 +22,6 @@ const Favorite: React.FC<IsEditingType> = ({ isEditing }) => {
     const newSelected = new Set(selected);
     newSelected.delete(value);
     setSelected(newSelected);
-  };
-
-  /** 이상형 업데이트하는 로직 */
-  const updateFavorite = async () => {
-    const favoriteArray = Array.from(selected);
-    const userId = user?.user_id;
-    if (!userId) return;
-    const { error } = await clientSupabase.from('users').update({ favorite: favoriteArray }).eq('user_id', userId);
-    if (error) {
-      console.error('Error updating introduction:', error);
-    } else {
-      alert('이상형이 업데이트되었습니다.');
-    }
   };
 
   useEffect(() => {
@@ -75,9 +63,6 @@ const Favorite: React.FC<IsEditingType> = ({ isEditing }) => {
               </SelectItem>
             ))}
           </Select>
-          <button className="p-4 border" onClick={updateFavorite}>
-            저장
-          </button>
         </div>
       ) : null}
     </div>

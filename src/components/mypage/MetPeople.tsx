@@ -1,10 +1,10 @@
 'use client';
 
-import { useAcceptKakaoIdMutation, useMetPeopleMutation } from '(@/hooks/useMutation/useMetPeopleMutation)';
-import { useMetPeople } from '(@/hooks/useQueries/useMetPeopleQuery)';
-import { useGetUserDataQuery } from '(@/hooks/useQueries/useUserQuery)';
-import { KAKAOID_REQUEST_QUERY_KEY } from '(@/query/user/metPeopleQueryKeys)';
-import { clientSupabase } from '(@/utils/supabase/client)';
+import { useAcceptKakaoIdMutation, useMetPeopleMutation } from '@/hooks/useMutation/useMetPeopleMutation';
+import { useMetPeople } from '@/hooks/useQueries/useMetPeopleQuery';
+import { useGetUserDataQuery } from '@/hooks/useQueries/useUserQuery';
+import { KAKAOID_REQUEST_QUERY_KEY } from '@/query/user/metPeopleQueryKeys';
+import { clientSupabase } from '@/utils/supabase/client';
 import { useQueryClient } from '@tanstack/react-query';
 import Image from 'next/image';
 import { useEffect } from 'react';

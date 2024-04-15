@@ -1,8 +1,8 @@
 'use client';
 
-import CommentList from '(@/components/review/comment/CommentList)';
-import ReviewDetail from '(@/components/review/ReviewDetail)';
-import ReviewDetailNavigate from '(@/components/review/ReviewDetailNavigate)';
+import CommentList from '@/components/review/comment/CommentList';
+import ReviewDetail from '@/components/review/ReviewDetail';
+import ReviewDetailNavigate from '@/components/review/ReviewDetailNavigate';
 import Link from 'next/link';
 import { useParams } from 'next/navigation';
 

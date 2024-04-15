@@ -1,15 +1,15 @@
 'use client';
-import { Message } from '(@/types/chatTypes)';
-import { clientSupabase } from '(@/utils/supabase/client)';
+import { Message } from '@/types/chatTypes';
+import { clientSupabase } from '@/utils/supabase/client';
 import { useEffect, useRef, useState } from 'react';
 import { User } from '@supabase/supabase-js';
 import ChatScroll from './ChatScroll';
 import NewChatAlert from './NewChatAlert';
 import LoadChatMore from './LoadChatMore';
-import { chatStore } from '(@/store/chatStore)';
+import { chatStore } from '@/store/chatStore';
 import OthersChat from './OthersChat';
 import ChatSearch from './ChatSearch';
-import { useMyLastMsgs, useRoomDataQuery } from '(@/hooks/useQueries/useChattingQuery)';
+import { useMyLastMsgs, useRoomDataQuery } from '@/hooks/useQueries/useChattingQuery';
 import MyChat from './MyChat';
 import RememberLastChat from '../chatFooter/RememberLastChat';
 

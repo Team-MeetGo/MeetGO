@@ -1,5 +1,5 @@
-import { addMeetingLocation, deleteMeetingLocation } from '(@/query/chat/chatQueryFns)';
-import { CHATDATA_QUERY_KEY } from '(@/query/chat/chatQueryKeys)';
+import { addMeetingLocation, deleteMeetingLocation } from '@/query/chat/chatQueryFns';
+import { CHATDATA_QUERY_KEY } from '@/query/chat/chatQueryKeys';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 export const useUpdateMeetingLocationMutation = () => {

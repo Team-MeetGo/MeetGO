@@ -13,10 +13,10 @@ import {
 import MeetGoLogo from '@/utils/icons/meetgo-logo.png';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
-import { clientSupabase } from '(@/utils/supabase/client)';
-import { useGetUserDataQuery } from '(@/hooks/useQueries/useUserQuery)';
+import { clientSupabase } from '@/utils/supabase/client';
+import { useGetUserDataQuery } from '@/hooks/useQueries/useUserQuery';
 import { useQueryClient } from '@tanstack/react-query';
-import { USER_DATA_QUERY_KEY } from '(@/query/user/userQueryKeys)';
+import { USER_DATA_QUERY_KEY } from '@/query/user/userQueryKeys';
 import Link from 'next/link';
 
 const NavBarContents = () => {
@@ -104,7 +104,7 @@ const NavBarContents = () => {
               </DropdownTrigger>
               <DropdownMenu aria-label="Profile Actions" variant="flat">
                 <DropdownItem key="mypage" textValue="mypage">
-                  <Link href="/mypage" className="flex">
+                  <Link href="/mypage" className="flex w-full h-full">
                     마이페이지
                   </Link>
                 </DropdownItem>

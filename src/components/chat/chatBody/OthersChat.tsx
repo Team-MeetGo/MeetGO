@@ -1,12 +1,11 @@
-import { useParticipantsQuery, useRoomDataQuery } from '(@/hooks/useQueries/useChattingQuery)';
-import { chatStore } from '(@/store/chatStore)';
-import { Message } from '(@/types/chatTypes)';
-import { getformattedDate, isItMe, isNextDay, showingDate } from '(@/utils)';
-import AvatarDefault from '(@/utils/icons/AvatarDefault)';
+import { useParticipantsQuery, useRoomDataQuery } from '@/hooks/useQueries/useChattingQuery';
+import { chatStore } from '@/store/chatStore';
+import { Message } from '@/types/chatTypes';
+import { getformattedDate, showingDate, isItMe, isNextDay } from '@/utils';
 import { Tooltip } from '@nextui-org/react';
 import { FaCrown } from 'react-icons/fa6';
 import Image from 'next/image';
-import { UserTypeFromTable } from '(@/types/userTypes)';
+import { UserTypeFromTable } from '@/types/userTypes';
 
 const OthersChat = ({ msg, idx, lastDivRefs }: { msg: Message; idx: number; lastDivRefs: any }) => {
   const { chatRoomId, messages } = chatStore((state) => state);

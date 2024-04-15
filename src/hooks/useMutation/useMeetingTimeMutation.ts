@@ -1,5 +1,5 @@
-import { CHATDATA_QUERY_KEY } from '(@/query/chat/chatQueryKeys)';
-import { addMeetingTime } from '(@/service/sidebar)';
+import { CHATDATA_QUERY_KEY } from '@/query/chat/chatQueryKeys';
+import { addMeetingTime } from '@/service/sidebar';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 export const useUpdateMeetingTimeMutation = () => {

@@ -1,8 +1,8 @@
 'use client';
 
-import { useMyChatRoomIdsQuery } from '(@/hooks/useQueries/useChattingQuery)';
-import { useGetUserDataQuery } from '(@/hooks/useQueries/useUserQuery)';
-import { clientSupabase } from '(@/utils/supabase/client)';
+import { useMyChatRoomIdsQuery } from '@/hooks/useQueries/useChattingQuery';
+import { useGetUserDataQuery } from '@/hooks/useQueries/useUserQuery';
+import { clientSupabase } from '@/utils/supabase/client';
 import { useCallback, useEffect, useState } from 'react';
 
 const HowManyMsg = () => {

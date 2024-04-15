@@ -1,9 +1,9 @@
 'use client';
-import { useMyMsgData } from '(@/hooks/useQueries/useChattingQuery)';
-import { useMyroomQuery, useRecruitingQuery } from '(@/hooks/useQueries/useMeetingQuery)';
-import { useGetUserDataQuery } from '(@/hooks/useQueries/useUserQuery)';
-import { useSearchRoomStore } from '(@/store/searchRoomStore)';
-import type { MeetingRoomType, MeetingRoomTypes } from '(@/types/roomTypes)';
+import { useMyMsgData } from '@/hooks/useQueries/useChattingQuery';
+import { useMyroomQuery, useRecruitingQuery } from '@/hooks/useQueries/useMeetingQuery';
+import { useGetUserDataQuery } from '@/hooks/useQueries/useUserQuery';
+import { useSearchRoomStore } from '@/store/searchRoomStore';
+import type { MeetingRoomType, MeetingRoomTypes } from '@/types/roomTypes';
 import { useEffect, useRef, useState } from 'react';
 import { IoIosArrowBack, IoIosArrowForward, IoMdRefresh } from 'react-icons/io';
 import MeetingRoom from './MeetingRoom';
@@ -160,12 +160,12 @@ function MeetingRoomList() {
         <div>
           <div className="flex flex-col justify-start min-w-[1116px] max-w-[1440px] mt-[40px]">
             <div className="text-[40px]	font-semibold">모집 중</div>
-            <div className="flex flex-row gap-x-[16px] mt-[24px]">
+            <div className="flex flex-row gap-x-[16px] mt-[24px] w-1/4">
               <RegionSelection text={'selectRegion'} />
               <MemberNumberSelection text={'selectMember'} />
             </div>
           </div>
-          <div className="gap-[24px] mb-[8px] grid grid-cols-3 w-100% mt-[24px]">
+          <div className="gap-[24px] mb-[8px] grid grid-cols-3 w-full mt-[24px]">
             {selectRegion &&
               selectRegion !== ('지역' || '전국') &&
               (!selectMemberNumber || selectMemberNumber === ('인원' || '전체')) &&

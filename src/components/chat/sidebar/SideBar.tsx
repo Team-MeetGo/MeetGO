@@ -1,11 +1,11 @@
 'use client';
 
 import React, { useState } from 'react';
-import Map from '(@/components/chat/sidebar/Map)';
-import { useChatDataQuery, useRoomDataQuery } from '(@/hooks/useQueries/useChattingQuery)';
+import Map from '@/components/chat/sidebar/Map';
+import { useChatDataQuery, useRoomDataQuery } from '@/hooks/useQueries/useChattingQuery';
 import { GiHamburgerMenu } from 'react-icons/gi';
 import { Card, CardBody } from '@nextui-org/react';
-import { useGetUserDataQuery } from '(@/hooks/useQueries/useUserQuery)';
+import { useGetUserDataQuery } from '@/hooks/useQueries/useUserQuery';
 
 interface SideBarProps {
   chatRoomId: string;
