@@ -24,19 +24,6 @@ const Favorite: React.FC<IsEditingType> = ({ isEditing }) => {
     setSelected(newSelected);
   };
 
-  // /** 이상형 업데이트하는 로직 */
-  // const updateFavorite = async () => {
-  //   const favoriteArray = Array.from(selected);
-  //   const userId = user?.user_id;
-  //   if (!userId) return;
-  //   const { error } = await clientSupabase.from('users').update({ favorite: favoriteArray }).eq('user_id', userId);
-  //   if (error) {
-  //     console.error('Error updating introduction:', error);
-  //   } else {
-  //     alert('이상형이 업데이트되었습니다.');
-  //   }
-  // };
-
   useEffect(() => {
     const initialFavorites = new Set(user?.favorite || []);
     setSelected(initialFavorites);
@@ -76,9 +63,6 @@ const Favorite: React.FC<IsEditingType> = ({ isEditing }) => {
               </SelectItem>
             ))}
           </Select>
-          {/* <button className="p-4 border" onClick={updateFavorite}>
-            저장
-          </button> */}
         </div>
       ) : null}
     </div>

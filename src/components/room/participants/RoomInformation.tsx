@@ -2,7 +2,7 @@
 import { Chip } from '@nextui-org/react';
 import { IoFemale, IoMale } from 'react-icons/io5';
 
-import type { UUID } from 'crypto';
+// import type { UUID } from 'crypto';
 import meetingRoomHandler from '@/hooks/custom/room';
 import { useRouter } from 'next/navigation';
 import {

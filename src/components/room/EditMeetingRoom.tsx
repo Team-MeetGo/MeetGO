@@ -70,7 +70,7 @@ function EditMeetingRoom({ room }: { room: MeetingRoomType }) {
     setSelected(new Set(room.feature));
   };
 
-  const handleSelect = (value: string[]) => {
+  const handleSelect = (value: string) => {
     if (selected.size > 5) {
       alert('최대 5개까지 선택 가능합니다.');
       return;
@@ -137,7 +137,7 @@ function EditMeetingRoom({ room }: { room: MeetingRoomType }) {
                         selectedKeys={selected}
                         className="max-w-xs"
                         aria-label="방의 특성"
-                        onSelectionChange={(value) => handleSelect(value as string[])}
+                        onSelectionChange={(value) => handleSelect(value as string)}
                       >
                         {favoriteOptions.map((option) => (
                           <SelectItem key={option.value} value={option.value}>
