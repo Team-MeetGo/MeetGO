@@ -1,4 +1,4 @@
-import { Message } from '(@/types/chatTypes)';
+import { Message } from '@/types/chatTypes';
 
 export const getformattedDate = (date: string) =>
   new Date(date).toLocaleString('ko', {

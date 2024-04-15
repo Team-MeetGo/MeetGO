@@ -6,6 +6,7 @@ import { Tooltip } from '@nextui-org/react';
 import { FaCrown } from 'react-icons/fa6';
 import Image from 'next/image';
 import { UserTypeFromTable } from '@/types/userTypes';
+import AvatarDefault from '@/utils/icons/AvatarDefault';
 
 const OthersChat = ({ msg, idx, lastDivRefs }: { msg: Message; idx: number; lastDivRefs: any }) => {
   const { chatRoomId, messages } = chatStore((state) => state);
