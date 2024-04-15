@@ -28,7 +28,7 @@ function MeetingRoom({ room }: { room: MeetingRoomType }) {
   const { data: alreadyChatRoom, error: alreadyChatRoomError } = useAlreadyChatRoomQuery(room_id);
   const genderMaxNumber = getmaxGenderMemberNumber(member_number);
 
-  const emptySeat = genderMaxNumber! * 2 - participants?.length;
+  const emptySeat = genderMaxNumber! * 2 - participants!.length;
   const countFemale = participants?.filter((member) => member?.gender === 'female').length;
   const countMale = participants?.filter((member) => member?.gender === 'male').length;
 

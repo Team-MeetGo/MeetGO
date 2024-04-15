@@ -16,7 +16,6 @@ import { profileCount } from '@/store/userStore';
 import { useQuery, useSuspenseQuery } from '@tanstack/react-query';
 import { useEffect } from 'react';
 
-import type { string } from 'crypto';
 //현재 모집중인 방
 export const useRecruitingQuery = (user_id: string) => {
   const results = useSuspenseQuery({

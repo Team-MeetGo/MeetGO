@@ -83,14 +83,14 @@ export const updateLeaderMember = async ({
   otherParticipants,
   room_id
 }: {
-  otherParticipants: UserType[] | undefined | null;
+  otherParticipants: (UserType | null)[] | undefined;
   room_id: string;
 }) => {
   try {
-    if (otherParticipants) {
+    if (otherParticipants && otherParticipants.length) {
       const { data: leaderUpdate, error } = await clientSupabase
         .from('room')
-        .update({ leader_id: otherParticipants[0].user_id })
+        .update({ leader_id: otherParticipants[0]!.user_id })
         .eq('room_id', room_id);
       return leaderUpdate;
     }

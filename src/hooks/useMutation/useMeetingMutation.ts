@@ -102,7 +102,7 @@ export const useUpdateLeaderMemberMutation = ({
   otherParticipants,
   room_id
 }: {
-  otherParticipants: UserType[] | undefined;
+  otherParticipants: (UserType | null)[] | undefined;
   room_id: string;
 }) => {
   const queryClient = useQueryClient();

@@ -159,7 +159,7 @@ function EditMeetingRoom({ room }: { room: MeetingRoomType }) {
                       ))}
                     </div>
                   </div>
-                  <div className="flex flex-row gap-4">
+                  <div className="flex flex-col gap-4">
                     <MemberNumberSelection text={'member'} />
                     <div className="w-20">
                       <RegionSelection text={'room'} />
