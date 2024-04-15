@@ -1,13 +1,13 @@
 'use client';
 
-import { emailCodeAPI, emailConfirmAPI, schoolConfirmAPI } from '(@/utils/api/emailConfirmAPI)';
+import { emailCodeAPI, emailConfirmAPI, schoolConfirmAPI } from '@/utils/api/emailConfirmAPI';
 import { useState } from 'react';
-import { schoolValidation } from '(@/utils/Validation)';
-import { clientSupabase } from '(@/utils/supabase/client)';
-import { useGetUserDataQuery } from '(@/hooks/useQueries/useUserQuery)';
+import { schoolValidation } from '@/utils/Validation';
+import { clientSupabase } from '@/utils/supabase/client';
+import { useGetUserDataQuery } from '@/hooks/useQueries/useUserQuery';
 import { useQueryClient } from '@tanstack/react-query';
-import { useSchoolUpdateMutation } from '(@/hooks/useMutation/useSchoolMutation)';
-import { USER_DATA_QUERY_KEY } from '(@/query/user/userQueryKeys)';
+import { useSchoolUpdateMutation } from '@/hooks/useMutation/useSchoolMutation';
+import { USER_DATA_QUERY_KEY } from '@/query/user/userQueryKeys';
 import {
   Button,
   Input,
@@ -189,26 +189,6 @@ const SchoolForm = () => {
           )}
         </ModalContent>
       </Modal>
-      {/* {user?.isValidate
-        ? null
-        : isCodeSent && (
-            <div className="flex flex-col">
-              <label className="block text-sm font-medium mb-1" htmlFor="schoolEmail">
-                인증 코드
-              </label>
-              <div>
-                <input
-                  className="mr-2 border p-3 rounded-md"
-                  name="code"
-                  type="text"
-                  placeholder=""
-                  value={code}
-                  onChange={(e) => setCode(e.target.value)}
-                />
-                <button onClick={onSubmitCodeConfirm}>확인</button>
-              </div>
-            </div>
-          )} */}
     </div>
   );
 };

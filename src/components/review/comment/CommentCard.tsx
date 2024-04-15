@@ -1,10 +1,10 @@
 import Image from 'next/image';
-import AvatarDefault from '(@/utils/icons/AvatarDefault)';
+import AvatarDefault from '@/utils/icons/AvatarDefault';
 import { CommentListType } from './CommentList';
-import { useCommentAuthorDataQuery } from '(@/hooks/useQueries/useCommentQuery)';
+import { useCommentAuthorDataQuery } from '@/hooks/useQueries/useCommentQuery';
 import { Button } from '@nextui-org/react';
-import { useGetUserDataQuery } from '(@/hooks/useQueries/useUserQuery)';
-import { useDeleteCommentMutation } from '(@/hooks/useMutation/useCommentMutations)';
+import { useGetUserDataQuery } from '@/hooks/useQueries/useUserQuery';
+import { useDeleteCommentMutation } from '@/hooks/useMutation/useCommentMutations';
 
 type Props = {
   comment: CommentListType;
@@ -38,7 +38,7 @@ const CommentCard = ({ comment }: Props) => {
               {userAvatar ? (
                 <Image
                   className="rounded-full w-[52px] h-[52px]"
-                  src={userAvatar}
+                  src={`${userAvatar}?${new Date().getTime()}`}
                   alt="유저 아바타"
                   height={50}
                   width={50}

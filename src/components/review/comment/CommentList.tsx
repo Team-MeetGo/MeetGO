@@ -1,6 +1,6 @@
 import CommentCard from './CommentCard';
 import NewComment from './NewComment';
-import { useFetchCommentData } from '(@/hooks/useQueries/useCommentQuery)';
+import { useFetchCommentData } from '@/hooks/useQueries/useCommentQuery';
 
 type Props = {
   review_id: string;

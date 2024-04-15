@@ -1,6 +1,6 @@
 'use client';
 
-import GetMostLikedReivew from '(@/components/mainpage/getMostLikedReview)';
+import GetMostLikedReivew from '@/components/mainpage/getMostLikedReview';
 import Image from 'next/image';
 import mainbanner_flower from '../../public/mainbanner_flower.png';
 import mainbanner_people from '../../public/mainbanner_people.png';

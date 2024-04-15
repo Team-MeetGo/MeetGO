@@ -1,6 +1,6 @@
-import { getMetPeople } from '(@/query/user/metPeopleQueryFns)';
-import { KAKAOID_REQUEST_QUERY_KEY } from '(@/query/user/metPeopleQueryKeys)';
-import { profileCount } from '(@/store/userStore)';
+import { getMetPeople } from '@/query/user/metPeopleQueryFns';
+import { KAKAOID_REQUEST_QUERY_KEY } from '@/query/user/metPeopleQueryKeys';
+import { profileCount } from '@/store/userStore';
 import { useQuery } from '@tanstack/react-query';
 import { useEffect } from 'react';
 

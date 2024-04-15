@@ -1,4 +1,4 @@
-import { clientSupabase } from '(@/utils/supabase/client)';
+import { clientSupabase } from '@/utils/supabase/client';
 
 export const getUserId = async () => {
   const {

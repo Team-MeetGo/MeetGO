@@ -1,10 +1,10 @@
 'use client';
-import { clientSupabase } from '(@/utils/supabase/client)';
+import { clientSupabase } from '@/utils/supabase/client';
 import ChatPresence from './ChatPresence';
-import { chatStore } from '(@/store/chatStore)';
+import { chatStore } from '@/store/chatStore';
 import { IoIosSearch } from 'react-icons/io';
-import { useRoomDataQuery } from '(@/hooks/useQueries/useChattingQuery)';
-import { useGetUserDataQuery } from '(@/hooks/useQueries/useUserQuery)';
+import { useRoomDataQuery } from '@/hooks/useQueries/useChattingQuery';
+import { useGetUserDataQuery } from '@/hooks/useQueries/useUserQuery';
 
 const ChatHeader = ({ chatRoomId }: { chatRoomId: string }) => {
   const { setMessages, setisRest, setSearchMode } = chatStore((state) => state);

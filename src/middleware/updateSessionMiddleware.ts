@@ -1,4 +1,4 @@
-import { updateSession } from '(@/utils/supabase/middleware)';
+import { updateSession } from '@/utils/supabase/middleware';
 import { NextFetchEvent, NextRequest, NextResponse } from 'next/server';
 import { CustomMiddleware } from './middlewareType';
 

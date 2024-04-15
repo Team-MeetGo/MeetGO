@@ -1,6 +1,6 @@
-import { fetchUserData, fetchUserLikePost, fetchUserPost } from '(@/query/user/userQueryFns)';
-import { USER_DATA_QUERY_KEY, USER_LIKE_POST_QUERY_KEY, USER_POST_QUERY_KEY } from '(@/query/user/userQueryKeys)';
-import { profileCount } from '(@/store/userStore)';
+import { fetchUserData, fetchUserLikePost, fetchUserPost } from '@/query/user/userQueryFns';
+import { USER_DATA_QUERY_KEY, USER_LIKE_POST_QUERY_KEY, USER_POST_QUERY_KEY } from '@/query/user/userQueryKeys';
+import { profileCount } from '@/store/userStore';
 import { useQuery } from '@tanstack/react-query';
 import { useEffect } from 'react';
 

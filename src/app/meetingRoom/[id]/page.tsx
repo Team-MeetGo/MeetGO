@@ -1,5 +1,5 @@
-import Member from '(@/components/room/participants/Member)';
-import RoomInformation from '(@/components/room/participants/RoomInformation)';
+import Member from '@/components/room/participants/Member';
+import RoomInformation from '@/components/room/participants/RoomInformation';
 import { Suspense } from 'react';
 
 import type { UUID } from 'crypto';

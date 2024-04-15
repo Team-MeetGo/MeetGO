@@ -1,4 +1,4 @@
-import ReviewList from '(@/components/review/ReviewList)';
+import ReviewList from '@/components/review/ReviewList';
 import Link from 'next/link';
 
 const ReviewsPage = () => {

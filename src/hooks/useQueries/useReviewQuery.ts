@@ -3,14 +3,9 @@ import {
   LIKED_REVIEWLIST_QUERY_KEY,
   REVIEWLIST_QUERY_KEY,
   REVIEW_QUERY_KEY
-} from '(@/query/review/reviewQueryKeys)';
+} from '@/query/review/reviewQueryKeys';
 import { useQuery } from '@tanstack/react-query';
-import {
-  fetchAuthorData,
-  fetchLikedReviewList,
-  fetchReviewData,
-  fetchReviewList
-} from '(@/query/review/reviewQueryFns)';
+import { fetchAuthorData, fetchLikedReviewList, fetchReviewData, fetchReviewList } from '@/query/review/reviewQueryFns';
 
 export const useAuthorDataQuery = (review_id: string) => {
   const { data: userData } = useQuery({

@@ -1,19 +1,19 @@
 'use client';
-import meetingRoomHandler from '(@/hooks/custom/room)';
+import meetingRoomHandler from '@/hooks/custom/room';
 import MeetGoLogo from '../../utils/icons/meetgo-logo.png';
 import { Chip } from '@nextui-org/react';
 import { useRouter } from 'next/navigation';
 import DeleteMeetingRoom from './DeleteMeetingRoom';
 import EditMeetingRoom from './EditMeetingRoom';
-import { useAddRoomMemberMutation, useUpdateRoomStatusClose } from '(@/hooks/useMutation/useMeetingMutation)';
-import { useAlreadyChatRoomQuery, useRoomParticipantsQuery } from '(@/hooks/useQueries/useMeetingQuery)';
-import { useGetUserDataQuery } from '(@/hooks/useQueries/useUserQuery)';
+import { useAddRoomMemberMutation, useUpdateRoomStatusClose } from '@/hooks/useMutation/useMeetingMutation';
+import { useAlreadyChatRoomQuery, useRoomParticipantsQuery } from '@/hooks/useQueries/useMeetingQuery';
+import { useGetUserDataQuery } from '@/hooks/useQueries/useUserQuery';
 import { useState } from 'react';
 import { BsFire } from 'react-icons/bs';
 import { HiOutlineDotsVertical } from 'react-icons/hi';
 import { IoChatbubblesOutline, IoFemale, IoMale } from 'react-icons/io5';
 
-import type { MeetingRoomType } from '(@/types/roomTypes)';
+import type { MeetingRoomType } from '@/types/roomTypes';
 import Image from 'next/image';
 function MeetingRoom({ room }: { room: MeetingRoomType }) {
   const { room_id, room_status, room_title, member_number, location, feature, leader_id, region } = room;
@@ -28,7 +28,7 @@ function MeetingRoom({ room }: { room: MeetingRoomType }) {
   const { data: alreadyChatRoom, error: alreadyChatRoomError } = useAlreadyChatRoomQuery(room_id);
   const genderMaxNumber = getmaxGenderMemberNumber(member_number);
 
-  const emptySeat = genderMaxNumber! * 2 - participants?.length;
+  const emptySeat = genderMaxNumber! * 2 - participants!.length;
   const countFemale = participants?.filter((member) => member?.gender === 'female').length;
   const countMale = participants?.filter((member) => member?.gender === 'male').length;
 

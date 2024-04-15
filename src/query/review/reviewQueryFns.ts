@@ -1,4 +1,4 @@
-import { clientSupabase } from '(@/utils/supabase/client)';
+import { clientSupabase } from '@/utils/supabase/client';
 
 export const fetchAuthorData = async (review_id: string) => {
   const { data: reviewDetail, error } = await clientSupabase

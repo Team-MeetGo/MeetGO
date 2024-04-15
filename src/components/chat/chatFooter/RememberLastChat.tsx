@@ -1,8 +1,8 @@
 'use client';
-import { useAddLastMsg, useClearNewMsgNum, useUpdateLastMsg } from '(@/hooks/useMutation/useChattingMutation)';
-import { useMyLastMsgs, useRoomDataQuery } from '(@/hooks/useQueries/useChattingQuery)';
-import { useGetUserDataQuery } from '(@/hooks/useQueries/useUserQuery)';
-import { chatStore } from '(@/store/chatStore)';
+import { useAddLastMsg, useClearNewMsgNum, useUpdateLastMsg } from '@/hooks/useMutation/useChattingMutation';
+import { useMyLastMsgs, useRoomDataQuery } from '@/hooks/useQueries/useChattingQuery';
+import { useGetUserDataQuery } from '@/hooks/useQueries/useUserQuery';
+import { chatStore } from '@/store/chatStore';
 import { useEffect } from 'react';
 
 const RememberLastChat = () => {

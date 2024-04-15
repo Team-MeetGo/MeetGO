@@ -2,22 +2,22 @@
 import { Chip } from '@nextui-org/react';
 import { IoFemale, IoMale } from 'react-icons/io5';
 
-import type { UUID } from 'crypto';
-import meetingRoomHandler from '(@/hooks/custom/room)';
+// import type { UUID } from 'crypto';
+import meetingRoomHandler from '@/hooks/custom/room';
 import { useRouter } from 'next/navigation';
 import {
   useDeleteMember,
   useDeleteRoom,
   useUpdateLeaderMemberMutation,
   useUpdateRoomStatusOpen
-} from '(@/hooks/useMutation/useMeetingMutation)';
-import { useRoomInfoWithRoomIdQuery, useRoomParticipantsQuery } from '(@/hooks/useQueries/useMeetingQuery)';
-import { useGetUserDataQuery } from '(@/hooks/useQueries/useUserQuery)';
+} from '@/hooks/useMutation/useMeetingMutation';
+import { useRoomInfoWithRoomIdQuery, useRoomParticipantsQuery } from '@/hooks/useQueries/useMeetingQuery';
+import { useGetUserDataQuery } from '@/hooks/useQueries/useUserQuery';
 
-import type { UserType } from '(@/types/roomTypes)';
+import type { UserType } from '@/types/roomTypes';
 import AcceptanceRoomButtons from './AcceptanceRoomButtons';
 
-function RoomInformation({ room_id }: { room_id: UUID }) {
+function RoomInformation({ room_id }: { room_id: string }) {
   const router = useRouter();
   const { data: user, isPending, isError } = useGetUserDataQuery();
   const user_id = user?.user_id!;

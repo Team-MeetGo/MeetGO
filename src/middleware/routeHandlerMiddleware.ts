@@ -1,6 +1,6 @@
 import { NextFetchEvent, NextRequest, NextResponse } from 'next/server';
 import { CustomMiddleware } from './middlewareType';
-import { serverSupabase } from '(@/utils/supabase/server)';
+import { serverSupabase } from '@/utils/supabase/server';
 
 export const routeHandlerMiddleware = (middleware: CustomMiddleware) => {
   return async (request: NextRequest, event: NextFetchEvent, response: NextResponse) => {

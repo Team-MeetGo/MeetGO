@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import { UsersType } from '(@/types/userTypes)';
+import { FavoriteType, UsersType } from '@/types/userTypes';
 
 type UserState = {
   user: UsersType | null;
@@ -43,4 +43,9 @@ export const profileCount = create<ProfileState>()((set) => ({
   setLikedPostCount: (count) => set({ likedPostCount: count }),
   setMetPeopleCount: (count) => set({ metPeopleCount: count }),
   setMeetingRoomCount: (count) => set({ meetingRoomCount: count })
+}));
+
+export const useFavoriteStore = create<FavoriteType>()((set) => ({
+  selected: new Set([]),
+  setSelected: (newSet: Set<string>) => set({ selected: newSet })
 }));

@@ -1,5 +1,5 @@
-import { COMMENT_QUERY_KEY } from '(@/query/review/commentQueryKeys)';
-import { clientSupabase } from '(@/utils/supabase/client)';
+import { COMMENT_QUERY_KEY } from '@/query/review/commentQueryKeys';
+import { clientSupabase } from '@/utils/supabase/client';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 export const useNewCommentMutation = (review_id: string) => {

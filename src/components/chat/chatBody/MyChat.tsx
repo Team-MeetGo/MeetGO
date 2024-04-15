@@ -1,7 +1,7 @@
-import { useGetUserDataQuery } from '(@/hooks/useQueries/useUserQuery)';
-import { chatStore } from '(@/store/chatStore)';
-import { Message } from '(@/types/chatTypes)';
-import { getformattedDate, showingDate } from '(@/utils)';
+import { useGetUserDataQuery } from '@/hooks/useQueries/useUserQuery';
+import { chatStore } from '@/store/chatStore';
+import { Message } from '@/types/chatTypes';
+import { getformattedDate, showingDate } from '@/utils';
 import ChatDeleteDropDown from './ChatDeleteDropDown';
 
 const MyChat = ({ msg, idx, lastDivRefs }: { msg: Message; idx: number; lastDivRefs: any }) => {
