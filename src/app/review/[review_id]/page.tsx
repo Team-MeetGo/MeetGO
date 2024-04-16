@@ -1,6 +1,6 @@
 import CommentList from '@/components/review/comment/CommentList';
 import ReviewDetail from '@/components/review/ReviewDetail';
-// import ReviewDetailNavigate from '@/components/review/ReviewDetailNavigate';
+import ReviewDetailNavigate from '@/components/review/ReviewDetailNavigate';
 import Link from 'next/link';
 import { useParams } from 'next/navigation';
 
@@ -22,7 +22,9 @@ const ReviewDetailPage = ({ params }: { params: { review_id: string } }) => {
         <div>
           <CommentList review_id={params.review_id} />
         </div>
-        <div>{/* <ReviewDetailNavigate review_id={params.review_id} /> */}</div>
+        <div>
+          <ReviewDetailNavigate review_id={params.review_id} />
+        </div>
       </div>
     </div>
   );

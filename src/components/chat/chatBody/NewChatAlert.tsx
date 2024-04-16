@@ -18,7 +18,7 @@ const NewChatAlert = ({
   return (
     <div className="absolute bottom-28 w-full">
       <div className="flex mx-auto w-full cursor-pointer" onClick={handleNewMsgAlertScroll}>
-        <div className="flex gap-[6px] mx-auto my-auto px-[16px] py-[14px] bg-[#E4D4F4] rounded-lg font-bold text-lg text-mainColor font-semibold">
+        <div className="flex gap-[6px] mx-auto my-auto px-[16px] py-[14px] bg-[#F2EAFA] rounded-lg font-bold text-lg text-mainColor font-semibold">
           <div className="my-auto">
             <FaChevronDown />
           </div>

@@ -29,12 +29,11 @@ const ChatPresence = () => {
         });
     }
   }, [user, chatRoomId]);
-  // presence가 re-load시 바로 반영이 안되는 문제 발생
 
   return (
     <>
       <div className="flex gap-2">
-        <div className="h-4  w-4 bg-indigo-500 rounded-full animate-pulse my-auto"></div>
+        <div className="h-4  w-4 bg-[#8F5DF4] rounded-full animate-pulse my-auto"></div>
         {chatRoomId && <h1>{onlineUsers} online</h1>}
       </div>
     </>
