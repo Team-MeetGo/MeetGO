@@ -1,5 +1,23 @@
-const page = () => {
-  return <div>page</div>;
+import Member from '@/components/room/participants/Member';
+import RoomInformation from '@/components/room/participants/RoomInformation';
+import { Suspense } from 'react';
+
+import type { UUID } from 'crypto';
+const memberList = ({ params }: { params: { id: UUID } }) => {
+  const room_id = params.id;
+
+  return (
+    <>
+      <Suspense>
+        <div className="flex flex-col justify-center w-full align-middle">
+          <RoomInformation room_id={room_id} />
+          <div className="w-100 h-100 flex flex-row justify-evenly">
+            <Member room_id={room_id} />
+          </div>
+        </div>
+      </Suspense>
+    </>
+  );
 };
 
-export default page;
+export default memberList;
