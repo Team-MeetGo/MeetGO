@@ -3,7 +3,6 @@
 import React, { useState } from 'react';
 import Map from '@/components/chat/sidebar/Map';
 import { useChatDataQuery } from '@/hooks/useQueries/useChattingQuery';
-import { GiHamburgerMenu } from 'react-icons/gi';
 import { Card, CardBody } from '@nextui-org/react';
 import { IoIosArrowForward, IoIosArrowBack } from 'react-icons/io';
 

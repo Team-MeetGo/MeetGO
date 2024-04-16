@@ -41,8 +41,6 @@ const Map: React.FC<MapProps> = ({ chatRoomId }) => {
   const room = useRoomDataQuery(chatRoomId);
   const leaderId = room?.roomData.leader_id;
 
-  console.log(userId, leaderId);
-
   // 채팅방 정보 가져오기
   const chat = useChatDataQuery(chatRoomId);
   const meetingLocation = chat?.[0]?.meeting_location;
