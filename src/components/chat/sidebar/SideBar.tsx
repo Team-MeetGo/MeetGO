@@ -2,10 +2,10 @@
 
 import React, { useState } from 'react';
 import Map from '@/components/chat/sidebar/Map';
-import { useChatDataQuery, useRoomDataQuery } from '@/hooks/useQueries/useChattingQuery';
+import { useChatDataQuery } from '@/hooks/useQueries/useChattingQuery';
 import { GiHamburgerMenu } from 'react-icons/gi';
 import { Card, CardBody } from '@nextui-org/react';
-import { useGetUserDataQuery } from '@/hooks/useQueries/useUserQuery';
+import { IoIosArrowForward, IoIosArrowBack } from 'react-icons/io';
 
 interface SideBarProps {
   chatRoomId: string;
@@ -30,29 +30,40 @@ const SideBar: React.FC<SideBarProps> = ({ chatRoomId }) => {
 
   const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);
+    console.log('사이드 바 상태', isSidebarOpen);
   };
 
   return (
     <div
-      className={`${
-        isSidebarOpen ? 'w-[377px]' : 'w-[30px]'
-      } flex justify-start ml-auto flex-col z-0 transition-all duration-300 ease-in-out`}
+      className={`sidebar-container ${
+        isSidebarOpen ? 'open' : 'closed'
+      } transition-transform duration-300 ease-in-out ml-auto`}
     >
-      <div className={`flex ${isSidebarOpen ? 'justify-end' : 'justify-end'}`}>
-        <GiHamburgerMenu onClick={toggleSidebar} />
-      </div>
-      <div
-        style={{ maxHeight: '100vh', overflowY: 'auto', paddingRight: '24px' }}
-        className={`${isSidebarOpen ? 'opacity-100' : 'opacity-0'} transition-all duration-300 ease-in-out`}
-      >
-        <div className={`pt-8`}>
-          <h1 className="font-semibold text-2xl mb-2">미팅 날짜/시간</h1>
-          <Card className="h-[60px] border border-mainColor rounded-[9px] shadow-none ">
-            <CardBody className="flex flex-row justify-start items-center text-lg">
-              <p>{convertedTime}</p>
-            </CardBody>
-          </Card>
-          <Map chatRoomId={chatRoomId} />
+      <div className="flex felx-row">
+        <div
+          style={{ maxHeight: '100vh', overflowY: 'auto' }}
+          className={`${isSidebarOpen ? 'opacity-100' : 'opacity-0'} transition-all duration-1000 ease-in-out`}
+        >
+          <div className="pt-8 mr-6">
+            <h1 className="font-semibold text-2xl mb-2">미팅 날짜/시간</h1>
+            <Card className="h-[60px] border border-mainColor rounded-[9px] shadow-none ">
+              <CardBody className="flex flex-row justify-start items-center text-lg">
+                <p>{convertedTime}</p>
+              </CardBody>
+            </Card>
+            <Map chatRoomId={chatRoomId} />
+          </div>
+        </div>
+        <div className="h-20 bg-slate-200 flex justify-center items-center ">
+          {isSidebarOpen ? (
+            <button>
+              <IoIosArrowForward onClick={toggleSidebar} size={25} />
+            </button>
+          ) : (
+            <button>
+              <IoIosArrowBack onClick={toggleSidebar} size={25} />
+            </button>
+          )}
         </div>
       </div>
     </div>
