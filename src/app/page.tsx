@@ -1,5 +1,3 @@
-'use client';
-
 import GetMostLikedReivew from '@/components/mainpage/getMostLikedReview';
 import Image from 'next/image';
 import mainbanner_flower from '../../public/mainbanner_flower.png';
