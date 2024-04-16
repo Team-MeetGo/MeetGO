@@ -38,7 +38,7 @@ const ChatInput = () => {
     >
       <Input
         value={message}
-        className="focus:outline-none"
+        classNames={{ input: ['bg-[#F2EAFA]', 'focus:outline-none'] }}
         placeholder="send message"
         onChange={(e) => setMessage(e.target.value)}
       />

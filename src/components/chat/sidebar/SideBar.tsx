@@ -14,13 +14,6 @@ interface SideBarProps {
 const SideBar: React.FC<SideBarProps> = ({ chatRoomId }) => {
   const [isSidebarOpen, setIsSidebarOpen] = useState<boolean>(true);
 
-  // 유저 정보 가져오기
-  const { data: userData } = useGetUserDataQuery();
-  const userId = userData?.user_id;
-
-  const room = useRoomDataQuery(chatRoomId);
-  const leaderId = room?.roomData.leader_id;
-
   //채팅방 정보 가져오기
   const chat = useChatDataQuery(chatRoomId);
   const meetingTime = chat?.[0]?.meeting_time;

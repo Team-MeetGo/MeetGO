@@ -5,7 +5,6 @@ import React, { useEffect, useRef, useState } from 'react';
 import { Card, CardBody, Pagination } from '@nextui-org/react';
 import { HiMiniMagnifyingGlass } from 'react-icons/hi2';
 import DateTimePicker from './DateTimePicker';
-import { userStore } from '@/store/userStore';
 import {
   useClearMeetingLocationMutation,
   useUpdateMeetingLocationMutation

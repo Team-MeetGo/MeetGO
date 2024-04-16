@@ -1,10 +1,10 @@
-'use client';
 import { clientSupabase } from '@/utils/supabase/client';
 import ChatPresence from './ChatPresence';
 import { chatStore } from '@/store/chatStore';
 import { IoIosSearch } from 'react-icons/io';
-import { useRoomDataQuery } from '@/hooks/useQueries/useChattingQuery';
+import { useParticipantsQuery, useRoomDataQuery } from '@/hooks/useQueries/useChattingQuery';
 import { useGetUserDataQuery } from '@/hooks/useQueries/useUserQuery';
+import { Avatar, AvatarGroup } from '@nextui-org/react';
 
 const ChatHeader = ({ chatRoomId }: { chatRoomId: string }) => {
   const { setMessages, setisRest, setSearchMode } = chatStore((state) => state);
@@ -12,6 +12,7 @@ const ChatHeader = ({ chatRoomId }: { chatRoomId: string }) => {
   const room = useRoomDataQuery(chatRoomId);
   const roomId = room?.roomId;
   const roomData = room?.roomData;
+  const participants = useParticipantsQuery(roomId as string);
 
   const UpdateIsActive = async () => {
     // 채팅방 isActive 상태를 false로 변경
@@ -68,21 +69,37 @@ const ChatHeader = ({ chatRoomId }: { chatRoomId: string }) => {
   };
 
   return (
-    <div className="h-20 border-b flex p-3 justify-between">
-      <div className="font-bold text-2xl flex gap-2">
-        {roomData && roomData.room_title}
-        <div className="text-base font-normal">
-          누가 들어와 있는지 들어갈 부분
-          <ChatPresence />
+    <div className="h-[116px] border-b flex p-[16px] justify-between">
+      <div className="flex gap-2">
+        <div className="flex flex-col gap-[16px]">
+          <p className="font-bold text-2xl h-[36px]">{roomData && roomData.room_title}</p>
+
+          <div className="flex gap-[16px]">
+            <div className="mt-[10px]">
+              <ChatPresence />
+            </div>
+
+            <div>
+              <AvatarGroup isBordered>
+                {participants.map((person) => (
+                  <Avatar key={person.user_id} src={person.avatar as string} className="w-[32px] h-[32px]" />
+                ))}
+              </AvatarGroup>
+            </div>
+          </div>
         </div>
       </div>
 
-      <div className="flex gap-2">
-        <button onClick={handleSearchMode}>
+      <div className="flex gap-2 h-[40px] my-auto">
+        <button onClick={handleSearchMode} className="text-[#A1A1AA]">
           <IoIosSearch />
         </button>
-
-        <button onClick={getOutOfChatRoom}>나가기</button>
+        <button
+          onClick={getOutOfChatRoom}
+          className="border border-[#D4D4D8] text-[#A1A1AA] p-[10px] flex items-center rounded-md"
+        >
+          나가기
+        </button>
       </div>
     </div>
   );

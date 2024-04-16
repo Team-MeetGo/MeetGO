@@ -1,7 +1,7 @@
 'use client';
 import { Message } from '@/types/chatTypes';
 import { clientSupabase } from '@/utils/supabase/client';
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { User } from '@supabase/supabase-js';
 import ChatScroll from './ChatScroll';
 import NewChatAlert from './NewChatAlert';
@@ -12,10 +12,11 @@ import ChatSearch from './ChatSearch';
 import { useMyLastMsgs, useRoomDataQuery } from '@/hooks/useQueries/useChattingQuery';
 import MyChat from './MyChat';
 import RememberLastChat from '../chatFooter/RememberLastChat';
+import { isNextDay, showingDate } from '@/utils';
 
 const ChatList = ({ user, chatRoomId }: { user: User | null; chatRoomId: string }) => {
   const scrollRef = useRef() as React.MutableRefObject<HTMLDivElement>;
-  const { hasMore, messages, setMessages } = chatStore((state) => state);
+  const { hasMore, messages, searchMode, setMessages, setSearchMode } = chatStore((state) => state);
   const [isScrolling, setIsScrolling] = useState(false);
   const [isScrollTop, setIsScrollTop] = useState(true);
   const [count, setCount] = useState(1);
@@ -105,6 +106,21 @@ const ChatList = ({ user, chatRoomId }: { user: User | null; chatRoomId: string 
     }
   }, [messages, isScrolling]);
 
+  const cancelSearchMode = useCallback(
+    (e: any) => {
+      return scrollRef.current && searchMode && scrollRef.current.contains(e.target) ? setSearchMode() : null;
+    },
+    [searchMode, setSearchMode]
+  );
+
+  // 빈 공간 누르면 검색창 꺼지기
+  useEffect(() => {
+    window.addEventListener('click', cancelSearchMode);
+    return () => {
+      window.removeEventListener('click', cancelSearchMode);
+    };
+  }, [cancelSearchMode]);
+
   // 스크롤 이벤트가 발생할 때
   const handleScroll = () => {
     const scrollBox = scrollRef.current;
@@ -131,7 +147,7 @@ const ChatList = ({ user, chatRoomId }: { user: User | null; chatRoomId: string 
   return (
     <>
       <div
-        className={`w-full h-full flex-1 p-5 flex flex-col gap-[8px] overflow-y-auto scroll-smooth`}
+        className={'w-full h-full flex-1 p-[16px] flex flex-col gap-[8px] overflow-y-auto scroll-smooth'}
         ref={scrollRef}
         onScroll={handleScroll}
       >
@@ -139,6 +155,11 @@ const ChatList = ({ user, chatRoomId }: { user: User | null; chatRoomId: string 
         {hasMore ? <LoadChatMore chatRoomId={chatRoomId} count={count} setCount={setCount} /> : <></>}
         {messages?.map((msg, idx) => (
           <div key={msg.message_id} className="w-full">
+            {isNextDay(idx, messages) ? (
+              <div className="flex justify-center my-[16px] bg-[#D4D4D8] mx-auto w-[150px] px-[16px] py-[6px] rounded-full text-white">
+                <p className="font-extralight tracking-wide text-sm">{showingDate(msg.created_at)}</p>
+              </div>
+            ) : null}
             {msg.send_from === user?.id ? (
               <MyChat msg={msg} idx={idx} lastDivRefs={lastDivRefs} />
             ) : (
