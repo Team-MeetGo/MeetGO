@@ -2,12 +2,8 @@ import CommentList from '@/components/review/comment/CommentList';
 import ReviewDetail from '@/components/review/ReviewDetail';
 import ReviewDetailNavigate from '@/components/review/ReviewDetailNavigate';
 import Link from 'next/link';
-import { useParams } from 'next/navigation';
 
 const ReviewDetailPage = ({ params }: { params: { review_id: string } }) => {
-  // const { review_id } = useParams();
-  // const id = review_id.toString();
-
   return (
     <div className="flex flex-col justify-center items-center">
       <div className="w-full h-[208px] flex justify-center items-center text-white text-[50px] bg-gradient-to-review mb-[88px]">

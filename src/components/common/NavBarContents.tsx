@@ -73,17 +73,6 @@ const NavBarContents = () => {
             리뷰게시판
           </Link>
         </NavbarItem>
-        <NavbarItem>
-          <Link
-            color="foreground"
-            href={isValidate ? 'test' : 'mypage'}
-            onClick={() => {
-              checkIsValidate();
-            }}
-          >
-            test
-          </Link>
-        </NavbarItem>
       </NavbarContent>
 
       <NavbarContent className="h-auto" as="div" justify="end">
