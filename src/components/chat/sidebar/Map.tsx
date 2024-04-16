@@ -83,6 +83,7 @@ const Map: React.FC<MapProps> = ({ chatRoomId }) => {
         });
         setCurrentPos(currentPos);
         setMap(kakaoMap);
+        map.setCenter(currentPos);
       },
       () => alert('위치 정보를 가져오는데 실패했습니다.'),
       {

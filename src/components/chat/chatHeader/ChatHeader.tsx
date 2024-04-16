@@ -1,3 +1,5 @@
+'use client';
+
 import { clientSupabase } from '@/utils/supabase/client';
 import ChatPresence from './ChatPresence';
 import { chatStore } from '@/store/chatStore';
