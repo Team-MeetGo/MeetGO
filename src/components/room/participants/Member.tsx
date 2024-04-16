@@ -1,6 +1,6 @@
 'use client';
 
-import { useRoomInfoWithRoomIdQuery, useRoomParticipantsQuery } from '@/hooks/useQueries/useMeetingQuery';
+import { useRoomInfoWithRoomIdQuery } from '@/hooks/useQueries/useMeetingQuery';
 import { clientSupabase } from '@/utils/supabase/client';
 import { useEffect, useState } from 'react';
 import { FaCrown } from 'react-icons/fa6';

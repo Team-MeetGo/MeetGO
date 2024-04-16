@@ -1,4 +1,5 @@
 import { Dispatch, SetStateAction } from 'react';
+import { FaChevronDown } from 'react-icons/fa';
 
 const NewChatAlert = ({
   newAddedMsgNum,
@@ -16,11 +17,13 @@ const NewChatAlert = ({
 
   return (
     <div className="absolute bottom-28 w-full">
-      <div
-        className="w-40 h-12 flex bg-indigo-500 p-2 mx-auto rounded-md cursor-pointer"
-        onClick={handleNewMsgAlertScroll}
-      >
-        <h1 className="mx-auto my-auto font-bold text-lg text-white">{newAddedMsgNum} New Message</h1>
+      <div className="flex mx-auto w-full cursor-pointer" onClick={handleNewMsgAlertScroll}>
+        <div className="flex gap-[6px] mx-auto my-auto px-[16px] py-[14px] bg-[#E4D4F4] rounded-lg font-bold text-lg text-mainColor font-semibold">
+          <div className="my-auto">
+            <FaChevronDown />
+          </div>
+          <h1>{newAddedMsgNum} New Message</h1>
+        </div>
       </div>
     </div>
   );

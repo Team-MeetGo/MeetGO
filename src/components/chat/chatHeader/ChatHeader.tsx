@@ -68,7 +68,7 @@ const ChatHeader = ({ chatRoomId }: { chatRoomId: string }) => {
   };
 
   return (
-    <div className="h-20 border-b border-indigo-600 flex p-3 justify-between">
+    <div className="h-20 border-b flex p-3 justify-between">
       <div className="font-bold text-2xl flex gap-2">
         {roomData && roomData.room_title}
         <div className="text-base font-normal">
