@@ -30,7 +30,6 @@ const SideBar: React.FC<SideBarProps> = ({ chatRoomId }) => {
 
   const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);
-    console.log('사이드 바 상태', isSidebarOpen);
   };
 
   return (
@@ -44,7 +43,7 @@ const SideBar: React.FC<SideBarProps> = ({ chatRoomId }) => {
           style={{ maxHeight: '100vh', overflowY: 'auto' }}
           className={`${isSidebarOpen ? 'opacity-100' : 'opacity-0'} transition-all duration-1000 ease-in-out`}
         >
-          <div className="pt-8 mr-6">
+          <div className="pt-8 pr-6">
             <h1 className="font-semibold text-2xl mb-2">미팅 날짜/시간</h1>
             <Card className="h-[60px] border border-mainColor rounded-[9px] shadow-none ">
               <CardBody className="flex flex-row justify-start items-center text-lg">
@@ -54,15 +53,11 @@ const SideBar: React.FC<SideBarProps> = ({ chatRoomId }) => {
             <Map chatRoomId={chatRoomId} />
           </div>
         </div>
-        <div className="h-20 bg-slate-200 flex justify-center items-center ">
+        <div className="h-20 flex items-center justify-center cursor-pointer shadow-xl" onClick={toggleSidebar}>
           {isSidebarOpen ? (
-            <button>
-              <IoIosArrowForward onClick={toggleSidebar} size={25} />
-            </button>
+            <IoIosArrowBack size={25} color="#A1A1AA" />
           ) : (
-            <button>
-              <IoIosArrowBack onClick={toggleSidebar} size={25} />
-            </button>
+            <IoIosArrowForward size={25} color="#A1A1AA" />
           )}
         </div>
       </div>

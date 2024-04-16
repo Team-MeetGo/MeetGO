@@ -86,17 +86,13 @@ const DateTimePicker: React.FC<DateTimePickerProps> = forwardRef(({ chatRoomId }
         }) => (
           <div className="flex flex-row justify-center">
             <button onClick={decreaseMonth} disabled={prevMonthButtonDisabled}>
-              {prevMonthButtonDisabled ? (
-                <IoIosArrowBack className="text-white" />
-              ) : (
-                <IoIosArrowBack className="text-gray-500" />
-              )}
+              {prevMonthButtonDisabled ? <IoIosArrowBack className="text-white" /> : <IoIosArrowBack color="#A1A1AA" />}
             </button>
             <div className="px-4 text-black text-base">
               {getYear(date)}년 {months[getMonth(date)]}
             </div>
             <button onClick={increaseMonth} disabled={nextMonthButtonDisabled}>
-              <IoIosArrowForward className="text-gray-500" />
+              <IoIosArrowForward color="#A1A1AA" />
             </button>
           </div>
         )}

@@ -219,7 +219,7 @@ const Map: React.FC<MapProps> = ({ chatRoomId }) => {
   };
 
   return (
-    <div className="z-10">
+    <div>
       <div className="py-6">
         <h1 className="font-semibold text-2xl mb-2">미팅 장소</h1>
         <Card className="h-[60px] border border-mainColor rounded-[9px] shadow-none ">
