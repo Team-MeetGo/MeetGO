@@ -144,13 +144,13 @@ const LoginForm = () => {
           </Button>
         </form>
         {isError && <p className="text-red-500 text-[13px] mt-2">아이디 또는 비밀번호가 일치하지 않습니다.</p>}
-        <Button
-          onClick={() => router.push('/join')}
+        <Link
+          href="/join"
           className="duration-200 bg-white text-[#27272A] border border-[#A1A1AA] p-5 mt-[16px] rounded-lg w-full py-[20px] h-auto text-[16px]"
           type="button"
         >
           아직 아이디가 없다면? 회원가입하기
-        </Button>
+        </Link>
         <p className="duration-200 bg-white text-[#27272A] p-5 mt-[50px] rounded-lg w-full py-[20px] h-auto text-[16px] text-center">
           소셜 계정으로 로그인하기
         </p>
