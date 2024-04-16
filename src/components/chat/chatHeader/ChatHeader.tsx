@@ -1,4 +1,3 @@
-'use client';
 import { clientSupabase } from '@/utils/supabase/client';
 import ChatPresence from './ChatPresence';
 import { chatStore } from '@/store/chatStore';
@@ -92,10 +91,13 @@ const ChatHeader = ({ chatRoomId }: { chatRoomId: string }) => {
       </div>
 
       <div className="flex gap-2 h-[40px] my-auto">
-        <button onClick={handleSearchMode}>
+        <button onClick={handleSearchMode} className="text-[#A1A1AA]">
           <IoIosSearch />
         </button>
-        <button onClick={getOutOfChatRoom} className="border border-[#D4D4D8] p-[10px] flex items-center rounded-md">
+        <button
+          onClick={getOutOfChatRoom}
+          className="border border-[#D4D4D8] text-[#A1A1AA] p-[10px] flex items-center rounded-md"
+        >
           나가기
         </button>
       </div>

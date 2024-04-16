@@ -1,3 +1,4 @@
+'use client';
 import { useGetUserDataQuery } from '@/hooks/useQueries/useUserQuery';
 import { chatStore } from '@/store/chatStore';
 import { Message } from '@/types/chatTypes';
