@@ -3,7 +3,7 @@ import { useGetUserDataQuery } from '@/hooks/useQueries/useUserQuery';
 import { chatStore } from '@/store/chatStore';
 import { clientSupabase } from '@/utils/supabase/client';
 import { Input } from '@nextui-org/react';
-import { ChangeEvent, useState } from 'react';
+import { ChangeEvent, useRef, useState } from 'react';
 import { FaPlus, FaRegArrowAltCircleUp } from 'react-icons/fa';
 
 //이거 나중에 지우자
@@ -12,6 +12,7 @@ const ChatInput = () => {
   const chatRoomId = chatStore((state) => state.chatRoomId);
   const [message, setMessage] = useState('');
   const [imgs, setImgs] = useState<File[]>([]);
+  const imgRef = useRef(null);
 
   const handleSubmit = async () => {
     if (user && chatRoomId && message.length) {
@@ -27,7 +28,7 @@ const ChatInput = () => {
     }
   };
 
-  const handleFile = (e: ChangeEvent<HTMLInputElement>) => {
+  const handleImgFile = (e: ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
     if (files) {
       const fileList = Array.from(files);
@@ -35,12 +36,16 @@ const ChatInput = () => {
     }
   };
 
+  const handleClick = () => {};
+
   return (
     <div>
-      <div className="flex items-center cursor-pointer">
-        <input type="file" multiple accept="image/*" className="" onChange={handleFile}></input>
-        <FaPlus className="w-6 h-6" />
-      </div>
+      <label className="flex items-center cursor-pointer">
+        <input type="file" multiple accept="image/*" className="hidden" ref={imgRef} onChange={handleImgFile} />
+        <span className="w-6 h-6 flex items-center justify-center">
+          <FaPlus className="text-gray-400 pointer-events-none" />
+        </span>
+      </label>
       <form
         className="p-5 flex gap-[10px]"
         onSubmit={(e) => {
