@@ -46,7 +46,9 @@ const SideBar: React.FC<SideBarProps> = ({ chatRoomId }) => {
             <h1 className="font-semibold text-2xl mb-2">미팅 날짜/시간</h1>
             <Card className="h-[60px] border border-mainColor rounded-[9px] shadow-none ">
               <CardBody className="flex flex-row justify-start items-center text-lg">
-                <p>{convertedTime}</p>
+                <p className={convertedTime ? '' : 'text-gray2'}>
+                  {convertedTime ? convertedTime : '방장이 선택한 시간이 표시됩니다.'}
+                </p>
               </CardBody>
             </Card>
             <Map chatRoomId={chatRoomId} />

@@ -25,7 +25,7 @@ const GetMostLikedReivew = () => {
     <div>
       <div className="max-w-[1160px] flex items-center justify-between mr-[15px]">
         <div className="flex items-center mb-[15px] ml-[15px]">
-          <p className="text-[26px] font-bold mr-[10px]">리뷰 페이지</p>
+          <p className="text-[26px] font-bold mr-[10px]">Best Review</p>
           <p className="text-[16px] text-[#A1A1AA]">{fetchReviewsData?.count}리뷰</p>
         </div>
         <div className="flex items-center mr-[10px] mb-[15px]">
