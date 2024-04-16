@@ -41,8 +41,6 @@ const Map: React.FC<MapProps> = ({ chatRoomId }) => {
   const room = useRoomDataQuery(chatRoomId);
   const leaderId = room?.roomData.leader_id;
 
-  console.log(userId, leaderId);
-
   // 채팅방 정보 가져오기
   const chat = useChatDataQuery(chatRoomId);
   const meetingLocation = chat?.[0]?.meeting_location;
@@ -83,6 +81,7 @@ const Map: React.FC<MapProps> = ({ chatRoomId }) => {
         });
         setCurrentPos(currentPos);
         setMap(kakaoMap);
+        kakaoMap.setCenter(currentPos);
       },
       () => alert('위치 정보를 가져오는데 실패했습니다.'),
       {
@@ -218,7 +217,7 @@ const Map: React.FC<MapProps> = ({ chatRoomId }) => {
   };
 
   return (
-    <div className="z-10">
+    <div>
       <div className="py-6">
         <h1 className="font-semibold text-2xl mb-2">미팅 장소</h1>
         <Card className="h-[60px] border border-mainColor rounded-[9px] shadow-none ">
