@@ -2,7 +2,7 @@
 import { useGetUserDataQuery } from '@/hooks/useQueries/useUserQuery';
 import { chatStore } from '@/store/chatStore';
 import { Message } from '@/types/chatTypes';
-import { getformattedDate, showingDate, isItMe, isNextDay } from '@/utils';
+import { getformattedDate, isItMe, isNextDay } from '@/utils';
 import ChatDeleteDropDown from './ChatDeleteDropDown';
 import AvatarDefault from '@/utils/icons/AvatarDefault';
 import { useRoomDataQuery } from '@/hooks/useQueries/useChattingQuery';
