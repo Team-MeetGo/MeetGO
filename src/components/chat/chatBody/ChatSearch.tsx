@@ -14,7 +14,7 @@ const ChatSearch = ({ isScrollTop }: { isScrollTop: boolean }) => {
   const handleSearch = () => {
     if (searchWord) {
       const filteredIds = messages
-        .filter((m) => m.message.includes(searchWord))
+        .filter((m) => m.message?.includes(searchWord))
         .map((messages) => messages.message_id)
         .reverse();
 

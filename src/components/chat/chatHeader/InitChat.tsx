@@ -56,19 +56,7 @@ const InitChat = ({ chatRoomId, allMsgs }: { user: User | null; chatRoomId: stri
   }, [chatState, isRest, router]);
   // 왜 요청이 2번이나 되징
 
-  return (
-    <>
-      {/* <div className="w-full max-w-2xl mx-auto md:py-10 h-screen">
-        <div className="h-full border rounded-md flex flex-col border-indigo-600 relative">
-          <ChatHeader chatRoomId={chatRoomId} />
-          <Suspense fallback="skeleton 들어갈 자리">
-            <ChatList user={user} chatRoomId={chatRoomId} />
-          </Suspense>
-          <ChatInput />
-        </div>
-      </div> */}
-    </>
-  );
+  return null;
 };
 
 export default InitChat;

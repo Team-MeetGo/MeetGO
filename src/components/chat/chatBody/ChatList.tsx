@@ -16,7 +16,7 @@ import { isNextDay, showingDate } from '@/utils';
 
 const ChatList = ({ user, chatRoomId }: { user: User | null; chatRoomId: string }) => {
   const scrollRef = useRef() as React.MutableRefObject<HTMLDivElement>;
-  const { hasMore, messages, searchMode, setMessages, setSearchMode } = chatStore((state) => state);
+  const { hasMore, messages, setMessages } = chatStore((state) => state);
   const [isScrolling, setIsScrolling] = useState(false);
   const [isScrollTop, setIsScrollTop] = useState(true);
   const [count, setCount] = useState(1);
