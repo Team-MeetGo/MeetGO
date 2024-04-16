@@ -15,7 +15,7 @@ import ReviewComment from './ReviewComment';
 import ReviewLike from './ReviewLike';
 import { useDeleteReviewMutation } from '@/hooks/useMutation/useReviewMutations';
 import { useAuthorDataQuery, useReviewDataQuery, useReviewListDataQuery } from '@/hooks/useQueries/useReviewQuery';
-// import { useAsyncNavigation } from '@/hooks/custom/useReviewNavigation';
+import { useAsyncNavigation } from '@/hooks/custom/useReviewNavigation';
 
 export type ReviewDetailType = {
   review_title: string | null;

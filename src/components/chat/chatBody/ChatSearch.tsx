@@ -2,6 +2,7 @@ import { chatStore } from '@/store/chatStore';
 import { useEffect, useState } from 'react';
 import { FaChevronDown, FaChevronUp } from 'react-icons/fa';
 import { FaX } from 'react-icons/fa6';
+import { IoIosSearch } from 'react-icons/io';
 
 const ChatSearch = ({ isScrollTop }: { isScrollTop: boolean }) => {
   const { searchMode, messages, setSearchMode } = chatStore((state) => state);
@@ -87,19 +88,32 @@ const ChatSearch = ({ isScrollTop }: { isScrollTop: boolean }) => {
   return (
     <>
       {searchMode ? (
-        <div className={`${isScrollTop ? '' : 'absolute'} flex justify-between w-full bg-gray-500`}>
+        <div className={`${isScrollTop ? '' : 'absolute'} flex justify-between w-full`}>
           <div className="flex gap-1">
             <form
               onSubmit={(e) => {
                 e.preventDefault();
                 handleSearch();
               }}
-              className="flex gap-2"
+              className="flex gap-2 relative items-center"
             >
-              <input value={searchWord} onChange={(e) => setSearchWord(e.target.value)} autoFocus></input>
-              <button>검색</button>
+              <div className="absolute ml-[10px] flex items-center gap-[6px] text-[#A1A1AA]">
+                {searchWord ? null : (
+                  <>
+                    <IoIosSearch />
+                  </>
+                )}
+              </div>
+
+              <input
+                value={searchWord}
+                onChange={(e) => setSearchWord(e.target.value)}
+                className="h-[40px] p-[8px] border-2 border-[#D4D4D8] rounded-md focus:outline-none"
+                placeholder="     채팅내용 검색하기"
+                autoFocus
+              ></input>
+              <div>{doneSearchDivs?.length ? `(${doneSearchDivs?.length})` : ''}</div>
             </form>
-            <div>{doneSearchDivs?.length ? `(${doneSearchDivs?.length})` : ''}</div>
           </div>
 
           <div className="flex gap-2">
