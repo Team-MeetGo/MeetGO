@@ -1,14 +1,10 @@
-'use client';
-
 import GetMostLikedReivew from '@/components/mainpage/getMostLikedReview';
 import Image from 'next/image';
 import mainbanner_flower from '../../public/mainbanner_flower.png';
 import mainbanner_people from '../../public/mainbanner_people.png';
-import { Button } from '@nextui-org/react';
-import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 
 export default function Home() {
-  const route = useRouter();
   return (
     <main className="w-full flex flex-col items-center justify-content">
       <div className="w-full h-[600px] max-h-[600px] bg-gradient-to-main flex justify-center items-center">
@@ -29,15 +25,14 @@ export default function Home() {
       <div className="w-full h-[208px] bg-gradient-to-main2 flex justify-center items-center mb-[88px]">
         <div className="flex items-center">
           <p className="text-[30px] text-white mr-[60px]">현재 많은 분들이 기다리고 있어요~</p>
-          <Button
+          <Link
             className="bg-transparant border-1 border-white max-w-[267px] h-[60px] text-[18px] text-white pt-[13px] pb-[13px] pl-[60px] pr-[60px] hover:bg-white hover:text-mainColor font-bold"
-            onClick={() => route.push('/meetingRoom')}
+            href="/meetingRoom"
           >
             로비로 바로가기
-          </Button>
+          </Link>
         </div>
       </div>
-      <button onClick={() => location.replace('/test')}>test</button>
     </main>
   );
 }
