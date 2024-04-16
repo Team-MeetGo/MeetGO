@@ -66,8 +66,8 @@ function MeetingRoomForm() {
   };
 
   const handleSelect = (value: string) => {
-    if (selected.size > 5) {
-      alert('최대 5개까지 선택 가능합니다.');
+    if (selected.size > 4) {
+      alert('최대 4개까지 선택 가능합니다.');
       return;
     }
     setSelected(new Set(value));
@@ -126,7 +126,7 @@ function MeetingRoomForm() {
                     <label>방의 컨셉을 골라주세요!</label>
                     <div className="flex whitespace-nowrap">
                       <Select
-                        label="방의 특성(최대 5개)"
+                        label="방의 특성(최대 4개)"
                         selectionMode="multiple"
                         variant="bordered"
                         selectedKeys={selected}

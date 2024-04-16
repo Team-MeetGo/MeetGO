@@ -3,7 +3,6 @@ import { useMyMsgData } from '@/hooks/useQueries/useChattingQuery';
 import { useMyroomQuery, useRecruitingQuery } from '@/hooks/useQueries/useMeetingQuery';
 import { useGetUserDataQuery } from '@/hooks/useQueries/useUserQuery';
 import { useSearchRoomStore } from '@/store/searchRoomStore';
-import type { MeetingRoomType, MeetingRoomTypes } from '@/types/roomTypes';
 import { useEffect, useRef, useState } from 'react';
 import { IoIosArrowBack, IoIosArrowForward, IoMdRefresh } from 'react-icons/io';
 import MeetingRoom from './MeetingRoom';
@@ -11,6 +10,7 @@ import MeetingRoomForm from './MeetingRoomForm';
 import MemberNumberSelection from './MemberNumberSelection';
 import RegionSelection from './RegionSelection';
 
+import type { MeetingRoomType } from '@/types/roomTypes';
 function MeetingRoomList() {
   const [page, setPage] = useState(1);
   const [scrollPage, setScrollPage] = useState(0);
@@ -19,19 +19,22 @@ function MeetingRoomList() {
   const scrollRef = useRef<HTMLInputElement>(null);
 
   const myRoomList = useMyroomQuery(String(user?.user_id));
+  const filteredMyRoomList = myRoomList?.map((r) => r.room);
   const { selectRegion, selectMemberNumber } = useSearchRoomStore();
 
   const myMsgData = useMyMsgData(user?.user_id!);
+  console.log('myRoomList', myRoomList);
+  console.log('filteredMyRoomList', filteredMyRoomList);
 
-  // meetingRoomList 중에서 myRoomList가 없는 것을 뽑아내기
   const otherRooms = meetingRoomList?.filter(function (room: MeetingRoomType) {
-    const foundItem = myRoomList?.find((r) => r?.room_id === room?.room_id);
+    const foundItem = filteredMyRoomList?.find((r) => r?.room_id === room?.room_id);
     if (foundItem) {
       return false;
     } else {
       return true;
     }
   });
+
   const regionSelectedOtherRooms = otherRooms?.filter((room) => room.region === selectRegion);
   const memberNumberSelectedOtherRooms = otherRooms?.filter((room) => room.member_number === selectMemberNumber);
   const regionMemberNumberSelectedOtherRooms = otherRooms?.filter(
@@ -43,7 +46,7 @@ function MeetingRoomList() {
   const [memberSelectedRoomScroll, setMemberSelectedRoomScroll] = useState<MeetingRoomType[]>([]);
   const [regionMemberSelectedRoomScroll, setRegionMemberSelectedRoomScroll] = useState<MeetingRoomType[]>([]);
   const nextpage = scrollPage * 3 + 3;
-  const pagecondition = otherRooms?.length! > nextpage ? nextpage : otherRooms?.length! + 1;
+  const pagecondition = otherRooms!.length > nextpage ? nextpage : otherRooms!.length + 1;
   console.log('pagecondition', pagecondition);
   const viewCards = () => {
     if (otherRooms) {
@@ -132,11 +135,11 @@ function MeetingRoomList() {
           </button>
           {
             <div className="h-[241px] gap-[24px] grid grid-cols-3 w-full px-4">
-              {myRoomList !== null &&
-                myRoomList?.map((room, index) => {
+              {filteredMyRoomList !== null &&
+                filteredMyRoomList?.map((room, index) => {
                   if (index < 3 * page && index >= 3 * (page - 1))
                     return (
-                      <div key={index}>
+                      <div key={room?.room_id}>
                         <div className="flex gap-2">
                           {myMsgData && myMsgData.find((item) => item.room_id === room?.room_id) ? (
                             <h1>

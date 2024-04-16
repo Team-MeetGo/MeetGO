@@ -46,14 +46,14 @@ function EditMeetingRoom({ room }: { room: MeetingRoomType }) {
     e.preventDefault();
     if (!title || !selected || !location || memberNumber === '인원' || roomRegion === '지역') {
       alert('모든 항목은 필수입니다.');
-      return;
+    } else {
+      await roomUpdateMutation.mutateAsync();
+      setTitle('');
+      setLocation('');
+      resetMemberNumber();
+      resetRoomRegion();
+      setSelected(new Set([]));
     }
-    await roomUpdateMutation.mutateAsync();
-    setTitle('');
-    setLocation('');
-    resetMemberNumber();
-    resetRoomRegion();
-    setSelected(new Set([]));
   };
 
   const cancelMakingMeetingRoom = () => {
@@ -71,8 +71,8 @@ function EditMeetingRoom({ room }: { room: MeetingRoomType }) {
   };
 
   const handleSelect = (value: string) => {
-    if (selected.size > 5) {
-      alert('최대 5개까지 선택 가능합니다.');
+    if (selected.size > 4) {
+      alert('최대 4개까지 선택 가능합니다.');
       return;
     }
     setSelected(new Set(value));

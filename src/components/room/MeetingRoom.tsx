@@ -63,6 +63,7 @@ function MeetingRoom({ room }: { room: MeetingRoomType }) {
     //모든 인원이 다 찼을 경우 모집종료로 변경
     if (genderMaxNumber && participants?.length === genderMaxNumber * 2) {
       await updateRoomStatusCloseMutation.mutateAsync();
+      return;
     }
   };
 
@@ -135,7 +136,7 @@ function MeetingRoom({ room }: { room: MeetingRoomType }) {
             </div>
             <div className="h-[8px]"></div>
 
-            <div className="text-[14px] flex flex-row gap-[8px]">
+            <div className="text-[14px] flex flex-row gap-[4px]">
               {Array.from(feature).map((value) => (
                 <Chip
                   key={value}

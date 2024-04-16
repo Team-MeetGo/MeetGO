@@ -1,13 +1,13 @@
 'use client';
 
-import { useRoomInfoWithRoomIdQuery } from '@/hooks/useQueries/useMeetingQuery';
+import { useRoomInfoWithRoomIdQuery, useRoomParticipantsQuery } from '@/hooks/useQueries/useMeetingQuery';
 import { clientSupabase } from '@/utils/supabase/client';
 import { useEffect, useState } from 'react';
 import { FaCrown } from 'react-icons/fa6';
 import { IoFemale, IoMale } from 'react-icons/io5';
-import AvatarDefault from '@/utils/icons/AvatarDefault';
-import type { UserType } from '@/types/roomTypes';
 import { useParticipantsQuery } from '@/hooks/useQueries/useChattingQuery';
+
+import type { UserType } from '@/types/roomTypes';
 
 const Member = ({ room_id }: { room_id: string }) => {
   const participants = useParticipantsQuery(room_id as string);

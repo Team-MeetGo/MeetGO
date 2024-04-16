@@ -12,35 +12,37 @@ import {
   ROOMLIST,
   ROOM_MEMBER
 } from '@/query/meetingRoom/meetingQueryKeys';
-import { profileCount } from '@/store/userStore';
+// import { profileCount } from '@/store/userStore';
 import { useQuery, useSuspenseQuery } from '@tanstack/react-query';
 import { useEffect } from 'react';
 
 //현재 모집중인 방
 export const useRecruitingQuery = (user_id: string) => {
-  const results = useSuspenseQuery({
+  const data = useSuspenseQuery({
     queryKey: RECRUTING_ROOMDATA,
     queryFn: fetchRecruitingRoom
   });
-  return results;
+  return data;
 };
 //내가 참가한 방
 export const useMyroomQuery = (user_id: string) => {
-  const results = useSuspenseQuery({
+  const { data } = useSuspenseQuery({
     queryKey: [ROOMLIST, user_id],
     queryFn: () => fetchMyRoom(user_id)
   });
-
-  // 희라가 참여한 방 숫자 가져오려고 추가하는 로직
-  const { setMeetingRoomCount } = profileCount();
-  useEffect(() => {
-    if (results.data) {
-      setMeetingRoomCount(results.data?.length);
-    }
-  }, [results.data]);
-
-  return results.data?.map((r) => r.room);
+  return data;
 };
+
+// 희라가 참여한 방 숫자 가져오려고 추가하는 로직
+//   const { setMeetingRoomCount } = profileCount();
+//   useEffect(() => {
+//     if (results.data) {
+//       setMeetingRoomCount(results.data?.length);
+//     }
+//   }, [results.data]);
+
+//   return results.data?.map((r) => r.room);
+// };
 //room_id로 하나의 방 얻기
 export const useRoomInfoWithRoomIdQuery = (room_id: string) => {
   const data = useQuery({
