@@ -40,12 +40,6 @@ const ChatInput = () => {
 
   return (
     <div>
-      <label className="flex items-center cursor-pointer">
-        <input type="file" multiple accept="image/*" className="hidden" ref={imgRef} onChange={handleImgFile} />
-        <span className="w-6 h-6 flex items-center justify-center">
-          <FaPlus className="text-gray-400 pointer-events-none" />
-        </span>
-      </label>
       <form
         className="p-5 flex gap-[10px]"
         onSubmit={(e) => {
@@ -54,6 +48,12 @@ const ChatInput = () => {
           setMessage('');
         }}
       >
+        <label className="flex items-center cursor-pointer">
+          <input type="file" multiple accept="image/*" className="hidden" ref={imgRef} onChange={handleImgFile} />
+          <span className="w-6 h-6 flex items-center justify-center">
+            <FaPlus className="text-[#71717A] pointer-events-none" />
+          </span>
+        </label>
         <Input
           value={message}
           classNames={{ input: ['bg-[#F2EAFA]', 'focus:outline-none'] }}
@@ -62,7 +62,7 @@ const ChatInput = () => {
         />
 
         <button>
-          <FaRegArrowAltCircleUp className="h-8 w-8 my-auto" />
+          <FaRegArrowAltCircleUp className="h-8 w-8 my-auto text-[#71717A]" />
         </button>
       </form>
     </div>
