@@ -79,30 +79,24 @@ export type Database = {
       };
       messages: {
         Row: {
-          avatar: string;
           chatting_room_id: string;
           created_at: string;
           message: string;
           message_id: string;
-          nickname: string;
           send_from: string;
         };
         Insert: {
-          avatar: string;
           chatting_room_id: string;
           created_at?: string;
           message: string;
           message_id?: string;
-          nickname: string;
           send_from?: string;
         };
         Update: {
-          avatar?: string;
           chatting_room_id?: string;
           created_at?: string;
           message?: string;
           message_id?: string;
-          nickname?: string;
           send_from?: string;
         };
         Relationships: [
