@@ -83,6 +83,7 @@ const ChatHeader = ({ chatRoomId }: { chatRoomId: string }) => {
     }
   };
 
+  // room_status 모집완료 -> 모집중으로 변경
   const updateRoomState = async () => {
     const { error } = await clientSupabase.from('room').update({ room_status: '모집중' }).eq('room_id', String(roomId));
     if (error) console.error('참가자 방 나갈 시 room_status 모집중으로 변경 실패', error.message);
