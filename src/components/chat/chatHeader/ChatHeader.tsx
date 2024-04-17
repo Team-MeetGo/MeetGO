@@ -44,13 +44,14 @@ const ChatHeader = ({ chatRoomId }: { chatRoomId: string }) => {
     }
   };
 
-  // OthersChat이랑 코드 겹침 나중에 마무리단계에서 따로 뺄 예정
+  // 남아있는 사람인지 나간사람인지 isRest 상태변경으로 화면 렌더링 바꾸는 함수
   const handleIsRest = async () => {
     const { data: restOf, error: getPartErr } = await clientSupabase
       .from('participants')
       .select('user_id')
       .eq('room_id', String(roomId));
     const restArr = restOf?.map((r) => r.user_id);
+
     setisRest(restArr?.includes(user?.user_id!) as boolean);
     if (getPartErr) {
       console.error(getPartErr.message);
