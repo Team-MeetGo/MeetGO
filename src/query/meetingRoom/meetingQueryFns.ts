@@ -61,11 +61,11 @@ export const updateRoomStatusClose = async (room_id: string) => {
   return data;
 };
 
-export const updateRoomStatusOpen = async (roomId: string) => {
+export const updateRoomStatusOpen = async (room_id: string) => {
   const { data, error } = await clientSupabase
     .from('room')
     .update({ room_status: '모집중' })
-    .eq('room_id', roomId)
+    .eq('room_id', room_id)
     .select();
   if (error) console.error('방 열림 오류', error.message);
   return data;

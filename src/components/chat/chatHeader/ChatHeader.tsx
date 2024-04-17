@@ -1,22 +1,19 @@
 'use client';
-import { clientSupabase } from '@/utils/supabase/client';
-import ChatPresence from './ChatPresence';
-import { chatStore } from '@/store/chatStore';
-import { IoIosSearch } from 'react-icons/io';
 import { useParticipantsQuery, useRoomDataQuery } from '@/hooks/useQueries/useChattingQuery';
 import { useGetUserDataQuery } from '@/hooks/useQueries/useUserQuery';
+import { chatStore } from '@/store/chatStore';
+import { clientSupabase } from '@/utils/supabase/client';
 import { Avatar, AvatarGroup } from '@nextui-org/react';
-import { useUpdateRoomStatusOpen } from '@/hooks/useMutation/useMeetingMutation';
+import { IoIosSearch } from 'react-icons/io';
+import ChatPresence from './ChatPresence';
 
 const ChatHeader = ({ chatRoomId }: { chatRoomId: string }) => {
   const { setMessages, setisRest, setSearchMode } = chatStore((state) => state);
   const { data: user } = useGetUserDataQuery();
   const room = useRoomDataQuery(chatRoomId);
-  const roomId = room?.roomId as string;
-  const userId = user?.user_id as string;
+  const roomId = room?.roomId;
   const roomData = room?.roomData;
   const participants = useParticipantsQuery(roomId as string);
-  const updateRoomStatusOpenMutation = useUpdateRoomStatusOpen({ roomId, userId });
 
   const handleSearchMode = () => {
     setSearchMode();
@@ -78,8 +75,6 @@ const ChatHeader = ({ chatRoomId }: { chatRoomId: string }) => {
       await handleIsRest();
       await deleteLastMsg();
       await updateRoomState();
-      //Room의 상태: 모집중, 색:흰색으로 변환
-      await updateRoomStatusOpenMutation.mutateAsync();
       setMessages([]);
     } else {
       return;

@@ -24,12 +24,12 @@ export const useUpdateRoomStatusClose = ({ room_id, user_id }: { room_id: string
   return roomStatusCloseMutation;
 };
 
-export const useUpdateRoomStatusOpen = ({ roomId, userId }: { roomId: string; userId: string }) => {
+export const useUpdateRoomStatusOpen = ({ room_id, user_id }: { room_id: string; user_id: string }) => {
   const queryClient = useQueryClient();
   const roomStatusOpenMutation = useMutation({
-    mutationFn: () => updateRoomStatusOpen(roomId),
+    mutationFn: () => updateRoomStatusOpen(room_id),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: [ROOM_MEMBER, userId] });
+      queryClient.invalidateQueries({ queryKey: [ROOM_MEMBER, user_id] });
     }
   });
   return roomStatusOpenMutation;
