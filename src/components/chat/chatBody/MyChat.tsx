@@ -34,9 +34,19 @@ const MyChat = ({ msg, idx, lastDivRefs }: { msg: Message; idx: number; lastDivR
                 <div>
                   <ChatDeleteDropDown msg={msg} />
                 </div>
-                <div className="rounded-md bg-mainColor py-1.5 px-[8px] text-right text-white font-extralight">
-                  {msg.message}
-                </div>
+                {msg.message?.length ? (
+                  <div className="rounded-md bg-mainColor py-1.5 px-[8px] text-right text-white font-extralight">
+                    {msg.message}
+                  </div>
+                ) : null}
+
+                {msg.imgs?.length ? (
+                  <div className="w-10 h-10">
+                    {msg.imgs.map((img) => (
+                      <img key={img} src={`/images/${img}`} alt=""></img>
+                    ))}
+                  </div>
+                ) : null}
               </div>
 
               {idx < messages.length - 1 && msg.send_from === messages[idx + 1].send_from ? null : (

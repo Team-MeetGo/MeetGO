@@ -120,7 +120,7 @@ const NewReview = () => {
                       {files.length <= 4 && (
                         <div className="flex justify-center gap-2">
                           {files.map((file, index) => (
-                            <div key={index} className="relative absolute w-[140px] h-[140px] aspect-square">
+                            <div key={file.name} className="relative absolute w-[140px] h-[140px] aspect-square">
                               <Image
                                 className="object-cover rounded-[10px]"
                                 src={URL.createObjectURL(file)}

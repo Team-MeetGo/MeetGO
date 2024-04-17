@@ -1,7 +1,7 @@
 'use client';
 import { Message } from '@/types/chatTypes';
 import { clientSupabase } from '@/utils/supabase/client';
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { User } from '@supabase/supabase-js';
 import ChatScroll from './ChatScroll';
 import NewChatAlert from './NewChatAlert';
