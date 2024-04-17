@@ -42,7 +42,7 @@ const AcceptanceRoomButtons = ({ room_id }: { room_id: string }) => {
   };
 
   return (
-    <div className="h-100 w-40 flex flex-row justify-end gap-8">
+    <div className="h-[100px] w-[100px] text-center">
       <button
         // disabled={participants?.length === maximumParticipants ? false : true}
         onClick={() => gotoChattingRoom()}

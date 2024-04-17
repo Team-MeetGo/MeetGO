@@ -59,10 +59,6 @@ function RoomInformation({ room_id }: { room_id: string }) {
     }
     router.push(`/meetingRoom`);
   };
-  //뒤로가기: 로비로
-  window.onpopstate = () => {
-    if (confirm('로비로 이동하시겠습니까?')) router.replace('/meetingRoom');
-  };
 
   return (
     <div className="flex flex-col items-center justify-content">

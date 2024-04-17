@@ -11,21 +11,20 @@ import MemberNumberSelection from './MemberNumberSelection';
 import RegionSelection from './RegionSelection';
 
 import type { MeetingRoomType } from '@/types/roomTypes';
+import { UUID } from 'crypto';
 function MeetingRoomList() {
   const [page, setPage] = useState(1);
   const [scrollPage, setScrollPage] = useState(0);
   const { data: user, isPending, isError, error } = useGetUserDataQuery();
   const { data: meetingRoomList } = useRecruitingQuery(String(user?.user_id));
   const scrollRef = useRef<HTMLInputElement>(null);
-
   const myRoomList = useMyroomQuery(String(user?.user_id));
-  const filteredMyRoomList = myRoomList?.map((r) => r.room);
+  const filteredMyRoomList = myRoomList?.map((room) => room.room);
   const { selectRegion, selectMemberNumber } = useSearchRoomStore();
 
   const myMsgData = useMyMsgData(user?.user_id!);
-  console.log('myRoomList', myRoomList);
-  console.log('filteredMyRoomList', filteredMyRoomList);
 
+  // meetingRoomList 중에서 myRoomList가 없는 것을 뽑아내기
   const otherRooms = meetingRoomList?.filter(function (room: MeetingRoomType) {
     const foundItem = filteredMyRoomList?.find((r) => r?.room_id === room?.room_id);
     if (foundItem) {
@@ -47,7 +46,6 @@ function MeetingRoomList() {
   const [regionMemberSelectedRoomScroll, setRegionMemberSelectedRoomScroll] = useState<MeetingRoomType[]>([]);
   const nextpage = scrollPage * 3 + 3;
   const pagecondition = otherRooms!.length > nextpage ? nextpage : otherRooms!.length + 1;
-  console.log('pagecondition', pagecondition);
   const viewCards = () => {
     if (otherRooms) {
       const otherRoomsViewCards = otherRooms.slice(0, pagecondition);
@@ -64,9 +62,22 @@ function MeetingRoomList() {
       //     setRegionMemberSelectedRoomScroll(regionMemberNumberSelectedOtherRoomsViewCards);
     }
   };
-
+  // const nowPageRoomOrder = page * 3 - 3;
+  // useEffect(() => {
+  //   const participatedRoom = () => {
+  //     if (filteredMyRoomList === undefined || filteredMyRoomList === null) return;
+  //     else if (page !== 1 && filteredMyRoomList.length > nowPageRoomOrder) {
+  //       const viewRooms = filteredMyRoomList.splice(nowPageRoomOrder, nowPageRoomOrder + 3);
+  //       setNowViewRoomOrder(viewRooms as MeetingRoomType[]);
+  //     } else {
+  //       const viewRooms = filteredMyRoomList.splice(nowPageRoomOrder);
+  //       setNowViewRoomOrder(viewRooms as MeetingRoomType[]);
+  //     }
+  //   };
+  //   participatedRoom();
+  // }, [page]);
   const nextPage = () => {
-    if (myRoomList && myRoomList.length / 3 <= page) {
+    if (filteredMyRoomList && filteredMyRoomList.length / 3 <= page) {
       return setPage(1);
     }
     setPage((page) => page + 1);
@@ -77,7 +88,6 @@ function MeetingRoomList() {
     }
     setPage((page) => page - 1);
   };
-
   const currentRef = scrollRef.current;
 
   useEffect(() => {
@@ -139,7 +149,7 @@ function MeetingRoomList() {
                 filteredMyRoomList?.map((room, index) => {
                   if (index < 3 * page && index >= 3 * (page - 1))
                     return (
-                      <div key={room?.room_id}>
+                      <div key={room.room_id}>
                         <div className="flex gap-2">
                           {myMsgData && myMsgData.find((item) => item.room_id === room?.room_id) ? (
                             <h1>
