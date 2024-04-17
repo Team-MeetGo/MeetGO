@@ -1,3 +1,5 @@
+'use client';
+
 import { useState, ChangeEvent, FormEvent } from 'react';
 import Image from 'next/image';
 import { Button, Checkbox, Modal, ModalBody, ModalContent, ModalHeader, useDisclosure } from '@nextui-org/react';

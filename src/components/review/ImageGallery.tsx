@@ -1,3 +1,5 @@
+'use client';
+
 import Image from 'next/image';
 import React, { useState } from 'react';
 import { GrNext, GrPrevious } from 'react-icons/gr';
