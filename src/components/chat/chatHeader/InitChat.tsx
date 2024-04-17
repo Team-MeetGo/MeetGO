@@ -15,7 +15,7 @@ const InitChat = ({ chatRoomId, allMsgs }: { user: User | null; chatRoomId: stri
   );
   const room = useRoomDataQuery(chatRoomId);
   const roomId = room?.roomId;
-  // console.log('allMsgs => ', allMsgs);
+
   useEffect(() => {
     // 채팅방 isActive 상태 구독
     const channel = clientSupabase

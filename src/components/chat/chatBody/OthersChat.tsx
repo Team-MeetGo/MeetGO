@@ -54,7 +54,30 @@ const OthersChat = ({ msg, idx, lastDivRefs }: { msg: Message; idx: number; last
 
           <div className="flex flex-col gap-1.5">
             <div className="gap-2 mr-auto">
-              <div className="border border-gray1 rounded-md py-1.5 px-[8px] font-light">{msg.message}</div>
+              {/* <div className="border border-gray1 rounded-md py-1.5 px-[8px] font-light">{msg.message}</div> */}
+              {msg.message?.length ? (
+                <div className="rounded-md bg-mainColor py-1.5 px-[8px] text-right text-white font-extralight">
+                  {msg.message}
+                </div>
+              ) : null}
+
+              {/* 다른 이름으로 저장하면 안뜨는 버그 */}
+              {msg.imgs?.length ? (
+                <div className="h-[100px] flex flex-wrap justify-start w-72">
+                  {msg.imgs.map((url) => (
+                    <div key={url} className="w-36 h-[100px] relative">
+                      <Image
+                        src={url}
+                        alt="채팅 이미지"
+                        fill={true}
+                        style={{ objectFit: 'fill', borderRadius: '3px' }}
+                        sizes="500px"
+                        priority={true}
+                      />
+                    </div>
+                  ))}
+                </div>
+              ) : null}
             </div>
             {idx < messages.length - 1 && msg.send_from === messages[idx + 1].send_from ? null : (
               <div className="mt-auto text-xs text-gray-400">

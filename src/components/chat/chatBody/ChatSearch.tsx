@@ -17,7 +17,6 @@ const ChatSearch = ({ isScrollTop }: { isScrollTop: boolean }) => {
         .filter((m) => m.message?.includes(searchWord))
         .map((messages) => messages.message_id)
         .reverse();
-
       const idsDivs = filteredIds.map((id) => {
         return document.getElementById(`${messages.find((m) => m.message_id === id)?.message_id}`);
       });
@@ -50,6 +49,7 @@ const ChatSearch = ({ isScrollTop }: { isScrollTop: boolean }) => {
       setUpDownCount((prev) => prev + 1);
     }
   };
+
   const handleSearchDown = () => {
     if (doneSearchDivs) {
       const theDiv = doneSearchDivs[upDownCount - 2];
