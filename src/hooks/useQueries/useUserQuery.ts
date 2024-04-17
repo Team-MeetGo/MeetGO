@@ -1,4 +1,3 @@
-'use client';
 import { fetchUserData, fetchUserLikePost, fetchUserPost } from '@/query/user/userQueryFns';
 import { USER_DATA_QUERY_KEY, USER_LIKE_POST_QUERY_KEY, USER_POST_QUERY_KEY } from '@/query/user/userQueryKeys';
 import { profileCount } from '@/store/userStore';
@@ -12,8 +11,6 @@ export const useGetUserDataQuery = () => {
   });
 
   const isLoggedIn = data?.user_id ? true : false;
-  console.log(isLoggedIn, 'isLoggedIn');
-  console.log(data, '데이터 확인');
 
   return { data, isPending, isError, error, isLoggedIn };
 };

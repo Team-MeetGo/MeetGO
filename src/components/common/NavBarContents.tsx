@@ -26,10 +26,6 @@ const NavBarContents = () => {
   const router = useRouter();
   const isValidate = user?.isValidate;
 
-  useEffect(() => {
-    console.log(isLoggedIn, 'useEffect');
-  }, [isLoggedIn]);
-
   if (isPending) {
     return <span>Loading...</span>;
   }
@@ -51,8 +47,6 @@ const NavBarContents = () => {
       alert('미팅을 하고 싶다면 학교 인증 ㄱㄱ');
     }
   };
-
-  console.log('리렌더링 ㅇㅇ진짜?', isLoggedIn);
 
   return (
     <Navbar className="py-[20px] h-auto">
@@ -111,7 +105,7 @@ const NavBarContents = () => {
             </Dropdown>
           </div>
         ) : (
-          <div>
+          <div className="flex gap-2">
             <Link
               href="/login"
               className="bg-white rounded-[12px] px-[20px] py-[12px] text-[18px] text-[#252642] font-medium"

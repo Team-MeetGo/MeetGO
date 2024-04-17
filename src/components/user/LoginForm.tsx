@@ -73,7 +73,6 @@ const LoginForm = () => {
       });
       if (session) {
         // 캐시 무효화
-
         showModal();
       } else if (error) throw error;
     } catch (error: any) {

@@ -18,6 +18,5 @@ export const useAvatarUpdateMutation = () =>
       queryClient.invalidateQueries({
         queryKey: [USER_DATA_QUERY_KEY]
       });
-      console.log('성공한건지 확인용');
     }
   });
