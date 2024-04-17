@@ -10,17 +10,13 @@ import {
   useUpdateMeetingLocationMutation
 } from '@/hooks/useMutation/useMeetingLocationMutation';
 import { useGetUserDataQuery } from '@/hooks/useQueries/useUserQuery';
+import { MapProps } from '@/types/sideBarTypes';
 
 declare global {
   interface Window {
     kakao: any;
   }
 }
-
-interface MapProps {
-  chatRoomId: string;
-}
-
 const Map: React.FC<MapProps> = ({ chatRoomId }) => {
   const mapRef = useRef<string>();
   const [map, setMap] = useState<any>();

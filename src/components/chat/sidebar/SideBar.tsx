@@ -5,10 +5,7 @@ import Map from '@/components/chat/sidebar/Map';
 import { useChatDataQuery } from '@/hooks/useQueries/useChattingQuery';
 import { Card, CardBody } from '@nextui-org/react';
 import { IoIosArrowForward, IoIosArrowBack } from 'react-icons/io';
-
-interface SideBarProps {
-  chatRoomId: string;
-}
+import { SideBarProps } from '@/types/sideBarTypes';
 
 const SideBar: React.FC<SideBarProps> = ({ chatRoomId }) => {
   const [isSidebarOpen, setIsSidebarOpen] = useState<boolean>(true);
