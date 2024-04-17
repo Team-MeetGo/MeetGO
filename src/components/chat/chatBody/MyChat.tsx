@@ -101,6 +101,7 @@ const MyInfoWrapper = ({
             fill={true}
             sizes="100px"
             priority={true}
+            className="transition-transform"
           />
         ) : (
           <AvatarDefault />

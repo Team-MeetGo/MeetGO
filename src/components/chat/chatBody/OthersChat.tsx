@@ -54,7 +54,6 @@ const OthersChat = ({ msg, idx, lastDivRefs }: { msg: Message; idx: number; last
 
           <div className="flex flex-col gap-1.5">
             <div className="gap-2 mr-auto">
-              {/* <div className="border border-gray1 rounded-md py-1.5 px-[8px] font-light">{msg.message}</div> */}
               {msg.message?.length ? (
                 <div className="rounded-md bg-mainColor py-1.5 px-[8px] text-right text-white font-extralight">
                   {msg.message}
@@ -116,6 +115,7 @@ const ParticipantsInfoWrapper = ({
               fill={true}
               sizes="500px"
               priority={true}
+              className="transition-transform"
             />
           ) : (
             <AvatarDefault />

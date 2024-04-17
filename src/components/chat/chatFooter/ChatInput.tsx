@@ -17,7 +17,6 @@ const ChatInput = () => {
   const makeUrl = async () => {
     let chatImgsUrls = [];
     for (const imgFile of imgs) {
-      const uuid = crypto.randomUUID();
       const imgUrlPath = `${chatRoomId}/${user?.user_id}/${imgFile.name}`;
       const { data: imgUrlData, error } = await clientSupabase.storage.from('chatImg').upload(imgUrlPath, imgFile, {
         cacheControl: '3600',
