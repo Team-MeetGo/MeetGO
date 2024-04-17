@@ -26,7 +26,7 @@ export default function RootLayout({
           <QueryProvider>
             <NavBar />
             {children}
-            <ReactQueryDevtools initialIsOpen={false} />
+            <ReactQueryDevtools initialIsOpen={true} />
           </QueryProvider>
         </NextProvider>
       </body>
