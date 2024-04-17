@@ -29,7 +29,7 @@ const MyChat = ({ msg, idx, lastDivRefs }: { msg: Message; idx: number; lastDivR
           )}
 
           <div className="flex gap-2 ml-auto">
-            <div className="flex flex-col gap-1.5">
+            <div className="flex flex-col">
               <div className="flex gap-2 ml-auto">
                 <div>
                   <ChatDeleteDropDown msg={msg} />
@@ -40,10 +40,11 @@ const MyChat = ({ msg, idx, lastDivRefs }: { msg: Message; idx: number; lastDivR
                   </div>
                 ) : null}
 
+                {/* 다른 이름으로 저장하면 안뜨는 버그 */}
                 {msg.imgs?.length ? (
-                  <div className="h-10">
+                  <div className="h-[100px] flex flex-wrap justify-end">
                     {msg.imgs.map((url) => (
-                      <div key={url} className="w-[150px] relative">
+                      <div key={url} className="w-36 h-[100px] relative">
                         <Image
                           src={url}
                           alt="채팅 이미지"
@@ -94,7 +95,7 @@ const MyInfoWrapper = ({
       <div className=" h-[52px] w-[52px] ml-auto">
         {user?.avatar ? (
           <Image
-            src={user?.avatar as string}
+            src={user.avatar as string}
             alt="Avatar"
             style={{ objectFit: 'cover' }}
             fill={true}

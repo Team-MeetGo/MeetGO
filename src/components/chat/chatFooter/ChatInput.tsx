@@ -21,7 +21,8 @@ const ChatInput = () => {
   const makeUrl = async () => {
     let chatImgsUrls = [];
     for (const imgFile of imgs) {
-      const imgUrlPath = `${chatRoomId}/${user?.user_id}/${imgFile.name}`;
+      const uuid = crypto.randomUUID();
+      const imgUrlPath = `${chatRoomId}/${user?.user_id}/${uuid}${imgFile.name}`;
       const { data: imgUrlData, error } = await clientSupabase.storage.from('chatImg').upload(imgUrlPath, imgFile, {
         cacheControl: '3600',
         upsert: true
@@ -34,16 +35,18 @@ const ChatInput = () => {
   };
 
   const handleSubmit = async () => {
+    setImgs([]);
     if (user && chatRoomId && (message.length || imgs.length)) {
       const { error } = await clientSupabase.from('messages').insert({
         send_from: user?.user_id,
         message: message.length ? message : null,
         chatting_room_id: chatRoomId,
-        imgs: imgs.length ? await makeUrl() : []
+        imgs: imgs.length ? await makeUrl() : null
       });
       if (error) {
         console.error(error.message);
         alert('새로운 메세지 추가 실패');
+      } else {
       }
     }
   };
@@ -67,7 +70,6 @@ const ChatInput = () => {
 
   return (
     <>
-      <button onClick={makeUrl}>올라가나 버튼</button>
       <div>
         <form
           className="p-5 flex gap-[10px]"
