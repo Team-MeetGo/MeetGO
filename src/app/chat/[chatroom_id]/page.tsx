@@ -24,7 +24,7 @@ const ChatPage = async ({ params }: { params: { chatroom_id: string } }) => {
 
   return (
     <Suspense fallback={<ChatLoading />}>
-      <div className="flex felx-row">
+      <div className="relative flex felx-row">
         <InitChat user={user} chatRoomId={chatRoomId} allMsgs={allMsgs ?? []} />
         <SideBar chatRoomId={chatRoomId} />
         <div className="w-full max-w-2xl mr-auto h-screen">

@@ -6,12 +6,9 @@ import { ITEM_INTERVAL } from '@/utils/constant';
 import { clientSupabase } from '@/utils/supabase/client';
 import { User } from '@supabase/supabase-js';
 import { useRouter } from 'next/navigation';
-import { Suspense, useEffect } from 'react';
-import ChatHeader from './ChatHeader';
-import ChatList from '../chatBody/ChatList';
-import ChatInput from '../chatFooter/ChatInput';
+import { useEffect } from 'react';
 
-const InitChat = ({ user, chatRoomId, allMsgs }: { user: User | null; chatRoomId: string; allMsgs: Message[] }) => {
+const InitChat = ({ chatRoomId, allMsgs }: { user: User | null; chatRoomId: string; allMsgs: Message[] }) => {
   const router = useRouter();
   const { messages, chatState, isRest, setChatState, setMessages, setChatRoomId, setHasMore } = chatStore(
     (state) => state

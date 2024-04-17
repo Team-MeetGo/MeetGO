@@ -12,7 +12,6 @@ interface SideBarProps {
 
 const SideBar: React.FC<SideBarProps> = ({ chatRoomId }) => {
   const [isSidebarOpen, setIsSidebarOpen] = useState<boolean>(true);
-
   //채팅방 정보 가져오기
   const chat = useChatDataQuery(chatRoomId);
   const meetingTime = chat?.[0]?.meeting_time;
@@ -54,7 +53,7 @@ const SideBar: React.FC<SideBarProps> = ({ chatRoomId }) => {
             <Map chatRoomId={chatRoomId} />
           </div>
         </div>
-        <div className="h-20 flex items-center justify-center cursor-pointer shadow-xl" onClick={toggleSidebar}>
+        <div className=" h-20 flex items-center justify-center cursor-pointer shadow-xl" onClick={toggleSidebar}>
           {isSidebarOpen ? (
             <IoIosArrowBack size={25} color="#A1A1AA" />
           ) : (

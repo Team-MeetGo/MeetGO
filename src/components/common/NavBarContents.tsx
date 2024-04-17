@@ -48,7 +48,7 @@ const NavBarContents = () => {
   };
 
   return (
-    <Navbar className="py-[20px] h-auto">
+    <Navbar className="flex flex-row py-[20px] h-auto">
       <NavbarBrand>
         <Link href="/" className="max-w-[150px]">
           <Image
@@ -62,7 +62,7 @@ const NavBarContents = () => {
           />
         </Link>
       </NavbarBrand>
-      <NavbarContent className="hidden sm:flex gap-4 h-auto" justify="center">
+      <NavbarContent className="hidden sm:flex gap-11 h-auto">
         <NavbarItem>
           <Link color="foreground" href={isValidate ? '/meetingRoom' : '/mypage'} onClick={() => checkIsValidate()}>
             Lobby
