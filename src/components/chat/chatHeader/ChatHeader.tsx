@@ -65,7 +65,7 @@ const ChatHeader = ({ chatRoomId }: { chatRoomId: string }) => {
   };
 
   // 해당 유저가 남긴 채팅창의 이미지들 지우기
-  const deleteStorageBucket = async () => {
+  const deleteTheUserImgs = async () => {
     const { error: imgStorageErr, data: usersAllImgList } = await clientSupabase.storage
       .from('chatImg')
       .list(`${chatRoomId}/${user?.user_id}`);
@@ -93,7 +93,7 @@ const ChatHeader = ({ chatRoomId }: { chatRoomId: string }) => {
       await getRidOfMe();
       await handleIsRest();
       await deleteLastMsg();
-      await deleteStorageBucket();
+      await deleteTheUserImgs();
       await updateRoomState();
       setMessages([]);
     } else {
