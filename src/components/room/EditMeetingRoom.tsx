@@ -32,6 +32,7 @@ function EditMeetingRoom({ room }: { room: MeetingRoomType }) {
   const [selected, setSelected] = useState<Set<string>>(new Set([]));
   const room_id = room.room_id;
   const favoriteArray = Array.from(selected);
+  //수정된 미팅룸 설정
   const editedMeetingRoom: UpdateRoomType = {
     room_title: title,
     feature: favoriteArray,
@@ -40,36 +41,23 @@ function EditMeetingRoom({ room }: { room: MeetingRoomType }) {
     room_id,
     region: String(roomRegion)
   };
+  //미팅룸 업데이트
   const roomUpdateMutation = useUpdateRoom({ editedMeetingRoom, user_id });
-
   const editMeetingRoom = async (e: any) => {
     e.preventDefault();
     if (!title || !selected || !location || memberNumber === '인원' || roomRegion === '지역') {
       alert('모든 항목은 필수입니다.');
-    } else {
+    } else if (title && selected && location && memberNumber !== '인원수' && roomRegion) {
       await roomUpdateMutation.mutateAsync();
-      setTitle('');
-      setLocation('');
-      resetMemberNumber();
-      resetRoomRegion();
-      setSelected(new Set([]));
     }
   };
-
-  const cancelMakingMeetingRoom = () => {
-    setTitle('');
-    setLocation('');
-    resetMemberNumber();
-    resetRoomRegion();
-    setSelected(new Set([]));
-  };
-
+  //수정전 데이터 불러오기
   const beforeData = () => {
     setMemberNumber(room.member_number);
     setRoomRegion(room.region);
     setSelected(new Set(room.feature));
   };
-
+  //방 컨셉을 선택합니다.
   const handleSelect = (value: string) => {
     if (selected.size > 4) {
       alert('최대 4개까지 선택 가능합니다.');
@@ -77,7 +65,7 @@ function EditMeetingRoom({ room }: { room: MeetingRoomType }) {
     }
     setSelected(new Set(value));
   };
-
+  //방 컨셉을 삭제합니다.
   const handleDelete = (value: string) => {
     const newSelected = new Set(selected);
     newSelected.delete(value);
@@ -173,7 +161,7 @@ function EditMeetingRoom({ room }: { room: MeetingRoomType }) {
                   </div>
                 </ModalBody>
                 <ModalFooter>
-                  <Button color="danger" variant="light" onPress={onClose} onClick={() => cancelMakingMeetingRoom()}>
+                  <Button color="danger" variant="light" onPress={onClose}>
                     취소
                   </Button>
                   <Button type="submit" className="bg-violet-300" onPress={onClose}>
