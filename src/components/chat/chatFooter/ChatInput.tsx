@@ -18,7 +18,26 @@ const ChatInput = () => {
   console.log('imgs =>', imgs);
   console.log(imgs.length);
 
+  const makeUrl = async () => {
+    let chatImgs = [];
+    for (const imgFile of imgs) {
+      const uuid = crypto.randomUUID;
+      const imgUrlPath = `${imgFile.name}/${uuid}`;
+      const { data: imgUrlData, error } = await clientSupabase.storage.from('chatImg').upload(imgUrlPath, imgFile, {
+        cacheControl: '3600',
+        upsert: true
+      });
+      if (error) console.error('채팅이미지 업로드 실패', error.message);
+      const { data: imgUrls } = await clientSupabase.storage.from('chatImg').getPublicUrl(imgUrlData?.path as string);
+      chatImgs.push(imgUrls);
+    }
+    console.log('chatImgs => ', chatImgs);
+    return chatImgs;
+  };
+
   const handleSubmit = async () => {
+    // const{data: imgUrl, error} = await clientSupabase.storage.from("chatInput").upload()
+
     if (user && chatRoomId && (message.length || imgs.length)) {
       const { error } = await clientSupabase.from('messages').insert({
         send_from: user?.user_id,
@@ -42,7 +61,7 @@ const ChatInput = () => {
         alert('이미지 추가는 최대 4장까지 가능합니다.');
       } else {
         setImgs([...imgs, ...newImgs]);
-        console.log(URL.createObjectURL(files[0]));
+        // console.log(URL.createObjectURL(files[0]));
       }
     }
   };
@@ -53,6 +72,7 @@ const ChatInput = () => {
 
   return (
     <>
+      <button onClick={makeUrl}>올라가나 버튼</button>
       <div>
         <form
           className="p-5 flex gap-[10px]"

@@ -106,7 +106,7 @@ const NewReview = () => {
       <Modal isOpen={isOpen} onClose={handleClose} placement="top-center" className="bg-purpleSecondary">
         <ModalContent
           className="w-full flex justify-center items-center"
-          style={{ maxWidth: '1116px', minHeight: '830px' }}
+          style={{ maxWidth: '1000px', minHeight: '830px' }}
         >
           {(onClose) => (
             <>

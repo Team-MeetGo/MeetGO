@@ -40,13 +40,15 @@ const MyChat = ({ msg, idx, lastDivRefs }: { msg: Message; idx: number; lastDivR
                   </div>
                 ) : null}
 
-                {msg.imgs?.length ? (
+                {/* {msg.imgs?.length ? (
                   <div className="w-10 h-10">
                     {msg.imgs.map((img) => (
-                      <img key={img} src={`/images/${img}`} alt=""></img>
+                     <Image
+                     src=
+                     />
                     ))}
                   </div>
-                ) : null}
+                ) : null} */}
               </div>
 
               {idx < messages.length - 1 && msg.send_from === messages[idx + 1].send_from ? null : (
