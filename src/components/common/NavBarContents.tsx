@@ -18,12 +18,17 @@ import { useGetUserDataQuery } from '@/hooks/useQueries/useUserQuery';
 import { useQueryClient } from '@tanstack/react-query';
 import { USER_DATA_QUERY_KEY } from '@/query/user/userQueryKeys';
 import Link from 'next/link';
+import { useEffect } from 'react';
 
 const NavBarContents = () => {
   const queryClient = useQueryClient();
   const { data: user, isPending, isError, error, isLoggedIn } = useGetUserDataQuery();
   const router = useRouter();
   const isValidate = user?.isValidate;
+
+  useEffect(() => {
+    console.log(isLoggedIn, 'useEffect');
+  }, [isLoggedIn]);
 
   if (isPending) {
     return <span>Loading...</span>;
@@ -46,6 +51,8 @@ const NavBarContents = () => {
       alert('미팅을 하고 싶다면 학교 인증 ㄱㄱ');
     }
   };
+
+  console.log('리렌더링 ㅇㅇ진짜?', isLoggedIn);
 
   return (
     <Navbar className="py-[20px] h-auto">

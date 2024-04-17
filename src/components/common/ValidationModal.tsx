@@ -1,9 +1,13 @@
+'use client';
 import { useRouter } from 'next/navigation';
 import { useModalStore } from '@/store/modalStore';
+import { USER_DATA_QUERY_KEY } from '@/query/user/userQueryKeys';
+import { useQueryClient } from '@tanstack/react-query';
 
 export const ValidationModal = () => {
   const router = useRouter();
   const { isOpen, type, name, text, onFunc, closeModal } = useModalStore();
+  const queryClient = useQueryClient();
 
   if (!isOpen) return null;
 
@@ -30,6 +34,9 @@ export const ValidationModal = () => {
                     if (type === 'alert' && text === '로그인 되었습니다.') {
                       closeModal();
                       router.replace('/');
+                      queryClient.invalidateQueries({
+                        queryKey: [USER_DATA_QUERY_KEY]
+                      });
                     } else if (type === 'alert' && text === '회원가입 되었습니다.') {
                       closeModal();
                       router.replace('/');

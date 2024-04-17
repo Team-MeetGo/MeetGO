@@ -12,6 +12,8 @@ export const useGetUserDataQuery = () => {
   });
 
   const isLoggedIn = data?.user_id ? true : false;
+  console.log(isLoggedIn, 'isLoggedIn');
+  console.log(data, '데이터 확인');
 
   return { data, isPending, isError, error, isLoggedIn };
 };
