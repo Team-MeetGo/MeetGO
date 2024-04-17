@@ -1,6 +1,6 @@
 'use client';
 import meetingRoomHandler from '@/hooks/custom/room';
-// import MeetGoLogo from '../../utils/icons/meetgo-logo.png';
+import MeetGoLogoPurple from '../../utils/icons/meetgo-logo-purple.png';
 import { useAddRoomMemberMutation, useUpdateRoomStatusClose } from '@/hooks/useMutation/useMeetingMutation';
 import { useAlreadyChatRoomQuery, useRoomParticipantsQuery } from '@/hooks/useQueries/useMeetingQuery';
 import { useGetUserDataQuery } from '@/hooks/useQueries/useUserQuery';
@@ -14,6 +14,7 @@ import DeleteMeetingRoom from './DeleteMeetingRoom';
 import EditMeetingRoom from './EditMeetingRoom';
 
 import type { MeetingRoomType } from '@/types/roomTypes';
+import Image from 'next/image';
 function MeetingRoom({ room }: { room: MeetingRoomType }) {
   const { room_id, room_status, room_title, member_number, location, feature, leader_id, region } = room;
   const router = useRouter();
@@ -78,18 +79,21 @@ function MeetingRoom({ room }: { room: MeetingRoomType }) {
       }
     >
       <div className="w-[354px] h-[241px] rounded-xl flex flex-col justify-start hover:cursor-pointer">
-        <div className="px-[24px]">
+        <div className="pl-[24px]">
           <div className="h-[24px]"></div>
-          <div className="flex flex-row justify-between align-middle justify-items-center relative">
-            <div className="text-[16px] flex flex-row justify-between align-middle justify-items-center">
-              <IoFemale className="w-[16px] fill-hotPink" /> {`${countFemale}/${genderMaxNumber} |`}
-              <IoMale className="w-[16px] fill-blue" /> {`${countMale}/${genderMaxNumber} | ${room_status}`}
+
+          <div className="flex flex-row justify-between align-middle justify-items-center m-auto">
+            <div>
+              <div className="text-[16px] flex flex-row justify-between align-middle justify-items-center">
+                <IoFemale className="w-[16px] m-auto fill-hotPink" /> {`${countFemale}/${genderMaxNumber} |`}
+                <IoMale className="w-[16px] m-auto fill-blue" /> {`${countMale}/${genderMaxNumber} | ${room_status}`}
+              </div>
             </div>
-            <div className="absolute right-[10px] flex justify-items-end">
+            <div className="pr-[8px]">
               {alreadyChatRoom && alreadyChatRoom.length > 0 ? (
-                <IoChatbubblesOutline className="h-6 w-6 m-2 fill-gray2" />
+                <IoChatbubblesOutline className="h-6 w-6 m-auto fill-gray2" />
               ) : emptySeat === 1 ? (
-                <BsFire className="h-6 w-6 m-2 fill-hotPink" />
+                <BsFire className="h-6 w-6 m-auto fill-hotPink" />
               ) : user_id === leader_id ? (
                 <div>
                   <button
@@ -97,7 +101,7 @@ function MeetingRoom({ room }: { room: MeetingRoomType }) {
                       setOpen((open) => !open);
                     }}
                   >
-                    <HiOutlineDotsVertical className="h-6 w-6 m-2" />
+                    <HiOutlineDotsVertical className="h-6 w-6 m-auto" />
                   </button>
 
                   {open && (
@@ -124,17 +128,16 @@ function MeetingRoom({ room }: { room: MeetingRoomType }) {
             </div>
             <div className="h-[40px]"></div>
             <div>
-              {/* <Image
-                src={MeetGoLogo}
+              <Image
+                src={MeetGoLogoPurple}
                 alt="MeetGo Logo"
                 style={{
                   width: 'auto',
                   height: '18px'
                 }}
-                priority={true}
-              /> */}
+              />
             </div>
-            <div className="h-[8px]"></div>
+            <div className="h-[16px]"></div>
 
             <div className="text-[14px] flex flex-row gap-[4px]">
               {feature &&
