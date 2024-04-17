@@ -22,10 +22,10 @@ const MyChat = ({ msg, idx, lastDivRefs }: { msg: Message; idx: number; lastDivR
         <div className="w-80 flex flex-col gap-1">
           {isItMe(idx, messages) ? (
             !isNextDay(idx, messages) ? null : (
-              <div className="font-bold ml-auto">{msg.nickname}</div>
+              <div className="font-bold ml-auto">{user?.nickname}</div>
             )
           ) : (
-            <div className="font-bold ml-auto">{msg.nickname}</div>
+            <div className="font-bold ml-auto">{user?.nickname}</div>
           )}
 
           <div className="flex gap-2 ml-auto">
