@@ -10,8 +10,8 @@ import { useParticipantsQuery } from '@/hooks/useQueries/useChattingQuery';
 import type { UserType } from '@/types/roomTypes';
 
 const Member = ({ room_id }: { room_id: string }) => {
-  const participants = useParticipantsQuery(room_id as string);
-  const [members, setMembers] = useState<UserType[]>(participants);
+  const participants = useRoomParticipantsQuery(room_id as string);
+  const [members, setMembers] = useState<UserType[]>(participants as UserType[]);
   const { data: roomInformation } = useRoomInfoWithRoomIdQuery(room_id);
   const leaderMember = roomInformation?.leader_id;
   const [leader, setLeader] = useState(leaderMember);

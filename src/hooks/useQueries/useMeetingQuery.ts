@@ -19,7 +19,7 @@ import { useEffect } from 'react';
 //현재 모집중인 방
 export const useRecruitingQuery = (user_id: string) => {
   const data = useSuspenseQuery({
-    queryKey: RECRUTING_ROOMDATA,
+    queryKey: ROOM_MEMBER,
     queryFn: fetchRecruitingRoom
   });
   return data;

@@ -6,14 +6,17 @@ import { IoIosSearch } from 'react-icons/io';
 import { useParticipantsQuery, useRoomDataQuery } from '@/hooks/useQueries/useChattingQuery';
 import { useGetUserDataQuery } from '@/hooks/useQueries/useUserQuery';
 import { Avatar, AvatarGroup } from '@nextui-org/react';
+import { useUpdateRoomStatusOpen } from '@/hooks/useMutation/useMeetingMutation';
 
 const ChatHeader = ({ chatRoomId }: { chatRoomId: string }) => {
   const { setMessages, setisRest, setSearchMode } = chatStore((state) => state);
   const { data: user } = useGetUserDataQuery();
   const room = useRoomDataQuery(chatRoomId);
-  const roomId = room?.roomId;
+  const roomId = room?.roomId as string;
+  const userId = user?.user_id as string;
   const roomData = room?.roomData;
   const participants = useParticipantsQuery(roomId as string);
+  const updateRoomStatusOpenMutation = useUpdateRoomStatusOpen({ roomId, userId });
 
   const UpdateIsActive = async () => {
     // 채팅방 isActive 상태를 false로 변경
@@ -63,6 +66,9 @@ const ChatHeader = ({ chatRoomId }: { chatRoomId: string }) => {
       await UpdateIsActive();
       await getRidOfMe();
       await handleIsRest();
+      //Room의 상태: 모집중, 색:흰색으로 변환
+      await updateRoomStatusOpenMutation.mutateAsync();
+
       setMessages([]);
     } else {
       return;

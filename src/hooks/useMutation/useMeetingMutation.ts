@@ -18,18 +18,18 @@ export const useUpdateRoomStatusClose = ({ room_id, user_id }: { room_id: string
   const roomStatusCloseMutation = useMutation({
     mutationFn: async () => await updateRoomStatusClose(room_id),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: [ROOMLIST, user_id] });
+      queryClient.invalidateQueries({ queryKey: [ROOM_MEMBER, user_id] });
     }
   });
   return roomStatusCloseMutation;
 };
 
-export const useUpdateRoomStatusOpen = ({ room_id, user_id }: { room_id: string; user_id: string }) => {
+export const useUpdateRoomStatusOpen = ({ roomId, userId }: { roomId: string; userId: string }) => {
   const queryClient = useQueryClient();
   const roomStatusOpenMutation = useMutation({
-    mutationFn: async () => await updateRoomStatusOpen(room_id),
+    mutationFn: () => updateRoomStatusOpen(roomId),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: [ROOMLIST, user_id] });
+      queryClient.invalidateQueries({ queryKey: [ROOM_MEMBER, userId] });
     }
   });
   return roomStatusOpenMutation;
@@ -78,7 +78,7 @@ export const useAddRoomMemberMutation = ({ user_id, room_id }: { user_id: string
   const queryClient = useQueryClient();
 
   const roomMemberMutation = useMutation({
-    mutationFn: async () => await addMember({ user_id, room_id }),
+    mutationFn: () => addMember({ user_id, room_id }),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: [ROOM_MEMBER, room_id] });
     }
