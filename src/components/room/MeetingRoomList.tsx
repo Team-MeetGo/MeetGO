@@ -120,56 +120,58 @@ function MeetingRoomList() {
 
   return (
     <>
-      <article className="h-[366px] mt-[88px] border-b border-gray2 min-w-[1116px] max-w-[1440px]">
-        <div className="flex flex-row w-full justify-between">
-          <div className="text-[40px] font-semibold ml-[56px]">참여 중</div>
-          <div className="flex flex-row align-middle justify-center gap-4 mr-[56px]">
-            <div className="flex flex-col align-middle justify-center text-gray2">
-              <button
-                className="h-full"
-                onClick={() => {
-                  onReload();
-                }}
-              >
-                <IoMdRefresh className="h-6 w-6 m-2" />
-              </button>
-              <div className="text-[14px]">새로고침</div>
+      <div className="fixed z-50 bg-white">
+        <article className="h-[366px] mt-[88px] border-b border-gray2 min-w-[1116px] max-w-[1540px]">
+          <div className="flex flex-row w-full justify-between">
+            <div className="text-[40px] font-semibold ml-[56px]">참여 중</div>
+            <div className="flex flex-row align-middle justify-center gap-4 mr-[56px]">
+              <div className="flex flex-col align-middle justify-center text-gray2">
+                <button
+                  className="h-full"
+                  onClick={() => {
+                    onReload();
+                  }}
+                >
+                  <IoMdRefresh className="h-6 w-6 m-2" />
+                </button>
+                <div className="text-[14px] text-center">New</div>
+              </div>
+              <MeetingRoomForm />
             </div>
-            <MeetingRoomForm />
           </div>
-        </div>
-        <div className="h-[24px]"></div>
-        <div className="w-full flex flex-row items-center justify-content">
-          <button onClick={() => beforePage()}>
-            <IoIosArrowBack className="h-[40px] w-[40px] m-[8px]" />
-          </button>
-          {
-            <div className="h-[241px] gap-[24px] grid grid-cols-3 w-full px-4">
-              {filteredMyRoomList !== null &&
-                filteredMyRoomList?.map((room, index) => {
-                  if (index < 3 * page && index >= 3 * (page - 1))
-                    return (
-                      <div key={room.room_id}>
-                        <div className="flex gap-2">
-                          {myMsgData && myMsgData.find((item) => item.room_id === room?.room_id) ? (
-                            <h1>
-                              {myMsgData.find((item) => item.room_id === room?.room_id)?.newMsgCount} 새로운 메세지 수
-                            </h1>
-                          ) : null}
+          <div className="h-[24px]"></div>
+          <div className="w-full flex flex-row items-center justify-content">
+            <button onClick={() => beforePage()}>
+              <IoIosArrowBack className="h-[40px] w-[40px] m-[8px]" />
+            </button>
+            {
+              <div className=" h-[241px] gap-[24px] grid grid-cols-3 w-full px-4">
+                {filteredMyRoomList !== null &&
+                  filteredMyRoomList?.map((room, index) => {
+                    if (index < 3 * page && index >= 3 * (page - 1))
+                      return (
+                        <div key={room?.room_id}>
+                          <div className="flex gap-2">
+                            {myMsgData && myMsgData.find((item) => item.room_id === room?.room_id) ? (
+                              <h1>
+                                {myMsgData.find((item) => item.room_id === room?.room_id)?.newMsgCount} 새로운 메세지 수
+                              </h1>
+                            ) : null}
+                          </div>
+                          {room && <MeetingRoom room={room} />}
                         </div>
-                        {room && <MeetingRoom room={room} />}
-                      </div>
-                    );
-                })}
-            </div>
-          }
-          <button onClick={() => nextPage()}>
-            <IoIosArrowForward className="h-[40px] w-[40px] m-[8px]" />
-          </button>
-        </div>
-        <div className="h-[40px]"></div>
-      </article>
-      <article className="flex flex-col items-center justify-content">
+                      );
+                  })}
+              </div>
+            }
+            <button onClick={() => nextPage()}>
+              <IoIosArrowForward className="h-[40px] w-[40px] m-[8px]" />
+            </button>
+          </div>
+          <div className="h-[40px]"></div>
+        </article>
+      </div>
+      <article className="z-10 flex flex-col items-center justify-content pt-[454px]">
         <div>
           <div className="flex flex-col justify-start min-w-[1116px] max-w-[1440px] mt-[40px]">
             <div className="text-[40px]	font-semibold">모집 중</div>

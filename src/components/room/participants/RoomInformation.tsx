@@ -70,8 +70,8 @@ function RoomInformation({ room_id }: { room_id: string }) {
 
               <div className="h-[46px] display display-col justify-items-center items-center gap-[8px]">
                 <div className="text-[16px] flex flex-row justify-between align-middle justify-items-center mt-[12px]">
-                  <IoFemale className="w-[16px] fill-hotPink" /> {`${countFemale}/${genderMaxNumber} |`}
-                  <IoMale className="w-[16px] fill-blue" /> {`${countMale}/${genderMaxNumber}`}
+                  <IoFemale className="w-[16px] m-auto fill-hotPink" /> {`${countFemale}/${genderMaxNumber} |`}
+                  <IoMale className="w-[16px] m-auto fill-blue" /> {`${countMale}/${genderMaxNumber}`}
                 </div>
                 <div className="text-[16px]">{`${region} ${location}`}</div>
               </div>
