@@ -88,6 +88,7 @@ const LoginForm = () => {
       } else if (error) throw error;
     } catch (error: any) {
       if (error.message.includes('Invalid login')) {
+        alert('아이디 또는 비밀번호를 확인해주세요.');
         setIsError(true);
       } else {
         alert('로그인 중 오류가 발생했습니다.');
@@ -127,10 +128,6 @@ const LoginForm = () => {
               이메일 저장
             </Checkbox>
             <div className="flex gap-[4px]">
-              <Link href="" className="text-gray3 text-[14px]">
-                아이디 찾기
-              </Link>
-              <p>|</p>
               <Link href="" className="text-gray3 text-[14px]">
                 비밀번호 찾기
               </Link>
