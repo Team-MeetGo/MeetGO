@@ -15,7 +15,11 @@ const ChatHeader = ({ chatRoomId }: { chatRoomId: string }) => {
   const roomData = room?.roomData;
   const participants = useParticipantsQuery(roomId as string);
 
-  const UpdateIsActive = async () => {
+  const handleSearchMode = () => {
+    setSearchMode();
+  };
+
+  const updateChatRoomIsActive = async () => {
     // 채팅방 isActive 상태를 false로 변경
     const { error: updateActiveErr } = await clientSupabase
       .from('chatting_room')
@@ -25,10 +29,6 @@ const ChatHeader = ({ chatRoomId }: { chatRoomId: string }) => {
       alert('채팅방 비활성화에 실패하였습니다.');
       console.error(updateActiveErr?.message);
     }
-  };
-
-  const handleSearchMode = () => {
-    setSearchMode();
   };
 
   const getRidOfMe = async () => {
@@ -58,11 +58,23 @@ const ChatHeader = ({ chatRoomId }: { chatRoomId: string }) => {
     }
   };
 
+  const deleteLastMsg = async () => {
+    const { error } = await clientSupabase.from('remember_last_msg').delete().eq('chatting_room_id', chatRoomId);
+    if (error) console.error('remember_last_msg table에 해당 채팅방 관련 정보 삭제 실패');
+  };
+
+  const updateRoomState = async () => {
+    const { error } = await clientSupabase.from('room').update({ room_status: '모집중' }).eq('room_id', String(roomId));
+    if (error) console.error('참가자 방 나갈 시 room_status 모집중으로 변경 실패', error.message);
+  };
+
   const getOutOfChatRoom = async () => {
     if (window.confirm('채팅창에서 한번 나가면 다시 입장할 수 없습니다. 그래도 나가시겠습니까?')) {
-      await UpdateIsActive();
+      await updateChatRoomIsActive();
       await getRidOfMe();
       await handleIsRest();
+      await deleteLastMsg();
+      await updateRoomState();
       setMessages([]);
     } else {
       return;
@@ -79,7 +91,6 @@ const ChatHeader = ({ chatRoomId }: { chatRoomId: string }) => {
             <div className="mt-[10px]">
               <ChatPresence />
             </div>
-
             <div>
               <AvatarGroup isBordered>
                 {participants.map((person) => (

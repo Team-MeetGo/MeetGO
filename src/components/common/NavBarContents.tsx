@@ -65,12 +65,12 @@ const NavBarContents = () => {
       <NavbarContent className="hidden sm:flex gap-4 h-auto" justify="center">
         <NavbarItem>
           <Link color="foreground" href={isValidate ? '/meetingRoom' : '/mypage'} onClick={() => checkIsValidate()}>
-            로비
+            Lobby
           </Link>
         </NavbarItem>
         <NavbarItem isActive>
           <Link href="/review/pageNumber/1" aria-current="page" color="secondary">
-            리뷰게시판
+            Review
           </Link>
         </NavbarItem>
       </NavbarContent>
