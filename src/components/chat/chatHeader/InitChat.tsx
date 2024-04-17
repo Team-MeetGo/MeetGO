@@ -10,9 +10,7 @@ import { useEffect } from 'react';
 
 const InitChat = ({ chatRoomId, allMsgs }: { user: User | null; chatRoomId: string; allMsgs: Message[] }) => {
   const router = useRouter();
-  const { messages, chatState, isRest, setChatState, setMessages, setChatRoomId, setHasMore } = chatStore(
-    (state) => state
-  );
+  const { chatState, isRest, setChatState, setMessages, setChatRoomId, setHasMore } = chatStore((state) => state);
   const room = useRoomDataQuery(chatRoomId);
   const roomId = room?.roomId;
 
@@ -47,7 +45,6 @@ const InitChat = ({ chatRoomId, allMsgs }: { user: User | null; chatRoomId: stri
       }
     } else {
       // **채팅방에 있는다면
-      console.log('지금 메세지', messages);
       setMessages([...allMsgs].reverse());
       setHasMore(allMsgs?.length >= ITEM_INTERVAL + 1);
 

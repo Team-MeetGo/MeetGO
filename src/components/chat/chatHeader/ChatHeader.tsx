@@ -8,7 +8,7 @@ import { useGetUserDataQuery } from '@/hooks/useQueries/useUserQuery';
 import { Avatar, AvatarGroup } from '@nextui-org/react';
 
 const ChatHeader = ({ chatRoomId }: { chatRoomId: string }) => {
-  const { setMessages, setisRest, setSearchMode } = chatStore((state) => state);
+  const { onlineUsers, setMessages, setisRest, setSearchMode } = chatStore((state) => state);
   const { data: user } = useGetUserDataQuery();
   const room = useRoomDataQuery(chatRoomId);
   const roomId = room?.roomId;
@@ -116,7 +116,11 @@ const ChatHeader = ({ chatRoomId }: { chatRoomId: string }) => {
             <div>
               <AvatarGroup isBordered>
                 {participants.map((person) => (
-                  <Avatar key={person.user_id} src={person.avatar as string} className="w-[32px] h-[32px]" />
+                  <Avatar
+                    key={person.user_id}
+                    src={person.avatar as string}
+                    className={`w-[32px] h-[32px] ${onlineUsers.find((id) => id === person.user_id) ? '' : ''}`}
+                  />
                 ))}
               </AvatarGroup>
             </div>

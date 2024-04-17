@@ -2,7 +2,7 @@ import { useParticipantsQuery, useRoomDataQuery } from '@/hooks/useQueries/useCh
 import { chatStore } from '@/store/chatStore';
 import { Message } from '@/types/chatTypes';
 import { getformattedDate, showingDate, isItMe, isNextDay } from '@/utils';
-import { Tooltip } from '@nextui-org/react';
+import { Avatar, Tooltip } from '@nextui-org/react';
 import { FaCrown } from 'react-icons/fa6';
 import Image from 'next/image';
 import { UserTypeFromTable } from '@/types/userTypes';
@@ -105,24 +105,20 @@ const ParticipantsInfoWrapper = ({
 }) => {
   return (
     <Tooltip content={<div>{participants && showThatUser(msg.send_from)?.nickname}</div>}>
-      <div className="relative my-auto flex h-[52px] w-[60px] rounded-full overflow-hidden flex justify-center items-center">
-        <div className=" h-[52px] w-[52px] mr-auto">
+      <div className="relative my-auto flex h-[60px] w-[60px] ">
+        <div className="h-16 w-16 ml-auto flex justify-center items-center">
           {showThatUser(msg.send_from)?.avatar ? (
-            <Image
+            <Avatar
               src={showThatUser(msg.send_from)?.avatar as string}
               alt="Avatar"
-              style={{ objectFit: 'cover' }}
-              fill={true}
-              sizes="500px"
-              priority={true}
-              className="transition-transform"
+              className="transition-transform w-14 h-14"
             />
           ) : (
             <AvatarDefault />
           )}
         </div>
         {leaderId === showThatUser(msg.send_from) ? (
-          <div className="w-[24px] h-[24px] rounded-full absolute bottom-0 right-0 flex justify-center bg-purpleThird border border-gray1 font-extralight">
+          <div className="w-6 h-6 rounded-full absolute bottom-0 right-0 flex justify-center bg-purpleThird border border-gray1 font-extralight">
             <FaCrown className="my-auto fill-mainColor " />
           </div>
         ) : null}

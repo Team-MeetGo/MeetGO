@@ -89,7 +89,6 @@ const ChatInput = () => {
               <FaPlus className="text-[#71717A] pointer-events-none" />
             </span>
           </label>
-
           <Input
             value={message}
             classNames={{ input: ['bg-[#F2EAFA]', 'focus:outline-none'] }}
@@ -97,12 +96,11 @@ const ChatInput = () => {
             onChange={(e) => setMessage(e.target.value)}
             disabled={imgs.length > 0}
           />
-
           <button>
             <FaRegArrowAltCircleUp className="h-8 w-8 my-auto text-[#71717A]" />
           </button>
         </form>
-        {/* 가로축으로 스크롤 되게 하고 싶다.. */}
+
         {imgs.length
           ? imgs.length < 5 && (
               <div className="h-[180px] w-full p-[8px] flex overflow-x-auto gap-[8px] relative ">

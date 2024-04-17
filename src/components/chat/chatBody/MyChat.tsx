@@ -9,6 +9,7 @@ import { useRoomDataQuery } from '@/hooks/useQueries/useChattingQuery';
 import { FaCrown } from 'react-icons/fa6';
 import Image from 'next/image';
 import { UserTypeFromTable } from '@/types/userTypes';
+import { Avatar } from '@nextui-org/react';
 
 const MyChat = ({ msg, idx, lastDivRefs }: { msg: Message; idx: number; lastDivRefs: any }) => {
   const { messages, chatRoomId } = chatStore((state) => state);
@@ -91,24 +92,16 @@ const MyInfoWrapper = ({
   leaderId: string | undefined;
 }) => {
   return (
-    <div className="relative my-auto flex h-[52px] w-[60px] rounded-full overflow-hidden flex justify-center items-center">
-      <div className=" h-[52px] w-[52px] ml-auto">
+    <div className="relative my-auto flex h-[60px] w-[60px] ">
+      <div className="h-16 w-16 ml-auto flex justify-center items-center">
         {user?.avatar ? (
-          <Image
-            src={user.avatar as string}
-            alt="Avatar"
-            style={{ objectFit: 'cover' }}
-            fill={true}
-            sizes="100px"
-            priority={true}
-            className="transition-transform"
-          />
+          <Avatar src={user.avatar as string} alt="Avatar" size="lg" className="transition-transform object-cover" />
         ) : (
           <AvatarDefault />
         )}
       </div>
       {leaderId === user?.user_id ? (
-        <div className="w-[24px] h-[24px] rounded-full absolute bottom-0 left-0 flex justify-center bg-purpleThird border border-gray1">
+        <div className="w-6 h-6 rounded-full absolute bottom-0 left-0 flex justify-center bg-purpleThird border border-gray1">
           <FaCrown className="my-auto fill-mainColor" />
         </div>
       ) : null}

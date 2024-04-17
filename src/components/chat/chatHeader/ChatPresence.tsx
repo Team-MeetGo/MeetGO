@@ -1,4 +1,5 @@
 'use client';
+import { useParticipantsQuery, useRoomDataQuery } from '@/hooks/useQueries/useChattingQuery';
 import { useGetUserDataQuery } from '@/hooks/useQueries/useUserQuery';
 import { chatStore } from '@/store/chatStore';
 import { clientSupabase } from '@/utils/supabase/client';
@@ -6,8 +7,12 @@ import { useEffect, useState } from 'react';
 
 const ChatPresence = () => {
   const { data: user } = useGetUserDataQuery();
-  const [onlineUsers, setOnlineUsers] = useState(0);
-  const chatRoomId = chatStore((state) => state.chatRoomId);
+  // const [onlineUsers, setOnlineUsers] = useState<string[]>([]);
+  const { chatRoomId, onlineUsers, setOnlineUsers } = chatStore((state) => state);
+  const room = useRoomDataQuery(chatRoomId as string);
+  const roomId = room?.roomId;
+  const participants = useParticipantsQuery(roomId as string);
+  console.log('onlineUsers => ', onlineUsers);
 
   useEffect(() => {
     if (chatRoomId) {
@@ -20,7 +25,7 @@ const ChatPresence = () => {
             // @ts-ignore
             nowUsers.push(channel.presenceState()[id][0].user_id);
           }
-          setOnlineUsers(nowUsers.length);
+          setOnlineUsers([...nowUsers]);
         })
         .subscribe(async (status) => {
           if (status === 'SUBSCRIBED') {
@@ -34,7 +39,7 @@ const ChatPresence = () => {
     <>
       <div className="flex gap-2">
         <div className="h-4  w-4 bg-[#8F5DF4] rounded-full animate-pulse my-auto"></div>
-        {chatRoomId && <h1>{onlineUsers} online</h1>}
+        {chatRoomId && <h1>{onlineUsers.length} online</h1>}
       </div>
     </>
   );
