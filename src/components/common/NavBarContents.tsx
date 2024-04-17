@@ -18,6 +18,7 @@ import { useGetUserDataQuery } from '@/hooks/useQueries/useUserQuery';
 import { useQueryClient } from '@tanstack/react-query';
 import { USER_DATA_QUERY_KEY } from '@/query/user/userQueryKeys';
 import Link from 'next/link';
+import { useEffect } from 'react';
 
 const NavBarContents = () => {
   const queryClient = useQueryClient();
@@ -104,7 +105,7 @@ const NavBarContents = () => {
             </Dropdown>
           </div>
         ) : (
-          <div>
+          <div className="flex gap-2">
             <Link
               href="/login"
               className="bg-white rounded-[12px] px-[20px] py-[12px] text-[18px] text-[#252642] font-medium"

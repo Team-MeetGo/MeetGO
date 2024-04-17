@@ -41,17 +41,13 @@ const LoginForm = () => {
     password: true
   });
   const [isError, setIsError] = useState(false);
-  const { setIsLoggedIn } = userStore((state) => state);
   const { openModal } = useModalStore();
 
   const showModal = () => {
     openModal({
       type: 'alert',
       name: '',
-      text: '로그인 되었습니다.',
-      onFunc: () => {
-        router.replace('/');
-      }
+      text: '로그인 되었습니다.'
     });
   };
 
@@ -76,18 +72,12 @@ const LoginForm = () => {
         password: loginData.password
       });
       if (session) {
-        setIsLoggedIn(true);
-
         // 캐시 무효화
-        // 맨 처음에 메인 페이지 -> 로그인
         showModal();
-        queryClient.invalidateQueries({
-          queryKey: [USER_DATA_QUERY_KEY]
-        });
-        console.log('로그인 성공: ', session);
       } else if (error) throw error;
     } catch (error: any) {
       if (error.message.includes('Invalid login')) {
+        alert('아이디 또는 비밀번호를 확인해주세요.');
         setIsError(true);
       } else {
         alert('로그인 중 오류가 발생했습니다.');
@@ -128,10 +118,6 @@ const LoginForm = () => {
             </Checkbox>
             <div className="flex gap-[4px]">
               <Link href="" className="text-gray3 text-[14px]">
-                아이디 찾기
-              </Link>
-              <p>|</p>
-              <Link href="" className="text-gray3 text-[14px]">
                 비밀번호 찾기
               </Link>
             </div>
@@ -144,14 +130,13 @@ const LoginForm = () => {
           </Button>
         </form>
         {isError && <p className="text-red-500 text-[13px] mt-2">아이디 또는 비밀번호가 일치하지 않습니다.</p>}
-        <Link
-          href="/join"
-          className="duration-200 bg-white text-[#27272A] border border-[#A1A1AA] p-5 mt-[16px] rounded-lg w-full py-[20px] h-auto text-[16px]"
-          type="button"
-        >
-          아직 아이디가 없다면? 회원가입하기
-        </Link>
-        <p className="duration-200 bg-white text-[#27272A] p-5 mt-[50px] rounded-lg w-full py-[20px] h-auto text-[16px] text-center">
+        <div className="flex items-center gap-2 justify-center mt-[32px]">
+          <p>아직 아이디가 없다면?</p>
+          <Link href="/join" className="text-[#27272A] rounded-lg h-auto text-[16px] underline" type="button">
+            회원가입하기
+          </Link>
+        </div>
+        <p className="duration-200 text-[#27272A] mt-[32px] mb-[16px] w-full h-auto text-[14px] text-center">
           소셜 계정으로 로그인하기
         </p>
         <div className="flex items-center justify-center gap-[16px]">
