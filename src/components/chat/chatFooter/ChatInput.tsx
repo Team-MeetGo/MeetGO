@@ -10,13 +10,10 @@ import { MdCancel } from 'react-icons/md';
 
 const ChatInput = () => {
   const { data: user } = useGetUserDataQuery();
-  const { chatRoomId, imgSection, setImgSection } = chatStore((state) => state);
+  const { chatRoomId, imgs, setImgs } = chatStore((state) => state);
   const [message, setMessage] = useState('');
-  const [imgs, setImgs] = useState<File[]>([]);
   const imgRef = useRef(null);
-  console.log(imgSection);
-  console.log('imgs =>', imgs);
-  console.log(imgs.length);
+  console.log(imgs);
 
   const makeUrl = async () => {
     let chatImgsUrls = [];
@@ -79,7 +76,7 @@ const ChatInput = () => {
             setMessage('');
           }}
         >
-          <label className="flex items-center cursor-pointer" onClick={() => setImgSection()}>
+          <label className="flex items-center cursor-pointer">
             <input
               type="file"
               multiple

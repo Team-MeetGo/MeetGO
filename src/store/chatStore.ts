@@ -8,7 +8,7 @@ type chatState = {
   chatState: boolean;
   isRest: boolean;
   searchMode: boolean;
-  imgSection: boolean;
+  imgs: File[];
 
   setChatRoomId: (chatRoomId: string | null) => void;
   setMessages: (messages: Message[]) => void;
@@ -16,7 +16,7 @@ type chatState = {
   setChatState: (isActive: boolean) => void;
   setisRest: (isRest: boolean) => void;
   setSearchMode: () => void;
-  setImgSection: () => void;
+  setImgs: (imgs: File[]) => void;
 };
 
 export const chatStore = create<chatState>()((set) => ({
@@ -26,7 +26,7 @@ export const chatStore = create<chatState>()((set) => ({
   chatState: true,
   isRest: true,
   searchMode: false,
-  imgSection: false,
+  imgs: [],
 
   setChatRoomId: (chatRoomId) => set({ chatRoomId }),
   setMessages: (messages) => set({ messages }),
@@ -34,5 +34,5 @@ export const chatStore = create<chatState>()((set) => ({
   setChatState: (isActive) => set({ chatState: isActive }),
   setisRest: (isRest) => set({ isRest }),
   setSearchMode: () => set((state) => ({ searchMode: !state.searchMode })),
-  setImgSection: () => set((state) => ({ imgSection: !state.imgSection }))
+  setImgs: (imgs) => set({ imgs })
 }));
