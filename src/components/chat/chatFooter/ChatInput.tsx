@@ -57,7 +57,6 @@ const ChatInput = () => {
         alert('이미지 추가는 최대 4장까지 가능합니다.');
       } else {
         setImgs([...imgs, ...newImgs]);
-        // console.log(URL.createObjectURL(files[0]));
       }
     }
   };

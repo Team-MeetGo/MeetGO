@@ -40,15 +40,22 @@ const MyChat = ({ msg, idx, lastDivRefs }: { msg: Message; idx: number; lastDivR
                   </div>
                 ) : null}
 
-                {/* {msg.imgs?.length ? (
-                  <div className="w-10 h-10">
-                    {msg.imgs.map((img) => (
-                     <Image
-                     src=
-                     />
+                {msg.imgs?.length ? (
+                  <div className="h-10">
+                    {msg.imgs.map((url) => (
+                      <div key={url} className="w-[150px] relative">
+                        <Image
+                          src={url}
+                          alt="채팅 이미지"
+                          fill={true}
+                          style={{ objectFit: 'fill', borderRadius: '3px' }}
+                          sizes="500px"
+                          priority={true}
+                        />
+                      </div>
                     ))}
                   </div>
-                ) : null} */}
+                ) : null}
               </div>
 
               {idx < messages.length - 1 && msg.send_from === messages[idx + 1].send_from ? null : (
