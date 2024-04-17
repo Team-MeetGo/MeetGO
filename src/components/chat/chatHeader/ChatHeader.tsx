@@ -119,7 +119,11 @@ const ChatHeader = ({ chatRoomId }: { chatRoomId: string }) => {
                   <Avatar
                     key={person.user_id}
                     src={person.avatar as string}
-                    className={`w-[32px] h-[32px] ${onlineUsers.find((id) => id === person.user_id) ? '' : ''}`}
+                    className={`w-[32px] h-[32px]`}
+                    classNames={{
+                      base: onlineUsers.find((id) => id === person.user_id) ? '' : 'bg-black opacity-70'
+                    }}
+                    // isDisabled={!onlineUsers.find((id) => id === person.user_id)}
                   />
                 ))}
               </AvatarGroup>
