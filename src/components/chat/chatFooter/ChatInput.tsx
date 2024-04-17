@@ -19,31 +19,27 @@ const ChatInput = () => {
   console.log(imgs.length);
 
   const makeUrl = async () => {
-    let chatImgs = [];
+    let chatImgsUrls = [];
     for (const imgFile of imgs) {
-      const uuid = crypto.randomUUID;
-      const imgUrlPath = `${imgFile.name}/${uuid}`;
+      const imgUrlPath = `${chatRoomId}/${user?.user_id}/${imgFile.name}`;
       const { data: imgUrlData, error } = await clientSupabase.storage.from('chatImg').upload(imgUrlPath, imgFile, {
         cacheControl: '3600',
         upsert: true
       });
       if (error) console.error('채팅이미지 업로드 실패', error.message);
       const { data: imgUrls } = await clientSupabase.storage.from('chatImg').getPublicUrl(imgUrlData?.path as string);
-      chatImgs.push(imgUrls);
+      chatImgsUrls.push(imgUrls);
     }
-    console.log('chatImgs => ', chatImgs);
-    return chatImgs;
+    return chatImgsUrls.map((url) => url.publicUrl);
   };
 
   const handleSubmit = async () => {
-    // const{data: imgUrl, error} = await clientSupabase.storage.from("chatInput").upload()
-
     if (user && chatRoomId && (message.length || imgs.length)) {
       const { error } = await clientSupabase.from('messages').insert({
         send_from: user?.user_id,
         message: message.length ? message : null,
         chatting_room_id: chatRoomId,
-        imgs: imgs.length ? imgs.map((img) => img.name) : []
+        imgs: imgs.length ? await makeUrl() : []
       });
       if (error) {
         console.error(error.message);
