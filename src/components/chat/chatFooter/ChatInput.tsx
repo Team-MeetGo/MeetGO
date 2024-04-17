@@ -6,6 +6,7 @@ import { Input } from '@nextui-org/react';
 import { useState } from 'react';
 import { FaRegArrowAltCircleUp } from 'react-icons/fa';
 
+//이거 나중에 지우자
 const ChatInput = () => {
   const [message, setMessage] = useState('');
   const { data: user } = useGetUserDataQuery();
@@ -16,8 +17,6 @@ const ChatInput = () => {
       const { error } = await clientSupabase.from('messages').insert({
         send_from: user.user_id,
         message: message,
-        nickname: String(user.nickname),
-        avatar: String(user.avatar),
         chatting_room_id: chatRoomId
       });
       if (error) {
