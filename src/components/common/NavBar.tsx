@@ -1,11 +1,10 @@
-import InitUser from '../user/InitUser';
+'use client';
 import InitChatRealTime from './InitChatRealTime';
 import NavBarContents from './NavBarContents';
 
-const NavBar = async () => {
+const NavBar = () => {
   return (
     <>
-      {/* <InitUser /> */}
       <NavBarContents />
       <InitChatRealTime />
     </>

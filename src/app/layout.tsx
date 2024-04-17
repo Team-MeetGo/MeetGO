@@ -18,6 +18,7 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  // 아무거나
   return (
     <html lang="ko">
       <body className={inter.className}>
@@ -25,7 +26,7 @@ export default function RootLayout({
           <QueryProvider>
             <NavBar />
             {children}
-            <ReactQueryDevtools initialIsOpen={false} />
+            <ReactQueryDevtools initialIsOpen={true} />
           </QueryProvider>
         </NextProvider>
       </body>
