@@ -19,8 +19,8 @@ const ChatHeader = ({ chatRoomId }: { chatRoomId: string }) => {
     setSearchMode();
   };
 
+  // 채팅방 isActive 상태를 false로 변경
   const updateChatRoomIsActive = async () => {
-    // 채팅방 isActive 상태를 false로 변경
     const { error: updateActiveErr } = await clientSupabase
       .from('chatting_room')
       .update({ isActive: false })
@@ -31,8 +31,8 @@ const ChatHeader = ({ chatRoomId }: { chatRoomId: string }) => {
     }
   };
 
+  // participants 테이블에서 해당 룸에 대한 유저정보 삭제
   const getRidOfMe = async () => {
-    // participants 테이블에서 해당 룸에 대한 유저정보 삭제
     const { error: deleteErr } = await clientSupabase
       .from('participants')
       .delete()
@@ -44,8 +44,8 @@ const ChatHeader = ({ chatRoomId }: { chatRoomId: string }) => {
     }
   };
 
+  // OthersChat이랑 코드 겹침 나중에 마무리단계에서 따로 뺄 예정
   const handleIsRest = async () => {
-    // OthersChat이랑 코드 겹침 나중에 마무리단계에서 따로 뺄 예정
     const { data: restOf, error: getPartErr } = await clientSupabase
       .from('participants')
       .select('user_id')
@@ -58,9 +58,28 @@ const ChatHeader = ({ chatRoomId }: { chatRoomId: string }) => {
     }
   };
 
+  // 마지막 메세지 삭제
   const deleteLastMsg = async () => {
     const { error } = await clientSupabase.from('remember_last_msg').delete().eq('chatting_room_id', chatRoomId);
     if (error) console.error('remember_last_msg table에 해당 채팅방 관련 정보 삭제 실패');
+  };
+
+  // 해당 유저가 남긴 채팅창의 이미지들 지우기
+  const deleteStorageBucket = async () => {
+    const { error: imgStorageErr, data: usersAllImgList } = await clientSupabase.storage
+      .from('chatImg')
+      .list(`${chatRoomId}/${user?.user_id}`);
+    imgStorageErr && console.error('storage remove fail', imgStorageErr.message);
+    const filesToRemove = usersAllImgList?.map((x) => `${chatRoomId}/${user?.user_id}/${x.name}`);
+
+    if (filesToRemove) {
+      const { error: deleteFilesErr } = await clientSupabase.storage.from('chatImg').remove(filesToRemove);
+      deleteFilesErr && console.error('fail to delete list of the folder', deleteFilesErr.message);
+      const { error: deleteFolderErr } = await clientSupabase.storage
+        .from('chatImg')
+        .remove([`${chatRoomId}/${user?.user_id}`]);
+      deleteFolderErr && console.error("fail to delete the user's folder of storage", deleteFolderErr.message);
+    }
   };
 
   const updateRoomState = async () => {
@@ -74,6 +93,7 @@ const ChatHeader = ({ chatRoomId }: { chatRoomId: string }) => {
       await getRidOfMe();
       await handleIsRest();
       await deleteLastMsg();
+      await deleteStorageBucket();
       await updateRoomState();
       setMessages([]);
     } else {
