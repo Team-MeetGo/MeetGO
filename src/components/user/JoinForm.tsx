@@ -10,23 +10,9 @@ import { ValidationModal } from '../common/ValidationModal';
 import { useModalStore } from '@/store/modalStore';
 import { USER_DATA_QUERY_KEY } from '@/query/user/userQueryKeys';
 import { useQueryClient } from '@tanstack/react-query';
+import { IoMdEye, IoMdEyeOff } from 'react-icons/io';
 
 type Gender = 'male' | 'female' | '';
-
-const JOIN_FORM_LIST = [
-  {
-    type: 'email',
-    name: 'userId',
-    placeholder: '이메일을 입력해주세요.',
-    error: '이메일 형식으로 작성해주세요.'
-  },
-  {
-    type: 'password',
-    name: 'password',
-    placeholder: '비밀번호를 입력해주세요.',
-    error: '숫자, 문자, 특수문자 조합으로 8자이상 작성해 주세요.'
-  }
-];
 
 const JoinForm = () => {
   const [joinData, setJoinData] = useState({
@@ -42,8 +28,24 @@ const JoinForm = () => {
   });
   const [gender, setGender] = useState<Gender>('');
   const router = useRouter();
+  const [passwordShow, setPasswordShow] = useState(false);
   const { openModal } = useModalStore();
   const queryClient = useQueryClient();
+
+  const JOIN_FORM_LIST = [
+    {
+      type: 'email',
+      name: 'userId',
+      placeholder: '이메일을 입력해주세요.',
+      error: '이메일 형식으로 작성해주세요.'
+    },
+    {
+      type: passwordShow ? 'text' : 'password',
+      name: 'password',
+      placeholder: '비밀번호를 입력해주세요.',
+      error: '숫자, 문자, 특수문자 조합으로 8자이상 작성해 주세요.'
+    }
+  ];
 
   const showModal = () => {
     openModal({
@@ -117,6 +119,10 @@ const JoinForm = () => {
     }
   };
 
+  const togglePasswordShow = () => {
+    setPasswordShow(!passwordShow);
+  };
+
   return (
     <>
       <form className="max-w-[450px] flex flex-col gap-[16px] w-full" onSubmit={onSubmitForm}>
@@ -165,7 +171,7 @@ const JoinForm = () => {
           )}
         </div>
         {JOIN_FORM_LIST.map(({ type, name, placeholder, error }) => (
-          <label key={name}>
+          <label key={name} className="relative">
             <input
               className="p-5 border border-[#A1A1AA] placeholder:text-[#A1A1AA] placeholder:text-[14px] rounded-lg focus:outline-none focus:border-[#8F5DF4] w-full"
               type={type}
@@ -174,10 +180,14 @@ const JoinForm = () => {
               onChange={onChangeInput}
               required
             />
+            {name === 'password' && (
+              <button type="button" onClick={togglePasswordShow} className="absolute top-6 right-4">
+                {passwordShow ? <IoMdEye className="text-xl" /> : <IoMdEyeOff className="text-xl" />}
+              </button>
+            )}
             {!isValidateShow[name] && <p className="text-red-500 text-[13px] mt-2">{error}</p>}
           </label>
         ))}
-
         <Button
           className="duration-200 bg-[#8F5DF4] text-white p-5 mt-[16px] rounded-lg font-semibold w-full py-[20px] h-auto text-[16px]"
           type="submit"

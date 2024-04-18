@@ -50,7 +50,7 @@ const NavBarContents = () => {
 
   return (
     <Navbar className="flex flex-row py-[20px] h-auto">
-      <div className="flex felx-row justify-between gap-11 ">
+      <div className="flex flex-row justify-between gap-11 ">
         <NavbarBrand>
           <Link href="/" className="max-w-[150px]">
             <Image
