@@ -20,8 +20,8 @@ function MemberNumberSelection({ text }: { text: string }) {
     if (conditionalRef.current === 'member') {
       setMemberNumber(member);
     }
-    //any를 e에 넣으면 작동 안함
-    const outSideClick = (e) => {
+
+    const outSideClick = (e: any) => {
       const { target } = e;
       if (openModal && dropdownRef.current && !dropdownRef.current.contains(target)) {
         setOpenModal(false);

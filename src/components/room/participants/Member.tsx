@@ -9,14 +9,18 @@ import meetingRoomHandler from '@/hooks/custom/room';
 import { RoomFemaleAvatar, RoomMaleAvatar } from '@/utils/icons/RoomAvatar';
 import MeetGoLogoPurple from '../../../utils/icons/meetgo-logo-purple.png';
 import Image from 'next/image';
+import { useUpdateLeaderMemberMutation, useUpdateRoomStatusOpen } from '@/hooks/useMutation/useMeetingMutation';
+import { useGetUserDataQuery } from '@/hooks/useQueries/useUserQuery';
 
 import type { UserType } from '@/types/roomTypes';
+import AcceptanceRoomButtons from './AcceptanceRoomButtons';
+import { RoomData } from '@/types/chatTypes';
 const Member = ({ room_id }: { room_id: string }) => {
   const participants = useRoomParticipantsQuery(room_id as string);
   const [members, setMembers] = useState<UserType[]>(participants as UserType[]);
   const { data: roomInformation } = useRoomInfoWithRoomIdQuery(room_id);
   const leaderMember = roomInformation?.leader_id;
-  const [leader, setLeader] = useState(leaderMember);
+  const [leader, setLeader] = useState(leaderMember as String);
   const femaleMembers = members.filter((member) => member.gender === 'female');
   const maleMembers = members.filter((member) => member.gender === 'male');
   const memberNumber = roomInformation?.member_number;
@@ -24,6 +28,8 @@ const Member = ({ room_id }: { room_id: string }) => {
   const genderMaxNumber = getmaxGenderMemberNumber(memberNumber as string);
   const hollowFemaleArray = Array.from({ length: (genderMaxNumber as number) - femaleMembers.length }, (vi, i) => i);
   const hollowMaleArray = Array.from({ length: (genderMaxNumber as number) - maleMembers.length }, (vi, i) => i);
+  const otherParticipants = participants?.filter((person: UserType | null) => person?.user_id !== leader);
+  const updateLeaderMemeberMutation = useUpdateLeaderMemberMutation({ otherParticipants, room_id });
 
   useEffect(() => {
     const channle = clientSupabase
@@ -48,7 +54,7 @@ const Member = ({ room_id }: { room_id: string }) => {
             console.log('오류 확인 => ', error);
             if (!participants || participants.length < 1) return;
             if (!newUserData || newUserData.length < 1) return;
-            setMembers(() => [...participants, newUserData[0].users as UserType]);
+            setMembers((participants) => [...participants, newUserData[0].users as UserType]);
           };
           addMemeberUserId({ addPartId: user_id });
         }
@@ -63,34 +69,37 @@ const Member = ({ room_id }: { room_id: string }) => {
         (payload) => {
           const { user_id } = payload.new;
           setMembers(members.filter((member) => member.user_id !== user_id));
-          if (user_id === leaderMember) {
-          }
-          const updateLeaderUser = async () => {
-            const { data: leader_id, error } = await clientSupabase
-              .from('room')
-              .select(`*`)
-              .eq('room_id', room_id)
-              .select('leader_id');
-            console.log('오류 확인 => ', error);
-            if (!participants || participants.length < 1) return;
-            if (!leader_id || leader_id.length < 1) return;
-            if (leader) {
-              const newLeader = leader_id[0].leader_id;
-              setLeader(newLeader);
-            }
-          };
-          updateLeaderUser();
+        }
+      )
+      .on(
+        'postgres_changes',
+        {
+          event: 'UPDATE',
+          schema: 'public',
+          table: 'room'
+        },
+        (payload) => {
+          console.log(payload);
+          const { leader_id } = payload.new;
+          setLeader(leader_id);
         }
       )
       .subscribe();
     return () => {
       clientSupabase.removeChannel(channle);
     };
-  }, [members, participants]);
+  }, [members, participants, leaderMember]);
   if (!participants) return;
+  console.log('현리더', leaderMember);
 
   return (
-    <>
+    <div className="flex flex-col">
+      <div className="w-100%">
+        <AcceptanceRoomButtons
+          roomInformation={roomInformation as RoomData}
+          participants={participants as UserType[]}
+        />
+      </div>
       <div className="flex flex-col items-center justify-content align-middle">
         <div className="flex flex-row gap-[100px] items-center justify-content align-middle min-w-[1116px] max-w-[1440px]">
           <main className="mt-[40px] grid grid-cols-1 grid-rows-4 w-100% gap-y-[50px]">
@@ -100,7 +109,7 @@ const Member = ({ room_id }: { room_id: string }) => {
                   {/* 카드 왼쪽 */}
                   <div className="mx-[40px] align-middle items-center">
                     <div className="w-[86px] h-[86px] mt-[32px] mr-[48px] rounded-full relative">
-                      {leaderMember === member.user_id ? (
+                      {leader === member.user_id ? (
                         <div>
                           <FaCrown className="absolute h-[20px] w-[20px] m-[2px] fill-mainColor z-50 top-[-18px] left-[29px]" />
                         </div>
@@ -130,7 +139,7 @@ const Member = ({ room_id }: { room_id: string }) => {
                       <div className="pr-[4px]">{member.school_name}</div>
                       {<IoFemale className="w-[14px] my-auto fill-hotPink" />}
                     </div>
-                    <div className="flex flex-row w-100% text-[14px] gap-[8px] w-[200px]">
+                    <div className="flex flex-row w-100% text-[14px] gap-[8px] w-100%">
                       <div className="my-[16px] flex flex-row gap-[6px]">
                         {member.favorite?.map((tag) => (
                           <div
@@ -174,11 +183,11 @@ const Member = ({ room_id }: { room_id: string }) => {
               <div key={member.user_id} className={`grid col-start-1 col-span-1`}>
                 <article className={`bg-purpleSecondary flex flex-row w-[506px] h-[166px] rounded-2xl`}>
                   {/* 카드 왼쪽 */}
-                  <div className="mx-[40px] flex flex-col">
-                    <div className="w-[86px] h-[86px] mt-[32px] mr-[48px] rounded-full relative">
+                  <div className="ml-[40px] mr-[88px] flex flex-col justify-center align-middle justify-items-center">
+                    <div className="w-[86px] h-[86px] mt-[32px] rounded-full relative">
                       {leaderMember === member.user_id ? (
                         <div>
-                          <FaCrown className="absolute h-[20px] w-[20px] m-[2px] fill-mainColor z-50 top-[-18px] left-[15px]" />
+                          <FaCrown className="absolute h-[20px] w-[20px] m-[2px] fill-mainColor z-50 top-[-20px] left-[30px]" />
                         </div>
                       ) : (
                         ''
@@ -206,7 +215,7 @@ const Member = ({ room_id }: { room_id: string }) => {
                       <div className="pr-[4px]">{member.school_name}</div>
                       {<IoMale className="w-[14px] my-auto fill-blue" />}
                     </div>
-                    <div className="flex flex-row w-100% text-[14px] gap-[8px] w-[200px]">
+                    <div className="flex flex-row w-100% text-[14px] gap-[8px] w-100%">
                       <div className="my-[16px] flex flex-row gap-[6px]">
                         {member.favorite?.map((tag) => (
                           <div
@@ -218,7 +227,7 @@ const Member = ({ room_id }: { room_id: string }) => {
                               padding: '8px'
                             }}
                           >
-                            {`${tag} `}
+                            {tag}
                           </div>
                         ))}
                       </div>
@@ -241,7 +250,7 @@ const Member = ({ room_id }: { room_id: string }) => {
           </main>
         </div>
       </div>
-    </>
+    </div>
   );
 };
 export default Member;

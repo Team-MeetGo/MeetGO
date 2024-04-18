@@ -15,20 +15,19 @@ function RegionSelection({ text }: { text: string }) {
 
   useEffect(() => {
     if (conditionalRef.current === 'selectRegion') {
-      return setSelectRegion(region);
+      setSelectRegion(region);
     }
     if (conditionalRef.current === 'room') {
-      return setRoomRegion(region);
+      setRoomRegion(region);
     }
-    //any를 e에 넣으면 작동 안함
-    const outSideClick = (e) => {
+    const outSideClick = (e: any) => {
       const { target } = e;
       if (openModal && dropdownRef.current && !dropdownRef.current.contains(target)) {
         setOpenModal(false);
       }
     };
     document.addEventListener('mousedown', outSideClick);
-  }, [region]);
+  }, [region, openModal]);
 
   const handleSelect = (r: string) => {
     setRegion(r);

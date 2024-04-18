@@ -107,12 +107,6 @@ function RoomInformation({ room_id }: { room_id: string }) {
             </div>
           </div>
         </div>
-        <div className="w-100% h">
-          <AcceptanceRoomButtons
-            roomInformation={roomInformation as RoomData}
-            participants={participants as UserType[]}
-          />
-        </div>
       </div>
     </div>
   );

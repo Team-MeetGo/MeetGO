@@ -34,22 +34,19 @@ function MeetingRoom({ room }: { room: MeetingRoomType }) {
   const [openModal, setOpenModal] = useState(false);
 
   const addMember = async ({ room_id }: { room_id: string }) => {
-    //채팅창: 채팅창으로 이동
-    if (alreadyChatRoom?.length === 1) {
-      console.log('alreadyChatRoom', alreadyChatRoom);
-      return router.replace(`/chat/${alreadyChatRoom[0].chatting_room_id}`);
-    }
-
     //수락창: 이미 참여한 방은 바로 입장
     const alreadyParticipants = participants?.find((member) => member?.user_id === user_id);
-    if (alreadyParticipants) {
+    if (alreadyParticipants && alreadyChatRoom?.length === 0) {
       return router.push(`/meetingRoom/${room_id}`);
+    }
+    //채팅창: 채팅창으로 이동
+    if (alreadyParticipants && alreadyChatRoom?.length === 1) {
+      return router.replace(`/chat/${alreadyChatRoom[0].chatting_room_id}`);
     }
     const participatedGenderMember = participants?.filter((member) => member?.gender === user?.gender).length;
 
     //성별에 할당된 인원이 다 찼으면 알람
     if (genderMaxNumber === participatedGenderMember && room_status === '모집중' && !alreadyParticipants) {
-      console.log('다 찼을 경우');
       alert('해당 성별은 모두 참여가 완료되었습니다.');
       return router.push('/meetingRoom');
     }
@@ -63,22 +60,20 @@ function MeetingRoom({ room }: { room: MeetingRoomType }) {
     }
     //모든 인원이 다 찼을 경우 모집종료로 변경
     if (genderMaxNumber && participants?.length === genderMaxNumber * 2 - 1) {
-      console.log('genderMaxNumber', genderMaxNumber);
-      console.log('참여자', participants);
       await updateRoomStatusCloseMutation.mutateAsync();
     }
     return router.push(`/meetingRoom/${room_id}`);
   };
 
   useEffect(() => {
-    const outSideClick = (e) => {
+    const outSideClick = (e: any) => {
       const { target } = e;
-      if (openModal && dropdownRef.current && !dropdownRef.current.contains(target)) {
+      if (openModal && dropdownRef.current && dropdownRef.current.contains(target)) {
         setOpenModal(false);
       }
     };
     document.addEventListener('mousedown', outSideClick);
-  });
+  }, [openModal]);
 
   return (
     <div
@@ -119,7 +114,7 @@ function MeetingRoom({ room }: { room: MeetingRoomType }) {
                     </div>
                   </div>
                 ) : user_id === leader_id ? (
-                  <div className="relative flex flex-row justify-center align-middle">
+                  <div ref={dropdownRef} className="relative flex flex-row justify-center align-middle">
                     <button
                       className="flex flex-row justify-center align-middle"
                       onClick={() => {
@@ -130,10 +125,7 @@ function MeetingRoom({ room }: { room: MeetingRoomType }) {
                     </button>
 
                     {open && (
-                      <div
-                        ref={dropdownRef}
-                        className="absolute top-full right-[0px] bg-white flex flex-col w-[92px] h-[78px] p-[5px] justify-items-center border-gray2 border-1 rounded-xl"
-                      >
+                      <div className="absolute top-full right-[0px] bg-white flex flex-col w-[92px] h-[78px] p-[5px] justify-items-center border-gray2 border-1 rounded-xl">
                         <div className="flex flex-col justify-items-center w-[92px]">
                           <DeleteMeetingRoom room_id={room_id} />
                         </div>
