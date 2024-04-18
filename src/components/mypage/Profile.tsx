@@ -6,6 +6,9 @@ import AvatarForm from './AvatarForm';
 import MyPost from './MyPost';
 import Favorite from './Favorite';
 import MetPeople from './MetPeople';
+import { GoPeople } from 'react-icons/go';
+import { IoMdHeartEmpty } from 'react-icons/io';
+import { HiOutlineChatBubbleOvalLeftEllipsis } from 'react-icons/hi2';
 import useInputChange from '@/hooks/custom/useInputChange';
 import { Avatar, Select, SelectItem } from '@nextui-org/react';
 import { useGetUserDataQuery } from '@/hooks/useQueries/useUserQuery';
@@ -61,20 +64,19 @@ const Profile = () => {
   const joinTime = user?.created_at?.toString().slice(0, 10);
 
   const buttonData = [
-    { title: '스쳐간 인연', count: metPeopleCount },
-    { title: '참여한 미팅방', count: meetingRoomCount },
-    { title: '작성 글', count: postCount },
-    { title: '좋아요한 글', count: likedPostCount }
+    { icon: GoPeople, title: '스쳐간 인연', count: metPeopleCount },
+    { icon: HiOutlineChatBubbleOvalLeftEllipsis, title: '작성 글', count: postCount },
+    { icon: IoMdHeartEmpty, title: '좋아요한 글', count: likedPostCount }
   ];
 
   return (
     <div className="mx-auto bg-white">
-      <div className="bg-purpleSecondary w-full py-[40px]">
-        <div className="flex flex-col gap-4 max-w-[1161px] m-auto">
+      <div className="bg-purpleSecondary w-full py-[40px] px-[20px]">
+        <div className="flex flex-col gap-4 max-w-[1000px] m-auto max-md:items-start">
           <span className="text-[42px] font-bold">프로필</span>
-          <div className="flex justify-between items-center">
+          <div className="flex items-center max-md:items-start md:justify-between max-md:flex-col max-md:gap-6">
             <div className="flex gap-6 items-center">
-              <div className="w-[180px] h-[180px] overflow-hidden flex justify-center items-center rounded-full relative">
+              <div className="max-md:w-[160px] max-md:h-[160px] w-[180px] h-[180px] overflow-hidden flex justify-center items-center rounded-full relative">
                 {user?.avatar ? (
                   <Image
                     src={`${user?.avatar}?${new Date().getTime()}`}
@@ -94,9 +96,10 @@ const Profile = () => {
                 <p className="font-medium text-gray3 text-sm">가입일 : {joinTime}</p>
               </div>
             </div>
-            <div className="flex gap-6">
+            <div className="flex gap-10 max-md:gap-6">
               {buttonData.map((item, index) => (
-                <button key={index} className="font-semibold">
+                <button key={index} className="font-semibold flex flex-col items-center gap-4 max-md:gap-2">
+                  <item.icon size={40} />
                   <p>{item.title}</p>
                   <p className="font-bold text-3xl">{item.count}</p>
                 </button>
@@ -105,7 +108,7 @@ const Profile = () => {
           </div>
         </div>
       </div>
-      <div className="max-w-[800px] m-auto pt-[40px] flex flex-col gap-6">
+      <div className="max-w-[800px] m-auto pt-[40px] px-[20px] flex flex-col gap-6">
         <div className="flex gap-6">
           <p className="text-lg font-semibold w-[100px]">사진</p>
           <div className="flex flex-col items-start">

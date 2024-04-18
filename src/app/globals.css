@@ -92,6 +92,7 @@ pre {
   font-family: 'Pretendard', sans-serif;
   font-weight: 400;
   box-sizing: border-box;
+  font-size: 16px;
 }
 
 .react-datepicker__header {
