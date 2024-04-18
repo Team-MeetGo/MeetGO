@@ -8,6 +8,7 @@ export interface IsValidateShow {
 }
 
 export interface LoginDataType {
+  [key: string]: string;
   userId: string;
   password: string;
 }
