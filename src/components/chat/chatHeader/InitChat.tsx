@@ -6,15 +6,17 @@ import { Message, chatRoomPayloadType } from '@/types/chatTypes';
 import { ITEM_INTERVAL } from '@/utils/constant';
 import { clientSupabase } from '@/utils/supabase/client';
 import { User } from '@supabase/supabase-js';
-import { useRouter } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import { useEffect } from 'react';
 
 const InitChat = ({ chatRoomId, allMsgs }: { user: User | null; chatRoomId: string; allMsgs: Message[] }) => {
-  const router = useRouter();
   const { chatState, isRest, setChatState, setMessages, setChatRoomId, setHasMore } = chatStore((state) => state);
   const room = useRoomDataQuery(chatRoomId);
   const roomId = room?.roomId;
   const { data: user } = useGetUserDataQuery();
+  const router = useRouter();
+  const pathname = usePathname();
+  console.log('pathname =>', pathname);
 
   useEffect(() => {
     // 채팅방 isActive 상태 구독
@@ -47,7 +49,8 @@ const InitChat = ({ chatRoomId, allMsgs }: { user: User | null; chatRoomId: stri
       }
     } else {
       // **채팅방에 있는다면
-      // if (user?.user_id !== room?.roomData.leader_id) router.push(`chat/${chatRoomId}`);
+      if (user?.user_id !== room?.roomData.leader_id && !pathname.startsWith('/chat/'))
+        router.push(`chat/${chatRoomId}`);
       setMessages([...allMsgs].reverse());
       setHasMore(allMsgs?.length >= ITEM_INTERVAL + 1);
 
