@@ -10,7 +10,7 @@ const ShowChatMember = ({ person }: { person: UsersType }) => {
           <Avatar src={person.avatar as string} className="w-24 h-24" />
           <p className="text-xl font-medium">{person.nickname as string}</p>
         </div>
-        <div className="flex text-base justify-center items-center gap-0.5">
+        <div className="flex text-base justify-center items-center gap-0.5 mb-2">
           <p className="mb-2">{person.school_name}</p>
           <p>
             {person.gender === 'male' ? (
@@ -24,7 +24,7 @@ const ShowChatMember = ({ person }: { person: UsersType }) => {
           {person.favorite?.map((fav) => (
             <div
               key={fav}
-              className="p-1 w-16 h-7 rounded-xl color: text-mainColor bg-purpleSecondary flex items-center justify-center text-"
+              className="p-1 w-20 h-7 rounded-xl color: text-mainColor bg-purpleSecondary flex items-center justify-center text-sm"
             >
               {fav}
             </div>
