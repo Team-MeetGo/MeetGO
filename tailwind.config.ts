@@ -21,7 +21,7 @@ const config: Config = {
         mainColor: '#8F5DF4',
         purpleSecondary: '#F2EAFA',
         purpleThird: '#E4D4F4',
-        gray1: '#8F5DF4',
+        gray1: '#D4D4D8',
         gray2: '#A1A1AA',
         gray3: '#52525B',
         hotPink: '#F31260',

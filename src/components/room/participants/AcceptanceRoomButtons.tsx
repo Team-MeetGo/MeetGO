@@ -60,7 +60,7 @@ const AcceptanceRoomButtons = ({
       {user_id === leader && participants?.length === maxMember && (
         <div
           className="
-        flex flex-col h-[114px] w-[1116px] justify-center text-center bg-mainColor border-[8px] border-[#FF0000]"
+        flex flex-col h-[114px] w-[1116px] justify-center text-center bg-mainColor"
         >
           <button
             disabled={genderParticipants ? (participants?.length === genderParticipants * 2 ? false : true) : false}
