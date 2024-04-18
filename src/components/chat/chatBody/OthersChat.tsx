@@ -1,12 +1,12 @@
 import { useParticipantsQuery, useRoomDataQuery } from '@/hooks/useQueries/useChattingQuery';
 import { chatStore } from '@/store/chatStore';
 import { Message } from '@/types/chatTypes';
-import { getformattedDate, showingDate, isItMe, isNextDay } from '@/utils';
+import { getformattedDate, isItMe, isNextDay } from '@/utils';
 import { Avatar, Tooltip } from '@nextui-org/react';
 import { FaCrown } from 'react-icons/fa6';
-import Image from 'next/image';
 import { UserTypeFromTable } from '@/types/userTypes';
 import AvatarDefault from '@/utils/icons/AvatarDefault';
+import ChatImg from './ChatImg';
 
 const OthersChat = ({ msg, idx, lastDivRefs }: { msg: Message; idx: number; lastDivRefs: any }) => {
   const { chatRoomId, messages } = chatStore((state) => state);
@@ -59,24 +59,7 @@ const OthersChat = ({ msg, idx, lastDivRefs }: { msg: Message; idx: number; last
                   {msg.message}
                 </div>
               ) : null}
-
-              {/* 다른 이름으로 저장하면 안뜨는 버그 */}
-              {msg.imgs?.length ? (
-                <div className="h-[100px] flex flex-wrap justify-start w-72">
-                  {msg.imgs.map((url) => (
-                    <div key={url} className="w-36 h-[100px] relative">
-                      <Image
-                        src={url}
-                        alt="채팅 이미지"
-                        fill={true}
-                        style={{ objectFit: 'fill', borderRadius: '3px' }}
-                        sizes="500px"
-                        priority={true}
-                      />
-                    </div>
-                  ))}
-                </div>
-              ) : null}
+              <ChatImg msg={msg} />
             </div>
             {idx < messages.length - 1 && msg.send_from === messages[idx + 1].send_from ? null : (
               <div className="mt-auto text-xs text-gray-400">

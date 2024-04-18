@@ -123,7 +123,6 @@ const ChatHeader = ({ chatRoomId }: { chatRoomId: string }) => {
                     classNames={{
                       base: onlineUsers.find((id) => id === person.user_id) ? '' : 'bg-black opacity-70'
                     }}
-                    // isDisabled={!onlineUsers.find((id) => id === person.user_id)}
                   />
                 ))}
               </AvatarGroup>

@@ -7,9 +7,9 @@ import ChatDeleteDropDown from './ChatDeleteDropDown';
 import AvatarDefault from '@/utils/icons/AvatarDefault';
 import { useRoomDataQuery } from '@/hooks/useQueries/useChattingQuery';
 import { FaCrown } from 'react-icons/fa6';
-import Image from 'next/image';
 import { UserTypeFromTable } from '@/types/userTypes';
 import { Avatar } from '@nextui-org/react';
+import ChatImg from './ChatImg';
 
 const MyChat = ({ msg, idx, lastDivRefs }: { msg: Message; idx: number; lastDivRefs: any }) => {
   const { messages, chatRoomId } = chatStore((state) => state);
@@ -40,24 +40,7 @@ const MyChat = ({ msg, idx, lastDivRefs }: { msg: Message; idx: number; lastDivR
                     {msg.message}
                   </div>
                 ) : null}
-
-                {/* 다른 이름으로 저장하면 안뜨는 버그 */}
-                {msg.imgs?.length ? (
-                  <div className="h-[100px] flex flex-wrap justify-end">
-                    {msg.imgs.map((url) => (
-                      <div key={url} className="w-36 h-[100px] relative">
-                        <Image
-                          src={url}
-                          alt="채팅 이미지"
-                          fill={true}
-                          style={{ objectFit: 'fill', borderRadius: '3px' }}
-                          sizes="500px"
-                          priority={true}
-                        />
-                      </div>
-                    ))}
-                  </div>
-                ) : null}
+                <ChatImg msg={msg} />
               </div>
 
               {idx < messages.length - 1 && msg.send_from === messages[idx + 1].send_from ? null : (
