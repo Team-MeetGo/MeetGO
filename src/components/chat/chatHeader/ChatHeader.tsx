@@ -6,7 +6,6 @@ import { IoIosSearch } from 'react-icons/io';
 import { useParticipantsQuery, useRoomDataQuery } from '@/hooks/useQueries/useChattingQuery';
 import { useGetUserDataQuery } from '@/hooks/useQueries/useUserQuery';
 import { Avatar, AvatarGroup, Tooltip } from '@nextui-org/react';
-import { IoFemale, IoMale } from 'react-icons/io5';
 import ShowChatMember from '../chatBody/ShowChatMember';
 
 const ChatHeader = ({ chatRoomId }: { chatRoomId: string }) => {
@@ -35,6 +34,13 @@ const ChatHeader = ({ chatRoomId }: { chatRoomId: string }) => {
 
   // participants 테이블에서 해당 룸에 대한 유저정보 삭제
   const getRidOfMe = async () => {
+    if (user?.user_id === room?.roomData.leader_id) {
+      const { error: updateLeaderErr } = await clientSupabase
+        .from('room')
+        .update({ leader_id: participants.find((person) => person.user_id !== user?.user_id)?.user_id })
+        .eq('room_id', String(roomId));
+      if (updateLeaderErr) console.error('fail to update leader of room', updateLeaderErr.message);
+    }
     const { error: deleteErr } = await clientSupabase
       .from('participants')
       .delete()
