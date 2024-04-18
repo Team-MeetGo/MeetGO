@@ -12,4 +12,9 @@ export interface MapProps {
 
 export interface SideBarProps {
   chatRoomId: string;
+  isSidebarOpen: boolean;
+}
+
+export interface SideBarButtonProps {
+  chatRoomId: string;
 }

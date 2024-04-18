@@ -8,6 +8,7 @@ import ChatLoading from '@/components/chat/ChatLoading';
 import { getFromTo } from '@/utils';
 import { ITEM_INTERVAL } from '@/utils/constant';
 import ChatList from '@/components/chat/chatBody/ChatList';
+import SideBarButton from '@/components/chat/sidebar/SideBarButton';
 
 const ChatPage = async ({ params }: { params: { chatroom_id: string } }) => {
   const chatRoomId = params.chatroom_id;
@@ -26,9 +27,11 @@ const ChatPage = async ({ params }: { params: { chatroom_id: string } }) => {
     <Suspense fallback={<ChatLoading />}>
       <div className="relative flex felx-row">
         <InitChat user={user} chatRoomId={chatRoomId} allMsgs={allMsgs ?? []} />
-        <SideBar chatRoomId={chatRoomId} />
-        <div className="w-full max-w-2xl mr-auto h-screen">
-          <div className="h-full border rounded-md flex flex-col relative">
+        <div className="w-full max-w-2xl mx-auto h-screen relative">
+          <div className=" absolute top-0 left-0 z-50">
+            <SideBarButton chatRoomId={chatRoomId} />
+          </div>
+          <div className="h-full border rounded-md flex flex-col relative ">
             <ChatHeader chatRoomId={chatRoomId} />
             <Suspense fallback="skeleton 들어갈 자리">
               <ChatList user={user} chatRoomId={chatRoomId} />
