@@ -5,10 +5,12 @@ import { clientSupabase } from '@/utils/supabase/client';
 import { useEffect, useState } from 'react';
 import { FaCrown } from 'react-icons/fa6';
 import { IoFemale, IoMale } from 'react-icons/io5';
-import { useParticipantsQuery } from '@/hooks/useQueries/useChattingQuery';
+import meetingRoomHandler from '@/hooks/custom/room';
+import { RoomFemaleAvatar, RoomMaleAvatar } from '@/utils/icons/RoomAvatar';
+import MeetGoLogoPurple from '../../../utils/icons/meetgo-logo-purple.png';
+import Image from 'next/image';
 
 import type { UserType } from '@/types/roomTypes';
-
 const Member = ({ room_id }: { room_id: string }) => {
   const participants = useRoomParticipantsQuery(room_id as string);
   const [members, setMembers] = useState<UserType[]>(participants as UserType[]);
@@ -17,6 +19,11 @@ const Member = ({ room_id }: { room_id: string }) => {
   const [leader, setLeader] = useState(leaderMember);
   const femaleMembers = members.filter((member) => member.gender === 'female');
   const maleMembers = members.filter((member) => member.gender === 'male');
+  const memberNumber = roomInformation?.member_number;
+  const { getmaxGenderMemberNumber } = meetingRoomHandler();
+  const genderMaxNumber = getmaxGenderMemberNumber(memberNumber as string);
+  const hollowFemaleArray = Array.from({ length: (genderMaxNumber as number) - femaleMembers.length }, (vi, i) => i);
+  const hollowMaleArray = Array.from({ length: (genderMaxNumber as number) - maleMembers.length }, (vi, i) => i);
 
   useEffect(() => {
     const channle = clientSupabase
@@ -86,35 +93,33 @@ const Member = ({ room_id }: { room_id: string }) => {
     <>
       <div className="flex flex-col items-center justify-content align-middle">
         <div className="flex flex-row gap-[100px] items-center justify-content align-middle min-w-[1116px] max-w-[1440px]">
-          <main className="mt-[40px] grid grid-cols-1 grid-rows-4 w-100% gap-y-[25px]">
+          <main className="mt-[40px] grid grid-cols-1 grid-rows-4 w-100% gap-y-[50px]">
             {femaleMembers.map((member) => (
               <div key={member.user_id} className={`grid col-start-1 col-span-1`}>
-                <article
-                  className={`border-purpleThird border-[2px] mb-[50px] flex flex-row w-[506px] h-[166px] rounded-2xl`}
-                >
+                <article className={`border-purpleThird border-[2px] flex flex-row w-[506px] h-[166px] rounded-2xl`}>
                   {/* 카드 왼쪽 */}
                   <div className="mx-[40px] align-middle items-center">
-                    <div className="w-[86px] h-[86px] mt-[32px] border-4 mr-[48px] rounded-full relative">
+                    <div className="w-[86px] h-[86px] mt-[32px] mr-[48px] rounded-full relative">
                       {leaderMember === member.user_id ? (
                         <div>
-                          <FaCrown className="absolute h-[20px] w-[20px] m-[2px] fill-mainColor z-50" />
+                          <FaCrown className="absolute h-[20px] w-[20px] m-[2px] fill-mainColor z-50 top-[-18px] left-[29px]" />
                         </div>
                       ) : (
                         ''
                       )}
-                      <div className="object-cover my-auto rounded-full overflow-hidden">
-                        {member.avatar ? (
-                          <img
-                            className="w-[86px] h-[86px] object-cover object-center bg-cover"
-                            src={member.avatar as string}
-                            alt="유저"
-                          />
-                        ) : (
-                          <div className="w-100% h-100% object-cover object-center bg-cover">
-                            {/* <AvatarDefault /> */}
-                          </div>
-                        )}
-                      </div>
+                      {member.avatar ? (
+                        <Image
+                          className="w-[86px] h-[86px] rounded-full object-center bg-cover"
+                          src={member.avatar as string}
+                          alt="유저 아바타"
+                          height={80}
+                          width={80}
+                        />
+                      ) : (
+                        <div className="w-[86px] h-[86px] rounded-full object-center bg-cover">
+                          <RoomFemaleAvatar />
+                        </div>
+                      )}
                     </div>
                     <div className="pt-[8px] w-[100px] text-center">{member.nickname}</div>
                   </div>
@@ -123,11 +128,23 @@ const Member = ({ room_id }: { room_id: string }) => {
                   <div className="flex flex-col mt-[32px] mb-[32px]">
                     <div className="flex flex-row gap text-[16px]">
                       <div>{member.school_name}</div>
-                      {<IoFemale className="w-[16px] fill-hotPink" />}
+                      {<IoFemale className="w-[16px] my-auto fill-hotPink" />}
                     </div>
                     <div className="flex flex-row w-100% text-[14px] gap-[8px] w-[200px]">
-                      <div className="my-[16px] bg-purpleSecondary color: text-mainColor rounded-xl ">
-                        {member.favorite}
+                      <div className="my-[16px] flex flex-row gap-[6px]">
+                        {member.favorite?.map((tag) => (
+                          <div
+                            key={tag}
+                            style={{
+                              backgroundColor: '#F2EAFA',
+                              color: '#8F5DF4',
+                              borderRadius: '8px',
+                              padding: '8px'
+                            }}
+                          >
+                            {`${tag} `}
+                          </div>
+                        ))}
                       </div>
                     </div>
                     <div className="text-[14px]">{member.intro}</div>
@@ -135,33 +152,50 @@ const Member = ({ room_id }: { room_id: string }) => {
                 </article>
               </div>
             ))}
+            {hollowFemaleArray.map((h) => (
+              <article
+                key={h}
+                className={`border-purpleThird border-[2px] flex justify-center w-[506px] h-[166px] rounded-2xl`}
+              >
+                <Image
+                  className="w-[86px] h-[68px] object-center flex justify-center my-auto"
+                  src={MeetGoLogoPurple}
+                  alt="참여하지 않은 인원"
+                  height={80}
+                  width={80}
+                />
+              </article>
+            ))}
           </main>
+          {genderMaxNumber && genderMaxNumber > femaleMembers.length ? '' : ''}
 
-          <main className="mt-[40px] grid grid-cols-1 grid-rows-4 w-100% gap-x-[100px] gap-y-[25px]">
+          <main className="mt-[40px] grid grid-cols-1 grid-rows-4 w-100% gap-x-[100px] gap-y-[50px]">
             {maleMembers.map((member) => (
               <div key={member.user_id} className={`grid col-start-1 col-span-1`}>
-                <article className={`bg-purpleSecondary mb-[50px] flex flex-row w-[506px] h-[166px] rounded-2xl`}>
+                <article className={`bg-purpleSecondary flex flex-row w-[506px] h-[166px] rounded-2xl`}>
                   {/* 카드 왼쪽 */}
                   <div className="mx-[40px] align-middle items-center">
-                    <div className="w-[86px] h-[86px] mt-[32px] border-4 mr-[48px] rounded-full relative">
+                    <div className="w-[86px] h-[86px] mt-[32px] mr-[48px] rounded-full relative">
                       {leaderMember === member.user_id ? (
                         <div>
-                          <FaCrown className="absolute h-[20px] w-[20px] m-[2px] fill-mainColor z-50" />
+                          <FaCrown className="absolute h-[20px] w-[20px] m-[2px] fill-mainColor z-50 top-[-18px] left-[15px]" />
                         </div>
                       ) : (
                         ''
                       )}
-                      <div className="object-cover my-auto rounded-full overflow-hidden">
-                        {member.avatar ? (
-                          <img
-                            className="w-full h-full object-cover object-center bg-cover"
-                            src={member.avatar as string}
-                            alt="유저"
-                          />
-                        ) : (
-                          ''
-                        )}
-                      </div>
+                      {member.avatar ? (
+                        <Image
+                          className="w-[86px] h-[86px] rounded-full object-center bg-cover"
+                          src={member.avatar as string}
+                          alt="유저 아바타"
+                          height={80}
+                          width={80}
+                        />
+                      ) : (
+                        <div className="w-[86px] h-[86px] rounded-full object-center bg-cover">
+                          <RoomMaleAvatar />
+                        </div>
+                      )}
                     </div>
                     <div className="pt-[8px] w-[100px] text-center">{member.nickname}</div>
                   </div>
@@ -170,17 +204,40 @@ const Member = ({ room_id }: { room_id: string }) => {
                   <div className="flex flex-col mt-[32px] mb-[32px]">
                     <div className="flex flex-row gap text-[16px]">
                       <div>{member.school_name}</div>
-                      {<IoMale className="w-[16px] fill-blue" />}
+                      {<IoMale className="w-[16px] my-auto fill-blue" />}
                     </div>
                     <div className="flex flex-row w-100% text-[14px] gap-[8px] w-[200px]">
-                      <div className="my-[16px] bg-purpleSecondary color: text-mainColor rounded-xl ">
-                        {member.favorite}
+                      <div className="my-[16px] flex flex-row gap-[6px]">
+                        {member.favorite?.map((tag) => (
+                          <div
+                            key={tag}
+                            style={{
+                              backgroundColor: '#FFFFFF',
+                              color: '#8F5DF4',
+                              borderRadius: '8px',
+                              padding: '8px'
+                            }}
+                          >
+                            {`${tag} `}
+                          </div>
+                        ))}
                       </div>
                     </div>
                     <div className="text-[14px]">{member.intro}</div>
                   </div>
                 </article>
               </div>
+            ))}
+            {hollowMaleArray.map((h) => (
+              <article key={h} className={`bg-purpleSecondary flex justify-center w-[506px] h-[166px] rounded-2xl`}>
+                <Image
+                  className="w-[86px] h-[68px] object-center flex justify-center my-auto"
+                  src={MeetGoLogoPurple}
+                  alt="참여하지 않은 인원"
+                  height={80}
+                  width={80}
+                />
+              </article>
             ))}
           </main>
         </div>

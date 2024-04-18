@@ -28,6 +28,13 @@ const config: Config = {
         blue: '#006FEE',
         lightPurple: '#D0A1FF',
         lightBlue: '#AEE2FF'
+      },
+      animation: { 'slideTop-animation': 'sildeTop 3s linear' },
+      keyframes: {
+        slideTop: {
+          from: { top: '-150px' },
+          to: { top: '0px' }
+        }
       }
     }
   },
