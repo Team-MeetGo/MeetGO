@@ -22,7 +22,7 @@ const GetMostLikedReivew = () => {
   const sliceReviews = [...(likedReviews || []), ...(zeroLikedReviews || [])].slice(0, 6);
 
   return (
-    <div>
+    <div className="my-12">
       <div className="max-w-[1160px] flex items-center justify-between mr-[15px]">
         <div className="flex items-center mb-[15px] ml-[15px]">
           <p className="text-[26px] font-bold mr-[10px]">Best Review</p>

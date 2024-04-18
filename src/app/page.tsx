@@ -1,15 +1,15 @@
 import GetMostLikedReivew from '@/components/mainpage/GetMostLikedReview';
 import MainBanner from '@/components/mainpage/MainBanner';
 import MainBottomBanner from '@/components/mainpage/MainBottomBanner';
+import UseInformation from '@/components/mainpage/UseInformation';
 
 export default function Home() {
   return (
-    <main className="w-full flex flex-col items-center justify-content">
+    <main className="w-full flex flex-col items-center justify-content gap-x-12">
       <MainBanner />
-      <div className="my-12">
-        <GetMostLikedReivew />
-      </div>
+      <GetMostLikedReivew />
       <MainBottomBanner />
+      <UseInformation />
     </main>
   );
 }
