@@ -102,7 +102,7 @@ const Member = ({ room_id }: { room_id: string }) => {
       </div>
       <div className="flex flex-col items-center justify-content align-middle">
         <div className="flex flex-row gap-[100px] items-center justify-content align-middle min-w-[1000px] max-w-[1440px]">
-          <main className="mt-[40px] grid grid-cols-1 grid-rows-4 w-100% gap-y-[25px]">
+          <main className="mt-[40px] grid grid-cols-1 grid-rows-4 w-100% gap-y-[50px]">
             {femaleMembers.map((member) => (
               <div key={member.user_id} className={`grid col-start-1 col-span-1`}>
                 <article className={`border-purpleThird border-[2px] flex flex-row w-[506px] h-[166px] rounded-2xl`}>
