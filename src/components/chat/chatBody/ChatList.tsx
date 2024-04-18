@@ -28,6 +28,7 @@ const ChatList = ({ user, chatRoomId }: { user: User | null; chatRoomId: string 
   const prevMsgsLengthRef = useRef(messages.length);
   const lastDivRefs = useRef(messages);
   const lastMsgId = useMyLastMsgs(user?.id!, chatRoomId);
+  console.log(isScrolling);
 
   // "messages" table Realtime INSERT, DELETE 구독로직
   useEffect(() => {
@@ -140,6 +141,8 @@ const ChatList = ({ user, chatRoomId }: { user: User | null; chatRoomId: string 
   };
 
   const handleScrollDown = () => {
+    setCheckedLastMsg(true);
+    if (lastCheckedDiv) lastCheckedDiv.style.backgroundColor = '';
     scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
   };
   // insert 할 때 없어졌으면 좋겠는데..
