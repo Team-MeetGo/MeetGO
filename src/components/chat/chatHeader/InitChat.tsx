@@ -10,12 +10,10 @@ import { useEffect } from 'react';
 
 const InitChat = ({ chatRoomId, allMsgs }: { user: User | null; chatRoomId: string; allMsgs: Message[] }) => {
   const router = useRouter();
-  const { messages, chatState, isRest, setChatState, setMessages, setChatRoomId, setHasMore } = chatStore(
-    (state) => state
-  );
+  const { chatState, isRest, setChatState, setMessages, setChatRoomId, setHasMore } = chatStore((state) => state);
   const room = useRoomDataQuery(chatRoomId);
   const roomId = room?.roomId;
-  // console.log('allMsgs => ', allMsgs);
+
   useEffect(() => {
     // 채팅방 isActive 상태 구독
     const channel = clientSupabase
@@ -47,7 +45,6 @@ const InitChat = ({ chatRoomId, allMsgs }: { user: User | null; chatRoomId: stri
       }
     } else {
       // **채팅방에 있는다면
-      console.log('지금 메세지', messages);
       setMessages([...allMsgs].reverse());
       setHasMore(allMsgs?.length >= ITEM_INTERVAL + 1);
 
@@ -56,19 +53,7 @@ const InitChat = ({ chatRoomId, allMsgs }: { user: User | null; chatRoomId: stri
   }, [chatState, isRest, router]);
   // 왜 요청이 2번이나 되징
 
-  return (
-    <>
-      {/* <div className="w-full max-w-2xl mx-auto md:py-10 h-screen">
-        <div className="h-full border rounded-md flex flex-col border-indigo-600 relative">
-          <ChatHeader chatRoomId={chatRoomId} />
-          <Suspense fallback="skeleton 들어갈 자리">
-            <ChatList user={user} chatRoomId={chatRoomId} />
-          </Suspense>
-          <ChatInput />
-        </div>
-      </div> */}
-    </>
-  );
+  return null;
 };
 
 export default InitChat;

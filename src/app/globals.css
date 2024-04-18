@@ -136,6 +136,13 @@ pre {
   display: flex;
 }
 
+.chatImgRowsOverOne {
+  grid-template-rows: 100px 100px;
+}
+.chatImgRowsNotOverOne {
+  grid-template-rows: 100px;
+}
+
 /* .after\:bg-default::after {
   background-color: white !important;
 } */

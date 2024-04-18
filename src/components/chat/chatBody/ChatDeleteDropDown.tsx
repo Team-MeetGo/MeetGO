@@ -5,9 +5,10 @@ import { CiMenuKebab } from 'react-icons/ci';
 
 const ChatDeleteDropDown = ({ msg }: { msg: Message }) => {
   const handleDeleteMessage = async () => {
-    const { error } = await clientSupabase.from('messages').delete().eq('message_id', msg.message_id);
-    if (error) alert('채팅 삭제 중 오류가 발생하였습니다.');
+    const { error: messageTableErr } = await clientSupabase.from('messages').delete().eq('message_id', msg?.message_id);
+    messageTableErr && alert('채팅 삭제 중 오류가 발생하였습니다.');
   };
+
   return (
     <Dropdown>
       <DropdownTrigger>

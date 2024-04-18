@@ -1,10 +1,10 @@
-import GetMostLikedReivew from '@/components/mainpage/getMostLikedReview';
 import Image from 'next/image';
 import mainbanner_flower from '../../public/mainbanner_flower.png';
 import mainbanner_people from '../../public/mainbanner_people.png';
 import mainbanner from '../../public/mainbanner.jpg';
 import mainbanner2 from '../../public/mainbanner-2.jpg';
 import Link from 'next/link';
+import GetMostLikedReivew from '@/components/mainpage/GetMostLikedReview';
 
 export default function Home() {
   return (

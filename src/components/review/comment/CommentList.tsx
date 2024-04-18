@@ -1,3 +1,5 @@
+'use client';
+
 import CommentCard from './CommentCard';
 import NewComment from './NewComment';
 import { useFetchCommentData } from '@/hooks/useQueries/useCommentQuery';
@@ -30,7 +32,7 @@ const CommentList = ({ review_id }: Props) => {
         <NewComment review_id={review_id} />
       </div>
       {sortedData?.map((comment, index) => (
-        <div key={index} className="flex w-full max-w-[1116px] h-[180px] mt-[32px]">
+        <div key={index} className="flex w-full max-w-[1000px] h-[180px] mt-[32px]">
           <CommentCard comment={comment} />
         </div>
       ))}

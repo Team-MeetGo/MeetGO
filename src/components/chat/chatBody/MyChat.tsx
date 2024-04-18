@@ -4,11 +4,9 @@ import { chatStore } from '@/store/chatStore';
 import { Message } from '@/types/chatTypes';
 import { getformattedDate, isItMe, isNextDay } from '@/utils';
 import ChatDeleteDropDown from './ChatDeleteDropDown';
-import AvatarDefault from '@/utils/icons/AvatarDefault';
 import { useRoomDataQuery } from '@/hooks/useQueries/useChattingQuery';
-import { FaCrown } from 'react-icons/fa6';
-import Image from 'next/image';
-import { UserTypeFromTable } from '@/types/userTypes';
+import ChatImg from './ChatImg';
+import MyInfoWrapper from './MyInfoWrapper';
 
 const MyChat = ({ msg, idx, lastDivRefs }: { msg: Message; idx: number; lastDivRefs: any }) => {
   const { messages, chatRoomId } = chatStore((state) => state);
@@ -29,14 +27,17 @@ const MyChat = ({ msg, idx, lastDivRefs }: { msg: Message; idx: number; lastDivR
           )}
 
           <div className="flex gap-2 ml-auto">
-            <div className="flex flex-col gap-1.5">
+            <div className="flex flex-col">
               <div className="flex gap-2 ml-auto">
                 <div>
                   <ChatDeleteDropDown msg={msg} />
                 </div>
-                <div className="rounded-md bg-mainColor py-1.5 px-[8px] text-right text-white font-extralight">
-                  {msg.message}
-                </div>
+                {msg.message?.length ? (
+                  <div className="rounded-md bg-mainColor py-1.5 px-[8px] text-right text-white font-extralight">
+                    {msg.message}
+                  </div>
+                ) : null}
+                <ChatImg msg={msg} />
               </div>
 
               {idx < messages.length - 1 && msg.send_from === messages[idx + 1].send_from ? null : (
@@ -62,35 +63,3 @@ const MyChat = ({ msg, idx, lastDivRefs }: { msg: Message; idx: number; lastDivR
 };
 
 export default MyChat;
-
-const MyInfoWrapper = ({
-  user,
-  leaderId
-}: {
-  user: UserTypeFromTable | null | undefined;
-  leaderId: string | undefined;
-}) => {
-  return (
-    <div className="relative my-auto flex h-[52px] w-[60px] rounded-full overflow-hidden flex justify-center items-center">
-      <div className=" h-[52px] w-[52px] ml-auto">
-        {user?.avatar ? (
-          <Image
-            src={user?.avatar as string}
-            alt="Avatar"
-            style={{ objectFit: 'cover' }}
-            fill={true}
-            sizes="100px"
-            priority={true}
-          />
-        ) : (
-          <AvatarDefault />
-        )}
-      </div>
-      {leaderId === user?.user_id ? (
-        <div className="w-[24px] h-[24px] rounded-full absolute bottom-0 left-0 flex justify-center bg-purpleThird border border-gray1">
-          <FaCrown className="my-auto fill-mainColor" />
-        </div>
-      ) : null}
-    </div>
-  );
-};

@@ -30,9 +30,9 @@ const CommentCard = ({ comment }: Props) => {
   const userNickname = commentAuthorData?.nickname || null;
 
   return (
-    <div className="flex w-full max-w-[1116px] border-b-1 border-gray2">
-      <div className="flex w-full max-w-[1116px] flex-col mb-[24px]">
-        <div className="flex flex-col w-full max-w-[1116px] mt-[24px]">
+    <div className="flex w-full max-w-[1000px] border-b-1 border-gray2">
+      <div className="flex w-full max-w-[1000px] flex-col mb-[24px]">
+        <div className="flex flex-col w-full max-w-[1000px] mt-[24px]">
           <div className="flex items-center">
             <div className="mr-[15px]">
               {userAvatar ? (

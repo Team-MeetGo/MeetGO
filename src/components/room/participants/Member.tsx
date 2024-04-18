@@ -85,7 +85,7 @@ const Member = ({ room_id }: { room_id: string }) => {
   return (
     <>
       <div className="flex flex-col items-center justify-content align-middle">
-        <div className="flex flex-row gap-[100px] items-center justify-content align-middle min-w-[1116px] max-w-[1440px]">
+        <div className="flex flex-row gap-[100px] items-center justify-content align-middle min-w-[1000px] max-w-[1440px]">
           <main className="mt-[40px] grid grid-cols-1 grid-rows-4 w-100% gap-y-[25px]">
             {femaleMembers.map((member) => (
               <div key={member.user_id} className={`grid col-start-1 col-span-1`}>
