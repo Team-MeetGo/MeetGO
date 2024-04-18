@@ -5,10 +5,11 @@ import { chatStore } from '@/store/chatStore';
 import { IoIosSearch } from 'react-icons/io';
 import { useParticipantsQuery, useRoomDataQuery } from '@/hooks/useQueries/useChattingQuery';
 import { useGetUserDataQuery } from '@/hooks/useQueries/useUserQuery';
-import { Avatar, AvatarGroup } from '@nextui-org/react';
+import { Avatar, AvatarGroup, Tooltip } from '@nextui-org/react';
+import ShowChatMember from '../chatBody/ShowChatMember';
 
 const ChatHeader = ({ chatRoomId }: { chatRoomId: string }) => {
-  const { setMessages, setisRest, setSearchMode } = chatStore((state) => state);
+  const { onlineUsers, setMessages, setisRest, setSearchMode } = chatStore((state) => state);
   const { data: user } = useGetUserDataQuery();
   const room = useRoomDataQuery(chatRoomId);
   const roomId = room?.roomId;
@@ -19,8 +20,8 @@ const ChatHeader = ({ chatRoomId }: { chatRoomId: string }) => {
     setSearchMode();
   };
 
+  // 채팅방 isActive 상태를 false로 변경
   const updateChatRoomIsActive = async () => {
-    // 채팅방 isActive 상태를 false로 변경
     const { error: updateActiveErr } = await clientSupabase
       .from('chatting_room')
       .update({ isActive: false })
@@ -31,8 +32,15 @@ const ChatHeader = ({ chatRoomId }: { chatRoomId: string }) => {
     }
   };
 
+  // participants 테이블에서 해당 룸에 대한 유저정보 삭제
   const getRidOfMe = async () => {
-    // participants 테이블에서 해당 룸에 대한 유저정보 삭제
+    if (user?.user_id === room?.roomData.leader_id) {
+      const { error: updateLeaderErr } = await clientSupabase
+        .from('room')
+        .update({ leader_id: participants.find((person) => person.user_id !== user?.user_id)?.user_id })
+        .eq('room_id', String(roomId));
+      if (updateLeaderErr) console.error('fail to update leader of room', updateLeaderErr.message);
+    }
     const { error: deleteErr } = await clientSupabase
       .from('participants')
       .delete()
@@ -44,13 +52,14 @@ const ChatHeader = ({ chatRoomId }: { chatRoomId: string }) => {
     }
   };
 
+  // 남아있는 사람인지 나간사람인지 isRest 상태변경으로 화면 렌더링 바꾸는 함수
   const handleIsRest = async () => {
-    // OthersChat이랑 코드 겹침 나중에 마무리단계에서 따로 뺄 예정
     const { data: restOf, error: getPartErr } = await clientSupabase
       .from('participants')
       .select('user_id')
       .eq('room_id', String(roomId));
     const restArr = restOf?.map((r) => r.user_id);
+
     setisRest(restArr?.includes(user?.user_id!) as boolean);
     if (getPartErr) {
       console.error(getPartErr.message);
@@ -58,11 +67,31 @@ const ChatHeader = ({ chatRoomId }: { chatRoomId: string }) => {
     }
   };
 
+  // 마지막 메세지 삭제
   const deleteLastMsg = async () => {
     const { error } = await clientSupabase.from('remember_last_msg').delete().eq('chatting_room_id', chatRoomId);
     if (error) console.error('remember_last_msg table에 해당 채팅방 관련 정보 삭제 실패');
   };
 
+  // 해당 유저가 남긴 채팅창의 이미지들 지우기
+  const deleteTheUserImgs = async () => {
+    const { error: imgStorageErr, data: usersAllImgList } = await clientSupabase.storage
+      .from('chatImg')
+      .list(`${chatRoomId}/${user?.user_id}`);
+    imgStorageErr && console.error('storage remove fail', imgStorageErr.message);
+    const filesToRemove = usersAllImgList?.map((x) => `${chatRoomId}/${user?.user_id}/${x.name}`);
+
+    if (filesToRemove) {
+      const { error: deleteFilesErr } = await clientSupabase.storage.from('chatImg').remove(filesToRemove);
+      deleteFilesErr && console.error('fail to delete list of the folder', deleteFilesErr.message);
+      const { error: deleteFolderErr } = await clientSupabase.storage
+        .from('chatImg')
+        .remove([`${chatRoomId}/${user?.user_id}`]);
+      deleteFolderErr && console.error("fail to delete the user's folder of storage", deleteFolderErr.message);
+    }
+  };
+
+  // room_status 모집완료 -> 모집중으로 변경
   const updateRoomState = async () => {
     const { error } = await clientSupabase.from('room').update({ room_status: '모집중' }).eq('room_id', String(roomId));
     if (error) console.error('참가자 방 나갈 시 room_status 모집중으로 변경 실패', error.message);
@@ -74,6 +103,7 @@ const ChatHeader = ({ chatRoomId }: { chatRoomId: string }) => {
       await getRidOfMe();
       await handleIsRest();
       await deleteLastMsg();
+      await deleteTheUserImgs();
       await updateRoomState();
       setMessages([]);
     } else {
@@ -94,7 +124,15 @@ const ChatHeader = ({ chatRoomId }: { chatRoomId: string }) => {
             <div>
               <AvatarGroup isBordered>
                 {participants.map((person) => (
-                  <Avatar key={person.user_id} src={person.avatar as string} className="w-[32px] h-[32px]" />
+                  <Tooltip key={person.user_id} content={<ShowChatMember person={person} />}>
+                    <Avatar
+                      src={person.avatar as string}
+                      className={`w-[32px] h-[32px]`}
+                      classNames={{
+                        base: onlineUsers.find((id) => id === person.user_id) ? '' : 'bg-black opacity-70'
+                      }}
+                    />
+                  </Tooltip>
                 ))}
               </AvatarGroup>
             </div>

@@ -3,7 +3,7 @@ import Link from 'next/link';
 
 const MainBottomBanner = () => {
   return (
-    <div className="w-full h-40 bg-gradient-to-main2 flex justify-center items-center mb-[88px]">
+    <div className="w-full h-40 bg-gradient-to-main2 flex justify-center items-center">
       <div className="flex items-center">
         <p className="text-[30px] text-white mr-[60px]">현재 많은 분들이 기다리고 있어요~</p>
         <Link

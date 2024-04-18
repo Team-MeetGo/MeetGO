@@ -31,8 +31,13 @@ const CommentList = ({ review_id }: Props) => {
       <div>
         <NewComment review_id={review_id} />
       </div>
+<<<<<<< HEAD
       {sortedData?.map((comment) => (
         <div key={comment.comment_id} className="flex w-full max-w-[1116px] h-[180px] mt-[32px]">
+=======
+      {sortedData?.map((comment, index) => (
+        <div key={index} className="flex w-full max-w-[1000px] h-[180px] mt-[32px]">
+>>>>>>> 27cdc65b71ee280eeea7a01b91c7cf9845d4f6f1
           <CommentCard comment={comment} />
         </div>
       ))}

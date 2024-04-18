@@ -22,21 +22,19 @@ const GetMostLikedReivew = () => {
   const sliceReviews = [...(likedReviews || []), ...(zeroLikedReviews || [])].slice(0, 6);
 
   return (
-    <div className="my-12">
-      <div className="max-w-[1160px] flex items-center justify-between mr-[15px]">
-        <div className="flex items-center mb-[15px] ml-[15px]">
-          <p className="text-[26px] font-bold mr-[10px]">Best Review</p>
-        </div>
-        <div className="flex items-center mr-[10px] mb-[15px]">
+    <div className="my-12 max-w-[1000px] flex flex-col justify-between w-full">
+      <div className="flex flex-row justify-between mb-8">
+        <p className="text-[26px] font-bold ">Best Review</p>
+        <div className="flex flex-row items-center">
           <Link href="/review/pageNumber/1">더보기</Link>
           <div className="text-mainColor">
             <IoIosArrowForward />
           </div>
         </div>
       </div>
-      <ul className="max-w-[1160px] grid grid-cols-3 gap-x-[24px] gap-y-[32px]">
-        {sliceReviews.map((item, index) => (
-          <ReviewCard key={index} review={item} />
+      <ul className="max-w-[1000px] grid grid-cols-3 gap-x-6 gap-y-8">
+        {sliceReviews.map((item) => (
+          <ReviewCard key={item.review_id} review={item} />
         ))}
       </ul>
     </div>

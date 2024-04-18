@@ -10,14 +10,14 @@ const ChatSearch = ({ isScrollTop }: { isScrollTop: boolean }) => {
   const [doneSearchDivs, setDoneSearchdivs] = useState<(HTMLElement | null)[]>();
   const [searchCount, setSearchCount] = useState(0);
   const [upDownCount, setUpDownCount] = useState(0);
+  console.log('upDownCount => ', upDownCount);
 
   const handleSearch = () => {
     if (searchWord) {
       const filteredIds = messages
-        .filter((m) => m.message.includes(searchWord))
+        .filter((m) => m.message?.includes(searchWord))
         .map((messages) => messages.message_id)
         .reverse();
-
       const idsDivs = filteredIds.map((id) => {
         return document.getElementById(`${messages.find((m) => m.message_id === id)?.message_id}`);
       });
@@ -26,7 +26,8 @@ const ChatSearch = ({ isScrollTop }: { isScrollTop: boolean }) => {
       if (idsDivs && idsDivs.length >= searchCount + 1) {
         const theDiv = idsDivs[searchCount];
         if (theDiv) {
-          theDiv.style.backgroundColor! = 'gray';
+          theDiv.style.backgroundColor! = '#E4D4F4';
+          theDiv.style.borderRadius = '5px';
           theDiv.scrollIntoView({ block: 'center' });
           setSearchCount((prev) => prev + 1);
           setUpDownCount((prev) => prev + 1);
@@ -41,20 +42,23 @@ const ChatSearch = ({ isScrollTop }: { isScrollTop: boolean }) => {
   };
 
   const handleSearchUp = () => {
-    if (doneSearchDivs) {
+    if (doneSearchDivs && upDownCount < doneSearchDivs.length) {
       const theDiv = doneSearchDivs[upDownCount];
       if (theDiv) {
-        theDiv.style.backgroundColor! = 'gray';
+        theDiv.style.backgroundColor! = '#E4D4F4';
+        theDiv.style.borderRadius = '5px';
         theDiv.scrollIntoView({ block: 'center' });
       }
       setUpDownCount((prev) => prev + 1);
     }
   };
+
   const handleSearchDown = () => {
-    if (doneSearchDivs) {
+    if (doneSearchDivs && upDownCount > 0) {
       const theDiv = doneSearchDivs[upDownCount - 2];
       if (theDiv) {
-        theDiv.style.backgroundColor! = 'gray';
+        theDiv.style.backgroundColor! = '#E4D4F4';
+        theDiv.style.borderRadius = '5px';
         theDiv.scrollIntoView({ block: 'center' });
       }
       setUpDownCount((prev) => prev - 1);
@@ -88,7 +92,7 @@ const ChatSearch = ({ isScrollTop }: { isScrollTop: boolean }) => {
   return (
     <>
       {searchMode ? (
-        <div className={`${isScrollTop ? '' : 'absolute'} flex justify-between w-full`}>
+        <div className={`${isScrollTop ? 'w-full' : 'absolute z-50 w-[94%]'} flex justify-between items-center`}>
           <div className="flex gap-1">
             <form
               onSubmit={(e) => {
@@ -108,15 +112,15 @@ const ChatSearch = ({ isScrollTop }: { isScrollTop: boolean }) => {
               <input
                 value={searchWord}
                 onChange={(e) => setSearchWord(e.target.value)}
-                className="h-[40px] p-[8px] border-2 border-[#D4D4D8] rounded-md focus:outline-none"
+                className="h-[40px] w-[560px] p-[8px] border-2 border-[#D4D4D8] rounded-md focus:outline-none"
                 placeholder="     채팅내용 검색하기"
                 autoFocus
               ></input>
-              <div>{doneSearchDivs?.length ? `(${doneSearchDivs?.length})` : ''}</div>
+              <div className="absolute right-3">{doneSearchDivs?.length ? `(${doneSearchDivs?.length})` : ''}</div>
             </form>
           </div>
 
-          <div className="flex gap-2">
+          <div className="flex gap-3">
             <div>
               <button onClick={handleSearchUp}>
                 <FaChevronUp />
