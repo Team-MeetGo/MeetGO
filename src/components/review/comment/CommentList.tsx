@@ -1,3 +1,5 @@
+'use client';
+
 import CommentCard from './CommentCard';
 import NewComment from './NewComment';
 import { useFetchCommentData } from '@/hooks/useQueries/useCommentQuery';

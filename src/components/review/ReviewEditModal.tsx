@@ -132,7 +132,7 @@ export default function ReviewEditModal({ review_id, disclosure }: Props) {
                     <div className="flex mb-[32px] gap-2">
                       <div className="flex justify-center gap-2">
                         {previewImages.map((imageUrl, index) => (
-                          <div key={index} className="relative absolute w-[140px] h-[140px] aspect-square">
+                          <div key={index} className="relative w-[140px] h-[140px] aspect-square">
                             <Image
                               src={imageUrl}
                               alt={`Preview Image ${index}`}

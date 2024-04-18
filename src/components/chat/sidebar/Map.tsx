@@ -10,17 +10,13 @@ import {
   useUpdateMeetingLocationMutation
 } from '@/hooks/useMutation/useMeetingLocationMutation';
 import { useGetUserDataQuery } from '@/hooks/useQueries/useUserQuery';
+import { MapProps } from '@/types/sideBarTypes';
 
 declare global {
   interface Window {
     kakao: any;
   }
 }
-
-interface MapProps {
-  chatRoomId: string;
-}
-
 const Map: React.FC<MapProps> = ({ chatRoomId }) => {
   const mapRef = useRef<string>();
   const [map, setMap] = useState<any>();
@@ -222,7 +218,9 @@ const Map: React.FC<MapProps> = ({ chatRoomId }) => {
         <h1 className="font-semibold text-2xl mb-2">미팅 장소</h1>
         <Card className="h-[60px] border border-mainColor rounded-[9px] shadow-none ">
           <CardBody className=" flex flex-row justify-start items-center text-lg">
-            <p className="text-lg">{selectedMeetingLocation}</p>
+            <p className={selectedMeetingLocation ? '' : 'text-gray2'}>
+              {selectedMeetingLocation ? selectedMeetingLocation : '방장이 선택한 장소가 표시됩니다.'}
+            </p>
           </CardBody>
         </Card>
       </div>
@@ -255,7 +253,7 @@ const Map: React.FC<MapProps> = ({ chatRoomId }) => {
         </CardBody>
       </Card>
 
-      <div id="map" className="w-70 h-80"></div>
+      <div id="map" className="w-full h-80"></div>
       <div className=" flex flex-col justify-start items-start mx-auto">
         {bars.map((bar, index) => (
           <div
