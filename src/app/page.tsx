@@ -2,7 +2,7 @@ import Image from 'next/image';
 import mainbanner_flower from '../../public/mainbanner_flower.png';
 import mainbanner_people from '../../public/mainbanner_people.png';
 import Link from 'next/link';
-// import GetMostLikedReivew from '@/components/mainpage/GetMostLikedReview';
+import GetMostLikedReivew from '@/components/mainpage/GetMostLikedReview';
 
 export default function Home() {
   return (
@@ -18,7 +18,9 @@ export default function Home() {
         </div>
       </div>
       <div className="mt-[120px] mb-[88px]">
-        <div>{/* <GetMostLikedReivew /> */}</div>
+        <div>
+          <GetMostLikedReivew />
+        </div>
       </div>
       <div className="w-full h-[208px] bg-gradient-to-main2 flex justify-center items-center mb-[88px]">
         <div className="flex items-center">
