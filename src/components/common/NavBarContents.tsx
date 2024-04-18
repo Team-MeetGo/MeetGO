@@ -18,6 +18,7 @@ import { useGetUserDataQuery } from '@/hooks/useQueries/useUserQuery';
 import { useQueryClient } from '@tanstack/react-query';
 import { USER_DATA_QUERY_KEY } from '@/query/user/userQueryKeys';
 import Link from 'next/link';
+import { useEffect } from 'react';
 
 const NavBarContents = () => {
   const queryClient = useQueryClient();
@@ -48,32 +49,34 @@ const NavBarContents = () => {
   };
 
   return (
-    <Navbar className="py-[20px] h-auto">
-      <NavbarBrand>
-        <Link href="/" className="max-w-[150px]">
-          <Image
-            src={MeetGoLogo}
-            alt="MeetGo Logo"
-            style={{
-              width: '100%',
-              height: 'auto'
-            }}
-            priority={true}
-          />
-        </Link>
-      </NavbarBrand>
-      <NavbarContent className="hidden sm:flex gap-4 h-auto" justify="center">
-        <NavbarItem>
-          <Link color="foreground" href={isValidate ? '/meetingRoom' : '/mypage'} onClick={() => checkIsValidate()}>
-            로비
+    <Navbar className="flex flex-row py-[20px] h-auto">
+      <div className="flex felx-row justify-between gap-11 ">
+        <NavbarBrand>
+          <Link href="/" className="max-w-[150px]">
+            <Image
+              src={MeetGoLogo}
+              alt="MeetGo Logo"
+              style={{
+                width: '100%',
+                height: 'auto'
+              }}
+              priority={true}
+            />
           </Link>
-        </NavbarItem>
-        <NavbarItem isActive>
-          <Link href="/review/pageNumber/1" aria-current="page" color="secondary">
-            리뷰게시판
-          </Link>
-        </NavbarItem>
-      </NavbarContent>
+        </NavbarBrand>
+        <NavbarContent className="hidden sm:flex h-auto gap-11">
+          <NavbarItem>
+            <Link color="foreground" href={isValidate ? '/meetingRoom' : '/mypage'} onClick={() => checkIsValidate()}>
+              Lobby
+            </Link>
+          </NavbarItem>
+          <NavbarItem isActive>
+            <Link href="/review/pageNumber/1" aria-current="page" color="secondary">
+              Review
+            </Link>
+          </NavbarItem>
+        </NavbarContent>
+      </div>
 
       <NavbarContent className="h-auto" as="div" justify="end">
         {isLoggedIn ? (
@@ -104,7 +107,7 @@ const NavBarContents = () => {
             </Dropdown>
           </div>
         ) : (
-          <div>
+          <div className="flex gap-2">
             <Link
               href="/login"
               className="bg-white rounded-[12px] px-[20px] py-[12px] text-[18px] text-[#252642] font-medium"
