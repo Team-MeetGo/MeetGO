@@ -10,10 +10,7 @@ import { IoIosArrowForward, IoIosArrowBack } from 'react-icons/io';
 import { useChatDataQuery, useRoomDataQuery } from '@/hooks/useQueries/useChattingQuery';
 import { useUpdateMeetingTimeMutation } from '@/hooks/useMutation/useMeetingTimeMutation';
 import { useGetUserDataQuery } from '@/hooks/useQueries/useUserQuery';
-
-interface DateTimePickerProps {
-  chatRoomId: string;
-}
+import { DateTimePickerProps } from '@/types/sideBarTypes';
 
 const DateTimePicker: React.FC<DateTimePickerProps> = forwardRef(({ chatRoomId }, ref) => {
   const [selectedMeetingTime, setSelectedMeetingTime] = useState<Date | null>(new Date());

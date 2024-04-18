@@ -8,7 +8,7 @@ const ReviewDetailPage = ({ params }: { params: { review_id: string } }) => {
     <div className="flex flex-col justify-center items-center">
       <div className="w-full h-[208px] flex justify-center items-center text-white text-[50px] bg-gradient-to-review mb-[88px]">
         <Link href="/review/pageNumber/1">
-          <p className="text-white text-[50px]">리뷰페이지</p>
+          <p className="text-white text-[50px]">Review</p>
         </Link>
       </div>
       <div className="flex flex-col max-w-[1111px] w-full mb-[88px]">
