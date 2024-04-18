@@ -81,21 +81,24 @@ export type Database = {
         Row: {
           chatting_room_id: string;
           created_at: string;
-          message: string;
+          imgs: string[] | null;
+          message: string | null;
           message_id: string;
           send_from: string;
         };
         Insert: {
           chatting_room_id: string;
           created_at?: string;
-          message: string;
+          imgs?: string[] | null;
+          message?: string | null;
           message_id?: string;
           send_from?: string;
         };
         Update: {
           chatting_room_id?: string;
           created_at?: string;
-          message?: string;
+          imgs?: string[] | null;
+          message?: string | null;
           message_id?: string;
           send_from?: string;
         };

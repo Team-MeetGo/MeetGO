@@ -1,10 +1,6 @@
 'use client';
-import { Chip } from '@nextui-org/react';
 import { IoFemale, IoMale } from 'react-icons/io5';
-
-// import type { UUID } from 'crypto';
 import meetingRoomHandler from '@/hooks/custom/room';
-import { useRouter } from 'next/navigation';
 import {
   useDeleteMember,
   useDeleteRoom,
@@ -13,10 +9,9 @@ import {
 } from '@/hooks/useMutation/useMeetingMutation';
 import { useRoomInfoWithRoomIdQuery, useRoomParticipantsQuery } from '@/hooks/useQueries/useMeetingQuery';
 import { useGetUserDataQuery } from '@/hooks/useQueries/useUserQuery';
+import { useRouter } from 'next/navigation';
 
 import type { UserType } from '@/types/roomTypes';
-import AcceptanceRoomButtons from './AcceptanceRoomButtons';
-import { RoomData } from '@/types/chatTypes';
 
 function RoomInformation({ room_id }: { room_id: string }) {
   const router = useRouter();
