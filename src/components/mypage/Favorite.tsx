@@ -33,7 +33,7 @@ const Favorite: React.FC<IsEditingType> = ({ isEditing }) => {
     <div className="flex flex-col gap-4">
       <div className="flex w-full gap-6">
         <label className="block text-lg font-semibold w-[100px]">이상형</label>
-        <div className="flex gap-2">
+        <div className="flex gap-2 max-md:flex-wrap">
           {Array.from(selected).map((value) => (
             <Chip
               key={value}

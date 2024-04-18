@@ -38,7 +38,7 @@ export const googleLogin = async () => {
 export const kakaoLogin = async () => {
   const { data, error } = await clientSupabase.auth.signInWithOAuth({
     provider: 'kakao',
-    options: { queryParams: { access_type: 'offline', prompt: 'consent' } }
+    options: { queryParams: { access_type: 'offline', prompt: 'consent' }, redirectTo: '/' }
   });
   if (data) {
     return console.log('카카오 로그인 성공');
