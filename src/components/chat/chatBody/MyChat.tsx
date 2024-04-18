@@ -4,12 +4,9 @@ import { chatStore } from '@/store/chatStore';
 import { Message } from '@/types/chatTypes';
 import { getformattedDate, isItMe, isNextDay } from '@/utils';
 import ChatDeleteDropDown from './ChatDeleteDropDown';
-import AvatarDefault from '@/utils/icons/AvatarDefault';
 import { useRoomDataQuery } from '@/hooks/useQueries/useChattingQuery';
-import { FaCrown } from 'react-icons/fa6';
-import { UserTypeFromTable } from '@/types/userTypes';
-import { Avatar } from '@nextui-org/react';
 import ChatImg from './ChatImg';
+import MyInfoWrapper from './MyInfoWrapper';
 
 const MyChat = ({ msg, idx, lastDivRefs }: { msg: Message; idx: number; lastDivRefs: any }) => {
   const { messages, chatRoomId } = chatStore((state) => state);
@@ -66,28 +63,3 @@ const MyChat = ({ msg, idx, lastDivRefs }: { msg: Message; idx: number; lastDivR
 };
 
 export default MyChat;
-
-const MyInfoWrapper = ({
-  user,
-  leaderId
-}: {
-  user: UserTypeFromTable | null | undefined;
-  leaderId: string | undefined;
-}) => {
-  return (
-    <div className="relative my-auto flex h-[60px] w-[60px] ">
-      <div className="h-16 w-16 ml-auto flex justify-center items-center">
-        {user?.avatar ? (
-          <Avatar src={user.avatar as string} alt="Avatar" size="lg" className="transition-transform object-cover" />
-        ) : (
-          <AvatarDefault />
-        )}
-      </div>
-      {leaderId === user?.user_id ? (
-        <div className="w-6 h-6 rounded-full absolute bottom-0 left-0 flex justify-center bg-purpleThird border border-gray1">
-          <FaCrown className="my-auto fill-mainColor" />
-        </div>
-      ) : null}
-    </div>
-  );
-};
