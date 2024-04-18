@@ -1,5 +1,6 @@
 'use client';
 import { useRoomDataQuery } from '@/hooks/useQueries/useChattingQuery';
+import { useGetUserDataQuery } from '@/hooks/useQueries/useUserQuery';
 import { chatStore } from '@/store/chatStore';
 import { Message, chatRoomPayloadType } from '@/types/chatTypes';
 import { ITEM_INTERVAL } from '@/utils/constant';
@@ -13,6 +14,7 @@ const InitChat = ({ chatRoomId, allMsgs }: { user: User | null; chatRoomId: stri
   const { chatState, isRest, setChatState, setMessages, setChatRoomId, setHasMore } = chatStore((state) => state);
   const room = useRoomDataQuery(chatRoomId);
   const roomId = room?.roomId;
+  const { data: user } = useGetUserDataQuery();
 
   useEffect(() => {
     // 채팅방 isActive 상태 구독
@@ -45,6 +47,7 @@ const InitChat = ({ chatRoomId, allMsgs }: { user: User | null; chatRoomId: stri
       }
     } else {
       // **채팅방에 있는다면
+      // if (user?.user_id !== room?.roomData.leader_id) router.push(`chat/${chatRoomId}`);
       setMessages([...allMsgs].reverse());
       setHasMore(allMsgs?.length >= ITEM_INTERVAL + 1);
 

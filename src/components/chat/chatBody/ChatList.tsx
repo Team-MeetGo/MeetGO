@@ -28,7 +28,6 @@ const ChatList = ({ user, chatRoomId }: { user: User | null; chatRoomId: string 
   const prevMsgsLengthRef = useRef(messages.length);
   const lastDivRefs = useRef(messages);
   const lastMsgId = useMyLastMsgs(user?.id!, chatRoomId);
-  console.log(isScrolling);
 
   // "messages" table Realtime INSERT, DELETE 구독로직
   useEffect(() => {
