@@ -66,9 +66,9 @@ function RoomInformation({ room_id }: { room_id: string }) {
 
   return (
     <div className="flex flex-col items-center justify-content">
-      <div className="flex flex-col items-center justify-content min-w-[1116px] max-w-[1440px]">
+      <div className="flex flex-col items-center justify-content min-w-[1000px] max-w-[1440px]">
         <div className="h-[72x] w-full mt-[88px] border-b border-gray2 flex flex-row pb-[32px]">
-          <div className="flex flex-row min-w-[1116px] max-w-[1440px] justify-between">
+          <div className="flex flex-row min-w-[1000px] max-w-[1440px] justify-between">
             <div className="flex flex-row align-bottom">
               <div className="text-[40px] pr-[32px]">{room_title}</div>
 
