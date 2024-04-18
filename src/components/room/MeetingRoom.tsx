@@ -6,15 +6,15 @@ import { useAlreadyChatRoomQuery, useRoomParticipantsQuery } from '@/hooks/useQu
 import { useGetUserDataQuery } from '@/hooks/useQueries/useUserQuery';
 import { Chip } from '@nextui-org/react';
 import { useRouter } from 'next/navigation';
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { BsFire } from 'react-icons/bs';
 import { HiOutlineDotsVertical } from 'react-icons/hi';
 import { IoChatbubblesOutline, IoFemale, IoMale } from 'react-icons/io5';
 import DeleteMeetingRoom from './DeleteMeetingRoom';
 import EditMeetingRoom from './EditMeetingRoom';
+import Image from 'next/image';
 
 import type { MeetingRoomType } from '@/types/roomTypes';
-import Image from 'next/image';
 function MeetingRoom({ room }: { room: MeetingRoomType }) {
   const { room_id, room_status, room_title, member_number, location, feature, leader_id, region } = room;
   const router = useRouter();
@@ -30,6 +30,8 @@ function MeetingRoom({ room }: { room: MeetingRoomType }) {
   const emptySeat = genderMaxNumber! * 2 - participants!.length;
   const countFemale = participants?.filter((member) => member?.gender === 'female').length;
   const countMale = participants?.filter((member) => member?.gender === 'male').length;
+  const dropdownRef = useRef<HTMLDivElement>(null);
+  const [openModal, setOpenModal] = useState(false);
 
   const addMember = async ({ room_id }: { room_id: string }) => {
     //채팅창: 채팅창으로 이동
@@ -68,6 +70,16 @@ function MeetingRoom({ room }: { room: MeetingRoomType }) {
     return router.push(`/meetingRoom/${room_id}`);
   };
 
+  useEffect(() => {
+    const outSideClick = (e) => {
+      const { target } = e;
+      if (openModal && dropdownRef.current && !dropdownRef.current.contains(target)) {
+        setOpenModal(false);
+      }
+    };
+    document.addEventListener('mousedown', outSideClick);
+  });
+
   return (
     <div
       className={
@@ -83,29 +95,41 @@ function MeetingRoom({ room }: { room: MeetingRoomType }) {
           <div className="h-[24px]"></div>
 
           <div className="flex flex-row justify-between align-middle justify-items-center m-auto">
-            <div>
-              <div className="text-[16px] flex flex-row justify-between align-middle justify-items-center">
-                <IoFemale className="w-[16px] m-auto fill-hotPink" /> {`${countFemale}/${genderMaxNumber} |`}
-                <IoMale className="w-[16px] m-auto fill-blue" /> {`${countMale}/${genderMaxNumber} | ${room_status}`}
-              </div>
+            <div className="text-[16px] flex flex-row justify-between align-middle justify-items-center">
+              <IoFemale className="w-[14px] h-[14px] my-auto fill-hotPink" /> {`${countFemale}/${genderMaxNumber} |`}
+              <IoMale className="w-[14px] h-[14px] my-auto fill-blue" />
+              {`${countMale}/${genderMaxNumber} | ${room_status}`}
             </div>
-            <div className="pr-[8px]">
+            <div className="pr-[16px]">
               {alreadyChatRoom && alreadyChatRoom.length > 0 ? (
-                <IoChatbubblesOutline className="h-6 w-6 m-auto fill-gray2" />
+                <div className="flex flex-row gap-[2px] p-[4px] bg-white rounded-lg text-[14px]">
+                  <div>채팅중</div>
+                  <div>
+                    <IoChatbubblesOutline className="h-[18px] w-[18px] m-auto fill-gray2" />
+                  </div>
+                </div>
               ) : emptySeat === 1 ? (
-                <BsFire className="h-6 w-6 m-auto fill-hotPink" />
+                <div className="flex flex-row gap-[2px] p-[4px] bg-white rounded-lg text-[14px]">
+                  <div className="text-hotPink m-auto">한자리!!</div>
+                  <div>
+                    <BsFire className="h-[18px] w-[18px] m-auto fill-hotPink" />
+                  </div>
+                </div>
               ) : user_id === leader_id ? (
-                <div>
+                <div className="relative">
                   <button
                     onClick={() => {
                       setOpen((open) => !open);
                     }}
                   >
-                    <HiOutlineDotsVertical className="h-6 w-6 m-auto" />
+                    <HiOutlineDotsVertical className="h-[20px] w-[20px] m-auto" />
                   </button>
 
                   {open && (
-                    <div className="flex flex-col w-[92px] h-[78px] p-[5px] justify-items-center border-gray2 border-1 rounded-xl">
+                    <div
+                      ref={dropdownRef}
+                      className="absolute top-full right-[0px] bg-white flex flex-col w-[92px] h-[78px] p-[5px] justify-items-center border-gray2 border-1 rounded-xl"
+                    >
                       <div className="flex flex-col justify-items-center w-[92px]">
                         <DeleteMeetingRoom room_id={room_id} />
                       </div>

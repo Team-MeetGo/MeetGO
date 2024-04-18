@@ -79,7 +79,7 @@ function EditMeetingRoom({ room }: { room: MeetingRoomType }) {
           beforeData();
         }}
         onPress={onOpen}
-        className="gap-0 p-0 m-0 h-[31px] w-[76px] bg-mainColor text-white text-[16px] rounded-xl"
+        className="gap-0 p-0 m-0 h-[31px] w-[76px] bg-white hover:bg-mainColor hover:text-white text-[16px] rounded-xl"
       >
         수정
       </Button>

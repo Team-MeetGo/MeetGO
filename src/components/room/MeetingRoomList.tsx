@@ -121,7 +121,7 @@ function MeetingRoomList() {
   return (
     <>
       <div className="fixed z-50 bg-white">
-        <article className="h-[366px] mt-[88px] border-b border-gray2 min-w-[1116px] max-w-[1540px]">
+        <article className="h-[366px] mt-[88px] border-b border-gray2 min-w-[1000px] max-w-[1540px]">
           <div className="flex flex-row w-full justify-between">
             <div className="text-[40px] font-semibold ml-[56px]">참여 중</div>
             <div className="flex flex-row align-middle justify-center gap-4 mr-[56px]">
@@ -132,7 +132,7 @@ function MeetingRoomList() {
                     onReload();
                   }}
                 >
-                  <IoMdRefresh className="h-6 w-6 m-2" />
+                  <IoMdRefresh className="h-[24px] w-[24px] m-2" />
                 </button>
                 <div className="text-[14px] text-center">New</div>
               </div>
@@ -145,7 +145,7 @@ function MeetingRoomList() {
               <IoIosArrowBack className="h-[40px] w-[40px] m-[8px]" />
             </button>
             {
-              <div className=" h-[241px] gap-[24px] grid grid-cols-3 w-full px-4">
+              <div className=" h-[241px] gap-[24px] grid grid-cols-3 w-100% px-4">
                 {filteredMyRoomList !== null &&
                   filteredMyRoomList?.map((room, index) => {
                     if (index < 3 * page && index >= 3 * (page - 1))

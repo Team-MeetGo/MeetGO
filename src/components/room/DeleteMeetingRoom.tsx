@@ -14,7 +14,10 @@ function DeleteMeetingRoom({ room_id }: { room_id: string }) {
   };
 
   return (
-    <button className="gap-0 p-0 m-0 h-[31px] w-[76px] text-black text-[16px]" onClick={DeleteMeetingRoomHandler}>
+    <button
+      className="gap-0 p-0 m-0 h-[31px] w-[76px] rounded-xl text-black text-[16px] bg-white hover:bg-mainColor hover:text-white "
+      onClick={DeleteMeetingRoomHandler}
+    >
       삭제
     </button>
   );
