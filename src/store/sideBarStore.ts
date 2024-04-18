@@ -1,4 +1,3 @@
-import { Message } from '@/types/chatTypes';
 import { create } from 'zustand';
 
 type sideBarState = {
