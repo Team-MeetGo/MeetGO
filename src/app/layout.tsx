@@ -10,7 +10,8 @@ const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
   title: 'MeetGo',
-  description: '20대 대학생을 위한 미팅 서비스'
+  description: '20대 대학생을 위한 미팅 서비스',
+  icons: { icon: '/favicon.ico' }
 };
 
 export default function RootLayout({
@@ -26,7 +27,7 @@ export default function RootLayout({
           <QueryProvider>
             <NavBar />
             {children}
-            <ReactQueryDevtools initialIsOpen={false} />
+            <ReactQueryDevtools initialIsOpen={true} />
           </QueryProvider>
         </NextProvider>
       </body>

@@ -7,7 +7,7 @@ import { useEffect } from 'react';
 
 const RememberLastChat = () => {
   const { data: user } = useGetUserDataQuery();
-  const { chatRoomId, messages, setMessages } = chatStore((state) => state);
+  const { chatRoomId, messages } = chatStore((state) => state);
   const room = useRoomDataQuery(chatRoomId as string);
   const roomId = room?.roomId;
   const lastMsgId = useMyLastMsgs(user?.user_id!, chatRoomId);
@@ -27,12 +27,8 @@ const RememberLastChat = () => {
 
   // 마지막으로 읽은 메세지 기억하기(채팅방에서 나갈 때 적용)
   useEffect(() => {
-    console.log('useEffect 자체가 실행되는 건 맞아?');
     return () => {
-      console.log('clean up 함수 실행되니');
       // 왜 처음에 방을 만들어서 들어간 뒤, 메세지를 남기면 나오기 직전에는 아닌데 나올때는 messages.length가 0이 출력될까?
-      console.log(messages.length);
-      console.log(lastMsgId);
       // 현재 나누는 메세지가 있을 때
       // 이전에 저장된 마지막 메세지가 있으면 현재 메세지 중 마지막 걸로 업데이트, 없으면 현재 메세지 중 마지막 메세지 추가하기
       if (messages.length) {

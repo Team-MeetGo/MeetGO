@@ -37,9 +37,9 @@ const NewComment = ({ review_id }: Props) => {
     setComments('');
   };
   return (
-    <div className="max-w-[1116px] w-full h-[136px] mb-[24px]">
-      <form onSubmit={handleNewComment} className="flex flex-col max-w-[1116px] w-full">
-        <div className="flex max-w-[1116px] w-full h-[136px]">
+    <div className="max-w-[1000px] w-full h-[136px] mb-[24px]">
+      <form onSubmit={handleNewComment} className="flex flex-col max-w-[1000px] w-full">
+        <div className="flex max-w-[1000px] w-full h-[136px]">
           <textarea
             id="comment_content"
             required
@@ -47,7 +47,7 @@ const NewComment = ({ review_id }: Props) => {
             maxLength={200}
             value={comments}
             onChange={handleInputChange}
-            className={`max-w-[1116px] w-full h-[136px] outline-none border-1 rounded-[10px] resize-none p-[24px] pl-4 mb-2 ${
+            className={`max-w-[1000px] w-full h-[136px] outline-none border-1 rounded-[10px] resize-none p-[24px] pl-4 mb-2 ${
               isActive ? 'border-mainColor' : 'border-gray-300'
             }`}
           />

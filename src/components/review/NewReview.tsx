@@ -1,3 +1,5 @@
+'use client';
+
 import { useState, ChangeEvent, FormEvent } from 'react';
 import Image from 'next/image';
 import { Button, Checkbox, Modal, ModalBody, ModalContent, ModalHeader, useDisclosure } from '@nextui-org/react';
@@ -106,7 +108,7 @@ const NewReview = () => {
       <Modal isOpen={isOpen} onClose={handleClose} placement="top-center" className="bg-purpleSecondary">
         <ModalContent
           className="w-full flex justify-center items-center"
-          style={{ maxWidth: '1116px', minHeight: '830px' }}
+          style={{ maxWidth: '1000px', minHeight: '830px' }}
         >
           {(onClose) => (
             <>
@@ -120,7 +122,7 @@ const NewReview = () => {
                       {files.length <= 4 && (
                         <div className="flex justify-center gap-2">
                           {files.map((file, index) => (
-                            <div key={index} className="relative absolute w-[140px] h-[140px] aspect-square">
+                            <div key={file.name} className="relative absolute w-[140px] h-[140px] aspect-square">
                               <Image
                                 className="object-cover rounded-[10px]"
                                 src={URL.createObjectURL(file)}

@@ -4,12 +4,12 @@ import Link from 'next/link';
 const ReviewsPage = () => {
   return (
     <div className="flex flex-col justify-center items-center">
-      <div className="w-full h-[208px] flex justify-center items-center text-white text-[50px] bg-gradient-to-review mb-[88px]">
-        <Link href="/review/page/1">
-          <p className="text-white text-[50px]">리뷰페이지</p>
+      <div className="w-full h-[208px] flex justify-center items-center text-white text-2xl bg-gradient-to-review mb-[88px]">
+        <Link href="/review/pageNumber/1">
+          <p className="text-white text-[50px]">Review</p>
         </Link>
       </div>
-      <div className="max-w-[1160px]">
+      <div className="max-w-[1000px]">
         <ReviewList />
       </div>
     </div>
