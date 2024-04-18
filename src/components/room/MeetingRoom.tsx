@@ -87,70 +87,74 @@ function MeetingRoom({ room }: { room: MeetingRoomType }) {
           ? `bg-white rounded-xl border-mainColor border-1`
           : alreadyChatRoom && alreadyChatRoom.length > 0
           ? `bg-purpleThird rounded-xl`
-          : `bg-slate-300 rounded-xl`
+          : `bg-gray1 rounded-xl`
       }
     >
-      <div className="w-[354px] h-[241px] rounded-xl flex flex-col justify-start hover:cursor-pointer">
+      <div className="w-max-[354px] h-[241px] rounded-xl flex flex-col justify-start">
         <div className="pl-[24px]">
           <div className="h-[24px]"></div>
 
-          <div className="flex flex-row justify-between align-middle justify-items-center m-auto">
-            <div className="text-[16px] flex flex-row justify-between align-middle justify-items-center">
-              <IoFemale className="w-[14px] h-[14px] my-auto fill-hotPink" /> {`${countFemale}/${genderMaxNumber} |`}
-              <IoMale className="w-[14px] h-[14px] my-auto fill-blue" />
-              {`${countMale}/${genderMaxNumber} | ${room_status}`}
-            </div>
-            <div className="pr-[16px]">
-              {alreadyChatRoom && alreadyChatRoom.length > 0 ? (
-                <div className="flex flex-row gap-[2px] p-[4px] bg-white rounded-lg text-[14px]">
-                  <div>채팅중</div>
-                  <div>
-                    <IoChatbubblesOutline className="h-[18px] w-[18px] m-auto fill-gray2" />
-                  </div>
-                </div>
-              ) : emptySeat === 1 ? (
-                <div className="flex flex-row gap-[2px] p-[4px] bg-white rounded-lg text-[14px]">
-                  <div className="text-hotPink m-auto">한자리!!</div>
-                  <div>
-                    <BsFire className="h-[18px] w-[18px] m-auto fill-hotPink" />
-                  </div>
-                </div>
-              ) : user_id === leader_id ? (
-                <div className="relative">
-                  <button
-                    onClick={() => {
-                      setOpen((open) => !open);
-                    }}
-                  >
-                    <HiOutlineDotsVertical className="h-[20px] w-[20px] m-auto" />
-                  </button>
-
-                  {open && (
-                    <div
-                      ref={dropdownRef}
-                      className="absolute top-full right-[0px] bg-white flex flex-col w-[92px] h-[78px] p-[5px] justify-items-center border-gray2 border-1 rounded-xl"
-                    >
-                      <div className="flex flex-col justify-items-center w-[92px]">
-                        <DeleteMeetingRoom room_id={room_id} />
-                      </div>
-                      <div className="flex flex-col justify-items-center w-[92px]">
-                        <EditMeetingRoom room={room} />
-                      </div>
+          <div className="flex flex-row align-middle my-auto">
+            <div className="flex flex-row align-middle justify-between w-full">
+              <div className="text-[16px] flex flex-row align-middle text-center">
+                <IoFemale className="w-[14px] h-[14px] my-auto fill-hotPink" /> {`${countFemale}/${genderMaxNumber}`}
+                <div className="px-[6px]">|</div>
+                <IoMale className="w-[14px] h-[14px] my-auto fill-blue" />
+                {`${countMale}/${genderMaxNumber}`}
+                <div className="mx-[6px]">|</div> {`${room_status}`}
+              </div>
+              <div className="pr-[16px] flex flex-row justify-center align-middle">
+                {alreadyChatRoom && alreadyChatRoom.length > 0 ? (
+                  <div className="flex flex-row gap-[2px] p-[4px] bg-white rounded-lg text-[14px]">
+                    <div className="text-[14px]">채팅중</div>
+                    <div>
+                      <IoChatbubblesOutline className="h-[16px] w-[16px] my-auto fill-gray2" />
                     </div>
-                  )}
-                </div>
-              ) : null}
+                  </div>
+                ) : emptySeat === 1 ? (
+                  <div className="flex flex-row gap-[2px] p-[4px] bg-white rounded-lg text-[14px]">
+                    <div className="text-hotPink my-auto">한자리!!</div>
+                    <div>
+                      <BsFire className="h-[18px] w-[18px] my-auto fill-hotPink" />
+                    </div>
+                  </div>
+                ) : user_id === leader_id ? (
+                  <div className="relative flex flex-row justify-center align-middle">
+                    <button
+                      className="flex flex-row justify-center align-middle"
+                      onClick={() => {
+                        setOpen((open) => !open);
+                      }}
+                    >
+                      <HiOutlineDotsVertical className="h-[20px] w-[20px] my-auto" />
+                    </button>
+
+                    {open && (
+                      <div
+                        ref={dropdownRef}
+                        className="absolute top-full right-[0px] bg-white flex flex-col w-[92px] h-[78px] p-[5px] justify-items-center border-gray2 border-1 rounded-xl"
+                      >
+                        <div className="flex flex-col justify-items-center w-[92px]">
+                          <DeleteMeetingRoom room_id={room_id} />
+                        </div>
+                        <div className="flex flex-col justify-items-center w-[92px]">
+                          <EditMeetingRoom room={room} />
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                ) : null}
+              </div>
             </div>
           </div>
-
-          <main className="flex flex-col justify-start" onClick={() => addMember({ room_id })}>
+          <main className="flex flex-col justify-start hover:cursor-pointer" onClick={() => addMember({ room_id })}>
             <div className="h-[16px]"></div>
             <div className="text-[26px]"> {room_title} </div>
             <div className="flex flex-row justify-start gap-2">
               <div className="text-[14px]">{region}</div>
               <div className="text-[14px]"> {location} </div>
             </div>
-            <div className="h-[40px]"></div>
+            <div className="h-[32px]"></div>
             <div>
               <Image
                 src={MeetGoLogoPurple}

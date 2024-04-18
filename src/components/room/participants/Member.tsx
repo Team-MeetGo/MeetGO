@@ -125,10 +125,10 @@ const Member = ({ room_id }: { room_id: string }) => {
                   </div>
 
                   {/* 카드 오른쪽 */}
-                  <div className="flex flex-col mt-[32px] mb-[32px]">
+                  <div className="flex flex-col justify-center w-100%">
                     <div className="flex flex-row gap text-[16px]">
-                      <div>{member.school_name}</div>
-                      {<IoFemale className="w-[16px] my-auto fill-hotPink" />}
+                      <div className="pr-[4px]">{member.school_name}</div>
+                      {<IoFemale className="w-[14px] my-auto fill-hotPink" />}
                     </div>
                     <div className="flex flex-row w-100% text-[14px] gap-[8px] w-[200px]">
                       <div className="my-[16px] flex flex-row gap-[6px]">
@@ -142,7 +142,7 @@ const Member = ({ room_id }: { room_id: string }) => {
                               padding: '8px'
                             }}
                           >
-                            {`${tag} `}
+                            {tag}
                           </div>
                         ))}
                       </div>
@@ -174,7 +174,7 @@ const Member = ({ room_id }: { room_id: string }) => {
               <div key={member.user_id} className={`grid col-start-1 col-span-1`}>
                 <article className={`bg-purpleSecondary flex flex-row w-[506px] h-[166px] rounded-2xl`}>
                   {/* 카드 왼쪽 */}
-                  <div className="mx-[40px] align-middle items-center">
+                  <div className="mx-[40px] flex flex-col">
                     <div className="w-[86px] h-[86px] mt-[32px] mr-[48px] rounded-full relative">
                       {leaderMember === member.user_id ? (
                         <div>
@@ -201,10 +201,10 @@ const Member = ({ room_id }: { room_id: string }) => {
                   </div>
 
                   {/* 카드 오른쪽 */}
-                  <div className="flex flex-col mt-[32px] mb-[32px]">
+                  <div className="flex flex-col justify-center">
                     <div className="flex flex-row gap text-[16px]">
-                      <div>{member.school_name}</div>
-                      {<IoMale className="w-[16px] my-auto fill-blue" />}
+                      <div className="pr-[4px]">{member.school_name}</div>
+                      {<IoMale className="w-[14px] my-auto fill-blue" />}
                     </div>
                     <div className="flex flex-row w-100% text-[14px] gap-[8px] w-[200px]">
                       <div className="my-[16px] flex flex-row gap-[6px]">
@@ -232,10 +232,9 @@ const Member = ({ room_id }: { room_id: string }) => {
               <article key={h} className={`bg-purpleSecondary flex justify-center w-[506px] h-[166px] rounded-2xl`}>
                 <Image
                   className="w-[86px] h-[68px] object-center flex justify-center my-auto"
+                  sizes="86px"
                   src={MeetGoLogoPurple}
                   alt="참여하지 않은 인원"
-                  height={80}
-                  width={80}
                 />
               </article>
             ))}
