@@ -23,7 +23,7 @@ const GetMostLikedReivew = () => {
 
   return (
     <div>
-      <div className="max-w-[1160px] flex items-center justify-between mr-[15px]">
+      <div className="max-w-[1000px] flex items-center justify-between mr-[15px]">
         <div className="flex items-center mb-[15px] ml-[15px]">
           <p className="text-[26px] font-bold mr-[10px]">리뷰 페이지</p>
           <p className="text-[16px] text-[#A1A1AA]">{fetchReviewsData?.count}리뷰</p>
@@ -35,7 +35,7 @@ const GetMostLikedReivew = () => {
           </div>
         </div>
       </div>
-      <ul className="max-w-[1160px] grid grid-cols-3 gap-x-[24px] gap-y-[32px]">
+      <ul className="max-w-[1000px] grid grid-cols-3 gap-x-[24px] gap-y-[32px]">
         {sliceReviews.map((item, index) => (
           <ReviewCard key={index} review={item} />
         ))}

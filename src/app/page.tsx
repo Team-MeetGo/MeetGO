@@ -2,12 +2,15 @@ import GetMostLikedReivew from '@/components/mainpage/getMostLikedReview';
 import Image from 'next/image';
 import mainbanner_flower from '../../public/mainbanner_flower.png';
 import mainbanner_people from '../../public/mainbanner_people.png';
+import mainbanner from '../../public/mainbanner.jpg';
+import mainbanner2 from '../../public/mainbanner-2.jpg';
 import Link from 'next/link';
 
 export default function Home() {
   return (
     <main className="w-full flex flex-col items-center justify-content">
-      <div className="w-full h-[600px] max-h-[600px] bg-gradient-to-main flex justify-center items-center">
+      <Image src={mainbanner} alt="메인페이지 배너" className="max-w-3/5 h-auto " />
+      {/* <div className="w-full h-[600px] max-h-[600px] bg-gradient-to-main flex justify-center items-center">
         <Image src={mainbanner_flower} alt="메인페이지 배너_꽃" className="w-full h-[600px] absolute" />
         <div className="flex justify-center items-center">
           <Image src={mainbanner_people} alt="메인페이지 배너_사람" className="relative max-w-[432px] max-h-[432px]" />
@@ -16,7 +19,7 @@ export default function Home() {
             <p className="relative text-[70px] font-bold">MeetGo 만나세요!</p>
           </div>
         </div>
-      </div>
+      </div> */}
       <div className="mt-[120px] mb-[88px]">
         <div>
           <GetMostLikedReivew />

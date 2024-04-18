@@ -9,28 +9,13 @@ import { ValidationModal } from '../common/ValidationModal';
 import { useModalStore } from '@/store/modalStore';
 import { authValidation } from '@/utils/Validation';
 import { IsValidateShow, LoginData } from '@/types/userTypes';
-import { userStore } from '@/store/userStore';
 import { useQueryClient } from '@tanstack/react-query';
 import { USER_DATA_QUERY_KEY } from '@/query/user/userQueryKeys';
 import Link from 'next/link';
 import Image from 'next/image';
 import kakaoLoginLogo from '@/utils/icons/login_kakao.png';
 import googleLoginLogo from '@/utils/icons/logo_google.png';
-
-const LOGIN_FORM_LIST = [
-  {
-    type: 'email',
-    name: 'userId',
-    placeholder: '이메일을 입력해주세요.',
-    error: '이메일 형식으로 작성해주세요.'
-  },
-  {
-    type: 'password',
-    name: 'password',
-    placeholder: '비밀번호를 입력해주세요.',
-    error: '숫자, 문자, 특수문자 조합으로 8자이상 작성해 주세요.'
-  }
-];
+import { IoMdEye, IoMdEyeOff } from 'react-icons/io';
 
 const LoginForm = () => {
   const queryClient = useQueryClient();
@@ -41,6 +26,7 @@ const LoginForm = () => {
     password: true
   });
   const [isError, setIsError] = useState(false);
+  const [passwordShow, setPasswordShow] = useState(false);
   const { openModal } = useModalStore();
 
   const showModal = () => {
@@ -50,6 +36,21 @@ const LoginForm = () => {
       text: '로그인 되었습니다.'
     });
   };
+
+  const LOGIN_FORM_LIST = [
+    {
+      type: 'email',
+      name: 'userId',
+      placeholder: '이메일을 입력해주세요.',
+      error: '이메일 형식으로 작성해주세요.'
+    },
+    {
+      type: passwordShow ? 'text' : 'password',
+      name: 'password',
+      placeholder: '비밀번호를 입력해주세요.',
+      error: '숫자, 문자, 특수문자 조합으로 8자이상 작성해 주세요.'
+    }
+  ];
 
   const router = useRouter();
 
@@ -85,13 +86,19 @@ const LoginForm = () => {
     }
   };
 
+  const togglePasswordShow = () => {
+    setPasswordShow(!passwordShow);
+  };
+
+  console.log(passwordShow, 'passwordShow');
+
   return (
     <>
       <div className="max-w-[450px] w-full">
         <form className="flex flex-col gap-[8px]" onSubmit={onSubmitForm}>
           <div className="flex flex-col gap-[16px]">
             {LOGIN_FORM_LIST.map(({ type, name, placeholder, error }) => (
-              <label key={name}>
+              <label key={name} className="relative">
                 <input
                   className="p-5 border border-[#A1A1AA] placeholder:text-[#A1A1AA] placeholder:text-[14px] rounded-lg focus:outline-none focus:border-[#8F5DF4] w-full"
                   type={type}
@@ -100,6 +107,11 @@ const LoginForm = () => {
                   onChange={onChangeInput}
                   required
                 />
+                {name === 'password' && (
+                  <button type="button" onClick={togglePasswordShow} className="absolute top-6 right-4">
+                    {passwordShow ? <IoMdEye className="text-xl" /> : <IoMdEyeOff className="text-xl" />}
+                  </button>
+                )}
                 {!isValidateShow[name] && <p className="text-red-500 text-[13px] mt-2">{error}</p>}
               </label>
             ))}
