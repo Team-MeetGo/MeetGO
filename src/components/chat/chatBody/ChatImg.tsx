@@ -10,9 +10,14 @@ const ChatImg = ({ msg }: { msg: Message }) => {
   const { data: user } = useGetUserDataQuery();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [slideCount, setSlideCount] = useState(0);
+  console.log(slideCount);
 
-  const showBigImg = () => {
-    onOpen();
+  const showBigImg = (urlIdx: number) => {
+    console.log('urlIdx =>', urlIdx);
+    if (urlIdx >= 0) {
+      onOpen();
+      setSlideCount(urlIdx);
+    }
   };
 
   const UpSlideCount = (msgArr: string[] | null) => {
@@ -29,9 +34,13 @@ const ChatImg = ({ msg }: { msg: Message }) => {
   return (
     <>
       {msg.imgs?.length ? (
-        <div className="h-[100px] flex flex-wrap justify-end">
+        <div
+          className={`grid ${msg.imgs.length < 2 ? 'grid-cols-1' : 'grid-cols-2'} ${
+            msg.imgs.length > 1 ? 'chatImgRowsOverOne' : 'chatImgRowsNotOverOne'
+          }`}
+        >
           {msg.imgs.map((url) => (
-            <div key={url} className="w-36 h-[100px] relative">
+            <div key={url} className="w-36 relative">
               <Image
                 src={url}
                 alt="채팅 이미지"
@@ -39,9 +48,16 @@ const ChatImg = ({ msg }: { msg: Message }) => {
                 style={{ objectFit: 'fill', borderRadius: '3px', cursor: 'pointer' }}
                 sizes="500px"
                 priority={true}
-                onClick={showBigImg}
+                onClick={() => showBigImg(msg.imgs ? msg.imgs.indexOf(url) : -1)}
               />
-              <Modal size={'sm'} isOpen={isOpen} onClose={onClose}>
+              <Modal
+                size={'sm'}
+                isOpen={isOpen}
+                onClose={() => {
+                  onClose();
+                  setSlideCount(0);
+                }}
+              >
                 <ModalContent className="h-96">
                   {(onClose) => {
                     return (

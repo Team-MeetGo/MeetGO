@@ -29,7 +29,7 @@ const ParticipantsInfoWrapper = ({
   };
   return (
     <>
-      <div className="relative my-auto flex h-[60px] w-[60px] ">
+      <div className="relative flex h-[60px] w-[60px] ">
         <div className="h-16 w-16 ml-auto flex justify-center items-center">
           {showThatUser(msg.send_from)?.avatar ? (
             <Avatar
