@@ -27,17 +27,19 @@ const ChatPage = async ({ params }: { params: { chatroom_id: string } }) => {
     <Suspense fallback={<ChatLoading />}>
       <div className="relative flex felx-row">
         <InitChat user={user} chatRoomId={chatRoomId} allMsgs={allMsgs ?? []} />
-        <SideBar chatRoomId={chatRoomId} />
-        <div className="w-full max-w-2xl mr-auto h-screen relative">
-          <div className=" absolute top-0 left-0 z-50">
-            <SideBarButton />
-          </div>
-          <div className="h-full border rounded-md flex flex-col relative ">
-            <ChatHeader chatRoomId={chatRoomId} />
-            <Suspense fallback="skeleton 들어갈 자리">
-              <ChatList user={user} chatRoomId={chatRoomId} />
-            </Suspense>
-            <ChatInput />
+        <div className="flex flex-row w-full justify-center mx-auto">
+          <SideBar chatRoomId={chatRoomId} />
+          <div className="w-full max-w-2xl h-screen relative">
+            <div className="absolute top-0 left-0">
+              <SideBarButton />
+            </div>
+            <div className="h-full border rounded-md flex flex-col relative ">
+              <ChatHeader chatRoomId={chatRoomId} />
+              <Suspense fallback="skeleton 들어갈 자리">
+                <ChatList user={user} chatRoomId={chatRoomId} />
+              </Suspense>
+              <ChatInput />
+            </div>
           </div>
         </div>
       </div>

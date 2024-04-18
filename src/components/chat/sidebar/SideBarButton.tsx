@@ -13,8 +13,11 @@ const SideBarButton: React.FC = () => {
   };
 
   return (
-    <div className="h-20 cursor-pointer shadow-xl flex justify-center items-center z-100" onClick={toggleSidebar}>
-      {isSidebarOpen ? <IoIosArrowForward size={25} color="#A1A1AA" /> : <IoIosArrowBack size={25} color="#A1A1AA" />}
+    <div
+      className="absolute z-10 h-20 cursor-pointer shadow-xl flex justify-center items-center rounded-r-lg"
+      onClick={toggleSidebar}
+    >
+      {isSidebarOpen ? <IoIosArrowForward size={28} color="#A1A1AA" /> : <IoIosArrowBack size={28} color="#A1A1AA" />}
     </div>
   );
 };

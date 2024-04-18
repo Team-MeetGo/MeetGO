@@ -24,23 +24,22 @@ const SideBar: React.FC<SideBarProps> = ({ chatRoomId }) => {
   };
   const convertedTime = meetingTime ? new Intl.DateTimeFormat('ko-KR', options).format(new Date(meetingTime)) : '';
 
+  if (!isSidebarOpen) {
+    return null;
+  }
+
   return (
-    <div className={`transition-transform duration-300 ease-in-out ml-auto ${isSidebarOpen ? 'ml-auto' : 'ml-0'}`}>
-      <div
-        style={{ maxHeight: '100vh', overflowY: 'auto' }}
-        className={`${isSidebarOpen ? 'opacity-100' : 'opacity-0'}`}
-      >
-        <div className="pt-8 pr-6">
-          <h1 className="font-semibold text-2xl mb-2">미팅 날짜/시간</h1>
-          <Card className="h-[60px] border border-mainColor rounded-[9px] shadow-none ">
-            <CardBody className="flex flex-row justify-start items-center text-lg">
-              <p className={convertedTime ? '' : 'text-gray2'}>
-                {convertedTime ? convertedTime : '방장이 선택한 시간이 표시됩니다.'}
-              </p>
-            </CardBody>
-          </Card>
-          <Map chatRoomId={chatRoomId} />
-        </div>
+    <div className="transition-max-h ease-in-out duration-1000 ">
+      <div className="max-h-screen overflow-y-auto w-full pt-8 pr-6">
+        <h1 className="font-semibold text-2xl mb-2">미팅 날짜/시간</h1>
+        <Card className="h-[60px] border border-mainColor rounded-[9px] shadow-none ">
+          <CardBody className="flex flex-row justify-start items-center text-lg">
+            <p className={convertedTime ? '' : 'text-gray2'}>
+              {convertedTime ? convertedTime : '방장이 선택한 시간이 표시됩니다.'}
+            </p>
+          </CardBody>
+        </Card>
+        <Map chatRoomId={chatRoomId} />
       </div>
     </div>
   );
