@@ -145,7 +145,8 @@ const ChatList = ({ user, chatRoomId }: { user: User | null; chatRoomId: string 
   // insert 할 때 없어졌으면 좋겠는데..
 
   const styleHere = (lastDiv: HTMLElement) => {
-    lastDiv.style.backgroundColor = 'pink';
+    lastDiv.style.backgroundColor = '#F2EAFA';
+    lastDiv.style.borderRadius = '5px';
     lastDiv.scrollIntoView({ block: 'center' });
   };
 
@@ -175,7 +176,7 @@ const ChatList = ({ user, chatRoomId }: { user: User | null; chatRoomId: string 
             lastMsgId === msg.message_id &&
             isScrolling &&
             !checkedLastMsg ? (
-              <div className={`flex ${msg.send_from === user?.id ? 'ml-auto' : 'mr-auto'}`}>
+              <div className={`flex ${msg.send_from === user?.id ? 'justify-end' : 'justify-start'}`}>
                 <p>여기까지 읽으셨습니다.</p>
               </div>
             ) : null}
