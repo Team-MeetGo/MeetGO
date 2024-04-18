@@ -5,7 +5,9 @@ import { chatStore } from '@/store/chatStore';
 import { IoIosSearch } from 'react-icons/io';
 import { useParticipantsQuery, useRoomDataQuery } from '@/hooks/useQueries/useChattingQuery';
 import { useGetUserDataQuery } from '@/hooks/useQueries/useUserQuery';
-import { Avatar, AvatarGroup } from '@nextui-org/react';
+import { Avatar, AvatarGroup, Tooltip } from '@nextui-org/react';
+import { IoFemale, IoMale } from 'react-icons/io5';
+import ShowChatMember from '../chatBody/ShowChatMember';
 
 const ChatHeader = ({ chatRoomId }: { chatRoomId: string }) => {
   const { onlineUsers, setMessages, setisRest, setSearchMode } = chatStore((state) => state);
@@ -116,14 +118,15 @@ const ChatHeader = ({ chatRoomId }: { chatRoomId: string }) => {
             <div>
               <AvatarGroup isBordered>
                 {participants.map((person) => (
-                  <Avatar
-                    key={person.user_id}
-                    src={person.avatar as string}
-                    className={`w-[32px] h-[32px]`}
-                    classNames={{
-                      base: onlineUsers.find((id) => id === person.user_id) ? '' : 'bg-black opacity-70'
-                    }}
-                  />
+                  <Tooltip key={person.user_id} content={<ShowChatMember person={person} />}>
+                    <Avatar
+                      src={person.avatar as string}
+                      className={`w-[32px] h-[32px]`}
+                      classNames={{
+                        base: onlineUsers.find((id) => id === person.user_id) ? '' : 'bg-black opacity-70'
+                      }}
+                    />
+                  </Tooltip>
                 ))}
               </AvatarGroup>
             </div>
