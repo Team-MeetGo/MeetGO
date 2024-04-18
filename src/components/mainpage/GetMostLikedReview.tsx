@@ -22,10 +22,12 @@ const GetMostLikedReivew = () => {
   const sliceReviews = [...(likedReviews || []), ...(zeroLikedReviews || [])].slice(0, 6);
 
   return (
-    <div className="my-12 max-w-[1000px] flex flex-col justify-between w-full">
-      <div className="flex flex-row justify-between mb-8">
-        <p className="text-[26px] font-bold ">Best Review</p>
-        <div className="flex flex-row items-center">
+    <div>
+      <div className="max-w-[1000px] flex items-center justify-between mr-[15px]">
+        <div className="flex items-center mb-[15px] ml-[15px]">
+          <p className="text-[26px] font-bold mr-[10px]">Best Review</p>
+        </div>
+        <div className="flex items-center mr-[10px] mb-[15px]">
           <Link href="/review/pageNumber/1">더보기</Link>
           <div className="text-mainColor">
             <IoIosArrowForward />

@@ -3,7 +3,7 @@ import { IoMdHeart } from 'react-icons/io';
 
 const UseInformation = () => {
   return (
-    <div className="flex flex-col my-12 gap-8 mx-auto">
+    <div className="flex flex-col mb-12 gap-8 mx-auto">
       <p className="text-[26px] font-bold">이용안내</p>
       {/* Section 01 */}
       <div className="flex flex-row justify-between ">
