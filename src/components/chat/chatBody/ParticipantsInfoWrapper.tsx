@@ -10,7 +10,6 @@ import {
   ModalHeader,
   useDisclosure
 } from '@nextui-org/react';
-
 import Image from 'next/image';
 import { FaCrown } from 'react-icons/fa6';
 

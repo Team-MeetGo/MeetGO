@@ -91,7 +91,11 @@ const ChatInput = () => {
           </label>
           <Input
             value={message}
-            classNames={{ input: ['bg-[#F2EAFA]', 'focus:outline-none'] }}
+            classNames={{
+              input: ['bg-[#F2EAFA]', 'focus:outline-none'],
+              innerWrapper: "'bg-[#F2EAFA]",
+              inputWrapper: ['bg-[#F2EAFA]', '!cursor-text']
+            }}
             placeholder="send message"
             onChange={(e) => setMessage(e.target.value)}
             disabled={imgs.length > 0}
@@ -106,7 +110,7 @@ const ChatInput = () => {
               <div className="h-[180px] w-full p-[8px] flex overflow-x-auto gap-[8px] relative ">
                 {imgs.map((img) => (
                   <div key={img.name} className="relative w-[150px]">
-                    <button className="absolute top-0 right-0 z-10" onClick={() => cancelImgFile(img.name)}>
+                    <button className="absolute top-0 right-0 z-10 text-xl" onClick={() => cancelImgFile(img.name)}>
                       <MdCancel />
                     </button>
                     <Image
