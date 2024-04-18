@@ -10,16 +10,17 @@ import { IoPlay } from 'react-icons/io5';
 
 const AcceptanceRoomButtons = ({
   roomInformation,
-  participants
+  participants,
+  leader
 }: {
   roomInformation: RoomData;
   participants: UserType[];
+  leader: string;
 }) => {
   const router = useRouter();
   const { data: user, isPending, isError } = useGetUserDataQuery();
   const user_id = user?.user_id!;
-  const room_id = roomInformation.room_id;
-  const leader = roomInformation?.leader_id;
+  const room_id = roomInformation?.room_id;
   const memberNumber = roomInformation?.member_number;
   //원하는 인원이 모두 들어오면 위에서 창이 내려온다.
   const { getmaxGenderMemberNumber } = meetingRoomHandler();

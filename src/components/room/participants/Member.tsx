@@ -9,8 +9,6 @@ import meetingRoomHandler from '@/hooks/custom/room';
 import { RoomFemaleAvatar, RoomMaleAvatar } from '@/utils/icons/RoomAvatar';
 import MeetGoLogoPurple from '../../../utils/icons/meetgo-logo-purple.png';
 import Image from 'next/image';
-import { useUpdateLeaderMemberMutation, useUpdateRoomStatusOpen } from '@/hooks/useMutation/useMeetingMutation';
-import { useGetUserDataQuery } from '@/hooks/useQueries/useUserQuery';
 
 import type { UserType } from '@/types/roomTypes';
 import AcceptanceRoomButtons from './AcceptanceRoomButtons';
@@ -20,7 +18,7 @@ const Member = ({ room_id }: { room_id: string }) => {
   const [members, setMembers] = useState<UserType[]>(participants as UserType[]);
   const { data: roomInformation } = useRoomInfoWithRoomIdQuery(room_id);
   const leaderMember = roomInformation?.leader_id;
-  const [leader, setLeader] = useState(leaderMember as String);
+  const [leader, setLeader] = useState(leaderMember as string);
   const femaleMembers = members.filter((member) => member.gender === 'female');
   const maleMembers = members.filter((member) => member.gender === 'male');
   const memberNumber = roomInformation?.member_number;
@@ -28,8 +26,6 @@ const Member = ({ room_id }: { room_id: string }) => {
   const genderMaxNumber = getmaxGenderMemberNumber(memberNumber as string);
   const hollowFemaleArray = Array.from({ length: (genderMaxNumber as number) - femaleMembers.length }, (vi, i) => i);
   const hollowMaleArray = Array.from({ length: (genderMaxNumber as number) - maleMembers.length }, (vi, i) => i);
-  const otherParticipants = participants?.filter((person: UserType | null) => person?.user_id !== leader);
-  const updateLeaderMemeberMutation = useUpdateLeaderMemberMutation({ otherParticipants, room_id });
 
   useEffect(() => {
     const channle = clientSupabase
@@ -79,7 +75,7 @@ const Member = ({ room_id }: { room_id: string }) => {
           table: 'room'
         },
         (payload) => {
-          console.log(payload);
+          console.log('payload', payload);
           const { leader_id } = payload.new;
           setLeader(leader_id);
         }
@@ -90,16 +86,19 @@ const Member = ({ room_id }: { room_id: string }) => {
     };
   }, [members, participants, leaderMember]);
   if (!participants) return;
-  console.log('현리더', leaderMember);
+  console.log('현리더', leader);
 
   return (
     <div className="flex flex-col">
-      <div className="w-100%">
-        <AcceptanceRoomButtons
-          roomInformation={roomInformation as RoomData}
-          participants={participants as UserType[]}
-        />
-      </div>
+      {hollowFemaleArray.length === 0 && hollowMaleArray.length === 0 && (
+        <div className="w-100%">
+          <AcceptanceRoomButtons
+            roomInformation={roomInformation as RoomData}
+            participants={participants as UserType[]}
+            leader={leader}
+          />
+        </div>
+      )}
       <div className="flex flex-col items-center justify-content align-middle">
         <div className="flex flex-row gap-[100px] items-center justify-content align-middle min-w-[1000px] max-w-[1440px]">
           <main className="mt-[40px] grid grid-cols-1 grid-rows-4 w-100% gap-y-[50px]">
@@ -185,7 +184,7 @@ const Member = ({ room_id }: { room_id: string }) => {
                   {/* 카드 왼쪽 */}
                   <div className="ml-[40px] mr-[88px] flex flex-col justify-center align-middle justify-items-center">
                     <div className="w-[86px] h-[86px] mt-[32px] rounded-full relative">
-                      {leaderMember === member.user_id ? (
+                      {leader === member.user_id ? (
                         <div>
                           <FaCrown className="absolute h-[20px] w-[20px] m-[2px] fill-mainColor z-50 top-[-20px] left-[30px]" />
                         </div>
