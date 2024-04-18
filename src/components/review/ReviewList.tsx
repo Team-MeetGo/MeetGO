@@ -114,7 +114,7 @@ const ReviewList: React.FC = () => {
 
   return (
     <div className="flex flex-col justify-center items-center">
-      <div className="flex justify-between w-full max-w-[1160px] mb-[24px]">
+      <div className="flex justify-between w-full max-w-[1000px] mb-[24px]">
         <div>
           <Dropdown onOpenChange={setIsOpen} isOpen={isOpen} className="min-w-0 w-auto">
             <DropdownTrigger className="w-[106px]">
@@ -155,7 +155,7 @@ const ReviewList: React.FC = () => {
           <div>{isLoggedIn ? <NewReview /> : null}</div>
         </div>
       </div>
-      <ul className="max-w-[1160px] grid grid-cols-3 gap-x-[24px] gap-y-[24px] mb-[64px]">
+      <ul className="max-w-[1000px] grid grid-cols-3 gap-x-[24px] gap-y-[24px] mb-[64px]">
         {reviewData.map((item, index) => (
           <ReviewCard key={index} review={item} />
         ))}
