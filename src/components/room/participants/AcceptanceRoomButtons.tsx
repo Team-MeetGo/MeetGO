@@ -49,6 +49,7 @@ const AcceptanceRoomButtons = ({ room_id }: { room_id: string }) => {
       >
         go to chat
       </button>
+      {/* <button onClick={() => router.replace("/chat/")}></button> */}
     </div>
   );
 };
