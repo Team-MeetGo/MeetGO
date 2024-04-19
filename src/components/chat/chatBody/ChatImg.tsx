@@ -1,4 +1,5 @@
 'use client';
+import { useGetUserDataQuery } from '@/hooks/useQueries/useUserQuery';
 import { Message } from '@/types/chatTypes';
 import { Button, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, useDisclosure } from '@nextui-org/react';
 import Image from 'next/image';
@@ -6,6 +7,7 @@ import { useState } from 'react';
 import { IoIosArrowBack } from 'react-icons/io';
 
 const ChatImg = ({ msg }: { msg: Message }) => {
+  const { data: user } = useGetUserDataQuery();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [slideCount, setSlideCount] = useState(0);
   console.log(slideCount);
@@ -60,6 +62,7 @@ const ChatImg = ({ msg }: { msg: Message }) => {
                   {(onClose) => {
                     return (
                       <>
+                        <ModalHeader className="flex flex-col gap-1"></ModalHeader>
                         <ModalBody>
                           <div className="z-10 w-full flex text-3xl my-auto text-[#A1A1AA]">
                             {msg.imgs && slideCount > 0 ? (

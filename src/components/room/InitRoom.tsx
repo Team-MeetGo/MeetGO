@@ -13,8 +13,6 @@ const InitRoom = ({ room_id }: { room_id: string }) => {
   const { data: room } = useRoomInfoWithRoomIdQuery(room_id);
   const router = useRouter();
 
-  //   console.log('pathname =>', pathname);
-
   useEffect(() => {
     // 채팅방 isActive 상태 구독
     const channel = clientSupabase
@@ -28,7 +26,6 @@ const InitRoom = ({ room_id }: { room_id: string }) => {
           filter: `room_id=eq.${room_id}`
         },
         (payload) => {
-          console.log('go to chat 페이로드 =>', payload.new);
           setNewChatRoom(payload.new as chatRoomPayloadType);
         }
       )
