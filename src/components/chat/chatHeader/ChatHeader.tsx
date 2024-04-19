@@ -112,30 +112,27 @@ const ChatHeader = ({ chatRoomId }: { chatRoomId: string }) => {
   };
 
   return (
-    <div className="h-[116px] border-b flex p-[16px] justify-between ">
+    <div className="h-[116px] border-b flex px-[32px] py-[16px] justify-between ">
       <div className="flex gap-2">
-        <div className="flex flex-col gap-[16px]">
+        <div className="flex flex-col gap-[8px]">
           <p className="font-bold text-2xl h-[36px]">{roomData && roomData.room_title}</p>
 
-          <div className="flex gap-[16px]">
-            <div className="mt-[10px]">
-              <ChatPresence />
-            </div>
-            <div>
-              <AvatarGroup isBordered>
-                {participants.map((person) => (
-                  <Tooltip key={person.user_id} content={<ShowChatMember person={person} />}>
-                    <Avatar
-                      src={person.avatar as string}
-                      className={`w-[32px] h-[32px]`}
-                      classNames={{
-                        base: onlineUsers.find((id) => id === person.user_id) ? '' : 'bg-black opacity-70'
-                      }}
-                    />
-                  </Tooltip>
-                ))}
-              </AvatarGroup>
-            </div>
+          <div className="flex gap-[20px] items-center">
+            <ChatPresence />
+            <AvatarGroup isBordered>
+              {participants.map((person) => (
+                <Tooltip key={person.user_id} content={<ShowChatMember person={person} />}>
+                  <Avatar
+                    src={person.avatar as string}
+                    className={`w-[32px] h-[32px]`}
+                    // classNames={{
+                    //   base: onlineUsers.find((id) => id === person.user_id) ? '' : 'bg-black opacity-70'
+                    // }}
+                    isDisabled={!onlineUsers.find((id) => id === person.user_id)}
+                  />
+                </Tooltip>
+              ))}
+            </AvatarGroup>
           </div>
         </div>
       </div>

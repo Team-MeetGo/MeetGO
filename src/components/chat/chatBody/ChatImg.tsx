@@ -45,7 +45,7 @@ const ChatImg = ({ msg }: { msg: Message }) => {
                 src={url}
                 alt="채팅 이미지"
                 fill={true}
-                style={{ objectFit: 'fill', borderRadius: '3px', cursor: 'pointer' }}
+                style={{ objectFit: 'contain', borderRadius: '3px', cursor: 'pointer' }}
                 sizes="500px"
                 priority={true}
                 onClick={() => showBigImg(msg.imgs ? msg.imgs.indexOf(url) : -1)}
@@ -62,7 +62,7 @@ const ChatImg = ({ msg }: { msg: Message }) => {
                   {(onClose) => {
                     return (
                       <>
-                        <ModalHeader className="flex flex-col gap-1">{user?.nickname}</ModalHeader>
+                        <ModalHeader className="flex flex-col gap-1"></ModalHeader>
                         <ModalBody>
                           <div className="z-10 w-full flex text-3xl my-auto text-[#A1A1AA]">
                             {msg.imgs && slideCount > 0 ? (
