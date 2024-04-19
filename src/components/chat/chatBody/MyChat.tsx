@@ -27,7 +27,7 @@ const MyChat = ({ msg, idx, lastDivRefs }: { msg: Message; idx: number; lastDivR
           )}
 
           <div className="flex gap-2 ml-auto">
-            <div className="flex flex-col">
+            <div className="flex flex-col gap-2">
               <div className="flex gap-2 ml-auto">
                 <div>
                   <ChatDeleteDropDown msg={msg} />
@@ -41,8 +41,8 @@ const MyChat = ({ msg, idx, lastDivRefs }: { msg: Message; idx: number; lastDivR
               </div>
 
               {idx < messages.length - 1 && msg.send_from === messages[idx + 1].send_from ? null : (
-                <div className="mt-auto text-xs text-gray-400 ml-auto">
-                  <p>{getformattedDate(msg.created_at)}</p>
+                <div className="mt-auto text-gray-400 ml-auto">
+                  <p className="text-sm">{getformattedDate(msg.created_at)}</p>
                 </div>
               )}
             </div>

@@ -9,7 +9,6 @@ const middlewareList = [
   routeHandlerMiddleware,
   schoolValidateMiddleware,
   meetingNchatRoomHandler
-  // checkSchoolMiddleware
 ];
 
 export default chain(middlewareList);

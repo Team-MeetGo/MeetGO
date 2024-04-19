@@ -35,10 +35,10 @@ const ChatPage = async ({ params }: { params: { chatroom_id: string } }) => {
             </div>
             <div className="h-full border rounded-md flex flex-col relative ">
               <ChatHeader chatRoomId={chatRoomId} />
-              <Suspense fallback="skeleton 들어갈 자리">
+              <Suspense>
                 <ChatList user={user} chatRoomId={chatRoomId} />
+                <ChatInput />
               </Suspense>
-              <ChatInput />
             </div>
           </div>
         </div>

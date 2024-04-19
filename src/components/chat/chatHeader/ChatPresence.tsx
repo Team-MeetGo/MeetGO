@@ -1,18 +1,12 @@
 'use client';
-import { useParticipantsQuery, useRoomDataQuery } from '@/hooks/useQueries/useChattingQuery';
 import { useGetUserDataQuery } from '@/hooks/useQueries/useUserQuery';
 import { chatStore } from '@/store/chatStore';
 import { clientSupabase } from '@/utils/supabase/client';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 
 const ChatPresence = () => {
   const { data: user } = useGetUserDataQuery();
-  // const [onlineUsers, setOnlineUsers] = useState<string[]>([]);
   const { chatRoomId, onlineUsers, setOnlineUsers } = chatStore((state) => state);
-  const room = useRoomDataQuery(chatRoomId as string);
-  const roomId = room?.roomId;
-  const participants = useParticipantsQuery(roomId as string);
-  console.log('onlineUsers => ', onlineUsers);
 
   useEffect(() => {
     if (chatRoomId) {
@@ -38,7 +32,7 @@ const ChatPresence = () => {
   return (
     <>
       <div className="flex gap-2">
-        <div className="h-4  w-4 bg-[#8F5DF4] rounded-full animate-pulse my-auto"></div>
+        <div className="h-4  w-4 bg-[#8F5DF4] rounded-full animate-pulse my-auto text-base"></div>
         {chatRoomId && <h1>{onlineUsers.length} online</h1>}
       </div>
     </>
