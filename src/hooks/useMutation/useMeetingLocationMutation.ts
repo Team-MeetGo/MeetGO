@@ -6,8 +6,8 @@ export const useUpdateMeetingLocationMutation = () => {
   const queryClient = useQueryClient();
 
   const updateMeetingRoomMutation = useMutation({
-    mutationFn: async ({ chatRoomId, barName }: { chatRoomId: string; barName: string }) =>
-      await addMeetingLocation({ chatRoomId, barName }),
+    mutationFn: ({ chatRoomId, barName }: { chatRoomId: string; barName: string }) =>
+      addMeetingLocation({ chatRoomId, barName }),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: CHATDATA_QUERY_KEY });
     }
@@ -20,8 +20,8 @@ export const useClearMeetingLocationMutation = () => {
   const queryClient = useQueryClient();
 
   const clearMeetingRoomMutation = useMutation<void, unknown, string>({
-    mutationFn: async (chatRoomId: string) => {
-      await deleteMeetingLocation(chatRoomId);
+    mutationFn: (chatRoomId: string) => {
+      return deleteMeetingLocation(chatRoomId);
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: CHATDATA_QUERY_KEY });

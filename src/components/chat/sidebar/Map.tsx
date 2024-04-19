@@ -199,13 +199,13 @@ const Map: React.FC<MapProps> = ({ chatRoomId }) => {
 
     if (barName === selectedMeetingLocation) {
       try {
-        await clearMeetingLocationMutation.mutateAsync(chatRoomId);
+        clearMeetingLocationMutation.mutate(chatRoomId);
       } catch (error) {
         console.error('미팅장소 삭제 오류:', error);
       }
     } else {
       try {
-        await updateMeetingLocationMutation.mutateAsync({ chatRoomId, barName });
+        updateMeetingLocationMutation.mutate({ chatRoomId, barName });
       } catch (error) {
         console.error('미팅장소 업데이트 오류:', error);
       }
