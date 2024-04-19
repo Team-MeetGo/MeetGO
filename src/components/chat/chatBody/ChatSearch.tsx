@@ -10,7 +10,6 @@ const ChatSearch = ({ isScrollTop }: { isScrollTop: boolean }) => {
   const [doneSearchDivs, setDoneSearchdivs] = useState<(HTMLElement | null)[]>();
   const [searchCount, setSearchCount] = useState(0);
   const [upDownCount, setUpDownCount] = useState(0);
-  console.log('upDownCount => ', upDownCount);
 
   const handleSearch = () => {
     if (searchWord) {
