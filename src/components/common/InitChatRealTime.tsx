@@ -1,5 +1,4 @@
 'use client';
-
 import { useUpdateNewMsg } from '@/hooks/useMutation/useChattingMutation';
 import { clientSupabase } from '@/utils/supabase/client';
 import { useEffect } from 'react';

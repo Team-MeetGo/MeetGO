@@ -171,13 +171,18 @@ function MeetingRoom({ room }: { room: MeetingRoomType }) {
               />
               <p className="text-mainColor text-sm font-bold">MEETGO</p>
             </div>
-            <div className="text-[14px] flex flex-row gap-[4px]">
+            <div className="flex flex-row gap-[4px] text-[14px]">
               {feature &&
                 Array.from(feature).map((value) => (
                   <Chip
                     key={value}
                     color="default"
-                    style={{ backgroundColor: '#F2EAFA', color: '#8F5DF4', borderRadius: '8px' }}
+                    style={{
+                      backgroundColor: '#F2EAFA',
+                      color: '#8F5DF4',
+                      borderRadius: '8px'
+                    }}
+                    classNames={{ content: 'px-1 text-sm' }}
                   >
                     {value}
                   </Chip>
