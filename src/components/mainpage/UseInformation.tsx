@@ -3,7 +3,7 @@ import { IoMdHeart } from 'react-icons/io';
 
 const UseInformation = () => {
   return (
-    <div className="flex flex-col mb-12 gap-8 mx-auto">
+    <div className="flex flex-col mb-12 gap-8 mx-auto max-w-[1000px] w-full">
       <p className="text-[26px] font-bold">이용안내</p>
       {/* Section 01 */}
       <div className="flex flex-row justify-between ">
@@ -48,7 +48,8 @@ const UseInformation = () => {
             </div>
             <div className="text-center">
               <p>인원수가 다 채워지면</p>
-              <p>방장이 채팅창으로 넘기기</p>
+              <p>방장이 채팅창으로</p>
+              <p>넘기기</p>
             </div>
           </div>
         </div>
@@ -92,11 +93,12 @@ const UseInformation = () => {
           <div className="flex flex-col gap-4">
             <p className="text-mainColor text-3xl text-center">03</p>
             <div className="border rounded-full bg-purpleThird w-40 h-40 flex justify-center items-center">
-              <img src="/gotoChat.svg" alt="gotoChat" />
+              <img src="/kakaoTalk.svg" alt="kakaoTalk" />
             </div>
             <div className="text-center">
               <p>미팅 후 마이페이지에서</p>
-              <p>마음에 드는 이성 카톡ID 요청</p> {/* You can add custom styles here */}
+              <p>마음에 드는 이성</p>
+              <p>카톡ID 요청</p>
             </div>
           </div>
         </div>
