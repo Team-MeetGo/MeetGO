@@ -13,8 +13,9 @@ import { IoChatbubblesOutline, IoFemale, IoMale } from 'react-icons/io5';
 import DeleteMeetingRoom from './DeleteMeetingRoom';
 import EditMeetingRoom from './EditMeetingRoom';
 import Image from 'next/image';
-
 import type { MeetingRoomType } from '@/types/roomTypes';
+import { useMyMsgData } from '@/hooks/useQueries/useChattingQuery';
+
 function MeetingRoom({ room }: { room: MeetingRoomType }) {
   const { room_id, room_status, room_title, member_number, location, feature, leader_id, region } = room;
   const router = useRouter();
@@ -32,6 +33,7 @@ function MeetingRoom({ room }: { room: MeetingRoomType }) {
   const countMale = participants?.filter((member) => member?.gender === 'male').length;
   const dropdownRef = useRef<HTMLDivElement>(null);
   const [openModal, setOpenModal] = useState(false);
+  const myMsgData = useMyMsgData(user?.user_id!);
 
   const addMember = async ({ room_id }: { room_id: string }) => {
     //수락창: 이미 참여한 방은 바로 입장
@@ -85,80 +87,90 @@ function MeetingRoom({ room }: { room: MeetingRoomType }) {
           : `bg-gray1 rounded-xl`
       }
     >
-      <div className="w-max-[354px] h-[241px] rounded-xl flex flex-col justify-start">
-        <div className="pl-[24px]">
-          <div className="h-[24px]"></div>
-
-          <div className="flex flex-row align-middle my-auto">
-            <div className="flex flex-row align-middle justify-between w-full">
-              <div className="text-[16px] flex flex-row align-middle text-center">
-                <IoFemale className="w-[14px] h-[14px] my-auto fill-hotPink" /> {`${countFemale}/${genderMaxNumber}`}
-                <div className="px-[6px]">|</div>
-                <IoMale className="w-[14px] h-[14px] my-auto fill-blue" />
-                {`${countMale}/${genderMaxNumber}`}
-                <div className="mx-[6px]">|</div> {`${room_status}`}
-              </div>
-              <div className="pr-[16px] flex flex-row justify-center align-middle">
-                {alreadyChatRoom && alreadyChatRoom.length > 0 ? (
-                  <div className="flex flex-row gap-[2px] p-[4px] bg-white rounded-lg text-[14px]">
-                    <div className="text-[14px]">채팅중</div>
-                    <div>
-                      <IoChatbubblesOutline className="h-[16px] w-[16px] my-auto fill-gray2" />
-                    </div>
-                  </div>
-                ) : emptySeat === 1 ? (
-                  <div className="flex flex-row gap-[2px] p-[4px] bg-white rounded-lg text-[14px]">
-                    <div className="text-hotPink my-auto">한자리!!</div>
-                    <div>
-                      <BsFire className="h-[18px] w-[18px] my-auto fill-hotPink" />
-                    </div>
-                  </div>
-                ) : user_id === leader_id ? (
-                  <div ref={dropdownRef} className="relative flex flex-row justify-center align-middle">
-                    <button
-                      className="flex flex-row justify-center align-middle"
-                      onClick={() => {
-                        setOpen((open) => !open);
-                      }}
+      <div
+        className="w-max-[354px] h-[241px] p-6 gap-4 rounded-xl flex flex-col hover:cursor-pointer"
+        onClick={() => addMember({ room_id })}
+      >
+        <div className="flex flex-row">
+          <div className="flex flex-row justify-between w-full items-center">
+            <div className="text-[16px] flex flex-row text-center">
+              <IoFemale className="w-[14px] h-[14px] my-auto fill-hotPink" /> {`${countFemale}/${genderMaxNumber}`}
+              <div className="px-[6px]">|</div>
+              <IoMale className="w-[14px] h-[14px] my-auto fill-blue" />
+              {`${countMale}/${genderMaxNumber}`}
+              <div className="mx-[6px]">|</div> {`${room_status}`}
+            </div>
+            <div className="pr-[16px] flex flex-row justify-center relative">
+              {alreadyChatRoom && alreadyChatRoom.length > 0 ? (
+                <div className="flex flex-row gap-[2px] p-[4px] bg-white border rounded-lg">
+                  {myMsgData && myMsgData.find((item) => item.room_id === room?.room_id) ? (
+                    <div
+                      className={`w-5 h-5 bg-[#F31260] rounded-full flex justify-center items-center gap-2 absolute top-[-8px] right-0 text-white`}
                     >
-                      <HiOutlineDotsVertical className="h-[20px] w-[20px] my-auto" />
-                    </button>
+                      <h1>{myMsgData.find((item) => item.room_id === room?.room_id)?.newMsgCount}</h1>
+                    </div>
+                  ) : null}
 
-                    {open && (
-                      <div className="absolute top-full right-[0px] bg-white flex flex-col w-[92px] h-[78px] p-[5px] justify-items-center border-gray2 border-1 rounded-xl">
-                        <div className="flex flex-col justify-items-center w-[92px]">
-                          <DeleteMeetingRoom room_id={room_id} />
-                        </div>
-                        <div className="flex flex-col justify-items-center w-[92px]">
-                          <EditMeetingRoom room={room} />
-                        </div>
-                      </div>
-                    )}
+                  <div className="text-[14px]">채팅중</div>
+                  <div>
+                    <IoChatbubblesOutline className="h-[16px] w-[16px] my-auto fill-gray2" />
                   </div>
-                ) : null}
-              </div>
+                </div>
+              ) : emptySeat === 1 ? (
+                <div className="flex flex-row gap-[2px] p-[4px] bg-white rounded-lg text-[14px]">
+                  <div className="text-hotPink my-auto">한자리!!</div>
+                  <div>
+                    <BsFire className="h-[18px] w-[18px] my-auto fill-hotPink" />
+                  </div>
+                </div>
+              ) : user_id === leader_id ? (
+                <div ref={dropdownRef} className="relative flex flex-row justify-center align-middle">
+                  <button
+                    className="flex flex-row justify-center align-middle"
+                    onClick={() => {
+                      setOpen((open) => !open);
+                    }}
+                  >
+                    <HiOutlineDotsVertical className="h-[20px] w-[20px] my-auto" />
+                  </button>
+
+                  {open && (
+                    <div className="absolute top-full right-[0px] bg-white flex flex-col w-[92px] h-[78px] p-[5px] justify-items-center border-gray2 border-1 rounded-xl">
+                      <div className="flex flex-col justify-items-center w-[92px]">
+                        <DeleteMeetingRoom room_id={room_id} />
+                      </div>
+                      <div className="flex flex-col justify-items-center w-[92px]">
+                        <EditMeetingRoom room={room} />
+                      </div>
+                    </div>
+                  )}
+                </div>
+              ) : null}
             </div>
           </div>
-          <main className="flex flex-col justify-start hover:cursor-pointer" onClick={() => addMember({ room_id })}>
-            <div className="h-[16px]"></div>
+        </div>
+
+        <div className="h-full flex flex-col justify-between">
+          <div className="flex flex-col">
             <div className="text-[26px]"> {room_title} </div>
             <div className="flex flex-row justify-start gap-2">
-              <div className="text-[14px]">{region}</div>
-              <div className="text-[14px]"> {location} </div>
+              <div className="text-base">{region}</div>
+              <div className="text-base"> {location} </div>
             </div>
-            <div className="h-[32px]"></div>
-            <div>
+          </div>
+
+          <div>
+            <div className="flex gap-1 mb-2 items-center">
               <Image
                 src={MeetGoLogoPurple}
                 alt="MeetGo Logo"
                 style={{
                   width: 'auto',
-                  height: '18px'
+                  height: '20px'
                 }}
               />
+              <p className="text-mainColor text-sm font-bold">MEETGO</p>
             </div>
-            <div className="h-[16px]"></div>
-
             <div className="text-[14px] flex flex-row gap-[4px]">
               {feature &&
                 Array.from(feature).map((value) => (
@@ -170,9 +182,8 @@ function MeetingRoom({ room }: { room: MeetingRoomType }) {
                     {value}
                   </Chip>
                 ))}
-              <div className="h-[24px]"></div>
             </div>
-          </main>
+          </div>
         </div>
       </div>
     </div>

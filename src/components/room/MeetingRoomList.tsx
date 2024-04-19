@@ -1,5 +1,4 @@
 'use client';
-import { useMyMsgData } from '@/hooks/useQueries/useChattingQuery';
 import { useMyroomQuery, useRecruitingQuery } from '@/hooks/useQueries/useMeetingQuery';
 import { useGetUserDataQuery } from '@/hooks/useQueries/useUserQuery';
 import { useSearchRoomStore } from '@/store/searchRoomStore';
@@ -20,8 +19,6 @@ function MeetingRoomList() {
   const myRoomList = useMyroomQuery(String(user?.user_id));
   const filteredMyRoomList = myRoomList?.map((room) => room.room);
   const { selectRegion, selectMemberNumber } = useSearchRoomStore();
-
-  const myMsgData = useMyMsgData(user?.user_id!);
 
   // meetingRoomList 중에서 myRoomList가 없는 것을 뽑아내기
   const otherRooms = meetingRoomList?.filter(function (room: MeetingRoomType) {
@@ -150,19 +147,7 @@ function MeetingRoomList() {
                     {filteredMyRoomList !== null &&
                       filteredMyRoomList?.map((room, index) => {
                         if (index < 3 * page && index >= 3 * (page - 1))
-                          return (
-                            <div key={room?.room_id}>
-                              <div className="flex gap-2">
-                                {myMsgData && myMsgData.find((item) => item.room_id === room?.room_id) ? (
-                                  <h1>
-                                    {myMsgData.find((item) => item.room_id === room?.room_id)?.newMsgCount} 새로운
-                                    메세지 수
-                                  </h1>
-                                ) : null}
-                              </div>
-                              {room && <MeetingRoom room={room} />}
-                            </div>
-                          );
+                          return <div key={room?.room_id}>{room && <MeetingRoom room={room} />}</div>;
                       })}
                   </div>
                 }

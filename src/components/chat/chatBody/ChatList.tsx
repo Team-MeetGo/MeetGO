@@ -67,18 +67,15 @@ const ChatList = ({ user, chatRoomId }: { user: User | null; chatRoomId: string 
   useEffect(() => {
     const scrollBox = scrollRef.current;
     if (scrollBox) {
-      console.log('0');
       // DB에 마지막 메세지로 저장된 메세지와 id가 동일한 div 가 있다면 강조처리
       const lastMsgValue = lastDivRefs.current.find((ref) => ref.message_id === lastMsgId);
       const lastDiv = lastMsgValue && (lastMsgValue as any).current;
       if (lastMsgId && lastMsgId !== messages[messages.length - 1].message_id && lastDiv) {
-        console.log('1');
         setLastCheckedDiv(lastDiv);
         styleHere(lastDiv);
         setIsScrolling(true);
       } else {
         // 그 외의 경우 기본적으로 스크롤 다운
-        console.log('*');
         scrollBox.scrollTop = scrollBox.scrollHeight;
         setCheckedLastMsg(true);
       }
@@ -93,23 +90,35 @@ const ChatList = ({ user, chatRoomId }: { user: User | null; chatRoomId: string 
       if (lastCheckedDiv) {
         // 강조처리를 보고난 뒤 스크롤을 맨 아래로 내리면 강조처리 해제
         if (!checkedLastMsg) {
-          console.log('2');
           setCheckedLastMsg(true);
           lastCheckedDiv.style.backgroundColor = '';
         } else if (checkedLastMsg && prevMsgsLengthRef.current !== messages.length) {
-          console.log('3');
           // 강조처리를 보고나야만 타인으로부터 새로운 메세지가 추가되었을 때 스크롤 다운되도록
           scrollBox.scrollTop = scrollBox.scrollHeight;
           prevMsgsLengthRef.current = messages.length;
         }
       } else if (prevMsgsLengthRef.current !== messages.length || count === 0) {
-        console.log('4');
         // 이전 메세지가 화면에 없고 + 새로운 메세지가 추가되면 스크롤 다운이 따라가도록
         scrollBox.scrollTop = scrollBox.scrollHeight;
         prevMsgsLengthRef.current = messages.length;
       }
     }
   }, [messages, isScrolling]);
+
+  // const cancelSearchMode = useCallback(
+  //   (e: any) => {
+  //     return scrollRef.current && searchMode && scrollRef.current.contains(e.target) ? setSearchMode() : null;
+  //   },
+  //   [searchMode, setSearchMode]
+  // );
+
+  // // 빈 공간 누르면 검색창 꺼지기
+  // useEffect(() => {
+  //   window.addEventListener('click', cancelSearchMode);
+  //   return () => {
+  //     window.removeEventListener('click', cancelSearchMode);
+  //   };
+  // }, [cancelSearchMode]);
 
   // 스크롤 이벤트가 발생할 때
   const handleScroll = () => {
@@ -129,6 +138,7 @@ const ChatList = ({ user, chatRoomId }: { user: User | null; chatRoomId: string 
     if (lastCheckedDiv) lastCheckedDiv.style.backgroundColor = '';
     scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
   };
+  // insert 할 때 없어졌으면 좋겠는데..
 
   const styleHere = (lastDiv: HTMLElement) => {
     lastDiv.style.backgroundColor = '#F2EAFA';
