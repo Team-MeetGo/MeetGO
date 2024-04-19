@@ -32,8 +32,8 @@ const RememberLastChat = () => {
       // 현재 나누는 메세지가 있을 때
       // 이전에 저장된 마지막 메세지가 있으면 현재 메세지 중 마지막 걸로 업데이트, 없으면 현재 메세지 중 마지막 메세지 추가하기
       if (messages.length) {
-        lastMsgId ? mutateToUpdate() : mutateToAdd();
-        mutateClearUnread(chatRoomId as string);
+        // lastMsgId ? mutateToUpdate() : mutateToAdd();
+        // mutateClearUnread(chatRoomId as string);
       }
     };
   }, []);

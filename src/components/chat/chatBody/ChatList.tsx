@@ -26,7 +26,7 @@ const ChatList = ({ user, chatRoomId }: { user: User | null; chatRoomId: string 
   const room = useRoomDataQuery(chatRoomId);
   const roomId = room?.roomId;
   const prevMsgsLengthRef = useRef(messages.length);
-  const msgRefs = useRef(messages);
+  const lastDivRefs = useRef(messages);
   const lastMsgId = useMyLastMsgs(user?.id!, chatRoomId);
 
   // "messages" table Realtime INSERT, DELETE 구독로직
@@ -68,7 +68,7 @@ const ChatList = ({ user, chatRoomId }: { user: User | null; chatRoomId: string 
     const scrollBox = scrollRef.current;
     if (scrollBox) {
       // DB에 마지막 메세지로 저장된 메세지와 id가 동일한 div 가 있다면 강조처리
-      const lastMsgValue = msgRefs.current.find((ref) => ref.message_id === lastMsgId);
+      const lastMsgValue = lastDivRefs.current.find((ref) => ref.message_id === lastMsgId);
       const lastDiv = lastMsgValue && (lastMsgValue as any).current;
       if (lastMsgId && lastMsgId !== messages[messages.length - 1].message_id && lastDiv) {
         setLastCheckedDiv(lastDiv);
@@ -105,6 +105,21 @@ const ChatList = ({ user, chatRoomId }: { user: User | null; chatRoomId: string 
     }
   }, [messages, isScrolling]);
 
+  // const cancelSearchMode = useCallback(
+  //   (e: any) => {
+  //     return scrollRef.current && searchMode && scrollRef.current.contains(e.target) ? setSearchMode() : null;
+  //   },
+  //   [searchMode, setSearchMode]
+  // );
+
+  // // 빈 공간 누르면 검색창 꺼지기
+  // useEffect(() => {
+  //   window.addEventListener('click', cancelSearchMode);
+  //   return () => {
+  //     window.removeEventListener('click', cancelSearchMode);
+  //   };
+  // }, [cancelSearchMode]);
+
   // 스크롤 이벤트가 발생할 때
   const handleScroll = () => {
     const scrollBox = scrollRef.current;
@@ -123,6 +138,7 @@ const ChatList = ({ user, chatRoomId }: { user: User | null; chatRoomId: string 
     if (lastCheckedDiv) lastCheckedDiv.style.backgroundColor = '';
     scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
   };
+  // insert 할 때 없어졌으면 좋겠는데..
 
   const styleHere = (lastDiv: HTMLElement) => {
     lastDiv.style.backgroundColor = '#F2EAFA';
@@ -147,9 +163,9 @@ const ChatList = ({ user, chatRoomId }: { user: User | null; chatRoomId: string 
               </div>
             ) : null}
             {msg.send_from === user?.id ? (
-              <MyChat msg={msg} idx={idx} msgRefs={msgRefs} />
+              <MyChat msg={msg} idx={idx} lastDivRefs={lastDivRefs} />
             ) : (
-              <OthersChat msg={msg} idx={idx} msgRefs={msgRefs} />
+              <OthersChat msg={msg} idx={idx} lastDivRefs={lastDivRefs} />
             )}
             {lastMsgId &&
             lastMsgId !== messages[messages.length - 1].message_id &&

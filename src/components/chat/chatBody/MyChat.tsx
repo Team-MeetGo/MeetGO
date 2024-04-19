@@ -8,7 +8,7 @@ import { useRoomDataQuery } from '@/hooks/useQueries/useChattingQuery';
 import ChatImg from './ChatImg';
 import MyInfoWrapper from './MyInfoWrapper';
 
-const MyChat = ({ msg, idx, msgRefs }: { msg: Message; idx: number; msgRefs: any }) => {
+const MyChat = ({ msg, idx, lastDivRefs }: { msg: Message; idx: number; lastDivRefs: any }) => {
   const { messages, chatRoomId } = chatStore((state) => state);
   const { data: user } = useGetUserDataQuery();
   const room = useRoomDataQuery(chatRoomId as string);
@@ -16,7 +16,7 @@ const MyChat = ({ msg, idx, msgRefs }: { msg: Message; idx: number; msgRefs: any
 
   return (
     <div>
-      <div id={msg.message_id} ref={msgRefs.current[idx]} className="flex gap-[8px] justify-end">
+      <div id={msg.message_id} ref={lastDivRefs.current[idx]} className="flex gap-[8px] justify-end">
         <div className="w-80 flex flex-col gap-1">
           {isItMe(idx, messages) ? (
             !isNextDay(idx, messages) ? null : (

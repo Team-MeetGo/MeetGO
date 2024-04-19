@@ -7,10 +7,8 @@ import { useState } from 'react';
 import { IoIosArrowBack } from 'react-icons/io';
 
 const ChatImg = ({ msg }: { msg: Message }) => {
-  const { data: user } = useGetUserDataQuery();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [slideCount, setSlideCount] = useState(0);
-  console.log(slideCount);
 
   const showBigImg = (urlIdx: number) => {
     console.log('urlIdx =>', urlIdx);

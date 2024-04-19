@@ -5,7 +5,7 @@ import { getformattedDate, isItMe, isNextDay } from '@/utils';
 import ChatImg from './ChatImg';
 import ParticipantsInfoWrapper from './ParticipantsInfoWrapper';
 
-const OthersChat = ({ msg, idx, msgRefs }: { msg: Message; idx: number; msgRefs: any }) => {
+const OthersChat = ({ msg, idx, lastDivRefs }: { msg: Message; idx: number; lastDivRefs: any }) => {
   const { chatRoomId, messages } = chatStore((state) => state);
   const room = useRoomDataQuery(chatRoomId as string);
   const roomId = room?.roomId;
@@ -19,7 +19,7 @@ const OthersChat = ({ msg, idx, msgRefs }: { msg: Message; idx: number; msgRefs:
 
   return (
     <div>
-      <div id={msg.message_id} ref={msgRefs.current[idx]} className="flex gap-[12px]">
+      <div id={msg.message_id} ref={lastDivRefs.current[idx]} className="flex gap-[12px]">
         {isItMe(idx, messages) ? (
           !isNextDay(idx, messages) ? (
             <div className="w-[60px]"></div>
