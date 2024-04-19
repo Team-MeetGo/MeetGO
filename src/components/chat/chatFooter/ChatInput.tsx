@@ -44,7 +44,6 @@ const ChatInput = () => {
   };
 
   const handleSubmit = async () => {
-    setImgs([]);
     if (user && chatRoomId && (message.length || imgs.length)) {
       const { error } = await clientSupabase.from('messages').insert({
         send_from: user?.user_id,
@@ -57,6 +56,7 @@ const ChatInput = () => {
         alert('새로운 메세지를 추가하는 데에 실패했습니다.');
       }
     }
+    setImgs([]);
   };
 
   const cancelImgFile = (name: string) => {
