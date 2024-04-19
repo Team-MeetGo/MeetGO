@@ -122,6 +122,21 @@ function MeetingRoomForm() {
                     maxLength={15}
                     className="border-gray2 border-b-2"
                   />
+                  <div className="flex flex-col gap-4">
+                    <div className="flex flex-row gap-4">
+                      <MemberNumberSelection text={'member'} />
+                      <div className="">
+                        <RegionSelection text={'room'} />
+                      </div>
+                    </div>
+                    <input
+                      value={location}
+                      onChange={(e) => setLocation(e.target.value)}
+                      placeholder="자세한 주소 (15자 이내)"
+                      maxLength={15}
+                      className="border-gray2 border-b-2"
+                    />
+                  </div>
                   <div className="flex w-full max-w-xs flex-col gap-2">
                     <label>방의 컨셉을 골라주세요!</label>
                     <div className="flex whitespace-nowrap">
@@ -153,19 +168,6 @@ function MeetingRoomForm() {
                         </Chip>
                       ))}
                     </div>
-                  </div>
-                  <div className="flex flex-col gap-4">
-                    <MemberNumberSelection text={'member'} />
-                    <div className="">
-                      <RegionSelection text={'room'} />
-                    </div>
-                    <input
-                      value={location}
-                      onChange={(e) => setLocation(e.target.value)}
-                      placeholder="자세한 주소 (15자 이내)"
-                      maxLength={15}
-                      className="border-gray2 border-b-2"
-                    />
                   </div>
                 </ModalBody>
                 <ModalFooter>

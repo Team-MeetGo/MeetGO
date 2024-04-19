@@ -2,7 +2,7 @@
 import { useRoomStore } from '@/store/roomStore';
 import { useSearchRoomStore } from '@/store/searchRoomStore';
 import { regionList } from '@/utils/MeetingRoomSelector';
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { IoIosArrowDown } from 'react-icons/io';
 
 function RegionSelection({ text }: { text: string }) {

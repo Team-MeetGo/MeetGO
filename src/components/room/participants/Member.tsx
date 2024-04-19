@@ -13,10 +13,9 @@ import Image from 'next/image';
 import type { UserType } from '@/types/roomTypes';
 import AcceptanceRoomButtons from './AcceptanceRoomButtons';
 import { RoomData } from '@/types/chatTypes';
-const Member = ({ room_id }: { room_id: string }) => {
+const Member = ({ room_id, roomInformation }: { room_id: string; roomInformation: MeetingRoomType }) => {
   const participants = useRoomParticipantsQuery(room_id as string);
   const [members, setMembers] = useState<UserType[]>(participants as UserType[]);
-  const { data: roomInformation } = useRoomInfoWithRoomIdQuery(room_id);
   const leaderMember = roomInformation?.leader_id;
   const [leader, setLeader] = useState(leaderMember as string);
   const femaleMembers = members.filter((member) => member.gender === 'female');
@@ -179,7 +178,7 @@ const Member = ({ room_id }: { room_id: string }) => {
               <div key={member.user_id} className={`grid col-start-1 col-span-1`}>
                 <article className={`bg-purpleSecondary flex flex-row w-[506px] h-[166px] rounded-2xl`}>
                   {/* 카드 왼쪽 */}
-                  <div className="ml-[40px] mr-[88px] flex flex-col justify-center align-middle justify-items-center">
+                  <div className="ml-[40px] mr-[40px] flex flex-col justify-center align-middle justify-items-center">
                     <div className="w-[86px] h-[86px] mt-[32px] rounded-full relative">
                       {leader === member.user_id ? (
                         <div>

@@ -1,6 +1,6 @@
 'use client';
 import meetingRoomHandler from '@/hooks/custom/room';
-import MeetGoLogoPurple from '../../utils/icons/meetgo-logo-purple.png';
+import MeetGoLogoPurple from '@/utils/icons/meetgo-logo-purple.png';
 import { useAddRoomMemberMutation, useUpdateRoomStatusClose } from '@/hooks/useMutation/useMeetingMutation';
 import { useAlreadyChatRoomQuery, useRoomParticipantsQuery } from '@/hooks/useQueries/useMeetingQuery';
 import { useGetUserDataQuery } from '@/hooks/useQueries/useUserQuery';
@@ -10,8 +10,8 @@ import { useEffect, useRef, useState } from 'react';
 import { BsFire } from 'react-icons/bs';
 import { HiOutlineDotsVertical } from 'react-icons/hi';
 import { IoChatbubblesOutline, IoFemale, IoMale } from 'react-icons/io5';
-import DeleteMeetingRoom from './DeleteMeetingRoom';
-import EditMeetingRoom from './EditMeetingRoom';
+import DeleteMeetingRoom from '../DeleteMeetingRoom';
+import EditMeetingRoom from '../EditMeetingRoom';
 import Image from 'next/image';
 import type { MeetingRoomType } from '@/types/roomTypes';
 import { useMyMsgData } from '@/hooks/useQueries/useChattingQuery';
@@ -76,7 +76,7 @@ function MeetingRoom({ room }: { room: MeetingRoomType }) {
     };
     document.addEventListener('mousedown', outSideClick);
   }, [openModal]);
-
+  console.log(dropdownRef);
   return (
     <div
       className={
@@ -87,10 +87,7 @@ function MeetingRoom({ room }: { room: MeetingRoomType }) {
           : `bg-gray1 rounded-xl`
       }
     >
-      <div
-        className="w-max-[354px] h-[241px] p-6 gap-4 rounded-xl flex flex-col hover:cursor-pointer"
-        onClick={() => addMember({ room_id })}
-      >
+      <div className="w-max-[354px] h-[241px] p-6 gap-4 rounded-xl flex flex-col hover:cursor-pointer">
         <div className="flex flex-row">
           <div className="flex flex-row justify-between w-full items-center">
             <div className="text-[16px] flex flex-row text-center">
@@ -124,7 +121,7 @@ function MeetingRoom({ room }: { room: MeetingRoomType }) {
                   </div>
                 </div>
               ) : user_id === leader_id ? (
-                <div ref={dropdownRef} className="relative flex flex-row justify-center align-middle">
+                <div className="relative flex flex-row justify-center align-middle">
                   <button
                     className="flex flex-row justify-center align-middle"
                     onClick={() => {
@@ -135,7 +132,10 @@ function MeetingRoom({ room }: { room: MeetingRoomType }) {
                   </button>
 
                   {open && (
-                    <div className="absolute top-full right-[0px] bg-white flex flex-col w-[92px] h-[78px] p-[5px] justify-items-center border-gray2 border-1 rounded-xl">
+                    <div
+                      ref={dropdownRef}
+                      className="absolute top-full right-[0px] bg-white flex flex-col w-[92px] h-[78px] p-[5px] justify-items-center border-gray2 border-1 rounded-xl"
+                    >
                       <div className="flex flex-col justify-items-center w-[92px]">
                         <DeleteMeetingRoom room_id={room_id} />
                       </div>
@@ -150,7 +150,7 @@ function MeetingRoom({ room }: { room: MeetingRoomType }) {
           </div>
         </div>
 
-        <div className="h-full flex flex-col justify-between">
+        <div className="h-full flex flex-col justify-between" onClick={() => addMember({ room_id })}>
           <div className="flex flex-col">
             <div className="text-[26px]"> {room_title} </div>
             <div className="flex flex-row justify-start gap-2">

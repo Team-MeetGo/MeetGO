@@ -1,20 +1,19 @@
 'use client';
 import { useMyroomQuery, useRecruitingQuery } from '@/hooks/useQueries/useMeetingQuery';
 import { useGetUserDataQuery } from '@/hooks/useQueries/useUserQuery';
+import { RECRUTING_ROOMDATA, ROOMLIST } from '@/query/meetingRoom/meetingQueryKeys';
 import { useSearchRoomStore } from '@/store/searchRoomStore';
-import { useEffect, useRef, useState } from 'react';
+import { useQueryClient } from '@tanstack/react-query';
+import { useRef, useState } from 'react';
 import { IoIosArrowBack, IoIosArrowForward, IoMdRefresh } from 'react-icons/io';
-import MeetingRoom from './MeetingRoom';
 import MeetingRoomForm from './MeetingRoomForm';
 import MemberNumberSelection from './MemberNumberSelection';
 import RegionSelection from './RegionSelection';
+import MeetingRoom from './singleMeetingRoom/MeetingRoom';
 
-import { RECRUTING_ROOMDATA, ROOMLIST } from '@/query/meetingRoom/meetingQueryKeys';
 import type { MeetingRoomType } from '@/types/roomTypes';
-import { useQueryClient } from '@tanstack/react-query';
 function MeetingRoomList() {
   const [page, setPage] = useState(1);
-  const [scrollPage, setScrollPage] = useState(0);
   const { data: user, isPending, isError, error } = useGetUserDataQuery();
   const { data: meetingRoomList } = useRecruitingQuery(String(user?.user_id));
   const scrollRef = useRef<HTMLInputElement>(null);
@@ -39,42 +38,6 @@ function MeetingRoomList() {
     (room) => room.member_number === selectMemberNumber && room.region === selectRegion
   );
 
-  const [otherRoomScroll, setOtherRoomScroll] = useState<MeetingRoomType[]>([]);
-  const [regionSelectedRoomScroll, setRegionSelectedRoomScroll] = useState<MeetingRoomType[]>([]);
-  const [memberSelectedRoomScroll, setMemberSelectedRoomScroll] = useState<MeetingRoomType[]>([]);
-  const [regionMemberSelectedRoomScroll, setRegionMemberSelectedRoomScroll] = useState<MeetingRoomType[]>([]);
-  const nextpage = scrollPage * 3 + 3;
-  const pagecondition = otherRooms!.length > nextpage ? nextpage : otherRooms!.length + 1;
-  const viewCards = () => {
-    if (otherRooms) {
-      const otherRoomsViewCards = otherRooms.slice(0, pagecondition);
-      if (otherRoomsViewCards) setOtherRoomScroll(otherRoomsViewCards);
-      // const regionSelectedOtherRoomsViewCards = regionSelectedOtherRooms?.slice(0, scrollPage * 3 + 3);
-      // const memberNumberSelectedOtherRoomsViewCards = memberNumberSelectedOtherRooms?.slice(0, scrollPage * 3 + 3);
-      // const regionMemberNumberSelectedOtherRoomsViewCards = regionMemberNumberSelectedOtherRooms?.slice(
-      //   0,
-      //   scrollPage * 3 + 3
-      // );
-      //   if (regionSelectedOtherRoomsViewCards) setRegionSelectedRoomScroll(regionSelectedOtherRoomsViewCards);
-      //   if (memberNumberSelectedOtherRoomsViewCards) setMemberSelectedRoomScroll(memberNumberSelectedOtherRoomsViewCards);
-      //   if (regionMemberNumberSelectedOtherRoomsViewCards)
-      //     setRegionMemberSelectedRoomScroll(regionMemberNumberSelectedOtherRoomsViewCards);
-    }
-  };
-  // const nowPageRoomOrder = page * 3 - 3;
-  // useEffect(() => {
-  //   const participatedRoom = () => {
-  //     if (filteredMyRoomList === undefined || filteredMyRoomList === null) return;
-  //     else if (page !== 1 && filteredMyRoomList.length > nowPageRoomOrder) {
-  //       const viewRooms = filteredMyRoomList.splice(nowPageRoomOrder, nowPageRoomOrder + 3);
-  //       setNowViewRoomOrder(viewRooms as MeetingRoomType[]);
-  //     } else {
-  //       const viewRooms = filteredMyRoomList.splice(nowPageRoomOrder);
-  //       setNowViewRoomOrder(viewRooms as MeetingRoomType[]);
-  //     }
-  //   };
-  //   participatedRoom();
-  // }, [page]);
   const nextPage = () => {
     if (filteredMyRoomList && filteredMyRoomList.length / 3 <= page) {
       return setPage(1);
@@ -87,34 +50,6 @@ function MeetingRoomList() {
     }
     setPage((page) => page - 1);
   };
-  const currentRef = scrollRef.current;
-
-  useEffect(() => {
-    const observerOptions = {
-      root: null,
-      rootMargin: '0px',
-      threshold: 0.3
-    };
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          const rect = entry.boundingClientRect;
-          // if (rect.y <= (window.innerHeight || document.documentElement.clientHeight)) {
-          viewCards();
-          setScrollPage((scrollPage) => scrollPage + 1);
-          // }
-        }
-      }, observerOptions);
-    });
-    const N = otherRooms?.length;
-    if (N === undefined) return;
-    const totalPage = Math.ceil(N / 3);
-    if (currentRef && scrollPage < totalPage) {
-      observer.observe(currentRef);
-    } else if (totalPage < scrollPage && currentRef) {
-      observer.unobserve(currentRef);
-    }
-  }, [currentRef, scrollPage]);
 
   const onReload = async () => {
     await queryClient.invalidateQueries({
@@ -126,14 +61,13 @@ function MeetingRoomList() {
       refetchType: 'all'
     });
   };
-  console.log(meetingRoomList);
   return (
     <>
-      <div className="fixed z-50 bg-white w-full flex-col justify-center align-middle">
+      <article className="fixed z-50 bg-white w-full flex-col justify-center align-middle">
         <div className="flex flex-row justify-center align-middle">
-          <article className="h-[366px] mt-[64px] border-b border-gray2 max-w-[1250px]">
+          <section className="h-[366px] mt-[64px] border-b border-gray2 max-w-[1250px]">
             <div className="flex flex-row w-full justify-between">
-              <div className="text-[40px] font-semibold ml-[56px]">참여 중</div>
+              <p className="text-[40px] font-semibold ml-[56px]">참여 중</p>
               <div className="flex flex-row align-middle justify-center gap-4 mr-[56px]">
                 <div className="flex flex-col align-middle justify-center text-gray2">
                   <button
@@ -170,9 +104,9 @@ function MeetingRoomList() {
               </button>
             </div>
             <div className="h-[40px]"></div>
-          </article>
+          </section>
         </div>
-      </div>
+      </article>
       <article className="z-10 flex flex-col items-center justify-content pt-[462px]">
         <div>
           <div className="flex flex-col justify-start min-w-[1000px] max-w-[1440px] mt-[40px]">

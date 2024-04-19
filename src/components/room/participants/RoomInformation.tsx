@@ -11,9 +11,9 @@ import { useRoomInfoWithRoomIdQuery, useRoomParticipantsQuery } from '@/hooks/us
 import { useGetUserDataQuery } from '@/hooks/useQueries/useUserQuery';
 import { useRouter } from 'next/navigation';
 
-import type { UserType } from '@/types/roomTypes';
+import type { MeetingRoomType, UserType } from '@/types/roomTypes';
 
-function RoomInformation({ room_id }: { room_id: string }) {
+function RoomInformation({ room_id, roomInformation }: { room_id: string; roomInformation: MeetingRoomType }) {
   const router = useRouter();
   const { data: user, isPending, isError } = useGetUserDataQuery();
   const user_id = user?.user_id!;
@@ -21,7 +21,6 @@ function RoomInformation({ room_id }: { room_id: string }) {
   const updateRoomStatusOpenMutation = useUpdateRoomStatusOpen({ room_id, user_id });
   const { mutate: deleteRoomMutation } = useDeleteRoom({ room_id, user_id });
 
-  const { data: roomInformation } = useRoomInfoWithRoomIdQuery(room_id);
   const leader = roomInformation?.leader_id;
   const participants = useRoomParticipantsQuery(room_id);
   const otherParticipants = participants?.filter((person: UserType | null) => person?.user_id !== leader);

@@ -57,7 +57,7 @@ const AcceptanceRoomButtons = ({
   };
 
   return (
-    <div>
+    <main>
       {user_id === leader && participants?.length === maxMember && (
         <div
           className="
@@ -77,7 +77,7 @@ const AcceptanceRoomButtons = ({
           </button>
         </div>
       )}
-    </div>
+    </main>
   );
 };
 
