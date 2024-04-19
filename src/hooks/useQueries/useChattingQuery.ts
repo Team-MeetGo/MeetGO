@@ -33,11 +33,10 @@ export const useParticipantsQuery = (roomId: string) => {
 };
 
 export const useChatDataQuery = (chatRoomId: string) => {
-  const { data: chat } = useSuspenseQuery({
+  const { data: chat } = useQuery({
     queryKey: [CHATDATA_QUERY_KEY],
     queryFn: async () => await fetchChatData(chatRoomId)
   });
-  // console.log('chat => ', chat);
   return chat;
 };
 
