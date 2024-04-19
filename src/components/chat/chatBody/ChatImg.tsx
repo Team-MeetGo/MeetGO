@@ -35,9 +35,8 @@ const ChatImg = ({ msg }: { msg: Message }) => {
     <>
       {msg.imgs?.length ? (
         <div
-          className={`grid ${msg.imgs.length < 2 ? 'grid-cols-1' : 'grid-cols-2'} ${
-            msg.imgs.length > 1 ? 'chatImgRowsOverOne' : 'chatImgRowsNotOverOne'
-          }`}
+          className={`grid ${msg.imgs.length < 2 ? 'grid-cols-1' : 'grid-cols-2'} 
+          ${msg.imgs.length > 2 ? 'chatImgRowsOverOne' : 'chatImgRowsNotOverOne'}`}
         >
           {msg.imgs.map((url) => (
             <div key={url} className="w-36 relative">
