@@ -1,10 +1,6 @@
 'use client';
-import { Chip } from '@nextui-org/react';
 import { IoFemale, IoMale } from 'react-icons/io5';
-
-// import type { UUID } from 'crypto';
 import meetingRoomHandler from '@/hooks/custom/room';
-import { useRouter } from 'next/navigation';
 import {
   useDeleteMember,
   useDeleteRoom,
@@ -13,9 +9,9 @@ import {
 } from '@/hooks/useMutation/useMeetingMutation';
 import { useRoomInfoWithRoomIdQuery, useRoomParticipantsQuery } from '@/hooks/useQueries/useMeetingQuery';
 import { useGetUserDataQuery } from '@/hooks/useQueries/useUserQuery';
+import { useRouter } from 'next/navigation';
 
 import type { UserType } from '@/types/roomTypes';
-import AcceptanceRoomButtons from './AcceptanceRoomButtons';
 
 function RoomInformation({ room_id }: { room_id: string }) {
   const router = useRouter();
@@ -59,43 +55,44 @@ function RoomInformation({ room_id }: { room_id: string }) {
     }
     router.push(`/meetingRoom`);
   };
-  //뒤로가기: 로비로
-  window.onpopstate = () => {
-    if (confirm('로비로 이동하시겠습니까?')) router.replace('/meetingRoom');
-  };
 
   return (
     <div className="flex flex-col items-center justify-content">
-      <div className="flex flex-col items-center justify-content min-w-[1000px] max-w-[1440px]">
-        <div className="h-[72x] w-full mt-[88px] border-b border-gray2 flex flex-row pb-[32px]">
-          <div className="flex flex-row min-w-[1000px] max-w-[1440px] justify-between">
+      <div className="flex flex-col items-center justify-content min-w-[1116px] max-w-[1440px]">
+        <div className="h-[72x] w-full pt-[64px] border-b border-gray2 flex flex-row pb-[32px]">
+          <div className="flex flex-row min-w-[1116px] max-w-[1440px] justify-between">
             <div className="flex flex-row align-bottom">
               <div className="text-[40px] pr-[32px]">{room_title}</div>
 
               <div className="h-[46px] display display-col justify-items-center items-center gap-[8px]">
                 <div className="text-[16px] flex flex-row justify-between align-middle justify-items-center mt-[12px]">
-                  <IoFemale className="w-[16px] fill-hotPink" /> {`${countFemale}/${genderMaxNumber} |`}
-                  <IoMale className="w-[16px] fill-blue" /> {`${countMale}/${genderMaxNumber}`}
+                  <IoFemale className="w-[16px] pr-[6px] my-auto fill-hotPink" /> {`${countFemale}/${genderMaxNumber}`}
+                  <div className="px-[6px]">|</div>
+                  <IoMale className="w-[16px] pr-[6px] my-auto fill-blue" /> {`${countMale}/${genderMaxNumber}`}
                 </div>
                 <div className="text-[16px]">{`${region} ${location}`}</div>
               </div>
 
-              <div className="flex flex-row w-[44px] text-[14px] gap-[8px] justify-start items-end pl-[32px] mb-[16 px]">
+              <div className="flex flex-row w-[full] text-[14px] gap-[8px] justify-start items-end pl-[32px] mb-[16 px]">
                 {feature &&
-                  Array.from(feature).map((value) => (
-                    <Chip
+                  feature.map((value) => (
+                    <div
                       key={value}
-                      color="default"
-                      style={{ backgroundColor: '#F2EAFA', color: '#8F5DF4', borderRadius: '8px' }}
+                      style={{
+                        backgroundColor: '#F2EAFA',
+                        color: '#8F5DF4',
+                        borderRadius: '8px',
+                        padding: '8px'
+                      }}
                     >
                       {value}
-                    </Chip>
+                    </div>
                   ))}
               </div>
             </div>
-            <div>
+            <div className="flex flex-col justify-end">
               <button
-                className="w-[90px] h-[43px] text-gray2 border-2 border-gray2 rounded-xl mt-[12px]"
+                className="w-[90px] h-[43px] text-gray2 border-1 border-gray2 rounded-xl align-bottom"
                 onClick={() => {
                   gotoLobby();
                 }}
@@ -104,9 +101,6 @@ function RoomInformation({ room_id }: { room_id: string }) {
               </button>
             </div>
           </div>
-        </div>
-        <div className="w-100% h">
-          <AcceptanceRoomButtons room_id={room_id} />
         </div>
       </div>
     </div>

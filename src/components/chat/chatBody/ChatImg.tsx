@@ -7,10 +7,8 @@ import { useState } from 'react';
 import { IoIosArrowBack } from 'react-icons/io';
 
 const ChatImg = ({ msg }: { msg: Message }) => {
-  const { data: user } = useGetUserDataQuery();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [slideCount, setSlideCount] = useState(0);
-  console.log(slideCount);
 
   const showBigImg = (urlIdx: number) => {
     console.log('urlIdx =>', urlIdx);
@@ -35,9 +33,8 @@ const ChatImg = ({ msg }: { msg: Message }) => {
     <>
       {msg.imgs?.length ? (
         <div
-          className={`grid ${msg.imgs.length < 2 ? 'grid-cols-1' : 'grid-cols-2'} ${
-            msg.imgs.length > 1 ? 'chatImgRowsOverOne' : 'chatImgRowsNotOverOne'
-          }`}
+          className={`grid ${msg.imgs.length < 2 ? 'grid-cols-1' : 'grid-cols-2'} 
+          ${msg.imgs.length > 2 ? 'chatImgRowsOverOne' : 'chatImgRowsNotOverOne'}`}
         >
           {msg.imgs.map((url) => (
             <div key={url} className="w-36 relative">
@@ -45,7 +42,7 @@ const ChatImg = ({ msg }: { msg: Message }) => {
                 src={url}
                 alt="채팅 이미지"
                 fill={true}
-                style={{ objectFit: 'fill', borderRadius: '3px', cursor: 'pointer' }}
+                style={{ objectFit: 'contain', borderRadius: '3px', cursor: 'pointer' }}
                 sizes="500px"
                 priority={true}
                 onClick={() => showBigImg(msg.imgs ? msg.imgs.indexOf(url) : -1)}
@@ -62,7 +59,7 @@ const ChatImg = ({ msg }: { msg: Message }) => {
                   {(onClose) => {
                     return (
                       <>
-                        <ModalHeader className="flex flex-col gap-1">{user?.nickname}</ModalHeader>
+                        <ModalHeader className="flex flex-col gap-1"></ModalHeader>
                         <ModalBody>
                           <div className="z-10 w-full flex text-3xl my-auto text-[#A1A1AA]">
                             {msg.imgs && slideCount > 0 ? (

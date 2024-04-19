@@ -14,8 +14,8 @@ export const fetchMyRoom = async (user_id: string) => {
   const { data: myRoom, error } = await clientSupabase
     .from('participants')
     .select(`*`)
-    .eq('user_id', user_id)
     .eq('isDeleted', false)
+    .eq('user_id', user_id)
     .select('user_id, room(*)')
     .order('created_at', { ascending: false });
   return myRoom;
@@ -52,13 +52,21 @@ export const addRoom = async ({ nextMeetingRoom, user_id }: { nextMeetingRoom: N
 };
 
 export const updateRoomStatusClose = async (room_id: string) => {
-  const { data, error } = await clientSupabase.from('room').update({ room_status: '모집종료' }).eq('room_id', room_id);
+  const { data, error } = await clientSupabase
+    .from('room')
+    .update({ room_status: '모집종료' })
+    .eq('room_id', room_id)
+    .select();
   if (error) console.error('방 닫힘 오류', error.message);
   return data;
 };
 
 export const updateRoomStatusOpen = async (room_id: string) => {
-  const { data, error } = await clientSupabase.from('room').update({ room_status: '모집중' }).eq('room_id', room_id);
+  const { data, error } = await clientSupabase
+    .from('room')
+    .update({ room_status: '모집중' })
+    .eq('room_id', room_id)
+    .select();
   if (error) console.error('방 열림 오류', error.message);
   return data;
 };
@@ -119,7 +127,8 @@ export const fetchRoomParticipants = async (roomId: string) => {
     .eq('room_id', roomId)
     .eq('isDeleted', false)
     .select('user_id, users(*)');
-  return userInformations?.map((user) => user.users);
+
+  return userInformations?.map((user) => user.users) ?? [];
 };
 
 // // 내가 들어가 있는 채팅방과 그 채팅방에 엮여있는 roomId

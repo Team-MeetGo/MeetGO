@@ -2,49 +2,64 @@
 import { useRoomStore } from '@/store/roomStore';
 import { useSearchRoomStore } from '@/store/searchRoomStore';
 import { regionList } from '@/utils/MeetingRoomSelector';
-import { Select, SelectItem } from '@nextui-org/react';
 import { useEffect, useMemo, useRef, useState } from 'react';
+import { IoIosArrowDown } from 'react-icons/io';
 
 function RegionSelection({ text }: { text: string }) {
-  const [selectedKeys, setSelectedKeys] = useState(new Set(['']));
-  const selectedValue = useMemo(() => Array.from(selectedKeys).join(', ').replaceAll('_', ' '), [selectedKeys]);
   const conditionalRef = useRef(text);
-  const { setRoomRegion, roomRegion } = useRoomStore();
-  const { setSelectRegion, selectRegion } = useSearchRoomStore();
-  console.log(selectRegion, '이건 바뀌는 것 selectRegion');
-  console.log(roomRegion, '이건 변하지 않는 것 roomRegion');
-  console.log(conditionalRef, '이건 room conditionalRef');
-  useEffect(() => {
-    if ((conditionalRef.current = 'selectRegion')) {
-      return setRoomRegion(selectedValue);
-    }
-    if ((conditionalRef.current = 'room')) {
-      return setSelectRegion(selectedValue);
-    }
-  }, [selectedValue]);
+  const [openModal, setOpenModal] = useState(false);
+  const [region, setRegion] = useState('');
+  const dropdownRef = useRef<HTMLDivElement>(null);
+  const { setRoomRegion } = useRoomStore();
+  const { setSelectRegion } = useSearchRoomStore();
 
-  const handleRegion = (value: string) => {
-    setSelectedKeys(new Set(value));
+  useEffect(() => {
+    if (conditionalRef.current === 'selectRegion') {
+      setSelectRegion(region);
+    }
+    if (conditionalRef.current === 'room') {
+      setRoomRegion(region);
+    }
+    const outSideClick = (e: any) => {
+      const { target } = e;
+      if (openModal && dropdownRef.current && !dropdownRef.current.contains(target)) {
+        setOpenModal(false);
+      }
+    };
+    document.addEventListener('mousedown', outSideClick);
+  }, [region, openModal]);
+
+  const handleSelect = (r: string) => {
+    setRegion(r);
+    setOpenModal(false);
   };
 
   return (
     <>
-      <div className="w-full">
-        <Select
-          label="지역"
-          aria-label="region"
-          variant="flat"
-          disallowEmptySelection
-          selectionMode="single"
-          selectedKeys={selectedKeys}
-          onSelectionChange={(value) => handleRegion(value as string)}
+      <div className="relative z-50 bg-white" ref={dropdownRef}>
+        <button
+          className="bg-white w-[120px] h-[43px] rounded-lg border-black border-[1px] text-[16px]"
+          type="button"
+          onClick={() => setOpenModal((openModal) => !openModal)}
         >
-          {regionList.map((region) => (
-            <SelectItem key={region} value={region}>
-              {region}
-            </SelectItem>
-          ))}
-        </Select>
+          <div className="flex flex-row justify-center align-middle">
+            {region ? region : '지역'}
+            <IoIosArrowDown className="my-auto" />
+          </div>
+        </button>
+        {openModal && (
+          <ul className="absolute top-full h-[180px] p-[8px] overflow-y-auto bg-white rounded-md shadow-md mt-1 w-full">
+            {regionList.map((m) => (
+              <li
+                key={m}
+                onClick={() => handleSelect(m)}
+                className="px-[16px] py-[8px] cursor-pointer rounded-lg hover:bg-mainColor hover:text-white"
+              >
+                {m}
+              </li>
+            ))}
+          </ul>
+        )}
       </div>
     </>
   );

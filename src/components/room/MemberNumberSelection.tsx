@@ -2,50 +2,65 @@
 import { useRoomStore } from '@/store/roomStore';
 import { useSearchRoomStore } from '@/store/searchRoomStore';
 import { member_number } from '@/utils/MeetingRoomSelector';
-import { Button, Dropdown, DropdownItem, DropdownMenu, DropdownTrigger, Select, SelectItem } from '@nextui-org/react';
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
+import { IoIosArrowDown } from 'react-icons/io';
 
 function MemberNumberSelection({ text }: { text: string }) {
-  const [selectedMemberKeys, setSelectedMemberKeys] = useState(new Set(['']));
+  const [member, setMember] = useState('');
+  const [openModal, setOpenModal] = useState(false);
   const conditionalRef = useRef(text);
-  const selectedMemberValue = useMemo(
-    () => Array.from(selectedMemberKeys).join(', ').replaceAll('_', ' '),
-    [selectedMemberKeys]
-  );
+  const dropdownRef = useRef<HTMLDivElement>(null);
   const { setMemberNumber } = useRoomStore();
   const { setSelectMemberNumber } = useSearchRoomStore();
 
   useEffect(() => {
     if (conditionalRef.current === 'selectMember') {
-      setSelectMemberNumber(selectedMemberValue);
+      setSelectMemberNumber(member);
     }
     if (conditionalRef.current === 'member') {
-      setMemberNumber(selectedMemberValue);
+      setMemberNumber(member);
     }
-  }, [selectedMemberValue]);
 
-  const handleSelectMember = (value: string) => {
-    setSelectedMemberKeys(new Set(value));
+    const outSideClick = (e: any) => {
+      const { target } = e;
+      if (openModal && dropdownRef.current && !dropdownRef.current.contains(target)) {
+        setOpenModal(false);
+      }
+    };
+    document.addEventListener('mousedown', outSideClick);
+  }, [member, openModal]);
+
+  const handleSelect = (member: string) => {
+    setMember(member);
+    setOpenModal(false);
   };
 
   return (
     <>
-      <div className="w-full">
-        <Select
-          label="인원"
-          aria-label="members"
-          variant="flat"
-          disallowEmptySelection
-          selectionMode="single"
-          selectedKeys={selectedMemberKeys}
-          onSelectionChange={(value) => handleSelectMember(value as string)}
+      <div className="relative bg-white z-50" ref={dropdownRef}>
+        <button
+          className="bg-white w-[120px] h-[43px] rounded-lg border-black border-[1px] text-[16px]"
+          type="button"
+          onClick={() => setOpenModal((openModal) => !openModal)}
         >
-          {member_number.map((member) => (
-            <SelectItem key={member} value={member}>
-              {member}
-            </SelectItem>
-          ))}
-        </Select>
+          <div className="flex flex-row justify-center align-middle">
+            {member ? member : '인원수'}
+            <IoIosArrowDown className="my-auto" />
+          </div>
+        </button>
+        {openModal && (
+          <ul className="absolute top-full p-[8px] bg-white rounded-md shadow-md mt-1 w-full">
+            {member_number.map((m) => (
+              <li
+                key={m}
+                onClick={() => handleSelect(m)}
+                className="px-[16px] py-[8px] cursor-pointer rounded-lg hover:bg-mainColor hover:text-white"
+              >
+                {m}
+              </li>
+            ))}
+          </ul>
+        )}
       </div>
     </>
   );

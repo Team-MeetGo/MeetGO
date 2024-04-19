@@ -9,7 +9,6 @@ const SideBarButton: React.FC = () => {
 
   const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);
-    console.log('사이드바 상태', isSidebarOpen);
   };
 
   return (
