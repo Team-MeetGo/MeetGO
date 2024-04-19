@@ -34,6 +34,7 @@ const NavBarContents = () => {
   }
 
   const signOut = async () => {
+    console.log('일단 버튼 잘 눌리는지');
     await clientSupabase.auth.signOut();
     queryClient.invalidateQueries({
       queryKey: [USER_DATA_QUERY_KEY]
@@ -98,7 +99,7 @@ const NavBarContents = () => {
                 <DropdownItem key="mypage" href="/mypage">
                   마이페이지
                 </DropdownItem>
-                <DropdownItem as="button" key="logout" color="danger" onPress={signOut}>
+                <DropdownItem key="logout" color="danger" className="w-full" onPress={signOut}>
                   LOGOUT
                 </DropdownItem>
               </DropdownMenu>
