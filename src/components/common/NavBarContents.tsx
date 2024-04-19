@@ -66,7 +66,7 @@ const NavBarContents = () => {
         </NavbarBrand>
         <NavbarContent className="hidden sm:flex h-auto gap-11">
           <NavbarItem>
-            <Link color="foreground" href={isValidate ? '/meetingRoom' : '/mypage'} onClick={() => checkIsValidate()}>
+            <Link color="foreground" href={isValidate ? '/meetingRoom' : '/mypage'} onClick={checkIsValidate}>
               Lobby
             </Link>
           </NavbarItem>
@@ -95,10 +95,8 @@ const NavBarContents = () => {
                 )}
               </DropdownTrigger>
               <DropdownMenu aria-label="Profile Actions" variant="flat">
-                <DropdownItem key="mypage" textValue="mypage">
-                  <Link href="/mypage" className="flex w-full h-full">
-                    마이페이지
-                  </Link>
+                <DropdownItem key="mypage" href="/mypage">
+                  마이페이지
                 </DropdownItem>
                 <DropdownItem key="logout" color="danger" onClick={signOut}>
                   LOGOUT

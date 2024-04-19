@@ -11,6 +11,7 @@ import { useModalStore } from '@/store/modalStore';
 import { USER_DATA_QUERY_KEY } from '@/query/user/userQueryKeys';
 import { useQueryClient } from '@tanstack/react-query';
 import { IoMdEye, IoMdEyeOff } from 'react-icons/io';
+import Link from 'next/link';
 
 type Gender = 'male' | 'female' | '';
 
@@ -195,6 +196,12 @@ const JoinForm = () => {
           회원가입
         </Button>
       </form>
+      <div className="flex items-center gap-2 justify-center mt-[8px]">
+        <p>이미 계정이 있다면?</p>
+        <Link href="/login" className="text-[#27272A] rounded-lg h-auto text-[16px] underline" type="button">
+          로그인하기
+        </Link>
+      </div>
       <ValidationModal />
     </>
   );
