@@ -39,7 +39,7 @@ const OthersChat = ({ msg, idx, lastDivRefs }: { msg: Message; idx: number; last
             <div className="font-bold">{showThatUser(msg.send_from)?.nickname}</div>
           )}
 
-          <div className="flex flex-col gap-1.5">
+          <div className="flex flex-col gap-2">
             <div className="gap-2 mr-auto">
               {msg.message?.length ? (
                 <div className="rounded-md bg-mainColor py-1.5 px-[8px] text-right text-white font-extralight">
@@ -49,8 +49,8 @@ const OthersChat = ({ msg, idx, lastDivRefs }: { msg: Message; idx: number; last
               <ChatImg msg={msg} />
             </div>
             {idx < messages.length - 1 && msg.send_from === messages[idx + 1].send_from ? null : (
-              <div className="mt-auto text-xs text-gray-400">
-                <p>{getformattedDate(msg.created_at)}</p>
+              <div className="mt-auto text-gray-400">
+                <p className="text-sm">{getformattedDate(msg.created_at)}</p>
               </div>
             )}
           </div>
