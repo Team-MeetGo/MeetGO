@@ -98,7 +98,7 @@ const NavBarContents = () => {
                 <DropdownItem key="mypage" href="/mypage">
                   마이페이지
                 </DropdownItem>
-                <DropdownItem key="logout" color="danger" onPress={signOut}>
+                <DropdownItem as="button" key="logout" color="danger" onPress={signOut}>
                   LOGOUT
                 </DropdownItem>
               </DropdownMenu>
