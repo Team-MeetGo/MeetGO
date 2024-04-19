@@ -10,6 +10,8 @@ const ChatSearch = ({ isScrollTop }: { isScrollTop: boolean }) => {
   const [doneSearchDivs, setDoneSearchdivs] = useState<(HTMLElement | null)[]>();
   const [searchCount, setSearchCount] = useState(0);
   const [upDownCount, setUpDownCount] = useState(0);
+  // console.log('upDownCount =>', upDownCount);
+  console.log('searchCount =>', searchCount);
 
   const handleSearch = () => {
     if (searchWord) {
@@ -22,7 +24,8 @@ const ChatSearch = ({ isScrollTop }: { isScrollTop: boolean }) => {
       });
       setDoneSearchdivs(idsDivs);
 
-      if (idsDivs && idsDivs.length >= searchCount + 1) {
+      if (idsDivs && searchCount < idsDivs.length) {
+        if (searchCount > 0) idsDivs[searchCount - 1]!.style.backgroundColor = 'transparent';
         const theDiv = idsDivs[searchCount];
         if (theDiv) {
           theDiv.style.backgroundColor! = '#E4D4F4';
@@ -42,6 +45,7 @@ const ChatSearch = ({ isScrollTop }: { isScrollTop: boolean }) => {
 
   const handleSearchUp = () => {
     if (doneSearchDivs && upDownCount < doneSearchDivs.length) {
+      if (upDownCount > 0) doneSearchDivs[upDownCount - 1]!.style.backgroundColor = 'transparent';
       const theDiv = doneSearchDivs[upDownCount];
       if (theDiv) {
         theDiv.style.backgroundColor! = '#E4D4F4';
@@ -53,7 +57,8 @@ const ChatSearch = ({ isScrollTop }: { isScrollTop: boolean }) => {
   };
 
   const handleSearchDown = () => {
-    if (doneSearchDivs && upDownCount > 0) {
+    if (doneSearchDivs && 1 < upDownCount) {
+      if (upDownCount <= doneSearchDivs.length) doneSearchDivs[upDownCount - 1]!.style.backgroundColor = 'transparent';
       const theDiv = doneSearchDivs[upDownCount - 2];
       if (theDiv) {
         theDiv.style.backgroundColor! = '#E4D4F4';
