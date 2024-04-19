@@ -1,4 +1,4 @@
-import MeetingRoomList from '@/components/room/MeetingRoomList';
+import MeetingRoomList from '@/components/room/LobbyRooms/MeetingRoomList';
 import RoomLoading from '@/components/room/RoomLoading';
 import { Suspense } from 'react';
 

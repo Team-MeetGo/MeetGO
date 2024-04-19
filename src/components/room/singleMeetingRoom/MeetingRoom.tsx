@@ -76,7 +76,6 @@ function MeetingRoom({ room }: { room: MeetingRoomType }) {
     };
     document.addEventListener('mousedown', outSideClick);
   }, [openModal]);
-  console.log(dropdownRef);
   return (
     <div
       className={
