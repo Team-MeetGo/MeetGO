@@ -5,21 +5,14 @@ import {
   fetchRoomInfoWithRoomId,
   fetchRoomParticipants
 } from '@/query/meetingRoom/meetingQueryFns';
-import {
-  MY_ROOM,
-  RECRUTING_ROOMDATA,
-  ROOMDATA_WITH_ROOMID,
-  ROOMLIST,
-  ROOM_MEMBER
-} from '@/query/meetingRoom/meetingQueryKeys';
+import { RECRUTING_ROOMDATA, ROOMDATA_WITH_ROOMID, ROOMLIST, ROOM_MEMBER } from '@/query/meetingRoom/meetingQueryKeys';
 // import { profileCount } from '@/store/userStore';
 import { useQuery, useSuspenseQuery } from '@tanstack/react-query';
-import { useEffect } from 'react';
 
 //현재 모집중인 방
 export const useRecruitingQuery = (user_id: string) => {
   const data = useSuspenseQuery({
-    queryKey: ROOM_MEMBER,
+    queryKey: RECRUTING_ROOMDATA,
     queryFn: fetchRecruitingRoom
   });
   return data;
