@@ -2,13 +2,13 @@
 
 import { clientSupabase } from '@/utils/supabase/client';
 import { useRouter } from 'next/navigation';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Button, Checkbox } from '@nextui-org/react';
 import { googleLogin, kakaoLogin } from '@/utils/api/authAPI';
 import { ValidationModal } from '../common/ValidationModal';
 import { useModalStore } from '@/store/modalStore';
 import { authValidation } from '@/utils/Validation';
-import { IsValidateShow, LoginData } from '@/types/userTypes';
+import { IsValidateShow, LoginDataType } from '@/types/userTypes';
 import { useQueryClient } from '@tanstack/react-query';
 import { USER_DATA_QUERY_KEY } from '@/query/user/userQueryKeys';
 import Link from 'next/link';
@@ -16,18 +16,29 @@ import Image from 'next/image';
 import kakaoLoginLogo from '@/utils/icons/login_kakao.png';
 import googleLoginLogo from '@/utils/icons/logo_google.png';
 import { IoMdEye, IoMdEyeOff } from 'react-icons/io';
+import cookie from 'react-cookies';
 
 const LoginForm = () => {
   const queryClient = useQueryClient();
 
-  const [loginData, setLoginData] = useState<LoginData>({ userId: '', password: '' });
+  const [loginData, setLoginData] = useState<LoginDataType>({ userId: '', password: '' });
   const [isValidateShow, setIsValidateShow] = useState<IsValidateShow>({
     userId: true,
     password: true
   });
   const [isError, setIsError] = useState(false);
   const [passwordShow, setPasswordShow] = useState(false);
+  const [checkRememberId, setCheckRememberId] = useState(false);
   const { openModal } = useModalStore();
+
+  const saveUserId = cookie.load('rememberUserId');
+
+  useEffect(() => {
+    if (saveUserId) {
+      setLoginData((prev) => ({ ...prev, userId: saveUserId }));
+      setCheckRememberId(true);
+    }
+  }, [saveUserId]);
 
   const showModal = () => {
     openModal({
@@ -73,7 +84,12 @@ const LoginForm = () => {
         password: loginData.password
       });
       if (session) {
-        // 캐시 무효화
+        // 쿠키에 아이디 저장
+        if (checkRememberId) {
+          cookie.save('rememberUserId', loginData.userId, { path: '/' });
+        } else {
+          cookie.remove('rememberUserId', { path: '/' });
+        }
         showModal();
       } else if (error) throw error;
     } catch (error: any) {
@@ -90,7 +106,10 @@ const LoginForm = () => {
     setPasswordShow(!passwordShow);
   };
 
-  console.log(passwordShow, 'passwordShow');
+  // 이메일 기억하기 기능
+  const toggleCheckRemember = () => {
+    setCheckRememberId(!checkRememberId);
+  };
 
   return (
     <>
@@ -105,6 +124,7 @@ const LoginForm = () => {
                   name={name}
                   placeholder={placeholder}
                   onChange={onChangeInput}
+                  value={loginData[name]}
                   required
                 />
                 {name === 'password' && (
@@ -125,6 +145,8 @@ const LoginForm = () => {
                 label: 'text-[14px] text-gray3',
                 wrapper: ''
               }}
+              isSelected={checkRememberId}
+              onChange={toggleCheckRemember}
             >
               이메일 저장
             </Checkbox>

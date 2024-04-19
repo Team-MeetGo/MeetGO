@@ -7,7 +7,8 @@ export interface IsValidateShow {
   [key: string]: boolean;
 }
 
-export interface LoginData {
+export interface LoginDataType {
+  [key: string]: string;
   userId: string;
   password: string;
 }
