@@ -105,21 +105,6 @@ const ChatList = ({ user, chatRoomId }: { user: User | null; chatRoomId: string 
     }
   }, [messages, isScrolling]);
 
-  // const cancelSearchMode = useCallback(
-  //   (e: any) => {
-  //     return scrollRef.current && searchMode && scrollRef.current.contains(e.target) ? setSearchMode() : null;
-  //   },
-  //   [searchMode, setSearchMode]
-  // );
-
-  // // 빈 공간 누르면 검색창 꺼지기
-  // useEffect(() => {
-  //   window.addEventListener('click', cancelSearchMode);
-  //   return () => {
-  //     window.removeEventListener('click', cancelSearchMode);
-  //   };
-  // }, [cancelSearchMode]);
-
   // 스크롤 이벤트가 발생할 때
   const handleScroll = () => {
     const scrollBox = scrollRef.current;
