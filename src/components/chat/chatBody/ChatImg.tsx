@@ -7,10 +7,8 @@ import { useState } from 'react';
 import { IoIosArrowBack } from 'react-icons/io';
 
 const ChatImg = ({ msg }: { msg: Message }) => {
-  const { data: user } = useGetUserDataQuery();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [slideCount, setSlideCount] = useState(0);
-  console.log(slideCount);
 
   const showBigImg = (urlIdx: number) => {
     console.log('urlIdx =>', urlIdx);
@@ -35,9 +33,8 @@ const ChatImg = ({ msg }: { msg: Message }) => {
     <>
       {msg.imgs?.length ? (
         <div
-          className={`grid ${msg.imgs.length < 2 ? 'grid-cols-1' : 'grid-cols-2'} ${
-            msg.imgs.length > 1 ? 'chatImgRowsOverOne' : 'chatImgRowsNotOverOne'
-          }`}
+          className={`grid ${msg.imgs.length < 2 ? 'grid-cols-1' : 'grid-cols-2'} 
+          ${msg.imgs.length > 2 ? 'chatImgRowsOverOne' : 'chatImgRowsNotOverOne'}`}
         >
           {msg.imgs.map((url) => (
             <div key={url} className="w-36 relative">
