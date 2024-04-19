@@ -54,7 +54,7 @@ const ChatInput = () => {
       });
       if (error) {
         console.error(error.message);
-        alert('새로운 메세지 추가 실패');
+        alert('새로운 메세지를 추가하는 데에 실패했습니다.');
       }
     }
   };
