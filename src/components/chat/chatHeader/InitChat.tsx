@@ -9,10 +9,10 @@ import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
 
 const InitChat = ({ chatRoomId, allMsgs }: { user: User | null; chatRoomId: string; allMsgs: Message[] }) => {
-  const router = useRouter();
   const { chatState, isRest, setChatState, setMessages, setChatRoomId, setHasMore } = chatStore((state) => state);
   const room = useRoomDataQuery(chatRoomId);
   const roomId = room?.roomId;
+  const router = useRouter();
 
   useEffect(() => {
     // 채팅방 isActive 상태 구독
@@ -47,7 +47,6 @@ const InitChat = ({ chatRoomId, allMsgs }: { user: User | null; chatRoomId: stri
       // **채팅방에 있는다면
       setMessages([...allMsgs].reverse());
       setHasMore(allMsgs?.length >= ITEM_INTERVAL + 1);
-
       setChatRoomId(chatRoomId);
     }
   }, [chatState, isRest, router]);

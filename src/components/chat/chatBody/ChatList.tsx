@@ -28,7 +28,6 @@ const ChatList = ({ user, chatRoomId }: { user: User | null; chatRoomId: string 
   const prevMsgsLengthRef = useRef(messages.length);
   const lastDivRefs = useRef(messages);
   const lastMsgId = useMyLastMsgs(user?.id!, chatRoomId);
-  console.log(isScrolling);
 
   // "messages" table Realtime INSERT, DELETE 구독로직
   useEffect(() => {
@@ -112,21 +111,6 @@ const ChatList = ({ user, chatRoomId }: { user: User | null; chatRoomId: string 
     }
   }, [messages, isScrolling]);
 
-  // const cancelSearchMode = useCallback(
-  //   (e: any) => {
-  //     return scrollRef.current && searchMode && scrollRef.current.contains(e.target) ? setSearchMode() : null;
-  //   },
-  //   [searchMode, setSearchMode]
-  // );
-
-  // // 빈 공간 누르면 검색창 꺼지기
-  // useEffect(() => {
-  //   window.addEventListener('click', cancelSearchMode);
-  //   return () => {
-  //     window.removeEventListener('click', cancelSearchMode);
-  //   };
-  // }, [cancelSearchMode]);
-
   // 스크롤 이벤트가 발생할 때
   const handleScroll = () => {
     const scrollBox = scrollRef.current;
@@ -145,7 +129,6 @@ const ChatList = ({ user, chatRoomId }: { user: User | null; chatRoomId: string 
     if (lastCheckedDiv) lastCheckedDiv.style.backgroundColor = '';
     scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
   };
-  // insert 할 때 없어졌으면 좋겠는데..
 
   const styleHere = (lastDiv: HTMLElement) => {
     lastDiv.style.backgroundColor = '#F2EAFA';

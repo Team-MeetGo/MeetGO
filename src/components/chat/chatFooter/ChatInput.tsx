@@ -14,10 +14,24 @@ const ChatInput = () => {
   const [message, setMessage] = useState('');
   const imgRef = useRef(null);
 
+  const collectImgFile = async (e: ChangeEvent<HTMLInputElement>) => {
+    const files = e.target.files;
+    if (files) {
+      const fileList = Array.from(files);
+      const newImgs = fileList.filter((file) => !imgs.some((img) => img.name === file.name));
+      if ([...imgs, ...newImgs].length >= 5) {
+        alert('이미지 추가는 최대 4장까지 가능합니다.');
+      } else {
+        setImgs([...imgs, ...newImgs]);
+      }
+    }
+  };
+
   const makeUrl = async () => {
     let chatImgsUrls = [];
     for (const imgFile of imgs) {
-      const imgUrlPath = `${chatRoomId}/${user?.user_id}/${imgFile.name}`;
+      const uuid = crypto.randomUUID();
+      const imgUrlPath = `${chatRoomId}/${user?.user_id}/${uuid}`;
       const { data: imgUrlData, error } = await clientSupabase.storage.from('chatImg').upload(imgUrlPath, imgFile, {
         cacheControl: '3600',
         upsert: true
@@ -41,20 +55,6 @@ const ChatInput = () => {
       if (error) {
         console.error(error.message);
         alert('새로운 메세지 추가 실패');
-      } else {
-      }
-    }
-  };
-
-  const collectImgFile = async (e: ChangeEvent<HTMLInputElement>) => {
-    const files = e.target.files;
-    if (files) {
-      const fileList = Array.from(files);
-      const newImgs = fileList.filter((file) => !imgs.some((img) => img.name === file.name));
-      if ([...imgs, ...newImgs].length >= 5) {
-        alert('이미지 추가는 최대 4장까지 가능합니다.');
-      } else {
-        setImgs([...imgs, ...newImgs]);
       }
     }
   };
@@ -78,7 +78,7 @@ const ChatInput = () => {
             <input
               type="file"
               multiple
-              accept="image/*"
+              accept="*"
               className="hidden"
               ref={imgRef}
               onChange={(e) => {
