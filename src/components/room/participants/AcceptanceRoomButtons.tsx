@@ -3,11 +3,11 @@
 import meetingRoomHandler from '@/hooks/custom/room';
 import { useGetUserDataQuery } from '@/hooks/useQueries/useUserQuery';
 import { RoomData } from '@/types/chatTypes';
-import { UserType } from '@/types/roomTypes';
 import { clientSupabase } from '@/utils/supabase/client';
 import { useRouter } from 'next/navigation';
 import { IoPlay } from 'react-icons/io5';
 
+import { UserType } from '@/types/roomTypes';
 const AcceptanceRoomButtons = ({
   roomInformation,
   participants,

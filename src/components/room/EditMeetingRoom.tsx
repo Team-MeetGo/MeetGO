@@ -79,7 +79,6 @@ function EditMeetingRoom({
     newSelected.delete(value);
     setSelected(newSelected);
   };
-  // console.log('수정페이지에서', editDeleteRef);
   return (
     <>
       <Button

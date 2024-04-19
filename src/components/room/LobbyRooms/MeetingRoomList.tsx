@@ -30,7 +30,6 @@ function MeetingRoomList() {
 
   //여러 조건에서 모집 중인 RoomList를 뽑아내기
   const filteredOtherRoomsHandler = () => {
-    console.log('들어는온다');
     if (
       (selectRegion === '지역' || selectRegion === '전국' || !selectRegion) &&
       (selectMemberNumber === '인원' || selectMemberNumber === '전체' || !selectMemberNumber)

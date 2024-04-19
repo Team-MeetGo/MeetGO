@@ -9,9 +9,9 @@ import meetingRoomHandler from '@/hooks/custom/room';
 import { RoomFemaleAvatar, RoomMaleAvatar } from '@/utils/icons/RoomAvatar';
 import MeetGoLogoPurple from '../../../utils/icons/meetgo-logo-purple.png';
 import Image from 'next/image';
-
-import type { UserType } from '@/types/roomTypes';
 import AcceptanceRoomButtons from './AcceptanceRoomButtons';
+
+import type { MeetingRoomType, UserType } from '@/types/roomTypes';
 import { RoomData } from '@/types/chatTypes';
 const Member = ({ room_id, roomInformation }: { room_id: string; roomInformation: MeetingRoomType }) => {
   const participants = useRoomParticipantsQuery(room_id as string);
