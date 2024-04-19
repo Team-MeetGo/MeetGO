@@ -14,9 +14,9 @@ const ShowChatMember = ({ person }: { person: UsersType }) => {
           <p className="mb-2">{person.school_name}</p>
           <p>
             {person.gender === 'male' ? (
-              <IoMale className="w-[16px] fill-blue" />
+              <IoMale className="w-[16px] fill-blue mb-2" />
             ) : (
-              <IoFemale className="w-[16px] fill-hotPink" />
+              <IoFemale className="w-[16px] fill-hotPink mb-2" />
             )}
           </p>
         </div>
