@@ -91,9 +91,6 @@ function MeetingRoom({ room }: { room: MeetingRoomType }) {
         className="w-max-[354px] h-[241px] p-6 gap-4 rounded-xl flex flex-col hover:cursor-pointer"
         onClick={() => addMember({ room_id })}
       >
-        {/* <div className="flex flex-col justify-between"> */}
-        {/* <div className="h-[24px]"></div> */}
-
         <div className="flex flex-row">
           <div className="flex flex-row justify-between w-full items-center">
             <div className="text-[16px] flex flex-row text-center">
@@ -187,10 +184,7 @@ function MeetingRoom({ room }: { room: MeetingRoomType }) {
                 ))}
             </div>
           </div>
-
-          {/* <div className="h-[16px]"></div> */}
         </div>
-        {/* </div> */}
       </div>
     </div>
   );
