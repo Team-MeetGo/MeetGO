@@ -39,7 +39,7 @@ const NavBarContents = () => {
       queryKey: [USER_DATA_QUERY_KEY]
     });
     alert('로그아웃 성공');
-    await router.replace('/'); // 로그아웃 후 메인 페이지로 이동. 뒤로가기 방지.
+    router.replace('/'); // 로그아웃 후 메인 페이지로 이동. 뒤로가기 방지.
   };
 
   const checkIsValidate = () => {
@@ -98,7 +98,7 @@ const NavBarContents = () => {
                 <DropdownItem key="mypage" href="/mypage">
                   마이페이지
                 </DropdownItem>
-                <DropdownItem key="logout" color="danger" onClick={signOut}>
+                <DropdownItem key="logout" color="danger" onPress={signOut}>
                   LOGOUT
                 </DropdownItem>
               </DropdownMenu>
