@@ -1,12 +1,12 @@
 'use client';
-import { clientSupabase } from '@/utils/supabase/client';
-import ChatPresence from './ChatPresence';
-import { chatStore } from '@/store/chatStore';
-import { IoIosSearch } from 'react-icons/io';
 import { useParticipantsQuery, useRoomDataQuery } from '@/hooks/useQueries/useChattingQuery';
 import { useGetUserDataQuery } from '@/hooks/useQueries/useUserQuery';
 import { Avatar, AvatarGroup, Tooltip } from '@nextui-org/react';
 import ShowChatMember from '../chatBody/ShowChatMember';
+import { chatStore } from '@/store/chatStore';
+import { clientSupabase } from '@/utils/supabase/client';
+import { IoIosSearch } from 'react-icons/io';
+import ChatPresence from './ChatPresence';
 
 const ChatHeader = ({ chatRoomId }: { chatRoomId: string }) => {
   const { onlineUsers, setMessages, setisRest, setSearchMode } = chatStore((state) => state);

@@ -55,7 +55,7 @@ function MeetingRoomForm() {
     e.preventDefault();
     if (!title || !selected || !location || memberNumber === '인원수' || !roomRegion) {
       alert('모든 항목은 필수입니다.');
-    } else {
+    } else if (title && selected && location && memberNumber !== '인원수' && roomRegion) {
       const data = await addRoomMutation.mutateAsync();
       alert('모임이 생성되었습니다.');
       setSelected(new Set([]));
@@ -64,15 +64,15 @@ function MeetingRoomForm() {
       router.push(`/meetingRoom/${data}`);
     }
   };
-
+  //방 컨셉을 선택합니다.
   const handleSelect = (value: string) => {
-    if (selected.size > 5) {
-      alert('최대 5개까지 선택 가능합니다.');
+    if (selected.size > 3) {
+      alert('최대 4개까지 선택 가능합니다.');
       return;
     }
     setSelected(new Set(value));
   };
-
+  //방 컨셉을 삭제합니다.
   const handleDelete = (value: string) => {
     const newSelected = new Set(selected);
     newSelected.delete(value);
@@ -126,7 +126,7 @@ function MeetingRoomForm() {
                     <label>방의 컨셉을 골라주세요!</label>
                     <div className="flex whitespace-nowrap">
                       <Select
-                        label="방의 특성(최대 5개)"
+                        label="방의 특성(최대 4개)"
                         selectionMode="multiple"
                         variant="bordered"
                         selectedKeys={selected}
