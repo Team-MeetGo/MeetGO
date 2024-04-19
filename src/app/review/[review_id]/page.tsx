@@ -11,7 +11,7 @@ const ReviewDetailPage = ({ params }: { params: { review_id: string } }) => {
           <p className="text-white text-[50px]">Review</p>
         </Link>
       </div>
-      <div className="flex flex-col max-w-[1111px] w-full mb-[88px]">
+      <div className="flex flex-col max-w-[1000px] w-full mb-[88px]">
         <div>
           <ReviewDetail review_id={params.review_id} />
         </div>
