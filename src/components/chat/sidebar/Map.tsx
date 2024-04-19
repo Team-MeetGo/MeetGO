@@ -263,13 +263,12 @@ const Map: React.FC<MapProps> = ({ chatRoomId }) => {
             }`}
           >
             <div
-              className="py-4 px-9"
+              className="py-4 px-9 cursor-pointer items-center"
               onClick={() => {
                 if (userId === leaderId) {
                   handleSelectLocation(selectedMeetingLocation === bar.place_name ? '' : bar.place_name);
                 }
               }}
-              style={{ cursor: 'pointer', alignItems: 'center' }}
             >
               <div className="flex flex-col items-start justify-start">
                 <h1 className="text-base mb-2.5">{bar.place_name}</h1>
