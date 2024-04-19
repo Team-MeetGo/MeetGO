@@ -21,7 +21,6 @@ const config: Config = {
         mainColor: '#8F5DF4',
         purpleSecondary: '#F2EAFA',
         purpleThird: '#E4D4F4',
-        gray0: '#E4E4E7',
         gray1: '#D4D4D8',
         gray2: '#A1A1AA',
         gray3: '#52525B',
@@ -29,6 +28,13 @@ const config: Config = {
         blue: '#006FEE',
         lightPurple: '#D0A1FF',
         lightBlue: '#AEE2FF'
+      },
+      animation: { 'slideTop-animation': 'sildeTop 3s linear' },
+      keyframes: {
+        slideTop: {
+          from: { top: '-150px' },
+          to: { top: '0px' }
+        }
       }
     }
   },
