@@ -152,14 +152,14 @@ function MeetingRoomList() {
                         if (index < 3 * page && index >= 3 * (page - 1))
                           return (
                             <div key={room?.room_id}>
-                              <div className="flex gap-2">
+                              {/* <div className="flex gap-2">
                                 {myMsgData && myMsgData.find((item) => item.room_id === room?.room_id) ? (
                                   <h1>
                                     {myMsgData.find((item) => item.room_id === room?.room_id)?.newMsgCount} 새로운
                                     메세지 수
                                   </h1>
                                 ) : null}
-                              </div>
+                              </div> */}
                               {room && <MeetingRoom room={room} />}
                             </div>
                           );
