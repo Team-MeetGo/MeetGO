@@ -1,9 +1,9 @@
 import Member from '@/components/room/participants/Member';
 import RoomInformation from '@/components/room/participants/RoomInformation';
 import { Suspense } from 'react';
+import InitRoom from '@/components/room/InitRoom';
 
 import type { UUID } from 'crypto';
-import InitRoom from '@/components/room/InitRoom';
 const memberList = ({ params }: { params: { id: UUID } }) => {
   const room_id = params.id;
 

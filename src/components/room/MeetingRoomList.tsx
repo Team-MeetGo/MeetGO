@@ -9,7 +9,9 @@ import MeetingRoomForm from './MeetingRoomForm';
 import MemberNumberSelection from './MemberNumberSelection';
 import RegionSelection from './RegionSelection';
 
+import { RECRUTING_ROOMDATA, ROOMLIST } from '@/query/meetingRoom/meetingQueryKeys';
 import type { MeetingRoomType } from '@/types/roomTypes';
+import { useQueryClient } from '@tanstack/react-query';
 function MeetingRoomList() {
   const [page, setPage] = useState(1);
   const [scrollPage, setScrollPage] = useState(0);
@@ -19,6 +21,7 @@ function MeetingRoomList() {
   const myRoomList = useMyroomQuery(String(user?.user_id));
   const filteredMyRoomList = myRoomList?.map((room) => room.room);
   const { selectRegion, selectMemberNumber } = useSearchRoomStore();
+  const queryClient = useQueryClient();
 
   // meetingRoomList 중에서 myRoomList가 없는 것을 뽑아내기
   const otherRooms = meetingRoomList?.filter(function (room: MeetingRoomType) {
@@ -112,8 +115,18 @@ function MeetingRoomList() {
       observer.unobserve(currentRef);
     }
   }, [currentRef, scrollPage]);
-  const onReload = () => {};
 
+  const onReload = async () => {
+    await queryClient.invalidateQueries({
+      queryKey: [ROOMLIST, user?.user_id],
+      refetchType: 'all'
+    });
+    await queryClient.invalidateQueries({
+      queryKey: RECRUTING_ROOMDATA,
+      refetchType: 'all'
+    });
+  };
+  console.log(meetingRoomList);
   return (
     <>
       <div className="fixed z-50 bg-white w-full flex-col justify-center align-middle">

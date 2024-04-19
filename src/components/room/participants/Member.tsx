@@ -75,7 +75,6 @@ const Member = ({ room_id }: { room_id: string }) => {
           table: 'room'
         },
         (payload) => {
-          console.log('payload', payload);
           const { leader_id } = payload.new;
           setLeader(leader_id);
         }
@@ -85,8 +84,6 @@ const Member = ({ room_id }: { room_id: string }) => {
       clientSupabase.removeChannel(channle);
     };
   }, [members, participants, leaderMember]);
-  if (!participants) return;
-  console.log('현리더', leader);
 
   return (
     <div className="flex flex-col">
