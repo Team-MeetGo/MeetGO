@@ -80,7 +80,7 @@ function MeetingRoomList() {
   return (
     <>
       <MyRoomsTitle>
-        <section className="w-full flex flex-row items-center justify-content">
+        <section className="w-100% flex flex-row items-center justify-content">
           <button onClick={() => beforePage()}>
             <IoIosArrowBack className="h-[40px] w-[40px] m-[8px]" />
           </button>
@@ -101,11 +101,11 @@ function MeetingRoomList() {
         </section>
       </MyRoomsTitle>
       <OtherRoomsTitle>
-        <div className="gap-[24px] mb-[8px] grid grid-cols-3 w-full pt-[24px] pb-[8px]">
+        <section className="gap-[24px] grid grid-cols-3 w-[1000px] pt-[24px] pb-[8px]">
           {filteredOtherRooms?.map((room) => (
             <MeetingRoom key={room?.room_id} room={room} />
           ))}
-        </div>
+        </section>
       </OtherRoomsTitle>
     </>
   );

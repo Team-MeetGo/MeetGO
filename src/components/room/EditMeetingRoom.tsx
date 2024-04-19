@@ -17,11 +17,18 @@ import {
 import { useState } from 'react';
 import MemberNumberSelection from './MemberNumberSelection';
 import RegionSelection from './RegionSelection';
-
 import { useGetUserDataQuery } from '@/hooks/useQueries/useUserQuery';
-import type { MeetingRoomType, UpdateRoomType } from '@/types/roomTypes';
 
-function EditMeetingRoom({ room }: { room: MeetingRoomType }) {
+import type { MeetingRoomType, UpdateRoomType } from '@/types/roomTypes';
+function EditMeetingRoom({
+  room,
+  dropdownRef,
+  setOpen
+}: {
+  room: MeetingRoomType;
+  dropdownRef: any;
+  setOpen: React.Dispatch<React.SetStateAction<boolean>>;
+}) {
   const { data: user } = useGetUserDataQuery();
   const user_id = user?.user_id;
   const { memberNumber, setMemberNumber, resetMemberNumber, roomRegion, setRoomRegion, resetRoomRegion } =
@@ -45,10 +52,11 @@ function EditMeetingRoom({ room }: { room: MeetingRoomType }) {
   const roomUpdateMutation = useUpdateRoom({ editedMeetingRoom, user_id });
   const editMeetingRoom = async (e: any) => {
     e.preventDefault();
+    setOpen(false);
     if (!title || !selected || !location || memberNumber === '인원' || roomRegion === '지역') {
       alert('모든 항목은 필수입니다.');
     } else if (title && selected && location && memberNumber !== '인원수' && roomRegion) {
-      await roomUpdateMutation.mutateAsync();
+      roomUpdateMutation.mutate();
     }
   };
   //수정전 데이터 불러오기
@@ -71,7 +79,7 @@ function EditMeetingRoom({ room }: { room: MeetingRoomType }) {
     newSelected.delete(value);
     setSelected(newSelected);
   };
-
+  // console.log('수정페이지에서', editDeleteRef);
   return (
     <>
       <Button
@@ -110,11 +118,25 @@ function EditMeetingRoom({ room }: { room: MeetingRoomType }) {
       >
         <ModalContent>
           {(onClose) => (
-            <>
+            <div ref={dropdownRef}>
               <ModalHeader className="flex flex-col gap-1">방 내용 수정</ModalHeader>
               <form onSubmit={(e: any) => editMeetingRoom(e)}>
                 <ModalBody>
                   <input value={title} onChange={(e) => setTitle(e.target.value)} placeholder="title" maxLength={15} />
+                  <div className="flex flex-col gap-4">
+                    <div className="flex flex-row gap-4">
+                      <MemberNumberSelection text={'member'} />
+                      <div>
+                        <RegionSelection text={'room'} />
+                      </div>
+                    </div>
+                    <input
+                      value={location}
+                      onChange={(e) => setLocation(e.target.value)}
+                      placeholder="자세한 주소 (15자 이내)"
+                      maxLength={15}
+                    />
+                  </div>
                   <div className="flex w-full max-w-xs flex-col gap-2">
                     <label>방의 컨셉을 골라주세요!</label>
                     <div className="flex whitespace-nowrap">
@@ -147,21 +169,9 @@ function EditMeetingRoom({ room }: { room: MeetingRoomType }) {
                       ))}
                     </div>
                   </div>
-                  <div className="flex flex-col gap-4">
-                    <MemberNumberSelection text={'member'} />
-                    <div className="">
-                      <RegionSelection text={'room'} />
-                    </div>
-                    <input
-                      value={location}
-                      onChange={(e) => setLocation(e.target.value)}
-                      placeholder="place"
-                      maxLength={15}
-                    />
-                  </div>
                 </ModalBody>
                 <ModalFooter>
-                  <Button color="danger" variant="light" onPress={onClose}>
+                  <Button onClick={() => setOpen(false)} color="danger" variant="light" onPress={onClose}>
                     취소
                   </Button>
                   <Button type="submit" className="bg-violet-300" onPress={onClose}>
@@ -169,7 +179,7 @@ function EditMeetingRoom({ room }: { room: MeetingRoomType }) {
                   </Button>
                 </ModalFooter>
               </form>
-            </>
+            </div>
           )}
         </ModalContent>
       </Modal>

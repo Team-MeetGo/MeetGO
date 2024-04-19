@@ -102,8 +102,8 @@ const Member = ({ room_id, roomInformation }: { room_id: string; roomInformation
               <div key={member.user_id} className={`grid col-start-1 col-span-1`}>
                 <article className={`border-purpleThird border-[2px] flex flex-row w-[506px] h-[166px] rounded-2xl`}>
                   {/* 카드 왼쪽 */}
-                  <div className="mx-[40px] align-middle items-center">
-                    <div className="w-[86px] h-[86px] mt-[32px] mr-[48px] rounded-full relative">
+                  <div className="mx-[40px] flex flex-col align-middle items-center justify-center">
+                    <div className="w-[86px] h-[86px] mt-[32px] rounded-full relative">
                       {leader === member.user_id ? (
                         <div>
                           <FaCrown className="absolute h-[20px] w-[20px] m-[2px] fill-mainColor z-50 top-[-18px] left-[29px]" />
@@ -113,14 +113,14 @@ const Member = ({ room_id, roomInformation }: { room_id: string; roomInformation
                       )}
                       {member.avatar ? (
                         <Image
-                          className="w-[86px] h-[86px] rounded-full object-center bg-cover"
+                          className="w-[86px] h-[86px] rounded-full object-center bg-cover object-fill"
                           src={member.avatar as string}
                           alt="유저 아바타"
-                          height={80}
-                          width={80}
+                          height={86}
+                          width={86}
                         />
                       ) : (
-                        <div className="w-[86px] h-[86px] rounded-full object-center bg-cover">
+                        <div className="w-[86px] h-[86px] rounded-full object-center bg-cover object-fill	">
                           <RoomFemaleAvatar />
                         </div>
                       )}
@@ -178,7 +178,7 @@ const Member = ({ room_id, roomInformation }: { room_id: string; roomInformation
               <div key={member.user_id} className={`grid col-start-1 col-span-1`}>
                 <article className={`bg-purpleSecondary flex flex-row w-[506px] h-[166px] rounded-2xl`}>
                   {/* 카드 왼쪽 */}
-                  <div className="ml-[40px] mr-[40px] flex flex-col justify-center align-middle justify-items-center">
+                  <div className="mx-[40px] flex flex-col align-middle items-center justify-center">
                     <div className="w-[86px] h-[86px] mt-[32px] rounded-full relative">
                       {leader === member.user_id ? (
                         <div>

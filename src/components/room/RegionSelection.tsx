@@ -48,17 +48,17 @@ function RegionSelection({ text }: { text: string }) {
           </div>
         </button>
         {openModal && (
-          <ul className="absolute top-full h-[180px] p-[8px] overflow-y-auto bg-white rounded-md shadow-md mt-1 w-full">
+          <div className="absolute top-full h-[180px] p-[8px] overflow-y-auto bg-white rounded-md shadow-md mt-1 w-full">
             {regionList.map((m) => (
               <li
                 key={m}
                 onClick={() => handleSelect(m)}
-                className="px-[16px] py-[8px] cursor-pointer rounded-lg hover:bg-mainColor hover:text-white"
+                className="px-[16px] py-[8px] cursor-pointer rounded-lg hover:bg-mainColor hover:text-white list-none	"
               >
                 {m}
               </li>
             ))}
-          </ul>
+          </div>
         )}
       </div>
     </>

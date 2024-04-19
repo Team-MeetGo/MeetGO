@@ -5,13 +5,11 @@ export function RoomFemaleAvatar() {
     <div className="flex items-center">
       <Avatar
         icon={<AvatarIcon />}
-        classNames={{
-          base: 'bg-gradient-to-br from-[#E4D4F4] to-[#E4D4F4]',
-          icon: '#FFFFFF'
-        }}
         style={{
           backgroundColor: '#E4D4F4',
-          color: '#FFFFFF'
+          color: '#FFFFFF',
+          width: '86px',
+          height: '86px'
         }}
         size="lg"
       />
@@ -23,13 +21,11 @@ export function RoomMaleAvatar() {
     <div className="flex items-center">
       <Avatar
         icon={<AvatarIcon />}
-        classNames={{
-          base: 'bg-gradient-to-br from-[#E4D4F4] to-[#E4D4F4]',
-          icon: '#E4D4F4'
-        }}
         style={{
           backgroundColor: '#FFFFFF',
-          color: '#E4D4F4'
+          color: '#E4D4F4',
+          width: '86px',
+          height: '86px'
         }}
         size="lg"
       />

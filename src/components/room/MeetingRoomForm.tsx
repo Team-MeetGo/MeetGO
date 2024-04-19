@@ -125,7 +125,7 @@ function MeetingRoomForm() {
                   <div className="flex flex-col gap-4">
                     <div className="flex flex-row gap-4">
                       <MemberNumberSelection text={'member'} />
-                      <div className="">
+                      <div>
                         <RegionSelection text={'room'} />
                       </div>
                     </div>
