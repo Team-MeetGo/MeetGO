@@ -34,7 +34,6 @@ const NavBarContents = () => {
   }
 
   const signOut = async () => {
-    console.log('일단 버튼 잘 눌리는지');
     await clientSupabase.auth.signOut();
     queryClient.invalidateQueries({
       queryKey: [USER_DATA_QUERY_KEY]
