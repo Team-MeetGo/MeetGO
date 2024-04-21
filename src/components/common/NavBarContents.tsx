@@ -18,6 +18,7 @@ import { useGetUserDataQuery } from '@/hooks/useQueries/useUserQuery';
 import { useQueryClient } from '@tanstack/react-query';
 import { USER_DATA_QUERY_KEY } from '@/query/user/userQueryKeys';
 import Link from 'next/link';
+import { customErrToast, customSuccessToast } from './customToast';
 
 const NavBarContents = () => {
   const queryClient = useQueryClient();
@@ -37,13 +38,13 @@ const NavBarContents = () => {
     queryClient.invalidateQueries({
       queryKey: [USER_DATA_QUERY_KEY]
     });
-    alert('로그아웃 성공');
+    customSuccessToast('로그아웃 성공');
     router.replace('/'); // 로그아웃 후 메인 페이지로 이동. 뒤로가기 방지.
   };
 
   const checkIsValidate = () => {
     if (!isValidate) {
-      alert('미팅을 하고 싶다면 학교 인증 ㄱㄱ');
+      customErrToast('미팅을 하고 싶다면 학교 인증 ㄱㄱ');
     }
   };
 

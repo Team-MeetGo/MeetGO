@@ -5,6 +5,7 @@ import { clientSupabase } from '@/utils/supabase/client';
 import { IsEditingType } from '@/types/userTypes';
 import { useGetUserDataQuery } from '@/hooks/useQueries/useUserQuery';
 import { useFavoriteStore } from '@/store/userStore';
+import { customErrToast } from '../common/customToast';
 
 const Favorite: React.FC<IsEditingType> = ({ isEditing }) => {
   const { selected, setSelected } = useFavoriteStore();
@@ -12,7 +13,7 @@ const Favorite: React.FC<IsEditingType> = ({ isEditing }) => {
 
   const handleSelect = (value: string) => {
     if (selected.size >= 5) {
-      alert('최대 5개까지 선택 가능합니다.');
+      customErrToast('최대 5개까지 선택 가능합니다.');
       return;
     }
     setSelected(new Set(value));
