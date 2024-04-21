@@ -36,7 +36,6 @@ const MetPeople = () => {
           'postgres_changes',
           { event: '*', schema: 'public', table: 'kakaoId_request', filter: `request_Id=eq.${userId}` },
           (payload) => {
-            console.log('요청 보내서 바뀜', payload);
             queryClient.invalidateQueries({ queryKey: [KAKAOID_REQUEST_QUERY_KEY, userId, userGender] });
           }
         )
@@ -44,7 +43,6 @@ const MetPeople = () => {
           'postgres_changes',
           { event: '*', schema: 'public', table: 'kakaoId_request', filter: `response_Id=eq.${userId}` },
           (payload) => {
-            console.log('요청받아서 바뀜', payload);
             queryClient.invalidateQueries({ queryKey: [KAKAOID_REQUEST_QUERY_KEY, userId, userGender] });
           }
         )

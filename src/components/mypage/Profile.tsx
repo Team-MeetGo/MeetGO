@@ -136,28 +136,36 @@ const Profile = () => {
           <p className="block text-lg font-semibold w-[100px]">이메일</p>
           <p className="block text-base font-medium">{user?.login_email}</p>
         </div>
-        <div className="flex items-center gap-6">
+        <div className={`${isEditing ? 'items-start' : 'items-center'} flex gap-6 w-full`}>
           <p className="block text-lg font-semibold w-[100px]">성별</p>
-          <p className="block text-base font-medium">
-            {user
-              ? user?.gender === 'female'
-                ? '여성'
-                : user?.gender === 'male'
-                ? '남성'
-                : '성별을 골라주세요.'
-              : '사용자 정보 없음'}
-          </p>
+          <div className="flex flex-col gap-2">
+            <p className="block text-base font-medium">
+              {user
+                ? user?.gender === 'female'
+                  ? '여성'
+                  : user?.gender === 'male'
+                  ? '남성'
+                  : '성별을 골라주세요.'
+                : '사용자 정보 없음'}
+            </p>
+            {isEditing && (
+              <Select
+                label="성별"
+                className="min-w-36 max-w-xs"
+                value={inputGender.value}
+                onChange={inputGender.onChange}
+              >
+                <SelectItem key="female" value="female">
+                  여성
+                </SelectItem>
+                <SelectItem key="male" value="male">
+                  남성
+                </SelectItem>
+              </Select>
+            )}
+          </div>
         </div>
-        {isEditing && (
-          <Select label="성별" className="max-w-xs" value={inputGender.value} onChange={inputGender.onChange}>
-            <SelectItem key="female" value="female">
-              여성
-            </SelectItem>
-            <SelectItem key="male" value="male">
-              남성
-            </SelectItem>
-          </Select>
-        )}
+
         <SchoolForm />
         <div className="mb-6 flex items-center gap-6">
           <label className="block text-lg font-semibold w-[100px]">카카오톡ID</label>
@@ -171,11 +179,12 @@ const Profile = () => {
               type="text"
               value={inputKakaoId.value}
               onChange={inputKakaoId.onChange}
+              maxLength={20}
             />
           )}
         </div>
         <Favorite isEditing={isEditing} />
-        <div className="flex gap-6 items-center">
+        <div className={`${isEditing ? 'items-start' : 'items-center'} flex gap-6 w-full`}>
           <label className="block text-lg font-semibold w-[100px]" htmlFor="introduction">
             자기소개
           </label>
@@ -183,7 +192,7 @@ const Profile = () => {
             <p className="block text-sm font-medium mb-1">{user?.intro}</p>
           ) : (
             <textarea
-              className="w-full p-2 border border-gray-300 rounded-md"
+              className="p-2 border border-gray-300 rounded-md w-1/2"
               id="introduction"
               placeholder="자기소개를 입력해주세요. 예)MBTI, 취미, 관심사 등"
               value={inputIntro.value}
@@ -192,7 +201,7 @@ const Profile = () => {
             />
           )}
         </div>
-        <div className="flex justify-center">
+        <div className="flex justify-center gap-2">
           {isEditing ? (
             <>
               <button
