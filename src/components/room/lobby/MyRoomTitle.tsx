@@ -1,5 +1,5 @@
-import MeetingRoomForm from '../MeetingRoomForm';
-import RefreshButoon from './RefreshButoon';
+import MeetingRoomForm from '@/components/room/MeetingRoomForm';
+import RefreshButoon from '@/components/room/lobby/RefreshButton';
 
 function MyRoomsTitle({ children }: { children: React.ReactNode }) {
   return (

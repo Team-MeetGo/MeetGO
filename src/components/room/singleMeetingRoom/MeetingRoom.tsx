@@ -3,10 +3,10 @@ import meetingRoomHandler from '@/hooks/custom/room';
 import { useAddRoomMemberMutation, useUpdateRoomStatusClose } from '@/hooks/useMutation/useMeetingMutation';
 import { useAlreadyChatRoomQuery, useRoomParticipantsQuery } from '@/hooks/useQueries/useMeetingQuery';
 import { useGetUserDataQuery } from '@/hooks/useQueries/useUserQuery';
-import MeetGoLogoPurple from '@/utils/icons/meetgo-logo-purple.png';
 import { Chip } from '@nextui-org/react';
-import Image from 'next/image';
 import { useRouter } from 'next/navigation';
+import Image from 'next/image';
+import MeetGoLogoPurple from '@/utils/icons/meetgo-logo-purple.png';
 import RoomInformation from './RoomInformation';
 
 import type { MeetingRoomType } from '@/types/roomTypes';

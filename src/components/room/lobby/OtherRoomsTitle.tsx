@@ -1,5 +1,5 @@
-import MemberNumberSelection from '../MemberNumberSelection';
-import RegionSelection from '../RegionSelection';
+import MemberNumberSelection from '@/components/room/MemberNumberSelection';
+import RegionSelection from '@/components/room/RegionSelection';
 
 function OtherRoomsTitle({ children }: { children: React.ReactNode }) {
   return (

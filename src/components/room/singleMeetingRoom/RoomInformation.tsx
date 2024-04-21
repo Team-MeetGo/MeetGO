@@ -5,8 +5,8 @@ import { useEffect, useRef, useState } from 'react';
 import { BsFire } from 'react-icons/bs';
 import { HiOutlineDotsVertical } from 'react-icons/hi';
 import { IoChatbubblesOutline, IoFemale, IoMale } from 'react-icons/io5';
-import DeleteMeetingRoom from '../DeleteMeetingRoom';
-import EditMeetingRoom from '../EditMeetingRoom';
+import DeleteMeetingRoom from '@/components/room/DeleteMeetingRoom';
+import EditMeetingRoom from '@/components/room/EditMeetingRoom';
 
 import type { ChattingRoomType, MeetingRoomType, UserType } from '@/types/roomTypes';
 function RoomInformation({

@@ -15,8 +15,8 @@ import {
   useDisclosure
 } from '@nextui-org/react';
 import { useState } from 'react';
-import MemberNumberSelection from './MemberNumberSelection';
-import RegionSelection from './RegionSelection';
+import MemberNumberSelection from '@/components/room/MemberNumberSelection';
+import RegionSelection from '@/components/room/RegionSelection';
 import { useGetUserDataQuery } from '@/hooks/useQueries/useUserQuery';
 
 import type { MeetingRoomType, UpdateRoomType } from '@/types/roomTypes';
