@@ -17,8 +17,8 @@ function RoomInformation({
 }: {
   room: MeetingRoomType;
   user_id: string;
-  alreadyChatRoom: ChattingRoomType[];
-  participants: UserType[];
+  alreadyChatRoom: ChattingRoomType[] | null | undefined;
+  participants: any;
 }) {
   const [open, setOpen] = useState(false);
   const { room_id, room_status, member_number, leader_id } = room;
@@ -26,7 +26,7 @@ function RoomInformation({
   const genderMaxNumber = getmaxGenderMemberNumber(member_number);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const emptySeat = genderMaxNumber! * 2 - participants!.length;
-  const countFemale = participants?.filter((member) => member?.gender === 'female').length;
+  const countFemale = participants?.filter((member: UserType) => member?.gender === 'female').length;
   const countMale = participants.length - countFemale;
   const myMsgData = useMyMsgData(user_id);
 

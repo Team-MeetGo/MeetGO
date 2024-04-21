@@ -5,10 +5,10 @@ import { useSearchRoomStore } from '@/store/searchRoomStore';
 import { useEffect, useState } from 'react';
 import { IoIosArrowBack, IoIosArrowForward } from 'react-icons/io';
 import MeetingRoom from '../singleMeetingRoom/MeetingRoom';
-import MyRoomsTitle from './MyRoomsTitle';
-import OtherRoomsTitle from './OtherRoomsTitle';
 
 import type { MeetingRoomType } from '@/types/roomTypes';
+import MyRoomsTitle from './MyRoomsTitle';
+import OtherRoomsTitle from './OtherRoomsTitle';
 function MeetingRoomList() {
   const [page, setPage] = useState(1);
   const [filteredOtherRooms, setFilteredOtherRooms] = useState<MeetingRoomType[]>();

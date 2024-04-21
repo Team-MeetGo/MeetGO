@@ -53,7 +53,6 @@ function MeetingRoom({ room }: { room: MeetingRoomType }) {
     }
     return router.push(`/meetingRoom/${room_id}`);
   };
-
   return (
     <div
       className={
