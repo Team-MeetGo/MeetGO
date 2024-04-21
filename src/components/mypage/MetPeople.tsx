@@ -115,7 +115,7 @@ const MetPeople = () => {
               <p className="text-xs px-4 py-2 rounded-lg bg-[#D4D4D8]">요청중</p>
             )}
             {userId === person.response_Id && person.requestStatus === '요청중' && (
-              <>
+              <div className="flex gap-1">
                 <button
                   className="text-xs border px-4 py-2 rounded-lg"
                   onClick={() => handleKakaoIdResponse(person.user_id, '수락')}
@@ -128,7 +128,7 @@ const MetPeople = () => {
                 >
                   거절
                 </button>
-              </>
+              </div>
             )}
             {person.requestStatus === '수락' && (
               <p className="text-xs border px-4 py-2 rounded-lg border-mainColor text-mainColor">{person.kakaoId}</p>
