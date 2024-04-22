@@ -53,6 +53,7 @@ function MeetingRoomForm() {
 
   const addMeetingRoom = async (e: any) => {
     e.preventDefault();
+
     if (!title || !selected || !location || memberNumber === '인원수' || !roomRegion) {
       alert('모든 항목은 필수입니다.');
     } else if (title && selected && location && memberNumber !== '인원수' && roomRegion) {
@@ -78,10 +79,17 @@ function MeetingRoomForm() {
     newSelected.delete(value);
     setSelected(newSelected);
   };
-
+  const roomOpenHandler = () => {
+    if (!user?.gender) {
+      alert('성별을 선택해주세요');
+      return router.push('/mypage');
+    } else {
+      onOpen();
+    }
+  };
   return (
     <>
-      <Button onPress={onOpen} className="w-[92px] h-[51px] bg-mainColor text-white">
+      <Button onPress={roomOpenHandler} className="w-[92px] h-[51px] bg-mainColor text-white">
         방 만들기
       </Button>
       <Modal
