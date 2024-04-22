@@ -1,4 +1,4 @@
-import { NewRoomType, UpdateRoomType, UserType } from '@/types/roomTypes';
+import { ChattingRoomType, MeetingRoomType, NewRoomType, UpdateRoomType, UserType } from '@/types/roomTypes';
 import { clientSupabase } from '@/utils/supabase/client';
 
 export const fetchRecruitingRoom = async () => {
@@ -34,13 +34,16 @@ export const fetchRoomInfoWithRoomId = async (room_id: string) => {
   }
 };
 
-export const fetchAlreadyChatRoom = async (room_id: string) => {
+export const fetchAlreadyChatRoom = async (room_id: string): Promise<ChattingRoomType[]> => {
   const { data: alreadyChat } = await clientSupabase
     .from('chatting_room')
     .select('*')
     .eq('room_id', room_id)
     .eq('isActive', true);
-  return alreadyChat;
+  if (alreadyChat !== null) {
+    return alreadyChat;
+  }
+  return [];
 };
 
 export const addRoom = async ({ nextMeetingRoom, user_id }: { nextMeetingRoom: NewRoomType; user_id: string }) => {
@@ -127,8 +130,8 @@ export const fetchRoomParticipants = async (roomId: string) => {
     .eq('room_id', roomId)
     .eq('isDeleted', false)
     .select('user_id, users(*)');
-
-  return userInformations?.map((user) => user.users) ?? [];
+  if (userInformations !== null) return userInformations?.map((user) => user.users) ?? [];
+  return [];
 };
 
 // // 내가 들어가 있는 채팅방과 그 채팅방에 엮여있는 roomId
