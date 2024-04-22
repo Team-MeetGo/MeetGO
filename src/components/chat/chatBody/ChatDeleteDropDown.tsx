@@ -6,7 +6,6 @@ import { CiMenuKebab } from 'react-icons/ci';
 const ChatDeleteDropDown = ({ msg }: { msg: Message }) => {
   const handleDeleteMessage = async (key: string) => {
     if (key === 'delete') {
-      console.log('드롭다운 작동?');
       const { error: messageTableErr } = await clientSupabase
         .from('messages')
         .delete()
