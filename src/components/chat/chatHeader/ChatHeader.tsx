@@ -115,7 +115,7 @@ const ChatHeader = ({ chatRoomId }: { chatRoomId: string }) => {
     <div className="h-[116px] border-b flex px-[32px] py-[16px] justify-between ">
       <div className="flex gap-2">
         <div className="flex flex-col gap-[8px]">
-          <p className="font-bold text-2xl h-[36px]">{room?.room_title}</p>
+          <h1 className="font-bold text-2xl h-[36px]">{room?.room_title}</h1>
 
           <div className="flex gap-[20px] items-center">
             <ChatPresence />
