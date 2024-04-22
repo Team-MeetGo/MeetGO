@@ -3,12 +3,12 @@
 import meetingRoomHandler from '@/hooks/custom/room';
 import { useGetUserDataQuery } from '@/hooks/useQueries/useUserQuery';
 import { RoomData } from '@/types/chatTypes';
-import { UserType } from '@/types/roomTypes';
 import { clientSupabase } from '@/utils/supabase/client';
 import { useRouter } from 'next/navigation';
 import { IoPlay } from 'react-icons/io5';
 
-const AcceptanceRoomButtons = ({
+import { UserType } from '@/types/roomTypes';
+const GotoChatButton = ({
   roomInformation,
   participants,
   leader
@@ -57,28 +57,28 @@ const AcceptanceRoomButtons = ({
   };
 
   return (
-    <div>
+    <main>
       {user_id === leader && participants?.length === maxMember && (
-        <div
+        <figure
           className="
         flex flex-col h-[114px] w-[1116px] justify-center text-center bg-mainColor"
         >
           <button
             disabled={genderParticipants ? (participants?.length === genderParticipants * 2 ? false : true) : false}
-            onClick={() => gotoChattingRoom()}
+            onClick={gotoChattingRoom}
           >
             <div className="flex flex-row justify-center align-middle ">
-              <div className="text-[40px] text-white font-bold">MEET GO</div>
+              <p className="text-[40px] text-white font-bold">MEET GO</p>
               <div className="flex flex-col justify-start">
                 <IoPlay className="w-[24px] h-[24px] my-auto fill-white" />
               </div>
             </div>
-            <div className="text-[14px] text-white">방장이 여기를 누를 시 채팅방으로 이동합니다.</div>
+            <p className="text-[14px] text-white">방장이 여기를 누를 시 채팅방으로 이동합니다.</p>
           </button>
-        </div>
+        </figure>
       )}
-    </div>
+    </main>
   );
 };
 
-export default AcceptanceRoomButtons;
+export default GotoChatButton;
