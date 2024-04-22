@@ -30,7 +30,7 @@ export const fetchRoomInfoWithRoomId = async (room_id: string) => {
     }
     return room[0];
   } catch (error) {
-    console.log(error);
+    console.error(error);
   }
 };
 
@@ -79,7 +79,7 @@ export const updateRoom = async (editedMeetingRoom: UpdateRoomType) => {
     .from('room')
     .update(editedMeetingRoom)
     .eq('room_id', editedMeetingRoom.room_id);
-  if (error) console.log('방 수정 오류', error.message);
+  if (error) console.error('방 수정 오류', error.message);
   return data;
 };
 
@@ -104,14 +104,11 @@ export const updateLeaderMember = async ({
       return leaderUpdate;
     }
   } catch (error) {
-    console.log(error);
+    console.error(error);
   }
 };
 
 export const addMember = async ({ user_id, room_id }: { user_id: string; room_id: string }) => {
-  if (!user_id) {
-    console.log('유저가 없어요');
-  }
   await clientSupabase.from('participants').insert([{ user_id, room_id }]);
 };
 

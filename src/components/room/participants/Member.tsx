@@ -49,7 +49,7 @@ const Member = ({ room_id, roomInformation }: { room_id: string; roomInformation
               .eq('isDeleted', false)
               .eq('user_id', user_id)
               .select('user_id, users(*)');
-            console.log('오류 확인 => ', error);
+            console.error('오류 확인 => ', error);
             if (!participants || participants.length < 1) return;
             if (!newUserData || newUserData.length < 1) return;
             setMembers((participants) => [...participants, newUserData[0].users as UserType]);

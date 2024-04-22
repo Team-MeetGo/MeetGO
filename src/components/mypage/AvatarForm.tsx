@@ -20,7 +20,7 @@ const AvatarForm = () => {
   useEffect(() => {
     if (!file) {
       setAvatarView(null);
-      console.log('파일이 선택되지 않았습니다.');
+      console.error('파일이 선택되지 않았습니다.');
       return;
     }
 
@@ -56,7 +56,7 @@ const AvatarForm = () => {
   /** 프로필 사진 업데이트 로직 */
   const handleAvatarUpdate = ({ userId, file }: { userId: string; file: File | null }) => {
     if (!file) {
-      console.log('파일이 선택되지 않았습니다.');
+      console.error('파일이 선택되지 않았습니다.');
       return;
     }
     updateAvatarMutate(
