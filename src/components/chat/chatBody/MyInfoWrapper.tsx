@@ -28,7 +28,7 @@ const MyInfoWrapper = ({
   };
   return (
     <>
-      <div className="relative flex h-[60px] w-[60px] ">
+      <div className="flex h-[60px] w-[60px] ">
         <div className="h-16 w-16 ml-auto flex justify-center items-center">
           {user?.avatar ? (
             <Avatar
@@ -48,12 +48,12 @@ const MyInfoWrapper = ({
           </div>
         ) : null}
       </div>
-      <Modal size={'sm'} isOpen={isOpen} onClose={onClose} className="absolute z-50">
+      <Modal size={'sm'} isOpen={isOpen} onClose={onClose} className="z-30">
         <ModalContent className="h-96">
           {(onClose) => {
             return (
               <>
-                <ModalHeader className="flex flex-col gap-1 ">{user?.nickname}</ModalHeader>
+                <ModalHeader className="flex flex-col gap-1 z-40 pointer-events-none">{user?.nickname}</ModalHeader>
                 <ModalBody>
                   <Image
                     src={user?.avatar as string}

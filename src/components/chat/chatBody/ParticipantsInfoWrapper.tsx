@@ -29,7 +29,7 @@ const ParticipantsInfoWrapper = ({
   };
   return (
     <>
-      <div className="relative flex h-[60px] w-[60px] ">
+      <div className="flex h-[60px] w-[60px] ">
         <div className="h-16 w-16 ml-auto flex justify-center items-center">
           {showThatUser(msg.send_from)?.avatar ? (
             <Avatar
@@ -48,12 +48,14 @@ const ParticipantsInfoWrapper = ({
           </div>
         ) : null}
       </div>
-      <Modal size={'sm'} isOpen={isOpen} onClose={onClose} className="absolute z-50">
+      <Modal size={'sm'} isOpen={isOpen} onClose={onClose} className="z-30">
         <ModalContent className="h-96">
           {(onClose) => {
             return (
               <>
-                <ModalHeader className="flex flex-col gap-1">{showThatUser(msg.send_from)?.nickname}</ModalHeader>
+                <ModalHeader className="flex flex-col gap-1 z-40 pointer-events-none">
+                  {showThatUser(msg.send_from)?.nickname}
+                </ModalHeader>
                 <ModalBody>
                   <Image
                     src={showThatUser(msg.send_from)?.avatar as string}
