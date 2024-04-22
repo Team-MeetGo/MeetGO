@@ -10,6 +10,7 @@ import {
   DropdownMenu,
   Avatar
 } from '@nextui-org/react';
+import { Skeleton } from '@nextui-org/skeleton';
 import MeetGoLogo from '@/utils/icons/meetgo-logo.png';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
@@ -27,7 +28,19 @@ const NavBarContents = () => {
   const isValidate = user?.isValidate;
 
   if (isPending) {
-    return <span>Loading...</span>;
+    return (
+      <div className="w-full flex items-center gap-2 max-w-5xl py-[20px] px-6 m-auto justify-between">
+        <div className="w-full flex gap-4 items-center">
+          <Skeleton className="w-1/3 h-10 rounded-lg" />
+          <Skeleton className="h-6 w-1/6 rounded-lg" />
+          <Skeleton className="h-6 w-1/6 rounded-lg" />
+        </div>
+        <div className="w-full flex gap-4 items-center justify-end">
+          <Skeleton className="h-6 w-1/5 rounded-lg" />
+          <Skeleton className="flex rounded-full w-10 h-10" />
+        </div>
+      </div>
+    );
   }
   if (isError) {
     return <span>{error?.message}</span>;
@@ -39,7 +52,7 @@ const NavBarContents = () => {
       queryKey: [USER_DATA_QUERY_KEY]
     });
     customSuccessToast('로그아웃 성공');
-    router.replace('/');
+    location.replace('/');
   };
 
   const checkIsValidate = () => {
