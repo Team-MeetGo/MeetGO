@@ -18,6 +18,7 @@ import {
   ModalHeader,
   useDisclosure
 } from '@nextui-org/react';
+import { customErrToast, customSuccessToast } from '../common/customToast';
 
 const SchoolForm = () => {
   const queryClient = useQueryClient();
@@ -52,7 +53,7 @@ const SchoolForm = () => {
   /**인증메일 보내는 로직 */
   const onSubmitEmailConfirm = async () => {
     if (!schoolEmail || !univName) {
-      alert('이메일과 학교명을 모두 입력해주세요.');
+      customErrToast('이메일과 학교명을 모두 입력해주세요.');
       return;
     }
 
@@ -60,7 +61,7 @@ const SchoolForm = () => {
     try {
       const schoolValidationResult = await schoolConfirmAPI(univName);
       if (!schoolValidationResult.success) {
-        alert('학교명을 다시 확인해주세요.');
+        customErrToast('학교명을 다시 확인해주세요.');
         return;
       }
 
@@ -68,15 +69,15 @@ const SchoolForm = () => {
       const emailConfirmResult = await emailConfirmAPI(schoolEmail, univName, true);
       if (emailConfirmResult.success) {
         onOpen();
-        alert('인증메일 전송 완료');
+        customSuccessToast('인증메일 전송 완료');
         setIsCodeSent(true); // 인증 메일 발송 성공 상태를 true로 변경
       } else {
-        alert('인증 실패');
+        customErrToast('인증 실패');
         setIsCodeSent(false);
       }
     } catch (error) {
       console.error(error);
-      alert('인증 과정 중 오류가 발생했습니다.');
+      customErrToast('인증 과정 중 오류가 발생했습니다.');
     }
   };
 
@@ -86,7 +87,7 @@ const SchoolForm = () => {
       const response = await emailCodeAPI(schoolEmail, univName, Number(code));
       if (response.success) {
         setIsCodeValid(true); // 인증 코드 유효성 검사 결과 상태 업데이트
-        alert('인증 완료');
+        customSuccessToast('인증 완료');
         onOpenChange();
         updateSchoolMutate(
           { userId: user!.user_id, schoolEmail, univName },
@@ -100,10 +101,10 @@ const SchoolForm = () => {
         );
       } else {
         setIsCodeValid(false);
-        alert('인증 코드가 유효하지 않습니다.');
+        customErrToast('인증 코드가 유효하지 않습니다.');
       }
     } catch (error) {
-      alert(error);
+      customErrToast('인증 과정 중 오류가 발생했습니다.');
     }
   };
 

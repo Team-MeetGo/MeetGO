@@ -17,6 +17,7 @@ import kakaoLoginLogo from '@/utils/icons/login_kakao.png';
 import googleLoginLogo from '@/utils/icons/logo_google.png';
 import { IoMdEye, IoMdEyeOff } from 'react-icons/io';
 import cookie from 'react-cookies';
+import { customErrToast } from '../common/customToast';
 
 const LoginForm = () => {
   const queryClient = useQueryClient();
@@ -94,10 +95,10 @@ const LoginForm = () => {
       } else if (error) throw error;
     } catch (error: any) {
       if (error.message.includes('Invalid login')) {
-        alert('아이디 또는 비밀번호를 확인해주세요.');
+        customErrToast('이메일 또는 비밀번호를 확인해주세요.');
         setIsError(true);
       } else {
-        alert('로그인 중 오류가 발생했습니다.');
+        customErrToast('로그인 중 오류가 발생했습니다.');
       }
     }
   };
@@ -138,12 +139,10 @@ const LoginForm = () => {
           </div>
           <div className="flex items-center justify-between">
             <Checkbox
-              className=""
               color="default"
               radius="sm"
               classNames={{
-                label: 'text-[14px] text-gray3',
-                wrapper: ''
+                label: 'text-[14px] text-gray3'
               }}
               isSelected={checkRememberId}
               onChange={toggleCheckRemember}
@@ -151,21 +150,21 @@ const LoginForm = () => {
               이메일 저장
             </Checkbox>
             <div className="flex gap-[4px]">
-              <Link href="" className="text-gray3 text-[14px]">
+              <Link href="/forgotpassword" className="text-gray3 text-[14px]">
                 비밀번호 찾기
               </Link>
             </div>
           </div>
           <Button
-            className="duration-200 bg-[#8F5DF4] text-white p-5 mt-[24px] rounded-lg font-semibold w-full py-[20px] h-auto text-[16px]"
+            className="duration-200 bg-mainColor text-white p-5 mt-[24px] rounded-lg font-semibold w-full py-[20px] h-auto text-base"
             type="submit"
           >
             로그인
           </Button>
         </form>
-        {isError && <p className="text-red-500 text-[13px] mt-2">아이디 또는 비밀번호가 일치하지 않습니다.</p>}
+        {isError && <p className="text-red-500 text-[13px] mt-2">이메일 또는 비밀번호가 일치하지 않습니다.</p>}
         <div className="flex items-center gap-2 justify-center mt-[32px]">
-          <p>아직 아이디가 없다면?</p>
+          <p>아직 계정이 없다면?</p>
           <Link href="/join" className="text-[#27272A] rounded-lg h-auto text-[16px] underline" type="button">
             회원가입하기
           </Link>

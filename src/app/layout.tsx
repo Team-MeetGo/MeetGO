@@ -5,6 +5,8 @@ import QueryProvider from '@/app/provider/QueryProvider';
 import { NextProvider } from './provider/NextUIProvider';
 import NavBar from '@/components/common/NavBar';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -25,6 +27,7 @@ export default function RootLayout({
       <body className={inter.className}>
         <NextProvider>
           <QueryProvider>
+            <ToastContainer position="top-right" limit={1} closeButton={false} autoClose={4000} />
             <NavBar />
             {children}
             <ReactQueryDevtools initialIsOpen={true} />

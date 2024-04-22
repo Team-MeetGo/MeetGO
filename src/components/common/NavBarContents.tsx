@@ -18,7 +18,7 @@ import { useGetUserDataQuery } from '@/hooks/useQueries/useUserQuery';
 import { useQueryClient } from '@tanstack/react-query';
 import { USER_DATA_QUERY_KEY } from '@/query/user/userQueryKeys';
 import Link from 'next/link';
-import { useEffect } from 'react';
+import { customErrToast, customSuccessToast } from './customToast';
 
 const NavBarContents = () => {
   const queryClient = useQueryClient();
@@ -38,13 +38,13 @@ const NavBarContents = () => {
     queryClient.invalidateQueries({
       queryKey: [USER_DATA_QUERY_KEY]
     });
-    alert('로그아웃 성공');
+    customSuccessToast('로그아웃 성공');
     router.replace('/'); // 로그아웃 후 메인 페이지로 이동. 뒤로가기 방지.
   };
 
   const checkIsValidate = () => {
     if (!isValidate) {
-      alert('미팅을 하고 싶다면 학교 인증 ㄱㄱ');
+      customErrToast('미팅을 하고 싶다면 학교 인증 ㄱㄱ');
     }
   };
 
@@ -81,24 +81,34 @@ const NavBarContents = () => {
       <NavbarContent className="h-auto" as="div" justify="end">
         {isLoggedIn ? (
           <div className="flex items-center gap-4">
-            <p>{user?.nickname}</p>
             <Dropdown placement="bottom-end">
               <DropdownTrigger>
-                {user?.avatar ? (
-                  <Avatar
-                    as="button"
-                    className="transition-transform"
-                    src={`${user?.avatar}?${new Date().getTime()}`}
-                  />
-                ) : (
-                  <Avatar showFallback as="button" className="transition-transform" color="secondary" size="sm" />
-                )}
+                <div className="flex items-center gap-2">
+                  <p className="cursor-pointer">{user?.nickname}</p>
+                  {user?.avatar ? (
+                    <Avatar
+                      as="button"
+                      className="transition-transform"
+                      src={`${user?.avatar}?${new Date().getTime()}`}
+                    />
+                  ) : (
+                    <Avatar showFallback as="button" className="transition-transform" color="secondary" size="sm" />
+                  )}
+                </div>
               </DropdownTrigger>
-              <DropdownMenu aria-label="Profile Actions" variant="flat">
+              <DropdownMenu
+                aria-label="Profile Actions"
+                variant="flat"
+                onAction={(key) => {
+                  if (key === 'logout') {
+                    signOut();
+                  }
+                }}
+              >
                 <DropdownItem key="mypage" href="/mypage">
                   마이페이지
                 </DropdownItem>
-                <DropdownItem key="logout" color="danger" className="w-full" onPress={signOut}>
+                <DropdownItem key="logout" color="danger" className="w-full">
                   LOGOUT
                 </DropdownItem>
               </DropdownMenu>

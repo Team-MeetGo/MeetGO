@@ -12,6 +12,7 @@ import { USER_DATA_QUERY_KEY } from '@/query/user/userQueryKeys';
 import { useQueryClient } from '@tanstack/react-query';
 import { IoMdEye, IoMdEyeOff } from 'react-icons/io';
 import Link from 'next/link';
+import { customErrToast } from '../common/customToast';
 
 type Gender = 'male' | 'female' | '';
 
@@ -80,12 +81,12 @@ const JoinForm = () => {
         .single();
 
       if (nicknameData) {
-        alert('이미 사용중인 닉네임입니다. 다른 닉네임을 입력해주세요.');
+        customErrToast('이미 사용중인 닉네임입니다. 다른 닉네임을 입력해주세요.');
         return;
       }
     } catch (error) {
       console.error('Error during nickname validation:', error);
-      alert('닉네임 중복 검사 중 예상치 못한 오류가 발생했습니다.');
+      customErrToast('닉네임 중복 검사 중 예상치 못한 오류가 발생했습니다.');
       return;
     }
 
@@ -113,9 +114,9 @@ const JoinForm = () => {
       }
     } catch (error: any) {
       if (error.message.includes('already registered')) {
-        alert('이미 존재하는 계정입니다.');
+        customErrToast('이미 존재하는 계정입니다.');
       } else {
-        alert('회원가입 중 오류가 발생했습니다.');
+        customErrToast('회원가입 중 오류가 발생했습니다.');
       }
     }
   };
