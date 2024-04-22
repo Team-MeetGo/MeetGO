@@ -39,9 +39,9 @@ const OthersChat = ({ msg, idx, lastDivRefs }: { msg: Message; idx: number; last
           )}
 
           <div className="flex flex-col gap-2">
-            <div className="gap-2 mr-auto">
+            <div className="flex gap-2 mr-auto">
               {msg.message?.length && (
-                <span className="rounded-md bg-mainColor py-1.5 px-[8px] text-right text-white font-extralight max-w-72 break-words">
+                <span className="rounded-md bg-mainColor py-1.5 px-[8px] text-right text-white font-extralight">
                   {msg.message}
                 </span>
               )}
