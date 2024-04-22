@@ -743,12 +743,25 @@
   resolved "https://registry.yarnpkg.com/@nextui-org/react-rsc-utils/-/react-rsc-utils-2.0.11.tgz#61994bf8a55d465f9f1653675387b0c17fc92d80"
   integrity sha512-clA0fpAB+kSfbDfx3V7qSWUPczTql9pBw0iWOKKwqY4RLFjoW9EuiwQiVLw0taJwhTlNH+L9M34TZZG9OQSjDw==
 
+"@nextui-org/react-rsc-utils@2.0.12":
+  version "2.0.12"
+  resolved "https://registry.yarnpkg.com/@nextui-org/react-rsc-utils/-/react-rsc-utils-2.0.12.tgz#a931a2e6a9523e9f11f3397a57cde0861ba9ff7a"
+  integrity sha512-s2IG4pM1K+kbm6A2g3UpqrS592AExpGixtZNPJ2lV5+UQi1ld3vb4EiBIOViZMoSCNCoNdaeO5Yqo6cKghwCPA==
+
 "@nextui-org/react-utils@2.0.11":
   version "2.0.11"
   resolved "https://registry.yarnpkg.com/@nextui-org/react-utils/-/react-utils-2.0.11.tgz#9fc89058e15ffdff35926494712d241842d9be07"
   integrity sha512-sKRuePleA6c/KCNZwViZpOB5VwpftzREXj5Ghp9d7AWJaGdTb5xfVaG9QAESG1Xmd6g4m/f06GwN9i4oi6Fzzw==
   dependencies:
     "@nextui-org/react-rsc-utils" "2.0.11"
+    "@nextui-org/shared-utils" "2.0.5"
+
+"@nextui-org/react-utils@2.0.13":
+  version "2.0.13"
+  resolved "https://registry.yarnpkg.com/@nextui-org/react-utils/-/react-utils-2.0.13.tgz#9710130e6c7299b70dc92b1dae685864353fc981"
+  integrity sha512-4DM1Cph1lVY64T/HDyEqcxYkInXx6hdL1Kp9StLza9yqgYmVipTaPkWZdmWbfkhP+dVVqrH3DVFfHtpLTQ625w==
+  dependencies:
+    "@nextui-org/react-rsc-utils" "2.0.12"
     "@nextui-org/shared-utils" "2.0.5"
 
 "@nextui-org/react@^2.2.10":
@@ -860,6 +873,15 @@
     "@nextui-org/shared-utils" "2.0.5"
     "@nextui-org/system-rsc" "2.1.0"
 
+"@nextui-org/skeleton@^2.0.27":
+  version "2.0.27"
+  resolved "https://registry.yarnpkg.com/@nextui-org/skeleton/-/skeleton-2.0.27.tgz#30dcba0af8d3346223df442cfe03ac355e2a0adb"
+  integrity sha512-AolxdzJ4xCyb7i2DwZ1iQGSaLGUBYh/rorO8llBqsXDpvhBANcFF3DbRO3kQ+EVGr5AEbEeurd3RabC2F6wVDA==
+  dependencies:
+    "@nextui-org/react-utils" "2.0.13"
+    "@nextui-org/shared-utils" "2.0.5"
+    "@nextui-org/system-rsc" "2.1.1"
+
 "@nextui-org/slider@2.2.7":
   version "2.2.7"
   resolved "https://registry.yarnpkg.com/@nextui-org/slider/-/slider-2.2.7.tgz#bfc592630719de77a68a0aae31d3d22d57f0af10"
@@ -927,6 +949,13 @@
   version "2.1.0"
   resolved "https://registry.yarnpkg.com/@nextui-org/system-rsc/-/system-rsc-2.1.0.tgz#dbdf6675ee655f8e9c15e609f78d2000cea10d8b"
   integrity sha512-8OBsJlUKsHy/D5MT5sciVARA1i09it9sJsGhm7WR2HORWnH/4W4a8FyD3qcQXJSqMlJ62LO0t0cV5bxfAMyryg==
+  dependencies:
+    clsx "^1.2.1"
+
+"@nextui-org/system-rsc@2.1.1":
+  version "2.1.1"
+  resolved "https://registry.yarnpkg.com/@nextui-org/system-rsc/-/system-rsc-2.1.1.tgz#175de9637cff1fd91b115ea6910718a3a446c92e"
+  integrity sha512-gkTKNAbTZVl81SVJsaLHp4iqyd956y40UIGUXPeq0pwOGLM0xGWSkLbkNT8WtdPUt3bSD9y0xuKbiV3tpSBGOA==
   dependencies:
     clsx "^1.2.1"
 

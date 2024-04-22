@@ -83,7 +83,7 @@ const Profile = () => {
                     alt="Avatar"
                     style={{ objectFit: 'cover' }}
                     fill={true}
-                    sizes="500px"
+                    sizes="450px"
                     priority={true}
                   />
                 ) : (
