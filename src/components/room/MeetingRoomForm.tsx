@@ -83,10 +83,17 @@ function MeetingRoomForm() {
     newSelected.delete(value);
     setSelected(newSelected);
   };
-
+  const roomOpenHandler = () => {
+    if (!user?.gender) {
+      alert('성별을 선택해주세요');
+      return router.push('/mypage');
+    } else {
+      onOpen();
+    }
+  };
   return (
     <>
-      <Button onPress={onOpen} className="w-[92px] h-[51px] bg-mainColor text-white">
+      <Button onPress={roomOpenHandler} className="w-[92px] h-[51px] bg-mainColor text-white">
         방 만들기
       </Button>
       <Modal

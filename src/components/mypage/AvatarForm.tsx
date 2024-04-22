@@ -82,7 +82,7 @@ const AvatarForm = () => {
               alt="Avatar Preview"
               style={{ objectFit: 'cover' }}
               fill={true}
-              sizes="500px"
+              sizes="450px"
               priority={false}
             />
           ) : user?.avatar ? (
@@ -91,7 +91,7 @@ const AvatarForm = () => {
               alt="Avatar"
               style={{ objectFit: 'cover' }}
               fill={true}
-              sizes="500px"
+              sizes="450px"
               priority={true}
             />
           ) : (
