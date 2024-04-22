@@ -8,6 +8,7 @@ import { clientSupabase } from '@/utils/supabase/client';
 import { useQueryClient } from '@tanstack/react-query';
 import Image from 'next/image';
 import { useEffect } from 'react';
+import { customSuccessToast } from '../common/customToast';
 
 /**
  * useMutation을 이용한 데이터 처리 사용 방법
@@ -80,7 +81,7 @@ const MetPeople = () => {
       },
       {
         onSuccess: () => {
-          alert(`카톡ID 요청을 ${newStatus === '수락' ? '수락했습니다.' : '거절했습니다.'}`);
+          customSuccessToast(`카톡ID 요청을 ${newStatus === '수락' ? '수락했습니다.' : '거절했습니다.'}`);
           queryClient.invalidateQueries({
             queryKey: [KAKAOID_REQUEST_QUERY_KEY, userId, userGender]
           });

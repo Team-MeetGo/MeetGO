@@ -20,7 +20,10 @@ const AvatarForm = () => {
   useEffect(() => {
     if (!file) {
       setAvatarView(null);
+<<<<<<< HEAD
       console.error('파일이 선택되지 않았습니다.');
+=======
+>>>>>>> bf42867cb4803b51528bef13c31a7a9dfc6a3fbd
       return;
     }
 
