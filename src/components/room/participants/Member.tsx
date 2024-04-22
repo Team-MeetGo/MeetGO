@@ -29,8 +29,8 @@ const Member = ({
   const maleMembers = members.filter((member) => member.gender === 'male');
   const memberNumber = roomInformation?.member_number;
   const genderMaxNumber = getmaxGenderMemberNumber(memberNumber as string);
-  const hollowFemaleArray = Array.from({ length: (genderMaxNumber as number) - femaleMembers.length }, (vi, i) => i);
-  const hollowMaleArray = Array.from({ length: (genderMaxNumber as number) - maleMembers.length }, (vi, i) => i);
+  const hollowFemaleArray = Array.from({ length: (genderMaxNumber as number) - femaleMembers.length }, (_, i) => i);
+  const hollowMaleArray = Array.from({ length: (genderMaxNumber as number) - maleMembers.length }, (_, i) => i);
 
   useEffect(() => {
     setLeader(roomInformation.leader_id);
@@ -210,13 +210,13 @@ const Member = ({
                         </div>
                       )}
                     </div>
-                    <div className="pt-[8px] w-[100px] text-center">{member.nickname}</div>
+                    <p className="pt-[8px] w-[100px] text-center">{member.nickname}</p>
                   </div>
 
                   {/* 카드 오른쪽 */}
                   <div className="flex flex-col justify-center">
                     <div className="flex flex-row gap text-[16px]">
-                      <div className="pr-[4px]">{member.school_name}</div>
+                      <p className="pr-[4px]">{member.school_name}</p>
                       {<IoMale className="w-[14px] my-auto fill-blue" />}
                     </div>
                     <div className="flex flex-row w-100% text-[14px] gap-[8px] w-100%">

@@ -46,7 +46,7 @@ function RoomInformation({
     updateRoomStatusOpenMutation.mutateAsync();
     deleteMemberMutation();
     //유저가 리더였다면 다른 사람에게 리더 역할이 승계됩니다.
-    if (leader_id && leader_id === user_id && participants?.length !== 1) {
+    if (leader_id === user_id && participants?.length > 1) {
       updateLeaderMemeberMutation.mutate();
     }
     //만약 유일한 참여자라면 나감과 동시에 방은 삭제됩니다.

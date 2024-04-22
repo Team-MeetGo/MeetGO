@@ -21,16 +21,16 @@ function MemberNumberSelection({ text }: { text: string }) {
       setMemberNumber(member);
     }
 
-    const outSideClick = (e: any) => {
+    const outSideClickHandler = (e: any) => {
       const { target } = e;
       if (openModal && dropdownRef.current && !dropdownRef.current.contains(target)) {
         setOpenModal(false);
       }
     };
-    document.addEventListener('mousedown', outSideClick);
+    document.addEventListener('mousedown', outSideClickHandler);
   }, [member, openModal]);
 
-  const handleSelect = (member: string) => {
+  const memberNumberSelectionHandler = (member: string) => {
     setMember(member);
     setOpenModal(false);
   };
@@ -52,7 +52,7 @@ function MemberNumberSelection({ text }: { text: string }) {
             {member_number.map((m) => (
               <li
                 key={m}
-                onClick={() => handleSelect(m)}
+                onClick={() => memberNumberSelectionHandler(m)}
                 className="px-[16px] py-[8px] cursor-pointer rounded-lg hover:bg-mainColor hover:text-white"
               >
                 {m}

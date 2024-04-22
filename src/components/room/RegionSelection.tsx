@@ -6,10 +6,10 @@ import { useEffect, useRef, useState } from 'react';
 import { IoIosArrowDown } from 'react-icons/io';
 
 function RegionSelection({ text }: { text: string }) {
-  const conditionalRef = useRef(text);
   const [openModal, setOpenModal] = useState(false);
   const [region, setRegion] = useState('');
   const dropdownRef = useRef<HTMLDivElement>(null);
+  const conditionalRef = useRef(text);
   const { setRoomRegion } = useRoomStore();
   const { setSelectRegion } = useSearchRoomStore();
 
@@ -20,46 +20,46 @@ function RegionSelection({ text }: { text: string }) {
     if (conditionalRef.current === 'room') {
       setRoomRegion(region);
     }
-    const outSideClick = (e: any) => {
+    const outSideClickHandler = (e: any) => {
       const { target } = e;
       if (openModal && dropdownRef.current && !dropdownRef.current.contains(target)) {
         setOpenModal(false);
       }
     };
-    document.addEventListener('mousedown', outSideClick);
+    document.addEventListener('mousedown', outSideClickHandler);
   }, [region, openModal]);
 
-  const handleSelect = (r: string) => {
+  const regionSelectionHandler = (r: string) => {
     setRegion(r);
     setOpenModal(false);
   };
 
   return (
     <>
-      <div className="relative z-50 bg-white" ref={dropdownRef}>
+      <article className="relative z-50 bg-white" ref={dropdownRef}>
         <button
           className="bg-white w-[120px] h-[43px] rounded-lg border-black border-[1px] text-[16px]"
           type="button"
           onClick={() => setOpenModal((openModal) => !openModal)}
         >
-          <div className="flex flex-row justify-center align-middle">
+          <figure className="flex flex-row justify-center align-middle">
             <IoIosArrowDown className="my-auto" />
-          </div>
+          </figure>
         </button>
         {openModal && (
-          <div className="absolute top-full h-[180px] p-[8px] overflow-y-auto bg-white rounded-md shadow-md mt-1 w-full">
+          <figure className="absolute top-full h-[180px] p-[8px] overflow-y-auto bg-white rounded-md shadow-md mt-1 w-full">
             {regionList.map((m) => (
               <li
                 key={m}
-                onClick={() => handleSelect(m)}
+                onClick={() => regionSelectionHandler(m)}
                 className="px-[16px] py-[8px] cursor-pointer rounded-lg hover:bg-mainColor hover:text-white list-none	"
               >
                 {m}
               </li>
             ))}
-          </div>
+          </figure>
         )}
-      </div>
+      </article>
     </>
   );
 }

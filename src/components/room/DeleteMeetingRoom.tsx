@@ -13,10 +13,10 @@ function DeleteMeetingRoom({
 }) {
   const { data: user } = useGetUserDataQuery();
   const user_id = user?.user_id!;
-  const deleteRoomMutation = useDeleteRoom({ room_id, user_id });
-  const DeleteMeetingRoomHandler = async () => {
+  const { mutate: deleteRoomMutation } = useDeleteRoom({ room_id, user_id });
+  const DeleteMeetingRoomHandler = () => {
     if (confirm('정말 삭제하시겠습니까?')) {
-      await deleteRoomMutation.mutateAsync();
+      deleteRoomMutation();
       setOpen(false);
     }
   };
