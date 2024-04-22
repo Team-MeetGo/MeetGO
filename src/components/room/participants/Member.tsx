@@ -1,18 +1,18 @@
 'use client';
 
-import { useRoomInfoWithRoomIdQuery, useRoomParticipantsQuery } from '@/hooks/useQueries/useMeetingQuery';
+import meetingRoomHandler from '@/hooks/custom/room';
+import { useRoomParticipantsQuery } from '@/hooks/useQueries/useMeetingQuery';
+import { RoomFemaleAvatar, RoomMaleAvatar } from '@/utils/icons/RoomAvatar';
 import { clientSupabase } from '@/utils/supabase/client';
+import Image from 'next/image';
 import { useEffect, useState } from 'react';
 import { FaCrown } from 'react-icons/fa6';
 import { IoFemale, IoMale } from 'react-icons/io5';
-import meetingRoomHandler from '@/hooks/custom/room';
-import { RoomFemaleAvatar, RoomMaleAvatar } from '@/utils/icons/RoomAvatar';
-import MeetGoLogoPurple from '../../../utils/icons/meetgo-logo-purple.png';
-import Image from 'next/image';
-import AcceptanceRoomButtons from './AcceptanceRoomButtons';
+import MeetGoLogoPurple from '@/utils/icons/meetgo-logo-purple.png';
+import GotoChatButton from '@/components/room/participants/GotoChatButton';
 
-import type { MeetingRoomType, UserType } from '@/types/roomTypes';
 import { RoomData } from '@/types/chatTypes';
+import type { MeetingRoomType, UserType } from '@/types/roomTypes';
 const Member = ({ room_id, roomInformation }: { room_id: string; roomInformation: MeetingRoomType }) => {
   const participants = useRoomParticipantsQuery(room_id as string);
   const [members, setMembers] = useState<UserType[]>(participants as UserType[]);
@@ -26,6 +26,9 @@ const Member = ({ room_id, roomInformation }: { room_id: string; roomInformation
   const hollowFemaleArray = Array.from({ length: (genderMaxNumber as number) - femaleMembers.length }, (vi, i) => i);
   const hollowMaleArray = Array.from({ length: (genderMaxNumber as number) - maleMembers.length }, (vi, i) => i);
 
+  useEffect(() => {
+    setLeader(roomInformation.leader_id);
+  }, []);
   useEffect(() => {
     const channle = clientSupabase
       .channel('custom-insert-channel')
@@ -88,7 +91,7 @@ const Member = ({ room_id, roomInformation }: { room_id: string; roomInformation
     <div className="flex flex-col">
       {hollowFemaleArray.length === 0 && hollowMaleArray.length === 0 && (
         <div className="w-100%">
-          <AcceptanceRoomButtons
+          <GotoChatButton
             roomInformation={roomInformation as RoomData}
             participants={participants as UserType[]}
             leader={leader}

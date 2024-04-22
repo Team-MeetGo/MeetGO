@@ -171,7 +171,7 @@ function MeetingRoomForm() {
                   </div>
                 </ModalBody>
                 <ModalFooter>
-                  <Button color="danger" variant="light" onPress={onClose} onClick={() => cancelMakingMeetingRoom()}>
+                  <Button color="danger" variant="light" onPress={onClose} onClick={cancelMakingMeetingRoom}>
                     취소
                   </Button>
                   <Button

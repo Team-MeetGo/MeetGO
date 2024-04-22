@@ -1,13 +1,12 @@
 'use client';
 
+import { useRoomInfoWithRoomIdQuery } from '@/hooks/useQueries/useMeetingQuery';
 import { UUID } from 'crypto';
 import Member from './Member';
 import RoomInformation from './RoomInformation';
-import { useRoomInfoWithRoomIdQuery } from '@/hooks/useQueries/useMeetingQuery';
 
 function AcceptanceRoom({ room_id }: { room_id: UUID }) {
   const { data: roomInformation } = useRoomInfoWithRoomIdQuery(room_id);
-
   return (
     <div>
       {roomInformation && (

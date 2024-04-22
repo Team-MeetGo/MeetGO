@@ -80,7 +80,7 @@ function MeetingRoomList() {
     <>
       <MyRoomsTitle>
         <section className="w-100% flex flex-row items-center justify-content">
-          <button onClick={() => beforePage()}>
+          <button onClick={beforePage}>
             <IoIosArrowBack className="h-[40px] w-[40px] m-[8px]" />
           </button>
           <div className="w-[1000px]">
@@ -94,7 +94,7 @@ function MeetingRoomList() {
               </li>
             }
           </div>
-          <button onClick={() => nextPage()}>
+          <button onClick={nextPage}>
             <IoIosArrowForward className="h-[40px] w-[40px] m-[8px]" />
           </button>
         </section>
