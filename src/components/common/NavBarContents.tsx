@@ -39,12 +39,12 @@ const NavBarContents = () => {
       queryKey: [USER_DATA_QUERY_KEY]
     });
     customSuccessToast('로그아웃 성공');
-    router.replace('/'); // 로그아웃 후 메인 페이지로 이동. 뒤로가기 방지.
+    router.replace('/');
   };
 
   const checkIsValidate = () => {
     if (!isValidate) {
-      customErrToast('미팅을 하고 싶다면 학교 인증 ㄱㄱ');
+      customErrToast('미팅을 하고 싶다면 학교 인증을 해주세요!');
     }
   };
 

@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { Button } from '@nextui-org/react';
 import { authValidation } from '@/utils/Validation';
-import { IsValidateShow } from '@/types/userTypes';
+import type { IsValidateShow } from '@/types/userTypes';
 import { ValidationModal } from '../common/ValidationModal';
 import { useModalStore } from '@/store/modalStore';
 import { USER_DATA_QUERY_KEY } from '@/query/user/userQueryKeys';
@@ -122,7 +122,7 @@ const JoinForm = () => {
   };
 
   const togglePasswordShow = () => {
-    setPasswordShow(!passwordShow);
+    setPasswordShow((prev) => !prev);
   };
 
   return (

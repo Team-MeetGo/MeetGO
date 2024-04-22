@@ -1,9 +1,9 @@
 'use client';
+
 import { useAvatarUpdateMutation } from '@/hooks/useMutation/useProfileMutation';
 import { useGetUserDataQuery } from '@/hooks/useQueries/useUserQuery';
 import { USER_DATA_QUERY_KEY } from '@/query/user/userQueryKeys';
-import { clientSupabase } from '@/utils/supabase/client';
-import { Avatar, avatar } from '@nextui-org/react';
+import { Avatar } from '@nextui-org/react';
 import { useQueryClient } from '@tanstack/react-query';
 import Image from 'next/image';
 import { useEffect, useState } from 'react';
@@ -82,7 +82,7 @@ const AvatarForm = () => {
               alt="Avatar Preview"
               style={{ objectFit: 'cover' }}
               fill={true}
-              sizes="500px"
+              sizes="450px"
               priority={false}
             />
           ) : user?.avatar ? (
@@ -91,7 +91,7 @@ const AvatarForm = () => {
               alt="Avatar"
               style={{ objectFit: 'cover' }}
               fill={true}
-              sizes="500px"
+              sizes="450px"
               priority={true}
             />
           ) : (
