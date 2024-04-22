@@ -11,21 +11,16 @@ import ChatPresence from './ChatPresence';
 const ChatHeader = ({ chatRoomId }: { chatRoomId: string }) => {
   const { onlineUsers, setMessages, setisRest, setSearchMode } = chatStore((state) => state);
   const { data: user } = useGetUserDataQuery();
-  const room = useRoomDataQuery(chatRoomId);
-  const roomId = room?.roomId;
-  const roomData = room?.roomData;
+  const { roomId, roomData } = useRoomDataQuery(chatRoomId);
   const participants = useParticipantsQuery(roomId as string);
 
-  const handleSearchMode = () => {
-    setSearchMode();
-  };
-
   // 채팅방 isActive 상태를 false로 변경
-  const updateChatRoomIsActive = async () => {
+  //
+  const updateIsActiveFalse = async () => {
     const { error: updateActiveErr } = await clientSupabase
       .from('chatting_room')
       .update({ isActive: false })
-      .eq('chatting_room_id', String(chatRoomId));
+      .eq('chatting_room_id', chatRoomId);
     if (updateActiveErr) {
       alert('채팅방 비활성화에 실패하였습니다.');
       console.error(updateActiveErr?.message);
@@ -99,7 +94,7 @@ const ChatHeader = ({ chatRoomId }: { chatRoomId: string }) => {
 
   const getOutOfChatRoom = async () => {
     if (window.confirm('채팅창에서 한번 나가면 다시 입장할 수 없습니다. 그래도 나가시겠습니까?')) {
-      await updateChatRoomIsActive();
+      await updateIsActiveFalse();
       await getRidOfMe();
       await handleIsRest();
       await deleteLastMsg();
@@ -138,7 +133,7 @@ const ChatHeader = ({ chatRoomId }: { chatRoomId: string }) => {
       </div>
 
       <div className="flex gap-2 h-[40px] my-auto">
-        <button onClick={handleSearchMode} className="text-[#A1A1AA]">
+        <button onClick={setSearchMode} className="text-[#A1A1AA]">
           <IoIosSearch />
         </button>
         <button

@@ -61,7 +61,7 @@ const ChatList = ({ user, chatRoomId }: { user: User | null; chatRoomId: string 
         clientSupabase.removeChannel(channel);
       };
     }
-  }, [messages, setMessages, isScrolling, roomId, chatRoomId]);
+  }, [messages, isScrolling, roomId, chatRoomId]);
 
   // 여기까지 읽으셨습니다(처음 마운트 시에만 실행)
   useEffect(() => {
@@ -109,6 +109,7 @@ const ChatList = ({ user, chatRoomId }: { user: User | null; chatRoomId: string 
   const handleScroll = () => {
     const scrollBox = scrollRef.current;
     if (scrollBox) {
+      // 5 상수화
       const isScroll = scrollBox.scrollTop < scrollBox.scrollHeight - scrollBox.clientHeight - 5;
       setIsScrolling(isScroll);
       if (!isScroll) {

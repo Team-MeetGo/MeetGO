@@ -53,7 +53,7 @@ const MyInfoWrapper = ({
           {(onClose) => {
             return (
               <>
-                <ModalHeader className="flex flex-col gap-1">{user?.nickname}</ModalHeader>
+                <ModalHeader className="flex flex-col gap-1 ">{user?.nickname}</ModalHeader>
                 <ModalBody>
                   <Image
                     src={user?.avatar as string}
