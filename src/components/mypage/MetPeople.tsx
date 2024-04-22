@@ -8,6 +8,7 @@ import { clientSupabase } from '@/utils/supabase/client';
 import { useQueryClient } from '@tanstack/react-query';
 import Image from 'next/image';
 import { useEffect } from 'react';
+import { customSuccessToast } from '../common/customToast';
 
 /**
  * useMutation을 이용한 데이터 처리 사용 방법
@@ -36,7 +37,6 @@ const MetPeople = () => {
           'postgres_changes',
           { event: '*', schema: 'public', table: 'kakaoId_request', filter: `request_Id=eq.${userId}` },
           (payload) => {
-            console.log('요청 보내서 바뀜', payload);
             queryClient.invalidateQueries({ queryKey: [KAKAOID_REQUEST_QUERY_KEY, userId, userGender] });
           }
         )
@@ -44,7 +44,6 @@ const MetPeople = () => {
           'postgres_changes',
           { event: '*', schema: 'public', table: 'kakaoId_request', filter: `response_Id=eq.${userId}` },
           (payload) => {
-            console.log('요청받아서 바뀜', payload);
             queryClient.invalidateQueries({ queryKey: [KAKAOID_REQUEST_QUERY_KEY, userId, userGender] });
           }
         )
@@ -82,7 +81,7 @@ const MetPeople = () => {
       },
       {
         onSuccess: () => {
-          alert(`카톡ID 요청을 ${newStatus === '수락' ? '수락했습니다.' : '거절했습니다.'}`);
+          customSuccessToast(`카톡ID 요청을 ${newStatus === '수락' ? '수락했습니다.' : '거절했습니다.'}`);
           queryClient.invalidateQueries({
             queryKey: [KAKAOID_REQUEST_QUERY_KEY, userId, userGender]
           });
@@ -115,7 +114,7 @@ const MetPeople = () => {
               <p className="text-xs px-4 py-2 rounded-lg bg-[#D4D4D8]">요청중</p>
             )}
             {userId === person.response_Id && person.requestStatus === '요청중' && (
-              <>
+              <div className="flex gap-1">
                 <button
                   className="text-xs border px-4 py-2 rounded-lg"
                   onClick={() => handleKakaoIdResponse(person.user_id, '수락')}
@@ -128,7 +127,7 @@ const MetPeople = () => {
                 >
                   거절
                 </button>
-              </>
+              </div>
             )}
             {person.requestStatus === '수락' && (
               <p className="text-xs border px-4 py-2 rounded-lg border-mainColor text-mainColor">{person.kakaoId}</p>

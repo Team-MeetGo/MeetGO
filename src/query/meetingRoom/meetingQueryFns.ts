@@ -1,4 +1,4 @@
-import { NewRoomType, UpdateRoomType, UserType } from '@/types/roomTypes';
+import { ChattingRoomType, MeetingRoomType, NewRoomType, UpdateRoomType, UserType } from '@/types/roomTypes';
 import { clientSupabase } from '@/utils/supabase/client';
 
 export const fetchRecruitingRoom = async () => {
@@ -30,17 +30,20 @@ export const fetchRoomInfoWithRoomId = async (room_id: string) => {
     }
     return room[0];
   } catch (error) {
-    console.log(error);
+    console.error(error);
   }
 };
 
-export const fetchAlreadyChatRoom = async (room_id: string) => {
+export const fetchAlreadyChatRoom = async (room_id: string): Promise<ChattingRoomType[]> => {
   const { data: alreadyChat } = await clientSupabase
     .from('chatting_room')
     .select('*')
     .eq('room_id', room_id)
     .eq('isActive', true);
-  return alreadyChat;
+  if (alreadyChat !== null) {
+    return alreadyChat;
+  }
+  return [];
 };
 
 export const addRoom = async ({ nextMeetingRoom, user_id }: { nextMeetingRoom: NewRoomType; user_id: string }) => {
@@ -76,7 +79,7 @@ export const updateRoom = async (editedMeetingRoom: UpdateRoomType) => {
     .from('room')
     .update(editedMeetingRoom)
     .eq('room_id', editedMeetingRoom.room_id);
-  if (error) console.log('방 수정 오류', error.message);
+  if (error) console.error('방 수정 오류', error.message);
   return data;
 };
 
@@ -101,14 +104,11 @@ export const updateLeaderMember = async ({
       return leaderUpdate;
     }
   } catch (error) {
-    console.log(error);
+    console.error(error);
   }
 };
 
 export const addMember = async ({ user_id, room_id }: { user_id: string; room_id: string }) => {
-  if (!user_id) {
-    console.log('유저가 없어요');
-  }
   await clientSupabase.from('participants').insert([{ user_id, room_id }]);
 };
 
@@ -127,8 +127,8 @@ export const fetchRoomParticipants = async (roomId: string) => {
     .eq('room_id', roomId)
     .eq('isDeleted', false)
     .select('user_id, users(*)');
-
-  return userInformations?.map((user) => user.users) ?? [];
+  if (userInformations !== null) return userInformations?.map((user) => user.users) ?? [];
+  return [];
 };
 
 // // 내가 들어가 있는 채팅방과 그 채팅방에 엮여있는 roomId

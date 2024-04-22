@@ -27,9 +27,6 @@ export const googleLogin = async () => {
     provider: 'google',
     options: { queryParams: { access_type: 'offline', prompt: 'consent' }, redirectTo: '/' }
   });
-  if (data) {
-    return console.log('구글 로그인 성공');
-  }
   if (error) {
     return console.error('구글 로그인 에러: ', error);
   }
@@ -40,9 +37,6 @@ export const kakaoLogin = async () => {
     provider: 'kakao',
     options: { queryParams: { access_type: 'offline', prompt: 'consent' }, redirectTo: '/' }
   });
-  if (data) {
-    return console.log('카카오 로그인 성공');
-  }
   if (error) {
     return console.error('카카오 로그인 에러: ', error);
   }

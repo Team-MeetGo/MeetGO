@@ -1,3 +1,4 @@
+import { customErrToast } from '@/components/common/customToast';
 import { UpdateSchoolType } from '@/types/userTypes';
 import { clientSupabase } from '@/utils/supabase/client';
 
@@ -24,8 +25,6 @@ export const updateRequestStatus = async (requestId: string, responseId: string,
     console.error('상태 업데이트 실패:', error);
     return;
   }
-
-  console.log('상태 업데이트 성공:', data);
   return;
 };
 
@@ -49,7 +48,7 @@ export const updateProfile = async (
     return;
   }
   if (nicknameData && nicknameData.length > 0) {
-    alert('이미 사용중인 닉네임입니다. 다른 닉네임을 입력해주세요.');
+    customErrToast('이미 사용중인 닉네임입니다. 다른 닉네임을 입력해주세요.');
     return;
   }
 
@@ -74,7 +73,6 @@ export const updateSchool = async ({ userId, schoolEmail, univName }: UpdateScho
   if (error) {
     console.error('Error updating school:', error);
   }
-  console.log('학생 인증 성공!');
   return;
 };
 

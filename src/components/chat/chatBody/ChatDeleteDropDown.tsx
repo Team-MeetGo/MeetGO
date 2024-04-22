@@ -4,9 +4,14 @@ import { Dropdown, DropdownItem, DropdownMenu, DropdownTrigger } from '@nextui-o
 import { CiMenuKebab } from 'react-icons/ci';
 
 const ChatDeleteDropDown = ({ msg }: { msg: Message }) => {
-  const handleDeleteMessage = async () => {
-    const { error: messageTableErr } = await clientSupabase.from('messages').delete().eq('message_id', msg?.message_id);
-    messageTableErr && alert('채팅 삭제 중 오류가 발생하였습니다.');
+  const handleDeleteMessage = async (key: string) => {
+    if (key === 'delete') {
+      const { error: messageTableErr } = await clientSupabase
+        .from('messages')
+        .delete()
+        .eq('message_id', msg?.message_id);
+      messageTableErr && alert('채팅 삭제 중 오류가 발생하였습니다.');
+    }
   };
 
   return (
@@ -16,8 +21,8 @@ const ChatDeleteDropDown = ({ msg }: { msg: Message }) => {
           <CiMenuKebab className="my-auto w-6 h-6 rotate-90" />
         </button>
       </DropdownTrigger>
-      <DropdownMenu aria-label="Static Actions">
-        <DropdownItem key="delete" className="text-danger" color="danger" onClick={handleDeleteMessage}>
+      <DropdownMenu aria-label="Static Actions" onAction={(key) => handleDeleteMessage(String(key))}>
+        <DropdownItem key="delete" className="text-danger" color="danger">
           Delete
         </DropdownItem>
       </DropdownMenu>

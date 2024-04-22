@@ -27,7 +27,6 @@ export const fetchParticipants = async (roomId: string) => {
     .from('participants')
     .select('user_id')
     .eq('room_id', String(roomId));
-  // console.log('채팅방 멤버들', userIds);
   if (userIdErr) console.error('채팅방 멤버들 ID를 불러오는 데에 실패했습니다.', userIdErr.message);
   const users = [];
   if (userIds) {
@@ -86,7 +85,6 @@ export const fetchMyLastMsgs = async (user_id: string, chatRoomId: string | null
     .eq('user_id', user_id)
     .eq('chatting_room_id', String(chatRoomId));
   if (error) console.error('마지막 메세지를 가져오는 데 실패했습니다.', error.message);
-  // console.log('잘 가져오는 거 맞아?', lastMsgs && lastMsgs[0].last_msg_id);
   if (lastMsgs && lastMsgs.length) {
     return lastMsgs[0].last_msg_id;
   }
@@ -100,7 +98,6 @@ export const fetchMyMsgData = async (user_id: string | undefined) => {
     .select('chatting_room_id, room_id, newMsgCount')
     .eq('user_id', String(user_id));
   if (error) console.error('마지막 메세지를 가져오는 데 실패했습니다.', error.message);
-  // console.log('잘 가져오는 거 맞아?', lastMsgs && lastMsgs[0].last_msg_id);
   if (msgData && msgData.length) {
     return msgData;
   }
@@ -131,7 +128,6 @@ export const addNewLastMsg = async (
         last_msg_id: String(last_msg_id)
       })
       .select('*');
-    console.log('새로 추가된 마지막 메세지', addedlastMsg && addedlastMsg[0].last_msg_id);
     if (error) console.error('마지막 메세지 추가하기 실패 => ', error.message);
     return addedlastMsg;
   }
@@ -145,7 +141,6 @@ export const updateMyLastMsg = async (user_id: string, chatRoomId: string, msg_i
     .eq('user_id', user_id)
     .eq('chatting_room_id', chatRoomId)
     .select('*');
-  console.log('업데이트 된 메세지 아이디 => ', updatedLastMsg && updatedLastMsg[0].last_msg_id);
   if (error) console.error('마지막 메세지 업데이트 실패 =>', error.message);
   return updateMyLastMsg;
 };
@@ -162,7 +157,6 @@ export const updateNewMsgNum = async (chatting_room_id: string) => {
       .update({ newMsgCount: oldCount[0].newMsgCount + 1 })
       .eq('chatting_room_id', chatting_room_id)
       .select('*');
-    console.log('업데이트 된 안 읽은 메세지 수 =>', updatedNewMsgNum && updatedNewMsgNum[0].newMsgCount);
     if (error) console.error('새로운 메세지 count UP 실패', error.message);
     return updatedNewMsgNum;
   }
@@ -176,13 +170,11 @@ export const clearUnReadMsgNum = async (chatting_room_id: string) => {
     .eq('chatting_room_id', chatting_room_id)
     .select('*');
   if (error) console.error('안 읽은 메세지 수 초기화 실패', error.message);
-  console.log('안 읽은 메세지 수 초기화 0으로 잘 됨? =>', clearedNewMsgNum);
 };
 
 // 미팅 장소 추가
 export const addMeetingLocation = async ({ chatRoomId, barName }: { chatRoomId: string; barName: string }) => {
   if (!chatRoomId) {
-    console.log('유저가 없어요');
   }
   await clientSupabase.from('chatting_room').update({ meeting_location: barName }).eq('chatting_room_id', chatRoomId);
 };

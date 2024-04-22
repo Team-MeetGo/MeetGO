@@ -22,7 +22,6 @@ const InitChat = ({ chatRoomId, allMsgs }: { user: User | null; chatRoomId: stri
         'postgres_changes',
         { event: 'UPDATE', schema: 'public', table: 'chatting_room', filter: `chatting_room_id=eq.${chatRoomId}` },
         (payload) => {
-          console.log(payload.new);
           setChatState((payload.new as chatRoomPayloadType).isActive);
         }
       )

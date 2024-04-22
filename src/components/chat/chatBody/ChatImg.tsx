@@ -11,7 +11,6 @@ const ChatImg = ({ msg }: { msg: Message }) => {
   const [slideCount, setSlideCount] = useState(0);
 
   const showBigImg = (urlIdx: number) => {
-    console.log('urlIdx =>', urlIdx);
     if (urlIdx >= 0) {
       onOpen();
       setSlideCount(urlIdx);
