@@ -25,8 +25,6 @@ export const updateRequestStatus = async (requestId: string, responseId: string,
     console.error('상태 업데이트 실패:', error);
     return;
   }
-
-  console.log('상태 업데이트 성공:', data);
   return;
 };
 
@@ -75,7 +73,6 @@ export const updateSchool = async ({ userId, schoolEmail, univName }: UpdateScho
   if (error) {
     console.error('Error updating school:', error);
   }
-  console.log('학생 인증 성공!');
   return;
 };
 

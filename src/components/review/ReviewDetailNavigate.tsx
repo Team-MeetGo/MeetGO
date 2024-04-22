@@ -19,7 +19,6 @@ const ReviewDetailNavigate = ({ review_id }: Props) => {
     return <div>Loading...</div>;
   }
 
-  console.log('navigation:', navigation);
   return (
     <div className="mt-[32px]">
       <div className="flex justify-between items-center">
