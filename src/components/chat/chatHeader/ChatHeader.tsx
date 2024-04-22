@@ -12,20 +12,14 @@ const ChatHeader = ({ chatRoomId }: { chatRoomId: string }) => {
   const { onlineUsers, setMessages, setisRest, setSearchMode } = chatStore((state) => state);
   const { data: user } = useGetUserDataQuery();
   const room = useRoomDataQuery(chatRoomId);
-  const roomId = room?.roomId;
-  const roomData = room?.roomData;
-  const participants = useParticipantsQuery(roomId as string);
-
-  const handleSearchMode = () => {
-    setSearchMode();
-  };
+  const participants = useParticipantsQuery(room?.room_id as string);
 
   // 채팅방 isActive 상태를 false로 변경
-  const updateChatRoomIsActive = async () => {
+  const updateIsActiveFalse = async () => {
     const { error: updateActiveErr } = await clientSupabase
       .from('chatting_room')
       .update({ isActive: false })
-      .eq('chatting_room_id', String(chatRoomId));
+      .eq('chatting_room_id', chatRoomId);
     if (updateActiveErr) {
       alert('채팅방 비활성화에 실패하였습니다.');
       console.error(updateActiveErr?.message);
@@ -34,17 +28,17 @@ const ChatHeader = ({ chatRoomId }: { chatRoomId: string }) => {
 
   // participants 테이블에서 해당 룸에 대한 유저정보 삭제
   const getRidOfMe = async () => {
-    if (user?.user_id === room?.roomData.leader_id) {
+    if (user?.user_id === room?.leader_id) {
       const { error: updateLeaderErr } = await clientSupabase
         .from('room')
         .update({ leader_id: participants.find((person) => person.user_id !== user?.user_id)?.user_id })
-        .eq('room_id', String(roomId));
+        .eq('room_id', String(room?.room_id));
       if (updateLeaderErr) console.error('fail to update leader of room', updateLeaderErr.message);
     }
     const { error: deleteErr } = await clientSupabase
       .from('participants')
       .delete()
-      .eq('room_id', String(roomId))
+      .eq('room_id', String(room?.room_id))
       .eq('user_id', user?.user_id!);
     if (deleteErr) {
       console.error(deleteErr?.message);
@@ -54,15 +48,16 @@ const ChatHeader = ({ chatRoomId }: { chatRoomId: string }) => {
 
   // 남아있는 사람인지 나간사람인지 isRest 상태변경으로 화면 렌더링 바꾸는 함수
   const handleIsRest = async () => {
-    const { data: restOf, error: getPartErr } = await clientSupabase
+    const { data: restOf, error } = await clientSupabase
       .from('participants')
       .select('user_id')
-      .eq('room_id', String(roomId));
+      .eq('room_id', String(room?.room_id))
+      .eq('isDeleted', false);
     const restArr = restOf?.map((r) => r.user_id);
 
     setisRest(restArr?.includes(user?.user_id!) as boolean);
-    if (getPartErr) {
-      console.error(getPartErr.message);
+    if (error) {
+      console.error(error.message);
       alert('참가자들 정보를 불러오는 데 실패했습니다.');
     }
   };
@@ -93,18 +88,21 @@ const ChatHeader = ({ chatRoomId }: { chatRoomId: string }) => {
 
   // room_status 모집완료 -> 모집중으로 변경
   const updateRoomState = async () => {
-    const { error } = await clientSupabase.from('room').update({ room_status: '모집중' }).eq('room_id', String(roomId));
+    const { error } = await clientSupabase
+      .from('room')
+      .update({ room_status: '모집중' })
+      .eq('room_id', String(room?.room_id));
     if (error) console.error('참가자 방 나갈 시 room_status 모집중으로 변경 실패', error.message);
   };
 
   const getOutOfChatRoom = async () => {
     if (window.confirm('채팅창에서 한번 나가면 다시 입장할 수 없습니다. 그래도 나가시겠습니까?')) {
-      await updateChatRoomIsActive();
+      await updateIsActiveFalse();
       await getRidOfMe();
-      await handleIsRest();
-      await deleteLastMsg();
-      await deleteTheUserImgs();
       await updateRoomState();
+      await handleIsRest();
+      deleteLastMsg();
+      deleteTheUserImgs();
       setMessages([]);
     } else {
       return;
@@ -115,7 +113,7 @@ const ChatHeader = ({ chatRoomId }: { chatRoomId: string }) => {
     <div className="h-[116px] border-b flex px-[32px] py-[16px] justify-between ">
       <div className="flex gap-2">
         <div className="flex flex-col gap-[8px]">
-          <p className="font-bold text-2xl h-[36px]">{roomData && roomData.room_title}</p>
+          <h1 className="font-bold text-2xl h-[36px]">{room?.room_title}</h1>
 
           <div className="flex gap-[20px] items-center">
             <ChatPresence />
@@ -138,7 +136,7 @@ const ChatHeader = ({ chatRoomId }: { chatRoomId: string }) => {
       </div>
 
       <div className="flex gap-2 h-[40px] my-auto">
-        <button onClick={handleSearchMode} className="text-[#A1A1AA]">
+        <button onClick={setSearchMode} className="text-[#A1A1AA]">
           <IoIosSearch />
         </button>
         <button
