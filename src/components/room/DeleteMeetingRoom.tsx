@@ -4,13 +4,20 @@ import { useDeleteRoom } from '@/hooks/useMutation/useMeetingMutation';
 import { useGetUserDataQuery } from '@/hooks/useQueries/useUserQuery';
 
 // import type { UUID } from 'crypto';
-function DeleteMeetingRoom({ room_id }: { room_id: string }) {
-  const { data: user, isPending, isError } = useGetUserDataQuery();
+function DeleteMeetingRoom({
+  room_id,
+  setOpen
+}: {
+  room_id: string;
+  setOpen: React.Dispatch<React.SetStateAction<boolean>>;
+}) {
+  const { data: user } = useGetUserDataQuery();
   const user_id = user?.user_id!;
   const deleteRoomMutation = useDeleteRoom({ room_id, user_id });
   const DeleteMeetingRoomHandler = async () => {
     if (confirm('정말 삭제하시겠습니까?')) {
       await deleteRoomMutation.mutateAsync();
+      setOpen(false);
     }
   };
 

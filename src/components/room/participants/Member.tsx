@@ -1,22 +1,21 @@
 'use client';
 
-import { useRoomInfoWithRoomIdQuery, useRoomParticipantsQuery } from '@/hooks/useQueries/useMeetingQuery';
+import meetingRoomHandler from '@/hooks/custom/room';
+import { useRoomParticipantsQuery } from '@/hooks/useQueries/useMeetingQuery';
+import { RoomFemaleAvatar, RoomMaleAvatar } from '@/utils/icons/RoomAvatar';
 import { clientSupabase } from '@/utils/supabase/client';
+import Image from 'next/image';
 import { useEffect, useState } from 'react';
 import { FaCrown } from 'react-icons/fa6';
 import { IoFemale, IoMale } from 'react-icons/io5';
-import meetingRoomHandler from '@/hooks/custom/room';
-import { RoomFemaleAvatar, RoomMaleAvatar } from '@/utils/icons/RoomAvatar';
-import MeetGoLogoPurple from '../../../utils/icons/meetgo-logo-purple.png';
-import Image from 'next/image';
+import MeetGoLogoPurple from '@/utils/icons/meetgo-logo-purple.png';
+import GotoChatButton from '@/components/room/participants/GotoChatButton';
 
-import type { UserType } from '@/types/roomTypes';
-import AcceptanceRoomButtons from './AcceptanceRoomButtons';
 import { RoomData } from '@/types/chatTypes';
-const Member = ({ room_id }: { room_id: string }) => {
+import type { MeetingRoomType, UserType } from '@/types/roomTypes';
+const Member = ({ room_id, roomInformation }: { room_id: string; roomInformation: MeetingRoomType }) => {
   const participants = useRoomParticipantsQuery(room_id as string);
   const [members, setMembers] = useState<UserType[]>(participants as UserType[]);
-  const { data: roomInformation } = useRoomInfoWithRoomIdQuery(room_id);
   const leaderMember = roomInformation?.leader_id;
   const [leader, setLeader] = useState(leaderMember as string);
   const femaleMembers = members.filter((member) => member.gender === 'female');
@@ -27,6 +26,9 @@ const Member = ({ room_id }: { room_id: string }) => {
   const hollowFemaleArray = Array.from({ length: (genderMaxNumber as number) - femaleMembers.length }, (vi, i) => i);
   const hollowMaleArray = Array.from({ length: (genderMaxNumber as number) - maleMembers.length }, (vi, i) => i);
 
+  useEffect(() => {
+    setLeader(roomInformation.leader_id);
+  }, []);
   useEffect(() => {
     const channle = clientSupabase
       .channel('custom-insert-channel')
@@ -89,7 +91,7 @@ const Member = ({ room_id }: { room_id: string }) => {
     <div className="flex flex-col">
       {hollowFemaleArray.length === 0 && hollowMaleArray.length === 0 && (
         <div className="w-100%">
-          <AcceptanceRoomButtons
+          <GotoChatButton
             roomInformation={roomInformation as RoomData}
             participants={participants as UserType[]}
             leader={leader}
@@ -103,8 +105,8 @@ const Member = ({ room_id }: { room_id: string }) => {
               <div key={member.user_id} className={`grid col-start-1 col-span-1`}>
                 <article className={`border-purpleThird border-[2px] flex flex-row w-[506px] h-[166px] rounded-2xl`}>
                   {/* 카드 왼쪽 */}
-                  <div className="mx-[40px] align-middle items-center">
-                    <div className="w-[86px] h-[86px] mt-[32px] mr-[48px] rounded-full relative">
+                  <div className="mx-[40px] flex flex-col align-middle items-center justify-center">
+                    <div className="w-[86px] h-[86px] mt-[32px] rounded-full relative">
                       {leader === member.user_id ? (
                         <div>
                           <FaCrown className="absolute h-[20px] w-[20px] m-[2px] fill-mainColor z-50 top-[-18px] left-[29px]" />
@@ -114,14 +116,14 @@ const Member = ({ room_id }: { room_id: string }) => {
                       )}
                       {member.avatar ? (
                         <Image
-                          className="w-[86px] h-[86px] rounded-full object-center bg-cover"
+                          className="w-[86px] h-[86px] rounded-full object-center bg-cover object-fill"
                           src={member.avatar as string}
                           alt="유저 아바타"
-                          height={80}
-                          width={80}
+                          height={86}
+                          width={86}
                         />
                       ) : (
-                        <div className="w-[86px] h-[86px] rounded-full object-center bg-cover">
+                        <div className="w-[86px] h-[86px] rounded-full object-center bg-cover object-fill	">
                           <RoomFemaleAvatar />
                         </div>
                       )}
@@ -179,7 +181,7 @@ const Member = ({ room_id }: { room_id: string }) => {
               <div key={member.user_id} className={`grid col-start-1 col-span-1`}>
                 <article className={`bg-purpleSecondary flex flex-row w-[506px] h-[166px] rounded-2xl`}>
                   {/* 카드 왼쪽 */}
-                  <div className="ml-[40px] mr-[88px] flex flex-col justify-center align-middle justify-items-center">
+                  <div className="mx-[40px] flex flex-col align-middle items-center justify-center">
                     <div className="w-[86px] h-[86px] mt-[32px] rounded-full relative">
                       {leader === member.user_id ? (
                         <div>
