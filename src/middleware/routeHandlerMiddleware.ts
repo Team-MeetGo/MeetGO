@@ -19,7 +19,7 @@ export const routeHandlerMiddleware = (middleware: CustomMiddleware) => {
       if (request.nextUrl.pathname.startsWith('/mypage')) {
         // 마이페이지 접근 방지 + 로그인 페이지로 redirect
         return NextResponse.redirect(new URL('/login', request.url));
-      } else if (request.nextUrl.pathname.startsWith('/meetingRoom')) {
+      } else if (request.nextUrl.pathname.startsWith('/meetingRoom') || request.nextUrl.pathname.startsWith('/chat/')) {
         // 로비로 접근 불가
         return NextResponse.redirect(new URL('/login', request.url));
       }

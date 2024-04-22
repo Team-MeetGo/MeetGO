@@ -12,7 +12,7 @@ const SideBar: React.FC<SideBarProps> = ({ chatRoomId }) => {
 
   //채팅방 정보 가져오기
   const chat = useChatDataQuery(chatRoomId);
-  const meetingTime = chat.meeting_time;
+  const meetingTime = chat?.meeting_time;
   const options: Intl.DateTimeFormatOptions = {
     year: 'numeric',
     month: 'long',

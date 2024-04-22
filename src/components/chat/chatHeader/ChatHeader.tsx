@@ -15,7 +15,6 @@ const ChatHeader = ({ chatRoomId }: { chatRoomId: string }) => {
   const participants = useParticipantsQuery(room?.room_id as string);
 
   // 채팅방 isActive 상태를 false로 변경
-
   const updateIsActiveFalse = async () => {
     const { error: updateActiveErr } = await clientSupabase
       .from('chatting_room')
