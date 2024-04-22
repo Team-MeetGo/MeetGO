@@ -11,7 +11,7 @@ import { useEffect } from 'react';
 const InitChat = ({ chatRoomId, allMsgs }: { user: User | null; chatRoomId: string; allMsgs: Message[] }) => {
   const { chatState, isRest, setChatState, setMessages, setChatRoomId, setHasMore } = chatStore((state) => state);
   const room = useRoomDataQuery(chatRoomId);
-  const roomId = room?.roomId;
+  const roomId = room?.room_id;
   const router = useRouter();
 
   useEffect(() => {

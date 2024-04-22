@@ -34,8 +34,8 @@ const ChatPage = async ({ params }: { params: { chatroom_id: string } }) => {
               <SideBarButton />
             </div>
             <div className="h-full border rounded-md flex flex-col relative ">
-              <ChatHeader chatRoomId={chatRoomId} />
               <Suspense>
+                <ChatHeader chatRoomId={chatRoomId} />
                 <ChatList user={user} chatRoomId={chatRoomId} />
                 <ChatInput />
               </Suspense>

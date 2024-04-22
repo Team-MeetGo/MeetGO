@@ -8,9 +8,8 @@ import ParticipantsInfoWrapper from './ParticipantsInfoWrapper';
 const OthersChat = ({ msg, idx, lastDivRefs }: { msg: Message; idx: number; lastDivRefs: any }) => {
   const { chatRoomId, messages } = chatStore((state) => state);
   const room = useRoomDataQuery(chatRoomId as string);
-  const roomId = room?.roomId;
-  const leaderId = room?.roomData.leader_id;
-  const participants = useParticipantsQuery(roomId as string);
+  const leaderId = room?.leader_id;
+  const participants = useParticipantsQuery(room?.room_id as string);
 
   const showThatUser = (userId: string | null) => {
     const thatUserData = participants?.find((p) => p.user_id === userId);
