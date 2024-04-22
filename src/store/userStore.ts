@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import { FavoriteType, UsersType } from '@/types/userTypes';
+import type { FavoriteType, UsersType } from '@/types/userTypes';
 
 type UserState = {
   user: UsersType | null;

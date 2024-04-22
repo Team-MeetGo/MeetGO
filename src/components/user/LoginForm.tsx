@@ -8,7 +8,7 @@ import { googleLogin, kakaoLogin } from '@/utils/api/authAPI';
 import { ValidationModal } from '../common/ValidationModal';
 import { useModalStore } from '@/store/modalStore';
 import { authValidation } from '@/utils/Validation';
-import { IsValidateShow, LoginDataType } from '@/types/userTypes';
+import type { IsValidateShow, LoginDataType } from '@/types/userTypes';
 import { useQueryClient } from '@tanstack/react-query';
 import { USER_DATA_QUERY_KEY } from '@/query/user/userQueryKeys';
 import Link from 'next/link';
@@ -103,13 +103,14 @@ const LoginForm = () => {
     }
   };
 
+  // 비밀번호 보이기 기능
   const togglePasswordShow = () => {
-    setPasswordShow(!passwordShow);
+    setPasswordShow((prev) => !prev);
   };
 
   // 이메일 기억하기 기능
   const toggleCheckRemember = () => {
-    setCheckRememberId(!checkRememberId);
+    setCheckRememberId((prev) => !prev);
   };
 
   return (
