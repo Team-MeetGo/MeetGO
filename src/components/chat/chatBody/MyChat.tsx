@@ -32,11 +32,11 @@ const MyChat = ({ msg, idx, lastDivRefs }: { msg: Message; idx: number; lastDivR
                 <div>
                   <ChatDeleteDropDown msg={msg} />
                 </div>
-                {msg.message?.length ? (
-                  <div className="rounded-md bg-mainColor py-1.5 px-[8px] text-right text-white font-extralight">
+                {msg.message?.length && (
+                  <span className="rounded-md bg-mainColor py-1.5 px-[8px] text-right text-white font-extralight max-w-72 break-words">
                     {msg.message}
-                  </div>
-                ) : null}
+                  </span>
+                )}
                 <ChatImg msg={msg} />
               </div>
 

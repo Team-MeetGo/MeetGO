@@ -40,11 +40,11 @@ const OthersChat = ({ msg, idx, lastDivRefs }: { msg: Message; idx: number; last
 
           <div className="flex flex-col gap-2">
             <div className="gap-2 mr-auto">
-              {msg.message?.length ? (
-                <div className="rounded-md bg-mainColor py-1.5 px-[8px] text-right text-white font-extralight">
+              {msg.message?.length && (
+                <span className="rounded-md bg-mainColor py-1.5 px-[8px] text-right text-white font-extralight max-w-72 break-words">
                   {msg.message}
-                </div>
-              ) : null}
+                </span>
+              )}
               <ChatImg msg={msg} />
             </div>
             {idx < messages.length - 1 && msg.send_from === messages[idx + 1].send_from ? null : (
