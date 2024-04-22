@@ -123,9 +123,6 @@ const ChatHeader = ({ chatRoomId }: { chatRoomId: string }) => {
                   <Avatar
                     src={person.avatar as string}
                     className={`w-[32px] h-[32px]`}
-                    // classNames={{
-                    //   base: onlineUsers.find((id) => id === person.user_id) ? '' : 'bg-black opacity-70'
-                    // }}
                     isDisabled={!onlineUsers.find((id) => id === person.user_id)}
                   />
                 </Tooltip>

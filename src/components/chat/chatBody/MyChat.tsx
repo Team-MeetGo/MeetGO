@@ -50,7 +50,7 @@ const MyChat = ({ msg, idx, lastDivRefs }: { msg: Message; idx: number; lastDivR
         </div>
         {isItMe(idx, messages) ? (
           !isNextDay(idx, messages) ? (
-            <div className="w-[60px]"></div>
+            <div className="w-16"></div>
           ) : (
             <MyInfoWrapper user={user} leaderId={leaderId} />
           )
