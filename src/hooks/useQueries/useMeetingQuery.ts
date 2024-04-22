@@ -6,6 +6,7 @@ import {
   fetchRoomParticipants
 } from '@/query/meetingRoom/meetingQueryFns';
 import { RECRUTING_ROOMDATA, ROOMDATA_WITH_ROOMID, ROOMLIST, ROOM_MEMBER } from '@/query/meetingRoom/meetingQueryKeys';
+import { UserType } from '@/types/roomTypes';
 // import { profileCount } from '@/store/userStore';
 import { useQuery, useSuspenseQuery } from '@tanstack/react-query';
 
