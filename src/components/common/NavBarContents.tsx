@@ -96,11 +96,19 @@ const NavBarContents = () => {
                   )}
                 </div>
               </DropdownTrigger>
-              <DropdownMenu aria-label="Profile Actions" variant="flat">
+              <DropdownMenu
+                aria-label="Profile Actions"
+                variant="flat"
+                onAction={(key) => {
+                  if (key === 'logout') {
+                    signOut();
+                  }
+                }}
+              >
                 <DropdownItem key="mypage" href="/mypage">
                   마이페이지
                 </DropdownItem>
-                <DropdownItem key="logout" color="danger" className="w-full" onPress={signOut}>
+                <DropdownItem key="logout" color="danger" className="w-full">
                   LOGOUT
                 </DropdownItem>
               </DropdownMenu>
