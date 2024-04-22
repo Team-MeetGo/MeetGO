@@ -3,9 +3,9 @@
 import GotoChatButton from '@/components/room/participants/GotoChatButton';
 import meetingRoomHandler from '@/hooks/custom/room';
 import MeetGoLogoPurple from '@/utils/icons/meetgo-logo-purple.png';
+import Image from 'next/image';
 import { RoomFemaleAvatar, RoomMaleAvatar } from '@/utils/icons/RoomAvatar';
 import { clientSupabase } from '@/utils/supabase/client';
-import Image from 'next/image';
 import { useEffect, useState } from 'react';
 import { FaCrown } from 'react-icons/fa6';
 import { IoFemale, IoMale } from 'react-icons/io5';
