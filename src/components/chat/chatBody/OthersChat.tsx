@@ -32,10 +32,10 @@ const OthersChat = ({ msg, idx, lastDivRefs }: { msg: Message; idx: number; last
         <div className="flex flex-col gap-1">
           {isItMe(idx, messages) ? (
             !isNextDay(idx, messages) ? null : (
-              <div className="font-bold">{showThatUser(msg.send_from)?.nickname}</div>
+              <h2 className="font-bold">{showThatUser(msg.send_from)?.nickname}</h2>
             )
           ) : (
-            <div className="font-bold">{showThatUser(msg.send_from)?.nickname}</div>
+            <h2 className="font-bold">{showThatUser(msg.send_from)?.nickname}</h2>
           )}
 
           <div className="flex flex-col gap-2">
