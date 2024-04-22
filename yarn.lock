@@ -743,12 +743,25 @@
   resolved "https://registry.yarnpkg.com/@nextui-org/react-rsc-utils/-/react-rsc-utils-2.0.11.tgz#61994bf8a55d465f9f1653675387b0c17fc92d80"
   integrity sha512-clA0fpAB+kSfbDfx3V7qSWUPczTql9pBw0iWOKKwqY4RLFjoW9EuiwQiVLw0taJwhTlNH+L9M34TZZG9OQSjDw==
 
+"@nextui-org/react-rsc-utils@2.0.12":
+  version "2.0.12"
+  resolved "https://registry.yarnpkg.com/@nextui-org/react-rsc-utils/-/react-rsc-utils-2.0.12.tgz#a931a2e6a9523e9f11f3397a57cde0861ba9ff7a"
+  integrity sha512-s2IG4pM1K+kbm6A2g3UpqrS592AExpGixtZNPJ2lV5+UQi1ld3vb4EiBIOViZMoSCNCoNdaeO5Yqo6cKghwCPA==
+
 "@nextui-org/react-utils@2.0.11":
   version "2.0.11"
   resolved "https://registry.yarnpkg.com/@nextui-org/react-utils/-/react-utils-2.0.11.tgz#9fc89058e15ffdff35926494712d241842d9be07"
   integrity sha512-sKRuePleA6c/KCNZwViZpOB5VwpftzREXj5Ghp9d7AWJaGdTb5xfVaG9QAESG1Xmd6g4m/f06GwN9i4oi6Fzzw==
   dependencies:
     "@nextui-org/react-rsc-utils" "2.0.11"
+    "@nextui-org/shared-utils" "2.0.5"
+
+"@nextui-org/react-utils@2.0.13":
+  version "2.0.13"
+  resolved "https://registry.yarnpkg.com/@nextui-org/react-utils/-/react-utils-2.0.13.tgz#9710130e6c7299b70dc92b1dae685864353fc981"
+  integrity sha512-4DM1Cph1lVY64T/HDyEqcxYkInXx6hdL1Kp9StLza9yqgYmVipTaPkWZdmWbfkhP+dVVqrH3DVFfHtpLTQ625w==
+  dependencies:
+    "@nextui-org/react-rsc-utils" "2.0.12"
     "@nextui-org/shared-utils" "2.0.5"
 
 "@nextui-org/react@^2.2.10":
@@ -860,6 +873,15 @@
     "@nextui-org/shared-utils" "2.0.5"
     "@nextui-org/system-rsc" "2.1.0"
 
+"@nextui-org/skeleton@^2.0.27":
+  version "2.0.27"
+  resolved "https://registry.yarnpkg.com/@nextui-org/skeleton/-/skeleton-2.0.27.tgz#30dcba0af8d3346223df442cfe03ac355e2a0adb"
+  integrity sha512-AolxdzJ4xCyb7i2DwZ1iQGSaLGUBYh/rorO8llBqsXDpvhBANcFF3DbRO3kQ+EVGr5AEbEeurd3RabC2F6wVDA==
+  dependencies:
+    "@nextui-org/react-utils" "2.0.13"
+    "@nextui-org/shared-utils" "2.0.5"
+    "@nextui-org/system-rsc" "2.1.1"
+
 "@nextui-org/slider@2.2.7":
   version "2.2.7"
   resolved "https://registry.yarnpkg.com/@nextui-org/slider/-/slider-2.2.7.tgz#bfc592630719de77a68a0aae31d3d22d57f0af10"
@@ -927,6 +949,13 @@
   version "2.1.0"
   resolved "https://registry.yarnpkg.com/@nextui-org/system-rsc/-/system-rsc-2.1.0.tgz#dbdf6675ee655f8e9c15e609f78d2000cea10d8b"
   integrity sha512-8OBsJlUKsHy/D5MT5sciVARA1i09it9sJsGhm7WR2HORWnH/4W4a8FyD3qcQXJSqMlJ62LO0t0cV5bxfAMyryg==
+  dependencies:
+    clsx "^1.2.1"
+
+"@nextui-org/system-rsc@2.1.1":
+  version "2.1.1"
+  resolved "https://registry.yarnpkg.com/@nextui-org/system-rsc/-/system-rsc-2.1.1.tgz#175de9637cff1fd91b115ea6910718a3a446c92e"
+  integrity sha512-gkTKNAbTZVl81SVJsaLHp4iqyd956y40UIGUXPeq0pwOGLM0xGWSkLbkNT8WtdPUt3bSD9y0xuKbiV3tpSBGOA==
   dependencies:
     clsx "^1.2.1"
 
@@ -4751,8 +4780,16 @@ streamsearch@^1.1.0:
   resolved "https://registry.yarnpkg.com/streamsearch/-/streamsearch-1.1.0.tgz#404dd1e2247ca94af554e841a8ef0eaa238da764"
   integrity sha512-Mcc5wHehp9aXz1ax6bZUyY5afg9u2rv5cqQI3mRrYkGC8rW2hM02jWuwjtL++LS5qinSyhj2QfLyNsuc+VsExg==
 
-"string-width-cjs@npm:string-width@^4.2.0", string-width@^4.1.0:
-  name string-width-cjs
+"string-width-cjs@npm:string-width@^4.2.0":
+  version "4.2.3"
+  resolved "https://registry.yarnpkg.com/string-width/-/string-width-4.2.3.tgz#269c7117d27b05ad2e536830a8ec895ef9c6d010"
+  integrity sha512-wKyQRQpjJ0sIp62ErSZdGsjMJWsap5oRNihHhu6G7JVO/9jIB6UyevL+tXuOqrng8j/cxKTWyWUwvSTriiZz/g==
+  dependencies:
+    emoji-regex "^8.0.0"
+    is-fullwidth-code-point "^3.0.0"
+    strip-ansi "^6.0.1"
+
+string-width@^4.1.0:
   version "4.2.3"
   resolved "https://registry.yarnpkg.com/string-width/-/string-width-4.2.3.tgz#269c7117d27b05ad2e536830a8ec895ef9c6d010"
   integrity sha512-wKyQRQpjJ0sIp62ErSZdGsjMJWsap5oRNihHhu6G7JVO/9jIB6UyevL+tXuOqrng8j/cxKTWyWUwvSTriiZz/g==
@@ -4816,7 +4853,14 @@ string.prototype.trimstart@^1.0.8:
     define-properties "^1.2.1"
     es-object-atoms "^1.0.0"
 
-"strip-ansi-cjs@npm:strip-ansi@^6.0.1", strip-ansi@^6.0.0, strip-ansi@^6.0.1:
+"strip-ansi-cjs@npm:strip-ansi@^6.0.1":
+  version "6.0.1"
+  resolved "https://registry.yarnpkg.com/strip-ansi/-/strip-ansi-6.0.1.tgz#9e26c63d30f53443e9489495b2105d37b67a85d9"
+  integrity sha512-Y38VPSHcqkFrCpFnQ9vuSXmquuv5oXOKpGeT6aGrr3o3Gc9AlVa6JBfUSOCnbxGGZF+/0ooI7KrPuUSztUdU5A==
+  dependencies:
+    ansi-regex "^5.0.1"
+
+strip-ansi@^6.0.0, strip-ansi@^6.0.1:
   version "6.0.1"
   resolved "https://registry.yarnpkg.com/strip-ansi/-/strip-ansi-6.0.1.tgz#9e26c63d30f53443e9489495b2105d37b67a85d9"
   integrity sha512-Y38VPSHcqkFrCpFnQ9vuSXmquuv5oXOKpGeT6aGrr3o3Gc9AlVa6JBfUSOCnbxGGZF+/0ooI7KrPuUSztUdU5A==
