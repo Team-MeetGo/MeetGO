@@ -44,7 +44,6 @@ function MemberNumberSelection({ text }: { text: string }) {
           onClick={() => setOpenModal((openModal) => !openModal)}
         >
           <div className="flex flex-row justify-center align-middle">
-            {member ? member : '인원수'}
             <IoIosArrowDown className="my-auto" />
           </div>
         </button>

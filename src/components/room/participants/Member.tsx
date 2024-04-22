@@ -1,34 +1,40 @@
 'use client';
 
+import GotoChatButton from '@/components/room/participants/GotoChatButton';
 import meetingRoomHandler from '@/hooks/custom/room';
-import { useRoomParticipantsQuery } from '@/hooks/useQueries/useMeetingQuery';
+import MeetGoLogoPurple from '@/utils/icons/meetgo-logo-purple.png';
 import { RoomFemaleAvatar, RoomMaleAvatar } from '@/utils/icons/RoomAvatar';
 import { clientSupabase } from '@/utils/supabase/client';
 import Image from 'next/image';
 import { useEffect, useState } from 'react';
 import { FaCrown } from 'react-icons/fa6';
 import { IoFemale, IoMale } from 'react-icons/io5';
-import MeetGoLogoPurple from '@/utils/icons/meetgo-logo-purple.png';
-import GotoChatButton from '@/components/room/participants/GotoChatButton';
 
-import { RoomData } from '@/types/chatTypes';
+import type { RoomData } from '@/types/chatTypes';
 import type { MeetingRoomType, UserType } from '@/types/roomTypes';
-const Member = ({ room_id, roomInformation }: { room_id: string; roomInformation: MeetingRoomType }) => {
-  const participants = useRoomParticipantsQuery(room_id as string);
+const Member = ({
+  room_id,
+  roomInformation,
+  participants
+}: {
+  room_id: string;
+  roomInformation: MeetingRoomType;
+  participants: UserType[];
+}) => {
   const [members, setMembers] = useState<UserType[]>(participants as UserType[]);
   const leaderMember = roomInformation?.leader_id;
   const [leader, setLeader] = useState(leaderMember as string);
+  const { getmaxGenderMemberNumber } = meetingRoomHandler();
   const femaleMembers = members.filter((member) => member.gender === 'female');
   const maleMembers = members.filter((member) => member.gender === 'male');
   const memberNumber = roomInformation?.member_number;
-  const { getmaxGenderMemberNumber } = meetingRoomHandler();
   const genderMaxNumber = getmaxGenderMemberNumber(memberNumber as string);
   const hollowFemaleArray = Array.from({ length: (genderMaxNumber as number) - femaleMembers.length }, (vi, i) => i);
   const hollowMaleArray = Array.from({ length: (genderMaxNumber as number) - maleMembers.length }, (vi, i) => i);
 
   useEffect(() => {
     setLeader(roomInformation.leader_id);
-  }, []);
+  }, [roomInformation]);
   useEffect(() => {
     const channle = clientSupabase
       .channel('custom-insert-channel')

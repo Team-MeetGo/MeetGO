@@ -161,7 +161,7 @@ function MeetingRoomForm() {
                         <Chip
                           key={value}
                           color="default"
-                          style={{ backgroundColor: favoriteOptions.find((option) => option.value === value)?.color }}
+                          className="bg-purpleSecondary text-mainColor rounded-[8px]"
                           onClose={() => handleDelete(value)}
                         >
                           {value}
@@ -177,9 +177,7 @@ function MeetingRoomForm() {
                   <Button
                     type="submit"
                     className="bg-violet-300"
-                    onPress={
-                      !title || !selected || !location || memberNumber === '인원수' || !roomRegion ? onOpen : onClose
-                    }
+                    onPress={!title || !selected || !location || !roomRegion ? onOpen : onClose}
                   >
                     등록
                   </Button>

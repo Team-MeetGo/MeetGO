@@ -82,9 +82,7 @@ function EditMeetingRoom({
   return (
     <>
       <Button
-        onClick={() => {
-          beforeData();
-        }}
+        onClick={beforeData}
         onPress={onOpen}
         className="gap-0 p-0 m-0 h-[31px] w-[76px] bg-white hover:bg-mainColor hover:text-white text-[16px] rounded-xl"
       >
@@ -119,7 +117,7 @@ function EditMeetingRoom({
           {(onClose) => (
             <div ref={dropdownRef}>
               <ModalHeader className="flex flex-col gap-1">방 내용 수정</ModalHeader>
-              <form onSubmit={(e: any) => editMeetingRoom(e)}>
+              <form onSubmit={(e) => editMeetingRoom(e)}>
                 <ModalBody>
                   <input value={title} onChange={(e) => setTitle(e.target.value)} placeholder="title" maxLength={15} />
                   <div className="flex flex-col gap-4">
@@ -160,7 +158,7 @@ function EditMeetingRoom({
                         <Chip
                           key={value}
                           color="default"
-                          style={{ backgroundColor: '#F2EAFA', color: '#8F5DF4', borderRadius: '8px' }}
+                          className="bg-purpleSecondary text-mainColor rounded-[8px]"
                           onClose={() => handleDelete(value)}
                         >
                           {value}

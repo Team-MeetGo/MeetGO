@@ -43,7 +43,6 @@ function RegionSelection({ text }: { text: string }) {
           onClick={() => setOpenModal((openModal) => !openModal)}
         >
           <div className="flex flex-row justify-center align-middle">
-            {region ? region : '지역'}
             <IoIosArrowDown className="my-auto" />
           </div>
         </button>

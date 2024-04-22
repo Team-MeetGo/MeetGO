@@ -130,7 +130,7 @@ export const fetchRoomParticipants = async (roomId: string) => {
     .eq('room_id', roomId)
     .eq('isDeleted', false)
     .select('user_id, users(*)');
-  if (userInformations !== null) return userInformations?.map((user) => user.users) ?? [];
+  userInformations !== null ? userInformations.map((user) => user.users) : [];
   return [];
 };
 

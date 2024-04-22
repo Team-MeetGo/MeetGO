@@ -13,7 +13,15 @@ import { IoFemale, IoMale } from 'react-icons/io5';
 
 import type { MeetingRoomType, UserType } from '@/types/roomTypes';
 
-function RoomInformation({ room_id, roomInformation }: { room_id: string; roomInformation: MeetingRoomType }) {
+function RoomInformation({
+  room_id,
+  roomInformation,
+  participants
+}: {
+  room_id: string;
+  roomInformation: MeetingRoomType;
+  participants: UserType[];
+}) {
   const router = useRouter();
   const { data: user } = useGetUserDataQuery();
   const user_id = user?.user_id!;
@@ -24,7 +32,6 @@ function RoomInformation({ room_id, roomInformation }: { room_id: string; roomIn
   const { room_title, member_number, location, feature, region, leader_id } = roomInformation;
   const { getmaxGenderMemberNumber } = meetingRoomHandler();
   const genderMaxNumber = getmaxGenderMemberNumber(member_number);
-  const participants = useRoomParticipantsQuery(room_id);
   const otherParticipants = participants?.filter((person: UserType | null) => person?.user_id !== leader_id);
   const updateLeaderMemeberMutation = useUpdateLeaderMemberMutation({ otherParticipants, room_id });
 
