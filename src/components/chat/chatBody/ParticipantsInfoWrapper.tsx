@@ -27,9 +27,10 @@ const ParticipantsInfoWrapper = ({
   const showMember = () => {
     onOpen();
   };
+
   return (
     <>
-      <div className="flex h-[60px] w-[60px] ">
+      <div className="relative flex h-[60px] w-[60px] ">
         <div className="h-16 w-16 ml-auto flex justify-center items-center">
           {showThatUser(msg.send_from)?.avatar ? (
             <Avatar
@@ -42,9 +43,10 @@ const ParticipantsInfoWrapper = ({
             <AvatarDefault />
           )}
         </div>
-        {leaderId === showThatUser(msg.send_from) ? (
+
+        {leaderId && leaderId === showThatUser(msg.send_from).user_id ? (
           <div className="w-6 h-6 rounded-full absolute bottom-0 right-0 flex justify-center bg-purpleThird border border-gray1 font-extralight">
-            <FaCrown className="my-auto fill-mainColor " />
+            <FaCrown className="my-auto fill-mainColor" />
           </div>
         ) : null}
       </div>

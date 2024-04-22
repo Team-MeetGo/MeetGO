@@ -28,7 +28,7 @@ const MyInfoWrapper = ({
   };
   return (
     <>
-      <div className="flex h-[60px] w-[60px] ">
+      <div className="relative flex h-[60px] w-[60px] ">
         <div className="h-16 w-16 ml-auto flex justify-center items-center">
           {user?.avatar ? (
             <Avatar
