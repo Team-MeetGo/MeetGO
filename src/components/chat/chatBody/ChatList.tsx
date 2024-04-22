@@ -61,7 +61,7 @@ const ChatList = ({ user, chatRoomId }: { user: User | null; chatRoomId: string 
         clientSupabase.removeChannel(channel);
       };
     }
-  }, [messages, isScrolling, roomId, chatRoomId]);
+  }, [messages, isScrolling, roomId, setMessages, chatRoomId]);
 
   // 여기까지 읽으셨습니다(처음 마운트 시에만 실행)
   useEffect(() => {

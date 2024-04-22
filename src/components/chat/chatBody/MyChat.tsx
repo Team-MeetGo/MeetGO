@@ -15,7 +15,7 @@ const MyChat = ({ msg, idx, lastDivRefs }: { msg: Message; idx: number; lastDivR
   const leaderId = room?.leader_id;
 
   return (
-    <div>
+    <>
       <div id={msg.message_id} ref={lastDivRefs.current[idx]} className="flex gap-[8px] justify-end">
         <div className="w-80 flex flex-col gap-1">
           {isItMe(idx, messages) ? (
@@ -58,7 +58,7 @@ const MyChat = ({ msg, idx, lastDivRefs }: { msg: Message; idx: number; lastDivR
           <MyInfoWrapper user={user} leaderId={leaderId} />
         )}
       </div>
-    </div>
+    </>
   );
 };
 

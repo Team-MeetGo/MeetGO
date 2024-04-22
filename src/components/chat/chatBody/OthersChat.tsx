@@ -17,7 +17,7 @@ const OthersChat = ({ msg, idx, lastDivRefs }: { msg: Message; idx: number; last
   };
 
   return (
-    <div>
+    <>
       <div id={msg.message_id} ref={lastDivRefs.current[idx]} className="flex gap-[12px]">
         {isItMe(idx, messages) ? (
           !isNextDay(idx, messages) ? (
@@ -55,7 +55,7 @@ const OthersChat = ({ msg, idx, lastDivRefs }: { msg: Message; idx: number; last
           </div>
         </div>
       </div>
-    </div>
+    </>
   );
 };
 

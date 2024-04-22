@@ -48,17 +48,17 @@ const ChatHeader = ({ chatRoomId }: { chatRoomId: string }) => {
   };
 
   // 남아있는 사람인지 나간사람인지 isRest 상태변경으로 화면 렌더링 바꾸는 함수
-  // not equal로 변경하기
   const handleIsRest = async () => {
-    const { data: restOf, error: getPartErr } = await clientSupabase
+    const { data: restOf, error } = await clientSupabase
       .from('participants')
       .select('user_id')
-      .eq('room_id', String(room?.room_id));
+      .eq('room_id', String(room?.room_id))
+      .eq('isDeleted', false);
     const restArr = restOf?.map((r) => r.user_id);
 
     setisRest(restArr?.includes(user?.user_id!) as boolean);
-    if (getPartErr) {
-      console.error(getPartErr.message);
+    if (error) {
+      console.error(error.message);
       alert('참가자들 정보를 불러오는 데 실패했습니다.');
     }
   };
@@ -96,15 +96,14 @@ const ChatHeader = ({ chatRoomId }: { chatRoomId: string }) => {
     if (error) console.error('참가자 방 나갈 시 room_status 모집중으로 변경 실패', error.message);
   };
 
-  // 필요한 것만 async/await 처리하기
   const getOutOfChatRoom = async () => {
     if (window.confirm('채팅창에서 한번 나가면 다시 입장할 수 없습니다. 그래도 나가시겠습니까?')) {
       await updateIsActiveFalse();
       await getRidOfMe();
-      await handleIsRest();
-      await deleteLastMsg();
-      await deleteTheUserImgs();
       await updateRoomState();
+      await handleIsRest();
+      deleteLastMsg();
+      deleteTheUserImgs();
       setMessages([]);
     } else {
       return;
