@@ -1,5 +1,5 @@
 import { customErrToast } from '@/components/common/customToast';
-import { UpdateSchoolType } from '@/types/userTypes';
+import type { UpdateSchoolType } from '@/types/userTypes';
 import { clientSupabase } from '@/utils/supabase/client';
 
 // supabase Insert, Delete, Update
