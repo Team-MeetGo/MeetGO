@@ -1,17 +1,26 @@
 'use client';
 import { useRoomStore } from '@/store/roomStore';
 import { useSearchRoomStore } from '@/store/searchRoomStore';
-import { member_number } from '@/utils/MeetingRoomSelector';
+import { MEMBERNUMBER, REGIONANDMEMBER, member_number } from '@/utils/MeetingRoomSelector';
 import { useEffect, useRef, useState } from 'react';
 import { IoIosArrowDown } from 'react-icons/io';
 
 function MemberNumberSelection({ text }: { text: string }) {
-  const [member, setMember] = useState('');
+  const initialMember = () => {
+    if (text === 'selectMember') {
+      return REGIONANDMEMBER.EVERYMEMBER;
+    }
+    return MEMBERNUMBER.ONE;
+  };
+
+  const [member, setMember] = useState(initialMember);
   const [openModal, setOpenModal] = useState(false);
-  const conditionalRef = useRef(text);
-  const dropdownRef = useRef<HTMLDivElement>(null);
+
   const { setMemberNumber } = useRoomStore();
   const { setSelectMemberNumber } = useSearchRoomStore();
+
+  const conditionalRef = useRef(text);
+  const dropdownRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (conditionalRef.current === 'selectMember') {
@@ -21,16 +30,16 @@ function MemberNumberSelection({ text }: { text: string }) {
       setMemberNumber(member);
     }
 
-    const outSideClick = (e: any) => {
+    const outSideClickHandler = (e: any) => {
       const { target } = e;
       if (openModal && dropdownRef.current && !dropdownRef.current.contains(target)) {
         setOpenModal(false);
       }
     };
-    document.addEventListener('mousedown', outSideClick);
+    document.addEventListener('mousedown', outSideClickHandler);
   }, [member, openModal]);
 
-  const handleSelect = (member: string) => {
+  const memberNumberSelectionHandler = (member: string) => {
     setMember(member);
     setOpenModal(false);
   };
@@ -43,22 +52,28 @@ function MemberNumberSelection({ text }: { text: string }) {
           type="button"
           onClick={() => setOpenModal((openModal) => !openModal)}
         >
-          <div className="flex flex-row justify-center align-middle">
-            {member ? member : '인원수'}
+          <div className="flex flex-row justify-center align-middle gap-[8px]">
+            {member}
             <IoIosArrowDown className="my-auto" />
           </div>
         </button>
         {openModal && (
           <ul className="absolute top-full p-[8px] bg-white rounded-md shadow-md mt-1 w-full">
-            {member_number.map((m) => (
-              <li
-                key={m}
-                onClick={() => handleSelect(m)}
-                className="px-[16px] py-[8px] cursor-pointer rounded-lg hover:bg-mainColor hover:text-white"
-              >
-                {m}
-              </li>
-            ))}
+            {member_number.map((m) => {
+              if (m === REGIONANDMEMBER.EVERYMEMBER && text === 'member') {
+                return;
+              }
+
+              return (
+                <li
+                  key={m}
+                  onClick={() => memberNumberSelectionHandler(m)}
+                  className="px-[16px] py-[8px] cursor-pointer rounded-lg hover:bg-mainColor hover:text-white"
+                >
+                  {m}
+                </li>
+              );
+            })}
           </ul>
         )}
       </div>

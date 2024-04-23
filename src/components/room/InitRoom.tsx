@@ -7,23 +7,24 @@ import { clientSupabase } from '@/utils/supabase/client';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
-const InitRoom = ({ room_id }: { room_id: string }) => {
+import type { UUID } from 'crypto';
+const InitRoom = ({ roomId }: { roomId: UUID }) => {
   const [newChatRoom, setNewChatRoom] = useState<chatRoomPayloadType | null>(null);
   const { data: user } = useGetUserDataQuery();
-  const { data: room } = useRoomInfoWithRoomIdQuery(room_id);
+  const room = useRoomInfoWithRoomIdQuery(roomId);
   const router = useRouter();
 
   useEffect(() => {
     // 채팅방 isActive 상태 구독
     const channel = clientSupabase
-      .channel(`${room_id}_chatting_room_table`)
+      .channel(`${roomId}_chatting_room_table`)
       .on(
         'postgres_changes',
         {
           event: 'INSERT',
           schema: 'public',
           table: 'chatting_room',
-          filter: `room_id=eq.${room_id}`
+          filter: `room_id=eq.${roomId}`
         },
         (payload) => {
           setNewChatRoom(payload.new as chatRoomPayloadType);
@@ -33,7 +34,7 @@ const InitRoom = ({ room_id }: { room_id: string }) => {
     return () => {
       clientSupabase.removeChannel(channel);
     };
-  }, [room_id]);
+  }, [roomId]);
 
   useEffect(() => {
     if (user?.user_id !== room?.leader_id && newChatRoom) {
