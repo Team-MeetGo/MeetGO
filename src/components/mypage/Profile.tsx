@@ -70,6 +70,9 @@ const Profile = () => {
         deleteUser(userId);
         closeModal();
         location.replace('/');
+      },
+      onCancelFunc: () => {
+        closeModal();
       }
     });
   };

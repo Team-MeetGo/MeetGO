@@ -6,7 +6,7 @@ import { useQueryClient } from '@tanstack/react-query';
 
 export const ValidationModal = () => {
   const router = useRouter();
-  const { isOpen, type, name, text, onFunc, closeModal } = useModalStore();
+  const { isOpen, type, name, text, onFunc, onCancelFunc, closeModal } = useModalStore();
   const queryClient = useQueryClient();
 
   if (!isOpen) return null;
@@ -31,7 +31,7 @@ export const ValidationModal = () => {
                   <button className="text-[#8F5DF4] pt-2 px-2" onClick={onFunc}>
                     확인
                   </button>
-                  <button className="pt-2 px-2" onClick={() => closeModal()}>
+                  <button className="pt-2 px-2" onClick={onCancelFunc}>
                     취소
                   </button>
                 </>

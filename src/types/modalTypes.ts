@@ -6,6 +6,7 @@ export interface ModalState {
   name: string;
   text: string;
   onFunc?: () => void;
+  onCancelFunc?: () => void;
 }
 
 export interface ModalActions {

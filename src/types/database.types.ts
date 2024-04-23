@@ -366,56 +366,12 @@ export type Database = {
           }
         ];
       };
-      test_review_comment: {
-        Row: {
-          comment_content: string | null;
-          comment_id: string;
-          created_at: string;
-          review_id: string | null;
-          user_id: string | null;
-        };
-        Insert: {
-          comment_content?: string | null;
-          comment_id?: string;
-          created_at?: string;
-          review_id?: string | null;
-          user_id?: string | null;
-        };
-        Update: {
-          comment_content?: string | null;
-          comment_id?: string;
-          created_at?: string;
-          review_id?: string | null;
-          user_id?: string | null;
-        };
-        Relationships: [];
-      };
-      test_review_like: {
-        Row: {
-          created_at: string;
-          like_id: string;
-          review_id: string | null;
-          user_id: string | null;
-        };
-        Insert: {
-          created_at?: string;
-          like_id?: string;
-          review_id?: string | null;
-          user_id?: string | null;
-        };
-        Update: {
-          created_at?: string;
-          like_id?: string;
-          review_id?: string | null;
-          user_id?: string | null;
-        };
-        Relationships: [];
-      };
       users: {
         Row: {
           avatar: string | null;
           created_at: string | null;
           favorite: string[] | null;
+          first_login: boolean;
           gender: string | null;
           intro: string | null;
           isValidate: boolean;
@@ -430,6 +386,7 @@ export type Database = {
           avatar?: string | null;
           created_at?: string | null;
           favorite?: string[] | null;
+          first_login?: boolean;
           gender?: string | null;
           intro?: string | null;
           isValidate?: boolean;
@@ -444,6 +401,7 @@ export type Database = {
           avatar?: string | null;
           created_at?: string | null;
           favorite?: string[] | null;
+          first_login?: boolean;
           gender?: string | null;
           intro?: string | null;
           isValidate?: boolean;
