@@ -12,6 +12,7 @@ import { useUpdateMeetingTimeMutation } from '@/hooks/useMutation/useMeetingTime
 import { useGetUserDataQuery } from '@/hooks/useQueries/useUserQuery';
 import { DateTimePickerProps } from '@/types/sideBarTypes';
 import { clientSupabase } from '@/utils/supabase/client';
+import { clientSupabase } from '@/utils/supabase/client';
 
 const DateTimePicker: React.FC<DateTimePickerProps> = forwardRef(({ chatRoomId }, ref) => {
   const [selectedMeetingTime, setSelectedMeetingTime] = useState<Date | null>(new Date());
@@ -21,15 +22,12 @@ const DateTimePicker: React.FC<DateTimePickerProps> = forwardRef(({ chatRoomId }
   // 유저 정보 가져오기
   const { data: userData } = useGetUserDataQuery();
   const userId = userData?.user_id;
-
   // useRoomDataQuery로 리더 아이디 가져오기
   const room = useRoomDataQuery(chatRoomId);
   const leaderId = room?.leader_id;
-
   const toggleCalendar = () => {
     setIsCalendarOpen(!isCalendarOpen);
   };
-
   const chat = useChatDataQuery(chatRoomId);
 
   useEffect(() => {
@@ -38,7 +36,6 @@ const DateTimePicker: React.FC<DateTimePickerProps> = forwardRef(({ chatRoomId }
       setSelectedMeetingTime(meetingTime);
     }
   }, [chatRoomId, chat]);
-
   const { mutate: updateMeetingTime } = useUpdateMeetingTimeMutation();
 
   useEffect(() => {
@@ -47,23 +44,20 @@ const DateTimePicker: React.FC<DateTimePickerProps> = forwardRef(({ chatRoomId }
         .channel(chatRoomId)
         .on(
           'postgres_changes',
-          { event: 'UPDATE', schema: 'public', table: 'chatting_room', filter: `chatting_room_id=eq.${chatRoomId}` },
+          { event: '*', schema: 'public', table: 'chatting_room', filter: `chatting_room_id=eq.${chatRoomId}` },
           (payload) => {
-            console.log('테스트', payload.new);
-            updateMeetingTime({ chatRoomId, isoStringMeetingTime: payload.new.meeting_time });
+            console.log(payload.new);
+            // updateMeetingTime({ chatRoomId, isoStringMeetingTime: '9시' });
           }
         )
         .subscribe();
-
       return () => {
         clientSupabase.removeChannel(channel);
       };
     }
-  }, [selectedMeetingTime, updateMeetingTime]);
-
+  }, [chatRoomId, selectedMeetingTime, updateMeetingTime]);
   // months 배열을 선언
   const months = ['1월', '2월', '3월', '4월', '5월', '6월', '7월', '8월', '9월', '10월', '11월', '12월'];
-
   return (
     <div className="relative z-50 w-full max-w-lg py-6">
       <DatePicker
@@ -77,11 +71,11 @@ const DateTimePicker: React.FC<DateTimePickerProps> = forwardRef(({ chatRoomId }
             setSelectedMeetingTime(date as Date);
             if (date) {
               // 선택된 미팅 시간이 있을 때에만 서버에 미팅 시간 업데이트
-              const isoStringMeetingTime = date.toISOString();
-              updateMeetingTime({
-                chatRoomId,
-                isoStringMeetingTime
-              });
+              // const isoStringMeetingTime = date.toISOString();
+              // updateMeetingTime({
+              //   chatRoomId,
+              //   isoStringMeetingTime
+              // });
             }
           }
         }}
@@ -115,10 +109,19 @@ const DateTimePicker: React.FC<DateTimePickerProps> = forwardRef(({ chatRoomId }
           </div>
         )}
       />
+      <button
+        onClick={() => {
+          const isoStringMeetingTime = selectedMeetingTime?.toISOString();
+          updateMeetingTime({
+            chatRoomId,
+            isoStringMeetingTime: String(isoStringMeetingTime)
+          });
+        }}
+      >
+        버튼
+      </button>
     </div>
   );
 });
-
 DateTimePicker.displayName = 'DateTimePicker';
-
 export default DateTimePicker;
