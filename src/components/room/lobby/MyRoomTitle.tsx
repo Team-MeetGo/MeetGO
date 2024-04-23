@@ -3,7 +3,7 @@ import RefreshButoon from '@/components/room/lobby/RefreshButton';
 
 function MyRoomsTitle({ children }: { children: React.ReactNode }) {
   return (
-    <article className="fixed z-50 bg-white w-full flex-col justify-center align-middle">
+    <article className="bg-white w-full flex-col justify-center align-middle">
       <div className="flex flex-row justify-center align-middle">
         <section className="h-[366px] mt-[64px] border-b border-gray2 max-w-[1250px]">
           <div className="flex flex-row w-full justify-between pb-[24px]">
