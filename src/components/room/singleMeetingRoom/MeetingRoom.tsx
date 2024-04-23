@@ -59,11 +59,11 @@ function MeetingRoom({ room }: { room: MeetingRoomType }) {
     if (genderMaxNumber && participants?.length === genderMaxNumber * 2 - 1) {
       updateRoomStatusCloseMutation();
     }
-    router.push(`/meetingRoom/${room_id}`);
+    return router.push(`/meetingRoom/${room_id}`);
   };
 
   const debounce = (callback: ({ room_id }: { room_id: string }) => Promise<void>, delay: number) => {
-    let timerId: NodeJS.Timeout | null = null;
+    let timerId: any = null;
     return (room_id: string) => {
       if (timerId) clearTimeout(timerId);
       timerId = setTimeout(() => {
@@ -72,7 +72,7 @@ function MeetingRoom({ room }: { room: MeetingRoomType }) {
     };
   };
 
-  const handleAddMemberDebounce = useCallback(debounce(addMember, 2000), []);
+  const handleAddMemberDebounce = debounce(addMember, 2000);
 
   return (
     <article
