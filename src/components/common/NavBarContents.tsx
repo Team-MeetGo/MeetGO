@@ -19,12 +19,11 @@ import { useGetUserDataQuery } from '@/hooks/useQueries/useUserQuery';
 import { useQueryClient } from '@tanstack/react-query';
 import { USER_DATA_QUERY_KEY } from '@/query/user/userQueryKeys';
 import Link from 'next/link';
-import { customErrToast, customSuccessToast } from './customToast';
+import { customErrToast } from './customToast';
 
 const NavBarContents = () => {
   const queryClient = useQueryClient();
   const { data: user, isPending, isError, error, isLoggedIn } = useGetUserDataQuery();
-  const router = useRouter();
   const isValidate = user?.isValidate;
 
   if (isPending) {
@@ -51,7 +50,6 @@ const NavBarContents = () => {
     queryClient.invalidateQueries({
       queryKey: [USER_DATA_QUERY_KEY]
     });
-    customSuccessToast('로그아웃 성공');
     location.replace('/');
   };
 
@@ -121,7 +119,7 @@ const NavBarContents = () => {
                 <DropdownItem key="mypage" href="/mypage">
                   마이페이지
                 </DropdownItem>
-                <DropdownItem key="logout" color="danger" className="w-full">
+                <DropdownItem key="logout" color="danger">
                   LOGOUT
                 </DropdownItem>
               </DropdownMenu>
