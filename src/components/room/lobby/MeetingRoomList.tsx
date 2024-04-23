@@ -1,27 +1,29 @@
 'use client';
-import { useMyroomQuery, useRecruitingQuery } from '@/hooks/useQueries/useMeetingQuery';
+import MyRoomsTitle from '@/components/room/lobby/MyRoomTitle';
+import OtherRoomsTitle from '@/components/room/lobby/OtherRoomsTitle';
+import MeetingRoom from '@/components/room/singleMeetingRoom/MeetingRoom';
+import { useMyPastAndNowRoomQuery, useMyroomQuery, useRecruitingQuery } from '@/hooks/useQueries/useMeetingQuery';
 import { useGetUserDataQuery } from '@/hooks/useQueries/useUserQuery';
 import { useSearchRoomStore } from '@/store/searchRoomStore';
 import { useEffect, useState } from 'react';
 import { IoIosArrowBack, IoIosArrowForward } from 'react-icons/io';
-import MeetingRoom from '@/components/room/singleMeetingRoom/MeetingRoom';
-import MyRoomsTitle from '@/components/room/lobby/MyRoomTitle';
-import OtherRoomsTitle from '@/components/room/lobby/OtherRoomsTitle';
+import { REGIONANDMEMBER } from '@/utils/MeetingRoomSelector';
 
 import type { MeetingRoomType } from '@/types/roomTypes';
-import { REGIONANDMEMBER, member_number } from '@/utils/MeetingRoomSelector';
 function MeetingRoomList() {
   const [page, setPage] = useState(1);
   const [filteredOtherRooms, setFilteredOtherRooms] = useState<MeetingRoomType[]>();
   const { data: user, isPending, isError, error } = useGetUserDataQuery();
   const { data: meetingRoomList } = useRecruitingQuery(String(user?.user_id));
-  const myRoomList = useMyroomQuery(String(user?.user_id));
+  const myRoomList = useMyroomQuery(user?.user_id as string);
+  const myOutList = useMyPastAndNowRoomQuery(user?.user_id as string);
   const filteredMyRoomList = myRoomList?.map((room) => room.room);
+  const filteredMyOutRoomList = myOutList?.map((room) => room.room);
   const { selectRegion, selectMemberNumber } = useSearchRoomStore();
 
-  // meetingRoomList 중에서 myRoomList가 없는 것을 뽑아내기
+  // meetingRoomList 중에서 내가 참여한 적도, 참여하지도 않은 방들을 뽑아내기
   const otherRooms = meetingRoomList?.filter(function (room: MeetingRoomType) {
-    const foundItem = filteredMyRoomList?.find((r) => r?.room_id === room?.room_id);
+    const foundItem = filteredMyOutRoomList?.find((r) => r?.room_id === room?.room_id);
     if (foundItem) {
       return false;
     } else {

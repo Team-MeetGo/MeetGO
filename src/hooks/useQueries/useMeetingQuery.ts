@@ -1,12 +1,19 @@
 import {
   fetchAlreadyChatRoom,
+  fetchMyPastAndNowRoom,
   fetchMyRoom,
   fetchRecruitingRoom,
   fetchRoomInfoWithRoomId,
   fetchRoomParticipants
 } from '@/query/meetingRoom/meetingQueryFns';
-import { RECRUTING_ROOMDATA, ROOMDATA_WITH_ROOMID, ROOMLIST, ROOM_MEMBER } from '@/query/meetingRoom/meetingQueryKeys';
-import { ChattingRoomType, MeetingRoomType, UserType } from '@/types/roomTypes';
+import {
+  MY_OUT_ROOM,
+  RECRUTING_ROOMDATA,
+  ROOMDATA_WITH_ROOMID,
+  ROOMLIST,
+  ROOM_MEMBER
+} from '@/query/meetingRoom/meetingQueryKeys';
+import { ChattingRoomType, MeetingRoomType } from '@/types/roomTypes';
 // import { profileCount } from '@/store/userStore';
 import { useQuery, useSuspenseQuery } from '@tanstack/react-query';
 
@@ -20,9 +27,17 @@ export const useRecruitingQuery = (user_id: string) => {
 };
 //내가 참가한 방
 export const useMyroomQuery = (user_id: string) => {
-  const { data } = useSuspenseQuery({
+  const { data } = useQuery({
     queryKey: [ROOMLIST, user_id],
     queryFn: () => fetchMyRoom(user_id)
+  });
+  return data;
+};
+
+export const useMyPastAndNowRoomQuery = (user_id: string) => {
+  const { data } = useQuery({
+    queryKey: [MY_OUT_ROOM],
+    queryFn: () => fetchMyPastAndNowRoom(user_id)
   });
   return data;
 };

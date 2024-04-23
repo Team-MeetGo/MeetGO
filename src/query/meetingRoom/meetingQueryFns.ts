@@ -21,6 +21,16 @@ export const fetchMyRoom = async (userId: string) => {
   return myRoom;
 };
 
+export const fetchMyPastAndNowRoom = async (userId: string) => {
+  const { data: myPastAndNowRoom, error } = await clientSupabase
+    .from('participants')
+    .select(`*`)
+    .eq('user_id', userId)
+    .select('user_id, room(*)')
+    .order('created_at', { ascending: false });
+  return myPastAndNowRoom;
+};
+
 export const fetchRoomInfoWithRoomId = async (roomId: string): Promise<MeetingRoomType> => {
   const { data: room, error } = await clientSupabase.from('room').select(`*`).eq('room_id', roomId);
   if (!room || room.length <= 0) {
