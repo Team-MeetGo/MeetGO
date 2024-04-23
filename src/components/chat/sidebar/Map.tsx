@@ -11,6 +11,7 @@ import {
 } from '@/hooks/useMutation/useMeetingLocationMutation';
 import { useGetUserDataQuery } from '@/hooks/useQueries/useUserQuery';
 import { MapProps } from '@/types/sideBarTypes';
+import { clientSupabase } from '@/utils/supabase/client';
 
 declare global {
   interface Window {
@@ -190,7 +191,7 @@ const Map: React.FC<MapProps> = ({ chatRoomId }) => {
   const clearMeetingLocationMutation = useClearMeetingLocationMutation();
 
   // 장소 선택 함수
-  const handleSelectLocation = async (barName: string) => {
+  const handleSelectLocation = (barName: string) => {
     setSelectedMeetingLocation(barName);
     setIsLocationSelected(!isLocationSelected);
     if (!chatRoomId) {
@@ -211,6 +212,29 @@ const Map: React.FC<MapProps> = ({ chatRoomId }) => {
       }
     }
   };
+
+  useEffect(() => {
+    if (selectedMeetingLocation) {
+      const channel = clientSupabase
+        .channel(chatRoomId)
+        .on(
+          'postgres_changes',
+          { event: '*', schema: 'public', table: 'chatting_room', filter: `chatting_room_id=eq.${chatRoomId}` },
+          (payload) => {
+            console.log(payload.new);
+            try {
+              updateMeetingLocationMutation.mutate({ chatRoomId, barName: selectedMeetingLocation });
+            } catch (error) {
+              console.error('미팅장소 업데이트 오류:', error);
+            }
+          }
+        )
+        .subscribe();
+      return () => {
+        clientSupabase.removeChannel(channel);
+      };
+    }
+  }, [chatRoomId, updateMeetingLocationMutation]);
 
   return (
     <div>

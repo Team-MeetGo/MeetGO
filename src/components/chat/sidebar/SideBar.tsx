@@ -32,24 +32,24 @@ const SideBar: React.FC<SideBarProps> = ({ chatRoomId }) => {
   };
   const convertedTime = meetingTime ? new Intl.DateTimeFormat('ko-KR', options).format(new Date(meetingTime)) : '';
 
-  useEffect(() => {
-    if (meetingTime) {
-      const channel = clientSupabase
-        .channel(chatRoomId)
-        .on(
-          'postgres_changes',
-          { event: 'UPDATE', schema: 'public', table: 'chatting_room', filter: `chatting_room_id=eq.${chatRoomId}` },
-          (payload) => {
-            updateMeetingTime(payload.new.chatting_room_id);
-          }
-        )
-        .subscribe();
+  // useEffect(() => {
+  //   if (meetingTime) {
+  //     const channel = clientSupabase
+  //       .channel(chatRoomId)
+  //       .on(
+  //         'postgres_changes',
+  //         { event: 'UPDATE', schema: 'public', table: 'chatting_room', filter: `chatting_room_id=eq.${chatRoomId}` },
+  //         (payload) => {
+  //           updateMeetingTime(payload.new.chatting_room_id);
+  //         }
+  //       )
+  //       .subscribe();
 
-      return () => {
-        clientSupabase.removeChannel(channel);
-      };
-    }
-  }, [meetingTime, updateMeetingTime]);
+  //     return () => {
+  //       clientSupabase.removeChannel(channel);
+  //     };
+  //   }
+  // }, [meetingTime, updateMeetingTime]);
 
   if (!isSidebarOpen) {
     return null;
