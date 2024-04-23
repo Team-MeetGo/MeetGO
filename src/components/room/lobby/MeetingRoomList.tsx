@@ -9,7 +9,7 @@ import MyRoomsTitle from '@/components/room/lobby/MyRoomTitle';
 import OtherRoomsTitle from '@/components/room/lobby/OtherRoomsTitle';
 
 import type { MeetingRoomType } from '@/types/roomTypes';
-import { REGIONANDMEMBER } from '@/utils/MeetingRoomSelector';
+import { REGIONANDMEMBER, member_number } from '@/utils/MeetingRoomSelector';
 function MeetingRoomList() {
   const [page, setPage] = useState(1);
   const [filteredOtherRooms, setFilteredOtherRooms] = useState<MeetingRoomType[]>();
@@ -32,6 +32,7 @@ function MeetingRoomList() {
   //여러 조건에서 모집 중인 RoomList를 뽑아내기
   const filteredOtherRoomsHandler = () => {
     if (selectRegion === REGIONANDMEMBER.EVERYWHERE && selectMemberNumber === REGIONANDMEMBER.EVERYMEMBER) {
+      console.log('otherRooms', otherRooms);
       return setFilteredOtherRooms(otherRooms);
     }
     if (selectRegion !== REGIONANDMEMBER.EVERYWHERE && selectMemberNumber === REGIONANDMEMBER.EVERYMEMBER) {
@@ -71,7 +72,8 @@ function MeetingRoomList() {
     }
     setPage((page) => page - 1);
   };
-
+  console.log(otherRooms);
+  console.log('user', user);
   return (
     <>
       <MyRoomsTitle>

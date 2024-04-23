@@ -8,7 +8,7 @@ import {
   updateRoomStatusClose,
   updateRoomStatusOpen
 } from '@/query/meetingRoom/meetingQueryFns';
-import { ROOMLIST, ROOM_MEMBER } from '@/query/meetingRoom/meetingQueryKeys';
+import { RECRUTING_ROOMDATA, ROOMLIST, ROOM_MEMBER } from '@/query/meetingRoom/meetingQueryKeys';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 import type { NewRoomType, UpdateRoomType, UserType } from '@/types/roomTypes';
@@ -52,12 +52,13 @@ export const useUpdateRoom = ({
   return updateRoomMutation;
 };
 
-export const useDeleteRoom = ({ room_id, userId }: { room_id: string; userId: string }) => {
+export const useDeleteRoom = ({ roomId, userId }: { roomId: string; userId: string }) => {
   const queryClient = useQueryClient();
   const deleteRoomMutation = useMutation({
-    mutationFn: async () => await deleteRoom(room_id),
+    mutationFn: () => deleteRoom(roomId),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: [ROOMLIST, userId] });
+      queryClient.invalidateQueries({ queryKey: [RECRUTING_ROOMDATA] });
     }
   });
   return deleteRoomMutation;

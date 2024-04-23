@@ -13,7 +13,7 @@ import { useQuery, useSuspenseQuery } from '@tanstack/react-query';
 //현재 모집중인 방
 export const useRecruitingQuery = (user_id: string) => {
   const data = useSuspenseQuery({
-    queryKey: RECRUTING_ROOMDATA,
+    queryKey: [RECRUTING_ROOMDATA],
     queryFn: fetchRecruitingRoom
   });
   return data;

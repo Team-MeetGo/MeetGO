@@ -55,10 +55,13 @@ const GotoChatButton = ({ roomId, leader }: { roomId: UUID; leader: string }) =>
       {
         <figure
           className="
-        flex flex-col h-[114px] w-[1116px] justify-center text-center bg-mainColor"
+        flex flex-col h-[114px] w-[1116px] justify-center text-center"
         >
           <button
             disabled={genderParticipants ? (participants?.length === genderParticipants * 2 ? false : true) : false}
+            className={`${
+              genderParticipants && participants?.length === genderParticipants * 2 ? 'bg-mainColor' : 'bg-gray1'
+            }`}
             onClick={gotoChattingRoom}
           >
             <div className="flex flex-row justify-center align-middle gap-[8px]">

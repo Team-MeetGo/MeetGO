@@ -11,8 +11,9 @@ function DeleteMeetingRoom({
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
   const { data: user } = useGetUserDataQuery();
+  const roomId = room_id;
   const userId = user?.user_id!;
-  const { mutate: deleteRoomMutation } = useDeleteRoom({ room_id, userId });
+  const { mutate: deleteRoomMutation } = useDeleteRoom({ roomId, userId });
   const DeleteMeetingRoomHandler = () => {
     if (confirm('정말 삭제하시겠습니까?')) {
       deleteRoomMutation();

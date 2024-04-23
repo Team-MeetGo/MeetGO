@@ -9,6 +9,7 @@ import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import RoomInformation from './RoomInformation';
 
+type ControlDelay = (callback: (...args: any[]) => void, delay: number) => any;
 import type { MeetingRoomType } from '@/types/roomTypes';
 function MeetingRoom({ room }: { room: MeetingRoomType }) {
   const router = useRouter();
@@ -22,6 +23,16 @@ function MeetingRoom({ room }: { room: MeetingRoomType }) {
   const { mutate: roomMemberMutation } = useAddRoomMemberMutation({ roomId, userId });
   const { mutate: updateRoomStatusCloseMutation } = useUpdateRoomStatusCloseMutation({ roomId, userId });
   const genderMaxNumber = getmaxGenderMemberNumber(member_number);
+
+  const debounce: ControlDelay = (callback, delay) => {
+    let timerId: NodeJS.Timeout | null = null;
+    return (...args: any[]) => {
+      if (timerId) clearTimeout(timerId);
+      timerId = setTimeout(() => {
+        callback(...args);
+      }, delay);
+    };
+  };
 
   const addMember = async ({ room_id }: { room_id: string }) => {
     if (!user?.gender) {
@@ -50,13 +61,13 @@ function MeetingRoom({ room }: { room: MeetingRoomType }) {
       (!alreadyParticipants && genderMaxNumber && genderMaxNumber > participatedGenderMember!) ||
       !participatedGenderMember
     ) {
-      roomMemberMutation;
+      roomMemberMutation();
     }
     //모든 인원이 다 찼을 경우 모집종료로 변경
     if (genderMaxNumber && participants?.length === genderMaxNumber * 2 - 1) {
-      updateRoomStatusCloseMutation;
+      updateRoomStatusCloseMutation();
     }
-    return router.push(`/meetingRoom/${room_id}`);
+    return debounce(() => router.push(`/meetingRoom/${room_id}`), 2000);
   };
   return (
     <article
