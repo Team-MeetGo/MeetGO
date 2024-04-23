@@ -8,9 +8,11 @@ import { Chip } from '@nextui-org/react';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import RoomInformation from './RoomInformation';
+import { useCallback } from 'react';
 
 type ControlDelay = (callback: (...args: any[]) => void, delay: number) => any;
 import type { MeetingRoomType } from '@/types/roomTypes';
+
 function MeetingRoom({ room }: { room: MeetingRoomType }) {
   const router = useRouter();
   const { room_id, room_status, room_title, member_number, location, feature, region } = room;
@@ -53,12 +55,26 @@ function MeetingRoom({ room }: { room: MeetingRoomType }) {
     ) {
       roomMemberMutation();
     }
+
     //모든 인원이 다 찼을 경우 모집종료로 변경
     if (genderMaxNumber && participants?.length === genderMaxNumber * 2 - 1) {
       updateRoomStatusCloseMutation();
     }
-    router.push(`/meetingRoom/${room_id}`);
+    return router.push(`/meetingRoom/${room_id}`);
   };
+
+  const debounce = (callback: ({ room_id }: { room_id: string }) => Promise<void>, delay: number) => {
+    let timerId: any = null;
+    return (room_id: string) => {
+      if (timerId) clearTimeout(timerId);
+      timerId = setTimeout(() => {
+        callback({ room_id });
+      }, delay);
+    };
+  };
+
+  const handleAddMemberDebounce = debounce(addMember, 2000);
+
   return (
     <article
       className={
@@ -71,7 +87,7 @@ function MeetingRoom({ room }: { room: MeetingRoomType }) {
     >
       <section className="w-max-[354px] h-[241px] p-6 gap-4 rounded-xl flex flex-col hover:cursor-pointer">
         <RoomInformation room={room} />
-        <main className="h-full flex flex-col justify-between" onClick={() => addMember({ room_id })}>
+        <main className="h-full flex flex-col justify-between" onClick={() => handleAddMemberDebounce(room_id)}>
           <section>
             <h1 className="text-[26px]"> {room_title} </h1>
             <div className="flex flex-row justify-start gap-2">

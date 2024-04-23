@@ -1,10 +1,12 @@
 'use client';
 import { useRoomDataQuery } from '@/hooks/useQueries/useChattingQuery';
+import { CHATDATA_QUERY_KEY } from '@/query/chat/chatQueryKeys';
 import { chatStore } from '@/store/chatStore';
 import { Message, chatRoomPayloadType } from '@/types/chatTypes';
 import { ITEM_INTERVAL } from '@/utils/constant';
 import { clientSupabase } from '@/utils/supabase/client';
 import { User } from '@supabase/supabase-js';
+import { useQueryClient } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
 
@@ -13,6 +15,7 @@ const InitChat = ({ chatRoomId, allMsgs }: { user: User | null; chatRoomId: stri
   const room = useRoomDataQuery(chatRoomId);
   const roomId = room?.room_id;
   const router = useRouter();
+  const queryClient = useQueryClient();
 
   useEffect(() => {
     // 채팅방 isActive 상태 구독
@@ -22,7 +25,12 @@ const InitChat = ({ chatRoomId, allMsgs }: { user: User | null; chatRoomId: stri
         'postgres_changes',
         { event: 'UPDATE', schema: 'public', table: 'chatting_room', filter: `chatting_room_id=eq.${chatRoomId}` },
         (payload) => {
+          console.log(payload.new);
+          console.log('두번?');
           setChatState((payload.new as chatRoomPayloadType).isActive);
+          // queryClient.invalidateQueries({
+          //   queryKey: [CHATDATA_QUERY_KEY]
+          // });
         }
       )
       .subscribe();
