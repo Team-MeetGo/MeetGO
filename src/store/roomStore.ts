@@ -13,11 +13,11 @@ export interface RoomState {
 
 export const useRoomStore = create<RoomState>()((set) => ({
   roomRegion: '전국',
-  memberNumber: '2:2',
+  memberNumber: '전체',
 
   setRoomRegion: (m: string) => set({ roomRegion: m }),
   resetRoomRegion: () => set(() => ({ roomRegion: '전국' })),
 
   setMemberNumber: (m: string) => set({ memberNumber: m }),
-  resetMemberNumber: () => set(() => ({ memberNumber: '2:2' }))
+  resetMemberNumber: () => set(() => ({ memberNumber: '전체' }))
 }));

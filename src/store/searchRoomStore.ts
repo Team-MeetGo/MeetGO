@@ -16,8 +16,8 @@ export const useSearchRoomStore = create<searchRoomStoreState>()((set) => ({
   selectMemberNumber: '전체',
 
   setSelectRegion: (m: string) => set({ selectRegion: m }),
-  resetSelectRegion: () => set(() => ({ selectRegion: undefined })),
+  resetSelectRegion: () => set(() => ({ selectRegion: '전국' })),
 
   setSelectMemberNumber: (m: string) => set({ selectMemberNumber: m }),
-  resetSelectMemberNumber: () => set(() => ({ selectMemberNumber: undefined }))
+  resetSelectMemberNumber: () => set(() => ({ selectMemberNumber: '전체' }))
 }));

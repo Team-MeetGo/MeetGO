@@ -61,11 +61,9 @@ const GotoChatButton = ({ roomId, leader }: { roomId: UUID; leader: string }) =>
             disabled={genderParticipants ? (participants?.length === genderParticipants * 2 ? false : true) : false}
             onClick={gotoChattingRoom}
           >
-            <div className="flex flex-row justify-center align-middle ">
+            <div className="flex flex-row justify-center align-middle gap-[8px]">
               <h2 className="text-[40px] text-white font-bold">MEET GO</h2>
-              <div className="flex flex-col justify-start">
-                <IoPlay className="w-[24px] h-[24px] my-auto fill-white" />
-              </div>
+              <IoPlay className="w-[24px] h-[24px] my-auto fill-white" />
             </div>
             <p className="text-[14px] text-white">방장이 여기를 누를 시 채팅방으로 이동합니다.</p>
           </button>

@@ -27,3 +27,13 @@ export const GENDER = {
   FEMALE: 'female',
   MALE: 'male'
 };
+
+export const REGIONANDMEMBER = {
+  EVERYWHERE: '전국',
+  EVERYMEMBER: '전체'
+};
+
+export const HOLLOWARRAY = {
+  FEMALEHOLLOWARRAY: 'hollowFemaleArray',
+  MALEHOLLOWARRAY: 'hollowMaleArray'
+};

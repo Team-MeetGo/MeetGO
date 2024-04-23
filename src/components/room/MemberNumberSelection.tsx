@@ -6,7 +6,7 @@ import { useEffect, useRef, useState } from 'react';
 import { IoIosArrowDown } from 'react-icons/io';
 
 function MemberNumberSelection({ text }: { text: string }) {
-  const [member, setMember] = useState('');
+  const [member, setMember] = useState('전체');
   const [openModal, setOpenModal] = useState(false);
 
   const conditionalRef = useRef(text);
@@ -45,7 +45,8 @@ function MemberNumberSelection({ text }: { text: string }) {
           type="button"
           onClick={() => setOpenModal((openModal) => !openModal)}
         >
-          <div className="flex flex-row justify-center align-middle">
+          <div className="flex flex-row justify-center align-middle gap-[8px]">
+            {member}
             <IoIosArrowDown className="my-auto" />
           </div>
         </button>

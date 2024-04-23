@@ -9,6 +9,7 @@ import MyRoomsTitle from '@/components/room/lobby/MyRoomTitle';
 import OtherRoomsTitle from '@/components/room/lobby/OtherRoomsTitle';
 
 import type { MeetingRoomType } from '@/types/roomTypes';
+import { REGIONANDMEMBER } from '@/utils/MeetingRoomSelector';
 function MeetingRoomList() {
   const [page, setPage] = useState(1);
   const [filteredOtherRooms, setFilteredOtherRooms] = useState<MeetingRoomType[]>();
@@ -30,18 +31,18 @@ function MeetingRoomList() {
 
   //여러 조건에서 모집 중인 RoomList를 뽑아내기
   const filteredOtherRoomsHandler = () => {
-    if (!selectRegion && !selectMemberNumber) {
+    if (selectRegion === REGIONANDMEMBER.EVERYWHERE && selectMemberNumber === REGIONANDMEMBER.EVERYMEMBER) {
       return setFilteredOtherRooms(otherRooms);
     }
-    if (selectRegion !== '전국' && (selectMemberNumber === '전체' || !selectMemberNumber)) {
+    if (selectRegion !== REGIONANDMEMBER.EVERYWHERE && selectMemberNumber === REGIONANDMEMBER.EVERYMEMBER) {
       const regionFilteredRooms = otherRooms?.filter((room) => room.region === selectRegion);
       return setFilteredOtherRooms(regionFilteredRooms);
     }
-    if (selectMemberNumber !== '전체' && (selectRegion === '전국' || !selectRegion)) {
+    if (selectMemberNumber !== REGIONANDMEMBER.EVERYMEMBER && selectRegion === REGIONANDMEMBER.EVERYWHERE) {
       const numberFilteredRooms = otherRooms?.filter((room) => room.member_number === selectMemberNumber);
       return setFilteredOtherRooms(numberFilteredRooms);
     }
-    if (selectMemberNumber !== '전체' && selectRegion !== '전국') {
+    if (selectMemberNumber !== REGIONANDMEMBER.EVERYMEMBER && selectRegion !== REGIONANDMEMBER.EVERYWHERE) {
       const regionNumberFilteredRooms = otherRooms?.filter(
         (room) => room.member_number === selectMemberNumber && room.region === selectRegion
       );

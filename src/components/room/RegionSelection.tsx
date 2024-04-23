@@ -7,7 +7,7 @@ import { IoIosArrowDown } from 'react-icons/io';
 
 function RegionSelection({ text }: { text: string }) {
   const [openModal, setOpenModal] = useState(false);
-  const [region, setRegion] = useState('');
+  const [region, setRegion] = useState('전국');
 
   const dropdownRef = useRef<HTMLDivElement>(null);
   const conditionalRef = useRef(text);
@@ -44,7 +44,8 @@ function RegionSelection({ text }: { text: string }) {
           type="button"
           onClick={() => setOpenModal((openModal) => !openModal)}
         >
-          <figure className="flex flex-row justify-center align-middle">
+          <figure className="flex flex-row justify-center align-middle gap-[8px]">
+            {region}
             <IoIosArrowDown className="my-auto" />
           </figure>
         </button>
