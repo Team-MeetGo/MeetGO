@@ -55,6 +55,7 @@ function MeetingRoom({ room }: { room: MeetingRoomType }) {
     ) {
       roomMemberMutation();
     }
+
     //모든 인원이 다 찼을 경우 모집종료로 변경
     if (genderMaxNumber && participants?.length === genderMaxNumber * 2 - 1) {
       updateRoomStatusCloseMutation();
