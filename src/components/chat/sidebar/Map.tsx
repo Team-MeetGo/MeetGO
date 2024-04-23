@@ -5,10 +5,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { Card, CardBody, Pagination } from '@nextui-org/react';
 import { HiMiniMagnifyingGlass } from 'react-icons/hi2';
 import DateTimePicker from './DateTimePicker';
-import {
-  // useClearMeetingLocationMutation,
-  useUpdateMeetingLocationMutation
-} from '@/hooks/useMutation/useMeetingLocationMutation';
+import { useUpdateMeetingLocationMutation } from '@/hooks/useMutation/useMeetingLocationMutation';
 import { useGetUserDataQuery } from '@/hooks/useQueries/useUserQuery';
 import { MapProps } from '@/types/sideBarTypes';
 
@@ -26,7 +23,6 @@ const Map: React.FC<MapProps> = ({ chatRoomId }) => {
   const [totalPages, setTotalPages] = useState(0);
   const [currentPos, setCurrentPos] = useState<string>();
   const [searchText, setSearchText] = useState<string>('');
-  // const [isLocationSelected, setIsLocationSelected] = useState<boolean>(false);
   const [selectedMeetingLocation, setSelectedMeetingLocation] = useState<string>();
 
   console.log('selectedMeetingLocation =>', selectedMeetingLocation);
@@ -43,11 +39,6 @@ const Map: React.FC<MapProps> = ({ chatRoomId }) => {
   const chat = useChatDataQuery(chatRoomId);
   const meetingLocation = chat?.meeting_location;
   console.log('meetingLocation =>', meetingLocation);
-
-  // useEffect(() => {
-  //   setSelectedMeetingLocation(meetingLocation || '');
-  //   // setIsLocationSelected(!!meetingLocation);
-  // }, [meetingLocation]);
 
   useEffect(() => {
     const script = document.createElement('script');
@@ -190,30 +181,14 @@ const Map: React.FC<MapProps> = ({ chatRoomId }) => {
   };
   // useMutation 호출
   const updateMeetingLocationMutation = useUpdateMeetingLocationMutation();
-  // const clearMeetingLocationMutation = useClearMeetingLocationMutation();
 
   // 장소 선택 함수
   const handleSelectLocation = (barName: string) => {
-    console.log('barName =>', barName);
     setSelectedMeetingLocation(barName);
-    // setIsLocationSelected(!isLocationSelected);
     if (!chatRoomId) {
       return;
     }
-
-    // if (barName === selectedMeetingLocation) {
-    //   try {
-    //     await clearMeetingLocationMutation.mutateAsync(chatRoomId);
-    //   } catch (error) {
-    //     console.error('미팅장소 삭제 오류:', error);
-    //   }
-    // } else {
-    //   try {
     updateMeetingLocationMutation.mutate({ chatRoomId, barName });
-    //   } catch (error) {
-    //     console.error('미팅장소 업데이트 오류:', error);
-    //   }
-    // }
   };
 
   return (
@@ -269,9 +244,9 @@ const Map: React.FC<MapProps> = ({ chatRoomId }) => {
             <div
               className="py-4 px-9"
               onClick={() => {
-                // if (userId === leaderId) {
-                handleSelectLocation(bar.place_name);
-                // }
+                if (userId === leaderId) {
+                  handleSelectLocation(bar.place_name);
+                }
               }}
               style={{ cursor: 'pointer', alignItems: 'center' }}
             >

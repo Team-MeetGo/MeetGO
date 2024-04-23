@@ -10,7 +10,6 @@ import { useRoomDataQuery } from '@/hooks/useQueries/useChattingQuery';
 import { useUpdateMeetingTimeMutation } from '@/hooks/useMutation/useMeetingTimeMutation';
 import { useGetUserDataQuery } from '@/hooks/useQueries/useUserQuery';
 import { DateTimePickerProps } from '@/types/sideBarTypes';
-import { useQueryClient } from '@tanstack/react-query';
 
 const DateTimePicker: React.FC<DateTimePickerProps> = forwardRef(({ chatRoomId }, ref) => {
   const [selectedMeetingTime, setSelectedMeetingTime] = useState<Date | null>(new Date());
@@ -25,39 +24,9 @@ const DateTimePicker: React.FC<DateTimePickerProps> = forwardRef(({ chatRoomId }
   const toggleCalendar = () => {
     setIsCalendarOpen(!isCalendarOpen);
   };
-  // const chat = useChatDataQuery(chatRoomId);
-  const queryClient = useQueryClient();
-
-  // useEffect(() => {
-  //   const meetingTime = new Date(String(chat?.meeting_time));
-  //   if (meetingTime instanceof Date && !isNaN(meetingTime.getTime())) {
-  //     setSelectedMeetingTime(meetingTime);
-  //   }
-  // }, [chatRoomId, chat]);
 
   const { mutate: updateMeetingTime } = useUpdateMeetingTimeMutation();
 
-  // useEffect(() => {
-  //   if (leaderId !== userId) {
-  //     const channel = clientSupabase
-  //       .channel(`${chatRoomId}_meetingTimeNLocation`)
-  //       .on(
-  //         'postgres_changes',
-  //         { event: 'UPDATE', schema: 'public', table: 'chatting_room', filter: `chatting_room_id=eq.${chatRoomId}` },
-  //         (payload) => {
-  //           console.log(payload.new);
-  //           queryClient.invalidateQueries({
-  //             queryKey: [CHATDATA_QUERY_KEY]
-  //           });
-  //         }
-  //       )
-  //       .subscribe();
-  //     return () => {
-  //       clientSupabase.removeChannel(channel);
-  //     };
-  //   }
-  // }, [chatRoomId, leaderId, queryClient, userId]);
-  // months 배열을 선언
   const months = ['1월', '2월', '3월', '4월', '5월', '6월', '7월', '8월', '9월', '10월', '11월', '12월'];
   return (
     <div className="relative z-50 w-full max-w-lg py-6">
@@ -67,15 +36,14 @@ const DateTimePicker: React.FC<DateTimePickerProps> = forwardRef(({ chatRoomId }
         wrapperClassName="w-full z-100"
         selected={selectedMeetingTime ? selectedMeetingTime : new Date()}
         onChange={(date) => {
-          // if (leaderId == userId) {
-          setSelectedMeetingTime(date as Date);
-          const isoStringMeetingTime = date?.toISOString();
-          updateMeetingTime({
-            chatRoomId,
-            isoStringMeetingTime: String(isoStringMeetingTime)
-          });
-
-          // }
+          if (leaderId == userId) {
+            setSelectedMeetingTime(date as Date);
+            const isoStringMeetingTime = date?.toISOString();
+            updateMeetingTime({
+              chatRoomId,
+              isoStringMeetingTime: String(isoStringMeetingTime)
+            });
+          }
         }}
         minDate={new Date()} // 오늘 이전의 날짜 선택 불가능
         showTimeSelect
