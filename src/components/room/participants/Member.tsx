@@ -91,7 +91,6 @@ const Member = ({ roomId }: { roomId: UUID }) => {
       clientSupabase.removeChannel(channle);
     };
   }, [members, participants, leaderMember]);
-  console.log(roomInformation);
   return (
     <div className="flex flex-col">
       <div className="w-100%">
