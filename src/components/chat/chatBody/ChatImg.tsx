@@ -30,7 +30,7 @@ const ChatImg = ({ msg }: { msg: Message }) => {
 
   return (
     <>
-      {msg.imgs?.length ? (
+      {msg.imgs?.length && (
         <div
           className={`grid ${msg.imgs.length < 2 ? 'grid-cols-1' : 'grid-cols-2'} 
           ${msg.imgs.length > 2 ? 'chatImgRowsOverOne' : 'chatImgRowsNotOverOne'}`}
@@ -95,7 +95,7 @@ const ChatImg = ({ msg }: { msg: Message }) => {
             </div>
           ))}
         </div>
-      ) : null}
+      )}
     </>
   );
 };

@@ -24,7 +24,7 @@ const DateTimePicker: React.FC<DateTimePickerProps> = forwardRef(({ chatRoomId }
 
   // useRoomDataQuery로 리더 아이디 가져오기
   const room = useRoomDataQuery(chatRoomId);
-  const leaderId = room?.roomData.leader_id;
+  const leaderId = room?.leader_id;
 
   const toggleCalendar = () => {
     setIsCalendarOpen(!isCalendarOpen);
@@ -33,7 +33,7 @@ const DateTimePicker: React.FC<DateTimePickerProps> = forwardRef(({ chatRoomId }
   const chat = useChatDataQuery(chatRoomId);
 
   useEffect(() => {
-    const meetingTime = new Date(String(chat?.[0]?.meeting_time));
+    const meetingTime = new Date(String(chat?.meeting_time));
     if (meetingTime instanceof Date && !isNaN(meetingTime.getTime())) {
       setSelectedMeetingTime(meetingTime);
     }

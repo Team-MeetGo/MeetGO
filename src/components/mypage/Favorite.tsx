@@ -54,7 +54,7 @@ const Favorite: React.FC<IsEditingType> = ({ isEditing }) => {
                 selectionMode="multiple"
                 variant="bordered"
                 selectedKeys={selected}
-                className="max-w-xs"
+                className="min-w-44 max-w-xs"
                 aria-label="이상형 선택"
                 onSelectionChange={(value) => handleSelect(value as string)}
               >
