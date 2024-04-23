@@ -37,6 +37,9 @@ const Map: React.FC<MapProps> = ({ chatRoomId }) => {
   const chat = useChatDataQuery(chatRoomId);
   const meetingLocation = chat?.meeting_location;
 
+  // useMutation 호출
+  const updateMeetingLocationMutation = useUpdateMeetingLocationMutation();
+
   useEffect(() => {
     const script = document.createElement('script');
     script.async = true;
@@ -176,8 +179,6 @@ const Map: React.FC<MapProps> = ({ chatRoomId }) => {
     setCurrentPage(pageNumber);
     searchBarsNearby(mapRef.current, pageNumber);
   };
-  // useMutation 호출
-  const updateMeetingLocationMutation = useUpdateMeetingLocationMutation();
 
   // 장소 선택 함수
   const handleSelectLocation = (barName: string) => {
