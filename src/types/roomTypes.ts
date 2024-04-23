@@ -6,6 +6,11 @@ export type MeetingRoomType = Tables<'room'>;
 export type MeetingRoomTypes = MeetingRoomType[] | null | undefined;
 export type ChattingRoomType = Tables<'chatting_room'>;
 
+export type ParticipantsWithId = {
+  user_id: string;
+  users: UserType[];
+};
+
 export type UpdateRoomType = {
   room_title: string;
   feature: string[];
