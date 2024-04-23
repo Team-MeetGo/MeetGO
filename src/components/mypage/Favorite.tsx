@@ -2,7 +2,7 @@ import { Chip, Select, SelectItem } from '@nextui-org/react';
 import { useEffect, useState } from 'react';
 import { favoriteOptions } from '@/utils/FavoriteData';
 import { clientSupabase } from '@/utils/supabase/client';
-import { IsEditingType } from '@/types/userTypes';
+import type { IsEditingType } from '@/types/userTypes';
 import { useGetUserDataQuery } from '@/hooks/useQueries/useUserQuery';
 import { useFavoriteStore } from '@/store/userStore';
 import { customErrToast } from '../common/customToast';
@@ -54,7 +54,7 @@ const Favorite: React.FC<IsEditingType> = ({ isEditing }) => {
                 selectionMode="multiple"
                 variant="bordered"
                 selectedKeys={selected}
-                className="max-w-xs"
+                className="min-w-44 max-w-xs"
                 aria-label="이상형 선택"
                 onSelectionChange={(value) => handleSelect(value as string)}
               >

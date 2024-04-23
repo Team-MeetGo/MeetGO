@@ -12,18 +12,18 @@ const MyChat = ({ msg, idx, lastDivRefs }: { msg: Message; idx: number; lastDivR
   const { messages, chatRoomId } = chatStore((state) => state);
   const { data: user } = useGetUserDataQuery();
   const room = useRoomDataQuery(chatRoomId as string);
-  const leaderId = room?.roomData.leader_id;
+  const leaderId = room?.leader_id;
 
   return (
-    <div>
+    <>
       <div id={msg.message_id} ref={lastDivRefs.current[idx]} className="flex gap-[8px] justify-end">
         <div className="w-80 flex flex-col gap-1">
           {isItMe(idx, messages) ? (
             !isNextDay(idx, messages) ? null : (
-              <div className="font-bold ml-auto">{user?.nickname}</div>
+              <h2 className="font-bold ml-auto">{user?.nickname}</h2>
             )
           ) : (
-            <div className="font-bold ml-auto">{user?.nickname}</div>
+            <h2 className="font-bold ml-auto">{user?.nickname}</h2>
           )}
 
           <div className="flex gap-2 ml-auto">
@@ -32,11 +32,11 @@ const MyChat = ({ msg, idx, lastDivRefs }: { msg: Message; idx: number; lastDivR
                 <div>
                   <ChatDeleteDropDown msg={msg} />
                 </div>
-                {msg.message?.length ? (
-                  <div className="rounded-md bg-mainColor py-1.5 px-[8px] text-right text-white font-extralight">
+                {msg.message?.length && (
+                  <span className="rounded-md bg-mainColor py-1.5 px-[8px] text-right text-white font-extralight max-w-72 break-words">
                     {msg.message}
-                  </div>
-                ) : null}
+                  </span>
+                )}
                 <ChatImg msg={msg} />
               </div>
 
@@ -50,7 +50,7 @@ const MyChat = ({ msg, idx, lastDivRefs }: { msg: Message; idx: number; lastDivR
         </div>
         {isItMe(idx, messages) ? (
           !isNextDay(idx, messages) ? (
-            <div className="w-[60px]"></div>
+            <div className="w-16"></div>
           ) : (
             <MyInfoWrapper user={user} leaderId={leaderId} />
           )
@@ -58,7 +58,7 @@ const MyChat = ({ msg, idx, lastDivRefs }: { msg: Message; idx: number; lastDivR
           <MyInfoWrapper user={user} leaderId={leaderId} />
         )}
       </div>
-    </div>
+    </>
   );
 };
 

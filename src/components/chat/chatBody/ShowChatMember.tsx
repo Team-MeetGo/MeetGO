@@ -13,6 +13,7 @@ const ShowChatMember = ({ person }: { person: UsersType }) => {
         <div className="flex text-base justify-center items-center gap-0.5 mb-2">
           <p className="mb-2">{person.school_name}</p>
           <p>
+            {/* male 변수화하기 */}
             {person.gender === 'male' ? (
               <IoMale className="w-[16px] fill-blue mb-2" />
             ) : (
