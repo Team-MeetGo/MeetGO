@@ -7,7 +7,7 @@ import { useRouter } from 'next/navigation';
 import { useFirstLoginMutation } from '@/hooks/useMutation/useFirstLoginMutation';
 
 const ProfileRouteModal = () => {
-  const { data: user, isPending, isSuccess } = useGetUserDataQuery();
+  const { data: user, isSuccess } = useGetUserDataQuery();
   const { openModal, closeModal } = useModalStore();
   const router = useRouter();
   const mutateFirstLogin = useFirstLoginMutation();
@@ -16,7 +16,7 @@ const ProfileRouteModal = () => {
     if (isSuccess && user?.first_login) {
       openModal({
         type: 'confirm',
-        name: 'Welcome!',
+        name: 'Welcome🎉',
         text: '미팅을 위해 프로필 설정 부탁드려요.',
         onFunc: () => {
           mutateFirstLogin(user.user_id);
