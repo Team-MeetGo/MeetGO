@@ -140,7 +140,7 @@ const Profile = () => {
         </div>
 
         <SchoolForm />
-        <div className="mb-6 flex items-center gap-6">
+        <div className="flex items-center gap-6">
           <label className="block text-lg font-semibold w-[100px]">카카오톡ID</label>
           {!isEditing ? (
             <p className="block text-sm font-medium mb-1">{user?.kakaoId}</p>
@@ -205,7 +205,7 @@ const Profile = () => {
             </button>
           )}
         </div>
-        <button className="underline" onClick={() => handleDeleteUser(user!.user_id)}>
+        <button className="underline max-w-24 m-auto" onClick={() => handleDeleteUser(user!.user_id)}>
           회원탈퇴
         </button>
         <ValidationModal />
