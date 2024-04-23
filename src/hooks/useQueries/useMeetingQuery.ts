@@ -1,28 +1,43 @@
 import {
   fetchAlreadyChatRoom,
+  fetchMyPastAndNowRoom,
   fetchMyRoom,
   fetchRecruitingRoom,
   fetchRoomInfoWithRoomId,
   fetchRoomParticipants
 } from '@/query/meetingRoom/meetingQueryFns';
-import { RECRUTING_ROOMDATA, ROOMDATA_WITH_ROOMID, ROOMLIST, ROOM_MEMBER } from '@/query/meetingRoom/meetingQueryKeys';
-import { UserType } from '@/types/roomTypes';
+import {
+  MY_OUT_ROOM,
+  RECRUTING_ROOMDATA,
+  ROOMDATA_WITH_ROOMID,
+  ROOMLIST,
+  ROOM_MEMBER
+} from '@/query/meetingRoom/meetingQueryKeys';
+import { ChattingRoomType, MeetingRoomType } from '@/types/roomTypes';
 // import { profileCount } from '@/store/userStore';
 import { useQuery, useSuspenseQuery } from '@tanstack/react-query';
 
 //현재 모집중인 방
 export const useRecruitingQuery = (user_id: string) => {
   const data = useSuspenseQuery({
-    queryKey: RECRUTING_ROOMDATA,
+    queryKey: [RECRUTING_ROOMDATA],
     queryFn: fetchRecruitingRoom
   });
   return data;
 };
 //내가 참가한 방
 export const useMyroomQuery = (user_id: string) => {
-  const { data } = useSuspenseQuery({
+  const { data } = useQuery({
     queryKey: [ROOMLIST, user_id],
     queryFn: () => fetchMyRoom(user_id)
+  });
+  return data;
+};
+
+export const useMyPastAndNowRoomQuery = (user_id: string) => {
+  const { data } = useQuery({
+    queryKey: [MY_OUT_ROOM],
+    queryFn: () => fetchMyPastAndNowRoom(user_id)
   });
   return data;
 };
@@ -38,18 +53,18 @@ export const useMyroomQuery = (user_id: string) => {
 //   return results.data?.map((r) => r.room);
 // };
 //room_id로 하나의 방 얻기
-export const useRoomInfoWithRoomIdQuery = (room_id: string) => {
-  const data = useQuery({
+export const useRoomInfoWithRoomIdQuery = (room_id: string): MeetingRoomType => {
+  const { data: chattingRoomWithId } = useSuspenseQuery({
     queryKey: [ROOMDATA_WITH_ROOMID, room_id],
     queryFn: () => fetchRoomInfoWithRoomId(room_id)
   });
-  return data;
+  return chattingRoomWithId;
 };
 //이미 채팅으로 넘어간 목록
-export const useAlreadyChatRoomQuery = (room_id: string) => {
-  const data = useQuery({
-    queryKey: [ROOMDATA_WITH_ROOMID, room_id],
-    queryFn: () => fetchAlreadyChatRoom(room_id)
+export const useAlreadyChatRoomQuery = (roomId: string): ChattingRoomType[] | undefined => {
+  const { data } = useQuery({
+    queryKey: [ROOMDATA_WITH_ROOMID, roomId],
+    queryFn: () => fetchAlreadyChatRoom(roomId)
   });
   return data;
 };

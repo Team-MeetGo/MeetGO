@@ -1,26 +1,38 @@
 'use client';
-import meetingRoomHandler from '@/hooks/custom/room';
-import { useAddRoomMemberMutation, useUpdateRoomStatusClose } from '@/hooks/useMutation/useMeetingMutation';
+import getmaxGenderMemberNumber from '@/hooks/custom/room';
+import { useAddRoomMemberMutation, useUpdateRoomStatusCloseMutation } from '@/hooks/useMutation/useMeetingMutation';
 import { useAlreadyChatRoomQuery, useRoomParticipantsQuery } from '@/hooks/useQueries/useMeetingQuery';
 import { useGetUserDataQuery } from '@/hooks/useQueries/useUserQuery';
-import { Chip } from '@nextui-org/react';
-import { useRouter } from 'next/navigation';
-import Image from 'next/image';
 import MeetGoLogoPurple from '@/utils/icons/meetgo-logo-purple.png';
+import { Chip } from '@nextui-org/react';
+import Image from 'next/image';
+import { useRouter } from 'next/navigation';
 import RoomInformation from './RoomInformation';
 
+type ControlDelay = (callback: (...args: any[]) => void, delay: number) => any;
 import type { MeetingRoomType } from '@/types/roomTypes';
 function MeetingRoom({ room }: { room: MeetingRoomType }) {
-  const { room_id, room_status, room_title, member_number, location, feature, region } = room;
   const router = useRouter();
+  const { room_id, room_status, room_title, member_number, location, feature, region } = room;
   const { data: user } = useGetUserDataQuery();
-  const user_id = user?.user_id as string;
-  const participants = useRoomParticipantsQuery(room_id);
-  const roomMemberMutation = useAddRoomMemberMutation({ user_id, room_id });
-  const updateRoomStatusCloseMutation = useUpdateRoomStatusClose({ room_id, user_id });
-  const { data: alreadyChatRoom, error: alreadyChatRoomError } = useAlreadyChatRoomQuery(room_id);
-  const { getmaxGenderMemberNumber } = meetingRoomHandler();
+  const userId = user?.user_id as string;
+  const roomId = room_id;
+
+  const participants = useRoomParticipantsQuery(roomId);
+  const alreadyChatRoom = useAlreadyChatRoomQuery(roomId);
+  const { mutate: roomMemberMutation } = useAddRoomMemberMutation({ roomId, userId });
+  const { mutate: updateRoomStatusCloseMutation } = useUpdateRoomStatusCloseMutation({ roomId, userId });
   const genderMaxNumber = getmaxGenderMemberNumber(member_number);
+
+  const debounce: ControlDelay = (callback, delay) => {
+    let timerId: NodeJS.Timeout | null = null;
+    return (...args: any[]) => {
+      if (timerId) clearTimeout(timerId);
+      timerId = setTimeout(() => {
+        callback(...args);
+      }, delay);
+    };
+  };
 
   const addMember = async ({ room_id }: { room_id: string }) => {
     if (!user?.gender) {
@@ -28,7 +40,7 @@ function MeetingRoom({ room }: { room: MeetingRoomType }) {
       return router.push('/mypage');
     }
     //수락창: 이미 참여한 방은 바로 입장
-    const alreadyParticipants = participants?.find((member) => member?.user_id === user_id);
+    const alreadyParticipants = participants?.find((member) => member?.user_id === userId);
     if (alreadyParticipants && alreadyChatRoom?.length === 0) {
       return router.push(`/meetingRoom/${room_id}`);
     }
@@ -49,16 +61,16 @@ function MeetingRoom({ room }: { room: MeetingRoomType }) {
       (!alreadyParticipants && genderMaxNumber && genderMaxNumber > participatedGenderMember!) ||
       !participatedGenderMember
     ) {
-      await roomMemberMutation.mutate();
+      roomMemberMutation();
     }
     //모든 인원이 다 찼을 경우 모집종료로 변경
     if (genderMaxNumber && participants?.length === genderMaxNumber * 2 - 1) {
-      await updateRoomStatusCloseMutation.mutate();
+      updateRoomStatusCloseMutation();
     }
-    return router.push(`/meetingRoom/${room_id}`);
+    return debounce(() => router.push(`/meetingRoom/${room_id}`), 2000);
   };
   return (
-    <div
+    <article
       className={
         room.room_status === '모집중'
           ? `bg-white rounded-xl border-mainColor border-1`
@@ -68,49 +80,32 @@ function MeetingRoom({ room }: { room: MeetingRoomType }) {
       }
     >
       <section className="w-max-[354px] h-[241px] p-6 gap-4 rounded-xl flex flex-col hover:cursor-pointer">
-        <RoomInformation room={room} user_id={user_id} alreadyChatRoom={alreadyChatRoom} participants={participants} />
+        <RoomInformation room={room} />
         <main className="h-full flex flex-col justify-between" onClick={() => addMember({ room_id })}>
-          <div className="flex flex-col">
-            <p className="text-[26px]"> {room_title} </p>
+          <section>
+            <h1 className="text-[26px]"> {room_title} </h1>
             <div className="flex flex-row justify-start gap-2">
               <p className="text-base">{region}</p>
               <p className="text-base"> {location} </p>
             </div>
-          </div>
+          </section>
 
-          <div>
+          <section>
             <figure className="flex gap-1 mb-2 items-center">
-              <Image
-                src={MeetGoLogoPurple}
-                alt="MeetGo Logo"
-                style={{
-                  width: 'auto',
-                  height: '20px'
-                }}
-              />
+              <Image src={MeetGoLogoPurple} alt="MeetGo Logo" className="w-auto h-[20px]" />
               <p className="text-mainColor text-sm font-bold">MEETGO</p>
             </figure>
-            <figure className="flex flex-row gap-[4px] text-[14px]">
-              {feature &&
-                Array.from(feature).map((value) => (
-                  <Chip
-                    key={value}
-                    color="default"
-                    style={{
-                      backgroundColor: '#F2EAFA',
-                      color: '#8F5DF4',
-                      borderRadius: '8px'
-                    }}
-                    classNames={{ content: 'px-1 text-sm' }}
-                  >
-                    {value}
-                  </Chip>
-                ))}
+            <figure className="flex flex-row gap-[4px]">
+              {Array.from(feature).map((value) => (
+                <div key={value} className="bg-purpleSecondary text-mainColor rounded-[8px] p-[8px] text-[14px]">
+                  {value}
+                </div>
+              ))}
             </figure>
-          </div>
+          </section>
         </main>
       </section>
-    </div>
+    </article>
   );
 }
 

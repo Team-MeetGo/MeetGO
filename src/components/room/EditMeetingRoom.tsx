@@ -1,5 +1,8 @@
 'use client';
+import MemberNumberSelection from '@/components/room/MemberNumberSelection';
+import RegionSelection from '@/components/room/RegionSelection';
 import { useUpdateRoom } from '@/hooks/useMutation/useMeetingMutation';
+import { useGetUserDataQuery } from '@/hooks/useQueries/useUserQuery';
 import { useRoomStore } from '@/store/roomStore';
 import { favoriteOptions } from '@/utils/FavoriteData';
 import {
@@ -15,9 +18,6 @@ import {
   useDisclosure
 } from '@nextui-org/react';
 import { useState } from 'react';
-import MemberNumberSelection from '@/components/room/MemberNumberSelection';
-import RegionSelection from '@/components/room/RegionSelection';
-import { useGetUserDataQuery } from '@/hooks/useQueries/useUserQuery';
 
 import type { MeetingRoomType, UpdateRoomType } from '@/types/roomTypes';
 function EditMeetingRoom({
@@ -30,14 +30,13 @@ function EditMeetingRoom({
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
   const { data: user } = useGetUserDataQuery();
-  const user_id = user?.user_id;
-  const { memberNumber, setMemberNumber, resetMemberNumber, roomRegion, setRoomRegion, resetRoomRegion } =
-    useRoomStore();
+  const userId = user?.user_id;
+  const { memberNumber, setMemberNumber, roomRegion, setRoomRegion } = useRoomStore();
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const [title, setTitle] = useState(room.room_title);
   const [location, setLocation] = useState(room.location);
   const [selected, setSelected] = useState<Set<string>>(new Set([]));
-  const room_id = room.room_id;
+  const roomId = room.room_id;
   const favoriteArray = Array.from(selected);
   //수정된 미팅룸 설정
   const editedMeetingRoom: UpdateRoomType = {
@@ -45,18 +44,18 @@ function EditMeetingRoom({
     feature: favoriteArray,
     location,
     member_number: String(memberNumber),
-    room_id,
+    room_id: roomId,
     region: String(roomRegion)
   };
   //미팅룸 업데이트
-  const roomUpdateMutation = useUpdateRoom({ editedMeetingRoom, user_id });
+  const { mutate: roomUpdateMutation } = useUpdateRoom({ editedMeetingRoom, userId });
   const editMeetingRoom = async (e: any) => {
     e.preventDefault();
     setOpen(false);
-    if (!title || !selected || !location || memberNumber === '인원' || roomRegion === '지역') {
+    if (!title || !selected || !location) {
       alert('모든 항목은 필수입니다.');
-    } else if (title && selected && location && memberNumber !== '인원수' && roomRegion) {
-      roomUpdateMutation.mutate();
+    } else if (title && selected && location && roomRegion) {
+      roomUpdateMutation();
     }
   };
   //수정전 데이터 불러오기
@@ -82,9 +81,7 @@ function EditMeetingRoom({
   return (
     <>
       <Button
-        onClick={() => {
-          beforeData();
-        }}
+        onClick={beforeData}
         onPress={onOpen}
         className="gap-0 p-0 m-0 h-[31px] w-[76px] bg-white hover:bg-mainColor hover:text-white text-[16px] rounded-xl"
       >
@@ -119,16 +116,14 @@ function EditMeetingRoom({
           {(onClose) => (
             <div ref={dropdownRef}>
               <ModalHeader className="flex flex-col gap-1">방 내용 수정</ModalHeader>
-              <form onSubmit={(e: any) => editMeetingRoom(e)}>
+              <form onSubmit={(e) => editMeetingRoom(e)}>
                 <ModalBody>
                   <input value={title} onChange={(e) => setTitle(e.target.value)} placeholder="title" maxLength={15} />
                   <div className="flex flex-col gap-4">
-                    <div className="flex flex-row gap-4">
+                    <section className="flex flex-row gap-4">
                       <MemberNumberSelection text={'member'} />
-                      <div>
-                        <RegionSelection text={'room'} />
-                      </div>
-                    </div>
+                      <RegionSelection text={'room'} />
+                    </section>
                     <input
                       value={location}
                       onChange={(e) => setLocation(e.target.value)}
@@ -136,9 +131,9 @@ function EditMeetingRoom({
                       maxLength={15}
                     />
                   </div>
-                  <div className="flex w-full max-w-xs flex-col gap-2">
+                  <section className="flex w-full max-w-xs flex-col gap-2">
                     <label>방의 컨셉을 골라주세요!</label>
-                    <div className="flex whitespace-nowrap">
+                    <figure className="flex whitespace-nowrap">
                       <Select
                         label="방의 특성(최대 5개)"
                         selectionMode="multiple"
@@ -154,20 +149,19 @@ function EditMeetingRoom({
                           </SelectItem>
                         ))}
                       </Select>
-                    </div>
-                    <div className="text-[14px] flex flex-row gap-[8px]">
+                    </figure>
+                    <figure className="text-[14px] flex flex-row gap-[8px]">
                       {Array.from(selected).map((value) => (
                         <Chip
                           key={value}
-                          color="default"
-                          style={{ backgroundColor: '#F2EAFA', color: '#8F5DF4', borderRadius: '8px' }}
+                          className="bg-purpleSecondary text-mainColor rounded-[8px]"
                           onClose={() => handleDelete(value)}
                         >
                           {value}
                         </Chip>
                       ))}
-                    </div>
-                  </div>
+                    </figure>
+                  </section>
                 </ModalBody>
                 <ModalFooter>
                   <Button onClick={() => setOpen(false)} color="danger" variant="light" onPress={onClose}>
