@@ -1,19 +1,26 @@
 'use client';
 import { useRoomStore } from '@/store/roomStore';
 import { useSearchRoomStore } from '@/store/searchRoomStore';
-import { member_number } from '@/utils/MeetingRoomSelector';
+import { MEMBERNUMBER, REGIONANDMEMBER, member_number } from '@/utils/MeetingRoomSelector';
 import { useEffect, useRef, useState } from 'react';
 import { IoIosArrowDown } from 'react-icons/io';
 
 function MemberNumberSelection({ text }: { text: string }) {
-  const [member, setMember] = useState('전체');
-  const [openModal, setOpenModal] = useState(false);
+  const initialMember = () => {
+    if (text === 'selectMember') {
+      return REGIONANDMEMBER.EVERYMEMBER;
+    }
+    return MEMBERNUMBER.ONE;
+  };
 
-  const conditionalRef = useRef(text);
-  const dropdownRef = useRef<HTMLDivElement>(null);
+  const [member, setMember] = useState(initialMember);
+  const [openModal, setOpenModal] = useState(false);
 
   const { setMemberNumber } = useRoomStore();
   const { setSelectMemberNumber } = useSearchRoomStore();
+
+  const conditionalRef = useRef(text);
+  const dropdownRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (conditionalRef.current === 'selectMember') {
@@ -52,15 +59,21 @@ function MemberNumberSelection({ text }: { text: string }) {
         </button>
         {openModal && (
           <ul className="absolute top-full p-[8px] bg-white rounded-md shadow-md mt-1 w-full">
-            {member_number.map((m) => (
-              <li
-                key={m}
-                onClick={() => memberNumberSelectionHandler(m)}
-                className="px-[16px] py-[8px] cursor-pointer rounded-lg hover:bg-mainColor hover:text-white"
-              >
-                {m}
-              </li>
-            ))}
+            {member_number.map((m) => {
+              if (m === REGIONANDMEMBER.EVERYMEMBER && text === 'member') {
+                return;
+              }
+
+              return (
+                <li
+                  key={m}
+                  onClick={() => memberNumberSelectionHandler(m)}
+                  className="px-[16px] py-[8px] cursor-pointer rounded-lg hover:bg-mainColor hover:text-white"
+                >
+                  {m}
+                </li>
+              );
+            })}
           </ul>
         )}
       </div>

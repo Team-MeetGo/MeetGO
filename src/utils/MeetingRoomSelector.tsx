@@ -37,3 +37,8 @@ export const HOLLOWARRAY = {
   FEMALEHOLLOWARRAY: 'hollowFemaleArray',
   MALEHOLLOWARRAY: 'hollowMaleArray'
 };
+
+export const MEMBERNUMBER = {
+  ONE: '1:1',
+  TWO: '2:2'
+};

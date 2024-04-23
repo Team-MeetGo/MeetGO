@@ -57,7 +57,6 @@ function RoomInformation({ room }: { room: MeetingRoomType }) {
                   <h1>{myMsgData.find((item) => item.room_id === room?.room_id)?.newMsgCount}</h1>
                 </figure>
               ) : null}
-
               <p className="text-[14px]">채팅중</p>
               <figure>
                 <IoChatbubblesOutline className="h-[16px] w-[16px] my-auto fill-gray2" />
@@ -70,7 +69,8 @@ function RoomInformation({ room }: { room: MeetingRoomType }) {
                 <BsFire className="h-[18px] w-[18px] my-auto fill-hotPink" />
               </figure>
             </mark>
-          ) : user_id === leader_id ? (
+          ) : null}
+          {user_id === leader_id ? (
             <mark ref={dropdownRef} className="relative flex flex-row justify-center align-middle">
               <button
                 className="flex flex-row justify-center align-middle"
