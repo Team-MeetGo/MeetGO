@@ -41,11 +41,11 @@ const AvatarForm = () => {
   const onFileCancel = () => {
     setFile(null);
     setAvatarView(null);
-    setIsEditing(!isEditing);
+    setIsEditing((prev) => !prev);
   };
 
   const toggleEdit = () => {
-    setIsEditing(!isEditing);
+    setIsEditing((prev) => !prev);
     if (!isEditing) {
       setFile(null);
       setAvatarView(null);
@@ -73,7 +73,6 @@ const AvatarForm = () => {
 
   return (
     <div className="flex flex-col justify-center items-start gap-2 relative">
-      {isEditing && <input type="file" onChange={onFileChange} accept="image/*" />}
       <div className="flex flex-col items-center gap-2">
         <div className="w-[80px] h-[80px] overflow-hidden flex justify-center items-center rounded-full relative">
           {avatarView ? (
@@ -99,13 +98,28 @@ const AvatarForm = () => {
           )}
         </div>
         {isEditing ? (
-          <div className="flex gap-2">
-            <button className="text-xs" onClick={() => handleAvatarUpdate({ userId: user!.user_id, file })}>
-              수정
-            </button>
-            <button className="text-xs" onClick={onFileCancel}>
-              취소
-            </button>
+          <div className="flex flex-col gap-1 items-center">
+            <label htmlFor="file_upload" className="px-3 py-2 border rounded-lg text-sm">
+              사진 선택
+            </label>
+            <input
+              type="file"
+              id="file_upload"
+              onChange={onFileChange}
+              accept="image/*"
+              className="w-0 h-0 opacity-0"
+            />
+            <div className="flex gap-1">
+              <button
+                className="text-xs bg-purpleThird px-2 py-1 rounded-lg"
+                onClick={() => handleAvatarUpdate({ userId: user!.user_id, file })}
+              >
+                저장
+              </button>
+              <button className="text-xs border px-2 py-1 rounded-lg bg-gray-100" onClick={onFileCancel}>
+                취소
+              </button>
+            </div>
           </div>
         ) : (
           <button className="text-lg rounded-full bg-[#D4D4D8] p-1 right-0 absolute bottom-0" onClick={toggleEdit}>

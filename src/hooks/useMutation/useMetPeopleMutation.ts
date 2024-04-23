@@ -12,3 +12,9 @@ export const useAcceptKakaoIdMutation = () =>
     mutationFn: ({ requestId, responseId, newStatus }: { requestId: string; responseId: string; newStatus: string }) =>
       updateRequestStatus(requestId, responseId, newStatus)
   });
+
+export const useCancelRequestKakaoIdMutation = () =>
+  useMutation({
+    mutationFn: ({ requestId, responseId }: { requestId: string; responseId: string }) =>
+      updateRequestStatus(requestId, responseId, '요청전')
+  });
