@@ -23,6 +23,10 @@ function MeetingRoom({ room }: { room: MeetingRoomType }) {
   const genderMaxNumber = getmaxGenderMemberNumber(member_number);
 
   const addMember = async ({ room_id }: { room_id: string }) => {
+    if (!user?.gender) {
+      alert('성별을 선택해주세요');
+      return router.push('/mypage');
+    }
     //수락창: 이미 참여한 방은 바로 입장
     const alreadyParticipants = participants?.find((member) => member?.user_id === user_id);
     if (alreadyParticipants && alreadyChatRoom?.length === 0) {

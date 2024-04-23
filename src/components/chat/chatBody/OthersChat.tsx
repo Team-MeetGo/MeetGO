@@ -8,9 +8,8 @@ import ParticipantsInfoWrapper from './ParticipantsInfoWrapper';
 const OthersChat = ({ msg, idx, lastDivRefs }: { msg: Message; idx: number; lastDivRefs: any }) => {
   const { chatRoomId, messages } = chatStore((state) => state);
   const room = useRoomDataQuery(chatRoomId as string);
-  const roomId = room?.roomId;
-  const leaderId = room?.roomData.leader_id;
-  const participants = useParticipantsQuery(roomId as string);
+  const leaderId = room?.leader_id;
+  const participants = useParticipantsQuery(room?.room_id as string);
 
   const showThatUser = (userId: string | null) => {
     const thatUserData = participants?.find((p) => p.user_id === userId);
@@ -18,7 +17,7 @@ const OthersChat = ({ msg, idx, lastDivRefs }: { msg: Message; idx: number; last
   };
 
   return (
-    <div>
+    <>
       <div id={msg.message_id} ref={lastDivRefs.current[idx]} className="flex gap-[12px]">
         {isItMe(idx, messages) ? (
           !isNextDay(idx, messages) ? (
@@ -33,19 +32,19 @@ const OthersChat = ({ msg, idx, lastDivRefs }: { msg: Message; idx: number; last
         <div className="flex flex-col gap-1">
           {isItMe(idx, messages) ? (
             !isNextDay(idx, messages) ? null : (
-              <div className="font-bold">{showThatUser(msg.send_from)?.nickname}</div>
+              <h2 className="font-bold">{showThatUser(msg.send_from)?.nickname}</h2>
             )
           ) : (
-            <div className="font-bold">{showThatUser(msg.send_from)?.nickname}</div>
+            <h2 className="font-bold">{showThatUser(msg.send_from)?.nickname}</h2>
           )}
 
           <div className="flex flex-col gap-2">
-            <div className="gap-2 mr-auto">
-              {msg.message?.length ? (
-                <div className="rounded-md bg-mainColor py-1.5 px-[8px] text-right text-white font-extralight">
+            <div className="flex gap-2 mr-auto">
+              {msg.message?.length && (
+                <span className="rounded-md bg-mainColor py-1.5 px-[8px] text-left text-white font-extralight max-w-72 break-words">
                   {msg.message}
-                </div>
-              ) : null}
+                </span>
+              )}
               <ChatImg msg={msg} />
             </div>
             {idx < messages.length - 1 && msg.send_from === messages[idx + 1].send_from ? null : (
@@ -56,7 +55,7 @@ const OthersChat = ({ msg, idx, lastDivRefs }: { msg: Message; idx: number; last
           </div>
         </div>
       </div>
-    </div>
+    </>
   );
 };
 

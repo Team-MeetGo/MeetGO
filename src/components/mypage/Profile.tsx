@@ -6,28 +6,24 @@ import AvatarForm from './AvatarForm';
 import MyPost from './MyPost';
 import Favorite from './Favorite';
 import MetPeople from './MetPeople';
-import { GoPeople } from 'react-icons/go';
-import { IoMdHeartEmpty } from 'react-icons/io';
-import { HiOutlineChatBubbleOvalLeftEllipsis } from 'react-icons/hi2';
 import useInputChange from '@/hooks/custom/useInputChange';
-import { Avatar, Select, SelectItem } from '@nextui-org/react';
+import { Select, SelectItem } from '@nextui-org/react';
 import { useGetUserDataQuery } from '@/hooks/useQueries/useUserQuery';
 import { useProfileUpdateMutation } from '@/hooks/useMutation/useProfileMutation';
 import { useQueryClient } from '@tanstack/react-query';
 import { USER_DATA_QUERY_KEY } from '@/query/user/userQueryKeys';
-import { UpdateProfileType } from '@/types/userTypes';
-import Image from 'next/image';
-import { profileCount, useFavoriteStore } from '@/store/userStore';
+import type { UpdateProfileType } from '@/types/userTypes';
+import { useFavoriteStore } from '@/store/userStore';
+import ProfileHeader from './ProfileHeader';
 
 const Profile = () => {
   const queryClient = useQueryClient();
   const { data: user, isPending, isError, error } = useGetUserDataQuery();
   const [isEditing, setIsEditing] = useState(false);
-  const inputNickname = useInputChange(user?.nickname ? user?.nickname : '');
-  const inputIntro = useInputChange(user?.intro ? user?.intro : '');
-  const inputKakaoId = useInputChange(user?.kakaoId ? user?.kakaoId : '');
-  const inputGender = useInputChange(user?.gender ? user?.gender : '');
-  const { postCount, likedPostCount, metPeopleCount, meetingRoomCount } = profileCount();
+  const inputNickname = useInputChange('');
+  const inputIntro = useInputChange('');
+  const inputKakaoId = useInputChange('');
+  const inputGender = useInputChange('');
   const { selected } = useFavoriteStore();
 
   const { mutate: updateProfileMutate } = useProfileUpdateMutation();
@@ -61,53 +57,9 @@ const Profile = () => {
     );
   };
 
-  const joinTime = user?.created_at?.toString().slice(0, 10);
-
-  const buttonData = [
-    { icon: GoPeople, title: '스쳐간 인연', count: metPeopleCount },
-    { icon: HiOutlineChatBubbleOvalLeftEllipsis, title: '작성 글', count: postCount },
-    { icon: IoMdHeartEmpty, title: '좋아요한 글', count: likedPostCount }
-  ];
-
   return (
     <div className="mx-auto bg-white">
-      <div className="bg-purpleSecondary w-full py-[40px] px-[20px]">
-        <div className="flex flex-col gap-4 max-w-[1000px] m-auto max-md:items-start">
-          <span className="text-[42px] font-bold">프로필</span>
-          <div className="flex items-center max-md:items-start md:justify-between max-md:flex-col max-md:gap-6">
-            <div className="flex gap-6 items-center">
-              <div className="max-md:w-[160px] max-md:h-[160px] w-[180px] h-[180px] overflow-hidden flex justify-center items-center rounded-full relative">
-                {user?.avatar ? (
-                  <Image
-                    src={`${user?.avatar}?${new Date().getTime()}`}
-                    alt="Avatar"
-                    style={{ objectFit: 'cover' }}
-                    fill={true}
-                    sizes="500px"
-                    priority={true}
-                  />
-                ) : (
-                  <Avatar color="secondary" className="w-32 h-32" />
-                )}
-              </div>
-              <div className="flex flex-col gap-2">
-                <p className="block text-2xl font-semibold">{user?.nickname}</p>
-                <p className="block text-lg font-medium">{user?.login_email}</p>
-                <p className="font-medium text-gray3 text-sm">가입일 : {joinTime}</p>
-              </div>
-            </div>
-            <div className="flex gap-10 max-md:gap-6">
-              {buttonData.map((item, index) => (
-                <button key={index} className="font-semibold flex flex-col items-center gap-4 max-md:gap-2">
-                  <item.icon size={40} />
-                  <p>{item.title}</p>
-                  <p className="font-bold text-3xl">{item.count}</p>
-                </button>
-              ))}
-            </div>
-          </div>
-        </div>
-      </div>
+      <ProfileHeader />
       <div className="max-w-[800px] m-auto py-[40px] px-[20px] flex flex-col gap-6">
         <div className="flex gap-6">
           <p className="text-lg font-semibold w-[100px]">사진</p>
@@ -129,6 +81,7 @@ const Profile = () => {
               type="text"
               value={inputNickname.value}
               onChange={inputNickname.onChange}
+              maxLength={10}
             />
           )}
         </div>
@@ -148,7 +101,7 @@ const Profile = () => {
                   : '성별을 골라주세요.'
                 : '사용자 정보 없음'}
             </p>
-            {isEditing && (
+            {isEditing && !user?.gender && (
               <Select
                 label="성별"
                 className="min-w-36 max-w-xs"

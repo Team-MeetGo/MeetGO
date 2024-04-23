@@ -78,7 +78,7 @@ const ChatInput = () => {
             <input
               type="file"
               multiple
-              accept="*"
+              accept="image/*"
               className="hidden"
               ref={imgRef}
               onChange={(e) => {

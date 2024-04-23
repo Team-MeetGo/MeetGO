@@ -15,7 +15,7 @@ export const fetchCommentData = async (review_id: string) => {
     .select('user_id, comment_content, created_at, comment_id, review_id')
     .eq('review_id', review_id);
   if (error) {
-    console.log('댓글 표시 중 에러 발생', error);
+    console.error('댓글 표시 중 에러 발생', error);
   }
   return commentData;
 };

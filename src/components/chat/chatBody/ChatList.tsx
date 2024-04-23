@@ -24,7 +24,7 @@ const ChatList = ({ user, chatRoomId }: { user: User | null; chatRoomId: string 
   const [lastCheckedDiv, setLastCheckedDiv] = useState<HTMLElement | null>();
   const [checkedLastMsg, setCheckedLastMsg] = useState(false);
   const room = useRoomDataQuery(chatRoomId);
-  const roomId = room?.roomId;
+  const roomId = room?.room_id;
   const prevMsgsLengthRef = useRef(messages.length);
   const lastDivRefs = useRef(messages);
   const lastMsgId = useMyLastMsgs(user?.id!, chatRoomId);
@@ -61,7 +61,7 @@ const ChatList = ({ user, chatRoomId }: { user: User | null; chatRoomId: string 
         clientSupabase.removeChannel(channel);
       };
     }
-  }, [messages, setMessages, isScrolling, roomId, chatRoomId]);
+  }, [messages, isScrolling, roomId, setMessages, chatRoomId]);
 
   // 여기까지 읽으셨습니다(처음 마운트 시에만 실행)
   useEffect(() => {
@@ -109,6 +109,7 @@ const ChatList = ({ user, chatRoomId }: { user: User | null; chatRoomId: string 
   const handleScroll = () => {
     const scrollBox = scrollRef.current;
     if (scrollBox) {
+      // 5 상수화
       const isScroll = scrollBox.scrollTop < scrollBox.scrollHeight - scrollBox.clientHeight - 5;
       setIsScrolling(isScroll);
       if (!isScroll) {
