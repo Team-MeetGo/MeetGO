@@ -34,7 +34,6 @@ function MeetingRoomList() {
   //여러 조건에서 모집 중인 RoomList를 뽑아내기
   const filteredOtherRoomsHandler = () => {
     if (selectRegion === REGIONANDMEMBER.EVERYWHERE && selectMemberNumber === REGIONANDMEMBER.EVERYMEMBER) {
-      console.log('otherRooms', otherRooms);
       return setFilteredOtherRooms(otherRooms);
     }
     if (selectRegion !== REGIONANDMEMBER.EVERYWHERE && selectMemberNumber === REGIONANDMEMBER.EVERYMEMBER) {
@@ -74,8 +73,7 @@ function MeetingRoomList() {
     }
     setPage((page) => page - 1);
   };
-  console.log(otherRooms);
-  console.log('user', user);
+
   return (
     <>
       <MyRoomsTitle>
