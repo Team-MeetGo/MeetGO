@@ -1,18 +1,16 @@
 'use client';
-import React, { forwardRef, useEffect, useRef, useState } from 'react';
+import React, { forwardRef, useRef, useState } from 'react';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import DateCustomeInput from './DateCustomeInput';
 import { ko } from 'date-fns/locale';
 import { getMonth, getYear } from 'date-fns';
 import { IoIosArrowForward, IoIosArrowBack } from 'react-icons/io';
-import { useChatDataQuery, useRoomDataQuery } from '@/hooks/useQueries/useChattingQuery';
+import { useRoomDataQuery } from '@/hooks/useQueries/useChattingQuery';
 import { useUpdateMeetingTimeMutation } from '@/hooks/useMutation/useMeetingTimeMutation';
 import { useGetUserDataQuery } from '@/hooks/useQueries/useUserQuery';
 import { DateTimePickerProps } from '@/types/sideBarTypes';
-import { clientSupabase } from '@/utils/supabase/client';
 import { useQueryClient } from '@tanstack/react-query';
-import { CHATDATA_QUERY_KEY } from '@/query/chat/chatQueryKeys';
 
 const DateTimePicker: React.FC<DateTimePickerProps> = forwardRef(({ chatRoomId }, ref) => {
   const [selectedMeetingTime, setSelectedMeetingTime] = useState<Date | null>(new Date());
@@ -39,26 +37,26 @@ const DateTimePicker: React.FC<DateTimePickerProps> = forwardRef(({ chatRoomId }
 
   const { mutate: updateMeetingTime } = useUpdateMeetingTimeMutation();
 
-  useEffect(() => {
-    if (leaderId !== userId) {
-      const channel = clientSupabase
-        .channel(chatRoomId)
-        .on(
-          'postgres_changes',
-          { event: 'UPDATE', schema: 'public', table: 'chatting_room', filter: `chatting_room_id=eq.${chatRoomId}` },
-          (payload) => {
-            console.log(payload.new);
-            queryClient.invalidateQueries({
-              queryKey: [CHATDATA_QUERY_KEY]
-            });
-          }
-        )
-        .subscribe();
-      return () => {
-        clientSupabase.removeChannel(channel);
-      };
-    }
-  }, [chatRoomId, leaderId, queryClient, userId]);
+  // useEffect(() => {
+  //   if (leaderId !== userId) {
+  //     const channel = clientSupabase
+  //       .channel(`${chatRoomId}_meetingTimeNLocation`)
+  //       .on(
+  //         'postgres_changes',
+  //         { event: 'UPDATE', schema: 'public', table: 'chatting_room', filter: `chatting_room_id=eq.${chatRoomId}` },
+  //         (payload) => {
+  //           console.log(payload.new);
+  //           queryClient.invalidateQueries({
+  //             queryKey: [CHATDATA_QUERY_KEY]
+  //           });
+  //         }
+  //       )
+  //       .subscribe();
+  //     return () => {
+  //       clientSupabase.removeChannel(channel);
+  //     };
+  //   }
+  // }, [chatRoomId, leaderId, queryClient, userId]);
   // months 배열을 선언
   const months = ['1월', '2월', '3월', '4월', '5월', '6월', '7월', '8월', '9월', '10월', '11월', '12월'];
   return (
@@ -69,9 +67,15 @@ const DateTimePicker: React.FC<DateTimePickerProps> = forwardRef(({ chatRoomId }
         wrapperClassName="w-full z-100"
         selected={selectedMeetingTime ? selectedMeetingTime : new Date()}
         onChange={(date) => {
-          if (leaderId == userId) {
-            setSelectedMeetingTime(date as Date);
-          }
+          // if (leaderId == userId) {
+          setSelectedMeetingTime(date as Date);
+          const isoStringMeetingTime = date?.toISOString();
+          updateMeetingTime({
+            chatRoomId,
+            isoStringMeetingTime: String(isoStringMeetingTime)
+          });
+
+          // }
         }}
         minDate={new Date()} // 오늘 이전의 날짜 선택 불가능
         showTimeSelect
@@ -103,7 +107,7 @@ const DateTimePicker: React.FC<DateTimePickerProps> = forwardRef(({ chatRoomId }
           </div>
         )}
       />
-      <button
+      {/* <button
         onClick={() => {
           const isoStringMeetingTime = selectedMeetingTime?.toISOString();
           updateMeetingTime({
@@ -113,7 +117,7 @@ const DateTimePicker: React.FC<DateTimePickerProps> = forwardRef(({ chatRoomId }
         }}
       >
         버튼
-      </button>
+      </button> */}
     </div>
   );
 });
