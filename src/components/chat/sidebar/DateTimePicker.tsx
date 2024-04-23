@@ -29,11 +29,11 @@ const DateTimePicker: React.FC<DateTimePickerProps> = forwardRef(({ chatRoomId }
 
   const months = ['1월', '2월', '3월', '4월', '5월', '6월', '7월', '8월', '9월', '10월', '11월', '12월'];
   return (
-    <div className="relative z-50 w-full max-w-lg py-6">
+    <div className="relative z-30 w-full max-w-lg py-6">
       <DatePicker
         locale={ko} // 한국어
         showPopperArrow={false} // 위에 삼각형 제거
-        wrapperClassName="w-full z-100"
+        wrapperClassName="w-full z-40"
         selected={selectedMeetingTime ? selectedMeetingTime : new Date()}
         onChange={(date) => {
           if (leaderId == userId) {

@@ -7,14 +7,18 @@ import { chatStore } from '@/store/chatStore';
 import { clientSupabase } from '@/utils/supabase/client';
 import { IoIosSearch } from 'react-icons/io';
 import ChatPresence from './ChatPresence';
+import { ValidationModal } from '@/components/common/ValidationModal';
+import { useModalStore } from '@/store/modalStore';
 
 const ChatHeader = ({ chatRoomId }: { chatRoomId: string }) => {
   const { onlineUsers, setMessages, setisRest, setSearchMode } = chatStore((state) => state);
+  const { openModal, closeModal } = useModalStore();
   const { data: user } = useGetUserDataQuery();
   const room = useRoomDataQuery(chatRoomId);
   const participants = useParticipantsQuery(room?.room_id as string);
 
   // 채팅방 isActive 상태를 false로 변경
+
   const updateIsActiveFalse = async () => {
     const { error: updateActiveErr } = await clientSupabase
       .from('chatting_room')
@@ -37,7 +41,7 @@ const ChatHeader = ({ chatRoomId }: { chatRoomId: string }) => {
     }
     const { error: deleteErr } = await clientSupabase
       .from('participants')
-      .delete()
+      .update({ isDeleted: true })
       .eq('room_id', String(room?.room_id))
       .eq('user_id', user?.user_id!);
     if (deleteErr) {
@@ -48,7 +52,7 @@ const ChatHeader = ({ chatRoomId }: { chatRoomId: string }) => {
 
   // 남아있는 사람인지 나간사람인지 isRest 상태변경으로 화면 렌더링 바꾸는 함수
   const handleIsRest = async () => {
-    const { data: restOf, error } = await clientSupabase
+    const { data: restOf, error: getPartErr } = await clientSupabase
       .from('participants')
       .select('user_id')
       .eq('room_id', String(room?.room_id))
@@ -56,8 +60,8 @@ const ChatHeader = ({ chatRoomId }: { chatRoomId: string }) => {
     const restArr = restOf?.map((r) => r.user_id);
 
     setisRest(restArr?.includes(user?.user_id!) as boolean);
-    if (error) {
-      console.error(error.message);
+    if (getPartErr) {
+      console.error(getPartErr.message);
       alert('참가자들 정보를 불러오는 데 실패했습니다.');
     }
   };
@@ -76,7 +80,7 @@ const ChatHeader = ({ chatRoomId }: { chatRoomId: string }) => {
     imgStorageErr && console.error('storage remove fail', imgStorageErr.message);
     const filesToRemove = usersAllImgList?.map((x) => `${chatRoomId}/${user?.user_id}/${x.name}`);
 
-    if (filesToRemove) {
+    if (filesToRemove && filesToRemove.length) {
       const { error: deleteFilesErr } = await clientSupabase.storage.from('chatImg').remove(filesToRemove);
       deleteFilesErr && console.error('fail to delete list of the folder', deleteFilesErr.message);
       const { error: deleteFolderErr } = await clientSupabase.storage
@@ -95,18 +99,26 @@ const ChatHeader = ({ chatRoomId }: { chatRoomId: string }) => {
     if (error) console.error('참가자 방 나갈 시 room_status 모집중으로 변경 실패', error.message);
   };
 
+  // 필요한 것만 async/await 처리하기
   const getOutOfChatRoom = async () => {
-    if (window.confirm('채팅창에서 한번 나가면 다시 입장할 수 없습니다. 그래도 나가시겠습니까?')) {
-      await updateIsActiveFalse();
-      await getRidOfMe();
-      await updateRoomState();
-      await handleIsRest();
-      deleteLastMsg();
-      deleteTheUserImgs();
-      setMessages([]);
-    } else {
-      return;
-    }
+    openModal({
+      type: 'confirm',
+      name: '',
+      text: '채팅창에서 한번 나가면 다시 입장할 수 없습니다. 그래도 나가시겠습니까?',
+      onFunc: async () => {
+        closeModal();
+        await updateIsActiveFalse();
+        await getRidOfMe();
+        await handleIsRest();
+        await updateRoomState();
+        deleteLastMsg();
+        deleteTheUserImgs();
+        setMessages([]);
+      },
+      onCancelFunc: () => {
+        closeModal();
+      }
+    });
   };
 
   return (
@@ -136,6 +148,7 @@ const ChatHeader = ({ chatRoomId }: { chatRoomId: string }) => {
         <button onClick={setSearchMode} className="text-[#A1A1AA]">
           <IoIosSearch />
         </button>
+        <ValidationModal />
         <button
           onClick={getOutOfChatRoom}
           className="border border-[#D4D4D8] text-[#A1A1AA] p-[10px] flex items-center rounded-md"

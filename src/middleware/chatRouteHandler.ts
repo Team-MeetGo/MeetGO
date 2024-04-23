@@ -12,7 +12,11 @@ export const chatRoomHandler = (middleware: CustomMiddleware) => {
       } = await supabase.auth.getUser();
       // 내가 들어가있는 방들
       const myChatRooms = [];
-      const { data: myRooms } = await supabase.from('participants').select('room_id').eq('user_id', String(user?.id));
+      const { data: myRooms } = await supabase
+        .from('participants')
+        .select('room_id')
+        .eq('user_id', String(user?.id))
+        .eq('isDeleted', false);
 
       if (myRooms) {
         for (let room of myRooms) {
