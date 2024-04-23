@@ -12,7 +12,6 @@ import { useUpdateMeetingTimeMutation } from '@/hooks/useMutation/useMeetingTime
 import { useGetUserDataQuery } from '@/hooks/useQueries/useUserQuery';
 import { DateTimePickerProps } from '@/types/sideBarTypes';
 import { clientSupabase } from '@/utils/supabase/client';
-import { clientSupabase } from '@/utils/supabase/client';
 
 const DateTimePicker: React.FC<DateTimePickerProps> = forwardRef(({ chatRoomId }, ref) => {
   const [selectedMeetingTime, setSelectedMeetingTime] = useState<Date | null>(new Date());
