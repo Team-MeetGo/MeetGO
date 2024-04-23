@@ -15,6 +15,9 @@ import { USER_DATA_QUERY_KEY } from '@/query/user/userQueryKeys';
 import type { UpdateProfileType } from '@/types/userTypes';
 import { useFavoriteStore } from '@/store/userStore';
 import ProfileHeader from './ProfileHeader';
+import { deleteUser } from '@/utils/api/authAPI';
+import { ValidationModal } from '../common/ValidationModal';
+import { useModalStore } from '@/store/modalStore';
 
 const Profile = () => {
   const queryClient = useQueryClient();
@@ -25,6 +28,7 @@ const Profile = () => {
   const inputKakaoId = useInputChange('');
   const inputGender = useInputChange('');
   const { selected } = useFavoriteStore();
+  const { openModal, closeModal } = useModalStore();
 
   const { mutate: updateProfileMutate } = useProfileUpdateMutation();
 
@@ -55,6 +59,19 @@ const Profile = () => {
         }
       }
     );
+  };
+
+  const handleDeleteUser = (userId: string) => {
+    openModal({
+      type: 'confirm',
+      name: '회원탈퇴',
+      text: '정말 탈퇴하시겠습니까?',
+      onFunc: () => {
+        deleteUser(userId);
+        closeModal();
+        location.replace('/');
+      }
+    });
   };
 
   return (
@@ -185,6 +202,10 @@ const Profile = () => {
             </button>
           )}
         </div>
+        <button className="underline" onClick={() => handleDeleteUser(user!.user_id)}>
+          회원탈퇴
+        </button>
+        <ValidationModal />
         <MetPeople />
         <MyPost />
       </div>

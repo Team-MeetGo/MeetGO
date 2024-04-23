@@ -1,3 +1,4 @@
+import { customErrToast, customSuccessToast } from '@/components/common/customToast';
 import { clientSupabase } from '@/utils/supabase/client';
 
 export const getUserId = async () => {
@@ -40,4 +41,13 @@ export const kakaoLogin = async () => {
   if (error) {
     return console.error('카카오 로그인 에러: ', error);
   }
+};
+
+/**회원탈퇴 API */
+export const deleteUser = async (userId: string) => {
+  const { error } = await clientSupabase.auth.admin.deleteUser(userId);
+  if (error) {
+    return customErrToast('회원탈퇴에 실패했습니다. 다시 시도해주세요.');
+  }
+  return customSuccessToast('회원탈퇴가 완료되었습니다.');
 };
