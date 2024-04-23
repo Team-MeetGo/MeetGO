@@ -4,13 +4,10 @@ import { useAddRoomMemberMutation, useUpdateRoomStatusCloseMutation } from '@/ho
 import { useAlreadyChatRoomQuery, useRoomParticipantsQuery } from '@/hooks/useQueries/useMeetingQuery';
 import { useGetUserDataQuery } from '@/hooks/useQueries/useUserQuery';
 import MeetGoLogoPurple from '@/utils/icons/meetgo-logo-purple.png';
-import { Chip } from '@nextui-org/react';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import RoomInformation from './RoomInformation';
-import { useCallback } from 'react';
 
-type ControlDelay = (callback: (...args: any[]) => void, delay: number) => any;
 import type { MeetingRoomType } from '@/types/roomTypes';
 
 function MeetingRoom({ room }: { room: MeetingRoomType }) {
@@ -55,6 +52,7 @@ function MeetingRoom({ room }: { room: MeetingRoomType }) {
     ) {
       roomMemberMutation();
     }
+
     //모든 인원이 다 찼을 경우 모집종료로 변경
     if (genderMaxNumber && participants?.length === genderMaxNumber * 2 - 1) {
       updateRoomStatusCloseMutation();
