@@ -13,17 +13,6 @@ import { useQueryClient } from '@tanstack/react-query';
 import Image from 'next/image';
 import { useEffect } from 'react';
 import { customErrToast, customLoveToast, customSuccessToast } from '../common/customToast';
-import { toast } from 'react-toastify';
-
-/**
- * useMutation을 이용한 데이터 처리 사용 방법
- * 1. service 폴더에 적절한 supabase의 insert/update/delete를 다루는 함수를 만든다.
- * 2. hooks/useMutation 폴더에 적절한 use~~~~~Mutation 함수를 만든다.
- * 3. 적용하려고 하는 컴포넌트를 client components로 바꾼다 -> "use client";
- * 4. const { mutate: 바꿔줄이름 } = useMetPeopleMutation(); => mutation을 호출한다.2번에서 만든 mutation.
- * 5. 실제 click이 일어나서 데이터를 넣어야 하는 곳에 mutate 함수를 실행한다.
- * 6. 실행이 완료되면(onSuccess), 갱신해야하는 useQuery로 가져온 데이터를 invalidate 처리한다.
- */
 
 const MetPeople = () => {
   const queryClient = useQueryClient();
@@ -48,9 +37,15 @@ const MetPeople = () => {
         )
         .on(
           'postgres_changes',
-          { event: 'INSERT', schema: 'public', table: 'kakaoId_request', filter: `response_Id=eq.${userId}` },
+          { event: '*', schema: 'public', table: 'kakaoId_request', filter: `response_Id=eq.${userId}` },
           (payload) => {
             queryClient.invalidateQueries({ queryKey: [KAKAOID_REQUEST_QUERY_KEY, userId, userGender] });
+          }
+        )
+        .on(
+          'postgres_changes',
+          { event: 'INSERT', schema: 'public', table: 'kakaoId_request', filter: `response_Id=eq.${userId}` },
+          (payload) => {
             customLoveToast('스쳐간 인연에게서 카카오톡ID 요청이 왔습니다!');
           }
         )
