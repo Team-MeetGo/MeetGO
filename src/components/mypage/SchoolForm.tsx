@@ -18,6 +18,7 @@ import {
   useDisclosure
 } from '@nextui-org/react';
 import { customErrToast, customSuccessToast } from '../common/customToast';
+import { FaCheckSquare } from 'react-icons/fa';
 
 const SchoolForm = () => {
   const queryClient = useQueryClient();
@@ -105,7 +106,7 @@ const SchoolForm = () => {
   };
 
   return (
-    <div className="mb-6 flex flex-col gap-6">
+    <div className="flex flex-col gap-6">
       <div className="flex gap-6">
         <label className="block text-lg font-semibold w-[100px]" htmlFor="schoolEmail">
           학교 이메일
@@ -129,7 +130,7 @@ const SchoolForm = () => {
           </div>
         )}
       </div>
-      <div className="flex gap-6">
+      <div className="flex gap-6 items-center">
         <label className="block text-lg font-semibold w-[100px]" htmlFor="univName">
           학교명
         </label>
@@ -152,7 +153,7 @@ const SchoolForm = () => {
           </div>
         )}
         {user?.isValidate ? (
-          <p>인증완료✔️</p>
+          <FaCheckSquare color="#006FEE" />
         ) : (
           <button className="text-sm border px-4 py-2 rounded-lg" onClick={onSubmitEmailConfirm} disabled={isCodeSent}>
             인증
