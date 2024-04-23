@@ -12,7 +12,8 @@ import { clientSupabase } from '@/utils/supabase/client';
 import { useQueryClient } from '@tanstack/react-query';
 import Image from 'next/image';
 import { useEffect } from 'react';
-import { customErrToast, customSuccessToast } from '../common/customToast';
+import { customErrToast, customLoveToast, customSuccessToast } from '../common/customToast';
+import { toast } from 'react-toastify';
 
 /**
  * useMutation을 이용한 데이터 처리 사용 방법
@@ -47,9 +48,10 @@ const MetPeople = () => {
         )
         .on(
           'postgres_changes',
-          { event: '*', schema: 'public', table: 'kakaoId_request', filter: `response_Id=eq.${userId}` },
+          { event: 'INSERT', schema: 'public', table: 'kakaoId_request', filter: `response_Id=eq.${userId}` },
           (payload) => {
             queryClient.invalidateQueries({ queryKey: [KAKAOID_REQUEST_QUERY_KEY, userId, userGender] });
+            customLoveToast('스쳐간 인연에게서 카카오톡ID 요청이 왔습니다!');
           }
         )
         .subscribe();
