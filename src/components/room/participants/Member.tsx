@@ -31,6 +31,10 @@ const Member = ({ roomId }: { roomId: UUID }) => {
   const hollowMaleArray = Array.from({ length: (genderMaxNumber as number) - maleMembers.length }, (_, i) => i);
 
   useEffect(() => {
+    setLeader(leaderMember);
+  }, [leaderMember]);
+
+  useEffect(() => {
     const channle = clientSupabase
       .channel('custom-insert-channel')
       .on(
@@ -87,7 +91,7 @@ const Member = ({ roomId }: { roomId: UUID }) => {
       clientSupabase.removeChannel(channle);
     };
   }, [members, participants, leaderMember]);
-
+  console.log(roomInformation);
   return (
     <div className="flex flex-col">
       {hollowFemaleArray.length === 0 && hollowMaleArray.length === 0 && (

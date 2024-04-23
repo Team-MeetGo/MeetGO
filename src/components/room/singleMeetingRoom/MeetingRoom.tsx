@@ -69,7 +69,7 @@ function MeetingRoom({ room }: { room: MeetingRoomType }) {
       }
     >
       <section className="w-max-[354px] h-[241px] p-6 gap-4 rounded-xl flex flex-col hover:cursor-pointer">
-        <RoomInformation room={room} user_id={userId} participants={participants} />
+        <RoomInformation room={room} />
         <main className="h-full flex flex-col justify-between" onClick={() => addMember({ room_id })}>
           <section>
             <h1 className="text-[26px]"> {room_title} </h1>

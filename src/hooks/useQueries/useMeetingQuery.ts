@@ -54,7 +54,7 @@ export const useAlreadyChatRoomQuery = (roomId: string): ChattingRoomType[] | un
   return data;
 };
 //참가한 사람들의 유저정보
-export const useRoomParticipantsQuery = (room_id: string): UserType[] => {
+export const useRoomParticipantsQuery = (room_id: string) => {
   const { data: users } = useSuspenseQuery({
     queryKey: [ROOM_MEMBER, room_id],
     queryFn: () => fetchRoomParticipants(room_id)

@@ -115,14 +115,15 @@ export const deleteMember = async ({ userId, roomId }: { userId: string; roomId:
     .eq('room_id', roomId)
     .select();
 };
-export const fetchRoomParticipants = async (roomId: string): Promise<UserType[]> => {
+
+export const fetchRoomParticipants = async (roomId: string) => {
   const { data: userInformations, error: userInformatinsError } = await clientSupabase
     .from('participants')
     .select(`*`)
     .eq('room_id', roomId)
     .eq('isDeleted', false)
     .select('user_id, users(*)');
-  userInformations !== null ? userInformations.map((user) => user.users) : [];
+  if (userInformations !== null) return userInformations?.map((user) => user.users) ?? [];
   return [];
 };
 

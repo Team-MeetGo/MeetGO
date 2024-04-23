@@ -1,30 +1,30 @@
 'use client';
 import DeleteMeetingRoom from '@/components/room/DeleteMeetingRoom';
 import EditMeetingRoom from '@/components/room/EditMeetingRoom';
+import getmaxGenderMemberNumber from '@/hooks/custom/room';
 import { useMyMsgData } from '@/hooks/useQueries/useChattingQuery';
+import { useAlreadyChatRoomQuery, useRoomParticipantsQuery } from '@/hooks/useQueries/useMeetingQuery';
+import { useGetUserDataQuery } from '@/hooks/useQueries/useUserQuery';
+import { GENDER } from '@/utils/MeetingRoomSelector';
 import { useEffect, useRef, useState } from 'react';
 import { BsFire } from 'react-icons/bs';
 import { HiOutlineDotsVertical } from 'react-icons/hi';
 import { IoChatbubblesOutline, IoFemale, IoMale } from 'react-icons/io5';
-import getmaxGenderMemberNumber from '@/hooks/custom/room';
-import { useAlreadyChatRoomQuery, useRoomParticipantsQuery } from '@/hooks/useQueries/useMeetingQuery';
 
-import type { MeetingRoomType, UserType } from '@/types/roomTypes';
-function RoomInformation({
-  room,
-}: {
-  room: MeetingRoomType;
-}) {
+import type { MeetingRoomType } from '@/types/roomTypes';
+function RoomInformation({ room }: { room: MeetingRoomType }) {
   const dropdownRef = useRef<HTMLDivElement>(null);
   const [open, setOpen] = useState(false);
   const { room_id, room_status, member_number, leader_id } = room;
   const alreadyChatRoom = useAlreadyChatRoomQuery(room_id);
   const participants = useRoomParticipantsQuery(room_id);
+  const { data: user } = useGetUserDataQuery();
 
   const genderMaxNumber = getmaxGenderMemberNumber(member_number);
   const emptySeat = genderMaxNumber! * 2 - participants!.length;
-  const countFemale = participants?.filter((member: UserType) => member?.gender === 'female').length;
+  const countFemale = participants?.filter((member) => member?.gender === GENDER.FEMALE).length;
   const countMale = participants.length - countFemale;
+  const user_id = user?.user_id;
   const myMsgData = useMyMsgData(user_id);
 
   useEffect(() => {
