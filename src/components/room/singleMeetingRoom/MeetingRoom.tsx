@@ -10,6 +10,7 @@ import MeetGoLogoPurple from '@/utils/icons/meetgo-logo-purple.png';
 import RoomInformation from './RoomInformation';
 
 import type { MeetingRoomType } from '@/types/roomTypes';
+import { useCallback } from 'react';
 function MeetingRoom({ room }: { room: MeetingRoomType }) {
   const { room_id, room_status, room_title, member_number, location, feature, region } = room;
   const router = useRouter();
@@ -57,6 +58,19 @@ function MeetingRoom({ room }: { room: MeetingRoomType }) {
     }
     return router.push(`/meetingRoom/${room_id}`);
   };
+
+  const debounce = (callback: ({ room_id }: { room_id: string }) => Promise<void>, delay: number) => {
+    let timerId: any = null;
+    return (room_id: string) => {
+      if (timerId) clearTimeout(timerId);
+      timerId = setTimeout(() => {
+        callback({ room_id });
+      }, delay);
+    };
+  };
+
+  const handleAddMemberDebounce = useCallback(debounce(addMember, 2000), []);
+
   return (
     <div
       className={
@@ -69,7 +83,7 @@ function MeetingRoom({ room }: { room: MeetingRoomType }) {
     >
       <section className="w-max-[354px] h-[241px] p-6 gap-4 rounded-xl flex flex-col hover:cursor-pointer">
         <RoomInformation room={room} user_id={user_id} alreadyChatRoom={alreadyChatRoom} participants={participants} />
-        <main className="h-full flex flex-col justify-between" onClick={() => addMember({ room_id })}>
+        <main className="h-full flex flex-col justify-between" onClick={() => handleAddMemberDebounce(room_id)}>
           <div className="flex flex-col">
             <p className="text-[26px]"> {room_title} </p>
             <div className="flex flex-row justify-start gap-2">
