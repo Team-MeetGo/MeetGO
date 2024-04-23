@@ -19,6 +19,7 @@ type chatState = {
   setSearchMode: () => void;
   setImgs: (imgs: File[]) => void;
   setOnlineUsers: (onlineUsers: string[]) => void;
+  // setSelectedMeetingTime: (value: React.SetStateAction<Date | null>) => void
 };
 
 export const chatStore = create<chatState>()((set) => ({
@@ -39,4 +40,5 @@ export const chatStore = create<chatState>()((set) => ({
   setSearchMode: () => set((state) => ({ searchMode: !state.searchMode })),
   setImgs: (imgs) => set({ imgs }),
   setOnlineUsers: (onlineUsers) => set({ onlineUsers })
+  // setSelectedMeetingTime:
 }));
