@@ -26,16 +26,6 @@ function MeetingRoom({ room }: { room: MeetingRoomType }) {
   const { mutate: updateRoomStatusCloseMutation } = useUpdateRoomStatusCloseMutation({ roomId, userId });
   const genderMaxNumber = getmaxGenderMemberNumber(member_number);
 
-  const debounce: ControlDelay = (callback, delay) => {
-    let timerId: NodeJS.Timeout | null = null;
-    return (...args: any[]) => {
-      if (timerId) clearTimeout(timerId);
-      timerId = setTimeout(() => {
-        callback(...args);
-      }, delay);
-    };
-  };
-
   const addMember = async ({ room_id }: { room_id: string }) => {
     if (!user?.gender) {
       alert('성별을 선택해주세요');
@@ -69,7 +59,7 @@ function MeetingRoom({ room }: { room: MeetingRoomType }) {
     if (genderMaxNumber && participants?.length === genderMaxNumber * 2 - 1) {
       updateRoomStatusCloseMutation();
     }
-    return debounce(() => router.push(`/meetingRoom/${room_id}`), 2000);
+    router.push(`/meetingRoom/${room_id}`);
   };
 
   const debounce = (callback: ({ room_id }: { room_id: string }) => Promise<void>, delay: number) => {
