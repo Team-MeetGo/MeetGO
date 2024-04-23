@@ -30,13 +30,13 @@ function EditMeetingRoom({
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
   const { data: user } = useGetUserDataQuery();
-  const user_id = user?.user_id;
+  const userId = user?.user_id;
   const { memberNumber, setMemberNumber, roomRegion, setRoomRegion } = useRoomStore();
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const [title, setTitle] = useState(room.room_title);
   const [location, setLocation] = useState(room.location);
   const [selected, setSelected] = useState<Set<string>>(new Set([]));
-  const room_id = room.room_id;
+  const roomId = room.room_id;
   const favoriteArray = Array.from(selected);
   //수정된 미팅룸 설정
   const editedMeetingRoom: UpdateRoomType = {
@@ -44,11 +44,11 @@ function EditMeetingRoom({
     feature: favoriteArray,
     location,
     member_number: String(memberNumber),
-    room_id,
+    room_id: roomId,
     region: String(roomRegion)
   };
   //미팅룸 업데이트
-  const { mutate: roomUpdateMutation } = useUpdateRoom({ editedMeetingRoom, user_id });
+  const { mutate: roomUpdateMutation } = useUpdateRoom({ editedMeetingRoom, userId });
   const editMeetingRoom = async (e: any) => {
     e.preventDefault();
     setOpen(false);

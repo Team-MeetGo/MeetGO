@@ -13,23 +13,23 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 import type { NewRoomType, UpdateRoomType, UserType } from '@/types/roomTypes';
 
-export const useUpdateRoomStatusClose = ({ room_id, user_id }: { room_id: string; user_id: string }) => {
+export const useUpdateRoomStatusCloseMutation = ({ roomId, userId }: { roomId: string; userId: string }) => {
   const queryClient = useQueryClient();
   const roomStatusCloseMutation = useMutation({
-    mutationFn: async () => await updateRoomStatusClose(room_id),
+    mutationFn: async () => await updateRoomStatusClose(roomId),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: [ROOM_MEMBER, user_id] });
+      queryClient.invalidateQueries({ queryKey: [ROOM_MEMBER, userId] });
     }
   });
   return roomStatusCloseMutation;
 };
 
-export const useUpdateRoomStatusOpen = ({ room_id, user_id }: { room_id: string; user_id: string }) => {
+export const useUpdateRoomStatusOpen = ({ roomId, userId }: { roomId: string; userId: string }) => {
   const queryClient = useQueryClient();
   const roomStatusOpenMutation = useMutation({
-    mutationFn: () => updateRoomStatusOpen(room_id),
+    mutationFn: () => updateRoomStatusOpen(roomId),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: [ROOM_MEMBER, user_id] });
+      queryClient.invalidateQueries({ queryKey: [ROOM_MEMBER, userId] });
     }
   });
   return roomStatusOpenMutation;
@@ -37,63 +37,60 @@ export const useUpdateRoomStatusOpen = ({ room_id, user_id }: { room_id: string;
 
 export const useUpdateRoom = ({
   editedMeetingRoom,
-  user_id
+  userId
 }: {
   editedMeetingRoom: UpdateRoomType;
-  user_id: string | undefined;
+  userId: string | undefined;
 }) => {
   const queryClient = useQueryClient();
   const updateRoomMutation = useMutation({
     mutationFn: async () => await updateRoom(editedMeetingRoom),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: [ROOMLIST, user_id] });
+      queryClient.invalidateQueries({ queryKey: [ROOMLIST, userId] });
     }
   });
   return updateRoomMutation;
 };
 
-export const useDeleteRoom = ({ room_id, user_id }: { room_id: string; user_id: string }) => {
+export const useDeleteRoom = ({ roomId, userId }: { roomId: string; userId: string }) => {
   const queryClient = useQueryClient();
   const deleteRoomMutation = useMutation({
-    mutationFn: async () => deleteRoom(room_id),
+    mutationFn: async () => deleteRoom(roomId),
     onSuccess: async () => {
-      await queryClient.invalidateQueries({ queryKey: [ROOMLIST, user_id] });
+      await queryClient.invalidateQueries({ queryKey: [ROOMLIST, userId] });
     }
   });
   return deleteRoomMutation;
 };
-export const useAddRoomMutation = ({ user_id }: { user_id: string }) => {
+export const useAddRoomMutation = () => {
   const queryClient = useQueryClient();
 
   const roomAddMutation = useMutation({
-    mutationFn: ({ nextMeetingRoom, user_id }: { nextMeetingRoom: NewRoomType; user_id: string }) =>
-      addRoom({ nextMeetingRoom, user_id }),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: [ROOMLIST, user_id] });
-    }
+    mutationFn: ({ nextMeetingRoom, userId }: { nextMeetingRoom: NewRoomType; userId: string }) =>
+      addRoom({ nextMeetingRoom, userId })
   });
   return roomAddMutation;
 };
 
-export const useAddRoomMemberMutation = ({ user_id, room_id }: { user_id: string; room_id: string }) => {
+export const useAddRoomMemberMutation = ({ userId, roomId }: { userId: string; roomId: string }) => {
   const queryClient = useQueryClient();
 
   const roomMemberMutation = useMutation({
-    mutationFn: () => addMember({ user_id, room_id }),
+    mutationFn: () => addMember({ userId, roomId }),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: [ROOM_MEMBER, room_id] });
+      queryClient.invalidateQueries({ queryKey: [ROOM_MEMBER, roomId] });
     }
   });
   return roomMemberMutation;
 };
 
-export const useDeleteMember = ({ user_id, room_id }: { user_id: string; room_id: string }) => {
+export const useDeleteMember = ({ userId, roomId }: { userId: string; roomId: string }) => {
   const queryClient = useQueryClient();
 
   const deleteMemberMutation = useMutation({
-    mutationFn: () => deleteMember({ user_id, room_id }),
+    mutationFn: () => deleteMember({ userId, roomId }),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: [ROOM_MEMBER, room_id] });
+      queryClient.invalidateQueries({ queryKey: [ROOM_MEMBER, roomId] });
     }
   });
   return deleteMemberMutation;
@@ -101,17 +98,17 @@ export const useDeleteMember = ({ user_id, room_id }: { user_id: string; room_id
 
 export const useUpdateLeaderMemberMutation = ({
   otherParticipants,
-  room_id
+  roomId
 }: {
   otherParticipants: (UserType | null)[] | undefined;
-  room_id: string;
+  roomId: string;
 }) => {
   const queryClient = useQueryClient();
 
   const roomLeaderMutation = useMutation({
-    mutationFn: () => updateLeaderMember({ otherParticipants, room_id }),
+    mutationFn: () => updateLeaderMember({ otherParticipants, roomId }),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: [ROOM_MEMBER, room_id] });
+      queryClient.invalidateQueries({ queryKey: [ROOM_MEMBER, roomId] });
     }
   });
   return roomLeaderMutation;

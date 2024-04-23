@@ -26,17 +26,15 @@ function MeetingRoomForm() {
   const router = useRouter();
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
 
-  const { data: user, isLoggedIn } = useGetUserDataQuery();
   const { memberNumber, resetMemberNumber, roomRegion, resetRoomRegion } = useRoomStore((state) => state);
+  const { data: user } = useGetUserDataQuery();
 
   const [location, setLocation] = useState('');
   const [title, setTitle] = useState('');
   const [selected, setSelected] = useState<Set<string>>(new Set([]));
+  const { mutate: addRoomMutation } = useAddRoomMutation();
 
-  const user_id = user.user_id;
-  const { mutate: addRoomMutation } = useAddRoomMutation({ user_id });
-
-  if (isLoggedIn) return <>...Loading</>;
+  const userId = user?.user_id!;
   const cancelMakingMeetingRoom = () => {
     setTitle('');
     setLocation('');
@@ -48,7 +46,7 @@ function MeetingRoomForm() {
   const favoriteArray = Array.from(selected);
   const nextMeetingRoom: NewRoomType = {
     feature: favoriteArray,
-    leader_id: String(user_id),
+    leader_id: userId,
     location,
     region: String(roomRegion),
     member_number: String(memberNumber),
@@ -61,7 +59,7 @@ function MeetingRoomForm() {
     if (!title || !selected || !location || !roomRegion) {
       alert('모든 항목은 필수입니다.');
     } else if (title && selected && location && roomRegion) {
-      const data = addRoomMutation({ nextMeetingRoom, user_id });
+      const data = addRoomMutation({ nextMeetingRoom, userId });
       alert('모임이 생성되었습니다.');
       setSelected(new Set([]));
       resetMemberNumber();

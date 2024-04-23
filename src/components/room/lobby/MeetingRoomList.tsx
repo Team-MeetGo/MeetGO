@@ -30,26 +30,18 @@ function MeetingRoomList() {
 
   //여러 조건에서 모집 중인 RoomList를 뽑아내기
   const filteredOtherRoomsHandler = () => {
-    if ((selectRegion === '전국' || !selectRegion) && (selectMemberNumber === '전체' || !selectMemberNumber)) {
+    if (!selectRegion && !selectMemberNumber) {
       return setFilteredOtherRooms(otherRooms);
     }
-    if (
-      selectRegion !== '지역' &&
-      selectRegion !== '전국' &&
-      (selectMemberNumber === '인원' || selectMemberNumber === '전체' || !selectMemberNumber)
-    ) {
+    if (selectRegion !== '전국' && (selectMemberNumber === '전체' || !selectMemberNumber)) {
       const regionFilteredRooms = otherRooms?.filter((room) => room.region === selectRegion);
       return setFilteredOtherRooms(regionFilteredRooms);
     }
-    if (
-      selectMemberNumber !== '인원' &&
-      selectMemberNumber !== '전체' &&
-      (selectRegion === '지역' || selectRegion === '전국' || !selectRegion)
-    ) {
+    if (selectMemberNumber !== '전체' && (selectRegion === '전국' || !selectRegion)) {
       const numberFilteredRooms = otherRooms?.filter((room) => room.member_number === selectMemberNumber);
       return setFilteredOtherRooms(numberFilteredRooms);
     }
-    if (selectMemberNumber !== ('인원' || '전체') && selectRegion !== ('지역' || '전국')) {
+    if (selectMemberNumber !== '전체' && selectRegion !== '전국') {
       const regionNumberFilteredRooms = otherRooms?.filter(
         (room) => room.member_number === selectMemberNumber && room.region === selectRegion
       );
@@ -83,11 +75,10 @@ function MeetingRoomList() {
           <div className="w-[1000px]">
             {
               <li className=" h-[241px] gap-[24px] grid grid-cols-3 w-100%">
-                {filteredMyRoomList !== null &&
-                  filteredMyRoomList?.map((room, index) => {
-                    if (index < 3 * page && index >= 3 * (page - 1))
-                      return <div key={room?.room_id}>{room && <MeetingRoom room={room} />}</div>;
-                  })}
+                {filteredMyRoomList?.map((room, index) => {
+                  if (index < 3 * page && index >= 3 * (page - 1))
+                    return <div key={room?.room_id}>{room && <MeetingRoom room={room} />}</div>;
+                })}
               </li>
             }
           </div>

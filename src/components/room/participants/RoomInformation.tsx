@@ -1,39 +1,33 @@
 'use client';
-import meetingRoomHandler from '@/hooks/custom/room';
 import {
   useDeleteMember,
   useDeleteRoom,
   useUpdateLeaderMemberMutation,
   useUpdateRoomStatusOpen
 } from '@/hooks/useMutation/useMeetingMutation';
-import { useRoomParticipantsQuery } from '@/hooks/useQueries/useMeetingQuery';
+import { useRoomInfoWithRoomIdQuery, useRoomParticipantsQuery } from '@/hooks/useQueries/useMeetingQuery';
 import { useGetUserDataQuery } from '@/hooks/useQueries/useUserQuery';
 import { useRouter } from 'next/navigation';
 import { IoFemale, IoMale } from 'react-icons/io5';
 
-import type { MeetingRoomType, UserType } from '@/types/roomTypes';
+import getmaxGenderMemberNumber from '@/hooks/custom/room';
+import type { UserType } from '@/types/roomTypes';
+import type { UUID } from 'crypto';
 
-function RoomInformation({
-  room_id,
-  roomInformation,
-  participants
-}: {
-  room_id: string;
-  roomInformation: MeetingRoomType;
-  participants: UserType[];
-}) {
+function RoomInformation({ roomId }: { roomId: UUID }) {
   const router = useRouter();
   const { data: user } = useGetUserDataQuery();
-  const user_id = user?.user_id!;
-  const { mutate: deleteMemberMutation } = useDeleteMember({ user_id, room_id });
-  const updateRoomStatusOpenMutation = useUpdateRoomStatusOpen({ room_id, user_id });
-  const { mutate: deleteRoomMutation } = useDeleteRoom({ room_id, user_id });
+  const userId = user?.user_id!;
+  const { mutate: deleteMemberMutation } = useDeleteMember({ userId, roomId });
+  const { mutate: updateRoomStatusOpenMutation } = useUpdateRoomStatusOpen({ roomId, userId });
+  const { mutate: deleteRoomMutation } = useDeleteRoom({ roomId, userId });
 
+  const roomInformation = useRoomInfoWithRoomIdQuery(roomId);
+  const participants = useRoomParticipantsQuery(roomId);
   const { room_title, member_number, location, feature, region, leader_id } = roomInformation;
-  const { getmaxGenderMemberNumber } = meetingRoomHandler();
   const genderMaxNumber = getmaxGenderMemberNumber(member_number);
   const otherParticipants = participants?.filter((person: UserType | null) => person?.user_id !== leader_id);
-  const updateLeaderMemeberMutation = useUpdateLeaderMemberMutation({ otherParticipants, room_id });
+  const { mutate: updateLeaderMemeberMutation } = useUpdateLeaderMemberMutation({ otherParticipants, roomId });
 
   const countFemale = participants?.filter((member) => member?.gender === 'female').length;
   const countMale = participants.length - countFemale;
@@ -43,11 +37,11 @@ function RoomInformation({
     if (!confirm('정말 나가시겠습니까? 나가면 다시 돌아올 수 없습니다!')) {
       return;
     }
-    updateRoomStatusOpenMutation.mutateAsync();
+    updateRoomStatusOpenMutation();
     deleteMemberMutation();
     //유저가 리더였다면 다른 사람에게 리더 역할이 승계됩니다.
-    if (leader_id === user_id && participants?.length > 1) {
-      updateLeaderMemeberMutation.mutate();
+    if (leader_id === userId && participants?.length > 1) {
+      updateLeaderMemeberMutation();
     }
     //만약 유일한 참여자라면 나감과 동시에 방은 삭제됩니다.
     if (participants?.length === 1) {
@@ -80,15 +74,7 @@ function RoomInformation({
               <figure className="flex flex-row w-[full] text-[14px] gap-[8px] justify-start items-end pl-[32px] mb-[16 px]">
                 {feature &&
                   feature.map((value) => (
-                    <div
-                      key={value}
-                      style={{
-                        backgroundColor: '#F2EAFA',
-                        color: '#8F5DF4',
-                        borderRadius: '8px',
-                        padding: '8px'
-                      }}
-                    >
+                    <div key={value} className="bg-purpleSecondary text-mainColor rounded-[8px] p-[8px]">
                       {value}
                     </div>
                   ))}

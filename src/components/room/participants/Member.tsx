@@ -1,40 +1,35 @@
 'use client';
 
 import GotoChatButton from '@/components/room/participants/GotoChatButton';
-import meetingRoomHandler from '@/hooks/custom/room';
-import MeetGoLogoPurple from '@/utils/icons/meetgo-logo-purple.png';
-import Image from 'next/image';
+import { useRoomInfoWithRoomIdQuery, useRoomParticipantsQuery } from '@/hooks/useQueries/useMeetingQuery';
+import { GENDER } from '@/utils/MeetingRoomSelector';
 import { RoomFemaleAvatar, RoomMaleAvatar } from '@/utils/icons/RoomAvatar';
+import MeetGoLogoPurple from '@/utils/icons/meetgo-logo-purple.png';
 import { clientSupabase } from '@/utils/supabase/client';
+import Image from 'next/image';
 import { useEffect, useState } from 'react';
 import { FaCrown } from 'react-icons/fa6';
 import { IoFemale, IoMale } from 'react-icons/io5';
+import getmaxGenderMemberNumber from '@/hooks/custom/room';
 
-import type { RoomData } from '@/types/chatTypes';
-import type { MeetingRoomType, UserType } from '@/types/roomTypes';
-const Member = ({
-  room_id,
-  roomInformation,
-  participants
-}: {
-  room_id: string;
-  roomInformation: MeetingRoomType;
-  participants: UserType[];
-}) => {
+import type { UserType } from '@/types/roomTypes';
+import type { UUID } from 'crypto';
+const Member = ({ roomId }: { roomId: UUID }) => {
+  const roomInformation = useRoomInfoWithRoomIdQuery(roomId);
+  const participants = useRoomParticipantsQuery(roomId);
+
+  const leaderMember = roomInformation.leader_id;
+  const memberNumber = roomInformation.member_number;
+
   const [members, setMembers] = useState<UserType[]>(participants as UserType[]);
-  const leaderMember = roomInformation?.leader_id;
   const [leader, setLeader] = useState(leaderMember as string);
-  const { getmaxGenderMemberNumber } = meetingRoomHandler();
-  const femaleMembers = members.filter((member) => member.gender === 'female');
-  const maleMembers = members.filter((member) => member.gender === 'male');
-  const memberNumber = roomInformation?.member_number;
-  const genderMaxNumber = getmaxGenderMemberNumber(memberNumber as string);
+
+  const genderMaxNumber = getmaxGenderMemberNumber(memberNumber);
+  const femaleMembers = members.filter((member) => member.gender === GENDER.FEMALE);
+  const maleMembers = members.filter((member) => member.gender === GENDER.MALE);
   const hollowFemaleArray = Array.from({ length: (genderMaxNumber as number) - femaleMembers.length }, (_, i) => i);
   const hollowMaleArray = Array.from({ length: (genderMaxNumber as number) - maleMembers.length }, (_, i) => i);
 
-  useEffect(() => {
-    setLeader(roomInformation.leader_id);
-  }, [roomInformation]);
   useEffect(() => {
     const channle = clientSupabase
       .channel('custom-insert-channel')
@@ -97,11 +92,7 @@ const Member = ({
     <div className="flex flex-col">
       {hollowFemaleArray.length === 0 && hollowMaleArray.length === 0 && (
         <div className="w-100%">
-          <GotoChatButton
-            roomInformation={roomInformation as RoomData}
-            participants={participants as UserType[]}
-            leader={leader}
-          />
+          <GotoChatButton roomId={roomId} leader={leader} />
         </div>
       )}
       <div className="flex flex-col items-center justify-content align-middle">
@@ -146,15 +137,7 @@ const Member = ({
                     <div className="flex flex-row w-100% text-[14px] gap-[8px] w-100%">
                       <div className="my-[16px] flex flex-row gap-[6px]">
                         {member.favorite?.map((tag) => (
-                          <div
-                            key={tag}
-                            style={{
-                              backgroundColor: '#F2EAFA',
-                              color: '#8F5DF4',
-                              borderRadius: '8px',
-                              padding: '8px'
-                            }}
-                          >
+                          <div key={tag} className="bg-purpleSecondary text-mainColor p-[8px] rounded-[8px]">
                             {tag}
                           </div>
                         ))}
@@ -180,7 +163,6 @@ const Member = ({
               </article>
             ))}
           </main>
-          {genderMaxNumber && genderMaxNumber > femaleMembers.length ? '' : ''}
 
           <main className="mt-[40px] grid grid-cols-1 grid-rows-4 w-100% gap-x-[100px] gap-y-[50px]">
             {maleMembers.map((member) => (
@@ -222,15 +204,7 @@ const Member = ({
                     <div className="flex flex-row w-100% text-[14px] gap-[8px] w-100%">
                       <div className="my-[16px] flex flex-row gap-[6px]">
                         {member.favorite?.map((tag) => (
-                          <div
-                            key={tag}
-                            style={{
-                              backgroundColor: '#FFFFFF',
-                              color: '#8F5DF4',
-                              borderRadius: '8px',
-                              padding: '8px'
-                            }}
-                          >
+                          <div key={tag} className="bg-white text-mainColor rounded-[8px] p-[8px]">
                             {tag}
                           </div>
                         ))}

@@ -1,30 +1,27 @@
 'use client';
-import meetingRoomHandler from '@/hooks/custom/room';
+import DeleteMeetingRoom from '@/components/room/DeleteMeetingRoom';
+import EditMeetingRoom from '@/components/room/EditMeetingRoom';
 import { useMyMsgData } from '@/hooks/useQueries/useChattingQuery';
 import { useEffect, useRef, useState } from 'react';
 import { BsFire } from 'react-icons/bs';
 import { HiOutlineDotsVertical } from 'react-icons/hi';
 import { IoChatbubblesOutline, IoFemale, IoMale } from 'react-icons/io5';
-import DeleteMeetingRoom from '@/components/room/DeleteMeetingRoom';
-import EditMeetingRoom from '@/components/room/EditMeetingRoom';
+import getmaxGenderMemberNumber from '@/hooks/custom/room';
+import { useAlreadyChatRoomQuery, useRoomParticipantsQuery } from '@/hooks/useQueries/useMeetingQuery';
 
-import type { ChattingRoomType, MeetingRoomType, UserType } from '@/types/roomTypes';
+import type { MeetingRoomType, UserType } from '@/types/roomTypes';
 function RoomInformation({
   room,
-  user_id,
-  alreadyChatRoom,
-  participants
 }: {
   room: MeetingRoomType;
-  user_id: string;
-  alreadyChatRoom: ChattingRoomType[] | null | undefined;
-  participants: any;
 }) {
+  const dropdownRef = useRef<HTMLDivElement>(null);
   const [open, setOpen] = useState(false);
   const { room_id, room_status, member_number, leader_id } = room;
-  const { getmaxGenderMemberNumber } = meetingRoomHandler();
+  const alreadyChatRoom = useAlreadyChatRoomQuery(room_id);
+  const participants = useRoomParticipantsQuery(room_id);
+
   const genderMaxNumber = getmaxGenderMemberNumber(member_number);
-  const dropdownRef = useRef<HTMLDivElement>(null);
   const emptySeat = genderMaxNumber! * 2 - participants!.length;
   const countFemale = participants?.filter((member: UserType) => member?.gender === 'female').length;
   const countMale = participants.length - countFemale;
@@ -87,7 +84,7 @@ function RoomInformation({
               {open && (
                 <div className="absolute top-full right-[0px] bg-white flex flex-col w-[92px] h-[78px] p-[5px] justify-items-center border-gray2 border-1 rounded-xl">
                   <div className="flex flex-col justify-items-center w-[92px]">
-                    <DeleteMeetingRoom room_id={room_id} setOpen={setOpen} />
+                    <DeleteMeetingRoom roomId={room_id} setOpen={setOpen} />
                   </div>
                   <div className="flex flex-col justify-items-center w-[92px]">
                     <EditMeetingRoom room={room} dropdownRef={dropdownRef} setOpen={setOpen} />

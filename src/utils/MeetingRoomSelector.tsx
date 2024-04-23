@@ -22,3 +22,8 @@ export const regionList = [
 export const member_number = ['전체', '2:2', '3:3', '4:4'];
 
 export const roomFeature = ['미친듯이 술 마시는', '여기저기 여행다니는'];
+
+export const GENDER = {
+  FEMALE: 'female',
+  MALE: 'male'
+};

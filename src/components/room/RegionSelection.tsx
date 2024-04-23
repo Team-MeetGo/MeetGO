@@ -8,8 +8,10 @@ import { IoIosArrowDown } from 'react-icons/io';
 function RegionSelection({ text }: { text: string }) {
   const [openModal, setOpenModal] = useState(false);
   const [region, setRegion] = useState('');
+
   const dropdownRef = useRef<HTMLDivElement>(null);
   const conditionalRef = useRef(text);
+
   const { setRoomRegion } = useRoomStore();
   const { setSelectRegion } = useSearchRoomStore();
 

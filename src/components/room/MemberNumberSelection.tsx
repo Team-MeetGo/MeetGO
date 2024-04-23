@@ -8,8 +8,10 @@ import { IoIosArrowDown } from 'react-icons/io';
 function MemberNumberSelection({ text }: { text: string }) {
   const [member, setMember] = useState('');
   const [openModal, setOpenModal] = useState(false);
+
   const conditionalRef = useRef(text);
   const dropdownRef = useRef<HTMLDivElement>(null);
+
   const { setMemberNumber } = useRoomStore();
   const { setSelectMemberNumber } = useSearchRoomStore();
 
