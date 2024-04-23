@@ -88,7 +88,7 @@ function RoomInformation({ roomId }: { roomId: UUID }) {
                 뒤로가기
               </button>
               <button
-                className="w-[90px] h-[43px] text-gray2 border-1 border-gray2 rounded-xl align-bottom"
+                className="w-[90px] h-[43px] text-white border-1 bg-gray3 border-gray2 rounded-xl align-bottom"
                 onClick={gotoLobby}
               >
                 나가기

@@ -84,7 +84,7 @@ function RoomInformation({ room }: { room: MeetingRoomType }) {
               {open && (
                 <div className="absolute top-full right-[0px] bg-white flex flex-col w-[92px] h-[78px] p-[5px] justify-items-center border-gray2 border-1 rounded-xl">
                   <div className="flex flex-col justify-items-center w-[92px]">
-                    <DeleteMeetingRoom roomId={room_id} setOpen={setOpen} />
+                    <DeleteMeetingRoom room_id={room_id} setOpen={setOpen} />
                   </div>
                   <div className="flex flex-col justify-items-center w-[92px]">
                     <EditMeetingRoom room={room} dropdownRef={dropdownRef} setOpen={setOpen} />

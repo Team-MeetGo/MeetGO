@@ -35,16 +35,22 @@ function MeetingRoomList() {
       return setFilteredOtherRooms(otherRooms);
     }
     if (selectRegion !== REGIONANDMEMBER.EVERYWHERE && selectMemberNumber === REGIONANDMEMBER.EVERYMEMBER) {
-      const regionFilteredRooms = otherRooms?.filter((room) => room.region === selectRegion);
+      const regionFilteredRooms = otherRooms?.filter(
+        (room) => room.region === selectRegion || room.region === REGIONANDMEMBER.EVERYWHERE
+      );
       return setFilteredOtherRooms(regionFilteredRooms);
     }
     if (selectMemberNumber !== REGIONANDMEMBER.EVERYMEMBER && selectRegion === REGIONANDMEMBER.EVERYWHERE) {
-      const numberFilteredRooms = otherRooms?.filter((room) => room.member_number === selectMemberNumber);
+      const numberFilteredRooms = otherRooms?.filter(
+        (room) => room.member_number === selectMemberNumber || room.member_number === REGIONANDMEMBER.EVERYMEMBER
+      );
       return setFilteredOtherRooms(numberFilteredRooms);
     }
     if (selectMemberNumber !== REGIONANDMEMBER.EVERYMEMBER && selectRegion !== REGIONANDMEMBER.EVERYWHERE) {
       const regionNumberFilteredRooms = otherRooms?.filter(
-        (room) => room.member_number === selectMemberNumber && room.region === selectRegion
+        (room) =>
+          room.member_number === (selectMemberNumber || REGIONANDMEMBER.EVERYMEMBER) &&
+          room.region === (selectRegion || REGIONANDMEMBER.EVERYWHERE)
       );
       return setFilteredOtherRooms(regionNumberFilteredRooms);
     }

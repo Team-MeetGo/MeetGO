@@ -52,7 +52,7 @@ const GotoChatButton = ({ roomId, leader }: { roomId: UUID; leader: string }) =>
 
   return (
     <main>
-      {userId === leader && participants?.length === maxMember && (
+      {
         <figure
           className="
         flex flex-col h-[114px] w-[1116px] justify-center text-center bg-mainColor"
@@ -65,10 +65,10 @@ const GotoChatButton = ({ roomId, leader }: { roomId: UUID; leader: string }) =>
               <h2 className="text-[40px] text-white font-bold">MEET GO</h2>
               <IoPlay className="w-[24px] h-[24px] my-auto fill-white" />
             </div>
-            <p className="text-[14px] text-white">방장이 여기를 누를 시 채팅방으로 이동합니다.</p>
+            <p className="text-[14px] text-white">인원이 다 차면 이 버튼이 활성화됩니다.</p>
           </button>
         </figure>
-      )}
+      }
     </main>
   );
 };

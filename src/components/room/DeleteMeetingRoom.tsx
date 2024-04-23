@@ -4,15 +4,15 @@ import { useDeleteRoom } from '@/hooks/useMutation/useMeetingMutation';
 import { useGetUserDataQuery } from '@/hooks/useQueries/useUserQuery';
 
 function DeleteMeetingRoom({
-  roomId,
+  room_id,
   setOpen
 }: {
-  roomId: string;
+  room_id: string;
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
   const { data: user } = useGetUserDataQuery();
   const userId = user?.user_id!;
-  const { mutate: deleteRoomMutation } = useDeleteRoom({ roomId, userId });
+  const { mutate: deleteRoomMutation } = useDeleteRoom({ room_id, userId });
   const DeleteMeetingRoomHandler = () => {
     if (confirm('정말 삭제하시겠습니까?')) {
       deleteRoomMutation();

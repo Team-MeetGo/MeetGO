@@ -78,8 +78,8 @@ export const updateRoom = async (editedMeetingRoom: UpdateRoomType) => {
   return data;
 };
 
-export const deleteRoom = async (roomId: string) => {
-  const { data: deleteRoomData } = await clientSupabase.from('room').delete().eq('room_id', roomId);
+export const deleteRoom = async (room_id: string) => {
+  const { data: deleteRoomData } = await clientSupabase.from('room').delete().eq('room_id', room_id);
   return deleteRoomData;
 };
 

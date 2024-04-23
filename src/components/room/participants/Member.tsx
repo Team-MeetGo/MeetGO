@@ -94,11 +94,9 @@ const Member = ({ roomId }: { roomId: UUID }) => {
   console.log(roomInformation);
   return (
     <div className="flex flex-col">
-      {hollowFemaleArray.length === 0 && hollowMaleArray.length === 0 && (
-        <div className="w-100%">
-          <GotoChatButton roomId={roomId} leader={leader} />
-        </div>
-      )}
+      <div className="w-100%">
+        <GotoChatButton roomId={roomId} leader={leader} />
+      </div>
       <div className="flex flex-row gap-[100px] items-center justify-content align-middle min-w-[1000px] max-w-[1440px]">
         <main className="mt-[40px] grid grid-cols-1 grid-rows-4 w-100% gap-y-[50px]">
           {femaleMembers.map((member) => (

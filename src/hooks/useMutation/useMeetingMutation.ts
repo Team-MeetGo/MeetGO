@@ -52,12 +52,12 @@ export const useUpdateRoom = ({
   return updateRoomMutation;
 };
 
-export const useDeleteRoom = ({ roomId, userId }: { roomId: string; userId: string }) => {
+export const useDeleteRoom = ({ room_id, userId }: { room_id: string; userId: string }) => {
   const queryClient = useQueryClient();
   const deleteRoomMutation = useMutation({
-    mutationFn: async () => deleteRoom(roomId),
-    onSuccess: async () => {
-      await queryClient.invalidateQueries({ queryKey: [ROOMLIST, userId] });
+    mutationFn: async () => await deleteRoom(room_id),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: [ROOMLIST, userId] });
     }
   });
   return deleteRoomMutation;
