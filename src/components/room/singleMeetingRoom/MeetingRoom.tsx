@@ -8,9 +8,10 @@ import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import MeetGoLogoPurple from '@/utils/icons/meetgo-logo-purple.png';
 import RoomInformation from './RoomInformation';
+import { useCallback } from 'react';
 
 import type { MeetingRoomType } from '@/types/roomTypes';
-import { useCallback } from 'react';
+
 function MeetingRoom({ room }: { room: MeetingRoomType }) {
   const { room_id, room_status, room_title, member_number, location, feature, region } = room;
   const router = useRouter();
