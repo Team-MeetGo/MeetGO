@@ -25,8 +25,6 @@ const Map: React.FC<MapProps> = ({ chatRoomId }) => {
   const [searchText, setSearchText] = useState<string>('');
   const [selectedMeetingLocation, setSelectedMeetingLocation] = useState<string>();
 
-  console.log('selectedMeetingLocation =>', selectedMeetingLocation);
-
   // 유저 정보 가져오기
   const { data: userData } = useGetUserDataQuery();
   const userId = userData?.user_id;
@@ -38,7 +36,6 @@ const Map: React.FC<MapProps> = ({ chatRoomId }) => {
   // 채팅방 정보 가져오기
   const chat = useChatDataQuery(chatRoomId);
   const meetingLocation = chat?.meeting_location;
-  console.log('meetingLocation =>', meetingLocation);
 
   useEffect(() => {
     const script = document.createElement('script');
