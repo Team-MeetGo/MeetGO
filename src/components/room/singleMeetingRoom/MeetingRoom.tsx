@@ -8,7 +8,6 @@ import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import RoomInformation from './RoomInformation';
 
-type ControlDelay = (callback: (...args: any[]) => void, delay: number) => any;
 import type { MeetingRoomType } from '@/types/roomTypes';
 
 function MeetingRoom({ room }: { room: MeetingRoomType }) {
