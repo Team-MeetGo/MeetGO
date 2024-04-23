@@ -44,7 +44,7 @@ const NavBarContents = () => {
 
   const checkIsValidate = () => {
     if (!isValidate) {
-      customErrToast('미팅을 하고 싶다면 학교 인증 ㄱㄱ');
+      customErrToast('미팅을 하고 싶다면 학교 인증을 해주세요!');
     }
   };
 

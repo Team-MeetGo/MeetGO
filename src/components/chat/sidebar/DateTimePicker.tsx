@@ -11,6 +11,7 @@ import { useChatDataQuery, useRoomDataQuery } from '@/hooks/useQueries/useChatti
 import { useUpdateMeetingTimeMutation } from '@/hooks/useMutation/useMeetingTimeMutation';
 import { useGetUserDataQuery } from '@/hooks/useQueries/useUserQuery';
 import { DateTimePickerProps } from '@/types/sideBarTypes';
+import { clientSupabase } from '@/utils/supabase/client';
 
 const DateTimePicker: React.FC<DateTimePickerProps> = forwardRef(({ chatRoomId }, ref) => {
   const [selectedMeetingTime, setSelectedMeetingTime] = useState<Date | null>(new Date());
@@ -39,6 +40,26 @@ const DateTimePicker: React.FC<DateTimePickerProps> = forwardRef(({ chatRoomId }
   }, [chatRoomId, chat]);
 
   const { mutate: updateMeetingTime } = useUpdateMeetingTimeMutation();
+
+  useEffect(() => {
+    if (selectedMeetingTime) {
+      const channel = clientSupabase
+        .channel(chatRoomId)
+        .on(
+          'postgres_changes',
+          { event: 'UPDATE', schema: 'public', table: 'chatting_room', filter: `chatting_room_id=eq.${chatRoomId}` },
+          (payload) => {
+            console.log('테스트', payload.new);
+            updateMeetingTime({ chatRoomId, isoStringMeetingTime: payload.new.meeting_time });
+          }
+        )
+        .subscribe();
+
+      return () => {
+        clientSupabase.removeChannel(channel);
+      };
+    }
+  }, [selectedMeetingTime, updateMeetingTime]);
 
   // months 배열을 선언
   const months = ['1월', '2월', '3월', '4월', '5월', '6월', '7월', '8월', '9월', '10월', '11월', '12월'];
