@@ -34,3 +34,13 @@ export const isNextDay = (idx: number, messages: Message[]) => {
 export const isItMe = (idx: number, messages: Message[]) => {
   return idx > 0 && messages[idx].send_from === messages[idx - 1].send_from;
 };
+
+export const debounce = <T extends (...args: any) => Promise<void>>(callback: T, delay: number) => {
+  let timerId: any = null;
+  return (...args: Parameters<T>) => {
+    if (timerId) clearTimeout(timerId);
+    timerId = setTimeout(() => {
+      callback(...args);
+    }, delay);
+  };
+};

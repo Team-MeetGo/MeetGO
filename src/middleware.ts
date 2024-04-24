@@ -9,7 +9,7 @@ const middlewareList = [
   updateSessionMiddleware,
   routeHandlerMiddleware,
   schoolValidateMiddleware,
-  meetingRoomHandler,
+  // meetingRoomHandler,
   chatRoomHandler
 ];
 

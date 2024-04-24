@@ -11,8 +11,6 @@ import type { UUID } from 'crypto';
 
 const InitRoom = ({ roomId }: { roomId: UUID }) => {
   const [newChatRoom, setNewChatRoom] = useState<chatRoomPayloadType | null>(null);
-  // const { data: user } = useGetUserDataQuery();
-  // const room = useRoomInfoWithRoomIdQuery(roomId);
   const router = useRouter();
 
   useEffect(() => {
@@ -38,7 +36,6 @@ const InitRoom = ({ roomId }: { roomId: UUID }) => {
   }, [roomId]);
 
   useEffect(() => {
-    // if (user?.user_id !== room?.leader_id && newChatRoom) {
     if (newChatRoom) {
       router.replace(`/chat/${newChatRoom.chatting_room_id}`);
     }
