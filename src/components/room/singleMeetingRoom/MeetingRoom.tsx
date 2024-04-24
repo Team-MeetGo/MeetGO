@@ -1,5 +1,5 @@
 'use client';
-import getmaxGenderMemberNumber from '@/hooks/custom/room';
+import getmaxGenderMemberNumber from '@/hooks/custom/useGenderMaxNumber';
 import { useAddRoomMemberMutation, useUpdateRoomStatusCloseMutation } from '@/hooks/useMutation/useMeetingMutation';
 import { useAlreadyChatRoomQuery, useRoomParticipantsQuery } from '@/hooks/useQueries/useMeetingQuery';
 import { useGetUserDataQuery } from '@/hooks/useQueries/useUserQuery';
@@ -70,7 +70,7 @@ function MeetingRoom({ room }: { room: MeetingRoomType }) {
     };
   };
 
-  const handleAddMemberDebounce = debounce(addMember, 2000);
+  const handleAddMemberDebounce = debounce(addMember, 500);
 
   return (
     <article
