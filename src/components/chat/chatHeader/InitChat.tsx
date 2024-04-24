@@ -25,7 +25,6 @@ const InitChat = ({ user, chatRoomId, allMsgs }: { user: User | null; chatRoomId
         'postgres_changes',
         { event: 'UPDATE', schema: 'public', table: 'chatting_room', filter: `chatting_room_id=eq.${chatRoomId}` },
         (payload) => {
-          console.log(payload.new);
           setChatState((payload.new as chatRoomPayloadType).isActive);
           if (user?.id !== room?.leader_id) {
             queryClient.invalidateQueries({
@@ -42,7 +41,6 @@ const InitChat = ({ user, chatRoomId, allMsgs }: { user: User | null; chatRoomId
 
   useEffect(() => {
     // **채팅방에 있을지 말지
-
     if (!chatState) {
       // 한 명이 채팅방을 나가서 채팅방 isActive가 false가 되면,
       if (isRest) {
