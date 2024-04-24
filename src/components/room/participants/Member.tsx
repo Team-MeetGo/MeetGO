@@ -18,20 +18,20 @@ const Member = ({ roomId }: { roomId: UUID }) => {
   const roomInformation = useRoomInfoWithRoomIdQuery(roomId);
   const participants = useRoomParticipantsQuery(roomId);
 
-  const leaderMember = roomInformation.leader_id;
-  const memberNumber = roomInformation.member_number;
+  const leaderMember = roomInformation?.leader_id;
+  const memberNumber = roomInformation?.member_number;
 
   const [members, setMembers] = useState<UserType[]>(participants as UserType[]);
   const [leader, setLeader] = useState(leaderMember as string);
 
-  const genderMaxNumber = getmaxGenderMemberNumber(memberNumber);
+  const genderMaxNumber = getmaxGenderMemberNumber(memberNumber!);
   const femaleMembers = members.filter((member) => member.gender === GENDER.FEMALE);
   const maleMembers = members.filter((member) => member.gender === GENDER.MALE);
   const hollowFemaleArray = Array.from({ length: (genderMaxNumber as number) - femaleMembers.length }, (_, i) => i);
   const hollowMaleArray = Array.from({ length: (genderMaxNumber as number) - maleMembers.length }, (_, i) => i);
 
   useEffect(() => {
-    setLeader(leaderMember);
+    setLeader(leaderMember!);
   }, [leaderMember]);
 
   useEffect(() => {

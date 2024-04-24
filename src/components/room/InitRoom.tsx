@@ -37,7 +37,7 @@ const InitRoom = ({ roomId }: { roomId: UUID }) => {
   }, [roomId]);
 
   useEffect(() => {
-    if (user?.user_id !== room?.leader_id && newChatRoom) {
+    if (newChatRoom) {
       router.replace(`/chat/${newChatRoom.chatting_room_id}`);
     }
   }, [newChatRoom]);

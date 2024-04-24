@@ -13,10 +13,12 @@ import type { MeetingRoomType } from '@/types/roomTypes';
 function MeetingRoomList() {
   const [page, setPage] = useState(1);
   const [filteredOtherRooms, setFilteredOtherRooms] = useState<MeetingRoomType[]>();
-  const { data: user, isPending, isError, error } = useGetUserDataQuery();
+
+  const { data: user, isPending } = useGetUserDataQuery();
   const { data: meetingRoomList } = useRecruitingQuery(String(user?.user_id));
   const myRoomList = useMyroomQuery(user?.user_id as string);
   const myOutList = useMyPastAndNowRoomQuery(user?.user_id as string);
+
   const filteredMyRoomList = myRoomList?.map((room) => room.room);
   const filteredMyOutRoomList = myOutList?.map((room) => room.room);
   const { selectRegion, selectMemberNumber } = useSearchRoomStore();
@@ -77,24 +79,36 @@ function MeetingRoomList() {
   return (
     <>
       <MyRoomsTitle>
-        <section className="w-100% flex flex-row items-center justify-content">
-          <button onClick={beforePage}>
-            <IoIosArrowBack className="h-[40px] w-[40px] m-[8px]" />
-          </button>
-          <div className="w-[1000px]">
-            {
-              <li className=" h-[241px] gap-[24px] grid grid-cols-3 w-100%">
-                {filteredMyRoomList?.map((room, index) => {
-                  if (index < 3 * page && index >= 3 * (page - 1))
-                    return <div key={room?.room_id}>{room && <MeetingRoom room={room} />}</div>;
-                })}
-              </li>
-            }
+        {filteredMyRoomList && filteredMyRoomList?.length > 0 ? (
+          <>
+            <button onClick={beforePage}>
+              {page !== 1 ? <IoIosArrowBack className="h-[40px] w-[40px] m-[8px]" /> : null}
+            </button>
+            <div className="w-[1000px]">
+              {
+                <li
+                  className={`${
+                    !filteredMyRoomList || filteredMyRoomList?.length === 0 ? 'h-[40px]' : 'h-[241px]'
+                  } gap-[24px] grid grid-cols-3 w-100%`}
+                >
+                  {filteredMyRoomList?.map((room, index) => {
+                    if (index < 3 * page && index >= 3 * (page - 1))
+                      return <div key={room?.room_id}>{room && <MeetingRoom room={room} />}</div>;
+                  })}
+                </li>
+              }
+            </div>
+            <button onClick={nextPage}>
+              {!filteredMyRoomList || filteredMyRoomList.length / 3 <= page ? null : (
+                <IoIosArrowForward className="h-[40px] w-[40px] m-[8px]" />
+              )}
+            </button>
+          </>
+        ) : (
+          <div className="text-[20px] w-[1112px] text-center">
+            아직 만들어진 방이 없습니다! 방을 만들어서 미팅을 시작해 보세요!
           </div>
-          <button onClick={nextPage}>
-            <IoIosArrowForward className="h-[40px] w-[40px] m-[8px]" />
-          </button>
-        </section>
+        )}
       </MyRoomsTitle>
       <OtherRoomsTitle>
         <section className="gap-[24px] grid grid-cols-3 w-[1000px] pt-[24px] pb-[8px]">

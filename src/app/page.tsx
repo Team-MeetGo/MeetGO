@@ -1,6 +1,7 @@
 import GetMostLikedReivew from '@/components/mainpage/GetMostLikedReview';
 import MainBanner from '@/components/mainpage/MainBanner';
 import MainBottomBanner from '@/components/mainpage/MainBottomBanner';
+import ProfileRouteModal from '@/components/mainpage/ProfileRouteModal';
 import UseInformation from '@/components/mainpage/UseInformation';
 
 export default function Home() {
@@ -10,6 +11,7 @@ export default function Home() {
       <GetMostLikedReivew />
       <MainBottomBanner />
       <UseInformation />
+      <ProfileRouteModal />
     </main>
   );
 }

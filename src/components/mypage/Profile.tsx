@@ -15,6 +15,9 @@ import { USER_DATA_QUERY_KEY } from '@/query/user/userQueryKeys';
 import type { UpdateProfileType } from '@/types/userTypes';
 import { useFavoriteStore } from '@/store/userStore';
 import ProfileHeader from './ProfileHeader';
+import { deleteUser } from '@/utils/api/authAPI';
+import { ValidationModal } from '../common/ValidationModal';
+import { useModalStore } from '@/store/modalStore';
 
 const Profile = () => {
   const queryClient = useQueryClient();
@@ -25,6 +28,7 @@ const Profile = () => {
   const inputKakaoId = useInputChange('');
   const inputGender = useInputChange('');
   const { selected } = useFavoriteStore();
+  const { openModal, closeModal } = useModalStore();
 
   const { mutate: updateProfileMutate } = useProfileUpdateMutation();
 
@@ -55,6 +59,22 @@ const Profile = () => {
         }
       }
     );
+  };
+
+  const handleDeleteUser = (userId: string) => {
+    openModal({
+      type: 'confirm',
+      name: '회원탈퇴',
+      text: '정말 탈퇴하시겠습니까?',
+      onFunc: () => {
+        deleteUser(userId);
+        closeModal();
+        location.replace('/');
+      },
+      onCancelFunc: () => {
+        closeModal();
+      }
+    });
   };
 
   return (
@@ -120,7 +140,7 @@ const Profile = () => {
         </div>
 
         <SchoolForm />
-        <div className="mb-6 flex items-center gap-6">
+        <div className="flex items-center gap-6">
           <label className="block text-lg font-semibold w-[100px]">카카오톡ID</label>
           {!isEditing ? (
             <p className="block text-sm font-medium mb-1">{user?.kakaoId}</p>
@@ -185,6 +205,10 @@ const Profile = () => {
             </button>
           )}
         </div>
+        <button className="underline max-w-24 m-auto" onClick={() => handleDeleteUser(user!.user_id)}>
+          회원탈퇴
+        </button>
+        <ValidationModal />
         <MetPeople />
         <MyPost />
       </div>

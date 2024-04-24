@@ -192,10 +192,8 @@ export const updateMeetingLocation = async ({ chatRoomId, barName }: { chatRoomI
     .eq('chatting_room_id', chatRoomId)
     .eq('meeting_location', barName);
   if (error) console.error('fail to select meeting_location', error.message);
-  console.log('업데이트 함수 안 barName => ', barName);
 
   if (DBdata && DBdata[0]) {
-    console.log('같은 게 있음!');
     const { data, error } = await clientSupabase
       .from('chatting_room')
       .update({ meeting_location: null })
@@ -203,7 +201,6 @@ export const updateMeetingLocation = async ({ chatRoomId, barName }: { chatRoomI
     if (error) console.error('fail to update meetingLocation to null', error.message);
     return data;
   } else {
-    console.log('같은 게 없어서 바꿈!');
     const { data, error } = await clientSupabase
       .from('chatting_room')
       .update({ meeting_location: barName })
