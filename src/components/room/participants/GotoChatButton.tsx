@@ -66,7 +66,7 @@ const GotoChatButton = ({ roomId, leader }: { roomId: UUID; leader: string }) =>
             className={`${
               genderParticipants && participants?.length === genderParticipants * 2 ? 'bg-mainColor' : 'bg-gray1'
             }`}
-            onClick={gotoChattingRoom}
+            onClick={handleGoChatDebounce}
           >
             <div className="flex flex-row justify-center align-middle gap-[8px]">
               <h2 className="text-[40px] text-white font-bold">MEET GO</h2>

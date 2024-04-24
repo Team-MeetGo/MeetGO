@@ -1,10 +1,4 @@
-import {
-  addNewLastMsg,
-  clearUnReadMsgNum,
-  fetchMyMsgData,
-  updateMyLastMsg,
-  updateNewMsgNum
-} from '@/query/chat/chatQueryFns';
+import { addNewLastMsg, clearUnReadMsgNum, updateMyLastMsg, updateNewMsgNum } from '@/query/chat/chatQueryFns';
 import { MY_LAST_MSGS_AFTER, MY_MSG_DATA } from '@/query/chat/chatQueryKeys';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 

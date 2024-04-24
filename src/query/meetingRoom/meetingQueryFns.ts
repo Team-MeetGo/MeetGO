@@ -33,7 +33,7 @@ export const fetchMyPastAndNowRoom = async (userId: string) => {
 
 export const fetchRoomInfoWithRoomId = async (roomId: string): Promise<MeetingRoomType> => {
   const { data: room, error } = await clientSupabase.from('room').select(`*`).eq('room_id', roomId);
-  if (!room || room.length <= 0) {
+  if (error || !room) {
     throw new Error('room이 존재하지 않습니다.');
   }
   return room[0];
