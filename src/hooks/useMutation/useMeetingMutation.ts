@@ -72,6 +72,7 @@ export const useAddRoomMutation = () => {
     mutationFn: ({ nextMeetingRoom, userId }: { nextMeetingRoom: NewRoomType; userId: string }) =>
       addRoom({ nextMeetingRoom, userId })
   });
+  console.log(roomAddMutation);
   return roomAddMutation;
 };
 
