@@ -8,6 +8,7 @@ import { FaCheck, FaPlus } from 'react-icons/fa6';
 import { useGetUserDataQuery } from '@/hooks/useQueries/useUserQuery';
 import { useNewReviewMutation, useUploadImgsMutation } from '@/hooks/useMutation/useReviewMutations';
 import { FaCamera } from 'react-icons/fa';
+import { customSuccessToast } from '../common/customToast';
 
 const NewReview = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -93,9 +94,8 @@ const NewReview = () => {
       show_nickname
     });
 
-    alert('리뷰가 등록되었습니다.');
-    window.location.reload();
-    console.error('이미지 업로드에 실패했습니다.');
+    customSuccessToast('리뷰가 등록되었습니다.');
+    handleClose();
   };
 
   return (

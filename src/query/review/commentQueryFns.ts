@@ -3,7 +3,7 @@ import { clientSupabase } from '@/utils/supabase/client';
 export const fetchCommentAuthor = async (commentAuthorId: string) => {
   const { data: commentAuthorData, error: userError } = await clientSupabase
     .from('users')
-    .select('nickname, avatar')
+    .select('nickname, avatar, gender')
     .eq('user_id', commentAuthorId as string)
     .single();
   return commentAuthorData;

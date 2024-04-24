@@ -85,13 +85,8 @@ const NavBarContents = () => {
             </Link>
           </NavbarItem>
           <NavbarItem isActive>
-            <Link href="/review/pageNumber/1" aria-current="page">
+            <Link href="/" aria-current="page">
               스쳐간 인연
-            </Link>
-          </NavbarItem>
-          <NavbarItem isActive>
-            <Link href="/review/pageNumber/1" aria-current="page">
-              고객지원
             </Link>
           </NavbarItem>
         </NavbarContent>
@@ -125,6 +120,9 @@ const NavBarContents = () => {
               >
                 <DropdownItem key="mypage" href="/mypage">
                   마이페이지
+                </DropdownItem>
+                <DropdownItem key="help" href="/help">
+                  고객센터
                 </DropdownItem>
                 <DropdownItem key="logout" color="danger">
                   LOGOUT

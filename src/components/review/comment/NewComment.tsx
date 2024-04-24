@@ -1,4 +1,5 @@
 'use client';
+import { customErrToast, customSuccessToast } from '@/components/common/customToast';
 import { useNewCommentMutation } from '@/hooks/useMutation/useCommentMutations';
 import { useGetUserDataQuery } from '@/hooks/useQueries/useUserQuery';
 import { Button } from '@nextui-org/react';
@@ -26,14 +27,14 @@ const NewComment = ({ review_id }: Props) => {
     e.preventDefault();
 
     if (!userId) {
-      alert('로그인 후 이용해주세요.');
+      customErrToast('로그인 후 이용해주세요.');
       return;
     }
     const comment_content = (document.getElementById('comment_content') as HTMLInputElement)?.value;
 
     addCommentMutation.mutate({ review_id, userId, comment_content });
 
-    alert('댓글이 등록되었습니다.');
+    customSuccessToast('댓글이 등록되었습니다.');
     setComments('');
   };
   return (

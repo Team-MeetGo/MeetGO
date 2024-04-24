@@ -1,12 +1,11 @@
 import { clientSupabase } from '@/utils/supabase/client';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import {
-  DELETE_REVIEW_QUERY_KEY,
   EDIT_IMGS_QUERY_KEY,
   EDIT_REVIEW_QUERY_KEY,
-  GET_IMGS_URL_QUERY_KEY,
   NEW_IMGS_QUERY_KEY,
-  NEW_REVIEW_QUERY_KEY
+  NEW_REVIEW_QUERY_KEY,
+  REVIEWLIST_QUERY_KEY
 } from '../../query/review/reviewQueryKeys';
 
 export const useDeleteReviewMutation = () => {
@@ -21,7 +20,9 @@ export const useDeleteReviewMutation = () => {
       const { error: reviewDeleteError } = await clientSupabase.from('review').delete().eq('review_id', review_id);
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: DELETE_REVIEW_QUERY_KEY });
+      queryClient.invalidateQueries({
+        queryKey: [REVIEWLIST_QUERY_KEY]
+      });
     }
   });
   return deleteCommentMutation;
@@ -59,7 +60,9 @@ export const useNewReviewMutation = () => {
       return newReview;
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: NEW_REVIEW_QUERY_KEY });
+      queryClient.invalidateQueries({
+        queryKey: [REVIEWLIST_QUERY_KEY]
+      });
     }
   });
   return newReviewMutation;

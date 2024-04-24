@@ -171,7 +171,7 @@ const JoinForm = () => {
                 type="button"
                 onClick={() => onGenderSelect('female')}
               >
-                여자
+                여성
               </Button>
               <Button
                 className={
@@ -183,7 +183,7 @@ const JoinForm = () => {
                 type="button"
                 onClick={() => onGenderSelect('male')}
               >
-                남자
+                남성
               </Button>
             </div>
           </div>
