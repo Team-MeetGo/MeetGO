@@ -1,5 +1,6 @@
 import {
   fetchChatData,
+  fetchMsgs,
   fetchMyChatRoomIds,
   fetchMyLastMsgs,
   fetchMyMsgData,
@@ -8,6 +9,7 @@ import {
 } from '@/query/chat/chatQueryFns';
 import {
   CHATDATA_QUERY_KEY,
+  MSGS_QUERY_KEY,
   MYCHAT_ROOMIDS,
   MY_LAST_MSGS_AFTER,
   MY_MSG_DATA,
@@ -46,6 +48,18 @@ export const useMyChatRoomIdsQuery = (userId: string) => {
     queryFn: () => fetchMyChatRoomIds(userId)
   });
   return myChatRoomIds;
+};
+
+// 더보기 해야만 이전 메세지를 불러올 수 있도록 refetch 관련 옵션 모두 false
+export const useMsgsQuery = (chatRoomId: string) => {
+  const { data } = useSuspenseQuery({
+    queryKey: [MSGS_QUERY_KEY, chatRoomId],
+    queryFn: () => fetchMsgs(chatRoomId),
+    refetchOnMount: false,
+    refetchOnReconnect: false,
+    refetchOnWindowFocus: false
+  });
+  if (data) return data;
 };
 
 export const useMyLastMsgs = (user_id: string, chatRoomId: string | null) => {

@@ -1,3 +1,4 @@
+import { useMsgsQuery } from '@/hooks/useQueries/useChattingQuery';
 import { chatStore } from '@/store/chatStore';
 import { useEffect, useState } from 'react';
 import { FaChevronDown, FaChevronUp } from 'react-icons/fa';
@@ -5,7 +6,8 @@ import { FaX } from 'react-icons/fa6';
 import { IoIosSearch } from 'react-icons/io';
 
 const ChatSearch = ({ isScrollTop }: { isScrollTop: boolean }) => {
-  const { searchMode, messages, setSearchMode } = chatStore((state) => state);
+  const { searchMode, chatRoomId, setSearchMode } = chatStore((state) => state);
+  const messages = useMsgsQuery(chatRoomId as string);
   const [searchWord, setSearchWord] = useState('');
   const [doneSearchDivs, setDoneSearchdivs] = useState<(HTMLElement | null)[]>();
   const [searchCount, setSearchCount] = useState(0);
@@ -13,12 +15,14 @@ const ChatSearch = ({ isScrollTop }: { isScrollTop: boolean }) => {
 
   const handleSearch = () => {
     if (searchWord) {
-      const filteredIds = messages
-        .filter((m) => m.message?.includes(searchWord))
-        .map((messages) => messages.message_id)
-        .reverse();
-      const idsDivs = filteredIds.map((id) => {
-        return document.getElementById(`${messages.find((m) => m.message_id === id)?.message_id}`);
+      const filteredIds =
+        messages &&
+        messages
+          .filter((m) => m.message?.includes(searchWord))
+          .map((messages) => messages.message_id)
+          .reverse();
+      const idsDivs = filteredIds?.map((id) => {
+        return document.getElementById(`${messages?.find((m) => m.message_id === id)?.message_id}`);
       });
       setDoneSearchdivs(idsDivs);
 

@@ -1,13 +1,14 @@
 'use client';
 import { useAddLastMsg, useClearNewMsgNum, useUpdateLastMsg } from '@/hooks/useMutation/useChattingMutation';
-import { useMyLastMsgs, useRoomDataQuery } from '@/hooks/useQueries/useChattingQuery';
+import { useMsgsQuery, useMyLastMsgs, useRoomDataQuery } from '@/hooks/useQueries/useChattingQuery';
 import { useGetUserDataQuery } from '@/hooks/useQueries/useUserQuery';
 import { chatStore } from '@/store/chatStore';
 import { useEffect } from 'react';
 
 const RememberLastChat = () => {
   const { data: user } = useGetUserDataQuery();
-  const { chatRoomId, messages } = chatStore((state) => state);
+  const { chatRoomId } = chatStore((state) => state);
+  const messages = useMsgsQuery(chatRoomId as string);
   const room = useRoomDataQuery(chatRoomId as string);
   const lastMsgId = useMyLastMsgs(user?.user_id!, chatRoomId);
   const { mutate: mutateClearUnread } = useClearNewMsgNum();
@@ -27,7 +28,7 @@ const RememberLastChat = () => {
   // 마지막으로 읽은 메세지 기억하기(채팅방에서 나갈 때만 적용: 의존성 빈배열)
   useEffect(() => {
     return () => {
-      if (messages.length) {
+      if (messages && messages.length) {
         lastMsgId ? mutateToUpdate() : mutateToAdd();
         mutateClearUnread(chatRoomId as string);
       }

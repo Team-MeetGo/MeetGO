@@ -9,16 +9,18 @@ import { IoIosSearch } from 'react-icons/io';
 import ChatPresence from './ChatPresence';
 import { ValidationModal } from '@/components/common/ValidationModal';
 import { useModalStore } from '@/store/modalStore';
+import { useQueryClient } from '@tanstack/react-query';
+import { MSGS_QUERY_KEY } from '@/query/chat/chatQueryKeys';
 
 const ChatHeader = ({ chatRoomId }: { chatRoomId: string }) => {
-  const { onlineUsers, setMessages, setisRest, setSearchMode } = chatStore((state) => state);
+  const { onlineUsers, setisRest, setSearchMode } = chatStore((state) => state);
   const { openModal, closeModal } = useModalStore();
   const { data: user } = useGetUserDataQuery();
   const room = useRoomDataQuery(chatRoomId);
   const participants = useParticipantsQuery(room?.room_id as string);
+  const queryClient = useQueryClient();
 
   // 채팅방 isActive 상태를 false로 변경
-
   const updateIsActiveFalse = async () => {
     const { error: updateActiveErr } = await clientSupabase
       .from('chatting_room')
@@ -116,7 +118,7 @@ const ChatHeader = ({ chatRoomId }: { chatRoomId: string }) => {
         await updateRoomState();
         deleteLastMsg();
         deleteTheUserImgs();
-        setMessages([]);
+        queryClient.removeQueries({ queryKey: [MSGS_QUERY_KEY, chatRoomId], exact: true });
       },
       onCancelFunc: () => {
         closeModal();

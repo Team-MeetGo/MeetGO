@@ -1,6 +1,6 @@
 'use client';
-import { useRoomDataQuery } from '@/hooks/useQueries/useChattingQuery';
-import { CHATDATA_QUERY_KEY } from '@/query/chat/chatQueryKeys';
+import { useMsgsQuery, useRoomDataQuery } from '@/hooks/useQueries/useChattingQuery';
+import { CHATDATA_QUERY_KEY, MSGS_QUERY_KEY } from '@/query/chat/chatQueryKeys';
 import { chatStore } from '@/store/chatStore';
 import { Message, chatRoomPayloadType } from '@/types/chatTypes';
 import { ITEM_INTERVAL } from '@/utils/constant';
@@ -11,7 +11,7 @@ import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
 
 const InitChat = ({ user, chatRoomId, allMsgs }: { user: User | null; chatRoomId: string; allMsgs: Message[] }) => {
-  const { chatState, isRest, setChatState, setMessages, setChatRoomId, setHasMore } = chatStore((state) => state);
+  const { chatState, isRest, setChatState, setChatRoomId, setHasMore } = chatStore((state) => state);
   const room = useRoomDataQuery(chatRoomId);
   const roomId = room?.room_id;
   const router = useRouter();
@@ -42,8 +42,7 @@ const InitChat = ({ user, chatRoomId, allMsgs }: { user: User | null; chatRoomId
 
   useEffect(() => {
     // **채팅방에 있을지 말지
-    console.log('chatState =>', chatState);
-    console.log('남아있는 사람인가 =>', isRest);
+
     if (!chatState) {
       // 한 명이 채팅방을 나가서 채팅방 isActive가 false가 되면,
       if (isRest) {
@@ -55,7 +54,7 @@ const InitChat = ({ user, chatRoomId, allMsgs }: { user: User | null; chatRoomId
       }
     } else {
       // **채팅방에 있는다면
-      setMessages([...allMsgs].reverse());
+      queryClient.setQueryData([MSGS_QUERY_KEY, chatRoomId], [...allMsgs].reverse());
       setHasMore(allMsgs?.length >= ITEM_INTERVAL + 1);
       setChatRoomId(chatRoomId);
     }

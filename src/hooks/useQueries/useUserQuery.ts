@@ -2,13 +2,14 @@
 import { fetchUserData, fetchUserLikePost, fetchUserPost } from '@/query/user/userQueryFns';
 import { USER_DATA_QUERY_KEY, USER_LIKE_POST_QUERY_KEY, USER_POST_QUERY_KEY } from '@/query/user/userQueryKeys';
 import { profileCount } from '@/store/userStore';
+import { UsersType } from '@/types/userTypes';
 import { useQuery } from '@tanstack/react-query';
 import { useEffect } from 'react';
 
 export const useGetUserDataQuery = () => {
   const { data, isPending, isError, error, isSuccess } = useQuery({
     queryKey: [USER_DATA_QUERY_KEY],
-    queryFn: fetchUserData
+    queryFn: () => fetchUserData()
   });
 
   const isLoggedIn = data?.user_id ? true : false;
