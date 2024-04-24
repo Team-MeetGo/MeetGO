@@ -7,7 +7,8 @@ export const fetchRecruitingRoom = async () => {
     .select(`*`)
     .eq('room_status', '모집중')
     .order('created_at', { ascending: false });
-  return meetingroom;
+  if (meetingroom) return meetingroom;
+  if (error) return console.error(error.message);
 };
 
 export const fetchMyRoom = async (userId: string) => {
