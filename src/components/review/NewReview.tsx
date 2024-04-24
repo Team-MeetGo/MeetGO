@@ -94,8 +94,7 @@ const NewReview = () => {
     });
 
     alert('리뷰가 등록되었습니다.');
-    window.location.reload();
-    console.error('이미지 업로드에 실패했습니다.');
+    handleClose();
   };
 
   return (

@@ -18,6 +18,7 @@ import ProfileHeader from './ProfileHeader';
 import { deleteUser } from '@/utils/api/authAPI';
 import { ValidationModal } from '../common/ValidationModal';
 import { useModalStore } from '@/store/modalStore';
+import { GENDER } from '@/utils/constant';
 
 const Profile = () => {
   const queryClient = useQueryClient();
