@@ -1,7 +1,7 @@
 'use client';
 import DeleteMeetingRoom from '@/components/room/DeleteMeetingRoom';
 import EditMeetingRoom from '@/components/room/EditMeetingRoom';
-import getmaxGenderMemberNumber from '@/hooks/custom/room';
+import getmaxGenderMemberNumber from '@/hooks/custom/useGenderMaxNumber';
 import { useMyMsgData } from '@/hooks/useQueries/useChattingQuery';
 import { useAlreadyChatRoomQuery, useRoomParticipantsQuery } from '@/hooks/useQueries/useMeetingQuery';
 import { useGetUserDataQuery } from '@/hooks/useQueries/useUserQuery';
@@ -16,6 +16,7 @@ function RoomInformation({ room }: { room: MeetingRoomType }) {
   const dropdownRef = useRef<HTMLDivElement>(null);
   const [open, setOpen] = useState(false);
   const { room_id, room_status, member_number, leader_id } = room;
+
   const alreadyChatRoom = useAlreadyChatRoomQuery(room_id);
   const participants = useRoomParticipantsQuery(room_id);
   const { data: user } = useGetUserDataQuery();

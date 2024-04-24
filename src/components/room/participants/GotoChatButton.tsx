@@ -5,17 +5,16 @@ import { useGetUserDataQuery } from '@/hooks/useQueries/useUserQuery';
 import { clientSupabase } from '@/utils/supabase/client';
 import { useRouter } from 'next/navigation';
 import { IoPlay } from 'react-icons/io5';
-import getmaxGenderMemberNumber from '@/hooks/custom/room';
+import getmaxGenderMemberNumber from '@/hooks/custom/useGenderMaxNumber';
 
 import type { UUID } from 'crypto';
-const GotoChatButton = ({ roomId, leader }: { roomId: UUID; leader: string }) => {
+import type { UserType } from '@/types/roomTypes';
+const GotoChatButton = ({ roomId, members }: { roomId: UUID; members: UserType[] }) => {
   const router = useRouter();
 
   const { data: user } = useGetUserDataQuery();
   const roomInformation = useRoomInfoWithRoomIdQuery(roomId);
-  const participants = useRoomParticipantsQuery(roomId);
 
-  const userId = user?.user_id!;
   const memberNumber = roomInformation?.member_number;
   const genderParticipants = getmaxGenderMemberNumber(memberNumber ?? '');
   const maxMember = genderParticipants! * 2;
@@ -56,17 +55,15 @@ const GotoChatButton = ({ roomId, leader }: { roomId: UUID; leader: string }) =>
         flex flex-col h-[114px] w-[1116px] justify-center text-center"
         >
           <button
-            disabled={genderParticipants ? (participants?.length === genderParticipants * 2 ? false : true) : false}
-            className={`${
-              genderParticipants && participants?.length === genderParticipants * 2 ? 'bg-mainColor' : 'bg-gray1'
-            }`}
+            disabled={genderParticipants ? (members?.length === maxMember ? false : true) : false}
+            className={`${genderParticipants && members?.length === maxMember ? 'bg-mainColor' : 'bg-gray1'}`}
             onClick={gotoChattingRoom}
           >
             <div className="flex flex-row justify-center align-middle gap-[8px]">
-              <h2 className="text-[40px] text-white font-bold">MEET GO</h2>
+              <h2 className="text-[40px] text-white font-bold">Go to chat</h2>
               <IoPlay className="w-[24px] h-[24px] my-auto fill-white" />
             </div>
-            <p className="text-[14px] text-white">인원이 다 차면 이 버튼이 활성화됩니다.</p>
+            <p className="text-[14px] text-white">인원이 다 차면 이 버튼을 누르세요.</p>
           </button>
         </figure>
       }
