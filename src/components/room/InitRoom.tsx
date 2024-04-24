@@ -1,7 +1,5 @@
 'use client';
 
-import { useRoomInfoWithRoomIdQuery } from '@/hooks/useQueries/useMeetingQuery';
-import { useGetUserDataQuery } from '@/hooks/useQueries/useUserQuery';
 import { chatRoomPayloadType } from '@/types/chatTypes';
 import { clientSupabase } from '@/utils/supabase/client';
 import { useRouter } from 'next/navigation';
