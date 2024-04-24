@@ -101,10 +101,13 @@ const ChatHeader = ({ chatRoomId }: { chatRoomId: string }) => {
 
   // 필요한 것만 async/await 처리하기
   const getOutOfChatRoom = async () => {
+    const message = `한 번 나가면 다시 입장하실 수 없습니다. 
+    한명이라도 나가면 채팅방이 닫힙니다. 
+    그래도 나가시겠습니까?`;
     openModal({
       type: 'confirm',
       name: '',
-      text: '채팅창에서 한번 나가면 다시 입장할 수 없습니다. 그래도 나가시겠습니까?',
+      text: message,
       onFunc: async () => {
         closeModal();
         await updateIsActiveFalse();
