@@ -121,3 +121,12 @@ export const updateAvatar = async (userId: string, file: File) => {
   }
   return publicURL;
 };
+
+/**첫 로그인 후 첫 로그인 여부 변경 */
+export const updateFirstLogin = async (userId: string) => {
+  const { error } = await clientSupabase.from('users').update({ first_login: false }).eq('user_id', userId);
+  if (error) {
+    console.error('Error updating first login:', error);
+  }
+  return;
+};

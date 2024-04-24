@@ -5,13 +5,10 @@ import React, { useEffect, useRef, useState } from 'react';
 import { Card, CardBody, Pagination } from '@nextui-org/react';
 import { HiMiniMagnifyingGlass } from 'react-icons/hi2';
 import DateTimePicker from './DateTimePicker';
-import {
-  useClearMeetingLocationMutation,
-  useUpdateMeetingLocationMutation
-} from '@/hooks/useMutation/useMeetingLocationMutation';
+import { useUpdateMeetingLocationMutation } from '@/hooks/useMutation/useMeetingLocationMutation';
 import { useGetUserDataQuery } from '@/hooks/useQueries/useUserQuery';
-import { MapProps } from '@/types/sideBarTypes';
-import { clientSupabase } from '@/utils/supabase/client';
+
+import type { MapProps } from '@/types/sideBarTypes';
 
 declare global {
   interface Window {
@@ -27,7 +24,6 @@ const Map: React.FC<MapProps> = ({ chatRoomId }) => {
   const [totalPages, setTotalPages] = useState(0);
   const [currentPos, setCurrentPos] = useState<string>();
   const [searchText, setSearchText] = useState<string>('');
-  const [isLocationSelected, setIsLocationSelected] = useState<boolean>(false);
   const [selectedMeetingLocation, setSelectedMeetingLocation] = useState<string>();
 
   // 유저 정보 가져오기
@@ -42,10 +38,8 @@ const Map: React.FC<MapProps> = ({ chatRoomId }) => {
   const chat = useChatDataQuery(chatRoomId);
   const meetingLocation = chat?.meeting_location;
 
-  useEffect(() => {
-    setSelectedMeetingLocation(meetingLocation || '');
-    setIsLocationSelected(!!meetingLocation);
-  }, [meetingLocation]);
+  // useMutation 호출
+  const updateMeetingLocationMutation = useUpdateMeetingLocationMutation();
 
   useEffect(() => {
     const script = document.createElement('script');
@@ -186,55 +180,15 @@ const Map: React.FC<MapProps> = ({ chatRoomId }) => {
     setCurrentPage(pageNumber);
     searchBarsNearby(mapRef.current, pageNumber);
   };
-  // useMutation 호출
-  const updateMeetingLocationMutation = useUpdateMeetingLocationMutation();
-  const clearMeetingLocationMutation = useClearMeetingLocationMutation();
 
   // 장소 선택 함수
   const handleSelectLocation = (barName: string) => {
     setSelectedMeetingLocation(barName);
-    setIsLocationSelected(!isLocationSelected);
     if (!chatRoomId) {
       return;
     }
-
-    if (barName === selectedMeetingLocation) {
-      try {
-        clearMeetingLocationMutation.mutate(chatRoomId);
-      } catch (error) {
-        console.error('미팅장소 삭제 오류:', error);
-      }
-    } else {
-      try {
-        updateMeetingLocationMutation.mutate({ chatRoomId, barName });
-      } catch (error) {
-        console.error('미팅장소 업데이트 오류:', error);
-      }
-    }
+    updateMeetingLocationMutation.mutate({ chatRoomId, barName });
   };
-
-  useEffect(() => {
-    if (selectedMeetingLocation) {
-      const channel = clientSupabase
-        .channel(chatRoomId)
-        .on(
-          'postgres_changes',
-          { event: '*', schema: 'public', table: 'chatting_room', filter: `chatting_room_id=eq.${chatRoomId}` },
-          (payload) => {
-            console.log(payload.new);
-            try {
-              updateMeetingLocationMutation.mutate({ chatRoomId, barName: selectedMeetingLocation });
-            } catch (error) {
-              console.error('미팅장소 업데이트 오류:', error);
-            }
-          }
-        )
-        .subscribe();
-      return () => {
-        clientSupabase.removeChannel(channel);
-      };
-    }
-  }, [chatRoomId, updateMeetingLocationMutation]);
 
   return (
     <div>
@@ -242,8 +196,8 @@ const Map: React.FC<MapProps> = ({ chatRoomId }) => {
         <h1 className="font-semibold text-2xl mb-2">미팅 장소</h1>
         <Card className="h-[60px] border border-mainColor rounded-[9px] shadow-none ">
           <CardBody className=" flex flex-row justify-start items-center text-lg">
-            <p className={selectedMeetingLocation ? '' : 'text-gray2'}>
-              {selectedMeetingLocation ? selectedMeetingLocation : '방장이 선택한 장소가 표시됩니다.'}
+            <p className={meetingLocation ? '' : 'text-gray2'}>
+              {meetingLocation ? meetingLocation : '방장이 선택한 장소가 표시됩니다.'}
             </p>
           </CardBody>
         </Card>
@@ -277,7 +231,7 @@ const Map: React.FC<MapProps> = ({ chatRoomId }) => {
         </CardBody>
       </Card>
 
-      <div id="map" className="w-full h-80"></div>
+      <div id="map" className="max-w-sm h-80"></div>
       <div className=" flex flex-col justify-start items-start mx-auto">
         {bars.map((bar, index) => (
           <div
@@ -290,7 +244,7 @@ const Map: React.FC<MapProps> = ({ chatRoomId }) => {
               className="py-4 px-9 cursor-pointer items-center"
               onClick={() => {
                 if (userId === leaderId) {
-                  handleSelectLocation(selectedMeetingLocation === bar.place_name ? '' : bar.place_name);
+                  handleSelectLocation(bar.place_name);
                 }
               }}
             >

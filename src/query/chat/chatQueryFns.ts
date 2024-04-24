@@ -143,7 +143,7 @@ export const updateMyLastMsg = async (user_id: string, chatRoomId: string, msg_i
     .eq('chatting_room_id', chatRoomId)
     .select('*');
   if (error) console.error('마지막 메세지 업데이트 실패 =>', error.message);
-  return updateMyLastMsg;
+  return updatedLastMsg;
 };
 
 // 안 읽은 메세지 수 추가
@@ -183,4 +183,29 @@ export const addMeetingLocation = async ({ chatRoomId, barName }: { chatRoomId: 
 // 미팅 장소 제거
 export const deleteMeetingLocation = async (chatRoomId: string) => {
   await clientSupabase.from('chatting_room').update({ meeting_location: null }).eq('chatting_room_id', chatRoomId);
+};
+
+export const updateMeetingLocation = async ({ chatRoomId, barName }: { chatRoomId: string; barName: string }) => {
+  const { data: DBdata, error } = await clientSupabase
+    .from('chatting_room')
+    .select('meeting_location')
+    .eq('chatting_room_id', chatRoomId)
+    .eq('meeting_location', barName);
+  if (error) console.error('fail to select meeting_location', error.message);
+
+  if (DBdata && DBdata[0]) {
+    const { data, error } = await clientSupabase
+      .from('chatting_room')
+      .update({ meeting_location: null })
+      .eq('chatting_room_id', chatRoomId);
+    if (error) console.error('fail to update meetingLocation to null', error.message);
+    return data;
+  } else {
+    const { data, error } = await clientSupabase
+      .from('chatting_room')
+      .update({ meeting_location: barName })
+      .eq('chatting_room_id', chatRoomId);
+    if (error) console.error('fail to update meetingLocation to new', error.message);
+    return data;
+  }
 };

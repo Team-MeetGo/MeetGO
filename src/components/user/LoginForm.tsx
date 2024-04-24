@@ -20,8 +20,6 @@ import cookie from 'react-cookies';
 import { customErrToast } from '../common/customToast';
 
 const LoginForm = () => {
-  const queryClient = useQueryClient();
-
   const [loginData, setLoginData] = useState<LoginDataType>({ userId: '', password: '' });
   const [isValidateShow, setIsValidateShow] = useState<IsValidateShow>({
     userId: true,
