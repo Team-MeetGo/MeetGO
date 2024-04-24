@@ -134,7 +134,7 @@ const ChatHeader = ({ chatRoomId }: { chatRoomId: string }) => {
 
           <div className="flex gap-[20px] items-center">
             <ChatPresence />
-            <AvatarGroup isBordered>
+            <AvatarGroup isBordered max={8}>
               {participants.map((person) => (
                 <Tooltip key={person.user_id} content={<ShowChatMember person={person} />}>
                   <Avatar
