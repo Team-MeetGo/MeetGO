@@ -24,7 +24,7 @@ const GetMostLikedReivew = () => {
   return (
     <div>
       <div className="max-w-[1000px] flex items-center justify-between mr-[15px]">
-        <div className="flex items-center mb-[15px] ml-[15px]">
+        <div className="flex items-center mb-[16px]">
           <p className="text-[26px] font-bold mr-[10px]">Best Review</p>
         </div>
         <div className="flex items-center mr-[10px] mb-[15px]">
@@ -34,7 +34,7 @@ const GetMostLikedReivew = () => {
           </div>
         </div>
       </div>
-      <ul className="max-w-[1000px] grid grid-cols-3 gap-x-6 gap-y-8">
+      <ul className="max-w-[1000px] grid max-sm:grid-cols-1 max-md:grid-cols-2 grid-cols-3 gap-x-6 gap-y-8">
         {sliceReviews.map((item) => (
           <ReviewCard key={item.review_id} review={item} />
         ))}
