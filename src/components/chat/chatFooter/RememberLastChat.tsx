@@ -2,7 +2,9 @@
 import { useAddLastMsg, useClearNewMsgNum, useUpdateLastMsg } from '@/hooks/useMutation/useChattingMutation';
 import { useMsgsQuery, useMyLastMsgs, useRoomDataQuery } from '@/hooks/useQueries/useChattingQuery';
 import { useGetUserDataQuery } from '@/hooks/useQueries/useUserQuery';
+import { MSGS_QUERY_KEY } from '@/query/chat/chatQueryKeys';
 import { chatStore } from '@/store/chatStore';
+import { useQueryClient } from '@tanstack/react-query';
 import { useEffect } from 'react';
 
 const RememberLastChat = () => {
@@ -12,6 +14,7 @@ const RememberLastChat = () => {
   const room = useRoomDataQuery(chatRoomId as string);
   const lastMsgId = useMyLastMsgs(user?.user_id!, chatRoomId);
   const { mutate: mutateClearUnread } = useClearNewMsgNum();
+  const queryClient = useQueryClient();
 
   const { mutate: mutateToUpdate } = useUpdateLastMsg(
     user?.user_id as string,
@@ -29,8 +32,8 @@ const RememberLastChat = () => {
   useEffect(() => {
     return () => {
       if (messages && messages.length) {
-        lastMsgId ? mutateToUpdate() : mutateToAdd();
-        mutateClearUnread(chatRoomId as string);
+        // lastMsgId ? mutateToUpdate() : mutateToAdd();
+        // mutateClearUnread(chatRoomId as string);
       }
     };
   }, []);

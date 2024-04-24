@@ -1,6 +1,6 @@
 'use client';
 
-import { useRoomDataQuery } from '@/hooks/useQueries/useChattingQuery';
+import { useMsgsQuery, useRoomDataQuery } from '@/hooks/useQueries/useChattingQuery';
 import { CHATDATA_QUERY_KEY, MSGS_QUERY_KEY } from '@/query/chat/chatQueryKeys';
 import { chatStore } from '@/store/chatStore';
 import { Message, chatRoomPayloadType } from '@/types/chatTypes';
@@ -17,6 +17,7 @@ const InitChat = ({ user, chatRoomId, allMsgs }: { user: User | null; chatRoomId
   const roomId = room?.room_id;
   const router = useRouter();
   const queryClient = useQueryClient();
+  const messages = useMsgsQuery(chatRoomId);
 
   useEffect(() => {
     // 채팅방 isActive 상태 구독
@@ -60,7 +61,6 @@ const InitChat = ({ user, chatRoomId, allMsgs }: { user: User | null; chatRoomId
       setChatRoomId(chatRoomId);
     }
   }, [chatState, isRest]);
-  // 왜 요청이 2번이나 되징
 
   return null;
 };

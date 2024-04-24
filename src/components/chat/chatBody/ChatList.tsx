@@ -47,17 +47,19 @@ const ChatList = ({ user, chatRoomId }: { user: User | null; chatRoomId: string 
             filter: `chatting_room_id=eq.${chatRoomId}`
           },
           async (payload) => {
-            await queryClient.invalidateQueries({ queryKey: [MSGS_QUERY_KEY, chatRoomId] });
-            const includingNew: Message[] | undefined = queryClient.getQueryData([MSGS_QUERY_KEY, chatRoomId]);
-            const lastIdx = messages && includingNew?.map((i) => i.message_id).indexOf(messages[0]?.message_id);
-            messages &&
-              includingNew &&
-              (await queryClient.setQueryData(
-                [MSGS_QUERY_KEY, chatRoomId],
-                [...includingNew].slice(lastIdx ?? 0, includingNew.length)
-              ));
-            if (isScrolling) {
-              setNewAddedMsgNum((prev) => (prev += 1));
+            if (payload) {
+              await queryClient.invalidateQueries({ queryKey: [MSGS_QUERY_KEY, chatRoomId] });
+              const includingNew: Message[] | undefined = queryClient.getQueryData([MSGS_QUERY_KEY, chatRoomId]);
+              const lastIdx = messages && includingNew?.map((i) => i.message_id).indexOf(messages[0]?.message_id);
+              messages &&
+                includingNew &&
+                (await queryClient.setQueryData(
+                  [MSGS_QUERY_KEY, chatRoomId],
+                  [...includingNew].slice(lastIdx ?? 0, includingNew.length)
+                ));
+              if (isScrolling) {
+                setNewAddedMsgNum((prev) => (prev += 1));
+              }
             }
           }
         )
@@ -65,12 +67,14 @@ const ChatList = ({ user, chatRoomId }: { user: User | null; chatRoomId: string 
           'postgres_changes',
           { event: 'DELETE', schema: 'public', table: 'messages', filter: `chatting_room_id=eq.${chatRoomId}` },
           async (payload) => {
-            await queryClient.invalidateQueries({ queryKey: [MSGS_QUERY_KEY, chatRoomId] });
-            messages &&
-              queryClient.setQueryData(
-                [MSGS_QUERY_KEY, chatRoomId],
-                messages.filter((msg) => msg.message_id !== payload.old.message_id)
-              );
+            if (payload) {
+              await queryClient.invalidateQueries({ queryKey: [MSGS_QUERY_KEY, chatRoomId] });
+              messages &&
+                queryClient.setQueryData(
+                  [MSGS_QUERY_KEY, chatRoomId],
+                  messages.filter((msg) => msg.message_id !== payload.old.message_id)
+                );
+            }
           }
         )
         .subscribe();
@@ -170,7 +174,8 @@ const ChatList = ({ user, chatRoomId }: { user: User | null; chatRoomId: string 
               ) : (
                 <OthersChat msg={msg} idx={idx} lastDivRefs={lastDivRefs} />
               )}
-              {lastMsgId &&
+              {messages &&
+              lastMsgId &&
               lastMsgId !== messages[messages.length - 1].message_id &&
               lastMsgId === msg.message_id &&
               isScrolling &&
