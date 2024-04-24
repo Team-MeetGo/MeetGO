@@ -30,7 +30,7 @@ const ReviewCard = ({ review }: { review: ReviewType }) => {
   return (
     <div
       key={review.review_id}
-      className="flex flex-col w-full justify-center item-center border-1 border-[#A1A1AA] rounded-[10px] p-[16px]"
+      className="flex flex-col w-full justify-center item-center border-1 border-[#A1A1AA] rounded-[8px] p-[16px]"
     >
       <div className="flex flex-col w-full items-start h-full">
         <Link href={`/review/${review.review_id}`}>
