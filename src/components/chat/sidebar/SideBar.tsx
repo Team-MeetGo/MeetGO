@@ -22,8 +22,8 @@ const SideBar: React.FC<SideBarProps> = ({ chatRoomId }) => {
   }
 
   return (
-    <div className="transition-max-h ease-in-out duration-1000 ">
-      <div className="max-h-screen overflow-y-auto w-full pt-8 pr-6 max-w-sm">
+    <div className="transition-max-h ease-in-out duration-1000 max-w-[32rem] ">
+      <div className="max-h-screen overflow-y-auto pt-8 pr-6 w-[24rem]">
         <h1 className="font-semibold text-2xl mb-2">미팅 날짜/시간</h1>
         <Card className="h-[60px] border border-mainColor rounded-[9px] shadow-none ">
           <CardBody className="flex flex-row justify-start items-center text-lg">

@@ -231,7 +231,7 @@ const Map: React.FC<MapProps> = ({ chatRoomId }) => {
         </CardBody>
       </Card>
 
-      <div id="map" className="max-w-sm h-80"></div>
+      <div id="map" className="w-full h-80"></div>
       <div className=" flex flex-col justify-start items-start mx-auto">
         {bars.map((bar, index) => (
           <div
