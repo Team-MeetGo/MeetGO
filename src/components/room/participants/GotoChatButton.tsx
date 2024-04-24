@@ -16,8 +16,8 @@ const GotoChatButton = ({ roomId, leader }: { roomId: UUID; leader: string }) =>
   const participants = useRoomParticipantsQuery(roomId);
 
   const userId = user?.user_id!;
-  const memberNumber = roomInformation.member_number;
-  const genderParticipants = getmaxGenderMemberNumber(memberNumber ?? []);
+  const memberNumber = roomInformation?.member_number;
+  const genderParticipants = getmaxGenderMemberNumber(memberNumber ?? '');
   const maxMember = genderParticipants! * 2;
 
   //원하는 인원이 모두 들어오면 위에서 창이 내려온다.

@@ -26,7 +26,7 @@ function RoomInformation({ roomId }: { roomId: UUID }) {
   const participants = useRoomParticipantsQuery(roomId);
   const { room_title, member_number, location, feature, region, leader_id } = roomInformation!;
   const genderMaxNumber = getmaxGenderMemberNumber(member_number);
-  const otherParticipants = participants.filter((person: UserType | null) => person.user_id !== leader_id);
+  const otherParticipants = participants.filter((person: UserType | null) => person?.user_id !== leader_id);
   const { mutate: updateLeaderMemeberMutation } = useUpdateLeaderMemberMutation({ otherParticipants, roomId });
 
   const countFemale = participants?.filter((member) => member?.gender === 'female').length;
