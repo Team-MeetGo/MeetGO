@@ -10,6 +10,7 @@ import { useEditImgsMutation, useEditReviewMutation } from '@/hooks/useMutation/
 import { useReviewDataQuery } from '@/hooks/useQueries/useReviewQuery';
 import { FaCamera } from 'react-icons/fa';
 import { FaPlus } from 'react-icons/fa6';
+import { customSuccessToast } from '../common/customToast';
 
 type Props = {
   review_id: string;
@@ -109,7 +110,7 @@ export default function ReviewEditModal({ review_id, disclosure }: Props) {
 
     editReviewMutation.mutate({ editedTitle, editedContent, allImages, review_id });
 
-    alert('리뷰가 수정되었습니다.');
+    customSuccessToast('리뷰가 수정되었습니다.');
     onClose();
     window.location.reload();
   };
