@@ -1,5 +1,4 @@
 'use client';
-import { useAddRoom } from '@/hooks/useMutation/useMeetingMutation';
 import { useGetUserDataQuery } from '@/hooks/useQueries/useUserQuery';
 import { useRoomStore } from '@/store/roomStore';
 import { favoriteOptions } from '@/utils/FavoriteData';
@@ -17,6 +16,7 @@ import {
 } from '@nextui-org/react';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
+import { useAddRoomMutation } from '@/hooks/useMutation/useMeetingMutation';
 import MemberNumberSelection from './MemberNumberSelection';
 import RegionSelection from './RegionSelection';
 
@@ -24,13 +24,17 @@ import type { NewRoomType } from '@/types/roomTypes';
 
 function MeetingRoomForm() {
   const router = useRouter();
-  const [location, setLocation] = useState('');
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
+
   const { memberNumber, resetMemberNumber, roomRegion, resetRoomRegion } = useRoomStore((state) => state);
-  const { data: user, isPending, isError, error } = useGetUserDataQuery();
+  const { data: user } = useGetUserDataQuery();
+
+  const [location, setLocation] = useState('');
   const [title, setTitle] = useState('');
   const [selected, setSelected] = useState<Set<string>>(new Set([]));
+  const { mutate: addRoomMutation } = useAddRoomMutation();
 
+  const userId = user?.user_id!;
   const cancelMakingMeetingRoom = () => {
     setTitle('');
     setLocation('');
@@ -38,26 +42,24 @@ function MeetingRoomForm() {
     resetRoomRegion();
     setSelected(new Set([]));
   };
+
   const favoriteArray = Array.from(selected);
-  const user_id = user?.user_id!;
   const nextMeetingRoom: NewRoomType = {
     feature: favoriteArray,
-    leader_id: String(user_id),
+    leader_id: userId,
     location,
     region: String(roomRegion),
     member_number: String(memberNumber),
     room_status: '모집중',
     room_title: title
   };
-  const addRoomMutation = useAddRoom({ nextMeetingRoom, user_id });
 
   const addMeetingRoom = async (e: any) => {
     e.preventDefault();
-
-    if (!title || !selected || !location || memberNumber === '인원수' || !roomRegion) {
+    if (!title || !selected || !location || !roomRegion) {
       alert('모든 항목은 필수입니다.');
-    } else if (title && selected && location && memberNumber !== '인원수' && roomRegion) {
-      const data = await addRoomMutation.mutateAsync();
+    } else if (title && selected && location && roomRegion) {
+      const data = addRoomMutation({ nextMeetingRoom, userId });
       alert('모임이 생성되었습니다.');
       setSelected(new Set([]));
       resetMemberNumber();
@@ -66,7 +68,7 @@ function MeetingRoomForm() {
     }
   };
   //방 컨셉을 선택합니다.
-  const handleSelect = (value: string) => {
+  const roomFeatureSelectHandler = (value: string) => {
     if (selected.size > 3) {
       alert('최대 4개까지 선택 가능합니다.');
       return;
@@ -74,7 +76,7 @@ function MeetingRoomForm() {
     setSelected(new Set(value));
   };
   //방 컨셉을 삭제합니다.
-  const handleDelete = (value: string) => {
+  const roomFeaturedeleteHandler = (value: string) => {
     const newSelected = new Set(selected);
     newSelected.delete(value);
     setSelected(newSelected);
@@ -155,7 +157,7 @@ function MeetingRoomForm() {
                         selectedKeys={selected}
                         className="max-w-xs"
                         aria-label="방의 특성"
-                        onSelectionChange={(value) => handleSelect(value as string)}
+                        onSelectionChange={(value) => roomFeatureSelectHandler(value as string)}
                       >
                         {favoriteOptions.map((option) => (
                           <SelectItem key={option.value} value={option.value}>
@@ -169,8 +171,8 @@ function MeetingRoomForm() {
                         <Chip
                           key={value}
                           color="default"
-                          style={{ backgroundColor: favoriteOptions.find((option) => option.value === value)?.color }}
-                          onClose={() => handleDelete(value)}
+                          className="bg-purpleSecondary text-mainColor rounded-[8px]"
+                          onClose={() => roomFeaturedeleteHandler(value)}
                         >
                           {value}
                         </Chip>
@@ -185,9 +187,7 @@ function MeetingRoomForm() {
                   <Button
                     type="submit"
                     className="bg-violet-300"
-                    onPress={
-                      !title || !selected || !location || memberNumber === '인원수' || !roomRegion ? onOpen : onClose
-                    }
+                    onPress={!title || !selected || !location || !roomRegion ? onOpen : onClose}
                   >
                     등록
                   </Button>

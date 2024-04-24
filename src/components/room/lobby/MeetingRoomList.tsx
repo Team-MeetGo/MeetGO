@@ -1,12 +1,13 @@
 'use client';
-import { useMyroomQuery, useRecruitingQuery } from '@/hooks/useQueries/useMeetingQuery';
+import MyRoomsTitle from '@/components/room/lobby/MyRoomTitle';
+import OtherRoomsTitle from '@/components/room/lobby/OtherRoomsTitle';
+import MeetingRoom from '@/components/room/singleMeetingRoom/MeetingRoom';
+import { useMyPastAndNowRoomQuery, useMyroomQuery, useRecruitingQuery } from '@/hooks/useQueries/useMeetingQuery';
 import { useGetUserDataQuery } from '@/hooks/useQueries/useUserQuery';
 import { useSearchRoomStore } from '@/store/searchRoomStore';
 import { useEffect, useState } from 'react';
 import { IoIosArrowBack, IoIosArrowForward } from 'react-icons/io';
-import MeetingRoom from '@/components/room/singleMeetingRoom/MeetingRoom';
-import MyRoomsTitle from '@/components/room/lobby/MyRoomTitle';
-import OtherRoomsTitle from '@/components/room/lobby/OtherRoomsTitle';
+import { REGIONANDMEMBER } from '@/utils/MeetingRoomSelector';
 
 import type { MeetingRoomType } from '@/types/roomTypes';
 function MeetingRoomList() {
@@ -14,13 +15,15 @@ function MeetingRoomList() {
   const [filteredOtherRooms, setFilteredOtherRooms] = useState<MeetingRoomType[]>();
   const { data: user, isPending, isError, error } = useGetUserDataQuery();
   const { data: meetingRoomList } = useRecruitingQuery(String(user?.user_id));
-  const myRoomList = useMyroomQuery(String(user?.user_id));
+  const myRoomList = useMyroomQuery(user?.user_id as string);
+  const myOutList = useMyPastAndNowRoomQuery(user?.user_id as string);
   const filteredMyRoomList = myRoomList?.map((room) => room.room);
+  const filteredMyOutRoomList = myOutList?.map((room) => room.room);
   const { selectRegion, selectMemberNumber } = useSearchRoomStore();
 
-  // meetingRoomList 중에서 myRoomList가 없는 것을 뽑아내기
+  // meetingRoomList 중에서 내가 참여한 적도, 참여하지도 않은 방들을 뽑아내기
   const otherRooms = meetingRoomList?.filter(function (room: MeetingRoomType) {
-    const foundItem = filteredMyRoomList?.find((r) => r?.room_id === room?.room_id);
+    const foundItem = filteredMyOutRoomList?.find((r) => r?.room_id === room?.room_id);
     if (foundItem) {
       return false;
     } else {
@@ -30,31 +33,26 @@ function MeetingRoomList() {
 
   //여러 조건에서 모집 중인 RoomList를 뽑아내기
   const filteredOtherRoomsHandler = () => {
-    if (
-      (selectRegion === '지역' || selectRegion === '전국' || !selectRegion) &&
-      (selectMemberNumber === '인원' || selectMemberNumber === '전체' || !selectMemberNumber)
-    ) {
+    if (selectRegion === REGIONANDMEMBER.EVERYWHERE && selectMemberNumber === REGIONANDMEMBER.EVERYMEMBER) {
       return setFilteredOtherRooms(otherRooms);
     }
-    if (
-      selectRegion !== '지역' &&
-      selectRegion !== '전국' &&
-      (selectMemberNumber === '인원' || selectMemberNumber === '전체' || !selectMemberNumber)
-    ) {
-      const regionFilteredRooms = otherRooms?.filter((room) => room.region === selectRegion);
+    if (selectRegion !== REGIONANDMEMBER.EVERYWHERE && selectMemberNumber === REGIONANDMEMBER.EVERYMEMBER) {
+      const regionFilteredRooms = otherRooms?.filter(
+        (room) => room.region === selectRegion || room.region === REGIONANDMEMBER.EVERYWHERE
+      );
       return setFilteredOtherRooms(regionFilteredRooms);
     }
-    if (
-      selectMemberNumber !== '인원' &&
-      selectMemberNumber !== '전체' &&
-      (selectRegion === '지역' || selectRegion === '전국' || !selectRegion)
-    ) {
-      const numberFilteredRooms = otherRooms?.filter((room) => room.member_number === selectMemberNumber);
+    if (selectMemberNumber !== REGIONANDMEMBER.EVERYMEMBER && selectRegion === REGIONANDMEMBER.EVERYWHERE) {
+      const numberFilteredRooms = otherRooms?.filter(
+        (room) => room.member_number === selectMemberNumber || room.member_number === REGIONANDMEMBER.EVERYMEMBER
+      );
       return setFilteredOtherRooms(numberFilteredRooms);
     }
-    if (selectMemberNumber !== ('인원' || '전체') && selectRegion !== ('지역' || '전국')) {
+    if (selectMemberNumber !== REGIONANDMEMBER.EVERYMEMBER && selectRegion !== REGIONANDMEMBER.EVERYWHERE) {
       const regionNumberFilteredRooms = otherRooms?.filter(
-        (room) => room.member_number === selectMemberNumber && room.region === selectRegion
+        (room) =>
+          room.member_number === (selectMemberNumber || REGIONANDMEMBER.EVERYMEMBER) &&
+          room.region === (selectRegion || REGIONANDMEMBER.EVERYWHERE)
       );
       return setFilteredOtherRooms(regionNumberFilteredRooms);
     }
@@ -86,11 +84,10 @@ function MeetingRoomList() {
           <div className="w-[1000px]">
             {
               <li className=" h-[241px] gap-[24px] grid grid-cols-3 w-100%">
-                {filteredMyRoomList !== null &&
-                  filteredMyRoomList?.map((room, index) => {
-                    if (index < 3 * page && index >= 3 * (page - 1))
-                      return <div key={room?.room_id}>{room && <MeetingRoom room={room} />}</div>;
-                  })}
+                {filteredMyRoomList?.map((room, index) => {
+                  if (index < 3 * page && index >= 3 * (page - 1))
+                    return <div key={room?.room_id}>{room && <MeetingRoom room={room} />}</div>;
+                })}
               </li>
             }
           </div>

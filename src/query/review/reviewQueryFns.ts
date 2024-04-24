@@ -19,7 +19,6 @@ export const fetchAuthorData = async (review_id: string) => {
         .single();
 
       if (userError) {
-        console.error('유저 정보를 불러오지 못함', userError);
         return null;
       } else {
         return userData || null;
