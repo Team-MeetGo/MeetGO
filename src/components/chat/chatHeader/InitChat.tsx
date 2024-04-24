@@ -10,7 +10,7 @@ import { useQueryClient } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
 
-const InitChat = ({ chatRoomId, allMsgs }: { user: User | null; chatRoomId: string; allMsgs: Message[] }) => {
+const InitChat = ({ user, chatRoomId, allMsgs }: { user: User | null; chatRoomId: string; allMsgs: Message[] }) => {
   const { chatState, isRest, setChatState, setMessages, setChatRoomId, setHasMore } = chatStore((state) => state);
   const room = useRoomDataQuery(chatRoomId);
   const roomId = room?.room_id;
@@ -25,12 +25,12 @@ const InitChat = ({ chatRoomId, allMsgs }: { user: User | null; chatRoomId: stri
         'postgres_changes',
         { event: 'UPDATE', schema: 'public', table: 'chatting_room', filter: `chatting_room_id=eq.${chatRoomId}` },
         (payload) => {
-          console.log(payload.new);
-          console.log('두번?');
           setChatState((payload.new as chatRoomPayloadType).isActive);
-          // queryClient.invalidateQueries({
-          //   queryKey: [CHATDATA_QUERY_KEY]
-          // });
+          if (user?.id !== room?.leader_id) {
+            queryClient.invalidateQueries({
+              queryKey: [CHATDATA_QUERY_KEY]
+            });
+          }
         }
       )
       .subscribe();

@@ -9,8 +9,9 @@ import { useRoomInfoWithRoomIdQuery, useRoomParticipantsQuery } from '@/hooks/us
 import { useGetUserDataQuery } from '@/hooks/useQueries/useUserQuery';
 import { useRouter } from 'next/navigation';
 import { IoFemale, IoMale } from 'react-icons/io5';
+import getmaxGenderMemberNumber from '@/hooks/custom/useGenderMaxNumber';
+import { GENDER } from '@/utils/MeetingRoomSelector';
 
-import getmaxGenderMemberNumber from '@/hooks/custom/room';
 import type { UserType } from '@/types/roomTypes';
 import type { UUID } from 'crypto';
 
@@ -21,15 +22,15 @@ function RoomInformation({ roomId }: { roomId: UUID }) {
   const { mutate: deleteMemberMutation } = useDeleteMember({ userId, roomId });
   const { mutate: updateRoomStatusOpenMutation } = useUpdateRoomStatusOpen({ roomId, userId });
   const { mutate: deleteRoomMutation } = useDeleteRoom({ roomId, userId });
-
   const roomInformation = useRoomInfoWithRoomIdQuery(roomId);
   const participants = useRoomParticipantsQuery(roomId);
-  const { room_title, member_number, location, feature, region, leader_id } = roomInformation;
+
+  const { room_title, member_number, location, feature, region, leader_id } = roomInformation!;
   const genderMaxNumber = getmaxGenderMemberNumber(member_number);
-  const otherParticipants = participants?.filter((person: UserType | null) => person?.user_id !== leader_id);
+  const otherParticipants = participants.filter((person: UserType | null) => person?.user_id !== leader_id);
   const { mutate: updateLeaderMemeberMutation } = useUpdateLeaderMemberMutation({ otherParticipants, roomId });
 
-  const countFemale = participants?.filter((member) => member?.gender === 'female').length;
+  const countFemale = participants?.filter((member) => member?.gender === GENDER.FEMALE).length;
   const countMale = participants.length - countFemale;
 
   //나가기: 로비로
@@ -37,7 +38,9 @@ function RoomInformation({ roomId }: { roomId: UUID }) {
     if (!confirm('정말 나가시겠습니까? 나가면 다시 돌아올 수 없습니다!')) {
       return;
     }
-    updateRoomStatusOpenMutation();
+    if (participants.length / 2 === genderMaxNumber) {
+      updateRoomStatusOpenMutation();
+    }
     deleteMemberMutation();
     //유저가 리더였다면 다른 사람에게 리더 역할이 승계됩니다.
     if (leader_id === userId && participants?.length > 1) {
@@ -80,7 +83,7 @@ function RoomInformation({ roomId }: { roomId: UUID }) {
                   ))}
               </figure>
             </section>
-            <div className="flex flex-row items-end gap-[16px]">
+            <section className="flex flex-row items-end gap-[16px]">
               <button
                 onClick={gotoBack}
                 className="w-[90px] h-[43px] text-gray2 border-1 border-gray2 rounded-xl align-bottom"
@@ -93,7 +96,7 @@ function RoomInformation({ roomId }: { roomId: UUID }) {
               >
                 나가기
               </button>
-            </div>
+            </section>
           </div>
         </div>
       </main>

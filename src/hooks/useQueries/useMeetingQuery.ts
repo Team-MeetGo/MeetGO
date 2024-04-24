@@ -7,7 +7,7 @@ import {
   fetchRoomParticipants
 } from '@/query/meetingRoom/meetingQueryFns';
 import {
-  MY_OUT_ROOM,
+  MY_PAST_NOW_ROOM,
   RECRUTING_ROOMDATA,
   ROOMDATA_WITH_ROOMID,
   ROOMLIST,
@@ -35,8 +35,8 @@ export const useMyroomQuery = (user_id: string) => {
 };
 
 export const useMyPastAndNowRoomQuery = (user_id: string) => {
-  const { data } = useQuery({
-    queryKey: [MY_OUT_ROOM],
+  const { data } = useSuspenseQuery({
+    queryKey: [MY_PAST_NOW_ROOM],
     queryFn: () => fetchMyPastAndNowRoom(user_id)
   });
   return data;
@@ -53,7 +53,7 @@ export const useMyPastAndNowRoomQuery = (user_id: string) => {
 //   return results.data?.map((r) => r.room);
 // };
 //room_id로 하나의 방 얻기
-export const useRoomInfoWithRoomIdQuery = (room_id: string): MeetingRoomType => {
+export const useRoomInfoWithRoomIdQuery = (room_id: string): MeetingRoomType | null => {
   const { data: chattingRoomWithId } = useSuspenseQuery({
     queryKey: [ROOMDATA_WITH_ROOMID, room_id],
     queryFn: () => fetchRoomInfoWithRoomId(room_id)

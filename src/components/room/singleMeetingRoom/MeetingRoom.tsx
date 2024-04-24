@@ -1,16 +1,13 @@
 'use client';
-import getmaxGenderMemberNumber from '@/hooks/custom/room';
+import getmaxGenderMemberNumber from '@/hooks/custom/useGenderMaxNumber';
 import { useAddRoomMemberMutation, useUpdateRoomStatusCloseMutation } from '@/hooks/useMutation/useMeetingMutation';
 import { useAlreadyChatRoomQuery, useRoomParticipantsQuery } from '@/hooks/useQueries/useMeetingQuery';
 import { useGetUserDataQuery } from '@/hooks/useQueries/useUserQuery';
 import MeetGoLogoPurple from '@/utils/icons/meetgo-logo-purple.png';
-import { Chip } from '@nextui-org/react';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import RoomInformation from './RoomInformation';
-import { useCallback } from 'react';
 
-type ControlDelay = (callback: (...args: any[]) => void, delay: number) => any;
 import type { MeetingRoomType } from '@/types/roomTypes';
 
 function MeetingRoom({ room }: { room: MeetingRoomType }) {
@@ -73,7 +70,7 @@ function MeetingRoom({ room }: { room: MeetingRoomType }) {
     };
   };
 
-  const handleAddMemberDebounce = debounce(addMember, 2000);
+  const handleAddMemberDebounce = debounce(addMember, 500);
 
   return (
     <article
