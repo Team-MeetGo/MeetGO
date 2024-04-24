@@ -17,7 +17,7 @@ const InitChat = ({ user, chatRoomId, allMsgs }: { user: User | null; chatRoomId
   const roomId = room?.room_id;
   const router = useRouter();
   const queryClient = useQueryClient();
-  const messages = useMsgsQuery(chatRoomId);
+  useMsgsQuery(chatRoomId);
 
   useEffect(() => {
     // 채팅방 isActive 상태 구독
