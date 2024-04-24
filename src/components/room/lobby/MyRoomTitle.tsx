@@ -12,7 +12,9 @@ function MyRoomsTitle({ children }: { children: React.ReactNode }) {
             <MeetingRoomForm />
           </div>
         </div>
-        <section className="w-100% flex flex-row items-center justify-content mb-[40px]">{children}</section>
+        <div className="flex flex-col justify-center">
+          <section className="w-[1112px] flex flex-row items-center justify-center mb-[40px]">{children}</section>
+        </div>
       </section>
     </article>
   );

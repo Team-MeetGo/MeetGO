@@ -68,8 +68,6 @@ export const useDeleteRoom = ({ roomId, userId }: { roomId: string; userId: stri
   return deleteRoomMutation;
 };
 export const useAddRoomMutation = () => {
-  const queryClient = useQueryClient();
-
   const roomAddMutation = useMutation({
     mutationFn: ({ nextMeetingRoom, userId }: { nextMeetingRoom: NewRoomType; userId: string }) =>
       addRoom({ nextMeetingRoom, userId })
