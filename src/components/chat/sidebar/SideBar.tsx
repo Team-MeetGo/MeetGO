@@ -5,29 +5,17 @@ import Map from '@/components/chat/sidebar/Map';
 import { useChatDataQuery } from '@/hooks/useQueries/useChattingQuery';
 import { Card, CardBody } from '@nextui-org/react';
 import { sideBarStore } from '@/store/sideBarStore';
-import { useQueryClient } from '@tanstack/react-query';
-import { useUpdateMeetingTimeMutation } from '@/hooks/useMutation/useMeetingTimeMutation';
 
 import type { SideBarProps } from '@/types/sideBarTypes';
+import { dateOptions } from '@/utils';
 
 const SideBar: React.FC<SideBarProps> = ({ chatRoomId }) => {
   const { isSidebarOpen } = sideBarStore((state) => state);
-  const queryClient = useQueryClient();
 
   //채팅방 정보 가져오기
   const chat = useChatDataQuery(chatRoomId);
   const meetingTime = chat?.meeting_time;
-
-  const options: Intl.DateTimeFormatOptions = {
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric',
-    hour: 'numeric',
-    minute: 'numeric',
-    hour12: true,
-    timeZone: 'Asia/Seoul'
-  };
-  const convertedTime = meetingTime ? new Intl.DateTimeFormat('ko-KR', options).format(new Date(meetingTime)) : '';
+  const convertedTime = meetingTime ? new Intl.DateTimeFormat('ko-KR', dateOptions).format(new Date(meetingTime)) : '';
 
   if (!isSidebarOpen) {
     return null;

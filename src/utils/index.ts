@@ -34,3 +34,13 @@ export const isNextDay = (idx: number, messages: Message[]) => {
 export const isItMe = (idx: number, messages: Message[]) => {
   return idx > 0 && messages[idx].send_from === messages[idx - 1].send_from;
 };
+
+export const dateOptions: Intl.DateTimeFormatOptions = {
+  year: 'numeric',
+  month: 'long',
+  day: 'numeric',
+  hour: 'numeric',
+  minute: 'numeric',
+  hour12: true,
+  timeZone: 'Asia/Seoul'
+};
