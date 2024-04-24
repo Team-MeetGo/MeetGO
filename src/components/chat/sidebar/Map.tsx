@@ -8,14 +8,12 @@ import DateTimePicker from './DateTimePicker';
 import { useUpdateMeetingLocationMutation } from '@/hooks/useMutation/useMeetingLocationMutation';
 import { useGetUserDataQuery } from '@/hooks/useQueries/useUserQuery';
 
-import type { MapProps } from '@/types/sideBarTypes';
-
 declare global {
   interface Window {
     kakao: any;
   }
 }
-const Map: React.FC<MapProps> = ({ chatRoomId }) => {
+const Map = ({ chatRoomId }: { chatRoomId: string }) => {
   const mapRef = useRef<string>();
   const [map, setMap] = useState<any>();
   const [markers, setMarkers] = useState<any>();

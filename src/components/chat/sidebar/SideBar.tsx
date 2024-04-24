@@ -6,10 +6,9 @@ import { useChatDataQuery } from '@/hooks/useQueries/useChattingQuery';
 import { Card, CardBody } from '@nextui-org/react';
 import { sideBarStore } from '@/store/sideBarStore';
 
-import type { SideBarProps } from '@/types/sideBarTypes';
 import { dateOptions } from '@/utils';
 
-const SideBar: React.FC<SideBarProps> = ({ chatRoomId }) => {
+const SideBar = ({ chatRoomId }: { chatRoomId: string }) => {
   const { isSidebarOpen } = sideBarStore((state) => state);
 
   //채팅방 정보 가져오기

@@ -10,9 +10,7 @@ import { useRoomDataQuery } from '@/hooks/useQueries/useChattingQuery';
 import { useUpdateMeetingTimeMutation } from '@/hooks/useMutation/useMeetingTimeMutation';
 import { useGetUserDataQuery } from '@/hooks/useQueries/useUserQuery';
 
-import type { DateTimePickerProps } from '@/types/sideBarTypes';
-
-const DateTimePicker: React.FC<DateTimePickerProps> = forwardRef(({ chatRoomId }, ref) => {
+const DateTimePicker = forwardRef(({ chatRoomId }: { chatRoomId: string }) => {
   const [selectedMeetingTime, setSelectedMeetingTime] = useState<Date | null>(new Date());
   const [isCalendarOpen, setIsCalendarOpen] = useState<boolean>(false);
   const datePickerRef = useRef<DatePicker>(null);
