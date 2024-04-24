@@ -41,7 +41,7 @@ const ReviewCard = ({ review }: { review: ReviewType }) => {
                 alt="reviewImage"
                 height={400}
                 width={400}
-                className="w-[324px] h-full max-h-[204px] object-cover rounded-[10px]"
+                className="w-[324px] h-[204px] object-cover rounded-[10px]"
               />
             ) : (
               <Image
@@ -49,7 +49,7 @@ const ReviewCard = ({ review }: { review: ReviewType }) => {
                 alt="reviewImage"
                 height={400}
                 width={400}
-                className="w-[324px] h-full object-cover rounded-[10px]"
+                className="w-[324px] h-[204px] object-cover rounded-[10px]"
               />
             )}
             <p className="text-[20px] pt-[16px] pb-[16px]">{review.review_title}</p>

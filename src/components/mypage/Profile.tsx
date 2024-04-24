@@ -78,9 +78,9 @@ const Profile = () => {
   };
 
   return (
-    <div className="mx-auto bg-white">
+    <div className="mx-auto bg-white ">
       <ProfileHeader />
-      <div className="max-w-[800px] m-auto py-[40px] px-[20px] flex flex-col gap-6">
+      <div className="max-w-[800px] m-auto py-[40px] px-[24px] flex flex-col gap-6">
         <div className="flex gap-6">
           <p className="text-lg font-semibold w-[100px]">사진</p>
           <div className="flex flex-col items-start">
