@@ -15,7 +15,7 @@ export const schoolValidateMiddleware = (middleware: CustomMiddleware) => {
       if (isValidate && !isValidate[0].isValidate) {
         return NextResponse.redirect(new URL('/mypage', request.url));
       }
-      return middleware(request, event, NextResponse.next());
     }
+    return middleware(request, event, NextResponse.next());
   };
 };

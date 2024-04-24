@@ -3,10 +3,9 @@ import { CustomMiddleware } from './middlewareType';
 import { serverSupabase } from '@/utils/supabase/server';
 
 export const meetingRoomHandler = (middleware: CustomMiddleware) => {
-  return async (request: NextRequest, event: NextFetchEvent) => {
+  return async (request: NextRequest, event: NextFetchEvent, response: NextResponse) => {
     // 수락창
     if (request.nextUrl.pathname.startsWith('/meetingRoom/')) {
-      console.log('0');
       const supabase = serverSupabase();
       const {
         data: { user }
@@ -21,10 +20,8 @@ export const meetingRoomHandler = (middleware: CustomMiddleware) => {
         myRooms &&
         myRooms.map((room) => room.room_id).includes(request.nextUrl.pathname.replace('/meetingRoom/', ''))
       ) {
-        console.log('1');
         return NextResponse.next();
       } else {
-        console.log('2');
         return NextResponse.redirect(new URL('/', request.nextUrl.origin));
       }
     }
