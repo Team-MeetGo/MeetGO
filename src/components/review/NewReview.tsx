@@ -213,6 +213,7 @@ const NewReview = () => {
                     <div className="flex gap-2 justify-end mt-[40px]">
                       <button
                         onClick={handleClose}
+                        type="button"
                         className="rounded-[8px] bg-white text-grayBlack text-sm font-semibold border-1 border-[#E5E7EB] px-[12px] py-[6px] hover:opacity-70"
                       >
                         취소
