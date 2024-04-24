@@ -8,6 +8,8 @@ import { IoPlay } from 'react-icons/io5';
 import getmaxGenderMemberNumber from '@/hooks/custom/room';
 
 import type { UUID } from 'crypto';
+import { useCallback } from 'react';
+import { debounce } from '@/utils';
 const GotoChatButton = ({ roomId, leader }: { roomId: UUID; leader: string }) => {
   const router = useRouter();
 
@@ -49,6 +51,8 @@ const GotoChatButton = ({ roomId, leader }: { roomId: UUID; leader: string }) =>
     } // "/chatting_room_id" 로 주소값 변경
     // }
   };
+
+  const handleGoChatDebounce = useCallback(debounce(gotoChattingRoom, 1500), []);
 
   return (
     <main>
