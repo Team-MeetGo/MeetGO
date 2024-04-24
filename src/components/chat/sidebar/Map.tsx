@@ -100,7 +100,7 @@ const Map: React.FC<MapProps> = ({ chatRoomId }) => {
           const bounds = new window.kakao.maps.LatLngBounds();
           let newMarkers = [];
           // 검색된 장소 정보를 바탕으로 마커 생성
-          for (var i = 0; i < data.length; i++) {
+          for (let i = 0; i < data.length; i++) {
             const markerPosition = new window.kakao.maps.LatLng(data[i].y, data[i].x);
             const marker = new window.kakao.maps.Marker({
               position: markerPosition,
@@ -153,7 +153,7 @@ const Map: React.FC<MapProps> = ({ chatRoomId }) => {
         const bounds = new window.kakao.maps.LatLngBounds();
         let newMarkers = [];
         // 검색된 장소 정보를 바탕으로 마커 생성
-        for (var i = 0; i < data.length; i++) {
+        for (let i = 0; i < data.length; i++) {
           const markerPosition = new window.kakao.maps.LatLng(data[i].y, data[i].x);
           const marker = new window.kakao.maps.Marker({
             position: markerPosition,

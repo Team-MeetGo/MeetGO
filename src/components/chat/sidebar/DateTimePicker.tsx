@@ -9,7 +9,8 @@ import { IoIosArrowForward, IoIosArrowBack } from 'react-icons/io';
 import { useRoomDataQuery } from '@/hooks/useQueries/useChattingQuery';
 import { useUpdateMeetingTimeMutation } from '@/hooks/useMutation/useMeetingTimeMutation';
 import { useGetUserDataQuery } from '@/hooks/useQueries/useUserQuery';
-import { DateTimePickerProps } from '@/types/sideBarTypes';
+
+import type { DateTimePickerProps } from '@/types/sideBarTypes';
 
 const DateTimePicker: React.FC<DateTimePickerProps> = forwardRef(({ chatRoomId }, ref) => {
   const [selectedMeetingTime, setSelectedMeetingTime] = useState<Date | null>(new Date());
@@ -22,7 +23,7 @@ const DateTimePicker: React.FC<DateTimePickerProps> = forwardRef(({ chatRoomId }
   const room = useRoomDataQuery(chatRoomId);
   const leaderId = room?.leader_id;
   const toggleCalendar = () => {
-    setIsCalendarOpen(!isCalendarOpen);
+    setIsCalendarOpen((prev) => !prev);
   };
 
   const { mutate: updateMeetingTime } = useUpdateMeetingTimeMutation();

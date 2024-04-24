@@ -1,7 +1,8 @@
 import React from 'react';
 import { MdDateRange } from 'react-icons/md';
 import { IoIosArrowDown } from 'react-icons/io';
-import { DateCustomInputProps } from '@/types/sideBarTypes';
+
+import type { DateCustomInputProps } from '@/types/sideBarTypes';
 
 const DateCustomeInput: React.ForwardRefRenderFunction<HTMLDivElement, DateCustomInputProps> = ({ onClick }, ref) => {
   return (
