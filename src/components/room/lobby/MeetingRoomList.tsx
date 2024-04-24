@@ -13,10 +13,12 @@ import type { MeetingRoomType } from '@/types/roomTypes';
 function MeetingRoomList() {
   const [page, setPage] = useState(1);
   const [filteredOtherRooms, setFilteredOtherRooms] = useState<MeetingRoomType[]>();
-  const { data: user, isPending, isError, error } = useGetUserDataQuery();
+
+  const { data: user, isPending } = useGetUserDataQuery();
   const { data: meetingRoomList } = useRecruitingQuery(String(user?.user_id));
   const myRoomList = useMyroomQuery(user?.user_id as string);
   const myOutList = useMyPastAndNowRoomQuery(user?.user_id as string);
+
   const filteredMyRoomList = myRoomList?.map((room) => room.room);
   const filteredMyOutRoomList = myOutList?.map((room) => room.room);
   const { selectRegion, selectMemberNumber } = useSearchRoomStore();
@@ -80,8 +82,7 @@ function MeetingRoomList() {
         {filteredMyRoomList && filteredMyRoomList?.length > 0 ? (
           <>
             <button onClick={beforePage}>
-              {/* {page !== 1 ? <IoIosArrowBack className="h-[40px] w-[40px] m-[8px]" /> : null} */}
-              <IoIosArrowBack className="h-[40px] w-[40px] m-[8px]" />
+              {page !== 1 ? <IoIosArrowBack className="h-[40px] w-[40px] m-[8px]" /> : null}
             </button>
             <div className="w-[1000px]">
               {
@@ -98,9 +99,9 @@ function MeetingRoomList() {
               }
             </div>
             <button onClick={nextPage}>
-              {/* {!filteredMyRoomList || filteredMyRoomList.length / 3 <= page ? null : ( */}
-              <IoIosArrowForward className="h-[40px] w-[40px] m-[8px]" />
-              {/* )} */}
+              {!filteredMyRoomList || filteredMyRoomList.length / 3 <= page ? null : (
+                <IoIosArrowForward className="h-[40px] w-[40px] m-[8px]" />
+              )}
             </button>
           </>
         ) : (
