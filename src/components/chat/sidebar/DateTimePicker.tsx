@@ -74,17 +74,6 @@ const DateTimePicker = forwardRef(({ chatRoomId }: { chatRoomId: string }) => {
           </div>
         )}
       />
-      {/* <button
-        onClick={() => {
-          const isoStringMeetingTime = selectedMeetingTime?.toISOString();
-          updateMeetingTime({
-            chatRoomId,
-            isoStringMeetingTime: String(isoStringMeetingTime)
-          });
-        }}
-      >
-        버튼
-      </button> */}
     </div>
   );
 });

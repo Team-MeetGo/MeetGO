@@ -18,8 +18,8 @@ const Map = ({ chatRoomId }: { chatRoomId: string }) => {
   const [map, setMap] = useState<any>();
   const [markers, setMarkers] = useState<any>();
   const [bars, setBars] = useState<any[]>([]);
-  const [currentPage, setCurrentPage] = useState(1);
-  const [totalPages, setTotalPages] = useState(0);
+  const [currentPage, setCurrentPage] = useState<number>(1);
+  const [totalPages, setTotalPages] = useState<number>(0);
   const [currentPos, setCurrentPos] = useState<string>();
   const [searchText, setSearchText] = useState<string>('');
   const [selectedMeetingLocation, setSelectedMeetingLocation] = useState<string>();
