@@ -35,13 +35,11 @@ export default function ReviewEditModal({ review_id, disclosure }: Props) {
   }, [reviewDetail]);
 
   const handleClose = () => {
-    if (window.confirm('리뷰 수정을 취소하시겠습니까?')) {
-      setEditedTitle(reviewDetail?.review_title || '');
-      setEditedContent(reviewDetail?.review_contents || '');
-      setPreviewImages(reviewDetail?.image_urls || []);
-      setFiles([]);
-      onClose();
-    }
+    setEditedTitle(reviewDetail?.review_title || '');
+    setEditedContent(reviewDetail?.review_contents || '');
+    setPreviewImages(reviewDetail?.image_urls || []);
+    setFiles([]);
+    onClose();
   };
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {

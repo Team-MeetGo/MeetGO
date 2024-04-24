@@ -136,13 +136,13 @@ const NavBarContents = () => {
           <div className="flex gap-2">
             <Link
               href="/login"
-              className="bg-white rounded-[12px] px-[20px] py-[12px] text-[18px] text-[#252642] font-medium"
+              className="bg-white rounded-[12px] px-[16px] py-[10px] text-base text-[#252642] font-medium"
             >
               로그인
             </Link>
             <Link
               href="/join"
-              className="bg-mainColor rounded-[12px] px-[20px] py-[12px] text-[18px] text-white font-medium"
+              className="bg-mainColor rounded-[12px] px-[16px] py-[10px] text-base text-white font-medium"
             >
               회원가입
             </Link>
