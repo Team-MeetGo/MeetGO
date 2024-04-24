@@ -22,12 +22,16 @@ const config: Config = {
         purpleSecondary: '#F2EAFA',
         purpleThird: '#E4D4F4',
         gray1: '#D4D4D8',
-        gray2: '#A1A1AA',
-        gray3: '#52525B',
+        gray2: '#6B7280',
+        gray3: '#595757',
+        grayBlack: '#111827',
         hotPink: '#F31260',
         blue: '#006FEE',
         lightPurple: '#D0A1FF',
-        lightBlue: '#AEE2FF'
+        lightBlue: '#AEE2FF',
+        borderSecondary: '#E2E2E2',
+        boxSecondary: '#F9FAFB',
+        requiredRed: '#F43F5E'
       },
       animation: { 'slideTop-animation': 'sildeTop 3s linear' },
       keyframes: {

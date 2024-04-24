@@ -21,7 +21,7 @@ import { useModalStore } from '@/store/modalStore';
 
 const Profile = () => {
   const queryClient = useQueryClient();
-  const { data: user, isPending, isError, error } = useGetUserDataQuery();
+  const { data: user, isPending } = useGetUserDataQuery();
   const [isEditing, setIsEditing] = useState(false);
   const inputNickname = useInputChange('');
   const inputIntro = useInputChange('');
