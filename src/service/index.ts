@@ -14,6 +14,16 @@ export const requestKakaoId = async (requestId: string, responseId: string) => {
   return data;
 };
 
+// 요청취소 업데이트
+export const cancelRequestKakaoId = async (requestId: string, responseId: string) => {
+  const { data, error } = await clientSupabase
+    .from('kakaoId_request')
+    .update({ request_status: '요청전' })
+    .match({ request_Id: requestId, response_Id: responseId });
+
+  return data;
+};
+
 // 요청상태 업데이트
 export const updateRequestStatus = async (requestId: string, responseId: string, newStatus: string) => {
   const { data, error } = await clientSupabase
@@ -110,4 +120,13 @@ export const updateAvatar = async (userId: string, file: File) => {
     return;
   }
   return publicURL;
+};
+
+/**첫 로그인 후 첫 로그인 여부 변경 */
+export const updateFirstLogin = async (userId: string) => {
+  const { error } = await clientSupabase.from('users').update({ first_login: false }).eq('user_id', userId);
+  if (error) {
+    console.error('Error updating first login:', error);
+  }
+  return;
 };

@@ -7,6 +7,7 @@ export const useModalStore = create<ModalState & ModalActions>((set) => ({
   type: 'alert',
   name: '',
   text: '',
-  openModal: ({ type, name, text, onFunc }) => set({ isOpen: true, type, name, text, onFunc }),
+  openModal: ({ type, name, text, onFunc, onCancelFunc }) =>
+    set({ isOpen: true, type, name, text, onFunc, onCancelFunc }),
   closeModal: () => set({ isOpen: false })
 }));
