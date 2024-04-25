@@ -16,6 +16,8 @@ import ReviewLike from './ReviewLike';
 import { useDeleteReviewMutation } from '@/hooks/useMutation/useReviewMutations';
 import { useAuthorDataQuery, useReviewDataQuery, useReviewListDataQuery } from '@/hooks/useQueries/useReviewQuery';
 import { useAsyncNavigation } from '@/hooks/custom/useReviewNavigation';
+import { useModalStore } from '@/store/modalStore';
+import { ValidationModal } from '../common/ValidationModal';
 
 export type ReviewDetailType = {
   review_title: string | null;
@@ -39,13 +41,13 @@ const ReviewDetail = ({ review_id }: Props) => {
   const editModal = useDisclosure();
   const [reviewDetailData, setReviewDetailData] = useState<ReviewDetailType | null>(null);
   const [authorData, setAuthorData] = useState<AuthorDataType | null>(null);
+  const { openModal, closeModal } = useModalStore();
   const router = useRouter();
 
   const { data: user } = useGetUserDataQuery();
   const userId = user && user.user_id;
 
   const userData = useAuthorDataQuery(review_id);
-
   const reviewDetail = useReviewDataQuery(review_id);
 
   useEffect(() => {
@@ -60,19 +62,32 @@ const ReviewDetail = ({ review_id }: Props) => {
   const deleteReviewMutation = useDeleteReviewMutation();
 
   const handleDeleteReview = async () => {
-    if (window.confirm('리뷰를 삭제하시겠습니까?')) {
-      try {
-        await deleteReviewMutation.mutate(review_id as string);
-      } catch (error) {
-        console.error('리뷰 삭제 오류:', error);
+    openModal({
+      type: 'confirm',
+      name: '',
+      text: '리뷰를 삭제하시겠습니까?',
+      onFunc: async () => {
+        closeModal();
+        try {
+          // 리뷰 삭제 로직 실행
+          await deleteReviewMutation.mutate(review_id as string);
+          // 리뷰 삭제 후 원하는 페이지로 리디렉션
+          router.push(`/review/pageNumber/1`);
+        } catch (error) {
+          console.error('리뷰 삭제 오류:', error);
+        } finally {
+          // 성공 또는 실패 후 모달 닫기
+          closeModal();
+        }
+      },
+      onCancelFunc: () => {
+        closeModal();
       }
-      router.push(`/review/pageNumber/1`);
-    }
-    return;
+    });
   };
 
   return (
-    <div>
+    <>
       <div>
         <div className="flex justify-between gap-2 items-end mb-[16px]">
           <p className="text-[40px] ">{reviewDetailData?.review_title}</p>
@@ -180,7 +195,8 @@ const ReviewDetail = ({ review_id }: Props) => {
           </div>
         </div>
       </div>
-    </div>
+      <ValidationModal />
+    </>
   );
 };
 

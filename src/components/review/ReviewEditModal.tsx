@@ -109,10 +109,9 @@ export default function ReviewEditModal({ review_id, disclosure }: Props) {
     const allImages = [...previewImages, ...updatedImageUrls];
 
     editReviewMutation.mutate({ editedTitle, editedContent, allImages, review_id });
-
+    setFiles([]);
     customSuccessToast('리뷰가 수정되었습니다.');
     onClose();
-    window.location.reload();
   };
 
   return (
@@ -254,7 +253,7 @@ export default function ReviewEditModal({ review_id, disclosure }: Props) {
                         type="submit"
                         className="rounded-[8px] bg-[#E5E7EB] text-[#9CA3AF] text-sm font-semibold px-[12px] py-[6px] hover:opacity-70"
                       >
-                        등록하기
+                        수정하기
                       </button>
                     </div>
                   </ModalBody>

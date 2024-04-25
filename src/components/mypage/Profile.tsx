@@ -36,7 +36,7 @@ const Profile = () => {
   const toggleEditing = () => {
     setIsEditing(true);
     if (user) {
-      inputNickname.setValue(user?.nickname);
+      inputNickname.setValue(user.nickname);
       inputIntro.setValue(user?.intro);
       inputKakaoId.setValue(user?.kakaoId);
       inputGender.setValue(user?.gender);
@@ -98,11 +98,11 @@ const Profile = () => {
             <input
               className="max-w-full p-2 border border-gray-300 rounded-md"
               id="nickname"
-              placeholder="닉네임 입력 (최대 10자)"
+              placeholder="닉네임 입력 (최대 12자)"
               type="text"
               value={inputNickname.value}
               onChange={inputNickname.onChange}
-              maxLength={10}
+              maxLength={12}
             />
           )}
         </div>
@@ -163,7 +163,7 @@ const Profile = () => {
             자기소개
           </label>
           {!isEditing ? (
-            <p className="block text-sm font-medium mb-1">{user?.intro}</p>
+            <p className="block text-sm font-medium">{user?.intro}</p>
           ) : (
             <textarea
               className="p-2 border border-gray-300 rounded-md w-1/2"
