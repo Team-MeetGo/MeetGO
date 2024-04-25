@@ -1,5 +1,6 @@
 import { clientSupabase } from '@/utils/supabase/client';
 import { useState } from 'react';
+import { customErrToast, customSuccessToast } from '../common/customToast';
 
 const ResetPasswordForm = () => {
   const [userId, setUserId] = useState('');
@@ -7,12 +8,12 @@ const ResetPasswordForm = () => {
     try {
       const { data, error } = await clientSupabase.auth.resetPasswordForEmail(userId);
       if (!error) {
-        alert('비밀번호 재설정 이메일이 발송되었습니다.');
+        customSuccessToast('비밀번호 재설정 이메일이 발송되었습니다.');
         setUserId('');
       }
     } catch (error) {
       console.error('Error during password reset:', error);
-      alert('비밀번호 재설정 중 오류가 발생했습니다.');
+      customErrToast('비밀번호 재설정 중 오류가 발생했습니다.');
     }
   };
 

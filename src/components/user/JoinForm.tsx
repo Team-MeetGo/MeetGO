@@ -1,11 +1,10 @@
 'use client';
 
 import { clientSupabase } from '@/utils/supabase/client';
-import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { Button } from '@nextui-org/react';
 import { authValidation } from '@/utils/Validation';
-import type { IsValidateShow } from '@/types/userTypes';
+import type { Gender, IsValidateShow, JoinDataType } from '@/types/userTypes';
 import { ValidationModal } from '../common/ValidationModal';
 import { useModalStore } from '@/store/modalStore';
 import { USER_DATA_QUERY_KEY } from '@/query/user/userQueryKeys';
@@ -14,22 +13,21 @@ import { IoMdEye, IoMdEyeOff } from 'react-icons/io';
 import Link from 'next/link';
 import { customErrToast } from '../common/customToast';
 
-type Gender = 'male' | 'female' | '';
-
 const JoinForm = () => {
-  const [joinData, setJoinData] = useState({
+  const [joinData, setJoinData] = useState<JoinDataType>({
     userId: '',
     password: '',
+    confirmPassword: '',
     nickname: '',
     gender: ''
   });
   const [isValidateShow, setIsValidateShow] = useState<IsValidateShow>({
     userId: true,
     password: true,
+    confirmPassword: true,
     nickname: true
   });
   const [gender, setGender] = useState<Gender>('');
-  const router = useRouter();
   const [passwordShow, setPasswordShow] = useState(false);
   const { openModal } = useModalStore();
   const queryClient = useQueryClient();
@@ -46,6 +44,12 @@ const JoinForm = () => {
       name: 'password',
       placeholder: '비밀번호를 입력해주세요.',
       error: '숫자, 문자, 특수문자 조합으로 8자이상 작성해 주세요.'
+    },
+    {
+      type: passwordShow ? 'text' : 'password',
+      name: 'confirmPassword',
+      placeholder: '비밀번호를 다시 입력해주세요.',
+      error: '비밀번호가 일치하지 않습니다.'
     }
   ];
 
@@ -65,9 +69,19 @@ const JoinForm = () => {
   const onChangeInput = (e: React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLSelectElement>) => {
     const { name, value } = e.target;
     setJoinData((prev) => ({ ...prev, [name]: value }));
-    if (value === '') return setIsValidateShow((prev) => ({ ...prev, [name]: true }));
-    const isValid = authValidation(name, value); // 유효성 검사 수행
-    setIsValidateShow((prev) => ({ ...prev, [name]: isValid })); // 결과 반영
+
+    if (value === '') {
+      setIsValidateShow((prev) => ({ ...prev, [name]: true }));
+    } else {
+      // 비밀번호 확인 필드인 경우에만 비밀번호와의 일치 여부도 확인
+      if (name === 'confirmPassword') {
+        const isValid = authValidation(name, value, joinData.password);
+        setIsValidateShow((prev) => ({ ...prev, [name]: isValid }));
+      } else {
+        const isValid = authValidation(name, value);
+        setIsValidateShow((prev) => ({ ...prev, [name]: isValid }));
+      }
+    }
   };
 
   const onSubmitForm = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -92,6 +106,11 @@ const JoinForm = () => {
 
     const isAllValid = Object.values(isValidateShow).every((v) => v); // 모든 유효성 검사가 통과되었는지 확인
     if (!isAllValid) return; // 통과되지 않았다면 회원가입 진행을 막음
+
+    if (joinData.password !== joinData.confirmPassword) {
+      setIsValidateShow((prev) => ({ ...prev, confirmPassword: false }));
+      return;
+    } // 비밀번호 확인 불일치 시 회원가입 X
 
     try {
       const {
@@ -152,7 +171,7 @@ const JoinForm = () => {
                 type="button"
                 onClick={() => onGenderSelect('female')}
               >
-                여자
+                여성
               </Button>
               <Button
                 className={
@@ -164,7 +183,7 @@ const JoinForm = () => {
                 type="button"
                 onClick={() => onGenderSelect('male')}
               >
-                남자
+                남성
               </Button>
             </div>
           </div>

@@ -4,7 +4,7 @@ import React from 'react';
 import { IoIosArrowForward, IoIosArrowBack } from 'react-icons/io';
 import { sideBarStore } from '@/store/sideBarStore';
 
-const SideBarButton: React.FC = () => {
+const SideBarButton = () => {
   const { isSidebarOpen, setIsSidebarOpen } = sideBarStore((state) => state);
 
   const toggleSidebar = () => {
