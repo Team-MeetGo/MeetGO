@@ -7,12 +7,14 @@ import { HiMiniMagnifyingGlass } from 'react-icons/hi2';
 import DateTimePicker from './DateTimePicker';
 import { useUpdateMeetingLocationMutation } from '@/hooks/useMutation/useMeetingLocationMutation';
 import { useGetUserDataQuery } from '@/hooks/useQueries/useUserQuery';
+import { useModalStore } from '@/store/modalStore';
 
 declare global {
   interface Window {
     kakao: any;
   }
 }
+
 const Map = ({ chatRoomId }: { chatRoomId: string }) => {
   const mapRef = useRef<string>();
   const [map, setMap] = useState<any>();
@@ -23,6 +25,7 @@ const Map = ({ chatRoomId }: { chatRoomId: string }) => {
   const [currentPos, setCurrentPos] = useState<string>();
   const [searchText, setSearchText] = useState<string>('');
   const [selectedMeetingLocation, setSelectedMeetingLocation] = useState<string>();
+  const { openModal } = useModalStore();
 
   // 유저 정보 가져오기
   const { data: userData } = useGetUserDataQuery();
@@ -30,7 +33,7 @@ const Map = ({ chatRoomId }: { chatRoomId: string }) => {
 
   // useRoomDataQuery로 리더 아이디 가져오기
   const room = useRoomDataQuery(chatRoomId);
-  const leaderId = room?.leader_id;
+  const leaderId = room && room?.leader_id;
 
   // 채팅방 정보 가져오기
   const chat = useChatDataQuery(chatRoomId);
@@ -38,6 +41,12 @@ const Map = ({ chatRoomId }: { chatRoomId: string }) => {
 
   // useMutation 호출
   const updateMeetingLocationMutation = useUpdateMeetingLocationMutation();
+
+  useEffect(() => {
+    if (meetingLocation) {
+      setSelectedMeetingLocation(meetingLocation);
+    }
+  }, [meetingLocation]);
 
   useEffect(() => {
     const script = document.createElement('script');
@@ -72,7 +81,12 @@ const Map = ({ chatRoomId }: { chatRoomId: string }) => {
         setMap(kakaoMap);
         kakaoMap.setCenter(currentPos);
       },
-      () => alert('위치 정보를 가져오는데 실패했습니다.'),
+      () =>
+        openModal({
+          type: 'alert',
+          name: '',
+          text: '현재 위치를 받아오지 못했습니다'
+        }),
       {
         enableHighAccuracy: true,
         maximumAge: 30000,
@@ -136,7 +150,11 @@ const Map = ({ chatRoomId }: { chatRoomId: string }) => {
   const searchNewPlaces = (page?: number) => {
     const places = new window.kakao.maps.services.Places();
     if (searchText === '') {
-      alert('검색어를 입력해 주세요.');
+      openModal({
+        type: 'alert',
+        name: '',
+        text: '검색어를 입력해주세요.'
+      });
       return;
     }
     places.keywordSearch(searchText, (data: any, status: any, pagination: any) => {
@@ -167,7 +185,11 @@ const Map = ({ chatRoomId }: { chatRoomId: string }) => {
         setCurrentPage(page || currentPage);
         setSearchText('');
       } else {
-        alert('검색 결과가 없습니다.');
+        openModal({
+          type: 'alert',
+          name: '',
+          text: '검색 결과가 없습니다.'
+        });
         setSearchText('');
       }
     });
@@ -181,9 +203,10 @@ const Map = ({ chatRoomId }: { chatRoomId: string }) => {
 
   // 장소 선택 함수
   const handleSelectLocation = (barName: string) => {
-    setSelectedMeetingLocation(barName);
-    if (!chatRoomId) {
-      return;
+    if (barName === meetingLocation) {
+      setSelectedMeetingLocation('');
+    } else {
+      setSelectedMeetingLocation(barName);
     }
     updateMeetingLocationMutation.mutate({ chatRoomId, barName });
   };
@@ -192,7 +215,7 @@ const Map = ({ chatRoomId }: { chatRoomId: string }) => {
     <div>
       <div className="py-6">
         <h1 className="font-semibold text-2xl mb-2">미팅 장소</h1>
-        <Card className="h-[60px] border border-mainColor rounded-[9px] shadow-none ">
+        <Card className="h-[3.75rem] border border-mainColor rounded-lg shadow-none ">
           <CardBody className=" flex flex-row justify-start items-center text-lg">
             <p className={meetingLocation ? '' : 'text-gray2'}>
               {meetingLocation ? meetingLocation : '방장이 선택한 장소가 표시됩니다.'}
@@ -206,7 +229,7 @@ const Map = ({ chatRoomId }: { chatRoomId: string }) => {
       <DateTimePicker chatRoomId={chatRoomId} />
 
       <h1 className="font-semibold text-2xl mb-2">장소 검색</h1>
-      <Card className="h-[60px] border border-gray2 rounded-[9px] shadow-none mb-4">
+      <Card className="h-[3.75rem] border border-gray2 rounded-lg shadow-none mb-4">
         <CardBody className=" flex flex-row justify-start items-center text-lg">
           <form
             onSubmit={(e) => {
