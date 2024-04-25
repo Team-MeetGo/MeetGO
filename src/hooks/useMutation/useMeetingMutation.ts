@@ -8,7 +8,7 @@ import {
   updateRoomStatusClose,
   updateRoomStatusOpen
 } from '@/query/meetingRoom/meetingQueryFns';
-import { RECRUTING_ROOMDATA, ROOMLIST, ROOM_MEMBER } from '@/query/meetingRoom/meetingQueryKeys';
+import { MY_PAST_NOW_ROOM, RECRUTING_ROOMDATA, ROOMLIST, ROOM_MEMBER } from '@/query/meetingRoom/meetingQueryKeys';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 import type { NewRoomType, UpdateRoomType, UserType } from '@/types/roomTypes';
@@ -19,6 +19,7 @@ export const useUpdateRoomStatusCloseMutation = ({ roomId, userId }: { roomId: s
     mutationFn: async () => await updateRoomStatusClose(roomId),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: [ROOM_MEMBER, userId] });
+      queryClient.invalidateQueries({ queryKey: [MY_PAST_NOW_ROOM] });
     }
   });
   return roomStatusCloseMutation;
@@ -30,6 +31,7 @@ export const useUpdateRoomStatusOpen = ({ roomId, userId }: { roomId: string; us
     mutationFn: () => updateRoomStatusOpen(roomId),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: [ROOM_MEMBER, userId] });
+      queryClient.invalidateQueries({ queryKey: [MY_PAST_NOW_ROOM] });
     }
   });
   return roomStatusOpenMutation;
@@ -47,6 +49,7 @@ export const useUpdateRoom = ({
     mutationFn: async () => await updateRoom(editedMeetingRoom),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: [ROOMLIST, userId] });
+      queryClient.invalidateQueries({ queryKey: [MY_PAST_NOW_ROOM] });
     }
   });
   return updateRoomMutation;
@@ -59,13 +62,12 @@ export const useDeleteRoom = ({ roomId, userId }: { roomId: string; userId: stri
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: [ROOMLIST, userId] });
       queryClient.invalidateQueries({ queryKey: [RECRUTING_ROOMDATA] });
+      queryClient.invalidateQueries({ queryKey: [MY_PAST_NOW_ROOM] });
     }
   });
   return deleteRoomMutation;
 };
 export const useAddRoomMutation = () => {
-  const queryClient = useQueryClient();
-
   const roomAddMutation = useMutation({
     mutationFn: ({ nextMeetingRoom, userId }: { nextMeetingRoom: NewRoomType; userId: string }) =>
       addRoom({ nextMeetingRoom, userId })

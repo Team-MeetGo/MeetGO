@@ -13,7 +13,6 @@ import {
 import { Skeleton } from '@nextui-org/skeleton';
 import MeetGoLogo from '@/utils/icons/meetgo-logo.png';
 import Image from 'next/image';
-import { useRouter } from 'next/navigation';
 import { clientSupabase } from '@/utils/supabase/client';
 import { useGetUserDataQuery } from '@/hooks/useQueries/useUserQuery';
 import { useQueryClient } from '@tanstack/react-query';
@@ -29,10 +28,9 @@ const NavBarContents = () => {
   if (isPending) {
     return (
       <div className="w-full flex items-center gap-2 max-w-5xl py-[20px] px-6 m-auto justify-between">
-        <div className="w-full flex gap-4 items-center">
+        <div className="w-full flex gap-10 items-center">
           <Skeleton className="w-1/3 h-10 rounded-lg" />
-          <Skeleton className="h-6 w-1/6 rounded-lg" />
-          <Skeleton className="h-6 w-1/6 rounded-lg" />
+          <Skeleton className="h-6 w-4/6 rounded-lg" />
         </div>
         <div className="w-full flex gap-4 items-center justify-end">
           <Skeleton className="h-6 w-1/5 rounded-lg" />
@@ -78,17 +76,21 @@ const NavBarContents = () => {
         <NavbarContent className="hidden sm:flex h-auto gap-11">
           <NavbarItem>
             <Link color="foreground" href={isValidate ? '/meetingRoom' : '/mypage'} onClick={checkIsValidate}>
-              Lobby
+              로비
             </Link>
           </NavbarItem>
           <NavbarItem isActive>
-            <Link href="/review/pageNumber/1" aria-current="page" color="secondary">
-              Review
+            <Link href="/review/pageNumber/1" aria-current="page">
+              리뷰
+            </Link>
+          </NavbarItem>
+          <NavbarItem isActive>
+            <Link href="/" aria-current="page">
+              스쳐간 인연
             </Link>
           </NavbarItem>
         </NavbarContent>
       </div>
-
       <NavbarContent className="h-auto" as="div" justify="end">
         {isLoggedIn ? (
           <div className="flex items-center gap-4">
@@ -119,6 +121,9 @@ const NavBarContents = () => {
                 <DropdownItem key="mypage" href="/mypage">
                   마이페이지
                 </DropdownItem>
+                <DropdownItem key="help" href="/help">
+                  고객센터
+                </DropdownItem>
                 <DropdownItem key="logout" color="danger">
                   LOGOUT
                 </DropdownItem>
@@ -129,13 +134,13 @@ const NavBarContents = () => {
           <div className="flex gap-2">
             <Link
               href="/login"
-              className="bg-white rounded-[12px] px-[20px] py-[12px] text-[18px] text-[#252642] font-medium"
+              className="bg-white rounded-[12px] px-[16px] py-[10px] text-base text-[#252642] font-medium"
             >
               로그인
             </Link>
             <Link
               href="/join"
-              className="bg-mainColor rounded-[12px] px-[20px] py-[12px] text-[18px] text-white font-medium"
+              className="bg-mainColor rounded-[12px] px-[16px] py-[10px] text-base text-white font-medium"
             >
               회원가입
             </Link>

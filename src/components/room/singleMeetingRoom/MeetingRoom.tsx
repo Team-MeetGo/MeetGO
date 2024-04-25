@@ -1,5 +1,5 @@
 'use client';
-import getmaxGenderMemberNumber from '@/hooks/custom/room';
+import getmaxGenderMemberNumber from '@/hooks/custom/useGenderMaxNumber';
 import { useAddRoomMemberMutation, useUpdateRoomStatusCloseMutation } from '@/hooks/useMutation/useMeetingMutation';
 import { useAlreadyChatRoomQuery, useRoomParticipantsQuery } from '@/hooks/useQueries/useMeetingQuery';
 import { useGetUserDataQuery } from '@/hooks/useQueries/useUserQuery';
@@ -61,7 +61,21 @@ function MeetingRoom({ room }: { room: MeetingRoomType }) {
     return router.push(`/meetingRoom/${room_id}`);
   };
 
+<<<<<<< HEAD
   const handleAddMemberDebounce = debounce(addMember, 2000);
+=======
+  const debounce = (callback: ({ room_id }: { room_id: string }) => Promise<void>, delay: number) => {
+    let timerId: any = null;
+    return (room_id: string) => {
+      if (timerId) clearTimeout(timerId);
+      timerId = setTimeout(() => {
+        callback({ room_id });
+      }, delay);
+    };
+  };
+
+  const handleAddMemberDebounce = debounce(addMember, 500);
+>>>>>>> 472a2de5449ddec8d73ce660ee7a0518680ebcf0
 
   return (
     <article

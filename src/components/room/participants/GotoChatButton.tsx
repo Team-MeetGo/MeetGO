@@ -5,21 +5,24 @@ import { useGetUserDataQuery } from '@/hooks/useQueries/useUserQuery';
 import { clientSupabase } from '@/utils/supabase/client';
 import { useRouter } from 'next/navigation';
 import { IoPlay } from 'react-icons/io5';
-import getmaxGenderMemberNumber from '@/hooks/custom/room';
+import getmaxGenderMemberNumber from '@/hooks/custom/useGenderMaxNumber';
 
 import type { UUID } from 'crypto';
+<<<<<<< HEAD
 import { useCallback } from 'react';
 import { debounce } from '@/utils';
 const GotoChatButton = ({ roomId, leader }: { roomId: UUID; leader: string }) => {
+=======
+import type { UserType } from '@/types/roomTypes';
+const GotoChatButton = ({ roomId, members }: { roomId: UUID; members: UserType[] }) => {
+>>>>>>> 472a2de5449ddec8d73ce660ee7a0518680ebcf0
   const router = useRouter();
 
   const { data: user } = useGetUserDataQuery();
   const roomInformation = useRoomInfoWithRoomIdQuery(roomId);
-  const participants = useRoomParticipantsQuery(roomId);
 
-  const userId = user?.user_id!;
-  const memberNumber = roomInformation.member_number;
-  const genderParticipants = getmaxGenderMemberNumber(memberNumber ?? []);
+  const memberNumber = roomInformation?.member_number;
+  const genderParticipants = getmaxGenderMemberNumber(memberNumber ?? '');
   const maxMember = genderParticipants! * 2;
 
   //원하는 인원이 모두 들어오면 위에서 창이 내려온다.
@@ -28,7 +31,10 @@ const GotoChatButton = ({ roomId, leader }: { roomId: UUID; leader: string }) =>
       alert('로그인 후에 이용하세요.');
       router.push('/login');
     }
+<<<<<<< HEAD
     // if (userId === leader) {
+=======
+>>>>>>> 472a2de5449ddec8d73ce660ee7a0518680ebcf0
     const { data: alreadyChat } = await clientSupabase
       .from('chatting_room')
       .select('*')
@@ -49,7 +55,10 @@ const GotoChatButton = ({ roomId, leader }: { roomId: UUID; leader: string }) =>
       if (error) console.error('fail tp make new Chatting Room', error.message);
       if (chat_room) router.replace(`/chat/${chat_room[0].chatting_room_id}`);
     } // "/chatting_room_id" 로 주소값 변경
+<<<<<<< HEAD
     // }
+=======
+>>>>>>> 472a2de5449ddec8d73ce660ee7a0518680ebcf0
   };
 
   const handleGoChatDebounce = useCallback(debounce(gotoChattingRoom, 1500), []);
@@ -62,17 +71,23 @@ const GotoChatButton = ({ roomId, leader }: { roomId: UUID; leader: string }) =>
         flex flex-col h-[114px] w-[1116px] justify-center text-center"
         >
           <button
+<<<<<<< HEAD
             disabled={genderParticipants ? (participants?.length === genderParticipants * 2 ? false : true) : false}
             className={`${
               genderParticipants && participants?.length === genderParticipants * 2 ? 'bg-mainColor' : 'bg-gray1'
             }`}
             onClick={handleGoChatDebounce}
+=======
+            disabled={genderParticipants ? (members?.length === maxMember ? false : true) : false}
+            className={`${genderParticipants && members?.length === maxMember ? 'bg-mainColor' : 'bg-gray1'}`}
+            onClick={gotoChattingRoom}
+>>>>>>> 472a2de5449ddec8d73ce660ee7a0518680ebcf0
           >
             <div className="flex flex-row justify-center align-middle gap-[8px]">
-              <h2 className="text-[40px] text-white font-bold">MEET GO</h2>
+              <h2 className="text-[40px] text-white font-bold">Go to chat</h2>
               <IoPlay className="w-[24px] h-[24px] my-auto fill-white" />
             </div>
-            <p className="text-[14px] text-white">인원이 다 차면 이 버튼이 활성화됩니다.</p>
+            <p className="text-[14px] text-white">인원이 다 차면 이 버튼을 누르세요.</p>
           </button>
         </figure>
       }
