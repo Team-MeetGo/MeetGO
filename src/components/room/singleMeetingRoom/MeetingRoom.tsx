@@ -10,6 +10,7 @@ import { useRouter } from 'next/navigation';
 import { ROOMSTATUS } from '@/utils/MeetingRoomSelector';
 
 import type { MeetingRoomType } from '@/types/roomTypes';
+import { debounce } from '@/utils';
 
 function MeetingRoom({ room }: { room: MeetingRoomType }) {
   const router = useRouter();
@@ -61,17 +62,7 @@ function MeetingRoom({ room }: { room: MeetingRoomType }) {
     return router.push(`/meetingRoom/${room_id}`);
   };
 
-  const debounce = (callback: ({ room_id }: { room_id: string }) => Promise<void>, delay: number) => {
-    let timerId: any = null;
-    return (room_id: string) => {
-      if (timerId) clearTimeout(timerId);
-      timerId = setTimeout(() => {
-        callback({ room_id });
-      }, delay);
-    };
-  };
-
-  const handleAddMemberDebounce = debounce(addMember, 500);
+  const handleAddMemberDebounce = debounce(addMember, 2000);
 
   return (
     <article
@@ -85,7 +76,7 @@ function MeetingRoom({ room }: { room: MeetingRoomType }) {
     >
       <section className="w-max-[354px] h-[241px] p-6 gap-4 rounded-xl flex flex-col hover:cursor-pointer">
         <RoomInformation room={room} />
-        <main className="h-full flex flex-col justify-between" onClick={() => handleAddMemberDebounce(room_id)}>
+        <main className="h-full flex flex-col justify-between" onClick={() => handleAddMemberDebounce({ room_id })}>
           <section>
             <h1 className="text-[26px]"> {room_title} </h1>
             <div className="flex flex-row justify-start gap-2">

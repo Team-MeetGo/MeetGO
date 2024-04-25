@@ -132,11 +132,11 @@ pre {
 }
 
 .chatImgRowsOverOne {
-  grid-template-rows: 100px 100px;
+  grid-template-rows: 6.25rem 6.25rem;
 }
 
 .chatImgRowsNotOverOne {
-  grid-template-rows: 100px;
+  grid-template-rows: 6.25rem;
 }
 
 .h-\[var\(--navbar-height\)\] {

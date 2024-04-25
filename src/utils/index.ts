@@ -27,12 +27,26 @@ export const getFromTo = (loadCount: number, idx: number) => {
   return { from, to };
 };
 
-export const isNextDay = (idx: number, messages: Message[]) => {
-  return idx > 0 && new Date(messages[idx].created_at).getDate() > new Date(messages[idx - 1].created_at).getDate();
+export const isNextDay = (idx: number, messages: Message[] | undefined) => {
+  return (
+    idx > 0 &&
+    messages &&
+    new Date(messages[idx].created_at).getDate() > new Date(messages[idx - 1].created_at).getDate()
+  );
 };
 
-export const isItMe = (idx: number, messages: Message[]) => {
-  return idx > 0 && messages[idx].send_from === messages[idx - 1].send_from;
+export const isItMe = (idx: number, messages: Message[] | undefined) => {
+  return idx > 0 && messages && messages[idx].send_from === messages[idx - 1].send_from;
+};
+
+export const debounce = <T extends (...args: any) => Promise<void>>(callback: T, delay: number) => {
+  let timerId: any = null;
+  return (...args: Parameters<T>) => {
+    if (timerId) clearTimeout(timerId);
+    timerId = setTimeout(() => {
+      callback(...args);
+    }, delay);
+  };
 };
 
 export const dateOptions: Intl.DateTimeFormatOptions = {

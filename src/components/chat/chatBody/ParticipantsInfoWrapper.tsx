@@ -44,7 +44,7 @@ const ParticipantsInfoWrapper = ({
           )}
         </div>
 
-        {leaderId && leaderId === showThatUser(msg.send_from).user_id ? (
+        {leaderId && leaderId === showThatUser(msg.send_from)?.user_id ? (
           <div className="w-6 h-6 rounded-full absolute bottom-0 right-0 flex justify-center bg-purpleThird border border-gray1 font-extralight">
             <FaCrown className="my-auto fill-mainColor" />
           </div>

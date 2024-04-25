@@ -3,7 +3,7 @@ import { CustomMiddleware } from './middlewareType';
 import { serverSupabase } from '@/utils/supabase/server';
 
 export const chatRoomHandler = (middleware: CustomMiddleware) => {
-  return async (request: NextRequest, event: NextFetchEvent) => {
+  return async (request: NextRequest, event: NextFetchEvent, response: NextResponse) => {
     // 채팅창
     if (request.nextUrl.pathname.startsWith('/chat/')) {
       const supabase = serverSupabase();
@@ -12,7 +12,11 @@ export const chatRoomHandler = (middleware: CustomMiddleware) => {
       } = await supabase.auth.getUser();
       // 내가 들어가있는 방들
       const myChatRooms = [];
-      const { data: myRooms } = await supabase.from('participants').select('room_id').eq('user_id', String(user?.id));
+      const { data: myRooms } = await supabase
+        .from('participants')
+        .select('room_id')
+        .eq('user_id', String(user?.id))
+        .eq('isDeleted', false);
 
       if (myRooms) {
         for (let room of myRooms) {
@@ -29,8 +33,8 @@ export const chatRoomHandler = (middleware: CustomMiddleware) => {
           // 내가 들어가있는 방이면 OK
           return NextResponse.next();
         } else {
-          // 내가 들어가있는 방이 아니면 홈으로
-          return NextResponse.redirect(new URL('/', request.nextUrl.origin));
+          // 내가 들어가있는 방이 아니면 로비로
+          return NextResponse.redirect(new URL('/meetingRoom', request.nextUrl.origin));
         }
       }
     }

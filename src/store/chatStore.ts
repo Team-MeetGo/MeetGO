@@ -3,7 +3,6 @@ import { create } from 'zustand';
 
 type chatState = {
   chatRoomId: string | null;
-  messages: Message[];
   hasMore: boolean;
   chatState: boolean;
   isRest: boolean;
@@ -12,7 +11,6 @@ type chatState = {
   onlineUsers: string[];
 
   setChatRoomId: (chatRoomId: string | null) => void;
-  setMessages: (messages: Message[]) => void;
   setHasMore: (hasMore: boolean) => void;
   setChatState: (isActive: boolean) => void;
   setisRest: (isRest: boolean) => void;
@@ -23,7 +21,6 @@ type chatState = {
 
 export const chatStore = create<chatState>()((set) => ({
   chatRoomId: null,
-  messages: [],
   hasMore: false,
   chatState: true,
   isRest: true,
@@ -32,7 +29,6 @@ export const chatStore = create<chatState>()((set) => ({
   onlineUsers: [],
 
   setChatRoomId: (chatRoomId) => set({ chatRoomId }),
-  setMessages: (messages) => set({ messages }),
   setHasMore: (hasMore) => set({ hasMore }),
   setChatState: (isActive) => set({ chatState: isActive }),
   setisRest: (isRest) => set({ isRest }),

@@ -3,7 +3,7 @@ import { CustomMiddleware } from './middlewareType';
 import { serverSupabase } from '@/utils/supabase/server';
 
 export const meetingRoomHandler = (middleware: CustomMiddleware) => {
-  return async (request: NextRequest, event: NextFetchEvent) => {
+  return async (request: NextRequest, event: NextFetchEvent, response: NextResponse) => {
     // 수락창
     if (request.nextUrl.pathname.startsWith('/meetingRoom/')) {
       const supabase = serverSupabase();
@@ -11,7 +11,11 @@ export const meetingRoomHandler = (middleware: CustomMiddleware) => {
         data: { user }
       } = await supabase.auth.getUser();
       // 내가 들어가있는 방들
-      const { data: myRooms } = await supabase.from('participants').select('room_id').eq('user_id', String(user?.id));
+      const { data: myRooms } = await supabase
+        .from('participants')
+        .select('room_id')
+        .eq('user_id', String(user?.id))
+        .eq('isDeleted', false);
       if (
         myRooms &&
         myRooms.map((room) => room.room_id).includes(request.nextUrl.pathname.replace('/meetingRoom/', ''))

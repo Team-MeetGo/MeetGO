@@ -35,6 +35,20 @@ function RoomInformation({ roomId }: { roomId: UUID }) {
 
   //나가기: 로비로
   const gotoLobby = async () => {
+    const getOutOfChatRoom = async () => {
+      if (window.confirm('채팅창에서 한번 나가면 다시 입장할 수 없습니다. 그래도 나가시겠습니까?')) {
+        await updateIsActiveFalse();
+        await getRidOfMe();
+        await updateRoomState();
+        await handleIsRest();
+        deleteLastMsg();
+        deleteTheUserImgs();
+        setMessages([]);
+      } else {
+        return;
+      }
+    };
+
     if (!confirm('정말 나가시겠습니까? 나가면 다시 돌아올 수 없습니다!')) {
       return;
     }

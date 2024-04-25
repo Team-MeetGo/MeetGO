@@ -1,4 +1,4 @@
-import { useParticipantsQuery, useRoomDataQuery } from '@/hooks/useQueries/useChattingQuery';
+import { useMsgsQuery, useParticipantsQuery, useRoomDataQuery } from '@/hooks/useQueries/useChattingQuery';
 import { chatStore } from '@/store/chatStore';
 import { Message } from '@/types/chatTypes';
 import { getformattedDate, isItMe, isNextDay } from '@/utils';
@@ -6,7 +6,8 @@ import ChatImg from './ChatImg';
 import ParticipantsInfoWrapper from './ParticipantsInfoWrapper';
 
 const OthersChat = ({ msg, idx, lastDivRefs }: { msg: Message; idx: number; lastDivRefs: any }) => {
-  const { chatRoomId, messages } = chatStore((state) => state);
+  const { chatRoomId } = chatStore((state) => state);
+  const messages = useMsgsQuery(chatRoomId as string);
   const room = useRoomDataQuery(chatRoomId as string);
   const leaderId = room?.leader_id;
   const participants = useParticipantsQuery(room?.room_id as string);
@@ -19,7 +20,7 @@ const OthersChat = ({ msg, idx, lastDivRefs }: { msg: Message; idx: number; last
   return (
     <>
       <div id={msg.message_id} ref={lastDivRefs.current[idx]} className="flex gap-[12px]">
-        {isItMe(idx, messages) ? (
+        {messages && isItMe(idx, messages) ? (
           !isNextDay(idx, messages) ? (
             <div className="w-[60px]"></div>
           ) : (
@@ -30,7 +31,7 @@ const OthersChat = ({ msg, idx, lastDivRefs }: { msg: Message; idx: number; last
         )}
 
         <div className="flex flex-col gap-1">
-          {isItMe(idx, messages) ? (
+          {messages && isItMe(idx, messages) ? (
             !isNextDay(idx, messages) ? null : (
               <h2 className="font-bold">{showThatUser(msg.send_from)?.nickname}</h2>
             )
@@ -47,7 +48,7 @@ const OthersChat = ({ msg, idx, lastDivRefs }: { msg: Message; idx: number; last
               )}
               <ChatImg msg={msg} />
             </div>
-            {idx < messages.length - 1 && msg.send_from === messages[idx + 1].send_from ? null : (
+            {messages && idx < messages.length - 1 && msg.send_from === messages[idx + 1].send_from ? null : (
               <div className="mt-auto text-gray-400">
                 <p className="text-sm">{getformattedDate(msg.created_at)}</p>
               </div>

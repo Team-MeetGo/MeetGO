@@ -7,12 +7,15 @@ import { ChangeEvent, useRef, useState } from 'react';
 import { FaPlus, FaRegArrowAltCircleUp } from 'react-icons/fa';
 import Image from 'next/image';
 import { MdCancel } from 'react-icons/md';
+import { useAddNewMsg } from '@/hooks/useMutation/useChattingMutation';
 
 const ChatInput = () => {
   const { data: user } = useGetUserDataQuery();
   const { chatRoomId, imgs, setImgs } = chatStore((state) => state);
   const [message, setMessage] = useState('');
   const imgRef = useRef(null);
+
+  const { mutate: addNewMsg } = useAddNewMsg();
 
   const collectImgFile = async (e: ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
@@ -27,38 +30,6 @@ const ChatInput = () => {
     }
   };
 
-  const makeUrl = async () => {
-    let chatImgsUrls = [];
-    for (const imgFile of imgs) {
-      const uuid = crypto.randomUUID();
-      const imgUrlPath = `${chatRoomId}/${user?.user_id}/${uuid}`;
-      const { data: imgUrlData, error } = await clientSupabase.storage.from('chatImg').upload(imgUrlPath, imgFile, {
-        cacheControl: '3600',
-        upsert: true
-      });
-      if (error) console.error('채팅이미지 업로드 실패', error.message);
-      const { data: imgUrls } = await clientSupabase.storage.from('chatImg').getPublicUrl(imgUrlData?.path as string);
-      chatImgsUrls.push(imgUrls);
-    }
-    return chatImgsUrls.map((url) => url.publicUrl);
-  };
-
-  const handleSubmit = async () => {
-    if (user && chatRoomId && (message.length || imgs.length)) {
-      const { error } = await clientSupabase.from('messages').insert({
-        send_from: user?.user_id,
-        message: message.length ? message : null,
-        chatting_room_id: chatRoomId,
-        imgs: imgs.length ? await makeUrl() : null
-      });
-      if (error) {
-        console.error(error.message);
-        alert('새로운 메세지를 추가하는 데에 실패했습니다.');
-      }
-    }
-    setImgs([]);
-  };
-
   const cancelImgFile = (name: string) => {
     setImgs(imgs.filter((img) => img.name !== name));
   };
@@ -70,7 +41,8 @@ const ChatInput = () => {
           className="p-5 flex gap-[10px]"
           onSubmit={(e) => {
             e.preventDefault();
-            handleSubmit();
+            addNewMsg({ user, chatRoomId, message, imgs });
+            setImgs([]);
             setMessage('');
           }}
         >
