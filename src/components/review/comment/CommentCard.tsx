@@ -5,6 +5,7 @@ import { useCommentAuthorDataQuery } from '@/hooks/useQueries/useCommentQuery';
 import { Button } from '@nextui-org/react';
 import { useGetUserDataQuery } from '@/hooks/useQueries/useUserQuery';
 import { useDeleteCommentMutation } from '@/hooks/useMutation/useCommentMutations';
+import { IoFemale, IoMale } from 'react-icons/io5';
 
 type Props = {
   comment: CommentListType;
@@ -28,6 +29,7 @@ const CommentCard = ({ comment }: Props) => {
 
   const userAvatar = commentAuthorData?.avatar || null;
   const userNickname = commentAuthorData?.nickname || null;
+  const userGender = commentAuthorData?.gender || null;
 
   return (
     <div className="flex w-full max-w-[1000px] border-b-1 border-gray2">
@@ -47,8 +49,15 @@ const CommentCard = ({ comment }: Props) => {
                 <AvatarDefault />
               )}
             </div>
-            <div className="flex items-center">
-              <div className="text-[20px] mr-[15px]">{userNickname ? userNickname : '익명유저'}</div>
+            <div className="flex items-center gap-1">
+              <p className="text-xl">{userNickname ? userNickname : '익명유저'}</p>
+              <p className="text-xl mr-[15px]">
+                {userGender === 'female' ? (
+                  <IoFemale className="fill-hotPink" />
+                ) : userGender === 'male' ? (
+                  <IoMale className="fill-blue" />
+                ) : null}
+              </p>
               <div className="text-[#A1A1AA] text-[16px]">
                 {comment && comment.created_at
                   ? new Intl.DateTimeFormat('ko-KR', {

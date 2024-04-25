@@ -27,9 +27,9 @@ const ImageGallery = ({ images }: Props) => {
             <Image
               src={imageUrl}
               alt={`reviewImage_${index}`}
-              className="w-full max-w-[630px] max-h-[480px] h-auto object-cover"
-              height={300}
-              width={300}
+              className="w-[620px] h-[480px] object-cover"
+              sizes="700px"
+              fill={true}
             />
           </div>
         ))}

@@ -74,18 +74,19 @@ const ReviewDetail = ({ review_id }: Props) => {
   return (
     <div>
       <div>
-        <div className="flex justify-between">
-          <div className="text-[40px] mb-[24px]">{reviewDetailData?.review_title}</div>
-          <div className="flex items-center">
-            <Link href="/review/pageNumber/1">
-              <IoIosList className="w-[31px] h-[36px] mb-[24px]" />
-            </Link>
-          </div>
+        <div className="flex justify-between gap-2 items-end mb-[16px]">
+          <p className="text-[40px] ">{reviewDetailData?.review_title}</p>
+          <Link href="/review/pageNumber/1">
+            <p className="max-sm:hidden rounded-[8px] bg-[#E5E7EB] text-[#9CA3AF] text-sm font-medium px-[12px] py-[6px] hover:opacity-70">
+              목록
+            </p>
+            <IoIosList className="w-[31px] h-[36px] mb-[24px] sm:hidden" />
+          </Link>
         </div>
         <div className="flex flex-col border-t-1 border-b-1 border-gray2 mb-[64px]">
           <div className="flex items-center mt-[24px] mb-[48px]">
             <div className="flex items-center mr-[15px]">
-              {authorData?.avatar ? (
+              {authorData?.avatar && reviewDetailData?.show_nickname ? (
                 <Image
                   className="w-[52px] h-[52px] rounded-full"
                   src={authorData?.avatar}

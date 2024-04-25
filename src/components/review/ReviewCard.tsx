@@ -30,7 +30,7 @@ const ReviewCard = ({ review }: { review: ReviewType }) => {
   return (
     <div
       key={review.review_id}
-      className="flex flex-col w-full justify-center item-center border-1 border-[#A1A1AA] rounded-[10px] p-[16px]"
+      className="flex flex-col w-full justify-center item-center border-1 border-[#A1A1AA] rounded-[8px] p-[16px]"
     >
       <div className="flex flex-col w-full items-start h-full">
         <Link href={`/review/${review.review_id}`}>
@@ -41,7 +41,7 @@ const ReviewCard = ({ review }: { review: ReviewType }) => {
                 alt="reviewImage"
                 height={400}
                 width={400}
-                className="w-[324px] h-full max-h-[204px] object-cover rounded-[10px]"
+                className="w-[324px] h-[204px] object-cover rounded-[10px]"
               />
             ) : (
               <Image
@@ -49,7 +49,7 @@ const ReviewCard = ({ review }: { review: ReviewType }) => {
                 alt="reviewImage"
                 height={400}
                 width={400}
-                className="w-[324px] h-full object-cover rounded-[10px]"
+                className="w-[324px] h-[204px] object-cover rounded-[10px]"
               />
             )}
             <p className="text-[20px] pt-[16px] pb-[16px]">{review.review_title}</p>
