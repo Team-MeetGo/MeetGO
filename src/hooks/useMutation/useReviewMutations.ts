@@ -5,7 +5,8 @@ import {
   EDIT_REVIEW_QUERY_KEY,
   NEW_IMGS_QUERY_KEY,
   NEW_REVIEW_QUERY_KEY,
-  REVIEWLIST_QUERY_KEY
+  REVIEWLIST_QUERY_KEY,
+  REVIEW_QUERY_KEY
 } from '../../query/review/reviewQueryKeys';
 
 export const useDeleteReviewMutation = () => {
@@ -120,7 +121,9 @@ export const useEditReviewMutation = () => {
       return updateReview;
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: EDIT_REVIEW_QUERY_KEY });
+      queryClient.invalidateQueries({
+        queryKey: [REVIEW_QUERY_KEY]
+      });
     }
   });
   return editReviewMutation;
@@ -144,7 +147,9 @@ export const useEditImgsMutation = () => {
       return imageUrlData.publicUrl;
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: EDIT_IMGS_QUERY_KEY });
+      queryClient.invalidateQueries({
+        queryKey: [REVIEW_QUERY_KEY]
+      });
     }
   });
   return editImgsMutation;
