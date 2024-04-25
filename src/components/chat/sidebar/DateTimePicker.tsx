@@ -1,12 +1,12 @@
 'use client';
-import React, { forwardRef, useRef, useState } from 'react';
+import React, { forwardRef, useEffect, useRef, useState } from 'react';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import DateCustomeInput from './DateCustomeInput';
 import { ko } from 'date-fns/locale';
 import { getMonth, getYear } from 'date-fns';
 import { IoIosArrowForward, IoIosArrowBack } from 'react-icons/io';
-import { useRoomDataQuery } from '@/hooks/useQueries/useChattingQuery';
+import { useChatDataQuery, useRoomDataQuery } from '@/hooks/useQueries/useChattingQuery';
 import { useUpdateMeetingTimeMutation } from '@/hooks/useMutation/useMeetingTimeMutation';
 import { useGetUserDataQuery } from '@/hooks/useQueries/useUserQuery';
 
@@ -24,9 +24,19 @@ const DateTimePicker = forwardRef(({ chatRoomId }: { chatRoomId: string }) => {
     setIsCalendarOpen((prev) => !prev);
   };
 
+  const chat = useChatDataQuery(chatRoomId);
+
+  useEffect(() => {
+    const meetingTime = new Date(String(chat.meeting_time));
+    if (meetingTime instanceof Date && !isNaN(meetingTime.getTime())) {
+      setSelectedMeetingTime(meetingTime);
+    }
+  }, [chatRoomId, chat]);
+
   const { mutate: updateMeetingTime } = useUpdateMeetingTimeMutation();
 
   const months = ['1월', '2월', '3월', '4월', '5월', '6월', '7월', '8월', '9월', '10월', '11월', '12월'];
+
   return (
     <div className="relative z-50 w-full py-6">
       <DatePicker

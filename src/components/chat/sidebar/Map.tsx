@@ -34,7 +34,7 @@ const Map = ({ chatRoomId }: { chatRoomId: string }) => {
 
   // 채팅방 정보 가져오기
   const chat = useChatDataQuery(chatRoomId);
-  const meetingLocation = chat?.meeting_location;
+  const meetingLocation = chat.meeting_location;
 
   // useMutation 호출
   const updateMeetingLocationMutation = useUpdateMeetingLocationMutation();

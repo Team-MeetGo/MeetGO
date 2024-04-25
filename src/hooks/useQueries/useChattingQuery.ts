@@ -37,7 +37,7 @@ export const useChatDataQuery = (chatRoomId: string) => {
     queryKey: [CHATDATA_QUERY_KEY],
     queryFn: () => fetchChatData(chatRoomId)
   });
-  return chat ? chat[0] : null;
+  return chat[0];
 };
 
 export const useMyChatRoomIdsQuery = (userId: string) => {

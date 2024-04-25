@@ -13,7 +13,7 @@ const SideBar = ({ chatRoomId }: { chatRoomId: string }) => {
 
   //채팅방 정보 가져오기
   const chat = useChatDataQuery(chatRoomId);
-  const meetingTime = chat?.meeting_time;
+  const meetingTime = chat.meeting_time;
   const convertedTime = meetingTime ? new Intl.DateTimeFormat('ko-KR', dateOptions).format(new Date(meetingTime)) : '';
 
   if (!isSidebarOpen) {
