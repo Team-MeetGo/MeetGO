@@ -14,17 +14,16 @@ const DateTimePicker = forwardRef(({ chatRoomId }: { chatRoomId: string }) => {
   const [selectedMeetingTime, setSelectedMeetingTime] = useState<Date | null>(new Date());
   const [isCalendarOpen, setIsCalendarOpen] = useState<boolean>(false);
   const datePickerRef = useRef<DatePicker>(null);
-  // 유저 정보 가져오기
   const { data: userData } = useGetUserDataQuery();
   const userId = userData?.user_id;
-  // useRoomDataQuery로 리더 아이디 가져오기
   const room = useRoomDataQuery(chatRoomId);
-  const leaderId = room?.leader_id;
+  const leaderId = room && room?.leader_id;
+  const chat = useChatDataQuery(chatRoomId);
   const toggleCalendar = () => {
     setIsCalendarOpen((prev) => !prev);
   };
-
-  const chat = useChatDataQuery(chatRoomId);
+  const months = ['1월', '2월', '3월', '4월', '5월', '6월', '7월', '8월', '9월', '10월', '11월', '12월'];
+  const { mutate: updateMeetingTime } = useUpdateMeetingTimeMutation();
 
   useEffect(() => {
     const meetingTime = new Date(String(chat.meeting_time));
@@ -32,10 +31,6 @@ const DateTimePicker = forwardRef(({ chatRoomId }: { chatRoomId: string }) => {
       setSelectedMeetingTime(meetingTime);
     }
   }, [chatRoomId, chat]);
-
-  const { mutate: updateMeetingTime } = useUpdateMeetingTimeMutation();
-
-  const months = ['1월', '2월', '3월', '4월', '5월', '6월', '7월', '8월', '9월', '10월', '11월', '12월'];
 
   return (
     <div className="relative z-40 w-full py-6">
