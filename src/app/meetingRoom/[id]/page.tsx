@@ -5,7 +5,6 @@ import { Suspense } from 'react';
 import type { UUID } from 'crypto';
 const MemberListPage = ({ params }: { params: { id: UUID } }) => {
   const roomId = params.id;
-  console.log('room', roomId);
   return (
     <>
       <Suspense>

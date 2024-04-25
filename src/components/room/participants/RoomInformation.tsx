@@ -11,12 +11,15 @@ import { useRouter } from 'next/navigation';
 import { IoFemale, IoMale } from 'react-icons/io5';
 import useGenderMaxNumber from '@/hooks/custom/useGenderMaxNumber';
 import { GENDER } from '@/utils/MeetingRoomSelector';
+import { useModalStore } from '@/store/modalStore';
 
 import type { UserType } from '@/types/roomTypes';
 import type { UUID } from 'crypto';
+import { ValidationModal } from '@/components/common/ValidationModal';
 
 function RoomInformation({ roomId }: { roomId: UUID }) {
   const router = useRouter();
+  const { openModal, closeModal } = useModalStore();
   const { data: user } = useGetUserDataQuery();
   const userId = user?.user_id!;
   const { mutate: deleteMemberMutation } = useDeleteMember({ userId, roomId });
@@ -34,37 +37,35 @@ function RoomInformation({ roomId }: { roomId: UUID }) {
   const countMale = participants.length - countFemale;
 
   //나가기: 로비로
-  const gotoLobby = async () => {
-    const getOutOfChatRoom = async () => {
-      if (window.confirm('채팅창에서 한번 나가면 다시 입장할 수 없습니다. 그래도 나가시겠습니까?')) {
-        await updateIsActiveFalse();
-        await getRidOfMe();
-        await updateRoomState();
-        await handleIsRest();
-        deleteLastMsg();
-        deleteTheUserImgs();
-        setMessages([]);
-      } else {
-        return;
+  const gotoLobby = () => {
+    console.log('로비?');
+    openModal({
+      type: 'confirm',
+      name: '',
+      text: `정말 나가시겠습니까?
+        나가면 다시 돌아올 수 없습니다!`,
+      onFunc: () => {
+        console.log('실행?');
+        if (participants.length / 2 === genderMaxNumber) {
+          updateRoomStatusOpenMutation();
+        }
+        deleteMemberMutation();
+        //유저가 리더였다면 다른 사람에게 리더 역할이 승계됩니다.
+        if (leader_id === userId && participants.length > 1) {
+          updateLeaderMemeberMutation();
+        }
+        //만약 유일한 참여자라면 나감과 동시에 방은 삭제됩니다.
+        if (participants.length === 1) {
+          deleteRoomMutation();
+        }
+        router.push(`/meetingRoom`);
+        closeModal();
+      },
+      onCancelFunc: () => {
+        closeModal();
       }
-    };
-
-    if (!confirm('정말 나가시겠습니까? 나가면 다시 돌아올 수 없습니다!')) {
-      return;
-    }
-    if (participants.length / 2 === genderMaxNumber) {
-      updateRoomStatusOpenMutation();
-    }
-    deleteMemberMutation();
-    //유저가 리더였다면 다른 사람에게 리더 역할이 승계됩니다.
-    if (leader_id === userId && participants.length > 1) {
-      updateLeaderMemeberMutation();
-    }
-    //만약 유일한 참여자라면 나감과 동시에 방은 삭제됩니다.
-    if (participants.length === 1) {
-      deleteRoomMutation();
-    }
-    router.push(`/meetingRoom`);
+    });
+    openModal;
   };
 
   const gotoBack = () => {
@@ -89,12 +90,12 @@ function RoomInformation({ roomId }: { roomId: UUID }) {
               </figure>
 
               <figure className="flex flex-row w-[full] text-[14px] gap-[8px] justify-start items-end pl-[32px] mb-[16 px]">
-                {/* {feature &&
+                {feature &&
                   feature.map((value) => (
                     <div key={value} className="bg-purpleSecondary text-mainColor rounded-[8px] p-[8px]">
                       {value}
                     </div>
-                  ))} */}
+                  ))}
               </figure>
             </section>
             <section className="flex flex-row items-end gap-[16px]">
@@ -104,6 +105,7 @@ function RoomInformation({ roomId }: { roomId: UUID }) {
               >
                 뒤로가기
               </button>
+              <ValidationModal />
               <button
                 className="w-[90px] h-[43px] text-white border-1 bg-gray3 border-gray2 rounded-xl align-bottom"
                 onClick={gotoLobby}

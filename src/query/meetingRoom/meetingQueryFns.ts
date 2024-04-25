@@ -26,8 +26,6 @@ export const fetchMyRoom = async (userId: string) => {
     console.error(error.message);
     throw new Error('Error fetching participating room data');
   } else {
-    console.log(userId);
-    console.log(myRoom);
     return myRoom;
   }
 };

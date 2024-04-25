@@ -16,7 +16,6 @@ function MeetingRoomList() {
 
   const { data: user } = useGetUserDataQuery();
   const { data: meetingRoomList } = useRecruitingQuery(String(user?.user_id));
-  console.log(user?.user_id);
   const myRoomList = useMyroomQuery(user?.user_id as string);
   const myOutList = useMyPastAndNowRoomQuery(user?.user_id as string);
 

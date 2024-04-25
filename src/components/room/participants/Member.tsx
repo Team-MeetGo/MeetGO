@@ -1,16 +1,15 @@
 'use client';
 
 import GotoChatButton from '@/components/room/participants/GotoChatButton';
+import useGenderMaxNumber from '@/hooks/custom/useGenderMaxNumber';
 import { useRoomInfoWithRoomIdQuery, useRoomParticipantsQuery } from '@/hooks/useQueries/useMeetingQuery';
 import { GENDER } from '@/utils/MeetingRoomSelector';
 import { RoomFemaleAvatar, RoomMaleAvatar } from '@/utils/icons/RoomAvatar';
-import MeetGoLogoPurple from '@/utils/icons/meetgo-logo-purple.png';
 import { clientSupabase } from '@/utils/supabase/client';
 import Image from 'next/image';
 import { useEffect, useState } from 'react';
 import { FaCrown } from 'react-icons/fa6';
 import { IoFemale, IoMale } from 'react-icons/io5';
-import useGenderMaxNumber from '@/hooks/custom/useGenderMaxNumber';
 import HollowFemaleMemberCard from './HollowFemaleMemberCard';
 import HollowMaleMemberCard from './HollowMaleMemberCard';
 
@@ -116,7 +115,7 @@ const Member = ({ roomId }: { roomId: UUID }) => {
                     {member.avatar ? (
                       <Image
                         className="w-[86px] h-[86px] rounded-full object-center bg-cover object-fill"
-                        src={member.avatar as string}
+                        src={member.avatar}
                         alt="유저 아바타"
                         height={86}
                         width={86}
@@ -170,7 +169,7 @@ const Member = ({ roomId }: { roomId: UUID }) => {
                     {member.avatar ? (
                       <Image
                         className="w-[86px] h-[86px] rounded-full object-center bg-cover"
-                        src={member.avatar as string}
+                        src={member.avatar}
                         alt="유저 아바타"
                         height={80}
                         width={80}
