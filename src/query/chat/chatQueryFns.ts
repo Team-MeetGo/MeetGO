@@ -17,10 +17,12 @@ export const fetchRoomDataWithChatRoomId = async (chatRoomId: string) => {
       .from('room')
       .select('*')
       .eq('room_id', String(roomId[0].room_id));
-    if (roomDataErr) console.error('room 데이터 불러오는 중 오류 발생');
-    if (roomData) return roomData[0];
+    if (roomDataErr) {
+      console.error('room 데이터 불러오는 중 오류 발생');
+    } else {
+      return roomData[0];
+    }
   }
-  return null;
 };
 
 // 채팅방 참여자들 불러오기

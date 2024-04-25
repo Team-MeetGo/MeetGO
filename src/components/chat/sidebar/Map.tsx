@@ -7,20 +7,19 @@ import { HiMiniMagnifyingGlass } from 'react-icons/hi2';
 import DateTimePicker from './DateTimePicker';
 import { useUpdateMeetingLocationMutation } from '@/hooks/useMutation/useMeetingLocationMutation';
 import { useGetUserDataQuery } from '@/hooks/useQueries/useUserQuery';
-import { MapProps } from '@/types/sideBarTypes';
 
 declare global {
   interface Window {
     kakao: any;
   }
 }
-const Map: React.FC<MapProps> = ({ chatRoomId }) => {
+const Map = ({ chatRoomId }: { chatRoomId: string }) => {
   const mapRef = useRef<string>();
   const [map, setMap] = useState<any>();
   const [markers, setMarkers] = useState<any>();
   const [bars, setBars] = useState<any[]>([]);
-  const [currentPage, setCurrentPage] = useState(1);
-  const [totalPages, setTotalPages] = useState(0);
+  const [currentPage, setCurrentPage] = useState<number>(1);
+  const [totalPages, setTotalPages] = useState<number>(0);
   const [currentPos, setCurrentPos] = useState<string>();
   const [searchText, setSearchText] = useState<string>('');
   const [selectedMeetingLocation, setSelectedMeetingLocation] = useState<string>();
@@ -35,7 +34,7 @@ const Map: React.FC<MapProps> = ({ chatRoomId }) => {
 
   // 채팅방 정보 가져오기
   const chat = useChatDataQuery(chatRoomId);
-  const meetingLocation = chat?.meeting_location;
+  const meetingLocation = chat.meeting_location;
 
   // useMutation 호출
   const updateMeetingLocationMutation = useUpdateMeetingLocationMutation();
@@ -99,7 +98,7 @@ const Map: React.FC<MapProps> = ({ chatRoomId }) => {
           const bounds = new window.kakao.maps.LatLngBounds();
           let newMarkers = [];
           // 검색된 장소 정보를 바탕으로 마커 생성
-          for (var i = 0; i < data.length; i++) {
+          for (let i = 0; i < data.length; i++) {
             const markerPosition = new window.kakao.maps.LatLng(data[i].y, data[i].x);
             const marker = new window.kakao.maps.Marker({
               position: markerPosition,
@@ -152,7 +151,7 @@ const Map: React.FC<MapProps> = ({ chatRoomId }) => {
         const bounds = new window.kakao.maps.LatLngBounds();
         let newMarkers = [];
         // 검색된 장소 정보를 바탕으로 마커 생성
-        for (var i = 0; i < data.length; i++) {
+        for (let i = 0; i < data.length; i++) {
           const markerPosition = new window.kakao.maps.LatLng(data[i].y, data[i].x);
           const marker = new window.kakao.maps.Marker({
             position: markerPosition,
@@ -240,13 +239,12 @@ const Map: React.FC<MapProps> = ({ chatRoomId }) => {
             }`}
           >
             <div
-              className="py-4 px-9"
+              className="py-4 px-9 cursor-pointer items-center"
               onClick={() => {
                 if (userId === leaderId) {
                   handleSelectLocation(bar.place_name);
                 }
               }}
-              style={{ cursor: 'pointer', alignItems: 'center' }}
             >
               <div className="flex flex-col items-start justify-start">
                 <h1 className="text-base mb-2.5">{bar.place_name}</h1>

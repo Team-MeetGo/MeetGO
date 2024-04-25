@@ -48,3 +48,13 @@ export const debounce = <T extends (...args: any) => Promise<void>>(callback: T,
     }, delay);
   };
 };
+
+export const dateOptions: Intl.DateTimeFormatOptions = {
+  year: 'numeric',
+  month: 'long',
+  day: 'numeric',
+  hour: 'numeric',
+  minute: 'numeric',
+  hour12: true,
+  timeZone: 'Asia/Seoul'
+};
