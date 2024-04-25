@@ -20,6 +20,7 @@ import {
 import { useState } from 'react';
 
 import type { MeetingRoomType, UpdateRoomType } from '@/types/roomTypes';
+import { meetingRoomFeatureData } from '@/utils/MeetingRoomFeatureData';
 function EditMeetingRoom({
   room,
   dropdownRef,
@@ -135,31 +136,20 @@ function EditMeetingRoom({
                     <label>방의 컨셉을 골라주세요!</label>
                     <figure className="flex whitespace-nowrap">
                       <Select
-                        label="방의 특성(최대 5개)"
-                        selectionMode="multiple"
+                        label="방의 컨셉"
+                        selectionMode="single"
                         variant="bordered"
                         selectedKeys={selected}
                         className="max-w-xs"
-                        aria-label="방의 특성"
+                        aria-label="방의 컨셉"
                         onSelectionChange={(value) => handleSelect(value as string)}
                       >
-                        {favoriteOptions.map((option) => (
-                          <SelectItem key={option.value} value={option.value}>
-                            {option.value}
+                        {meetingRoomFeatureData.map((option) => (
+                          <SelectItem key={option} value={option}>
+                            {option}
                           </SelectItem>
                         ))}
                       </Select>
-                    </figure>
-                    <figure className="text-[14px] flex flex-row gap-[8px]">
-                      {Array.from(selected).map((value) => (
-                        <Chip
-                          key={value}
-                          className="bg-purpleSecondary text-mainColor rounded-[8px]"
-                          onClose={() => handleDelete(value)}
-                        >
-                          {value}
-                        </Chip>
-                      ))}
                     </figure>
                   </section>
                 </ModalBody>
