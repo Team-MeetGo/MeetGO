@@ -23,7 +23,7 @@ export const useRoomDataQuery = (chatRoomId: string) => {
     queryKey: [ROOMDATA_QUERY_KEY, chatRoomId],
     queryFn: () => fetchRoomDataWithChatRoomId(chatRoomId)
   });
-  return room;
+  if (room) return room;
 };
 
 export const useParticipantsQuery = (roomId: string) => {

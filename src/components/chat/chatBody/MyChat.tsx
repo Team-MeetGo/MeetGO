@@ -13,7 +13,7 @@ const MyChat = ({ msg, idx, lastDivRefs }: { msg: Message; idx: number; lastDivR
   const messages = useMsgsQuery(chatRoomId as string);
   const { data: user } = useGetUserDataQuery();
   const room = useRoomDataQuery(chatRoomId as string);
-  const leaderId = room?.leader_id;
+  const leaderId = room && room?.leader_id;
 
   return (
     <>

@@ -21,7 +21,7 @@ const ChatList = ({ user, chatRoomId }: { user: User | null; chatRoomId: string 
   const { hasMore } = chatStore((state) => state);
   const messages = useMsgsQuery(chatRoomId);
   const room = useRoomDataQuery(chatRoomId);
-  const roomId = room?.room_id;
+  const roomId = room && room?.room_id;
   const lastMsgId = useMyLastMsgs(user?.id!, chatRoomId);
   const queryClient = useQueryClient();
   const [isScrolling, setIsScrolling] = useState(false);

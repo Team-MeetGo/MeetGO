@@ -13,7 +13,7 @@ export const fetchRoomDataWithChatRoomId = async (chatRoomId: string) => {
     throw new Error('roomId 불러오는 중 오류 발생');
   } else {
     // 룸 정보 가져오기
-    if (roomId?.length) {
+    if (roomId && roomId?.length) {
       const { data: roomData, error: roomDataErr } = await clientSupabase
         .from('room')
         .select('*')
@@ -158,7 +158,7 @@ export const handleSubmit = async (
   imgs: File[]
 ) => {
   if (user && chatRoomId && (message.length || imgs.length)) {
-    const { data, error } = await clientSupabase.from('messages').insert({
+    const { error } = await clientSupabase.from('messages').insert({
       send_from: user?.user_id,
       message: message.length ? message : null,
       chatting_room_id: chatRoomId,
