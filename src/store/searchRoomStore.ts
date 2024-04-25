@@ -1,3 +1,4 @@
+import { REGIONANDMEMBER } from '@/utils/MeetingRoomSelector';
 import { create } from 'zustand';
 
 export interface searchRoomStoreState {
@@ -12,12 +13,12 @@ export interface searchRoomStoreState {
 }
 
 export const useSearchRoomStore = create<searchRoomStoreState>()((set) => ({
-  selectRegion: '전국',
-  selectMemberNumber: '전체',
+  selectRegion: REGIONANDMEMBER.EVERYWHERE,
+  selectMemberNumber: REGIONANDMEMBER.EVERYMEMBER,
 
   setSelectRegion: (m: string) => set({ selectRegion: m }),
-  resetSelectRegion: () => set(() => ({ selectRegion: '전국' })),
+  resetSelectRegion: () => set(() => ({ selectRegion: REGIONANDMEMBER.EVERYWHERE })),
 
   setSelectMemberNumber: (m: string) => set({ selectMemberNumber: m }),
-  resetSelectMemberNumber: () => set(() => ({ selectMemberNumber: '전체' }))
+  resetSelectMemberNumber: () => set(() => ({ selectMemberNumber: REGIONANDMEMBER.EVERYMEMBER }))
 }));

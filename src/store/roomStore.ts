@@ -1,3 +1,4 @@
+import { REGIONANDMEMBER } from '@/utils/MeetingRoomSelector';
 import { create } from 'zustand';
 
 export interface RoomState {
@@ -12,12 +13,12 @@ export interface RoomState {
 }
 
 export const useRoomStore = create<RoomState>()((set) => ({
-  roomRegion: '전국',
-  memberNumber: '전체',
+  roomRegion: REGIONANDMEMBER.EVERYWHERE,
+  memberNumber: REGIONANDMEMBER.EVERYMEMBER,
 
   setRoomRegion: (m: string) => set({ roomRegion: m }),
-  resetRoomRegion: () => set(() => ({ roomRegion: '전국' })),
+  resetRoomRegion: () => set(() => ({ roomRegion: REGIONANDMEMBER.EVERYWHERE })),
 
   setMemberNumber: (m: string) => set({ memberNumber: m }),
-  resetMemberNumber: () => set(() => ({ memberNumber: '전체' }))
+  resetMemberNumber: () => set(() => ({ memberNumber: REGIONANDMEMBER.EVERYMEMBER }))
 }));

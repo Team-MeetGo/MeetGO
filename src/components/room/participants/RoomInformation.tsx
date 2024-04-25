@@ -12,10 +12,10 @@ import { IoFemale, IoMale } from 'react-icons/io5';
 import useGenderMaxNumber from '@/hooks/custom/useGenderMaxNumber';
 import { GENDER } from '@/utils/MeetingRoomSelector';
 import { useModalStore } from '@/store/modalStore';
+import { ValidationModal } from '@/components/common/ValidationModal';
 
 import type { UserType } from '@/types/roomTypes';
 import type { UUID } from 'crypto';
-import { ValidationModal } from '@/components/common/ValidationModal';
 
 function RoomInformation({ roomId }: { roomId: UUID }) {
   const router = useRouter();
@@ -38,14 +38,12 @@ function RoomInformation({ roomId }: { roomId: UUID }) {
 
   //나가기: 로비로
   const gotoLobby = () => {
-    console.log('로비?');
     openModal({
       type: 'confirm',
       name: '',
       text: `정말 나가시겠습니까?
         나가면 다시 돌아올 수 없습니다!`,
       onFunc: () => {
-        console.log('실행?');
         if (participants.length / 2 === genderMaxNumber) {
           updateRoomStatusOpenMutation();
         }
