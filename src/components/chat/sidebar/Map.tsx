@@ -7,6 +7,7 @@ import { HiMiniMagnifyingGlass } from 'react-icons/hi2';
 import DateTimePicker from './DateTimePicker';
 import { useUpdateMeetingLocationMutation } from '@/hooks/useMutation/useMeetingLocationMutation';
 import { useGetUserDataQuery } from '@/hooks/useQueries/useUserQuery';
+import { useModalStore } from '@/store/modalStore';
 
 declare global {
   interface Window {
@@ -23,6 +24,7 @@ const Map = ({ chatRoomId }: { chatRoomId: string }) => {
   const [currentPos, setCurrentPos] = useState<string>();
   const [searchText, setSearchText] = useState<string>('');
   const [selectedMeetingLocation, setSelectedMeetingLocation] = useState<string>();
+  const { openModal } = useModalStore();
 
   // 유저 정보 가져오기
   const { data: userData } = useGetUserDataQuery();
@@ -72,7 +74,12 @@ const Map = ({ chatRoomId }: { chatRoomId: string }) => {
         setMap(kakaoMap);
         kakaoMap.setCenter(currentPos);
       },
-      () => alert('위치 정보를 가져오는데 실패했습니다.'),
+      () =>
+        openModal({
+          type: 'alert',
+          name: '',
+          text: '현재 위치를 받아오지 못했습니다'
+        }),
       {
         enableHighAccuracy: true,
         maximumAge: 30000,
@@ -136,7 +143,11 @@ const Map = ({ chatRoomId }: { chatRoomId: string }) => {
   const searchNewPlaces = (page?: number) => {
     const places = new window.kakao.maps.services.Places();
     if (searchText === '') {
-      alert('검색어를 입력해 주세요.');
+      openModal({
+        type: 'alert',
+        name: '',
+        text: '검색어를 입력해주세요.'
+      });
       return;
     }
     places.keywordSearch(searchText, (data: any, status: any, pagination: any) => {
@@ -167,7 +178,11 @@ const Map = ({ chatRoomId }: { chatRoomId: string }) => {
         setCurrentPage(page || currentPage);
         setSearchText('');
       } else {
-        alert('검색 결과가 없습니다.');
+        openModal({
+          type: 'alert',
+          name: '',
+          text: '검색 결과가 없습니다.'
+        });
         setSearchText('');
       }
     });
