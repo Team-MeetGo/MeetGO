@@ -32,7 +32,7 @@ const Map = ({ chatRoomId }: { chatRoomId: string }) => {
 
   // useRoomDataQuery로 리더 아이디 가져오기
   const room = useRoomDataQuery(chatRoomId);
-  const leaderId = room?.leader_id;
+  const leaderId = room && room?.leader_id;
 
   // 채팅방 정보 가져오기
   const chat = useChatDataQuery(chatRoomId);
@@ -196,12 +196,19 @@ const Map = ({ chatRoomId }: { chatRoomId: string }) => {
 
   // 장소 선택 함수
   const handleSelectLocation = (barName: string) => {
-    setSelectedMeetingLocation(barName);
-    if (!chatRoomId) {
-      return;
+    if (barName === meetingLocation) {
+      setSelectedMeetingLocation('');
+    } else {
+      setSelectedMeetingLocation(barName);
     }
     updateMeetingLocationMutation.mutate({ chatRoomId, barName });
   };
+
+  useEffect(() => {
+    if (meetingLocation) {
+      setSelectedMeetingLocation(meetingLocation);
+    }
+  }, [meetingLocation]);
 
   return (
     <div>

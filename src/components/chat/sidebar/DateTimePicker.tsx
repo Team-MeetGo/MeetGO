@@ -19,7 +19,7 @@ const DateTimePicker = forwardRef(({ chatRoomId }: { chatRoomId: string }) => {
   const userId = userData?.user_id;
   // useRoomDataQuery로 리더 아이디 가져오기
   const room = useRoomDataQuery(chatRoomId);
-  const leaderId = room?.leader_id;
+  const leaderId = room && room?.leader_id;
   const toggleCalendar = () => {
     setIsCalendarOpen((prev) => !prev);
   };
