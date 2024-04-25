@@ -10,7 +10,7 @@ import Image from 'next/image';
 import { useEffect, useState } from 'react';
 import { FaCrown } from 'react-icons/fa6';
 import { IoFemale, IoMale } from 'react-icons/io5';
-import getmaxGenderMemberNumber from '@/hooks/custom/useGenderMaxNumber';
+import useGenderMaxNumber from '@/hooks/custom/useGenderMaxNumber';
 import HollowFemaleMemberCard from './HollowFemaleMemberCard';
 import HollowMaleMemberCard from './HollowMaleMemberCard';
 
@@ -20,13 +20,13 @@ const Member = ({ roomId }: { roomId: UUID }) => {
   const roomInformation = useRoomInfoWithRoomIdQuery(roomId);
   const participants = useRoomParticipantsQuery(roomId);
 
-  const leaderMember = roomInformation?.leader_id;
-  const memberNumber = roomInformation?.member_number;
+  const leaderMember = roomInformation.leader_id;
+  const memberNumber = roomInformation.member_number;
 
   const [members, setMembers] = useState<UserType[]>(participants as UserType[]);
   const [leader, setLeader] = useState(leaderMember as string);
 
-  const genderMaxNumber = getmaxGenderMemberNumber(memberNumber!);
+  const genderMaxNumber = useGenderMaxNumber(memberNumber!);
   const femaleMembers = members.filter((member) => member.gender === GENDER.FEMALE);
   const maleMembers = members.filter((member) => member.gender === GENDER.MALE);
   const hollowFemaleArray = Array.from({ length: (genderMaxNumber as number) - femaleMembers.length }, (_, i) => i);

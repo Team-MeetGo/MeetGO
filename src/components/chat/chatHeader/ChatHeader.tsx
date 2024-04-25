@@ -7,6 +7,7 @@ import { chatStore } from '@/store/chatStore';
 import { clientSupabase } from '@/utils/supabase/client';
 import { IoIosSearch } from 'react-icons/io';
 import ChatPresence from './ChatPresence';
+import { ROOMSTATUS } from '@/utils/MeetingRoomSelector';
 
 const ChatHeader = ({ chatRoomId }: { chatRoomId: string }) => {
   const { onlineUsers, setMessages, setisRest, setSearchMode } = chatStore((state) => state);
@@ -90,7 +91,7 @@ const ChatHeader = ({ chatRoomId }: { chatRoomId: string }) => {
   const updateRoomState = async () => {
     const { error } = await clientSupabase
       .from('room')
-      .update({ room_status: '모집중' })
+      .update({ room_status: ROOMSTATUS.RECRUITING })
       .eq('room_id', String(room?.room_id));
     if (error) console.error('참가자 방 나갈 시 room_status 모집중으로 변경 실패', error.message);
   };

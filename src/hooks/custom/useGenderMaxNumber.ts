@@ -1,7 +1,7 @@
 'use client';
 import { clientSupabase } from '@/utils/supabase/client';
 
-function getmaxGenderMemberNumber(memberNumber: string) {
+function useGenderMaxNumber(memberNumber: string) {
   if (memberNumber === '1:1') {
     return 1;
   } else if (memberNumber === '2:2') {
@@ -12,4 +12,4 @@ function getmaxGenderMemberNumber(memberNumber: string) {
     return 4;
   }
 }
-export default getmaxGenderMemberNumber;
+export default useGenderMaxNumber;

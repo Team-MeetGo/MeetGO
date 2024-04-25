@@ -42,3 +42,8 @@ export const MEMBERNUMBER = {
   ONE: '1:1',
   TWO: '2:2'
 };
+
+export const ROOMSTATUS = {
+  RECRUITING: '모집중',
+  CLOSED: '모집종료'
+};

@@ -5,7 +5,7 @@ import { useGetUserDataQuery } from '@/hooks/useQueries/useUserQuery';
 import { clientSupabase } from '@/utils/supabase/client';
 import { useRouter } from 'next/navigation';
 import { IoPlay } from 'react-icons/io5';
-import getmaxGenderMemberNumber from '@/hooks/custom/useGenderMaxNumber';
+import useGenderMaxNumber from '@/hooks/custom/useGenderMaxNumber';
 
 import type { UUID } from 'crypto';
 import type { UserType } from '@/types/roomTypes';
@@ -13,10 +13,9 @@ const GotoChatButton = ({ roomId, members }: { roomId: UUID; members: UserType[]
   const router = useRouter();
 
   const { data: user } = useGetUserDataQuery();
-  const roomInformation = useRoomInfoWithRoomIdQuery(roomId);
+  const { member_number } = useRoomInfoWithRoomIdQuery(roomId);
 
-  const memberNumber = roomInformation?.member_number;
-  const genderParticipants = getmaxGenderMemberNumber(memberNumber ?? '');
+  const genderParticipants = useGenderMaxNumber(member_number);
   const maxMember = genderParticipants! * 2;
 
   //원하는 인원이 모두 들어오면 위에서 창이 내려온다.
@@ -30,7 +29,7 @@ const GotoChatButton = ({ roomId, members }: { roomId: UUID; members: UserType[]
       .select('*')
       .eq('room_id', roomId)
       .eq('isActive', true);
-    if (alreadyChat && alreadyChat?.length > 0) {
+    if (alreadyChat && alreadyChat.length > 0) {
       // 만약 isActive인 채팅방이 이미 있다면 그 방으로 보내기
       router.replace(`/chat/${alreadyChat[0].chatting_room_id}`);
     } else {
@@ -55,8 +54,8 @@ const GotoChatButton = ({ roomId, members }: { roomId: UUID; members: UserType[]
         flex flex-col h-[114px] w-[1116px] justify-center text-center"
         >
           <button
-            disabled={genderParticipants ? (members?.length === maxMember ? false : true) : false}
-            className={`${genderParticipants && members?.length === maxMember ? 'bg-mainColor' : 'bg-gray1'}`}
+            disabled={members.length === maxMember ? false : true}
+            className={`${members.length === maxMember ? 'bg-mainColor' : 'bg-gray1'}`}
             onClick={gotoChattingRoom}
           >
             <div className="flex flex-row justify-center align-middle gap-[8px]">

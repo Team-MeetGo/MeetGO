@@ -9,7 +9,7 @@ import { useRoomInfoWithRoomIdQuery, useRoomParticipantsQuery } from '@/hooks/us
 import { useGetUserDataQuery } from '@/hooks/useQueries/useUserQuery';
 import { useRouter } from 'next/navigation';
 import { IoFemale, IoMale } from 'react-icons/io5';
-import getmaxGenderMemberNumber from '@/hooks/custom/useGenderMaxNumber';
+import useGenderMaxNumber from '@/hooks/custom/useGenderMaxNumber';
 import { GENDER } from '@/utils/MeetingRoomSelector';
 
 import type { UserType } from '@/types/roomTypes';
@@ -25,12 +25,12 @@ function RoomInformation({ roomId }: { roomId: UUID }) {
   const roomInformation = useRoomInfoWithRoomIdQuery(roomId);
   const participants = useRoomParticipantsQuery(roomId);
 
-  const { room_title, member_number, location, feature, region, leader_id } = roomInformation!;
-  const genderMaxNumber = getmaxGenderMemberNumber(member_number);
+  const { room_title, member_number, location, feature, region, leader_id } = roomInformation;
+  const genderMaxNumber = useGenderMaxNumber(member_number);
   const otherParticipants = participants.filter((person: UserType | null) => person?.user_id !== leader_id);
   const { mutate: updateLeaderMemeberMutation } = useUpdateLeaderMemberMutation({ otherParticipants, roomId });
 
-  const countFemale = participants?.filter((member) => member?.gender === GENDER.FEMALE).length;
+  const countFemale = participants.filter((member) => member?.gender === GENDER.FEMALE).length;
   const countMale = participants.length - countFemale;
 
   //나가기: 로비로
@@ -43,11 +43,11 @@ function RoomInformation({ roomId }: { roomId: UUID }) {
     }
     deleteMemberMutation();
     //유저가 리더였다면 다른 사람에게 리더 역할이 승계됩니다.
-    if (leader_id === userId && participants?.length > 1) {
+    if (leader_id === userId && participants.length > 1) {
       updateLeaderMemeberMutation();
     }
     //만약 유일한 참여자라면 나감과 동시에 방은 삭제됩니다.
-    if (participants?.length === 1) {
+    if (participants.length === 1) {
       deleteRoomMutation();
     }
     router.push(`/meetingRoom`);
@@ -75,12 +75,12 @@ function RoomInformation({ roomId }: { roomId: UUID }) {
               </figure>
 
               <figure className="flex flex-row w-[full] text-[14px] gap-[8px] justify-start items-end pl-[32px] mb-[16 px]">
-                {feature &&
+                {/* {feature &&
                   feature.map((value) => (
                     <div key={value} className="bg-purpleSecondary text-mainColor rounded-[8px] p-[8px]">
                       {value}
                     </div>
-                  ))}
+                  ))} */}
               </figure>
             </section>
             <section className="flex flex-row items-end gap-[16px]">

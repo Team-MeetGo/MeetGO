@@ -27,7 +27,7 @@ export const useRecruitingQuery = (user_id: string) => {
 };
 //내가 참가한 방
 export const useMyroomQuery = (user_id: string) => {
-  const { data } = useQuery({
+  const { data } = useSuspenseQuery({
     queryKey: [ROOMLIST, user_id],
     queryFn: () => fetchMyRoom(user_id)
   });
@@ -53,12 +53,12 @@ export const useMyPastAndNowRoomQuery = (user_id: string) => {
 //   return results.data?.map((r) => r.room);
 // };
 //room_id로 하나의 방 얻기
-export const useRoomInfoWithRoomIdQuery = (room_id: string): MeetingRoomType | null => {
-  const { data: chattingRoomWithId } = useSuspenseQuery({
+export const useRoomInfoWithRoomIdQuery = (room_id: string): MeetingRoomType => {
+  const { data: roomInfoWith } = useSuspenseQuery({
     queryKey: [ROOMDATA_WITH_ROOMID, room_id],
     queryFn: () => fetchRoomInfoWithRoomId(room_id)
   });
-  return chattingRoomWithId;
+  return roomInfoWith;
 };
 //이미 채팅으로 넘어간 목록
 export const useAlreadyChatRoomQuery = (roomId: string): ChattingRoomType[] | undefined => {

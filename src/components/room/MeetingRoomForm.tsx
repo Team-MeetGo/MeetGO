@@ -19,6 +19,7 @@ import { useState } from 'react';
 import { useAddRoomMutation } from '@/hooks/useMutation/useMeetingMutation';
 import MemberNumberSelection from './MemberNumberSelection';
 import RegionSelection from './RegionSelection';
+import { ROOMSTATUS } from '@/utils/MeetingRoomSelector';
 
 import type { NewRoomType } from '@/types/roomTypes';
 
@@ -50,7 +51,7 @@ function MeetingRoomForm() {
     location,
     region: String(roomRegion),
     member_number: String(memberNumber),
-    room_status: '모집중',
+    room_status: ROOMSTATUS.RECRUITING,
     room_title: title
   };
 
