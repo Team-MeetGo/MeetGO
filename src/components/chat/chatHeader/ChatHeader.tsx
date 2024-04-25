@@ -28,7 +28,7 @@ const ChatHeader = ({ chatRoomId }: { chatRoomId: string }) => {
       .eq('chatting_room_id', chatRoomId);
     if (updateActiveErr) {
       alert('채팅방 비활성화에 실패하였습니다.');
-      console.error(updateActiveErr?.message);
+      console.error(updateActiveErr.message);
     }
   };
 
@@ -37,7 +37,7 @@ const ChatHeader = ({ chatRoomId }: { chatRoomId: string }) => {
     if (user?.user_id === room?.leader_id) {
       const { error: updateLeaderErr } = await clientSupabase
         .from('room')
-        .update({ leader_id: participants.find((person) => person.user_id !== user?.user_id)?.user_id })
+        .update({ leader_id: participants?.find((person) => person.user_id !== user?.user_id)?.user_id })
         .eq('room_id', String(room?.room_id));
       if (updateLeaderErr) console.error('fail to update leader of room', updateLeaderErr.message);
     }
@@ -47,7 +47,7 @@ const ChatHeader = ({ chatRoomId }: { chatRoomId: string }) => {
       .eq('room_id', String(room?.room_id))
       .eq('user_id', user?.user_id!);
     if (deleteErr) {
-      console.error(deleteErr?.message);
+      console.error(deleteErr.message);
       alert('채팅방 나가기에서 오류가 발생하였습니다.');
     }
   };
@@ -59,12 +59,12 @@ const ChatHeader = ({ chatRoomId }: { chatRoomId: string }) => {
       .select('user_id')
       .eq('room_id', String(room?.room_id))
       .eq('isDeleted', false);
-    const restArr = restOf?.map((r) => r.user_id);
-
-    setisRest(restArr?.includes(user?.user_id!) as boolean);
     if (getPartErr) {
       console.error(getPartErr.message);
       alert('참가자들 정보를 불러오는 데 실패했습니다.');
+    } else {
+      const restArr = restOf.map((r) => r.user_id);
+      setisRest(restArr.includes(user?.user_id!) as boolean);
     }
   };
 
@@ -79,16 +79,19 @@ const ChatHeader = ({ chatRoomId }: { chatRoomId: string }) => {
     const { error: imgStorageErr, data: usersAllImgList } = await clientSupabase.storage
       .from('chatImg')
       .list(`${chatRoomId}/${user?.user_id}`);
-    imgStorageErr && console.error('storage remove fail', imgStorageErr.message);
-    const filesToRemove = usersAllImgList?.map((x) => `${chatRoomId}/${user?.user_id}/${x.name}`);
+    if (imgStorageErr) {
+      console.error('storage remove fail', imgStorageErr.message);
+    } else {
+      const filesToRemove = usersAllImgList.map((x) => `${chatRoomId}/${user?.user_id}/${x.name}`);
 
-    if (filesToRemove && filesToRemove.length) {
-      const { error: deleteFilesErr } = await clientSupabase.storage.from('chatImg').remove(filesToRemove);
-      deleteFilesErr && console.error('fail to delete list of the folder', deleteFilesErr.message);
-      const { error: deleteFolderErr } = await clientSupabase.storage
-        .from('chatImg')
-        .remove([`${chatRoomId}/${user?.user_id}`]);
-      deleteFolderErr && console.error("fail to delete the user's folder of storage", deleteFolderErr.message);
+      if (filesToRemove && filesToRemove.length) {
+        const { error: deleteFilesErr } = await clientSupabase.storage.from('chatImg').remove(filesToRemove);
+        deleteFilesErr && console.error('fail to delete list of the folder', deleteFilesErr.message);
+        const { error: deleteFolderErr } = await clientSupabase.storage
+          .from('chatImg')
+          .remove([`${chatRoomId}/${user?.user_id}`]);
+        deleteFolderErr && console.error("fail to delete the user's folder of storage", deleteFolderErr.message);
+      }
     }
   };
 
@@ -135,7 +138,7 @@ const ChatHeader = ({ chatRoomId }: { chatRoomId: string }) => {
           <div className="flex gap-[20px] items-center">
             <ChatPresence />
             <AvatarGroup isBordered max={8}>
-              {participants.map((person) => (
+              {participants?.map((person) => (
                 <Tooltip key={person.user_id} content={<ShowChatMember person={person} />}>
                   <Avatar
                     src={person.avatar as string}

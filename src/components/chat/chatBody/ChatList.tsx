@@ -50,7 +50,7 @@ const ChatList = ({ user, chatRoomId }: { user: User | null; chatRoomId: string 
             if (payload) {
               await queryClient.invalidateQueries({ queryKey: [MSGS_QUERY_KEY, chatRoomId] });
               const includingNew: Message[] | undefined = queryClient.getQueryData([MSGS_QUERY_KEY, chatRoomId]);
-              const lastIdx = messages && includingNew?.map((i) => i.message_id).indexOf(messages[0]?.message_id);
+              const lastIdx = messages && includingNew?.map((i) => i.message_id).indexOf(messages[0].message_id);
               messages &&
                 includingNew &&
                 (await queryClient.setQueryData(
@@ -118,7 +118,7 @@ const ChatList = ({ user, chatRoomId }: { user: User | null; chatRoomId: string 
           scrollBox.scrollTop = scrollBox.scrollHeight;
           prevMsgsLengthRef.current = messages.length;
         }
-      } else if (prevMsgsLengthRef.current !== messages?.length || count === 0) {
+      } else if (prevMsgsLengthRef.current !== messages.length || count === 0) {
         // 이전 메세지가 화면에 없고 + 새로운 메세지가 추가되면 스크롤 다운이 따라가도록
         scrollBox.scrollTop = scrollBox.scrollHeight;
         prevMsgsLengthRef.current = messages.length;
