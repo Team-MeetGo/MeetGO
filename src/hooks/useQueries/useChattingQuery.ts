@@ -50,7 +50,7 @@ export const useMyChatRoomIdsQuery = (userId: string) => {
   return myChatRoomIds;
 };
 
-// 더보기 해야만 이전 메세지를 불러올 수 있도록 refetch 관련 옵션 모두 false
+// 더보기 or invalidate 해야만 이전 메세지를 불러올 수 있도록 자동 refetch되는 옵션 모두 false
 export const useMsgsQuery = (chatRoomId: string) => {
   const { data } = useSuspenseQuery({
     queryKey: [MSGS_QUERY_KEY, chatRoomId],
