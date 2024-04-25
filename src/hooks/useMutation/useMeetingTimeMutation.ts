@@ -7,8 +7,8 @@ export const useUpdateMeetingTimeMutation = () => {
   const { mutate: updateMeetingTime } = useMutation({
     mutationFn: ({ chatRoomId, isoStringMeetingTime }: { chatRoomId: string; isoStringMeetingTime: string }) =>
       addMeetingTime(chatRoomId, isoStringMeetingTime),
-    onSuccess: async () => {
-      await queryClient.invalidateQueries({
+    onSuccess: () => {
+      queryClient.invalidateQueries({
         queryKey: [CHATDATA_QUERY_KEY]
       });
     }

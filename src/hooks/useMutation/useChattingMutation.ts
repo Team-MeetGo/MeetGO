@@ -1,12 +1,32 @@
 import {
   addNewLastMsg,
   clearUnReadMsgNum,
-  fetchMyMsgData,
+  handleSubmit,
   updateMyLastMsg,
   updateNewMsgNum
 } from '@/query/chat/chatQueryFns';
-import { MY_LAST_MSGS_AFTER, MY_MSG_DATA } from '@/query/chat/chatQueryKeys';
+import { MSGS_QUERY_KEY, MY_LAST_MSGS_AFTER, MY_MSG_DATA } from '@/query/chat/chatQueryKeys';
+import { Message } from '@/types/chatTypes';
+import { UsersType } from '@/types/userTypes';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
+
+// 새로운 메세지 추가
+export const useAddNewMsg = () => {
+  const { mutate: addNewMsg } = useMutation({
+    mutationFn: ({
+      user,
+      chatRoomId,
+      message,
+      imgs
+    }: {
+      user: UsersType | null | undefined;
+      chatRoomId: string | null;
+      message: string;
+      imgs: File[];
+    }) => handleSubmit(user, chatRoomId, message, imgs)
+  });
+  return { mutate: addNewMsg };
+};
 
 export const useAddLastMsg = (chatRoomId: string, roomId: string, user_id: string, last_msg_id: string | undefined) => {
   const queryClient = useQueryClient();

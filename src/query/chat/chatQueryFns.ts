@@ -1,3 +1,5 @@
+import { Message } from '@/types/chatTypes';
+import { UsersType } from '@/types/userTypes';
 import { clientSupabase } from '@/utils/supabase/client';
 
 // 채팅룸 아이디로 룸 정보 가져오기
@@ -15,10 +17,12 @@ export const fetchRoomDataWithChatRoomId = async (chatRoomId: string) => {
       .from('room')
       .select('*')
       .eq('room_id', String(roomId[0].room_id));
-    if (roomDataErr) console.error('room 데이터 불러오는 중 오류 발생');
-    if (roomData) return roomData[0];
+    if (roomDataErr) {
+      console.error('room 데이터 불러오는 중 오류 발생');
+    } else {
+      return roomData[0];
+    }
   }
-  return null;
 };
 
 // 채팅방 참여자들 불러오기
@@ -85,11 +89,22 @@ export const fetchMyLastMsgs = async (user_id: string, chatRoomId: string | null
     .select('last_msg_id')
     .eq('user_id', user_id)
     .eq('chatting_room_id', String(chatRoomId));
-  if (error) console.error('마지막 메세지를 가져오는 데 실패했습니다.', error.message);
+  if (error) console.error('마지막 메세지가 없습니다.', error.message);
   if (lastMsgs && lastMsgs.length) {
     return lastMsgs[0].last_msg_id;
   }
   return null;
+};
+
+// 채팅 메세지 가져오기
+export const fetchMsgs = async (chatRoomId: string) => {
+  const { data: msgs, error } = await clientSupabase
+    .from('messages')
+    .select('*')
+    .eq('chatting_room_id', chatRoomId)
+    .order('created_at', { ascending: true });
+  if (error) console.error('fail to load messages', error.message);
+  return msgs;
 };
 
 // user_id로 현재 들어가있는 방들 정보 가져오기
@@ -98,14 +113,50 @@ export const fetchMyMsgData = async (user_id: string | undefined) => {
     .from('remember_last_msg')
     .select('chatting_room_id, room_id, newMsgCount')
     .eq('user_id', String(user_id));
-  if (error) console.error('마지막 메세지를 가져오는 데 실패했습니다.', error.message);
+  if (error) console.error('현재 방 정보 불러오는 데에 실패했습니다.', error.message);
   if (msgData && msgData.length) {
     return msgData;
   }
   return null;
 };
 
-////
+// 새로운 메세지 추가하기
+export const makeUrl = async (user: UsersType, imgs: File[], chatRoomId: string) => {
+  let chatImgsUrls = [];
+  for (const imgFile of imgs) {
+    const uuid = crypto.randomUUID();
+    const imgUrlPath = `${chatRoomId}/${user?.user_id}/${uuid}`;
+    const { data: imgUrlData, error } = await clientSupabase.storage.from('chatImg').upload(imgUrlPath, imgFile, {
+      cacheControl: '3600',
+      upsert: true
+    });
+    if (error) console.error('채팅이미지 업로드 실패', error.message);
+    const { data: imgUrls } = await clientSupabase.storage.from('chatImg').getPublicUrl(imgUrlData?.path as string);
+    chatImgsUrls.push(imgUrls);
+  }
+  return chatImgsUrls.map((url) => url.publicUrl);
+};
+
+export const handleSubmit = async (
+  user: UsersType | null | undefined,
+  chatRoomId: string | null,
+  message: string,
+  imgs: File[]
+) => {
+  if (user && chatRoomId && (message.length || imgs.length)) {
+    const { data, error } = await clientSupabase.from('messages').insert({
+      send_from: user?.user_id,
+      message: message.length ? message : null,
+      chatting_room_id: chatRoomId,
+      imgs: imgs.length ? await makeUrl(user, imgs, chatRoomId) : null
+    });
+    if (error) {
+      console.error(error.message);
+      alert('새로운 메세지를 추가하는 데에 실패했습니다.');
+    }
+    return data;
+  }
+};
 
 // DB에 마지막 메세지 추가하기
 export const addNewLastMsg = async (

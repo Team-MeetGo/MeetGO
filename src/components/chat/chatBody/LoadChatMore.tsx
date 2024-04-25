@@ -1,9 +1,12 @@
 'use client';
+import { useMsgsQuery } from '@/hooks/useQueries/useChattingQuery';
+import { MSGS_QUERY_KEY } from '@/query/chat/chatQueryKeys';
 import { chatStore } from '@/store/chatStore';
 import { getFromTo } from '@/utils';
 import { ITEM_INTERVAL } from '@/utils/constant';
 import { clientSupabase } from '@/utils/supabase/client';
 import { Button } from '@nextui-org/react';
+import { useQueryClient } from '@tanstack/react-query';
 import { Dispatch, SetStateAction, useEffect } from 'react';
 
 const LoadChatMore = ({
@@ -15,7 +18,9 @@ const LoadChatMore = ({
   count: number;
   setCount: Dispatch<SetStateAction<number>>;
 }) => {
-  const { messages, setMessages, setHasMore } = chatStore((state) => state);
+  const { setHasMore } = chatStore((state) => state);
+  const messages = useMsgsQuery(chatRoomId);
+  const queryClient = useQueryClient();
 
   const fetchMoreMsg = async () => {
     const { from, to } = getFromTo(count, ITEM_INTERVAL);
@@ -28,7 +33,8 @@ const LoadChatMore = ({
     if (error) {
       alert('이전 메세지를 불러오는 데에 오류가 발생했습니다.');
     } else {
-      setMessages([...(newMsgs ? newMsgs.reverse() : []), ...messages]);
+      messages &&
+        queryClient.setQueryData([MSGS_QUERY_KEY, chatRoomId], [...(newMsgs ? newMsgs.reverse() : []), ...messages]);
       if (newMsgs.length < ITEM_INTERVAL + 1) {
         setHasMore(false);
       } else if (!newMsgs.length) {

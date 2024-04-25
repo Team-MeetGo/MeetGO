@@ -1,17 +1,16 @@
 'use client';
-import React, { forwardRef, useRef, useState } from 'react';
+import React, { forwardRef, useEffect, useRef, useState } from 'react';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import DateCustomeInput from './DateCustomeInput';
 import { ko } from 'date-fns/locale';
 import { getMonth, getYear } from 'date-fns';
 import { IoIosArrowForward, IoIosArrowBack } from 'react-icons/io';
-import { useRoomDataQuery } from '@/hooks/useQueries/useChattingQuery';
+import { useChatDataQuery, useRoomDataQuery } from '@/hooks/useQueries/useChattingQuery';
 import { useUpdateMeetingTimeMutation } from '@/hooks/useMutation/useMeetingTimeMutation';
 import { useGetUserDataQuery } from '@/hooks/useQueries/useUserQuery';
-import { DateTimePickerProps } from '@/types/sideBarTypes';
 
-const DateTimePicker: React.FC<DateTimePickerProps> = forwardRef(({ chatRoomId }, ref) => {
+const DateTimePicker = forwardRef(({ chatRoomId }: { chatRoomId: string }) => {
   const [selectedMeetingTime, setSelectedMeetingTime] = useState<Date | null>(new Date());
   const [isCalendarOpen, setIsCalendarOpen] = useState<boolean>(false);
   const datePickerRef = useRef<DatePicker>(null);
@@ -22,18 +21,28 @@ const DateTimePicker: React.FC<DateTimePickerProps> = forwardRef(({ chatRoomId }
   const room = useRoomDataQuery(chatRoomId);
   const leaderId = room?.leader_id;
   const toggleCalendar = () => {
-    setIsCalendarOpen(!isCalendarOpen);
+    setIsCalendarOpen((prev) => !prev);
   };
+
+  const chat = useChatDataQuery(chatRoomId);
+
+  useEffect(() => {
+    const meetingTime = new Date(String(chat.meeting_time));
+    if (meetingTime instanceof Date && !isNaN(meetingTime.getTime())) {
+      setSelectedMeetingTime(meetingTime);
+    }
+  }, [chatRoomId, chat]);
 
   const { mutate: updateMeetingTime } = useUpdateMeetingTimeMutation();
 
   const months = ['1월', '2월', '3월', '4월', '5월', '6월', '7월', '8월', '9월', '10월', '11월', '12월'];
+
   return (
-    <div className="relative z-50 w-full max-w-lg py-6">
+    <div className="relative z-40 w-full py-6">
       <DatePicker
         locale={ko} // 한국어
         showPopperArrow={false} // 위에 삼각형 제거
-        wrapperClassName="w-full z-100"
+        wrapperClassName="w-full z-30"
         selected={selectedMeetingTime ? selectedMeetingTime : new Date()}
         onChange={(date) => {
           if (leaderId == userId) {
@@ -75,17 +84,6 @@ const DateTimePicker: React.FC<DateTimePickerProps> = forwardRef(({ chatRoomId }
           </div>
         )}
       />
-      {/* <button
-        onClick={() => {
-          const isoStringMeetingTime = selectedMeetingTime?.toISOString();
-          updateMeetingTime({
-            chatRoomId,
-            isoStringMeetingTime: String(isoStringMeetingTime)
-          });
-        }}
-      >
-        버튼
-      </button> */}
     </div>
   );
 });

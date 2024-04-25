@@ -1,14 +1,15 @@
 'use client';
 
-import { useRoomInfoWithRoomIdQuery, useRoomParticipantsQuery } from '@/hooks/useQueries/useMeetingQuery';
+import { useRoomInfoWithRoomIdQuery } from '@/hooks/useQueries/useMeetingQuery';
 import { useGetUserDataQuery } from '@/hooks/useQueries/useUserQuery';
 import { clientSupabase } from '@/utils/supabase/client';
 import { useRouter } from 'next/navigation';
 import { IoPlay } from 'react-icons/io5';
 import getmaxGenderMemberNumber from '@/hooks/custom/useGenderMaxNumber';
-
 import type { UUID } from 'crypto';
 import type { UserType } from '@/types/roomTypes';
+import { useCallback } from 'react';
+import { debounce } from '@/utils';
 const GotoChatButton = ({ roomId, members }: { roomId: UUID; members: UserType[] }) => {
   const router = useRouter();
 
@@ -46,6 +47,8 @@ const GotoChatButton = ({ roomId, members }: { roomId: UUID; members: UserType[]
       if (chat_room) router.replace(`/chat/${chat_room[0].chatting_room_id}`);
     } // "/chatting_room_id" 로 주소값 변경
   };
+
+  const handleGoChatDebounce = useCallback(debounce(gotoChattingRoom, 1500), []);
 
   return (
     <main>

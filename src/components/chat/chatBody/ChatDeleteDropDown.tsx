@@ -1,10 +1,11 @@
 import { Message } from '@/types/chatTypes';
 import { clientSupabase } from '@/utils/supabase/client';
 import { Dropdown, DropdownItem, DropdownMenu, DropdownTrigger } from '@nextui-org/react';
+import { useMutation } from '@tanstack/react-query';
 import { CiMenuKebab } from 'react-icons/ci';
 
 const ChatDeleteDropDown = ({ msg }: { msg: Message }) => {
-  const handleDeleteMessage = async (key: string) => {
+  const handleDeleteMsg = async (key: string) => {
     if (key === 'delete') {
       const { error: messageTableErr } = await clientSupabase
         .from('messages')
@@ -14,6 +15,15 @@ const ChatDeleteDropDown = ({ msg }: { msg: Message }) => {
     }
   };
 
+  const useDeleteMsg = () => {
+    const { mutate: deleteMsg } = useMutation({
+      mutationFn: (key: string) => handleDeleteMsg(key)
+    });
+    return { mutate: deleteMsg };
+  };
+
+  const { mutate: deleteMsg } = useDeleteMsg();
+
   return (
     <Dropdown>
       <DropdownTrigger>
@@ -21,7 +31,7 @@ const ChatDeleteDropDown = ({ msg }: { msg: Message }) => {
           <CiMenuKebab className="my-auto w-6 h-6 rotate-90" />
         </button>
       </DropdownTrigger>
-      <DropdownMenu aria-label="Static Actions" onAction={(key) => handleDeleteMessage(String(key))}>
+      <DropdownMenu aria-label="Static Actions" onAction={(key) => deleteMsg(String(key))}>
         <DropdownItem key="delete" className="text-danger" color="danger">
           Delete
         </DropdownItem>
