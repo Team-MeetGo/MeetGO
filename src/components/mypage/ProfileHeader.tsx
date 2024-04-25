@@ -3,8 +3,8 @@ import { useGetUserDataQuery } from '@/hooks/useQueries/useUserQuery';
 import { profileCount } from '@/store/userStore';
 import { Avatar } from '@nextui-org/react';
 import Image from 'next/image';
+import { BsPostcardHeart } from 'react-icons/bs';
 import { GoPeople } from 'react-icons/go';
-import { HiOutlineChatBubbleOvalLeftEllipsis } from 'react-icons/hi2';
 import { IoMdHeartEmpty } from 'react-icons/io';
 
 const ProfileHeader = () => {
@@ -15,7 +15,7 @@ const ProfileHeader = () => {
 
   const buttonData = [
     { icon: GoPeople, title: '스쳐간 인연', count: metPeopleCount },
-    { icon: HiOutlineChatBubbleOvalLeftEllipsis, title: '작성 글', count: postCount },
+    { icon: BsPostcardHeart, title: '작성 글', count: postCount },
     { icon: IoMdHeartEmpty, title: '좋아요한 글', count: likedPostCount }
   ];
 

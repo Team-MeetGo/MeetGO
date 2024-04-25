@@ -36,7 +36,7 @@ const Profile = () => {
   const toggleEditing = () => {
     setIsEditing(true);
     if (user) {
-      inputNickname.setValue(user?.nickname);
+      inputNickname.setValue(user.nickname);
       inputIntro.setValue(user?.intro);
       inputKakaoId.setValue(user?.kakaoId);
       inputGender.setValue(user?.gender);
