@@ -1,4 +1,6 @@
 'use client';
+import { ValidationModal } from '@/components/common/ValidationModal';
+import useGenderMaxNumber from '@/hooks/custom/useGenderMaxNumber';
 import {
   useDeleteMember,
   useDeleteRoom,
@@ -7,16 +9,13 @@ import {
 } from '@/hooks/useMutation/useMeetingMutation';
 import { useRoomInfoWithRoomIdQuery, useRoomParticipantsQuery } from '@/hooks/useQueries/useMeetingQuery';
 import { useGetUserDataQuery } from '@/hooks/useQueries/useUserQuery';
+import { useModalStore } from '@/store/modalStore';
+import { GENDERFILTER, ROUTERADDRESS } from '@/utils/constant';
 import { useRouter } from 'next/navigation';
 import { IoFemale, IoMale } from 'react-icons/io5';
-import useGenderMaxNumber from '@/hooks/custom/useGenderMaxNumber';
-import { GENDER } from '@/utils/MeetingRoomSelector';
-import { useModalStore } from '@/store/modalStore';
-import { ValidationModal } from '@/components/common/ValidationModal';
 
 import type { UserType } from '@/types/roomTypes';
 import type { UUID } from 'crypto';
-
 function RoomInformation({ roomId }: { roomId: UUID }) {
   const router = useRouter();
   const { openModal, closeModal } = useModalStore();
@@ -25,15 +24,15 @@ function RoomInformation({ roomId }: { roomId: UUID }) {
   const { mutate: deleteMemberMutation } = useDeleteMember({ userId, roomId });
   const { mutate: updateRoomStatusOpenMutation } = useUpdateRoomStatusOpen({ roomId, userId });
   const { mutate: deleteRoomMutation } = useDeleteRoom({ roomId, userId });
-  const roomInformation = useRoomInfoWithRoomIdQuery(roomId);
+
+  const { room_title, member_number, location, feature, region, leader_id } = useRoomInfoWithRoomIdQuery(roomId);
   const participants = useRoomParticipantsQuery(roomId);
 
-  const { room_title, member_number, location, feature, region, leader_id } = roomInformation;
   const genderMaxNumber = useGenderMaxNumber(member_number);
   const otherParticipants = participants.filter((person: UserType | null) => person?.user_id !== leader_id);
   const { mutate: updateLeaderMemeberMutation } = useUpdateLeaderMemberMutation({ otherParticipants, roomId });
 
-  const countFemale = participants.filter((member) => member?.gender === GENDER.FEMALE).length;
+  const countFemale = participants.filter((member) => member?.gender === GENDERFILTER.FEMALE).length;
   const countMale = participants.length - countFemale;
 
   //나가기: 로비로
@@ -56,7 +55,7 @@ function RoomInformation({ roomId }: { roomId: UUID }) {
         if (participants.length === 1) {
           deleteRoomMutation();
         }
-        router.push(`/meetingRoom`);
+        router.push(ROUTERADDRESS.GOTOLOBBY);
         closeModal();
       },
       onCancelFunc: () => {
@@ -67,7 +66,7 @@ function RoomInformation({ roomId }: { roomId: UUID }) {
   };
 
   const gotoBack = () => {
-    router.push(`/meetingRoom`);
+    router.push(ROUTERADDRESS.GOTOLOBBY);
   };
 
   return (
@@ -75,7 +74,7 @@ function RoomInformation({ roomId }: { roomId: UUID }) {
       <main className="flex flex-col items-center justify-content min-w-[1116px] max-w-[1440px]">
         <div className="h-[72x] w-full pt-[64px] border-b border-gray2 flex flex-row pb-[32px]">
           <div className="flex flex-row min-w-[1116px] max-w-[1440px] justify-between">
-            <section className="flex flex-row align-bottom">
+            <section className="flex flex-row justify-center">
               <p className="text-[40px] pr-[32px]">{room_title}</p>
 
               <figure className="h-[46px] display display-col justify-items-center items-center gap-[8px]">
@@ -86,14 +85,10 @@ function RoomInformation({ roomId }: { roomId: UUID }) {
                 </div>
                 <p className="text-[16px]">{`${region} ${location}`}</p>
               </figure>
-
-              <figure className="flex flex-row w-[full] text-[14px] gap-[8px] justify-start items-end pl-[32px] mb-[16 px]">
-                {feature &&
-                  feature.map((value) => (
-                    <div key={value} className="bg-purpleSecondary text-mainColor rounded-[8px] p-[8px]">
-                      {value}
-                    </div>
-                  ))}
+              <figure className="flex flex-col justify-end">
+                <div className="text-[14px] h-[40px] ml-[32px] bg-purpleSecondary text-mainColor rounded-[8px] p-[8px]">
+                  {feature && feature[0]}
+                </div>
               </figure>
             </section>
             <section className="flex flex-row items-end gap-[16px]">

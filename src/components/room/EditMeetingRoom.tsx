@@ -4,10 +4,9 @@ import RegionSelection from '@/components/room/RegionSelection';
 import { useUpdateRoom } from '@/hooks/useMutation/useMeetingMutation';
 import { useGetUserDataQuery } from '@/hooks/useQueries/useUserQuery';
 import { useRoomStore } from '@/store/roomStore';
-import { favoriteOptions } from '@/utils/FavoriteData';
+import { meetingRoomFeatureData } from '@/utils/MeetingRoomFeatureData';
 import {
   Button,
-  Chip,
   Modal,
   ModalBody,
   ModalContent,
@@ -20,7 +19,6 @@ import {
 import { useState } from 'react';
 
 import type { MeetingRoomType, UpdateRoomType } from '@/types/roomTypes';
-import { meetingRoomFeatureData } from '@/utils/MeetingRoomFeatureData';
 function EditMeetingRoom({
   room,
   dropdownRef,
@@ -72,12 +70,6 @@ function EditMeetingRoom({
       return;
     }
     setSelected(new Set(value));
-  };
-  //방 컨셉을 삭제합니다.
-  const handleDelete = (value: string) => {
-    const newSelected = new Set(selected);
-    newSelected.delete(value);
-    setSelected(newSelected);
   };
   return (
     <>

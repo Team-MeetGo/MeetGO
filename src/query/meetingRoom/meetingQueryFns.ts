@@ -1,5 +1,5 @@
 import { ChattingRoomType, MeetingRoomType, NewRoomType, UpdateRoomType, UserType } from '@/types/roomTypes';
-import { ROOMSTATUS } from '@/utils/MeetingRoomSelector';
+import { ROOMSTATUS } from '@/utils/constant';
 import { clientSupabase } from '@/utils/supabase/client';
 
 export const fetchRecruitingRoom = async () => {
@@ -23,7 +23,6 @@ export const fetchMyRoom = async (userId: string) => {
     .select('user_id, room(*)')
     .order('created_at', { ascending: false });
   if (error) {
-    console.error(error.message);
     throw new Error('Error fetching participating room data');
   } else {
     return myRoom;

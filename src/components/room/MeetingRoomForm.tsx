@@ -1,10 +1,11 @@
 'use client';
+import { useAddRoomMutation } from '@/hooks/useMutation/useMeetingMutation';
 import { useGetUserDataQuery } from '@/hooks/useQueries/useUserQuery';
 import { useRoomStore } from '@/store/roomStore';
-import { favoriteOptions } from '@/utils/FavoriteData';
+import { meetingRoomFeatureData } from '@/utils/MeetingRoomFeatureData';
+import { ROOMSTATUS, ROUTERADDRESS } from '@/utils/constant';
 import {
   Button,
-  Chip,
   Modal,
   ModalBody,
   ModalContent,
@@ -16,14 +17,10 @@ import {
 } from '@nextui-org/react';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
-import { useAddRoomMutation } from '@/hooks/useMutation/useMeetingMutation';
 import MemberNumberSelection from './MemberNumberSelection';
 import RegionSelection from './RegionSelection';
-import { ROOMSTATUS } from '@/utils/MeetingRoomSelector';
 
 import type { NewRoomType } from '@/types/roomTypes';
-import { meetingRoomFeatureData } from '@/utils/MeetingRoomFeatureData';
-
 function MeetingRoomForm() {
   const router = useRouter();
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
@@ -59,7 +56,7 @@ function MeetingRoomForm() {
       setSelected(new Set([]));
       resetMemberNumber();
       resetRoomRegion();
-      router.push(`/meetingRoom/${data}`);
+      router.push(`${ROUTERADDRESS.GOTOLOBBY}/${data}`);
     }
   };
 

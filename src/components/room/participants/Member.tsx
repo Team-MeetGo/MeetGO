@@ -3,7 +3,7 @@
 import GotoChatButton from '@/components/room/participants/GotoChatButton';
 import useGenderMaxNumber from '@/hooks/custom/useGenderMaxNumber';
 import { useRoomInfoWithRoomIdQuery, useRoomParticipantsQuery } from '@/hooks/useQueries/useMeetingQuery';
-import { GENDER } from '@/utils/MeetingRoomSelector';
+import { GENDERFILTER } from '@/utils/constant';
 import { RoomFemaleAvatar, RoomMaleAvatar } from '@/utils/icons/RoomAvatar';
 import { clientSupabase } from '@/utils/supabase/client';
 import Image from 'next/image';
@@ -16,24 +16,21 @@ import HollowMaleMemberCard from './HollowMaleMemberCard';
 import type { UserType } from '@/types/roomTypes';
 import type { UUID } from 'crypto';
 const Member = ({ roomId }: { roomId: UUID }) => {
-  const roomInformation = useRoomInfoWithRoomIdQuery(roomId);
+  const { leader_id, member_number } = useRoomInfoWithRoomIdQuery(roomId);
   const participants = useRoomParticipantsQuery(roomId);
 
-  const leaderMember = roomInformation.leader_id;
-  const memberNumber = roomInformation.member_number;
-
   const [members, setMembers] = useState<UserType[]>(participants as UserType[]);
-  const [leader, setLeader] = useState(leaderMember as string);
+  const [leader, setLeader] = useState(leader_id as string);
 
-  const genderMaxNumber = useGenderMaxNumber(memberNumber!);
-  const femaleMembers = members.filter((member) => member.gender === GENDER.FEMALE);
-  const maleMembers = members.filter((member) => member.gender === GENDER.MALE);
+  const genderMaxNumber = useGenderMaxNumber(member_number);
+  const femaleMembers = members.filter((member) => member.gender === GENDERFILTER.FEMALE);
+  const maleMembers = members.filter((member) => member.gender === GENDERFILTER.MALE);
   const hollowFemaleArray = Array.from({ length: (genderMaxNumber as number) - femaleMembers.length }, (_, i) => i);
   const hollowMaleArray = Array.from({ length: (genderMaxNumber as number) - maleMembers.length }, (_, i) => i);
 
   useEffect(() => {
-    setLeader(leaderMember!);
-  }, [leaderMember]);
+    setLeader(leader_id!);
+  }, [leader_id]);
 
   useEffect(() => {
     const channle = clientSupabase
@@ -91,7 +88,7 @@ const Member = ({ roomId }: { roomId: UUID }) => {
     return () => {
       clientSupabase.removeChannel(channle);
     };
-  }, [members, participants, leaderMember]);
+  }, [members, participants, leader_id]);
   return (
     <div className="flex flex-col">
       <section className="w-100%">

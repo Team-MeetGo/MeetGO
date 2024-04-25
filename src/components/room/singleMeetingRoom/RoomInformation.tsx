@@ -5,7 +5,7 @@ import useGenderMaxNumber from '@/hooks/custom/useGenderMaxNumber';
 import { useMyMsgData } from '@/hooks/useQueries/useChattingQuery';
 import { useAlreadyChatRoomQuery, useRoomParticipantsQuery } from '@/hooks/useQueries/useMeetingQuery';
 import { useGetUserDataQuery } from '@/hooks/useQueries/useUserQuery';
-import { GENDER } from '@/utils/MeetingRoomSelector';
+import { GENDERFILTER } from '@/utils/constant';
 import { useEffect, useRef, useState } from 'react';
 import { BsFire } from 'react-icons/bs';
 import { HiOutlineDotsVertical } from 'react-icons/hi';
@@ -23,10 +23,9 @@ function RoomInformation({ room }: { room: MeetingRoomType }) {
 
   const genderMaxNumber = useGenderMaxNumber(member_number);
   const emptySeatNumber = genderMaxNumber! * 2 - participants.length;
-  const femaleNumber = participants.filter((member) => member?.gender === GENDER.FEMALE).length;
+  const femaleNumber = participants.filter((member) => member?.gender === GENDERFILTER.FEMALE).length;
   const maleNumber = participants.length - femaleNumber;
-  const user_id = user?.user_id;
-  const myMsgData = useMyMsgData(user_id);
+  const myMsgData = useMyMsgData(user?.user_id);
 
   useEffect(() => {
     const outSideClick = (e: any) => {
@@ -71,7 +70,7 @@ function RoomInformation({ room }: { room: MeetingRoomType }) {
               </figure>
             </mark>
           ) : null}
-          {user_id === leader_id ? (
+          {user?.user_id === leader_id ? (
             <mark ref={dropdownRef} className="relative flex flex-row justify-center align-middle">
               <button
                 className="flex flex-row justify-center align-middle"

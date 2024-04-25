@@ -1,4 +1,4 @@
-import { REGIONANDMEMBER } from '@/utils/MeetingRoomSelector';
+import { REGIONANDMEMBER } from '@/utils/constant';
 import { create } from 'zustand';
 
 export interface RoomState {

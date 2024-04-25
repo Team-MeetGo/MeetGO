@@ -3,15 +3,14 @@ import useGenderMaxNumber from '@/hooks/custom/useGenderMaxNumber';
 import { useAddRoomMemberMutation, useUpdateRoomStatusCloseMutation } from '@/hooks/useMutation/useMeetingMutation';
 import { useAlreadyChatRoomQuery, useRoomParticipantsQuery } from '@/hooks/useQueries/useMeetingQuery';
 import { useGetUserDataQuery } from '@/hooks/useQueries/useUserQuery';
+import { debounce } from '@/utils';
+import { ROOMSTATUS, ROUTERADDRESS } from '@/utils/constant';
 import MeetGoLogoPurple from '@/utils/icons/meetgo-logo-purple.png';
-import RoomInformation from './RoomInformation';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
-import { ROOMSTATUS } from '@/utils/MeetingRoomSelector';
+import RoomInformation from './RoomInformation';
 
 import type { MeetingRoomType } from '@/types/roomTypes';
-import { debounce } from '@/utils';
-
 function MeetingRoom({ room }: { room: MeetingRoomType }) {
   const router = useRouter();
   const { room_id, room_status, room_title, member_number, location, feature, region } = room;
@@ -33,7 +32,7 @@ function MeetingRoom({ room }: { room: MeetingRoomType }) {
     //수락창: 이미 참여한 방은 바로 입장
     const alreadyParticipants = participants.find((member) => member?.user_id === userId);
     if (alreadyParticipants && alreadyChatRoom?.length === 0) {
-      return router.push(`/meetingRoom/${room_id}`);
+      return router.push(`${ROUTERADDRESS.GOTOLOBBY}/${room_id}`);
     }
     //채팅창: 채팅창으로 이동
     if (alreadyParticipants && alreadyChatRoom?.length === 1) {
@@ -44,7 +43,7 @@ function MeetingRoom({ room }: { room: MeetingRoomType }) {
     //성별에 할당된 인원이 다 찼으면 알람
     if (genderMaxNumber === participatedGenderMember && room_status === ROOMSTATUS.RECRUITING && !alreadyParticipants) {
       alert('해당 성별은 모두 참여가 완료되었습니다.');
-      return router.push('/meetingRoom');
+      return router.push(ROUTERADDRESS.GOTOLOBBY);
     }
 
     //성별에 할당된 인원이 참여자 정보보다 적을 때 입장
@@ -59,10 +58,10 @@ function MeetingRoom({ room }: { room: MeetingRoomType }) {
     if (genderMaxNumber && participants.length === genderMaxNumber * 2 - 1) {
       updateRoomStatusCloseMutation();
     }
-    return router.push(`/meetingRoom/${room_id}`);
+    return router.push(`${ROUTERADDRESS.GOTOLOBBY}/${room_id}`);
   };
 
-  const handleAddMemberDebounce = debounce(addMember, 2000);
+  const handleAddMemberDebounce = debounce(addMember, 500);
 
   return (
     <article
@@ -91,11 +90,9 @@ function MeetingRoom({ room }: { room: MeetingRoomType }) {
               <p className="text-mainColor text-sm font-bold">MEETGO</p>
             </figure>
             <figure className="flex flex-row gap-[4px]">
-              {Array.from(feature).map((value) => (
-                <div key={value} className="bg-purpleSecondary text-mainColor rounded-[8px] p-[8px] text-[14px]">
-                  {value}
-                </div>
-              ))}
+              <div className="bg-purpleSecondary text-mainColor rounded-[8px] p-[8px] text-[14px]">
+                {feature && feature[0]}
+              </div>
             </figure>
           </section>
         </main>
