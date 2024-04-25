@@ -20,7 +20,7 @@ const ProfileHeader = () => {
   ];
 
   return (
-    <div className="bg-purpleSecondary w-full py-[40px] px-[20px]">
+    <div className="bg-purpleSecondary w-full py-[40px] px-[24px]">
       <div className="flex flex-col gap-4 max-w-[1000px] m-auto max-md:items-start">
         <h1 className="text-[42px] font-bold">프로필</h1>
         <div className="flex items-center max-md:items-start md:justify-between max-md:flex-col max-md:gap-6">

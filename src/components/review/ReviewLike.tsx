@@ -7,6 +7,7 @@ import HeartIcon from '@/utils/icons/HeartIcon';
 import { useGetUserDataQuery } from '@/hooks/useQueries/useUserQuery';
 import { useLikedReviewCountQuery, useLikedReviewDataQuery } from '@/hooks/useQueries/useLikeQuery';
 import { useToggleLikeMutation } from '@/hooks/useMutation/useLikeMutation';
+import { customErrToast } from '../common/customToast';
 
 type Props = {
   review_id: string;
@@ -48,7 +49,7 @@ const ReviewLike = ({ review_id }: Props) => {
 
   const handleLikeToggle = async () => {
     if (!userId) {
-      alert('로그인 후 이용해주세요.');
+      customErrToast('로그인 후 이용해주세요.');
       return;
     }
     try {

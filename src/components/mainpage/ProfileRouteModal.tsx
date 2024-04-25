@@ -17,7 +17,7 @@ const ProfileRouteModal = () => {
       openModal({
         type: 'confirm',
         name: 'Welcome🎉',
-        text: '미팅을 위해 프로필 설정 부탁드려요.',
+        text: '미팅을 위해 마이페이지에서\n프로필 설정 부탁드려요!',
         onFunc: () => {
           mutateFirstLogin(user.user_id);
           closeModal();
@@ -31,7 +31,11 @@ const ProfileRouteModal = () => {
     }
   }, [isSuccess, user]);
 
-  return <>{user?.first_login && <ValidationModal />}</>;
+  return (
+    <>
+      <ValidationModal />
+    </>
+  );
 };
 
 export default ProfileRouteModal;

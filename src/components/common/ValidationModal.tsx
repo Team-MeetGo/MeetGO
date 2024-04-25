@@ -22,7 +22,7 @@ export const ValidationModal = () => {
     <div className="fixed inset-0 bg-black bg-opacity-50 z-40 flex justify-center items-center">
       <div className="bg-white px-[50px] py-[30px] rounded-xl z-50 items-center flex flex-col gap-2">
         <h2 className=" text-xl font-semibold">{name}</h2>
-        <pre className="text-[18px]">{text}</pre>
+        <pre className="text-[18px] text-center">{text}</pre>
         <div>
           <form>
             <div>

@@ -13,6 +13,16 @@ export interface LoginDataType {
   password: string;
 }
 
+export type Gender = 'male' | 'female' | '';
+
+export interface JoinDataType {
+  userId: string;
+  password: string;
+  confirmPassword: string;
+  nickname: string;
+  gender: Gender;
+}
+
 export type IsEditingType = {
   isEditing: boolean;
 };
