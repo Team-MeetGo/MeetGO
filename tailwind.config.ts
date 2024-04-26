@@ -18,7 +18,7 @@ const config: Config = {
         'gradient-to-main2': 'linear-gradient(90deg, rgba(199,140,234,1) 0%, rgba(133,87,252,1) 100%)'
       },
       colors: {
-        mainColor: '#8F5DF4',
+        mainColor: '#7238D2',
         purpleSecondary: '#F2EAFA',
         purpleThird: '#E4D4F4',
         gray1: '#D4D4D8',

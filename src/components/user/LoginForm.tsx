@@ -113,7 +113,8 @@ const LoginForm = () => {
 
   return (
     <>
-      <div className="max-w-[450px] w-full">
+      <div className="max-w-[450px] w-full p-6">
+        <h1 className="text-[40px] font-semibold mb-[40px] text-center">로그인</h1>
         <form className="flex flex-col gap-[8px]" onSubmit={onSubmitForm}>
           <div className="flex flex-col gap-[16px]">
             {LOGIN_FORM_LIST.map(({ type, name, placeholder, error }) => (

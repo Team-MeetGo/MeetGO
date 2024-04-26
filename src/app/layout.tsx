@@ -30,7 +30,7 @@ export default function RootLayout({
             <ToastContainer position="top-right" limit={1} closeButton={false} autoClose={4000} />
             <NavBar />
             {children}
-            <ReactQueryDevtools initialIsOpen={true} />
+            {/* <ReactQueryDevtools initialIsOpen={true} /> */}
           </QueryProvider>
         </NextProvider>
       </body>
