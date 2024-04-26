@@ -1,9 +1,9 @@
 import { ReactNode } from 'react';
 
-interface DropdownProps {
+interface DrawerProps {
   children: ReactNode;
 }
 
-export const Dropdown: React.FC<DropdownProps> = ({ children }) => {
+export const Drawer: React.FC<DrawerProps> = ({ children }) => {
   return <div>{children}</div>;
 };

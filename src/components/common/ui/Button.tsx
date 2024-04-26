@@ -4,7 +4,7 @@ interface ButtonProps {
 }
 
 const Button: React.FC<ButtonProps> = ({ children, className = '' }) => {
-  return <button className={`px-[24px] py-[14px] font-bold text-base rounded-lg ${className}`}>{children}</button>;
+  return <button className={`px-[16px] py-[8px] font-semibold text-base rounded-lg ${className}`}>{children}</button>;
 };
 
 export default Button;

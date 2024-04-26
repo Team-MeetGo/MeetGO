@@ -10,25 +10,31 @@ import Link from 'next/link';
 import { customErrToast } from './customToast';
 import { FaRegUser } from 'react-icons/fa6';
 import { RxHamburgerMenu } from 'react-icons/rx';
-import { Dropdown } from './ui/Dropdown';
-import { DropdownTrigger } from './ui/DropdownTrigger';
-import { DropdownMenu } from './ui/DropdownMenu';
 import Button from './ui/Button';
 import { useState } from 'react';
 import { IoClose } from 'react-icons/io5';
+import { Avatar } from '@nextui-org/react';
+import { Drawer } from './ui/Drawer';
+import { DrawerTrigger } from './ui/DrawerTrigger';
+import { DrawerMenu } from './ui/DrawerMenu';
 
 const NavBarContents2 = () => {
   const queryClient = useQueryClient();
   const { data: user, isPending, isError, error, isLoggedIn } = useGetUserDataQuery();
   const [isOpen, setIsOpen] = useState(false);
+
   const handleToggle = () => {
     setIsOpen((prev) => !prev);
   };
+  const handleClose = () => {
+    setIsOpen(false);
+  };
+
   const isValidate = user?.isValidate;
 
   if (isPending) {
     return (
-      <div className="w-full flex items-center gap-2 max-w-5xl py-[20px] px-6 m-auto justify-between">
+      <div className="max-w-[1000px] flex items-center gap-2 py-[20px] px-6 m-auto justify-between">
         <div className="w-full flex gap-10 items-center">
           <Skeleton className="w-1/3 h-10 rounded-lg" />
           <Skeleton className="h-6 w-4/6 rounded-lg" />
@@ -53,21 +59,22 @@ const NavBarContents2 = () => {
   };
 
   const checkIsValidate = () => {
+    setIsOpen(false);
     if (!isValidate) {
       customErrToast('미팅을 하고 싶다면 학교 인증을 해주세요!');
     }
   };
 
   return (
-    <header className="flex max-w-[1200px] h-20 w-full shrink-0 items-center px-6 m-auto">
+    <header className="flex max-w-[1000px] h-20 w-full shrink-0 items-center px-6 m-auto">
       <div className="flex items-center">
-        <Dropdown>
-          <DropdownTrigger onToggle={handleToggle}>
+        <Drawer>
+          <DrawerTrigger onToggle={handleToggle}>
             <RxHamburgerMenu className="h-6 w-6 mr-4 lg:hidden" />
-          </DropdownTrigger>
-          <DropdownMenu isOpen={isOpen}>
+          </DrawerTrigger>
+          <DrawerMenu isOpen={isOpen}>
             <div className="flex flex-col gap-4 px-4 py-6">
-              <IoClose className="absolute top-0 right-0 mt-4 mr-4 h-5 w-5 " onClick={handleToggle} />
+              <IoClose className="absolute top-0 right-0 mt-4 mr-4 h-5 w-5 " onClick={handleClose} />
               <Link className="flex items-center max-w-[100px]" href="/">
                 <Image
                   src={MeetGoLogo}
@@ -77,33 +84,37 @@ const NavBarContents2 = () => {
                     height: 'auto'
                   }}
                   priority={true}
+                  onClick={handleClose}
                 />
               </Link>
               <nav className="grid gap-2">
                 <Link
-                  className="flex items-center rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-gray-100 hover:text-gray-900 focus:bg-gray-100 focus:text-gray-900 focus:outline-none disabled:pointer-events-none disabled:opacity-50 dark:hover:bg-gray-800 dark:hover:text-gray-50 dark:focus:bg-gray-800 dark:focus:text-gray-50"
-                  href="#"
+                  className="flex items-center rounded-md px-3 py-2 text-base font-medium transition-colors"
+                  href={isValidate ? '/meetingRoom' : '/mypage'}
+                  onClick={checkIsValidate}
                 >
                   로비
                 </Link>
                 <Link
-                  className="flex items-center rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-gray-100 hover:text-gray-900 focus:bg-gray-100 focus:text-gray-900 focus:outline-none disabled:pointer-events-none disabled:opacity-50 dark:hover:bg-gray-800 dark:hover:text-gray-50 dark:focus:bg-gray-800 dark:focus:text-gray-50"
-                  href="#"
+                  className="flex items-center rounded-md px-3 py-2 text-base font-medium transition-colors"
+                  href="/review/pageNumber/1"
+                  onClick={handleClose}
                 >
                   리뷰
                 </Link>
                 <Link
-                  className="flex items-center rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-gray-100 hover:text-gray-900 focus:bg-gray-100 focus:text-gray-900 focus:outline-none disabled:pointer-events-none disabled:opacity-50 dark:hover:bg-gray-800 dark:hover:text-gray-50 dark:focus:bg-gray-800 dark:focus:text-gray-50"
+                  className="flex items-center rounded-md px-3 py-2 text-base font-medium transition-colors"
                   href="#"
+                  onClick={handleClose}
                 >
                   스쳐간인연
                 </Link>
               </nav>
             </div>
-          </DropdownMenu>
-        </Dropdown>
+          </DrawerMenu>
+        </Drawer>
         <div className="flex items-center">
-          <Link className="flex items-center max-w-[120px]" href="/">
+          <Link className="flex items-center max-w-[120px] mr-[24px]" href="/">
             <Image
               src={MeetGoLogo}
               alt="MeetGo Logo"
@@ -112,25 +123,27 @@ const NavBarContents2 = () => {
                 height: 'auto'
               }}
               priority={true}
+              onClick={handleClose}
             />
           </Link>
         </div>
       </div>
       <nav className="hidden lg:flex gap-4">
         <Link
-          className="inline-flex h-9 w-max items-center justify-center rounded-md bg-white px-4 py-2 text-sm font-medium transition-colors hover:bg-gray-100 hover:text-gray-900 focus:bg-gray-100 focus:text-gray-900 focus:outline-none disabled:pointer-events-none disabled:opacity-50 data-[active]:bg-gray-100/50 data-[state=open]:bg-gray-100/50 dark:bg-gray-950 dark:hover:bg-gray-800 dark:hover:text-gray-50 dark:focus:bg-gray-800 dark:focus:text-gray-50 dark:data-[active]:bg-gray-800/50 dark:data-[state=open]:bg-gray-800/50"
-          href="#"
+          className="inline-flex h-full w-max items-center justify-center rounded-md px-4 py-2 text-base font-medium transition-colors"
+          href={isValidate ? '/meetingRoom' : '/mypage'}
+          onClick={checkIsValidate}
         >
           로비
         </Link>
         <Link
-          className="inline-flex h-9 w-max items-center justify-center rounded-md bg-white px-4 py-2 text-sm font-medium transition-colors hover:bg-gray-100 hover:text-gray-900 focus:bg-gray-100 focus:text-gray-900 focus:outline-none disabled:pointer-events-none disabled:opacity-50 data-[active]:bg-gray-100/50 data-[state=open]:bg-gray-100/50 dark:bg-gray-950 dark:hover:bg-gray-800 dark:hover:text-gray-50 dark:focus:bg-gray-800 dark:focus:text-gray-50 dark:data-[active]:bg-gray-800/50 dark:data-[state=open]:bg-gray-800/50"
-          href="#"
+          className="inline-flex h-full w-max items-center justify-center rounded-md px-4 py-2 text-base font-medium transition-colors"
+          href="/review/pageNumber/1"
         >
           리뷰
         </Link>
         <Link
-          className="inline-flex h-9 w-max items-center justify-center rounded-md bg-white px-4 py-2 text-sm font-medium transition-colors hover:bg-gray-100 hover:text-gray-900 focus:bg-gray-100 focus:text-gray-900 focus:outline-none disabled:pointer-events-none disabled:opacity-50 data-[active]:bg-gray-100/50 data-[state=open]:bg-gray-100/50 dark:bg-gray-950 dark:hover:bg-gray-800 dark:hover:text-gray-50 dark:focus:bg-gray-800 dark:focus:text-gray-50 dark:data-[active]:bg-gray-800/50 dark:data-[state=open]:bg-gray-800/50"
+          className="inline-flex h-full w-max items-center justify-center rounded-md px-4 py-2 text-base font-medium transition-colors"
           href="#"
         >
           스쳐간인연
@@ -138,13 +151,33 @@ const NavBarContents2 = () => {
       </nav>
       <div className="ml-auto flex gap-2">
         <div className="flex items-center gap-2 lg:hidden">
-          <Button>
-            <FaRegUser className="h-5 w-5" />
-          </Button>
+          {isLoggedIn ? (
+            <Button>
+              <FaRegUser className="h-5 w-5" />
+            </Button>
+          ) : (
+            <Link href="/">
+              <FaRegUser className="h-5 w-5" />
+            </Link>
+          )}
+          {/* 하나는 로그인 true시 마이페이지 드롭다운 메뉴가 열리도록*/}
         </div>
         <div className="hidden lg:flex gap-2">
-          <Button>로그인</Button>
-          <Button className="bg-mainColor text-white">회원가입</Button>
+          {isLoggedIn ? (
+            <div className="flex items-center gap-2">
+              <p className="cursor-pointer">{user?.nickname}</p>
+              {user?.avatar ? (
+                <Avatar as="button" className="transition-transform" src={`${user?.avatar}?${new Date().getTime()}`} />
+              ) : (
+                <Avatar as="button" className="transition-transform" color="secondary" size="sm" />
+              )}
+            </div>
+          ) : (
+            <>
+              <Button>로그인</Button>
+              <Button className="bg-mainColor text-white">회원가입</Button>
+            </>
+          )}
         </div>
       </div>
     </header>

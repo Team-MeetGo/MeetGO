@@ -1,11 +1,11 @@
 import React, { ReactElement } from 'react';
 
-interface DropdownTriggerProps {
+interface DrawerTriggerProps {
   children: ReactElement;
   onToggle: () => void;
 }
 
-export const DropdownTrigger: React.FC<DropdownTriggerProps> = ({ children, onToggle }) => {
+export const DrawerTrigger: React.FC<DrawerTriggerProps> = ({ children, onToggle }) => {
   return React.cloneElement(children, {
     onClick: onToggle
   });
