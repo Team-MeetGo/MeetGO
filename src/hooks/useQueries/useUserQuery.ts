@@ -3,7 +3,7 @@ import { fetchUserData, fetchUserLikePost, fetchUserPost } from '@/query/user/us
 import { USER_DATA_QUERY_KEY, USER_LIKE_POST_QUERY_KEY, USER_POST_QUERY_KEY } from '@/query/user/userQueryKeys';
 import { profileCount } from '@/store/userStore';
 import { UsersType } from '@/types/userTypes';
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useSuspenseQuery } from '@tanstack/react-query';
 import { useEffect } from 'react';
 
 // 1) initialData
@@ -12,7 +12,7 @@ import { useEffect } from 'react';
 // 4) 프리패치 쿼리 (서버에서 유저에 대한 데이터를 들고 내려온다)
 
 export const useGetUserDataQuery = () => {
-  const { data, isPending, isError, error, isSuccess } = useQuery({
+  const { data, isPending, isError, error, isSuccess } = useSuspenseQuery({
     queryKey: [USER_DATA_QUERY_KEY],
     queryFn: fetchUserData
   });
