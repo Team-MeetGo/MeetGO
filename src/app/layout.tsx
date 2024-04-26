@@ -7,30 +7,60 @@ import NavBar from '@/components/common/NavBar';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-
+import { HydrationBoundary, QueryClient, dehydrate } from '@tanstack/react-query';
+import { USER_DATA_QUERY_KEY } from '@/query/user/userQueryKeys';
+import { serverSupabase } from '@/utils/supabase/server';
+import { User } from '@supabase/supabase-js';
+import { Suspense } from 'react';
 const inter = Inter({ subsets: ['latin'] });
-
 export const metadata: Metadata = {
   title: 'MeetGo',
   description: '20대 대학생을 위한 미팅 서비스',
   icons: { icon: '/favicon.ico' }
 };
-
-export default function RootLayout({
+export default async function RootLayout({
   children
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  // 아무거나
+  const setUser = async () => {
+    const supabase = serverSupabase();
+    // 유저 데이터 가져오기
+    const {
+      data: { user },
+      error
+    } = await supabase.auth.getUser();
+    console.log('user', user);
+    if (!user || error) throw error;
+    const { data: userData, error: userDataErr } = await supabase
+      .from('users')
+      .select('*')
+      .eq('user_id', String((user as User).id));
+    if (userDataErr || !userData) {
+      throw new Error('error');
+    } else {
+      return userData[0];
+    }
+  };
+  const queryClient = new QueryClient();
+  await queryClient.prefetchQuery({
+    queryKey: [USER_DATA_QUERY_KEY],
+    queryFn: setUser
+  });
+  const data = queryClient.getQueryData([USER_DATA_QUERY_KEY]);
   return (
     <html lang="ko">
       <body className={inter.className}>
         <NextProvider>
           <QueryProvider>
-            <ToastContainer position="top-right" limit={1} closeButton={false} autoClose={4000} />
-            <NavBar />
-            {children}
-            <ReactQueryDevtools initialIsOpen={true} />
+            <HydrationBoundary state={dehydrate(queryClient)}>
+              {/* <Suspense> */}
+              <NavBar />
+              <ToastContainer position="top-right" limit={1} closeButton={false} autoClose={4000} />
+              {children}
+              <ReactQueryDevtools initialIsOpen={true} />
+              {/* </Suspense> */}
+            </HydrationBoundary>
           </QueryProvider>
         </NextProvider>
       </body>
