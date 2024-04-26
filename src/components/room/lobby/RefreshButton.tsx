@@ -1,6 +1,6 @@
 'use client';
 import { useGetUserDataQuery } from '@/hooks/useQueries/useUserQuery';
-import { RECRUTING_ROOMDATA, ROOMLIST } from '@/query/meetingRoom/meetingQueryKeys';
+import { MY_PAST_NOW_ROOM, RECRUTING_ROOMDATA, ROOMLIST } from '@/query/meetingRoom/meetingQueryKeys';
 import { useQueryClient } from '@tanstack/react-query';
 import { IoMdRefresh } from 'react-icons/io';
 
@@ -15,6 +15,10 @@ function RefreshButoon() {
     });
     await queryClient.invalidateQueries({
       queryKey: RECRUTING_ROOMDATA,
+      refetchType: 'all'
+    });
+    await queryClient.invalidateQueries({
+      queryKey: [MY_PAST_NOW_ROOM],
       refetchType: 'all'
     });
   };
