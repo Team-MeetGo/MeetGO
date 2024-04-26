@@ -31,9 +31,8 @@ function MeetingRoomForm() {
   const [location, setLocation] = useState('');
   const [title, setTitle] = useState('');
   const [selected, setSelected] = useState<Set<string>>(new Set([]));
-  const { mutateAsync: addRoomMutation } = useAddRoomMutation();
-
   const userId = user?.user_id!;
+  const { mutateAsync: addRoomMutation } = useAddRoomMutation(userId);
 
   const favoriteArray = Array.from(selected);
   const nextMeetingRoom: NewRoomType = {
@@ -51,7 +50,7 @@ function MeetingRoomForm() {
     if (!title || !selected || !location || !roomRegion) {
       alert('모든 항목은 필수입니다.');
     } else if (title && selected && location && roomRegion) {
-      const data = addRoomMutation({ nextMeetingRoom, userId });
+      const data = await addRoomMutation({ nextMeetingRoom, userId });
       alert('모임이 생성되었습니다.');
       setSelected(new Set([]));
       resetMemberNumber();

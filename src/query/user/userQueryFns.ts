@@ -1,16 +1,23 @@
+import { UserType } from '@/types/roomTypes';
 import { clientSupabase } from '@/utils/supabase/client';
+import { User } from '@supabase/supabase-js';
 
 export const fetchUserData = async () => {
   // 유저 데이터 가져오기
   const {
-    data: { user }
+    data: { user },
+    error
   } = await clientSupabase.auth.getUser();
-
-  if (user) {
-    const { data: userData } = await clientSupabase.from('users').select('*').eq('user_id', String(user.id));
-    if (userData) return userData[0];
+  if (!user || error) throw error;
+  const { data: userData, error: userDataErr } = await clientSupabase
+    .from('users')
+    .select('*')
+    .eq('user_id', String((user as User).id));
+  if (userDataErr || !userData) {
+    throw new Error('error');
+  } else {
+    return userData[0] as UserType;
   }
-  return null;
 };
 
 /** 유저의 작성 글 가져오기 */

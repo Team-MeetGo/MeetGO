@@ -34,9 +34,9 @@ function EditMeetingRoom({
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const [title, setTitle] = useState(room.room_title);
   const [location, setLocation] = useState(room.location);
-  const [selected, setSelected] = useState<Set<string>>(new Set([]));
+  const [concept, setConcept] = useState<Set<string>>(new Set([]));
   const roomId = room.room_id;
-  const favoriteArray = Array.from(selected);
+  const favoriteArray = Array.from(concept);
   //수정된 미팅룸 설정
   const editedMeetingRoom: UpdateRoomType = {
     room_title: title,
@@ -51,9 +51,9 @@ function EditMeetingRoom({
   const editMeetingRoom = async (e: any) => {
     e.preventDefault();
     setOpen(false);
-    if (!title || !selected || !location) {
+    if (!title || !concept || !location) {
       alert('모든 항목은 필수입니다.');
-    } else if (title && selected && location && roomRegion) {
+    } else if (title && concept && location) {
       roomUpdateMutation();
     }
   };
@@ -61,15 +61,14 @@ function EditMeetingRoom({
   const beforeData = () => {
     setMemberNumber(room.member_number);
     setRoomRegion(room.region);
-    setSelected(new Set(room.feature));
+    setConcept(new Set(room.feature));
   };
   //방 컨셉을 선택합니다.
   const handleSelect = (value: string) => {
-    if (selected.size > 4) {
-      alert('최대 4개까지 선택 가능합니다.');
-      return;
-    }
-    setSelected(new Set(value));
+    setConcept(new Set(value));
+  };
+  const editionHandler = () => {
+    if (!title || !concept || !location) return onOpen;
   };
   return (
     <>
@@ -131,7 +130,7 @@ function EditMeetingRoom({
                         label="방의 컨셉"
                         selectionMode="single"
                         variant="bordered"
-                        selectedKeys={selected}
+                        selectedKeys={concept}
                         className="max-w-xs"
                         aria-label="방의 컨셉"
                         onSelectionChange={(value) => handleSelect(value as string)}
@@ -149,7 +148,11 @@ function EditMeetingRoom({
                   <Button onClick={() => setOpen(false)} color="danger" variant="light" onPress={onClose}>
                     취소
                   </Button>
-                  <Button type="submit" className="bg-violet-300" onPress={onClose}>
+                  <Button
+                    type="submit"
+                    className="bg-violet-300"
+                    onPress={!title || !concept || !location ? onOpen : onClose}
+                  >
                     수정
                   </Button>
                 </ModalFooter>

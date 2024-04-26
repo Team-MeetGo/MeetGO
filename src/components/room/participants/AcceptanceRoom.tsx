@@ -1,3 +1,4 @@
+import { Suspense } from 'react';
 import Member from './Member';
 import RoomInformation from './RoomInformation';
 
@@ -6,10 +7,10 @@ function AcceptanceRoom({ roomId }: { roomId: UUID }) {
   return (
     <>
       <div>
-        <RoomInformation roomId={roomId} />
-        <div className="w-100 h-100 flex flex-row justify-evenly">
+        <Suspense>
+          <RoomInformation roomId={roomId} />
           <Member roomId={roomId} />
-        </div>
+        </Suspense>
       </div>
     </>
   );

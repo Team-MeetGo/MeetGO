@@ -67,10 +67,16 @@ export const useDeleteRoom = ({ roomId, userId }: { roomId: string; userId: stri
   });
   return deleteRoomMutation;
 };
-export const useAddRoomMutation = () => {
+export const useAddRoomMutation = (userId: string) => {
+  const queryClient = useQueryClient();
   const roomAddMutation = useMutation({
     mutationFn: ({ nextMeetingRoom, userId }: { nextMeetingRoom: NewRoomType; userId: string }) =>
-      addRoom({ nextMeetingRoom, userId })
+      addRoom({ nextMeetingRoom, userId }),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: [ROOMLIST, userId] });
+      queryClient.invalidateQueries({ queryKey: [RECRUTING_ROOMDATA] });
+      queryClient.invalidateQueries({ queryKey: [MY_PAST_NOW_ROOM] });
+    }
   });
   return roomAddMutation;
 };

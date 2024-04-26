@@ -53,13 +53,14 @@ export const useMyPastAndNowRoomQuery = (user_id: string) => {
 //   return results.data?.map((r) => r.room);
 // };
 //room_id로 하나의 방 얻기
-export const useRoomInfoWithRoomIdQuery = (room_id: string): MeetingRoomType => {
-  const { data: roomInfoWith } = useSuspenseQuery({
+export const useRoomInfoWithRoomIdQuery = (room_id: string): MeetingRoomType | undefined => {
+  const { data: roomInfoWithId } = useQuery({
     queryKey: [ROOMDATA_WITH_ROOMID, room_id],
     queryFn: () => fetchRoomInfoWithRoomId(room_id)
   });
-  return roomInfoWith;
+  return roomInfoWithId ?? undefined;
 };
+
 //이미 채팅으로 넘어간 목록
 export const useAlreadyChatRoomQuery = (roomId: string): ChattingRoomType[] | undefined => {
   const { data } = useQuery({

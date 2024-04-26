@@ -6,7 +6,7 @@ import { useMyPastAndNowRoomQuery, useMyroomQuery, useRecruitingQuery } from '@/
 import { useGetUserDataQuery } from '@/hooks/useQueries/useUserQuery';
 import { useSearchRoomStore } from '@/store/searchRoomStore';
 import { REGIONANDMEMBER } from '@/utils/constant';
-import { useEffect, useState } from 'react';
+import { Suspense, useEffect, useState } from 'react';
 import { IoIosArrowBack, IoIosArrowForward } from 'react-icons/io';
 
 import type { MeetingRoomType } from '@/types/roomTypes';
@@ -19,13 +19,13 @@ function MeetingRoomList() {
   const myRoomList = useMyroomQuery(user?.user_id as string);
   const myOutList = useMyPastAndNowRoomQuery(user?.user_id as string);
 
-  const filteredMyRoomList = myRoomList.map((room) => room.room);
-  const filteredMyOutRoomList = myOutList.map((room) => room.room);
+  const filteredMyRoomList = myRoomList?.map((room) => room.room);
+  const filteredMyOutRoomList = myOutList?.map((room) => room.room);
   const { selectRegion, selectMemberNumber } = useSearchRoomStore();
 
   // meetingRoomList 중에서 내가 참여한 적도, 참여하지도 않은 방들을 뽑아내기
-  const otherRooms = meetingRoomList.filter(function (room: MeetingRoomType) {
-    const foundItem = filteredMyOutRoomList.find((r) => r?.room_id === room.room_id);
+  const otherRooms = meetingRoomList?.filter(function (room: MeetingRoomType) {
+    const foundItem = filteredMyOutRoomList?.find((r) => r?.room_id === room.room_id);
     if (foundItem) {
       return false;
     } else {
@@ -40,23 +40,24 @@ function MeetingRoomList() {
 
   //여러 조건에서 모집 중인 RoomList를 뽑아내기
   const filteredOtherRoomsHandler = () => {
+    if (!otherRooms) return setFilteredOtherRooms([]);
     if (allRegion && allMember) {
       return setFilteredOtherRooms(otherRooms);
     }
     if (someRegion && allMember) {
-      const regionFilteredRooms = otherRooms.filter(
+      const regionFilteredRooms = otherRooms?.filter(
         (room) => room.region === selectRegion || room.region === REGIONANDMEMBER.EVERYWHERE
       );
       return setFilteredOtherRooms(regionFilteredRooms);
     }
     if (someMember && allRegion) {
-      const numberFilteredRooms = otherRooms.filter(
+      const numberFilteredRooms = otherRooms?.filter(
         (room) => room.member_number === selectMemberNumber || room.member_number === REGIONANDMEMBER.EVERYMEMBER
       );
       return setFilteredOtherRooms(numberFilteredRooms);
     }
     if (someMember && someRegion) {
-      const regionNumberFilteredRooms = otherRooms.filter(
+      const regionNumberFilteredRooms = otherRooms?.filter(
         (room) =>
           room.member_number === (selectMemberNumber || REGIONANDMEMBER.EVERYMEMBER) &&
           room.region === (selectRegion || REGIONANDMEMBER.EVERYWHERE)
@@ -81,15 +82,19 @@ function MeetingRoomList() {
     }
     setPage((page) => page - 1);
   };
-
+  console.log(user?.user_id);
+  console.log(filteredMyRoomList);
+  console.log(otherRooms);
+  console.log(filteredMyOutRoomList);
   return (
     <>
       <MyRoomsTitle>
-        {filteredMyRoomList.length > 0 ? (
+        {filteredMyRoomList && filteredMyRoomList.length > 0 ? (
           <>
             <button onClick={beforePage}>
               {page !== 1 ? <IoIosArrowBack className="h-[40px] w-[40px] m-[8px]" /> : null}
             </button>
+
             <div className="w-[1000px]">
               {
                 <li
@@ -97,13 +102,16 @@ function MeetingRoomList() {
                     filteredMyRoomList.length === 0 ? 'h-[40px]' : 'h-[241px]'
                   } gap-[24px] grid grid-cols-3 w-100%`}
                 >
-                  {filteredMyRoomList.map((room, index) => {
-                    if (index < 3 * page && index >= 3 * (page - 1))
-                      return <div key={room?.room_id}>{room && <MeetingRoom room={room} />}</div>;
-                  })}
+                  <Suspense>
+                    {filteredMyRoomList.map((room, index) => {
+                      if (index < 3 * page && index >= 3 * (page - 1))
+                        return <div key={room?.room_id}>{room && <MeetingRoom room={room} />}</div>;
+                    })}
+                  </Suspense>
                 </li>
               }
             </div>
+
             <button onClick={nextPage}>
               {filteredMyRoomList.length / 3 <= page ? null : (
                 <IoIosArrowForward className="h-[40px] w-[40px] m-[8px]" />
@@ -118,9 +126,11 @@ function MeetingRoomList() {
       </MyRoomsTitle>
       <OtherRoomsTitle>
         <section className="gap-[24px] grid grid-cols-3 w-[1000px] pt-[24px] pb-[8px]">
-          {filteredOtherRooms.map((room) => (
-            <MeetingRoom key={room.room_id} room={room} />
-          ))}
+          <Suspense>
+            {filteredOtherRooms.map((room) => (
+              <MeetingRoom key={room.room_id} room={room} />
+            ))}
+          </Suspense>
         </section>
       </OtherRoomsTitle>
     </>

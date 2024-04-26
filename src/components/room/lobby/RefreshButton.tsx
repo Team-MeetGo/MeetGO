@@ -14,7 +14,7 @@ function RefreshButoon() {
       refetchType: 'all'
     });
     await queryClient.invalidateQueries({
-      queryKey: RECRUTING_ROOMDATA,
+      queryKey: [RECRUTING_ROOMDATA],
       refetchType: 'all'
     });
     await queryClient.invalidateQueries({

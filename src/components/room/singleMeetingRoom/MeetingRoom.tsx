@@ -9,6 +9,8 @@ import MeetGoLogoPurple from '@/utils/icons/meetgo-logo-purple.png';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import RoomInformation from './RoomInformation';
+import { useModalStore } from '@/store/modalStore';
+import { ValidationModal } from '@/components/common/ValidationModal';
 
 import type { MeetingRoomType } from '@/types/roomTypes';
 function MeetingRoom({ room }: { room: MeetingRoomType }) {
@@ -17,6 +19,7 @@ function MeetingRoom({ room }: { room: MeetingRoomType }) {
   const { data: user } = useGetUserDataQuery();
   const userId = user?.user_id as string;
   const roomId = room_id;
+  const { openModal, closeModal } = useModalStore();
 
   const participants = useRoomParticipantsQuery(roomId);
   const alreadyChatRoom = useAlreadyChatRoomQuery(roomId);
@@ -25,8 +28,12 @@ function MeetingRoom({ room }: { room: MeetingRoomType }) {
   const genderMaxNumber = useGenderMaxNumber(member_number);
 
   const addMember = async ({ room_id }: { room_id: string }) => {
-    if (!user?.gender) {
-      alert('성별을 선택해주세요');
+    if (!user?.gender && user?.gender === null) {
+      openModal({
+        type: 'alert',
+        name: '',
+        text: '성별을 선택해주세요.'
+      });
       return router.push('/mypage');
     }
     //수락창: 이미 참여한 방은 바로 입장
@@ -42,8 +49,11 @@ function MeetingRoom({ room }: { room: MeetingRoomType }) {
 
     //성별에 할당된 인원이 다 찼으면 알람
     if (genderMaxNumber === participatedGenderMember && room_status === ROOMSTATUS.RECRUITING && !alreadyParticipants) {
-      alert('해당 성별은 모두 참여가 완료되었습니다.');
-      return router.push(ROUTERADDRESS.GOTOLOBBY);
+      openModal({
+        type: 'alert',
+        name: '',
+        text: `해당 성별은 모두 참여가 완료되었습니다.`
+      });
     }
 
     //성별에 할당된 인원이 참여자 정보보다 적을 때 입장
@@ -52,13 +62,12 @@ function MeetingRoom({ room }: { room: MeetingRoomType }) {
       !participatedGenderMember
     ) {
       roomMemberMutation();
+      //모든 인원이 다 찼을 경우 모집종료로 변경
+      if (genderMaxNumber && participants.length === genderMaxNumber * 2 - 1) {
+        updateRoomStatusCloseMutation();
+      }
+      return router.push(`${ROUTERADDRESS.GOTOLOBBY}/${room_id}`);
     }
-
-    //모든 인원이 다 찼을 경우 모집종료로 변경
-    if (genderMaxNumber && participants.length === genderMaxNumber * 2 - 1) {
-      updateRoomStatusCloseMutation();
-    }
-    return router.push(`${ROUTERADDRESS.GOTOLOBBY}/${room_id}`);
   };
 
   const handleAddMemberDebounce = debounce(addMember, 500);
@@ -97,6 +106,7 @@ function MeetingRoom({ room }: { room: MeetingRoomType }) {
           </section>
         </main>
       </section>
+      <ValidationModal />
     </article>
   );
 }
