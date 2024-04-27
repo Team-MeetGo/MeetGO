@@ -1,7 +1,7 @@
 'use client';
 import { useParticipantsQuery, useRoomDataQuery } from '@/hooks/useQueries/useChattingQuery';
 import { useGetUserDataQuery } from '@/hooks/useQueries/useUserQuery';
-import { Avatar, AvatarGroup, Tooltip } from '@nextui-org/react';
+import { Avatar, AvatarGroup, Popover, PopoverContent, PopoverTrigger, Tooltip } from '@nextui-org/react';
 import ShowChatMember from '../chatBody/ShowChatMember';
 import { chatStore } from '@/store/chatStore';
 import { clientSupabase } from '@/utils/supabase/client';
@@ -137,13 +137,20 @@ const ChatHeader = ({ chatRoomId }: { chatRoomId: string }) => {
             <ChatPresence />
             <AvatarGroup isBordered max={8}>
               {participants.map((person) => (
-                <Tooltip key={person.user_id} content={<ShowChatMember person={person} />}>
-                  <Avatar
-                    src={person.avatar as string}
-                    className={`w-[32px] h-[32px]`}
-                    isDisabled={!onlineUsers.find((id) => id === person.user_id)}
-                  />
-                </Tooltip>
+                <Popover key={person.user_id} showArrow placement="bottom">
+                  <PopoverTrigger>
+                    <Avatar
+                      as="button"
+                      src={person.avatar as string}
+                      className={`w-[32px] h-[32px] ${
+                        !onlineUsers.find((id) => id === person.user_id) ? 'bg-black opacity-30' : ''
+                      }`}
+                    />
+                  </PopoverTrigger>
+                  <PopoverContent>
+                    <ShowChatMember person={person} />
+                  </PopoverContent>
+                </Popover>
               ))}
             </AvatarGroup>
           </div>
