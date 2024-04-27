@@ -26,7 +26,6 @@ const NavBarContents = () => {
   const queryClient = useQueryClient();
 
   const { data: user, isPending, isError, error, isLoggedIn } = useGetUserDataQuery();
-  console.log('user =>', user);
   const isValidate = user?.isValidate;
 
   // if (isPending) {
