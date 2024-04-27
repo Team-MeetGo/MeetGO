@@ -16,11 +16,9 @@ import Image from 'next/image';
 import { clientSupabase } from '@/utils/supabase/client';
 import { useGetUserDataQuery } from '@/hooks/useQueries/useUserQuery';
 import { useQueryClient } from '@tanstack/react-query';
-import { BASIC_USER_DATA, USER_DATA_QUERY_KEY } from '@/query/user/userQueryKeys';
+import { USER_DATA_QUERY_KEY } from '@/query/user/userQueryKeys';
 import Link from 'next/link';
 import { customErrToast } from './customToast';
-import { UserType } from '@/types/roomTypes';
-import { User } from '@supabase/supabase-js';
 
 const NavBarContents = () => {
   const queryClient = useQueryClient();
@@ -51,12 +49,16 @@ const NavBarContents = () => {
     queryClient.invalidateQueries({
       queryKey: [USER_DATA_QUERY_KEY]
     });
-    // location.replace('/');
+    location.replace('/');
   };
 
   const checkIsValidate = () => {
-    if (!isValidate) {
-      customErrToast('미팅을 하고 싶다면 학교 인증을 해주세요!');
+    if (!isLoggedIn) {
+      customErrToast('로그인 후 이용가능합니다.');
+    } else {
+      if (!isValidate) {
+        customErrToast('미팅을 하고 싶다면 학교 인증을 해주세요!');
+      }
     }
   };
 
