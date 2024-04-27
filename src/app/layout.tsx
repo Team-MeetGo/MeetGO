@@ -35,11 +35,12 @@ export default async function RootLayout({
     const { data: userData, error: userDataErr } = await supabase
       .from('users')
       .select('*')
-      .eq('user_id', String((user as User).id));
+      .eq('user_id', String((user as User).id))
+      .single();
     if (userDataErr || !userData) {
       console.error(userDataErr.message);
     } else {
-      return userData[0];
+      return userData;
     }
     return user;
   };

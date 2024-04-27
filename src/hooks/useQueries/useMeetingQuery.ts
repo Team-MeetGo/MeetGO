@@ -27,7 +27,7 @@ export const useRecruitingQuery = (user_id: string) => {
 };
 //내가 참가한 방
 export const useMyroomQuery = (user_id: string) => {
-  const { data } = useQuery({
+  const { data } = useSuspenseQuery({
     queryKey: [ROOMLIST, user_id],
     queryFn: () => fetchMyRoom(user_id)
   });
