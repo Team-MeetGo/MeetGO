@@ -32,12 +32,13 @@ export const fetchMyPastAndNowRoom = async (userId: string) => {
   return myPastAndNowRoom;
 };
 
-export const fetchRoomInfoWithRoomId = async (roomId: string): Promise<MeetingRoomType> => {
-  const { data: room, error } = await clientSupabase.from('room').select(`*`).eq('room_id', roomId);
+export const fetchRoomInfoWithRoomId = async (roomId: string) => {
+  const { data: room, error } = await clientSupabase.from('room').select(`*`).eq('room_id', roomId).single();
   if (error || !room) {
     throw new Error('room이 존재하지 않습니다.');
+  } else {
+    return room;
   }
-  return room[0];
 };
 
 export const fetchAlreadyChatRoom = async (roomId: string): Promise<ChattingRoomType[] | undefined> => {

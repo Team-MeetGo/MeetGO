@@ -10,11 +10,11 @@ import {
   MY_PAST_NOW_ROOM,
   RECRUTING_ROOMDATA,
   ROOMDATA_WITH_ROOMID,
+  ROOMDATA_WITH_ROOMID_1,
   ROOMLIST,
   ROOM_MEMBER
 } from '@/query/meetingRoom/meetingQueryKeys';
-import { ChattingRoomType, MeetingRoomType } from '@/types/roomTypes';
-// import { profileCount } from '@/store/userStore';
+import { ChattingRoomType } from '@/types/roomTypes';
 import { useQuery, useSuspenseQuery } from '@tanstack/react-query';
 
 //현재 모집중인 방
@@ -42,24 +42,15 @@ export const useMyPastAndNowRoomQuery = (user_id: string) => {
   return data;
 };
 
-// 희라가 참여한 방 숫자 가져오려고 추가하는 로직
-//   const { setMeetingRoomCount } = profileCount();
-//   useEffect(() => {
-//     if (results.data) {
-//       setMeetingRoomCount(results.data?.length);
-//     }
-//   }, [results.data]);
-
-//   return results.data?.map((r) => r.room);
-// };
 //room_id로 하나의 방 얻기
-export const useRoomInfoWithRoomIdQuery = (room_id: string): MeetingRoomType | null => {
-  const { data: chattingRoomWithId } = useSuspenseQuery({
-    queryKey: [ROOMDATA_WITH_ROOMID, room_id],
+export const useRoomInfoWithRoomIdQuery = (room_id: string) => {
+  const { data: roomWithRoomId } = useSuspenseQuery({
+    queryKey: [ROOMDATA_WITH_ROOMID_1, room_id],
     queryFn: () => fetchRoomInfoWithRoomId(room_id)
   });
-  return chattingRoomWithId;
+  return roomWithRoomId;
 };
+
 //이미 채팅으로 넘어간 목록
 export const useAlreadyChatRoomQuery = (roomId: string): ChattingRoomType[] | undefined => {
   const { data } = useQuery({
@@ -68,6 +59,7 @@ export const useAlreadyChatRoomQuery = (roomId: string): ChattingRoomType[] | un
   });
   return data;
 };
+
 //참가한 사람들의 유저정보
 export const useRoomParticipantsQuery = (room_id: string) => {
   const { data: users } = useSuspenseQuery({
@@ -76,11 +68,3 @@ export const useRoomParticipantsQuery = (room_id: string) => {
   });
   return users;
 };
-
-// export const useMyChatRoomsQuery = (user_id: string | undefined) => {
-//   const data = useSuspenseQuery({
-//     queryKey: [MYCHATROOMS],
-//     queryFn: () => fetchMyChatRooms(user_id)
-//   });
-//   return data;
-// };

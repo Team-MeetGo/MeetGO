@@ -8,18 +8,16 @@ import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { HydrationBoundary, QueryClient, dehydrate } from '@tanstack/react-query';
-import { USER_DATA_QUERY_KEY } from '@/query/user/userQueryKeys';
+import { BASIC_USER_DATA, USER_DATA_QUERY_KEY } from '@/query/user/userQueryKeys';
 import { serverSupabase } from '@/utils/supabase/server';
 import { User } from '@supabase/supabase-js';
 import { Suspense } from 'react';
-
 const inter = Inter({ subsets: ['latin'] });
 export const metadata: Metadata = {
   title: 'MeetGo',
   description: '20대 대학생을 위한 미팅 서비스',
   icons: { icon: '/favicon.ico' }
 };
-
 export default async function RootLayout({
   children
 }: Readonly<{
@@ -32,24 +30,26 @@ export default async function RootLayout({
       data: { user },
       error
     } = await supabase.auth.getUser();
-    // console.log('user', user);
+    // console.log('layout User =>', user);
     if (!user || error) throw error;
     const { data: userData, error: userDataErr } = await supabase
       .from('users')
       .select('*')
       .eq('user_id', String((user as User).id));
     if (userDataErr || !userData) {
-      throw new Error('error');
+      console.error(userDataErr.message);
     } else {
       return userData[0];
     }
+    return user;
   };
   const queryClient = new QueryClient();
+
   await queryClient.prefetchQuery({
     queryKey: [USER_DATA_QUERY_KEY],
     queryFn: setUser
+    // revalidateIfStale: true
   });
-
   return (
     <html lang="ko">
       <body className={inter.className}>

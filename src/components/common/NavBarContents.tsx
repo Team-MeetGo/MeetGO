@@ -16,27 +16,31 @@ import Image from 'next/image';
 import { clientSupabase } from '@/utils/supabase/client';
 import { useGetUserDataQuery } from '@/hooks/useQueries/useUserQuery';
 import { useQueryClient } from '@tanstack/react-query';
-import { USER_DATA_QUERY_KEY } from '@/query/user/userQueryKeys';
+import { BASIC_USER_DATA, USER_DATA_QUERY_KEY } from '@/query/user/userQueryKeys';
 import Link from 'next/link';
 import { customErrToast } from './customToast';
+import { UserType } from '@/types/roomTypes';
+import { User } from '@supabase/supabase-js';
 
 const NavBarContents = () => {
   const queryClient = useQueryClient();
+
   const { data: user, isPending, isError, error, isLoggedIn } = useGetUserDataQuery();
+  console.log('user =>', user);
   const isValidate = user?.isValidate;
 
   // if (isPending) {
   //   return (
-  // <div className="w-full flex items-center gap-2 max-w-5xl py-[20px] px-6 m-auto justify-between">
-  //   <div className="w-full flex gap-10 items-center">
-  //     <Skeleton className="w-1/3 h-10 rounded-lg" />
-  //     <Skeleton className="h-6 w-4/6 rounded-lg" />
-  //   </div>
-  //   <div className="w-full flex gap-4 items-center justify-end">
-  //     <Skeleton className="h-6 w-1/5 rounded-lg" />
-  //     <Skeleton className="flex rounded-full w-10 h-10" />
-  //   </div>
-  // </div>
+  //     <div className="w-full flex items-center gap-2 max-w-5xl py-[20px] px-6 m-auto justify-between">
+  //       <div className="w-full flex gap-10 items-center">
+  //         <Skeleton className="w-1/3 h-10 rounded-lg" />
+  //         <Skeleton className="h-6 w-4/6 rounded-lg" />
+  //       </div>
+  //       <div className="w-full flex gap-4 items-center justify-end">
+  //         <Skeleton className="h-6 w-1/5 rounded-lg" />
+  //         <Skeleton className="flex rounded-full w-10 h-10" />
+  //       </div>
+  //     </div>
   //   );
   // }
   // if (isError) {
@@ -48,7 +52,7 @@ const NavBarContents = () => {
     queryClient.invalidateQueries({
       queryKey: [USER_DATA_QUERY_KEY]
     });
-    location.replace('/');
+    // location.replace('/');
   };
 
   const checkIsValidate = () => {

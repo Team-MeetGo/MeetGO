@@ -16,12 +16,13 @@ import HollowMaleMemberCard from './HollowMaleMemberCard';
 
 import type { UserType } from '@/types/roomTypes';
 import type { UUID } from 'crypto';
+
 const Member = ({ roomId }: { roomId: UUID }) => {
   const roomInformation = useRoomInfoWithRoomIdQuery(roomId);
   const participants = useRoomParticipantsQuery(roomId);
 
-  const leaderMember = roomInformation?.leader_id;
-  const memberNumber = roomInformation?.member_number;
+  const leaderMember = roomInformation.leader_id;
+  const memberNumber = roomInformation.member_number;
 
   const [members, setMembers] = useState<UserType[]>(participants as UserType[]);
   const [leader, setLeader] = useState(leaderMember as string);

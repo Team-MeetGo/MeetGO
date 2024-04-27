@@ -14,23 +14,29 @@ import { GENDER } from '@/utils/MeetingRoomSelector';
 
 import type { UserType } from '@/types/roomTypes';
 import type { UUID } from 'crypto';
+import { useQueryClient } from '@tanstack/react-query';
+import { ROOM_MEMBER } from '@/query/meetingRoom/meetingQueryKeys';
+import { BASIC_USER_DATA } from '@/query/user/userQueryKeys';
+import { User } from '@supabase/supabase-js';
 
 function RoomInformation({ roomId }: { roomId: UUID }) {
   const router = useRouter();
   const { data: user } = useGetUserDataQuery();
   const userId = user?.user_id!;
+
+  const roomWithRoomId = useRoomInfoWithRoomIdQuery(roomId);
+  const participants = useRoomParticipantsQuery(roomId);
+
   const { mutate: deleteMemberMutation } = useDeleteMember({ userId, roomId });
   const { mutate: updateRoomStatusOpenMutation } = useUpdateRoomStatusOpen({ roomId, userId });
   const { mutate: deleteRoomMutation } = useDeleteRoom({ roomId, userId });
-  const roomInformation = useRoomInfoWithRoomIdQuery(roomId);
-  const participants = useRoomParticipantsQuery(roomId);
 
-  const { room_title, member_number, location, feature, region, leader_id } = roomInformation!;
+  const { room_title, member_number, location, feature, region, leader_id } = roomWithRoomId;
   const genderMaxNumber = getmaxGenderMemberNumber(member_number);
   const otherParticipants = participants.filter((person: UserType | null) => person?.user_id !== leader_id);
   const { mutate: updateLeaderMemeberMutation } = useUpdateLeaderMemberMutation({ otherParticipants, roomId });
 
-  const countFemale = participants?.filter((member) => member?.gender === GENDER.FEMALE).length;
+  const countFemale = participants.filter((member) => member?.gender === GENDER.FEMALE).length;
   const countMale = participants.length - countFemale;
 
   //나가기: 로비로

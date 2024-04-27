@@ -3,7 +3,6 @@ import MeetingRoomList from '@/components/room/lobby/MeetingRoomList';
 import { Suspense } from 'react';
 
 const LobbyPage = async () => {
-  // fallback={<RoomLoading />}
   return (
     <>
       <Suspense fallback={<LobbySkeleton />}>
