@@ -11,6 +11,7 @@ import { ValidationModal } from '@/components/common/ValidationModal';
 import { useModalStore } from '@/store/modalStore';
 import { useQueryClient } from '@tanstack/react-query';
 import { MSGS_QUERY_KEY } from '@/query/chat/chatQueryKeys';
+import Link from 'next/link';
 
 const ChatHeader = ({ chatRoomId }: { chatRoomId: string }) => {
   const { onlineUsers, setisRest, setSearchMode } = chatStore((state) => state);
@@ -127,7 +128,7 @@ const ChatHeader = ({ chatRoomId }: { chatRoomId: string }) => {
   };
 
   return (
-    <div className="h-[116px] border-b flex px-[32px] py-[16px] justify-between ">
+    <div className="h-[116px] border-b flex pl-[32px] pr-[16px] py-[16px] justify-between ">
       <div className="flex gap-2">
         <div className="flex flex-col gap-[8px]">
           <h1 className="font-bold text-2xl h-[36px]">{room?.room_title}</h1>
@@ -153,6 +154,12 @@ const ChatHeader = ({ chatRoomId }: { chatRoomId: string }) => {
         <button onClick={setSearchMode} className="text-[#A1A1AA]">
           <IoIosSearch />
         </button>
+        <Link
+          href="/meetingRoom"
+          className="border border-[#D4D4D8] text-[#A1A1AA] p-[10px] flex items-center rounded-md"
+        >
+          로비로가기
+        </Link>
         <ValidationModal />
         <button
           onClick={getOutOfChatRoom}
