@@ -7,7 +7,6 @@ import { chatStore } from '@/store/chatStore';
 import { clientSupabase } from '@/utils/supabase/client';
 import { IoIosSearch } from 'react-icons/io';
 import ChatPresence from './ChatPresence';
-import { ValidationModal } from '@/components/common/ValidationModal';
 import { useModalStore } from '@/store/modalStore';
 import { useQueryClient } from '@tanstack/react-query';
 import { MSGS_QUERY_KEY } from '@/query/chat/chatQueryKeys';
@@ -167,7 +166,6 @@ const ChatHeader = ({ chatRoomId }: { chatRoomId: string }) => {
         >
           로비로가기
         </Link>
-        <ValidationModal />
         <button
           onClick={getOutOfChatRoom}
           className="border border-[#D4D4D8] text-[#A1A1AA] p-[10px] flex items-center rounded-md"

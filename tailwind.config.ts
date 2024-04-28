@@ -39,6 +39,9 @@ const config: Config = {
           from: { top: '-150px' },
           to: { top: '0px' }
         }
+      },
+      fontSize: {
+        '2xs': '0.7rem'
       }
     }
   },
