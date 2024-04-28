@@ -12,7 +12,7 @@ import ChatSearch from './ChatSearch';
 import { useMsgsQuery, useMyLastMsgs, useRoomDataQuery } from '@/hooks/useQueries/useChattingQuery';
 import MyChat from './MyChat';
 import RememberLastChat from '../chatFooter/RememberLastChat';
-import { isNextDay, showingDate } from '@/utils';
+import { isNextDay, showingDate } from '@/utils/utilFns';
 import { useQueryClient } from '@tanstack/react-query';
 import { MSGS_QUERY_KEY } from '@/query/chat/chatQueryKeys';
 

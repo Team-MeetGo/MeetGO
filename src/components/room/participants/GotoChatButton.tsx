@@ -9,7 +9,7 @@ import getmaxGenderMemberNumber from '@/hooks/custom/useGenderMaxNumber';
 import type { UUID } from 'crypto';
 import type { UserType } from '@/types/roomTypes';
 import { useCallback } from 'react';
-import { debounce } from '@/utils';
+import { debounce } from '@/utils/utilFns';
 const GotoChatButton = ({ roomId, members }: { roomId: UUID; members: UserType[] }) => {
   const router = useRouter();
 

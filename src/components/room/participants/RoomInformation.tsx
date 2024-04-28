@@ -10,7 +10,7 @@ import { useGetUserDataQuery } from '@/hooks/useQueries/useUserQuery';
 import { useRouter } from 'next/navigation';
 import { IoFemale, IoMale } from 'react-icons/io5';
 import getmaxGenderMemberNumber from '@/hooks/custom/useGenderMaxNumber';
-import { GENDER } from '@/utils/MeetingRoomSelector';
+import { GENDER } from '@/utils/data/MeetingRoomSelector';
 
 import type { UserType } from '@/types/roomTypes';
 import type { UUID } from 'crypto';

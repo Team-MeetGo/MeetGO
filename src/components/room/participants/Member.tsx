@@ -2,7 +2,7 @@
 
 import GotoChatButton from '@/components/room/participants/GotoChatButton';
 import { useRoomInfoWithRoomIdQuery, useRoomParticipantsQuery } from '@/hooks/useQueries/useMeetingQuery';
-import { GENDER } from '@/utils/MeetingRoomSelector';
+import { GENDER } from '@/utils/data/MeetingRoomSelector';
 import { RoomFemaleAvatar, RoomMaleAvatar } from '@/utils/icons/RoomAvatar';
 import MeetGoLogoPurple from '@/utils/icons/meetgo-logo-purple.png';
 import { clientSupabase } from '@/utils/supabase/client';

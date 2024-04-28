@@ -1,7 +1,7 @@
 'use client';
 import { useRoomStore } from '@/store/roomStore';
 import { useSearchRoomStore } from '@/store/searchRoomStore';
-import { MEMBERNUMBER, REGIONANDMEMBER, member_number } from '@/utils/MeetingRoomSelector';
+import { MEMBERNUMBER, REGIONANDMEMBER, member_number } from '@/utils/data/MeetingRoomSelector';
 import { useEffect, useRef, useState } from 'react';
 import { IoIosArrowDown } from 'react-icons/io';
 

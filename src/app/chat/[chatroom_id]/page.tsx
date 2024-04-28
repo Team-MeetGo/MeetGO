@@ -5,7 +5,7 @@ import InitChat from '@/components/chat/chatHeader/InitChat';
 import SideBar from '@/components/chat/sidebar/SideBar';
 import ChatInput from '@/components/chat/chatFooter/ChatInput';
 import ChatLoading from '@/components/chat/ChatLoading';
-import { getFromTo } from '@/utils';
+import { getFromTo } from '@/utils/utilFns';
 import { ITEM_INTERVAL } from '@/utils/constant';
 import ChatList from '@/components/chat/chatBody/ChatList';
 import SideBarButton from '@/components/chat/sidebar/SideBarButton';

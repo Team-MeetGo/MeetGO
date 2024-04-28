@@ -5,7 +5,7 @@ import MeetingRoom from '@/components/room/singleMeetingRoom/MeetingRoom';
 import { useMyPastAndNowRoomQuery, useMyroomQuery, useRecruitingQuery } from '@/hooks/useQueries/useMeetingQuery';
 import { useGetUserDataQuery } from '@/hooks/useQueries/useUserQuery';
 import { useSearchRoomStore } from '@/store/searchRoomStore';
-import { REGIONANDMEMBER } from '@/utils/MeetingRoomSelector';
+import { REGIONANDMEMBER } from '@/utils/data/MeetingRoomSelector';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { IoIosArrowBack, IoIosArrowForward } from 'react-icons/io';

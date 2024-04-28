@@ -52,8 +52,12 @@ const ReviewCard = ({ review }: { review: ReviewType }) => {
                 className="w-64 h-44 object-cover rounded-[10px]"
               />
             )}
-            <p className="text-base pt-[16px] pb-[16px]">{review.review_title}</p>
-            <p className="text-sm pb-[24px] text-ellipsis overflow-hidden">{ellipsisText(review.review_contents)}</p>
+            <p className="text-base pt-[16px] pb-[16px] whitespace-nowrap text-ellipsis overflow-hidden">
+              {review.review_title}
+            </p>
+            <p className="text-sm text-gray2 pb-[24px] text-ellipsis overflow-hidden">
+              {ellipsisText(review.review_contents)}
+            </p>
           </div>
         </Link>
       </div>
