@@ -2,6 +2,8 @@ import { FaFacebookF, FaInstagram, FaYoutube } from 'react-icons/fa6';
 import { GrMail } from 'react-icons/gr';
 
 const Footer = () => {
+  const iconArr = [<GrMail key="0" />, <FaFacebookF key="1" />, <FaInstagram key="2" />, <FaYoutube key="3" />];
+
   return (
     <footer className="w-full h-44 flex justify-center items-center px-3 mx-auto">
       <div className="w-full max-w-[1280px] flex justify-between gap-6">
@@ -15,20 +17,12 @@ const Footer = () => {
           <p className="text-2xs">이용약관 개인정보처리방침 사업자정보확인</p>
           <p className="text-2xs">ⓒ 2024 MeetGo</p>
         </section>
-        <section className="flex">
-          <button>
-            <GrMail />
-          </button>
-          <button>
-            <FaFacebookF />
-          </button>
-          <button>
-            <FaInstagram />
-          </button>
-          <button>
-            <FaYoutube />
-          </button>
-          <button></button>
+        <section className="flex gap-2">
+          {iconArr.map((icon, idx) => (
+            <button key={idx} className="w-6 h-6 bg-mainColor rounded-md text-white flex items-center justify-center">
+              {icon}
+            </button>
+          ))}
         </section>
       </div>
     </footer>

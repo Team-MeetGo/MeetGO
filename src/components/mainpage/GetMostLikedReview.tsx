@@ -36,7 +36,7 @@ const GetMostLikedReivew = () => {
           </div>
         </div>
       </div>
-      <ul className="grid max-sm:grid-cols-1 max-lg:grid-cols-2 grid-cols-4 gap-x-2 gap-y-8">
+      <ul className="grid max-sm:grid-cols-1 max-lg:grid-cols-2 grid-cols-4 gap-x-2 gap-y-4">
         {sliceReviews.map((item) => (
           <ReviewCard key={item.review_id} review={item} />
         ))}
