@@ -9,10 +9,8 @@ import { fetchUserData } from '@/query/user/userQueryFns';
 const NavBar = () => {
   return (
     <>
-      <Suspense>
-        <NavBarContents />
-        <InitChatRealTime />
-      </Suspense>
+      <NavBarContents />
+      <InitChatRealTime />
     </>
   );
 };

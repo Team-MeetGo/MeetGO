@@ -1,21 +1,34 @@
+'use client';
+import { useGetUserDataQuery } from '@/hooks/useQueries/useUserQuery';
+import Link from 'next/link';
+import { customErrToast } from '../common/customToast';
+
 const MainBottomBanner = () => {
+  const { isLoggedIn } = useGetUserDataQuery();
+
+  const checkIfMember = () => {
+    if (isLoggedIn) {
+      customErrToast(`이미 로그인을 하셨네요!`);
+    }
+  };
+
   return (
-    <section className="w-full h-28 bg-mainColor flex justify-center items-center px">
-      <div className="w-4/6 flex justify-between">
-        <div>
-          <p>지금 대학생 이메일 인증하면,</p>
-          <p>나를 설레게하는 캠퍼스 인연들을 만날 수 있어요</p>
+    <section className="w-full h-24 bg-mainColor flex justify-center items-center px-3">
+      <div className="w-full max-w-[1080px] flex justify-between gap-6">
+        <div className="text-white">
+          <p className="font-thin text-lg">지금 대학생 이메일 인증하면,</p>
+          <p className="text-lg">
+            나를 설레게하는 캠퍼스 인연들을 <span className="font-thin text-lg">만날 수 있어요</span>
+          </p>
         </div>
-        <button>회원가입하러가기</button>
+        <Link
+          className="bg-white rounded-xl max-w-52 px-7 h-12 text-[#6758FF] text-base font-semibold my-auto flex justify-center items-center hover:bg-opacity-90"
+          href={isLoggedIn ? '/' : 'join'}
+          onClick={checkIfMember}
+        >
+          회원가입하러 가기
+        </Link>
       </div>
-      {/* <p className="text-[30px] text-white mr-[60px]">현재 많은 인연들이 기다리고 있어요!</p> */}
-      {/* <Link
-      className="bg-transparant border-1 rounded-xl border-white max-w-[267px] h-[60px] text-[18px] text-white pt-[13px] pb-[13px] pl-[60px] pr-[60px] hover:bg-white hover:text-mainColor font-bold"
-      href="/meetingRoom"
-    >
-      로비로 바로가기
-    </Link> */}
-      {/* </div> */}
     </section>
   );
 };

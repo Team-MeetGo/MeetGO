@@ -6,7 +6,11 @@ import mainbanner from '../../../public/mainbanner.jpg';
 const UseInformation = () => {
   return (
     <div className="flex flex-col mb-12 gap-8 mx-auto max-w-[1000px] w-full">
-      <Image src={mainbanner} alt="메인페이지 배너" className="w-full max-w-[1440px] h-auto " priority={true} />
+      <>
+        임시로 이미지 넣어둡니다.
+        <Image src={mainbanner} alt="메인페이지 배너" className="w-full max-w-[1440px] h-auto " priority={true} />
+      </>
+
       {/* <p className="text-[26px] font-bold">이용안내</p> */}
       {/* Section 01 */}
       {/* <div className="flex flex-row justify-between ">
