@@ -1,5 +1,15 @@
 'use client';
-import { Skeleton } from '@nextui-org/skeleton';
+import {
+  Navbar,
+  NavbarBrand,
+  NavbarContent,
+  NavbarItem,
+  DropdownItem,
+  Dropdown,
+  DropdownTrigger,
+  DropdownMenu,
+  Avatar
+} from '@nextui-org/react';
 import MeetGoLogo from '@/utils/icons/meetgo-logo.png';
 import Image from 'next/image';
 import { clientSupabase } from '@/utils/supabase/client';
@@ -10,17 +20,18 @@ import Link from 'next/link';
 import { customErrToast } from './customToast';
 import { FaRegUser } from 'react-icons/fa6';
 import { RxHamburgerMenu } from 'react-icons/rx';
-import { useState } from 'react';
 import { IoClose } from 'react-icons/io5';
-import { Avatar, Dropdown, DropdownItem, DropdownMenu, DropdownTrigger } from '@nextui-org/react';
 import { Drawer } from './ui/Drawer';
 import { DrawerTrigger } from './ui/DrawerTrigger';
 import { DrawerMenu } from './ui/DrawerMenu';
 import { useRouter } from 'next/navigation';
+import { useState } from 'react';
 
 const NavBarContents = () => {
   const queryClient = useQueryClient();
-  const { data: user, isPending, isError, error, isLoggedIn } = useGetUserDataQuery();
+
+  const { data: user, isLoggedIn } = useGetUserDataQuery();
+  const isValidate = user?.isValidate;
   const [isOpen, setIsOpen] = useState(false);
 
   //사이드바 액션
@@ -30,26 +41,6 @@ const NavBarContents = () => {
   const handleDrawerClose = () => {
     setIsOpen(false);
   };
-
-  const isValidate = user?.isValidate;
-
-  if (isPending) {
-    return (
-      <div className="max-w-[1000px] flex items-center gap-2 py-[20px] px-6 m-auto justify-between">
-        <div className="w-full flex gap-10 items-center">
-          <Skeleton className="w-1/3 h-10 rounded-lg" />
-          <Skeleton className="h-6 w-4/6 rounded-lg" />
-        </div>
-        <div className="w-full flex gap-4 items-center justify-end">
-          <Skeleton className="h-6 w-1/5 rounded-lg" />
-          <Skeleton className="flex rounded-full w-10 h-10" />
-        </div>
-      </div>
-    );
-  }
-  if (isError) {
-    return <span>{error?.message}</span>;
-  }
 
   const signOut = async () => {
     await clientSupabase.auth.signOut();

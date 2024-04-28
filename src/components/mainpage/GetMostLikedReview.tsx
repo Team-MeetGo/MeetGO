@@ -19,22 +19,24 @@ const GetMostLikedReivew = () => {
     return bLikes - aLikes;
   });
 
-  const sliceReviews = [...(likedReviews || []), ...(zeroLikedReviews || [])].slice(0, 6);
+  const sliceReviews = [...(likedReviews || []), ...(zeroLikedReviews || [])].slice(0, 8);
 
   return (
-    <div className="px-[24px] max-w-[1000px]">
-      <div className="flex items-center justify-between ">
-        <div className="flex items-center mb-[16px]">
-          <p className="text-[26px] font-bold mr-[10px]">Best Review</p>
+    <div className="px-[24px] w-full max-w-[1080px]">
+      <div className="flex items-center justify-between mb-[12px]">
+        <div className="flex items-center">
+          <p className="text-2xl font-bold mr-[10px]">실시간 베스트 후기</p>
         </div>
-        <div className="flex items-center mb-[15px]">
-          <Link href="/review/pageNumber/1">더보기</Link>
-          <div className="text-mainColor">
+        <div className="flex items-center">
+          <Link href="/review/pageNumber/1" className="text-sm text-gray2">
+            더보기
+          </Link>
+          <div className="text-mainColor text-sm">
             <IoIosArrowForward />
           </div>
         </div>
       </div>
-      <ul className="grid max-sm:grid-cols-1 max-lg:grid-cols-2 grid-cols-3 gap-x-6 gap-y-8">
+      <ul className="grid max-sm:grid-cols-1 max-lg:grid-cols-2 grid-cols-4 gap-x-2 gap-y-4">
         {sliceReviews.map((item) => (
           <ReviewCard key={item.review_id} review={item} />
         ))}

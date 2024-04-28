@@ -10,47 +10,62 @@ import { useGetUserDataQuery } from '@/hooks/useQueries/useUserQuery';
 import { useRouter } from 'next/navigation';
 import { IoFemale, IoMale } from 'react-icons/io5';
 import getmaxGenderMemberNumber from '@/hooks/custom/useGenderMaxNumber';
-import { GENDER } from '@/utils/MeetingRoomSelector';
-
+import { GENDER } from '@/utils/data/MeetingRoomSelector';
 import type { UserType } from '@/types/roomTypes';
 import type { UUID } from 'crypto';
+import { useModalStore } from '@/store/modalStore';
 
 function RoomInformation({ roomId }: { roomId: UUID }) {
   const router = useRouter();
   const { data: user } = useGetUserDataQuery();
   const userId = user?.user_id!;
+
+  const roomWithRoomId = useRoomInfoWithRoomIdQuery(roomId);
+  const participants = useRoomParticipantsQuery(roomId);
+
   const { mutate: deleteMemberMutation } = useDeleteMember({ userId, roomId });
   const { mutate: updateRoomStatusOpenMutation } = useUpdateRoomStatusOpen({ roomId, userId });
   const { mutate: deleteRoomMutation } = useDeleteRoom({ roomId, userId });
-  const roomInformation = useRoomInfoWithRoomIdQuery(roomId);
-  const participants = useRoomParticipantsQuery(roomId);
 
-  const { room_title, member_number, location, feature, region, leader_id } = roomInformation!;
+  const { room_title, member_number, location, feature, region, leader_id } = roomWithRoomId;
+  const { openModal, closeModal } = useModalStore();
   const genderMaxNumber = getmaxGenderMemberNumber(member_number);
   const otherParticipants = participants.filter((person: UserType | null) => person?.user_id !== leader_id);
   const { mutate: updateLeaderMemeberMutation } = useUpdateLeaderMemberMutation({ otherParticipants, roomId });
 
-  const countFemale = participants?.filter((member) => member?.gender === GENDER.FEMALE).length;
+  const countFemale = participants.filter((member) => member?.gender === GENDER.FEMALE).length;
   const countMale = participants.length - countFemale;
 
   //나가기: 로비로
-  const gotoLobby = async () => {
-    if (!confirm('정말 나가시겠습니까? 나가면 다시 돌아올 수 없습니다!')) {
-      return;
-    }
-    if (participants.length / 2 === genderMaxNumber) {
-      updateRoomStatusOpenMutation();
-    }
-    deleteMemberMutation();
-    //유저가 리더였다면 다른 사람에게 리더 역할이 승계됩니다.
-    if (leader_id === userId && participants?.length > 1) {
-      updateLeaderMemeberMutation();
-    }
-    //만약 유일한 참여자라면 나감과 동시에 방은 삭제됩니다.
-    if (participants?.length === 1) {
-      deleteRoomMutation();
-    }
-    router.push(`/meetingRoom`);
+  const gotoLobby = () => {
+    // if (!confirm('정말 나가시겠습니까? 나가면 다시 돌아올 수 없습니다!')) {
+    //   return;
+    // }
+
+    openModal({
+      type: 'confirm',
+      name: '',
+      text: '진짜 나가게?',
+      onFunc: () => {
+        closeModal();
+        if (participants.length / 2 === genderMaxNumber) {
+          updateRoomStatusOpenMutation();
+        }
+        deleteMemberMutation();
+        //유저가 리더였다면 다른 사람에게 리더 역할이 승계됩니다.
+        if (leader_id === userId && participants?.length > 1) {
+          updateLeaderMemeberMutation();
+        }
+        //만약 유일한 참여자라면 나감과 동시에 방은 삭제됩니다.
+        if (participants?.length === 1) {
+          deleteRoomMutation();
+        }
+        router.push(`/meetingRoom`);
+      },
+      onCancelFunc: () => {
+        closeModal();
+      }
+    });
   };
 
   const gotoBack = () => {

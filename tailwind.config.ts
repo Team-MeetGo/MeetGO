@@ -19,11 +19,13 @@ const config: Config = {
       },
       colors: {
         mainColor: '#7238D2',
+        secondMainColor: '#6758FF',
         purpleSecondary: '#F2EAFA',
         purpleThird: '#E4D4F4',
         gray1: '#D4D4D8',
         gray2: '#6B7280',
         gray3: '#595757',
+        gray4: '#F8F8F8',
         grayBlack: '#111827',
         hotPink: '#F31260',
         blue: '#006FEE',
@@ -40,6 +42,9 @@ const config: Config = {
           from: { top: '-150px' },
           to: { top: '0px' }
         }
+      },
+      fontSize: {
+        '2xs': '0.7rem'
       }
     }
   },

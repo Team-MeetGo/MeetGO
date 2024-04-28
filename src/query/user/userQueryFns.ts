@@ -1,4 +1,5 @@
 import { clientSupabase } from '@/utils/supabase/client';
+import { User } from '@supabase/supabase-js';
 
 export const fetchUserData = async () => {
   // 유저 데이터 가져오기

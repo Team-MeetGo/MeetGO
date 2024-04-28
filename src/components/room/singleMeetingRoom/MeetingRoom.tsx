@@ -9,7 +9,7 @@ import { useRouter } from 'next/navigation';
 import RoomInformation from './RoomInformation';
 
 import type { MeetingRoomType } from '@/types/roomTypes';
-import { debounce } from '@/utils';
+import { debounce } from '@/utils/utilFns';
 
 function MeetingRoom({ room }: { room: MeetingRoomType }) {
   const router = useRouter();

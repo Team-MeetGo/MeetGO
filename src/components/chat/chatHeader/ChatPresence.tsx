@@ -32,7 +32,7 @@ const ChatPresence = () => {
   return (
     <>
       <div className="flex gap-2">
-        <div className="h-4  w-4 bg-[#8F5DF4] rounded-full animate-pulse my-auto text-base"></div>
+        <div className="h-4  w-4 bg-mainColor rounded-full animate-pulse my-auto text-base"></div>
         {chatRoomId && <h1>{onlineUsers.length} online</h1>}
       </div>
     </>

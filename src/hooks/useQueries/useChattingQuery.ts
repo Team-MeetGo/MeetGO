@@ -23,7 +23,7 @@ export const useRoomDataQuery = (chatRoomId: string) => {
     queryKey: [ROOMDATA_QUERY_KEY, chatRoomId],
     queryFn: () => fetchRoomDataWithChatRoomId(chatRoomId)
   });
-  return room;
+  if (room) return room;
 };
 
 export const useParticipantsQuery = (roomId: string) => {
@@ -59,7 +59,7 @@ export const useMsgsQuery = (chatRoomId: string) => {
     refetchOnReconnect: false,
     refetchOnWindowFocus: false
   });
-  if (data) return data;
+  return data;
 };
 
 export const useMyLastMsgs = (user_id: string, chatRoomId: string | null) => {
