@@ -6,14 +6,14 @@ import { useQuery, useSuspenseQuery } from '@tanstack/react-query';
 import { useEffect } from 'react';
 
 export const useGetUserDataQuery = () => {
-  const { data } = useSuspenseQuery({
+  const { data, isSuccess } = useSuspenseQuery({
     queryKey: [USER_DATA_QUERY_KEY],
     queryFn: () => fetchUserData()
   });
 
   const isLoggedIn = data ? true : false;
 
-  return { data, isLoggedIn };
+  return { data, isSuccess, isLoggedIn };
 };
 
 export const useGetUserPostQuery = (userId: string) => {

@@ -18,11 +18,10 @@ import ProfileHeader from './ProfileHeader';
 import { deleteUser } from '@/utils/api/authAPI';
 import { ValidationModal } from '../common/ValidationModal';
 import { useModalStore } from '@/store/modalStore';
-import { GENDER } from '@/utils/constant';
 
 const Profile = () => {
   const queryClient = useQueryClient();
-  const { data: user, isPending } = useGetUserDataQuery();
+  const { data: user } = useGetUserDataQuery();
   const [isEditing, setIsEditing] = useState(false);
   const inputNickname = useInputChange('');
   const inputIntro = useInputChange('');
@@ -32,8 +31,6 @@ const Profile = () => {
   const { openModal, closeModal } = useModalStore();
 
   const { mutate: updateProfileMutate } = useProfileUpdateMutation();
-
-  if (isPending) return <></>;
 
   if (!user) return null;
 

@@ -24,7 +24,6 @@ import { IoClose } from 'react-icons/io5';
 import { Drawer } from './ui/Drawer';
 import { DrawerTrigger } from './ui/DrawerTrigger';
 import { DrawerMenu } from './ui/DrawerMenu';
-import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 
 const NavBarContents = () => {

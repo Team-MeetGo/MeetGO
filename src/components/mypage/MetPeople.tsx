@@ -16,7 +16,7 @@ import { customErrToast, customLoveToast, customSuccessToast } from '../common/c
 
 const MetPeople = () => {
   const queryClient = useQueryClient();
-  const { data: user, isPending, isError, error } = useGetUserDataQuery();
+  const { data: user } = useGetUserDataQuery();
   const userId = user?.user_id ?? '';
   const userGender = user?.gender ?? '';
   const metPeopleList = useMetPeople(userId, userGender);

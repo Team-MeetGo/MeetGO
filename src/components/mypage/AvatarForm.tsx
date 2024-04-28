@@ -10,7 +10,7 @@ import { useEffect, useState } from 'react';
 import { IoCamera } from 'react-icons/io5';
 
 const AvatarForm = () => {
-  const { data: user, isPending } = useGetUserDataQuery();
+  const { data: user } = useGetUserDataQuery();
   const [file, setFile] = useState(null as File | null);
   const [avatarView, setAvatarView] = useState<string | null>(null);
   const [isEditing, setIsEditing] = useState(false);
