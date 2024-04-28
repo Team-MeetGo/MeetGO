@@ -1,11 +1,9 @@
 'use client';
 
-import React from 'react';
 import Map from '@/components/chat/sidebar/Map';
 import { useChatDataQuery } from '@/hooks/useQueries/useChattingQuery';
 import { Card, CardBody } from '@nextui-org/react';
 import { sideBarStore } from '@/store/sideBarStore';
-
 import { dateOptions } from '@/utils/utilFns';
 
 const SideBar = ({ chatRoomId }: { chatRoomId: string }) => {
@@ -21,8 +19,8 @@ const SideBar = ({ chatRoomId }: { chatRoomId: string }) => {
   }
 
   return (
-    <div className="max-h-[53rem] ease-in-out duration-1000 max-w-[32rem] ">
-      <div className="max-h-[53rem] overflow-y-auto pt-8 pr-6 w-[24rem]">
+    <div className="max-h-[calc(100vh-90px)] ease-in-out duration-1000 max-w-[32rem] ">
+      <div className="max-h-[calc(100vh-90px)] overflow-y-auto pt-8 pr-6 w-[24rem]">
         <h1 className="font-semibold text-2xl mb-2">미팅 날짜/시간</h1>
         <Card className="h-[3.75rem] border border-mainColor rounded-lg shadow-none ">
           <CardBody className="flex flex-row justify-start items-center text-lg">
