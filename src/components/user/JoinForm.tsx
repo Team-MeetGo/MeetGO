@@ -146,7 +146,7 @@ const JoinForm = () => {
 
   return (
     <>
-      <form className="max-w-[450px] flex flex-col gap-[16px] w-full" onSubmit={onSubmitForm}>
+      <form className="max-w-[450px] flex flex-col gap-[16px] w-full px-6" onSubmit={onSubmitForm}>
         <div>
           <div className="flex gap-[16px] w-full">
             <label key="nickname" className="w-full">
@@ -223,7 +223,6 @@ const JoinForm = () => {
           로그인하기
         </Link>
       </div>
-      <ValidationModal />
     </>
   );
 };
