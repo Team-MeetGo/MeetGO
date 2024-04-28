@@ -13,6 +13,8 @@ import { serverSupabase } from '@/utils/supabase/server';
 import { User } from '@supabase/supabase-js';
 import { Suspense } from 'react';
 import Footer from '@/components/common/Footer';
+import { ValidationModal } from '@/components/common/ValidationModal';
+
 const inter = Inter({ subsets: ['latin'] });
 export const metadata: Metadata = {
   title: 'MeetGo',
@@ -59,8 +61,9 @@ export default async function RootLayout({
           <QueryProvider>
             <HydrationBoundary state={dehydrate(queryClient)}>
               <Suspense>
-                <NavBar />
                 <ToastContainer position="top-right" limit={1} closeButton={false} autoClose={4000} />
+                <ValidationModal />
+                <NavBar />
                 {children}
                 <ReactQueryDevtools initialIsOpen={true} />
                 <Footer />
