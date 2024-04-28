@@ -47,6 +47,7 @@ export const fetchRoomInfoWithRoomId = async (roomId: string): Promise<MeetingRo
   if (error) {
     throw new Error('방이 존재하지 않습니다.');
   }
+  return room[0];
 };
 
 export const fetchAlreadyChatRoom = async (roomId: string): Promise<ChattingRoomType[]> => {

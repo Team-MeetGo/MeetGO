@@ -15,7 +15,7 @@ import {
   ROOMLIST,
   ROOM_MEMBER
 } from '@/query/meetingRoom/meetingQueryKeys';
-import { ChattingRoomType } from '@/types/roomTypes';
+import { ChattingRoomType, MeetingRoomType } from '@/types/roomTypes';
 import { useQuery, useSuspenseQuery } from '@tanstack/react-query';
 
 //현재 모집중인 방

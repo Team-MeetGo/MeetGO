@@ -1,5 +1,6 @@
 import InitRoom from '@/components/room/InitRoom';
 import AcceptanceRoom from '@/components/room/participants/AcceptanceRoom';
+import { Suspense } from 'react';
 
 import type { UUID } from 'crypto';
 

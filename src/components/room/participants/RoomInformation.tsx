@@ -22,14 +22,10 @@ function RoomInformation({ roomId }: { roomId: UUID }) {
   const { data: user } = useGetUserDataQuery();
   const userId = user?.user_id!;
 
-  const roomWithRoomId = useRoomInfoWithRoomIdQuery(roomId);
-  const participants = useRoomParticipantsQuery(roomId);
-
   const { mutate: deleteMemberMutation } = useDeleteMember({ userId, roomId });
   const { mutate: updateRoomStatusOpenMutation } = useUpdateRoomStatusOpen({ roomId, userId });
   const { mutate: deleteRoomMutation } = useDeleteRoom({ roomId, userId });
   const roomInformation = useRoomInfoWithRoomIdQuery(roomId);
-
   const participants = useRoomParticipantsQuery(roomId);
 
   const genderMaxNumber = useGenderMaxNumber(roomInformation?.member_number as string);

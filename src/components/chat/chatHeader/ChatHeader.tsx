@@ -1,22 +1,17 @@
 'use client';
-import { ValidationModal } from '@/components/common/ValidationModal';
 import { useParticipantsQuery, useRoomDataQuery } from '@/hooks/useQueries/useChattingQuery';
 import { useGetUserDataQuery } from '@/hooks/useQueries/useUserQuery';
-import { Avatar, AvatarGroup, Popover, PopoverContent, PopoverTrigger, Tooltip } from '@nextui-org/react';
-import ShowChatMember from '../chatBody/ShowChatMember';
+import { MSGS_QUERY_KEY } from '@/query/chat/chatQueryKeys';
 import { chatStore } from '@/store/chatStore';
 import { useModalStore } from '@/store/modalStore';
 import { ROOMSTATUS } from '@/utils/constant';
 import { clientSupabase } from '@/utils/supabase/client';
-import { Avatar, AvatarGroup, Tooltip } from '@nextui-org/react';
+import { Avatar, AvatarGroup, Popover, PopoverContent, PopoverTrigger } from '@nextui-org/react';
 import { useQueryClient } from '@tanstack/react-query';
+import Link from 'next/link';
 import { IoIosSearch } from 'react-icons/io';
 import ShowChatMember from '../chatBody/ShowChatMember';
 import ChatPresence from './ChatPresence';
-import { useModalStore } from '@/store/modalStore';
-import { useQueryClient } from '@tanstack/react-query';
-import { MSGS_QUERY_KEY } from '@/query/chat/chatQueryKeys';
-import Link from 'next/link';
 
 const ChatHeader = ({ chatRoomId }: { chatRoomId: string }) => {
   const { onlineUsers, setisRest, setSearchMode } = chatStore((state) => state);
