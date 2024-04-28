@@ -17,8 +17,9 @@ function RoomInformation({ room }: { room: MeetingRoomType }) {
   const [open, setOpen] = useState(false);
   const { room_id, room_status, member_number, leader_id } = room;
 
+  const roomId = room_id;
   const alreadyChatRoom = useAlreadyChatRoomQuery(room_id);
-  const participants = useRoomParticipantsQuery(room_id);
+  const participants = useRoomParticipantsQuery(roomId);
   const { data: user } = useGetUserDataQuery();
 
   const genderMaxNumber = useGenderMaxNumber(member_number);

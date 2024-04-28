@@ -95,7 +95,7 @@ function MeetingRoom({ room }: { room: MeetingRoomType }) {
 
           <section>
             <figure className="flex gap-1 mb-2 items-center">
-              <Image src={MeetGoLogoPurple} alt="MeetGo Logo" className="w-auto h-[20px]" />
+              <Image src={MeetGoLogoPurple} alt="MeetGo Logo" className="w-auto h-[20px]" priority={true} />
               <p className="text-mainColor text-sm font-bold">MEETGO</p>
             </figure>
             <figure className="flex flex-row gap-[4px]">

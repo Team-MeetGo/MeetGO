@@ -11,3 +11,5 @@ export const ROOMLIST = ['roomList'];
 export const CHATROOM_ID = ['chatRoom_id_with_room_id'];
 
 export const MY_PAST_NOW_ROOM = ['my_past_now_room'];
+
+export const ROOMDATA = ['ROOMDATA'];

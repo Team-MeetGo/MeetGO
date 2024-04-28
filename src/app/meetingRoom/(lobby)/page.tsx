@@ -7,9 +7,7 @@ const LobbyPage = async () => {
   return (
     <>
       <Suspense fallback={<LobbySkeleton />}>
-        <main className="flex flex-col items-center justify-content min-w-[1000px]">
-          <MeetingRoomList />
-        </main>
+        <MeetingRoomList />
       </Suspense>
     </>
   );

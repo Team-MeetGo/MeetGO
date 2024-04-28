@@ -88,51 +88,53 @@ function MeetingRoomList() {
   console.log(filteredMyOutRoomList);
   return (
     <>
-      <MyRoomsTitle>
-        {filteredMyRoomList && filteredMyRoomList.length > 0 ? (
-          <>
-            <button onClick={beforePage}>
-              {page !== 1 ? <IoIosArrowBack className="h-[40px] w-[40px] m-[8px]" /> : null}
-            </button>
+      <main className="flex flex-col items-center justify-content min-w-[1000px]">
+        <MyRoomsTitle>
+          {filteredMyRoomList && filteredMyRoomList.length > 0 ? (
+            <>
+              <button onClick={beforePage}>
+                {page !== 1 ? <IoIosArrowBack className="h-[40px] w-[40px] m-[8px]" /> : null}
+              </button>
 
-            <div className="w-[1000px]">
-              {
-                <li
-                  className={`${
-                    filteredMyRoomList.length === 0 ? 'h-[40px]' : 'h-[241px]'
-                  } gap-[24px] grid grid-cols-3 w-100%`}
-                >
-                  <Suspense>
-                    {filteredMyRoomList.map((room, index) => {
-                      if (index < 3 * page && index >= 3 * (page - 1))
-                        return <div key={room?.room_id}>{room && <MeetingRoom room={room} />}</div>;
-                    })}
-                  </Suspense>
-                </li>
-              }
+              <div className="w-[1000px]">
+                {
+                  <li
+                    className={`${
+                      filteredMyRoomList.length === 0 ? 'h-[40px]' : 'h-[241px]'
+                    } gap-[24px] grid grid-cols-3 w-100%`}
+                  >
+                    <Suspense>
+                      {filteredMyRoomList.map((room, index) => {
+                        if (index < 3 * page && index >= 3 * (page - 1))
+                          return <div key={room?.room_id}>{room && <MeetingRoom room={room} />}</div>;
+                      })}
+                    </Suspense>
+                  </li>
+                }
+              </div>
+
+              <button onClick={nextPage}>
+                {filteredMyRoomList.length / 3 <= page ? null : (
+                  <IoIosArrowForward className="h-[40px] w-[40px] m-[8px]" />
+                )}
+              </button>
+            </>
+          ) : (
+            <div className="text-[20px] w-[1112px] text-center">
+              아직 만들어진 방이 없습니다! 방을 만들어서 미팅을 시작해 보세요!
             </div>
-
-            <button onClick={nextPage}>
-              {filteredMyRoomList.length / 3 <= page ? null : (
-                <IoIosArrowForward className="h-[40px] w-[40px] m-[8px]" />
-              )}
-            </button>
-          </>
-        ) : (
-          <div className="text-[20px] w-[1112px] text-center">
-            아직 만들어진 방이 없습니다! 방을 만들어서 미팅을 시작해 보세요!
-          </div>
-        )}
-      </MyRoomsTitle>
-      <OtherRoomsTitle>
-        <section className="gap-[24px] grid grid-cols-3 w-[1000px] pt-[24px] pb-[8px]">
-          <Suspense>
-            {filteredOtherRooms.map((room) => (
-              <MeetingRoom key={room.room_id} room={room} />
-            ))}
-          </Suspense>
-        </section>
-      </OtherRoomsTitle>
+          )}
+        </MyRoomsTitle>
+        <OtherRoomsTitle>
+          <section className="gap-[24px] grid grid-cols-3 w-[1000px] pt-[24px] pb-[8px]">
+            <Suspense>
+              {filteredOtherRooms.map((room) => (
+                <MeetingRoom key={room.room_id} room={room} />
+              ))}
+            </Suspense>
+          </section>
+        </OtherRoomsTitle>
+      </main>
     </>
   );
 }

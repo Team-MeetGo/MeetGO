@@ -16,7 +16,6 @@ import { IoFemale, IoMale } from 'react-icons/io5';
 
 import type { UserType } from '@/types/roomTypes';
 import type { UUID } from 'crypto';
-import { Suspense } from 'react';
 function RoomInformation({ roomId }: { roomId: UUID }) {
   const router = useRouter();
   const { openModal, closeModal } = useModalStore();
@@ -35,7 +34,7 @@ function RoomInformation({ roomId }: { roomId: UUID }) {
   );
   const { mutate: updateLeaderMemeberMutation } = useUpdateLeaderMemberMutation({ otherParticipants, roomId });
 
-  const countFemale = participants!.filter((member) => member?.gender === GENDERFILTER.FEMALE).length;
+  const countFemale = participants!.filter((member: any) => member?.gender === GENDERFILTER.FEMALE).length;
   const countMale = participants!.length - countFemale;
 
   //나가기: 로비로
@@ -74,6 +73,7 @@ function RoomInformation({ roomId }: { roomId: UUID }) {
   console.log(roomInformation?.room_title);
   console.log(roomInformation?.room_status);
   console.log(roomInformation?.leader_id);
+  console.log(genderMaxNumber);
   return (
     <div className="flex flex-col items-center justify-content">
       <main className="flex flex-col items-center justify-content min-w-[1116px] max-w-[1440px]">
