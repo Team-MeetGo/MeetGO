@@ -31,11 +31,7 @@ const ProfileRouteModal = () => {
     }
   }, [isSuccess, user]);
 
-  return (
-    <>
-      <ValidationModal />
-    </>
-  );
+  return <></>;
 };
 
 export default ProfileRouteModal;
