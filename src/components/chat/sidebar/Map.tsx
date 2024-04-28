@@ -267,7 +267,7 @@ const Map = ({ chatRoomId }: { chatRoomId: string }) => {
                 }
               }}
             >
-              <div className="flex flex-col items-start justify-start">
+              <div className="flex flex-col items-start justify-start break-all">
                 <h1 className="text-base mb-2.5">{bar.place_name}</h1>
                 <div className="text-sm">
                   <p>{bar.address_name}</p>
