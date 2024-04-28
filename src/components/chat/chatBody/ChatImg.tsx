@@ -1,5 +1,5 @@
 'use client';
-import { useGetUserDataQuery } from '@/hooks/useQueries/useUserQuery';
+
 import { Message } from '@/types/chatTypes';
 import { Button, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, useDisclosure } from '@nextui-org/react';
 import Image from 'next/image';

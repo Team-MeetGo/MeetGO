@@ -8,7 +8,7 @@ import { GoPeople } from 'react-icons/go';
 import { IoMdHeartEmpty } from 'react-icons/io';
 
 const ProfileHeader = () => {
-  const { data: user, isPending, isError, error } = useGetUserDataQuery();
+  const { data: user } = useGetUserDataQuery();
   const joinTime = user?.created_at?.toString().slice(0, 10);
   const { postCount, likedPostCount, metPeopleCount } = profileCount();
 
