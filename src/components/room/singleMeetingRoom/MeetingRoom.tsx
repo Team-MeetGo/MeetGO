@@ -13,6 +13,8 @@ import { useModalStore } from '@/store/modalStore';
 import { ValidationModal } from '@/components/common/ValidationModal';
 
 import type { MeetingRoomType } from '@/types/roomTypes';
+import { debounce } from '@/utils/utilFns';
+
 function MeetingRoom({ room }: { room: MeetingRoomType }) {
   const router = useRouter();
   const { room_id, room_status, room_title, member_number, location, feature, region } = room;

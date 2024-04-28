@@ -12,6 +12,9 @@ import { USER_DATA_QUERY_KEY } from '@/query/user/userQueryKeys';
 import { serverSupabase } from '@/utils/supabase/server';
 import { User } from '@supabase/supabase-js';
 import { Suspense } from 'react';
+import Footer from '@/components/common/Footer';
+import { ValidationModal } from '@/components/common/ValidationModal';
+
 const inter = Inter({ subsets: ['latin'] });
 export const metadata: Metadata = {
   title: 'MeetGo',
@@ -30,35 +33,41 @@ export default async function RootLayout({
       data: { user },
       error
     } = await supabase.auth.getUser();
+    // console.log('layout User =>', user);
     if (!user || error) throw error;
     const { data: userData, error: userDataErr } = await supabase
       .from('users')
       .select('*')
-      .eq('user_id', String((user as User).id));
+      .eq('user_id', String((user as User).id))
+      .single();
     if (userDataErr || !userData) {
-      throw new Error('error');
+      console.error(userDataErr.message);
     } else {
-      return userData[0];
+      return userData;
     }
+    return user;
   };
   const queryClient = new QueryClient();
+
   await queryClient.prefetchQuery({
     queryKey: [USER_DATA_QUERY_KEY],
     queryFn: setUser
+    // revalidateIfStale: true
   });
-  const data = queryClient.getQueryData([USER_DATA_QUERY_KEY]);
   return (
     <html lang="ko">
       <body className={inter.className}>
         <NextProvider>
           <QueryProvider>
             <HydrationBoundary state={dehydrate(queryClient)}>
-              {/* <Suspense> */}
-              <NavBar />
-              <ToastContainer position="top-right" limit={1} closeButton={false} autoClose={4000} />
-              {children}
-              <ReactQueryDevtools initialIsOpen={true} />
-              {/* </Suspense> */}
+              <Suspense>
+                <ToastContainer position="top-right" limit={1} closeButton={false} autoClose={4000} />
+                <ValidationModal />
+                <NavBar />
+                {children}
+                <ReactQueryDevtools initialIsOpen={true} />
+                <Footer />
+              </Suspense>
             </HydrationBoundary>
           </QueryProvider>
         </NextProvider>

@@ -1,7 +1,7 @@
 import { useMsgsQuery, useParticipantsQuery, useRoomDataQuery } from '@/hooks/useQueries/useChattingQuery';
 import { chatStore } from '@/store/chatStore';
 import { Message } from '@/types/chatTypes';
-import { getformattedDate, isItMe, isNextDay } from '@/utils';
+import { getformattedDate, isItMe, isNextDay } from '@/utils/utilFns';
 import ChatImg from './ChatImg';
 import ParticipantsInfoWrapper from './ParticipantsInfoWrapper';
 
@@ -13,8 +13,10 @@ const OthersChat = ({ msg, idx, lastDivRefs }: { msg: Message; idx: number; last
   const participants = useParticipantsQuery(room?.room_id as string);
 
   const showThatUser = (userId: string | null) => {
-    const thatUserData = participants?.find((p) => p.user_id === userId);
-    return thatUserData;
+    if (userId) {
+      const thatUserData = participants?.find((p) => p.user_id === userId);
+      return thatUserData;
+    }
   };
 
   return (

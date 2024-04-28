@@ -20,7 +20,7 @@ const ResetPasswordForm = () => {
   return (
     <label>
       <input
-        className="p-5 border border-[#A1A1AA] placeholder:text-[#A1A1AA] placeholder:text-[14px] rounded-lg focus:outline-none focus:border-[#8F5DF4] w-full"
+        className="p-5 border border-[#A1A1AA] placeholder:text-[#A1A1AA] placeholder:text-[14px] rounded-lg focus:outline-none focus:border-mainColor w-full"
         type="email"
         name="userId"
         placeholder="이메일을 입력해주세요."

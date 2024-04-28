@@ -5,7 +5,7 @@ import InitChat from '@/components/chat/chatHeader/InitChat';
 import SideBar from '@/components/chat/sidebar/SideBar';
 import ChatInput from '@/components/chat/chatFooter/ChatInput';
 import ChatLoading from '@/components/chat/ChatLoading';
-import { getFromTo } from '@/utils';
+import { getFromTo } from '@/utils/utilFns';
 import { ITEM_INTERVAL } from '@/utils/constant';
 import ChatList from '@/components/chat/chatBody/ChatList';
 import SideBarButton from '@/components/chat/sidebar/SideBarButton';
@@ -16,12 +16,13 @@ const ChatPage = async ({ params }: { params: { chatroom_id: string } }) => {
   const { data } = await supabase.auth.getUser();
   const user = data.user;
   const { from, to } = getFromTo(0, ITEM_INTERVAL);
-  const { data: allMsgs } = await supabase
+  const { data: allMsgs, error } = await supabase
     .from('messages')
     .select('*')
     .eq('chatting_room_id', chatRoomId)
     .range(from, to)
     .order('created_at', { ascending: false });
+  if (error) console.error('fail to select allMsgs');
 
   return (
     <Suspense fallback={<ChatLoading />}>
@@ -29,7 +30,7 @@ const ChatPage = async ({ params }: { params: { chatroom_id: string } }) => {
         <InitChat user={user} chatRoomId={chatRoomId} allMsgs={allMsgs ?? []} />
         <div className="flex flex-row w-full justify-center mx-auto">
           <SideBar chatRoomId={chatRoomId} />
-          <div className="w-full max-w-2xl max-h-[53rem] relative">
+          <div className="w-full max-w-2xl max-h-[calc(100vh-90px)] relative">
             <div className="absolute top-0 left-0">
               <SideBarButton />
             </div>

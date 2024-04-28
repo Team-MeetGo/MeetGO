@@ -57,7 +57,7 @@ const InitChat = ({ user, chatRoomId, allMsgs }: { user: User | null; chatRoomId
     } else {
       // **채팅방에 있는다면
       queryClient.setQueryData([MSGS_QUERY_KEY, chatRoomId], [...allMsgs].reverse());
-      setHasMore(allMsgs?.length >= ITEM_INTERVAL + 1);
+      setHasMore(allMsgs.length >= ITEM_INTERVAL + 1);
       setChatRoomId(chatRoomId);
     }
   }, [chatState, isRest]);

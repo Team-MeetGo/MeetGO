@@ -146,12 +146,12 @@ const JoinForm = () => {
 
   return (
     <>
-      <form className="max-w-[450px] flex flex-col gap-[16px] w-full" onSubmit={onSubmitForm}>
+      <form className="max-w-[450px] flex flex-col gap-[16px] w-full px-6" onSubmit={onSubmitForm}>
         <div>
           <div className="flex gap-[16px] w-full">
             <label key="nickname" className="w-full">
               <input
-                className="p-5 border border-[#A1A1AA] placeholder:text-[#A1A1AA] placeholder:text-[14px] rounded-lg focus:outline-none focus:border-[#8F5DF4] w-full"
+                className="p-5 border border-[#A1A1AA] placeholder:text-[#A1A1AA] placeholder:text-[14px] rounded-lg focus:outline-none focus:border-mainColor w-full"
                 type="text"
                 name="nickname"
                 placeholder="닉네임을 입력해주세요."
@@ -164,7 +164,7 @@ const JoinForm = () => {
               <Button
                 className={
                   gender === 'female'
-                    ? 'px-[16px] py-[20px] h-auto border min-w-0 rounded-lg bg-[#8F5DF4] text-white'
+                    ? 'px-[16px] py-[20px] h-auto border min-w-0 rounded-lg bg-mainColor text-white'
                     : 'px-[16px] py-[20px] h-auto border min-w-0 rounded-lg border-[#A1A1AA]'
                 }
                 color={gender === 'female' ? 'secondary' : 'default'}
@@ -177,7 +177,7 @@ const JoinForm = () => {
               <Button
                 className={
                   gender === 'male'
-                    ? 'px-[16px] py-[20px] h-auto border min-w-0 rounded-lg bg-[#8F5DF4] text-white'
+                    ? 'px-[16px] py-[20px] h-auto border min-w-0 rounded-lg bg-mainColor text-white'
                     : 'px-[16px] py-[20px] h-auto border min-w-0 rounded-lg border-[#A1A1AA]'
                 }
                 variant={gender === 'male' ? 'solid' : 'bordered'}
@@ -195,7 +195,7 @@ const JoinForm = () => {
         {JOIN_FORM_LIST.map(({ type, name, placeholder, error }) => (
           <label key={name} className="relative">
             <input
-              className="p-5 border border-[#A1A1AA] placeholder:text-[#A1A1AA] placeholder:text-[14px] rounded-lg focus:outline-none focus:border-[#8F5DF4] w-full"
+              className="p-5 border border-[#A1A1AA] placeholder:text-[#A1A1AA] placeholder:text-[14px] rounded-lg focus:outline-none focus:border-mainColor w-full"
               type={type}
               name={name}
               placeholder={placeholder}
@@ -211,7 +211,7 @@ const JoinForm = () => {
           </label>
         ))}
         <Button
-          className="duration-200 bg-[#8F5DF4] text-white p-5 mt-[16px] rounded-lg font-semibold w-full py-[20px] h-auto text-[16px]"
+          className="duration-200 bg-mainColor text-white p-5 mt-[16px] rounded-lg font-semibold w-full py-[20px] h-auto text-[16px]"
           type="submit"
         >
           회원가입
@@ -223,7 +223,6 @@ const JoinForm = () => {
           로그인하기
         </Link>
       </div>
-      <ValidationModal />
     </>
   );
 };

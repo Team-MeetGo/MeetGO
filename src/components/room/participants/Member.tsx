@@ -15,6 +15,7 @@ import HollowMaleMemberCard from './HollowMaleMemberCard';
 
 import type { UserType } from '@/types/roomTypes';
 import type { UUID } from 'crypto';
+
 const Member = ({ roomId }: { roomId: UUID }) => {
   const roomInformation = useRoomInfoWithRoomIdQuery(roomId);
   const participants = useRoomParticipantsQuery(roomId);

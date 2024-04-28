@@ -30,9 +30,9 @@ const ReviewCard = ({ review }: { review: ReviewType }) => {
   return (
     <div
       key={review.review_id}
-      className="flex flex-col w-full justify-center item-center border-1 border-[#A1A1AA] rounded-[8px] p-[16px]"
+      className="flex flex-col w-full justify-center item-center border-2 rounded-[8px] pt-[16px] px-[16px] pb-[8px]"
     >
-      <div className="flex flex-col w-full items-start h-full">
+      <div className="flex flex-col w-full h-full items-center">
         <Link href={`/review/${review.review_id}`}>
           <div className="flex w-full flex-col h-full items-start">
             {review.image_urls && review.image_urls.length > 0 ? (
@@ -41,7 +41,7 @@ const ReviewCard = ({ review }: { review: ReviewType }) => {
                 alt="reviewImage"
                 height={400}
                 width={400}
-                className="w-[324px] h-[204px] object-cover rounded-[10px]"
+                className="w-64 h-44 object-cover rounded-[10px]"
               />
             ) : (
               <Image
@@ -49,17 +49,21 @@ const ReviewCard = ({ review }: { review: ReviewType }) => {
                 alt="reviewImage"
                 height={400}
                 width={400}
-                className="w-[324px] h-[204px] object-cover rounded-[10px]"
+                className="w-64 h-44 object-cover rounded-[10px]"
               />
             )}
-            <p className="text-[20px] pt-[16px] pb-[16px]">{review.review_title}</p>
-            <p className="pb-[24px] text-ellipsis overflow-hidden">{ellipsisText(review.review_contents)}</p>
+            <p className="text-base pt-[16px] pb-[16px] whitespace-nowrap text-ellipsis overflow-hidden">
+              {review.review_title}
+            </p>
+            <p className="text-sm text-gray2 pb-[24px] text-ellipsis overflow-hidden">
+              {ellipsisText(review.review_contents)}
+            </p>
           </div>
         </Link>
       </div>
-      <div className="flex max-w-[324px] w-full justify-between items-end">
-        <p className="pb-1">{review.show_nickname ? authorNickname || '익명유저' : '익명유저'}</p>
-        <div className="flex gap-x-3">
+      <div className="flex max-w-64 w-full justify-between items-end">
+        <p className="pb-1 text-gray2 text-sm">{review.show_nickname ? authorNickname || '익명유저' : '익명유저'}</p>
+        <div className="flex gap-x-3 text-sm">
           <ReviewLike review_id={review.review_id} />
           <ReviewComment review_id={review.review_id} />
         </div>
