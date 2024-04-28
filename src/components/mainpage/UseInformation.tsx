@@ -1,12 +1,15 @@
 import React from 'react';
 import { IoMdHeart } from 'react-icons/io';
+import Image from 'next/image';
+import mainbanner from '../../../public/mainbanner.jpg';
 
 const UseInformation = () => {
   return (
     <div className="flex flex-col mb-12 gap-8 mx-auto max-w-[1000px] w-full">
-      <p className="text-[26px] font-bold">이용안내</p>
+      <Image src={mainbanner} alt="메인페이지 배너" className="w-full max-w-[1440px] h-auto " priority={true} />
+      {/* <p className="text-[26px] font-bold">이용안내</p> */}
       {/* Section 01 */}
-      <div className="flex flex-row justify-between ">
+      {/* <div className="flex flex-row justify-between ">
         <div className="flex justify-center items-center ">
           <div className="flex flex-col gap-4">
             <p className="text-mainColor text-3xl text-center">01</p>
@@ -53,9 +56,9 @@ const UseInformation = () => {
             </div>
           </div>
         </div>
-      </div>
+      </div> */}
       {/* Section 02 */}
-      <div className="flex flex-row justify-between">
+      {/* <div className="flex flex-row justify-between">
         <div className="flex justify-center items-center ">
           <div className="flex flex-col gap-4">
             <p className="text-mainColor text-3xl text-center">01</p>
@@ -102,7 +105,7 @@ const UseInformation = () => {
             </div>
           </div>
         </div>
-      </div>
+      </div> */}
     </div>
   );
 };
