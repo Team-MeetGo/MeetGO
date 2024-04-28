@@ -1,5 +1,3 @@
-import React from 'react';
-
 const MainMiddleBanner = () => {
   return (
     <div className="w-full h-14 bg-mainColor flex justify-center items-center">

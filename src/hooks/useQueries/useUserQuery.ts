@@ -1,15 +1,8 @@
 'use client';
 import { fetchUserData, fetchUserLikePost, fetchUserPost } from '@/query/user/userQueryFns';
-import {
-  BASIC_USER_DATA,
-  USER_DATA_QUERY_KEY,
-  USER_LIKE_POST_QUERY_KEY,
-  USER_POST_QUERY_KEY
-} from '@/query/user/userQueryKeys';
+import { USER_DATA_QUERY_KEY, USER_LIKE_POST_QUERY_KEY, USER_POST_QUERY_KEY } from '@/query/user/userQueryKeys';
 import { profileCount } from '@/store/userStore';
-import { UsersType } from '@/types/userTypes';
-import { User } from '@supabase/supabase-js';
-import { useQuery, useQueryClient, useSuspenseQuery } from '@tanstack/react-query';
+import { useQuery, useSuspenseQuery } from '@tanstack/react-query';
 import { useEffect } from 'react';
 
 // 1) initialData
@@ -18,17 +11,14 @@ import { useEffect } from 'react';
 // 4) 프리패치 쿼리 (서버에서 유저에 대한 데이터를 들고 내려온다)
 
 export const useGetUserDataQuery = () => {
-  // const queryClient = useQueryClient();
-  // const user: User | undefined | null = queryClient.getQueryData([BASIC_USER_DATA]);
-
-  const { data, isPending, isError, error, isSuccess } = useSuspenseQuery({
+  const { data } = useSuspenseQuery({
     queryKey: [USER_DATA_QUERY_KEY],
     queryFn: () => fetchUserData()
   });
 
   const isLoggedIn = data ? true : false;
 
-  return { data, isPending, isError, error, isSuccess, isLoggedIn };
+  return { data, isLoggedIn };
 };
 
 export const useGetUserPostQuery = (userId: string) => {

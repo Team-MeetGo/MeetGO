@@ -1,4 +1,4 @@
-import { ChattingRoomType, MeetingRoomType, NewRoomType, UpdateRoomType, UserType } from '@/types/roomTypes';
+import { ChattingRoomType, NewRoomType, UpdateRoomType, UserType } from '@/types/roomTypes';
 import { clientSupabase } from '@/utils/supabase/client';
 
 export const fetchRecruitingRoom = async () => {

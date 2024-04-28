@@ -1,7 +1,5 @@
 import React from 'react';
-import { IoMdHeart } from 'react-icons/io';
 import Image from 'next/image';
-import mainbanner from '../../../public/mainbanner.jpg';
 import { stepArr } from '@/utils/data/mainPageData';
 
 const UseInformation = () => {
@@ -16,7 +14,6 @@ const UseInformation = () => {
             <h2 className="text-xl font-bold">{step.title}</h2>
           </div>
           <div className="">{step.src}</div>
-
           <div className="w-full max-w-60 px-[8px]">
             <p className="mx-auto break-keep text-base">{step.des}</p>
           </div>
