@@ -82,10 +82,7 @@ function MeetingRoomList() {
     }
     setPage((page) => page - 1);
   };
-  console.log(user?.user_id);
-  console.log(filteredMyRoomList);
-  console.log(otherRooms);
-  console.log(filteredMyOutRoomList);
+
   return (
     <>
       <main className="flex flex-col items-center justify-content min-w-[1000px]">

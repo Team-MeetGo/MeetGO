@@ -55,7 +55,7 @@ const GotoChatButton = ({ roomId, members }: { roomId: UUID; members: UserType[]
       {
         <figure
           className="
-        flex flex-col h-[114px] w-[1116px] justify-center text-center"
+        flex flex-col lg:h-[114px] lg:w-[1116px] lg:max-w-[1440px] max-sm:w-[22rem] max-sm:mt-[0.5rem] justify-center text-center"
         >
           <button
             disabled={members.length === maxMember ? false : true}

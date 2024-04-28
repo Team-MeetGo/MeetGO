@@ -28,11 +28,11 @@ export const useRecruitingQuery = (user_id: string) => {
 };
 //내가 참가한 방
 export const useMyroomQuery = (user_id: string) => {
-  const { data } = useSuspenseQuery({
+  const { data: myRoomData } = useSuspenseQuery({
     queryKey: [ROOMLIST, user_id],
     queryFn: () => fetchMyRoom(user_id)
   });
-  return data;
+  return myRoomData;
 };
 
 export const useMyPastAndNowRoomQuery = (user_id: string) => {

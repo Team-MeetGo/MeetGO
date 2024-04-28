@@ -8,7 +8,7 @@ const MemberListPage = ({ params }: { params: { id: UUID } }) => {
   return (
     <>
       <Suspense>
-        <div className="flex flex-col justify-center w-full align-middle">
+        <div className="flex flex-col justify-center align-middle">
           <InitRoom roomId={roomId} />
           <AcceptanceRoom roomId={roomId} />
         </div>

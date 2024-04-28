@@ -70,42 +70,39 @@ function RoomInformation({ roomId }: { roomId: UUID }) {
   const gotoBack = () => {
     router.push(ROUTERADDRESS.GOTOLOBBY);
   };
-  console.log(roomInformation?.room_title);
-  console.log(roomInformation?.room_status);
-  console.log(roomInformation?.leader_id);
-  console.log(genderMaxNumber);
+
   return (
     <div className="flex flex-col items-center justify-content">
-      <main className="flex flex-col items-center justify-content min-w-[1116px] max-w-[1440px]">
-        <div className="h-[72x] w-full pt-[64px] border-b border-gray2 flex flex-row pb-[32px]">
-          <div className="flex flex-row min-w-[1116px] max-w-[1440px] justify-between">
-            <section className="flex flex-row justify-center">
-              <p className="text-[40px] pr-[32px]">{roomInformation?.room_title}</p>
+      <main className="flex flex-col items-center justify-content lg:w-[1116px] lg:max-w-[1440px] max-sm:w-[22rem]">
+        <div className="h-[72x] w-full lg:pt-[64px] max-sm:pt-[2rem] border-b border-gray2 flex flex-row lg:pb-[32px] max-sm:pb-[1rem] max-sm:px-[1rem]">
+          <div className="flex flex-row lg:w-[1116px] lg:max-w-[1440px] justify-between max-sm:w-[22rem]">
+            <section className="flex lg:flex-row max-sm:flex-col max-sm:gap-[0.3rem] justify-center ">
+              <p className="lg:text-[40px] max-sm:text-[1.8rem] pr-[32px]">{roomInformation?.room_title}</p>
 
-              <figure className="h-[46px] display display-col justify-items-center items-center gap-[8px]">
-                <div className="text-[16px] flex flex-row justify-between align-middle justify-items-center mt-[12px]">
+              <figure className="lg:h-[46px] max-sm:h-[4rem] display display-col justify-items-center items-center gap-[8px]">
+                <div className="text-[16px] flex flex-row mt-[12px]">
                   <IoFemale className="w-[16px] pr-[6px] my-auto fill-hotPink" /> {`${countFemale}/${genderMaxNumber}`}
                   <div className="px-[6px]">|</div>
                   <IoMale className="w-[16px] pr-[6px] my-auto fill-blue" /> {`${countMale}/${genderMaxNumber}`}
                 </div>
                 <p className="text-[16px]">{`${roomInformation?.region} ${roomInformation?.location}`}</p>
               </figure>
-              <figure className="flex flex-col justify-end">
-                <div className="text-[14px] h-[40px] ml-[32px] bg-purpleSecondary text-mainColor rounded-[8px] p-[8px]">
+              <figure className="flex flex-col lg:justify-end max-sm:justify-start">
+                <div className="lg:text-[14px] max-sm:text-[1rem] text-center lg:h-[40px] lg:ml-[32px] max-sm:ml-0 bg-purpleSecondary text-mainColor lg:rounded-[8px] max-sm:rounded-lg lg:p-[8px] max-sm:p-[0.5rem]">
                   {roomInformation?.feature && roomInformation?.feature[0]}
                 </div>
               </figure>
             </section>
-            <section className="flex flex-row items-end gap-[16px]">
+            <section className="flex flex-row lg:items-end max-sm:items-center gap-[16px]">
               <button
                 onClick={gotoBack}
-                className="w-[90px] h-[43px] text-gray2 border-1 border-gray2 rounded-xl align-bottom"
+                className="lg:w-[90px] max-sm:w-[5rem] lg:h-[43px] max-sm:h-[2.2rem] max-sm:text-[1rem] rounded-xl max-sm:rounded-lg text-gray2 border-1 border-gray2 align-bottom"
               >
                 뒤로가기
               </button>
               <ValidationModal />
               <button
-                className="w-[90px] h-[43px] text-white border-1 bg-gray3 border-gray2 rounded-xl align-bottom"
+                className="lg:w-[90px] max-sm:w-[5rem] lg:h-[43px] max-sm:h-[2.2rem] max-sm:text-[1rem] rounded-xl max-sm:rounded-lg text-white border-1 bg-gray3 border-gray2 align-bottom"
                 onClick={gotoLobby}
               >
                 나가기

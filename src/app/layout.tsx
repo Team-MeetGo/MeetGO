@@ -30,7 +30,6 @@ export default async function RootLayout({
       data: { user },
       error
     } = await supabase.auth.getUser();
-    console.log('user', user);
     if (!user || error) throw error;
     const { data: userData, error: userDataErr } = await supabase
       .from('users')

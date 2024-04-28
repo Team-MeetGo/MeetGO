@@ -46,8 +46,6 @@ export const fetchRoomInfoWithRoomId = async (roomId: string): Promise<MeetingRo
   const { data: room, error, status } = await clientSupabase.from('room').select(`*`).eq('room_id', roomId);
   if (error) {
     throw new Error('방이 존재하지 않습니다.');
-  } else if (status) {
-    console.log(status);
   }
   return room[0];
 };
