@@ -181,8 +181,6 @@ const LoginForm = () => {
           </button>
         </div>
       </div>
-
-      <ValidationModal />
     </>
   );
 };

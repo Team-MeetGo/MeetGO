@@ -1,11 +1,11 @@
 'use client';
 import InitChatRealTime from './InitChatRealTime';
-import NavBarContents2 from './NavBarContents2';
+import NavBarContents from './NavBarContents';
 
 const NavBar = () => {
   return (
     <>
-      <NavBarContents2 />
+      <NavBarContents />
       <InitChatRealTime />
     </>
   );

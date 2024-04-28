@@ -7,6 +7,7 @@ import NavBar from '@/components/common/NavBar';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { ValidationModal } from '@/components/common/ValidationModal';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -28,6 +29,7 @@ export default function RootLayout({
         <NextProvider>
           <QueryProvider>
             <ToastContainer position="top-right" limit={1} closeButton={false} autoClose={4000} />
+            <ValidationModal />
             <NavBar />
             {children}
             <ReactQueryDevtools initialIsOpen={true} />
