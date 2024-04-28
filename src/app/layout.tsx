@@ -8,7 +8,7 @@ import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { HydrationBoundary, QueryClient, dehydrate } from '@tanstack/react-query';
-import { BASIC_USER_DATA, USER_DATA_QUERY_KEY } from '@/query/user/userQueryKeys';
+import { USER_DATA_QUERY_KEY } from '@/query/user/userQueryKeys';
 import { serverSupabase } from '@/utils/supabase/server';
 import { User } from '@supabase/supabase-js';
 import { Suspense } from 'react';
