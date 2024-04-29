@@ -1,3 +1,5 @@
+import React from 'react';
+
 const MainBanner = () => {
   return (
     <main className="max-w-[1000px] w-full flex items-start max-h-[524px]">
@@ -18,6 +20,7 @@ const MainBanner = () => {
           지금 바로 인연 만들러 가기
         </button>
       </div>
+      <p className="text-mainColor">아아아</p>
     </main>
   );
 };

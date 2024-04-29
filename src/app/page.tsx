@@ -1,9 +1,9 @@
 import GetMostLikedReivew from '@/components/mainpage/GetMostLikedReview';
 import MainBanner from '@/components/mainpage/MainBanner';
-import MainBottomBanner from '@/utils/banner/ThickBanner';
 import ProfileRouteModal from '@/components/mainpage/ProfileRouteModal';
 import UseInformation from '@/components/mainpage/UseInformation';
 import ThinBanner from '@/utils/banner/ThinBanner';
+import ThickBanner from '@/utils/banner/ThickBanner';
 
 export default function Home() {
   return (
@@ -13,7 +13,7 @@ export default function Home() {
       <ThinBanner />
       <UseInformation />
       <ProfileRouteModal />
-      <MainBottomBanner />
+      <ThickBanner />
     </main>
   );
 }
