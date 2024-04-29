@@ -89,7 +89,7 @@ const ChatList = ({ user, chatRoomId }: { user: User | null; chatRoomId: string 
     const scrollBox = scrollRef.current;
     if (scrollBox && messages) {
       // DB에 마지막 메세지로 저장된 메세지와 id가 동일한 div 가 있다면 강조처리
-      const lastMsgValue = lastMsgId && lastDivRefs?.current?.find((ref) => ref.message_id === lastMsgId);
+      const lastMsgValue = lastDivRefs?.current?.find((ref) => ref.message_id === lastMsgId);
       const lastDiv = lastMsgValue && (lastMsgValue as any).current;
       if (lastMsgId && lastMsgId !== messages[messages.length - 1].message_id && lastDiv) {
         setLastCheckedDiv(lastDiv);

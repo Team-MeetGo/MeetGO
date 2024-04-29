@@ -98,10 +98,9 @@ export const fetchMyLastMsgs = async (user_id: string, chatRoomId: string | null
   } else {
     if (lastMsgs.length) {
       return lastMsgs[0].last_msg_id;
+    } else {
+      return null;
     }
-    // else {
-    //   return null;
-    // }
   }
 };
 
