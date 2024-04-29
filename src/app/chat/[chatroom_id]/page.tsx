@@ -28,7 +28,10 @@ const ChatPage = async ({ params }: { params: { chatroom_id: string } }) => {
       <div className="relative flex felx-row w-full max-w-[1080px] mx-auto">
         <InitChat user={user} chatRoomId={chatRoomId} allMsgs={allMsgs ?? []} />
         <div className="flex w-full justify-center mx-auto">
-          <SideBar chatRoomId={chatRoomId} />
+          <div className="sm:hidden">
+            <SideBar chatRoomId={chatRoomId} />
+          </div>
+
           <div className="w-full lg:max-w-xl max-h-[calc(100vh-90px)] min-h-[36rem] relative">
             <div className="absolute top-0 left-0">
               <SideBarButton />
