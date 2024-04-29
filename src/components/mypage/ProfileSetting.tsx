@@ -10,7 +10,6 @@ import { deleteUser } from '@/utils/api/authAPI';
 import { useQueryClient } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
 import AvatarForm from './AvatarForm';
-import SchoolForm from './SchoolForm';
 import Favorite from './Favorite';
 import { FaCheckSquare } from 'react-icons/fa';
 
