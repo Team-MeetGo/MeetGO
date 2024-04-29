@@ -152,7 +152,7 @@ const ChatHeader = ({ chatRoomId }: { chatRoomId: string }) => {
   };
 
   return (
-    <div className="h-[116px] border-b flex pl-[32px] pr-[16px] py-[16px] justify-between items-center">
+    <div className="h-28 border-b flex pl-[32px] pr-[16px] py-[16px] justify-between items-center">
       <div className="flex gap-2">
         <div className="flex flex-col gap-[8px]">
           <h1 className="font-bold text-2xl h-[36px]">{room?.room_title}</h1>
@@ -197,7 +197,7 @@ const ChatHeader = ({ chatRoomId }: { chatRoomId: string }) => {
               로비로가기
             </DropdownItem>
             <DropdownItem key="getOutOfRoom" className="text-danger text-right" color="danger">
-              방 나가기
+              이 방 나가기
             </DropdownItem>
           </DropdownMenu>
         </Dropdown>

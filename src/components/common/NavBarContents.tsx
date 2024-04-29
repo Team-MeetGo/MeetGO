@@ -1,15 +1,5 @@
 'use client';
-import {
-  Navbar,
-  NavbarBrand,
-  NavbarContent,
-  NavbarItem,
-  DropdownItem,
-  Dropdown,
-  DropdownTrigger,
-  DropdownMenu,
-  Avatar
-} from '@nextui-org/react';
+import { DropdownItem, Dropdown, DropdownTrigger, DropdownMenu, Avatar } from '@nextui-org/react';
 import MeetGoLogo from '@/utils/icons/meetgo-logo.png';
 import Image from 'next/image';
 import { clientSupabase } from '@/utils/supabase/client';
