@@ -89,7 +89,7 @@ export const useUploadImgsMutation = () => {
       return imageUrlData.publicUrl;
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: NEW_IMGS_QUERY_KEY });
+      queryClient.invalidateQueries({ queryKey: [NEW_IMGS_QUERY_KEY] });
     }
   });
   return uploadImgsMutation;

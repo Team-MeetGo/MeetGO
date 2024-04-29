@@ -20,7 +20,7 @@ export const useToggleLikeMutation = () => {
       }
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: LIKE_TOGGLE_KEY });
+      queryClient.invalidateQueries({ queryKey: [LIKE_TOGGLE_KEY] });
     }
   });
 

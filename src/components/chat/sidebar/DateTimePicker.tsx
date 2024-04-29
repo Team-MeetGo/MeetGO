@@ -33,7 +33,7 @@ const DateTimePicker = forwardRef(({ chatRoomId }: { chatRoomId: string }) => {
   }, [chatRoomId, chat]);
 
   return (
-    <div className="relative z-40 w-full py-6">
+    <div className="relative z-40 py-6">
       <DatePicker
         locale={ko} // 한국어
         showPopperArrow={false} // 위에 삼각형 제거
