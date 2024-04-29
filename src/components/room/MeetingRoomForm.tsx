@@ -21,6 +21,8 @@ import MemberNumberSelection from './MemberNumberSelection';
 import RegionSelection from './RegionSelection';
 
 import type { NewRoomType } from '@/types/roomTypes';
+import { customErrToast, customSuccessToast } from '../common/customToast';
+import { features } from 'process';
 function MeetingRoomForm() {
   const router = useRouter();
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
@@ -47,11 +49,11 @@ function MeetingRoomForm() {
 
   const addMeetingRoom = async (e: any) => {
     e.preventDefault();
-    if (!title || !selected || !location || !roomRegion) {
-      alert('모든 항목은 필수입니다.');
-    } else if (title && selected && location && roomRegion) {
+    if (!title || !selected || !location || !roomRegion || !selected) {
+      customErrToast('모든 항목은 필수입니다.');
+    } else if (title && selected && location && roomRegion && selected) {
       const data = await addRoomMutation({ nextMeetingRoom, userId });
-      alert('모임이 생성되었습니다.');
+      customSuccessToast('모임이 생성되었습니다.');
       setSelected(new Set([]));
       resetMemberNumber();
       resetRoomRegion();
@@ -67,7 +69,7 @@ function MeetingRoomForm() {
   //방만들기 모달을 누릅니다.
   const roomOpenHandler = () => {
     if (!user?.gender) {
-      alert('성별을 선택해주세요');
+      customErrToast('성별을 선택해주세요');
       return router.push('/mypage');
     } else {
       onOpen();

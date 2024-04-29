@@ -93,22 +93,22 @@ const Member = ({ roomId }: { roomId: UUID }) => {
 
   return (
     <div className="w-100 h-100 flex flex-row justify-evenly">
-      <div className="flex flex-col">
+      <div className="flex flex-col items-center justify-content">
         <section className="w-100%">
           <GotoChatButton roomId={roomId} members={members} />
         </section>
-        <section className="flex lg:flex-row max-sm:flex-col lg:gap-[100px] max-sm:gap-[2rem] lg:min-w-[1000px] lg:max-w-[1440px] max-sm:w-[22rem] items-center justify-content align-middle ">
+        <section className="flex lg:flex-row flex-col lg:gap-[100px] gap-[2rem] lg:min-w-[1080px] w-[22rem] items-center justify-content align-middle ">
           <section
-            className={`lg:mt-[40px] max-sm:mt-[2rem] grid grid-cols-1 grid-rows-${femaleMembers.length} w-100% lg:gap-y-[50px] max-sm:gap-y-[0.8rem]`}
+            className={`lg:mt-[40px] mt-[2rem] grid grid-cols-1 grid-rows-${femaleMembers.length} w-100% lg:gap-y-[50px] gap-y-[0.8rem]`}
           >
             {femaleMembers.map((member) => (
               <div key={member.user_id} className={`grid col-start-1 col-span-1`}>
                 <article
-                  className={`border-purpleThird border-[2px] flex flex-row align-middle lg:w-[506px] max-sm:w-[20rem] lg:h-[166px] max-sm:h-[8rem] rounded-2xl`}
+                  className={`border-purpleThird border-[2px] flex flex-row align-middle lg:w-[490px] w-[20rem] lg:h-[166px] h-[8rem] rounded-2xl`}
                 >
                   {/* 카드 왼쪽 */}
-                  <div className="lg:mx-[40px] max-sm:mx-[1rem] max-sm:w-[5rem] flex flex-col justify-items-center">
-                    <figure className="lg:w-[86px] max-sm:w-[5rem] lg:h-[86px] max-sm:h-[5rem] lg:mt-[32px] max-sm:mt-[0.8rem] rounded-full relative">
+                  <div className="lg:mx-[40px] mx-[1rem] lg:h-[86px] w-[5rem] flex flex-col justify-items-center">
+                    <figure className="lg:w-[86px] w-[5rem] lg:h-[86px] h-[5rem] lg:mt-[32px] mt-[0.8rem] rounded-full relative">
                       {leader === member.user_id ? (
                         <div>
                           <FaCrown className="absolute h-[20px] w-[20px] m-[2px] fill-mainColor z-20 top-[-18px] left-[29px]" />
@@ -118,18 +118,18 @@ const Member = ({ roomId }: { roomId: UUID }) => {
                       )}
                       {member.avatar ? (
                         <Image
-                          className="lg:w-[86px] max-sm:w-[5rem] h-[86px] max-sm:h-[5rem] rounded-full object-center bg-cover object-fill"
+                          className="lg:w-[86px] w-[5rem] lg:h-[86px] h-[5rem] rounded-full object-center bg-cover object-fill"
                           src={member.avatar}
                           alt="유저 아바타"
                           height={86}
                           width={86}
                         />
                       ) : (
-                        <figure className="lg:w-[86px] max-sm:w-[5rem] h-[86px] max-sm:h-[5rem] rounded-full object-center bg-cover object-fill">
+                        <figure className="lg:w-[86px] w-[5rem] lg:h-[86px] h-[5rem] rounded-full object-center bg-cover object-fill">
                           <RoomFemaleAvatar />
                         </figure>
                       )}
-                      <p className="lg:pt-[8px] max-sm:pt-[0.4rem] lg:w-[100px] max-sm:w-[5rem] max-sm:text-[0.9rem] text-center">
+                      <p className="lg:pt-[8px] pt-[0.4rem] w-full lg:text-[16px] text-[0.9rem] text-center">
                         {member.nickname}
                       </p>
                     </figure>
@@ -142,11 +142,11 @@ const Member = ({ roomId }: { roomId: UUID }) => {
                       {<IoFemale className="w-[14px] my-auto fill-hotPink" />}
                     </div>
                     <figure className="flex flex-row w-100% text-[14px] w-100%">
-                      <div className="lg:my-[16px] max-sm:my-[0.5rem] flex flex-row gap-[6px]">
+                      <div className="lg:my-[16px] my-[0.5rem] flex flex-row gap-[6px]">
                         {member.favorite?.map((tag) => (
                           <div
                             key={tag}
-                            className="bg-purpleSecondary text-mainColor lg:text-[14px] max-sm:text-[0.7rem] rounded-[8px] lg:p-[8px] max-sm:p-[0.3rem]"
+                            className="bg-purpleSecondary text-mainColor lg:text-[14px] text-[0.7rem] rounded-[8px] lg:p-[8px] p-[0.3rem]"
                           >
                             {tag}
                           </div>
@@ -162,16 +162,16 @@ const Member = ({ roomId }: { roomId: UUID }) => {
           </section>
 
           <section
-            className={`lg:mt-[40px] max-sm:mt-[2rem] grid grid-cols-1 grid-rows-${maleMembers.length} w-100% lg:gap-y-[50px] max-sm:gap-y-[0.8rem] max-sm:mb-[4rem]`}
+            className={`lg:mt-[40px] mt-[2rem] grid grid-cols-1 grid-rows-${maleMembers.length} w-100% lg:gap-y-[50px] gap-y-[0.8rem] lg:mb-0 mb-[4rem]`}
           >
             {maleMembers.map((member) => (
               <div key={member.user_id} className={`grid col-start-1 col-span-1`}>
                 <article
-                  className={`bg-purpleSecondary flex flex-row align-middle lg:w-[506px] max-sm:w-[20rem] lg:h-[166px] max-sm:h-[8rem] rounded-2xl`}
+                  className={`bg-purpleSecondary flex flex-row align-middle lg:w-[490px] w-[20rem] lg:h-[166px] h-[8rem] rounded-2xl`}
                 >
                   {/* 카드 왼쪽 */}
-                  <div className="lg:mx-[40px] max-sm:mx-[1rem] max-sm:w-[5rem] flex flex-col justify-items-center">
-                    <figure className="lg:w-[86px] max-sm:w-[5rem] lg:h-[86px] max-sm:h-[5rem] lg:mt-[32px] max-sm:mt-[0.8rem] rounded-full relative">
+                  <div className="lg:mx-[40px] mx-[1rem] w-[5rem] flex flex-col items-center justify-content align-middle">
+                    <figure className="lg:w-[86px] w-[5rem] lg:h-[86px] h-[5rem] lg:mt-[32px] mt-[0.8rem] rounded-full relative">
                       {leader === member.user_id ? (
                         <div>
                           <FaCrown className="absolute h-[20px] w-[20px] m-[2px] fill-mainColor z-20 top-[-20px] left-[30px]" />
@@ -181,18 +181,18 @@ const Member = ({ roomId }: { roomId: UUID }) => {
                       )}
                       {member.avatar ? (
                         <Image
-                          className="lg:w-[86px] max-sm:w-[5rem] h-[86px] max-sm:h-[5rem] rounded-full object-center bg-cover object-fill"
+                          className="lg:w-[86px] w-[5rem] lg:h-[86px] h-[5rem] rounded-full object-center bg-cover object-fill"
                           src={member.avatar}
                           alt="유저 아바타"
                           height={80}
                           width={80}
                         />
                       ) : (
-                        <figure className="lg:w-[86px] max-sm:w-[5rem] h-[86px] max-sm:h-[5rem] rounded-full object-center bg-cover object-fill">
+                        <figure className="lg:w-[86px] w-[5rem] lg:h-[86px] h-[5rem] rounded-full object-center bg-cover object-fill">
                           <RoomMaleAvatar />
                         </figure>
                       )}
-                      <p className="lg:pt-[8px] max-sm:pt-[0.4rem] lg:w-[100px] max-sm:w-[5rem] max-sm:text-[0.9rem] text-center">
+                      <p className="lg:pt-[8px] pt-[0.4rem] w-full lg:text-[16px] text-[0.9rem] text-center">
                         {member.nickname}
                       </p>
                     </figure>
@@ -205,11 +205,11 @@ const Member = ({ roomId }: { roomId: UUID }) => {
                       {<IoMale className="w-[14px] my-auto fill-blue" />}
                     </div>
                     <figure className="flex flex-row w-full">
-                      <div className="lg:my-[16px] max-sm:my-[0.5rem] flex flex-row gap-[6px]">
+                      <div className="lg:my-[16px] my-[0.5rem] flex flex-row gap-[6px]">
                         {member.favorite?.map((tag) => (
                           <div
                             key={tag}
-                            className="bg-white text-mainColor lg:text-[14px] max-sm:text-[0.7rem] rounded-[8px] lg:p-[8px] max-sm:p-[0.3rem]"
+                            className="bg-white text-mainColor lg:text-[14px] text-[0.7rem] rounded-[8px] lg:p-[8px] p-[0.3rem]"
                           >
                             {tag}
                           </div>

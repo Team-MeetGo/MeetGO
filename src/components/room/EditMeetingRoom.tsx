@@ -17,6 +17,7 @@ import {
   useDisclosure
 } from '@nextui-org/react';
 import { useState } from 'react';
+import { customErrToast } from '../common/customToast';
 
 import type { MeetingRoomType, UpdateRoomType } from '@/types/roomTypes';
 function EditMeetingRoom({
@@ -52,7 +53,7 @@ function EditMeetingRoom({
     e.preventDefault();
     setOpen(false);
     if (!title || !concept || !location) {
-      alert('모든 항목은 필수입니다.');
+      customErrToast('모든 항목은 필수입니다.');
     } else if (title && concept && location) {
       roomUpdateMutation();
     }
@@ -67,9 +68,7 @@ function EditMeetingRoom({
   const handleSelect = (value: string) => {
     setConcept(new Set(value));
   };
-  const editionHandler = () => {
-    if (!title || !concept || !location) return onOpen;
-  };
+
   return (
     <>
       <Button

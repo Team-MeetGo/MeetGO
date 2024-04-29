@@ -1,5 +1,6 @@
 'use client';
 
+import { customErrToast } from '@/components/common/customToast';
 import useGenderMaxNumber from '@/hooks/custom/useGenderMaxNumber';
 import { useRoomInfoWithRoomIdQuery } from '@/hooks/useQueries/useMeetingQuery';
 import { useGetUserDataQuery } from '@/hooks/useQueries/useUserQuery';
@@ -23,7 +24,7 @@ const GotoChatButton = ({ roomId, members }: { roomId: UUID; members: UserType[]
   //원하는 인원이 모두 들어오면 위에서 창이 내려온다.
   const gotoChattingRoom = async () => {
     if (!user) {
-      alert('로그인 후에 이용하세요.');
+      customErrToast('로그인 후에 이용하세요.');
       router.push('/login');
     }
     const { data: alreadyChat } = await clientSupabase
@@ -48,19 +49,19 @@ const GotoChatButton = ({ roomId, members }: { roomId: UUID; members: UserType[]
     } // "/chatting_room_id" 로 주소값 변경
   };
 
-  const handleGoChatDebounce = useCallback(debounce(gotoChattingRoom, 1500), []);
+  const handleGoChatDebounce = useCallback(debounce(gotoChattingRoom, 1000), []);
 
   return (
     <main>
       {
         <figure
           className="
-        flex flex-col lg:h-[114px] lg:w-[1116px] lg:max-w-[1440px] max-sm:w-[22rem] max-sm:mt-[0.5rem] justify-center text-center"
+        flex flex-col lg:h-[114px] lg:w-[1080px] lg:max-w-[1440px] w-[22rem] mt-[0.5rem] justify-center text-center"
         >
           <button
             disabled={members.length === maxMember ? false : true}
             className={`${members.length === maxMember ? 'bg-mainColor' : 'bg-gray1'}`}
-            onClick={gotoChattingRoom}
+            onClick={handleGoChatDebounce}
           >
             <div className="flex flex-row justify-center align-middle gap-[8px]">
               <h2 className="text-[40px] text-white font-bold">Go to chat</h2>

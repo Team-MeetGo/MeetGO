@@ -48,12 +48,12 @@ function RoomInformation({ room }: { room: MeetingRoomType }) {
           {`${maleNumber}/${genderMaxNumber}`}
           <div className="mx-[6px]">|</div> {`${room_status}`}
         </section>
-        <section className="pr-[16px] flex flex-row justify-center relative">
+        <section className="lg:pr-[30px] pr-[0rem] flex flex-row justify-center relative">
           {alreadyChatRoom && alreadyChatRoom.length > 0 ? (
-            <mark className="flex flex-row gap-[2px] p-[4px] bg-white border rounded-lg">
+            <mark className="flex flex-row mr-[6px] p-[4px] bg-white border rounded-lg">
               {myMsgData && myMsgData.find((item) => item.room_id === room.room_id) ? (
                 <figure
-                  className={`w-5 h-5 bg-[#F31260] rounded-full flex justify-center items-center gap-2 absolute top-[-8px] right-0 text-white`}
+                  className={`w-5 h-5 bg-[#F31260] rounded-full flex justify-center items-center gap-2 absolute top-[-8px] lg:right-[2.7rem] right-[1.5rem] text-white z-[5]`}
                 >
                   <h1>{myMsgData.find((item) => item.room_id === room.room_id)?.newMsgCount}</h1>
                 </figure>
@@ -74,7 +74,7 @@ function RoomInformation({ room }: { room: MeetingRoomType }) {
           {user?.user_id === leader_id ? (
             <mark ref={dropdownRef} className="relative flex flex-row justify-center align-middle">
               <button
-                className="flex flex-row justify-center align-middle"
+                className="flex flex-row justify-center align-middle p-[0.2rem]"
                 onClick={() => {
                   setOpen((open) => !open);
                 }}

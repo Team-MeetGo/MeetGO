@@ -1,5 +1,5 @@
 'use client';
-import { ValidationModal } from '@/components/common/ValidationModal';
+import { customErrToast } from '@/components/common/customToast';
 import useGenderMaxNumber from '@/hooks/custom/useGenderMaxNumber';
 import { useAddRoomMemberMutation, useUpdateRoomStatusCloseMutation } from '@/hooks/useMutation/useMeetingMutation';
 import { useAlreadyChatRoomQuery, useRoomParticipantsQuery } from '@/hooks/useQueries/useMeetingQuery';
@@ -19,7 +19,6 @@ function MeetingRoom({ room }: { room: MeetingRoomType }) {
   const { data: user } = useGetUserDataQuery();
   const userId = user?.user_id as string;
   const roomId = room_id;
-  const { openModal, closeModal } = useModalStore();
 
   const participants = useRoomParticipantsQuery(roomId);
   const alreadyChatRoom = useAlreadyChatRoomQuery(roomId);
@@ -29,11 +28,7 @@ function MeetingRoom({ room }: { room: MeetingRoomType }) {
 
   const addMember = async ({ room_id }: { room_id: string }) => {
     if (!user?.gender && user?.gender === null) {
-      openModal({
-        type: 'alert',
-        name: '',
-        text: '성별을 선택해주세요.'
-      });
+      customErrToast('성별을 선택해주세요.');
       return router.push('/mypage');
     }
     //수락창: 이미 참여한 방은 바로 입장
@@ -49,11 +44,7 @@ function MeetingRoom({ room }: { room: MeetingRoomType }) {
 
     //성별에 할당된 인원이 다 찼으면 알람
     if (genderMaxNumber === participatedGenderMember && room_status === ROOMSTATUS.RECRUITING && !alreadyParticipants) {
-      openModal({
-        type: 'alert',
-        name: '',
-        text: `해당 성별은 모두 참여가 완료되었습니다.`
-      });
+      customErrToast(`해당 성별은 모두 참여가 완료되었습니다.`);
     }
 
     //성별에 할당된 인원이 참여자 정보보다 적을 때 입장
@@ -106,7 +97,6 @@ function MeetingRoom({ room }: { room: MeetingRoomType }) {
           </section>
         </main>
       </section>
-      <ValidationModal />
     </article>
   );
 }
