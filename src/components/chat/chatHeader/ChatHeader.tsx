@@ -154,10 +154,10 @@ const ChatHeader = ({ chatRoomId }: { chatRoomId: string }) => {
   return (
     <div className="h-28 border-b flex pl-[32px] pr-[16px] py-[16px] justify-between items-center">
       <div className="flex gap-2">
-        <div className="flex flex-col gap-[8px]">
-          <h1 className="font-bold text-2xl h-[36px]">{room?.room_title}</h1>
+        <div className="flex flex-col gap-2">
+          <h1 className="font-bold text-2xl h-9">{room?.room_title}</h1>
 
-          <div className="flex gap-[20px] items-center">
+          <div className="flex gap-5 items-center">
             <ChatPresence />
             <AvatarGroup isBordered max={8}>
               {participants?.map((person) => (
@@ -194,7 +194,7 @@ const ChatHeader = ({ chatRoomId }: { chatRoomId: string }) => {
           </DropdownTrigger>
           <DropdownMenu aria-label="Static Actions" onAction={(key) => handleBtn(String(key))}>
             <DropdownItem key="goToLobby" className="text-right">
-              로비로 가기
+              뒤로가기
             </DropdownItem>
             <DropdownItem key="getOutOfRoom" className="text-danger text-right" color="danger">
               이 방 나가기
