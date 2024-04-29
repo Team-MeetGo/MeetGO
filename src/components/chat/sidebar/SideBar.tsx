@@ -19,7 +19,7 @@ const SideBar = ({ chatRoomId }: { chatRoomId: string }) => {
   }
 
   return (
-    <div className="max-h-[calc(100vh-90px)] overflow-y-auto pt-8 px-4 ease-in-out duration-1000 w-full lg:max-w-80 sm:w-[20rem]">
+    <div className="max-h-[calc(100vh-90px)] overflow-y-auto pt-8 px-4 ease-in-out duration-1000 w-full lg:max-w-96 sm:w-[20rem]">
       <h1 className="font-semibold text-2xl mb-2">미팅 날짜/시간</h1>
       <Card className="h-14 border border-mainColor rounded-lg shadow-none w-full">
         <CardBody className="flex flex-row justify-start items-center text-lg">

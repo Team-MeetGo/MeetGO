@@ -1,15 +1,5 @@
 'use client';
-import {
-  Navbar,
-  NavbarBrand,
-  NavbarContent,
-  NavbarItem,
-  DropdownItem,
-  Dropdown,
-  DropdownTrigger,
-  DropdownMenu,
-  Avatar
-} from '@nextui-org/react';
+import { DropdownItem, Dropdown, DropdownTrigger, DropdownMenu, Avatar } from '@nextui-org/react';
 import MeetGoLogo from '@/utils/icons/meetgo-logo.png';
 import Image from 'next/image';
 import { clientSupabase } from '@/utils/supabase/client';
@@ -58,7 +48,7 @@ const NavBarContents = () => {
 
   return (
     <header className="flex h-20 w-full shrink-0 items-center m-auto sticky z-20 top-0 inset-x-0 backdrop-blur-lg bg-white bg-opacity-70 justify-center ">
-      <div className="max-w-[1000px] w-full flex justify-between p-6">
+      <div className="max-w-[1280px] w-full flex justify-between p-6">
         <div className="flex items-center">
           <Drawer>
             <DrawerTrigger onToggle={handleDrawerToggle}>

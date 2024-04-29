@@ -3,7 +3,7 @@ import React from 'react';
 const MobileSideber = () => {
   return (
     <div>
-      <div className="sm:hidden">모바일</div>
+      <div className="">모바일</div>
       {/* <Dropdown>
         <DropdownTrigger>
           <button>

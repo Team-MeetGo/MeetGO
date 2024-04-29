@@ -1,7 +1,18 @@
 'use client';
 import { useParticipantsQuery, useRoomDataQuery } from '@/hooks/useQueries/useChattingQuery';
 import { useGetUserDataQuery } from '@/hooks/useQueries/useUserQuery';
-import { Avatar, AvatarGroup, Popover, PopoverContent, PopoverTrigger, Tooltip } from '@nextui-org/react';
+import {
+  Avatar,
+  AvatarGroup,
+  Dropdown,
+  DropdownItem,
+  DropdownMenu,
+  DropdownTrigger,
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+  Tooltip
+} from '@nextui-org/react';
 import ShowChatMember from '../chatBody/ShowChatMember';
 import { chatStore } from '@/store/chatStore';
 import { clientSupabase } from '@/utils/supabase/client';
@@ -11,6 +22,8 @@ import { useModalStore } from '@/store/modalStore';
 import { useQueryClient } from '@tanstack/react-query';
 import { MSGS_QUERY_KEY } from '@/query/chat/chatQueryKeys';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+import { CiMenuKebab } from 'react-icons/ci';
 
 const ChatHeader = ({ chatRoomId }: { chatRoomId: string }) => {
   const { onlineUsers, setisRest, setSearchMode } = chatStore((state) => state);
@@ -19,6 +32,7 @@ const ChatHeader = ({ chatRoomId }: { chatRoomId: string }) => {
   const room = useRoomDataQuery(chatRoomId);
   const participants = useParticipantsQuery(room?.room_id as string);
   const queryClient = useQueryClient();
+  const router = useRouter();
 
   // 채팅방 isActive 상태를 false로 변경
   const updateIsActiveFalse = async () => {
@@ -129,8 +143,16 @@ const ChatHeader = ({ chatRoomId }: { chatRoomId: string }) => {
     });
   };
 
+  const handleBtn = (key: string) => {
+    if (key === 'goToLobby') {
+      router.push('/meetingRoom');
+    } else {
+      getOutOfChatRoom();
+    }
+  };
+
   return (
-    <div className="h-[116px] border-b flex pl-[32px] pr-[16px] py-[16px] justify-between ">
+    <div className="h-28 border-b flex pl-[32px] pr-[16px] py-[16px] justify-between items-center">
       <div className="flex gap-2">
         <div className="flex flex-col gap-[8px]">
           <h1 className="font-bold text-2xl h-[36px]">{room?.room_title}</h1>
@@ -159,22 +181,26 @@ const ChatHeader = ({ chatRoomId }: { chatRoomId: string }) => {
         </div>
       </div>
 
-      <div className="flex gap-2 h-[40px] my-auto">
+      <div className="flex gap-2 h-[40px] mt-auto mr-[10px]">
         <button onClick={setSearchMode} className="text-[#A1A1AA]">
           <IoIosSearch />
         </button>
-        <Link
-          href="/meetingRoom"
-          className="border border-[#D4D4D8] text-[#A1A1AA] p-[10px] flex items-center rounded-md"
-        >
-          로비로가기
-        </Link>
-        <button
-          onClick={getOutOfChatRoom}
-          className="border border-[#D4D4D8] text-[#A1A1AA] p-[10px] flex items-center rounded-md"
-        >
-          나가기
-        </button>
+
+        <Dropdown className="min-w-0">
+          <DropdownTrigger>
+            <button>
+              <CiMenuKebab className="my-auto w-6 h-6 text-[#A1A1AA]" />
+            </button>
+          </DropdownTrigger>
+          <DropdownMenu aria-label="Static Actions" onAction={(key) => handleBtn(String(key))}>
+            <DropdownItem key="goToLobby" className="text-right">
+              로비로가기
+            </DropdownItem>
+            <DropdownItem key="getOutOfRoom" className="text-danger text-right" color="danger">
+              이 방 나가기
+            </DropdownItem>
+          </DropdownMenu>
+        </Dropdown>
       </div>
     </div>
   );
