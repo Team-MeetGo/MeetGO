@@ -9,7 +9,7 @@ import { getFromTo } from '@/utils/utilFns';
 import { ITEM_INTERVAL } from '@/utils/constant';
 import ChatList from '@/components/chat/chatBody/ChatList';
 import SideBarButton from '@/components/chat/sidebar/SideBarButton';
-import MobileSideber from '@/components/chat/sidebar/MobileSideber';
+import SideBarModal from '@/components/chat/sidebar/SideBarModal';
 
 const ChatPage = async ({ params }: { params: { chatroom_id: string } }) => {
   const chatRoomId = params.chatroom_id;
@@ -29,10 +29,12 @@ const ChatPage = async ({ params }: { params: { chatroom_id: string } }) => {
       <div className="relative flex flex-row">
         <InitChat user={user} chatRoomId={chatRoomId} allMsgs={allMsgs ?? []} />
         <div className="flex lg:flex-row lg:w-full justify-center mx-auto">
-          <SideBar chatRoomId={chatRoomId} />
+          <div className="lg:flex hidden">
+            <SideBar chatRoomId={chatRoomId} />
+          </div>
           <div className="w-full max-w-2xl max-h-[calc(100vh-90px)] relative">
             <div className="absolute top-0 left-0 lg:hidden">
-              <MobileSideber />
+              <SideBarModal chatRoomId={chatRoomId} />
             </div>
             <div className="absolute top-0 left-0 hidden lg:block">
               <SideBarButton />
