@@ -193,7 +193,7 @@ const ChatHeader = ({ chatRoomId }: { chatRoomId: string }) => {
             </button>
           </DropdownTrigger>
           <DropdownMenu aria-label="Static Actions" onAction={(key) => handleBtn(String(key))}>
-            <DropdownItem key="goToLobby" className="text-danger text-right" color="danger">
+            <DropdownItem key="goToLobby" className="text-right">
               로비로가기
             </DropdownItem>
             <DropdownItem key="getOutOfRoom" className="text-danger text-right" color="danger">

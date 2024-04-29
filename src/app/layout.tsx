@@ -66,7 +66,7 @@ export default async function RootLayout({
                 <NavBar />
                 {children}
                 <ReactQueryDevtools initialIsOpen={true} />
-                {/* <Footer /> */}
+                <Footer />
               </Suspense>
             </HydrationBoundary>
           </QueryProvider>
