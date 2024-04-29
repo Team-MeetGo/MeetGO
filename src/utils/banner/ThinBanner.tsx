@@ -40,7 +40,7 @@ const ThinBanner = () => {
             있어요.
           </p>
           <Link
-            className="bg-white rounded-md max-w-52 px-7 h-10 text-secondMainColor text-base max-sm:text-sm font-semibold my-auto flex justify-center items-center hover:bg-opacity-90 break-keep"
+            className="bg-white rounded-md px-7 h-10 text-secondMainColor text-base max-sm:text-sm font-semibold my-auto flex justify-center items-center hover:bg-opacity-90 break-keep"
             href={user?.isValidate ? '/review/pageNumber/1' : '/mypage'}
             onClick={checkIfValidated}
           >

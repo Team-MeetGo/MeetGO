@@ -4,15 +4,16 @@ import Link from 'next/link';
 
 const ReviewsPage = () => {
   return (
-    <div className="flex flex-col justify-center items-center">
-      {/* <div className="w-full h-[120px] flex justify-center items-center text-white text-2xl bg-gradient-to-review mb-8"> */}
-
-      {/* </div> */}
-      <div className="max-w-[1000px]">
+    <>
+      <main className="w-full max-w-[1080px] mx-auto px-[24px] flex flex-col gap-12">
+        <header className="h-40 flex flex-col justify-center items-center gap-4 py-auto">
+          <p className="text-[#6F7785] mr-auto">자유게시판 이라고 생각해도 좋아요.</p>
+          <h1 className="text-4xl font-extrabold mr-auto">실시간 후기</h1>
+        </header>
         <ReviewList />
-      </div>
+      </main>
       <ThinBanner />
-    </div>
+    </>
   );
 };
 
