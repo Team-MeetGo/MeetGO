@@ -85,7 +85,7 @@ function MeetingRoomList() {
 
   return (
     <>
-      <main className="flex flex-col items-center justify-content min-w-[1000px]">
+      <main className="flex flex-col items-center justify-content lg:min-w-[1000px] w-full">
         <MyRoomsTitle>
           {filteredMyRoomList && filteredMyRoomList.length > 0 ? (
             <>
@@ -93,12 +93,12 @@ function MeetingRoomList() {
                 {page !== 1 ? <IoIosArrowBack className="h-[40px] w-[40px] m-[8px]" /> : null}
               </button>
 
-              <div className="w-[1000px]">
+              <div className="lg:w-[1000px] max-sm:w-[22rem]">
                 {
                   <li
                     className={`${
-                      filteredMyRoomList.length === 0 ? 'h-[40px]' : 'h-[241px]'
-                    } gap-[24px] grid grid-cols-3 w-100%`}
+                      filteredMyRoomList.length === 0 ? 'h-[40px]' : 'lg:h-[241px]'
+                    } lg:gap-[24px] lg:grid lg:grid-cols-3 w-full flex flex-col gap-[1rem]`}
                   >
                     <Suspense>
                       {filteredMyRoomList.map((room, index) => {
@@ -110,20 +110,20 @@ function MeetingRoomList() {
                 }
               </div>
 
-              <button onClick={nextPage}>
+              <button onClick={nextPage} className="lg:block hidden">
                 {filteredMyRoomList.length / 3 <= page ? null : (
                   <IoIosArrowForward className="h-[40px] w-[40px] m-[8px]" />
                 )}
               </button>
             </>
           ) : (
-            <div className="text-[20px] w-[1112px] text-center">
+            <div className="text-[20px] lg:w-[1112px] max-sm:[22rem] text-center">
               아직 만들어진 방이 없습니다! 방을 만들어서 미팅을 시작해 보세요!
             </div>
           )}
         </MyRoomsTitle>
         <OtherRoomsTitle>
-          <section className="gap-[24px] grid grid-cols-3 w-[1000px] pt-[24px] pb-[8px]">
+          <section className="lg:gap-[24px] lg:grid lg:grid-cols-3 lg:w-[1000px] pt-[24px] pb-[8px] max-sm:flex max-sm:flex-col gap-[1rem]">
             <Suspense>
               {filteredOtherRooms.map((room) => (
                 <MeetingRoom key={room.room_id} room={room} />

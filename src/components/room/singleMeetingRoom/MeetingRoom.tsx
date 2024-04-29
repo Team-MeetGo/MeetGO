@@ -82,7 +82,7 @@ function MeetingRoom({ room }: { room: MeetingRoomType }) {
           : `bg-gray1 rounded-xl`
       }
     >
-      <section className="w-max-[354px] h-[241px] p-6 gap-4 rounded-xl flex flex-col hover:cursor-pointer">
+      <section className="w-[354px] h-[241px] p-6 gap-4 rounded-xl flex flex-col hover:cursor-pointer">
         <RoomInformation room={room} />
         <main className="h-full flex flex-col justify-between" onClick={() => handleAddMemberDebounce({ room_id })}>
           <section>

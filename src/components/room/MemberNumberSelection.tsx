@@ -48,7 +48,7 @@ function MemberNumberSelection({ text }: { text: string }) {
 
   return (
     <>
-      <section className="relative bg-white z-20" ref={dropdownRef}>
+      <section className="relative bg-white z-10" ref={dropdownRef}>
         <button
           className="bg-white w-[120px] h-[43px] rounded-lg border-black border-[1px] text-[16px]"
           type="button"
