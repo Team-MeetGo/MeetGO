@@ -76,7 +76,7 @@ const NavBarContents = () => {
                     onClick={checkIsValidate}
                     prefetch={true}
                   >
-                    라운지
+                    미팅룸
                   </Link>
                   <Link
                     className="flex items-center rounded-md px-3 py-2 text-base font-medium transition-colors"
@@ -117,7 +117,7 @@ const NavBarContents = () => {
             href={isValidate ? '/meetingRoom' : '/mypage'}
             onClick={checkIsValidate}
           >
-            믿고
+            미팅룸
           </Link>
           <Link
             className="inline-flex h-full w-max items-center justify-center rounded-md px-4 py-2 text-base font-medium transition-colors"
