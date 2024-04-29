@@ -22,7 +22,7 @@ const MainBottomBanner = () => {
           </p>
         </div>
         <Link
-          className="bg-white rounded-xl max-w-52 px-7 h-12 text-secondMainColor text-base font-semibold my-auto flex justify-center items-center hover:bg-opacity-90 break-keep"
+          className="bg-white rounded-xl max-w-52 px-7 h-11 text-secondMainColor text-base font-semibold my-auto flex justify-center items-center hover:bg-opacity-90 break-keep"
           href={isLoggedIn ? '/' : '/join'}
           onClick={checkIfMember}
         >
