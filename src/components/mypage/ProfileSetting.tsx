@@ -31,8 +31,6 @@ const ProfileSetting = () => {
 
   const { mutate: updateProfileMutate } = useProfileUpdateMutation();
 
-  useEffect;
-
   useEffect(() => {
     if (user) {
       inputNickname.setValue(user.nickname);
@@ -97,7 +95,7 @@ const ProfileSetting = () => {
       required: '*',
       name: 'nickname',
       input: inputNickname,
-      content: user!.nickname,
+      content: user?.nickname,
       editable: true,
       maxLength: 10
     },
@@ -106,7 +104,7 @@ const ProfileSetting = () => {
       required: '*',
       name: 'loginEmail',
       input: inputEmail,
-      content: user!.login_email,
+      content: user?.login_email,
       editable: false
     },
     {
@@ -137,7 +135,7 @@ const ProfileSetting = () => {
       required: '*',
       name: 'schoolName',
       input: inputSchoolName,
-      content: user!.school_name,
+      content: user?.school_name,
       editable: user?.school_name ? false : true
     },
     {
@@ -145,7 +143,7 @@ const ProfileSetting = () => {
       required: '*',
       name: 'schoolEmail',
       input: inputSchoolEmail,
-      content: user!.school_email,
+      content: user?.school_email,
       editable: user?.school_email ? false : true,
       icon: user?.school_email && <FaCheckSquare className="text-[#00C77E]" />
     },
@@ -154,7 +152,7 @@ const ProfileSetting = () => {
       required: '*',
       name: 'kakaoId',
       input: inputKakaoId,
-      content: user!.kakaoId,
+      content: user?.kakaoId,
       editable: true,
       maxLength: 20
     }
@@ -163,13 +161,13 @@ const ProfileSetting = () => {
   const optionProfileInfo = [
     {
       title: '이상형',
-      content: user!.favorite,
+      content: user?.favorite,
       type: 'select',
       component: <Favorite isEditing={isEditing} />
     },
     {
       title: '자기소개',
-      content: user!.intro,
+      content: user?.intro,
       editable: true,
       name: 'intro',
       input: inputIntro,
@@ -238,7 +236,10 @@ const ProfileSetting = () => {
             </div>
           ))}
         </div>
-        <button className="underline max-w-24 mt-[48px] opacity-50" onClick={() => handleDeleteUser(user!.user_id)}>
+        <button
+          className="underline max-w-24 mt-[48px] opacity-50"
+          onClick={() => handleDeleteUser(user?.user_id ?? '')}
+        >
           회원탈퇴하기
         </button>
       </div>
@@ -282,7 +283,7 @@ const ProfileSetting = () => {
               className="border rounded-xl px-[32px] py-[12px] text-[18px] font-medium"
               onClick={() =>
                 handleProfileUpdate({
-                  userId: user!.user_id,
+                  userId: user?.user_id ?? '',
                   inputNickname: inputNickname.value,
                   inputIntro: inputIntro.value,
                   inputKakaoId: inputKakaoId.value,

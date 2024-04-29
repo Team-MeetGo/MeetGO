@@ -10,7 +10,6 @@ const ProfileSideNav = () => {
       <Link
         href="/mypage"
         className={`hover:text-mainColor ${pathname === '/mypage' ? 'text-mainColor font-bold' : ''}`}
-        prefetch={true}
       >
         프로필 설정
       </Link>
