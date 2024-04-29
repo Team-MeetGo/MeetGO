@@ -215,7 +215,7 @@ const Map = ({ chatRoomId }: { chatRoomId: string }) => {
     <div>
       <div className="py-6">
         <h1 className="font-semibold text-2xl mb-2">미팅 장소</h1>
-        <Card className="h-[3.75rem] border border-mainColor rounded-lg shadow-none ">
+        <Card className="h-[60px] border border-mainColor rounded-lg shadow-none ">
           <CardBody className=" flex flex-row justify-start items-center text-lg">
             <p className={meetingLocation ? '' : 'text-gray2'}>
               {meetingLocation ? meetingLocation : '방장이 선택한 장소가 표시됩니다.'}
@@ -229,7 +229,7 @@ const Map = ({ chatRoomId }: { chatRoomId: string }) => {
       <DateTimePicker chatRoomId={chatRoomId} />
 
       <h1 className="font-semibold text-2xl mb-2">장소 검색</h1>
-      <Card className="h-[3.75rem] border border-gray2 rounded-lg shadow-none mb-4">
+      <Card className="h-[60px] border border-gray2 rounded-lg shadow-none mb-4">
         <CardBody className=" flex flex-row justify-start items-center text-lg">
           <form
             onSubmit={(e) => {
