@@ -62,6 +62,7 @@ export const updateProfile = async (
     return;
   }
 
+  // 프로필 업데이트
   const { error } = await clientSupabase
     .from('users')
     .update({
@@ -72,6 +73,10 @@ export const updateProfile = async (
       favorite: favorite
     })
     .eq('user_id', userId);
+
+  if (error) {
+    console.error('Error updating profile:', error);
+  }
 };
 
 /** 학교 업데이트하는 로직 */

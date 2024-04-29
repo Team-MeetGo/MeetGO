@@ -18,36 +18,41 @@ import {
   useDisclosure
 } from '@nextui-org/react';
 import { customErrToast, customSuccessToast } from '../common/customToast';
-import { FaCheckSquare } from 'react-icons/fa';
 
-const SchoolForm = () => {
+interface SchoolFormProps {
+  inputSchoolEmail: { value: string; onChange: (e: any) => void };
+  inputSchoolName: { value: string; onChange: (e: any) => void };
+  isEditing: boolean;
+}
+
+const SchoolForm: React.FC<SchoolFormProps> = ({ inputSchoolEmail, inputSchoolName, isEditing }) => {
   const queryClient = useQueryClient();
-  const [schoolEmail, setSchoolEmail] = useState('');
-  const [univName, setUnivName] = useState('');
+  const schoolEmail = inputSchoolEmail.value;
+  const univName = inputSchoolName.value;
   const [code, setCode] = useState('');
   const [isCodeSent, setIsCodeSent] = useState(false);
-  const [validationMessages, setValidationMessages] = useState({
-    schoolEmail: '',
-    univName: ''
-  });
+  // const [validationMessages, setValidationMessages] = useState({
+  //   schoolEmail: '',
+  //   univName: ''
+  // });
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
 
   const { data: user } = useGetUserDataQuery();
   const { mutate: updateSchoolMutate } = useSchoolUpdateMutation();
 
-  const onChangeInput = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    if (name === 'schoolEmail') setSchoolEmail(value);
-    if (name === 'univName') setUnivName(value);
-    const validationResult = schoolValidation(name, value);
-    if (typeof validationResult === 'string') {
-      // 유효성 검사를 통과하지 못했을 경우, 오류 메시지를 설정합니다.
-      setValidationMessages((prev) => ({ ...prev, [name]: validationResult }));
-    } else {
-      // 유효성 검사를 통과한 경우, 해당 필드의 오류 메시지를 비웁니다.
-      setValidationMessages((prev) => ({ ...prev, [name]: '' }));
-    }
-  };
+  // const onChangeInput = (e: React.ChangeEvent<HTMLInputElement>) => {
+  //   const { name, value } = e.target;
+  //   if (name === 'schoolEmail') setSchoolEmail(value);
+  //   if (name === 'univName') setUnivName(value);
+  //   const validationResult = schoolValidation(name, value);
+  //   if (typeof validationResult === 'string') {
+  //     // 유효성 검사를 통과하지 못했을 경우, 오류 메시지를 설정합니다.
+  //     setValidationMessages((prev) => ({ ...prev, [name]: validationResult }));
+  //   } else {
+  //     // 유효성 검사를 통과한 경우, 해당 필드의 오류 메시지를 비웁니다.
+  //     setValidationMessages((prev) => ({ ...prev, [name]: '' }));
+  //   }
+  // };
 
   /**인증메일 보내는 로직 */
   const onSubmitEmailConfirm = async () => {
@@ -64,7 +69,7 @@ const SchoolForm = () => {
         return;
       }
 
-      // 학교명이 유효한 경우, 인증 메일 발송
+      // 학교메일도 유효한 경우, 인증 메일 발송
       const emailConfirmResult = await emailConfirmAPI(schoolEmail, univName, true);
       if (emailConfirmResult.success) {
         onOpen();
@@ -107,59 +112,9 @@ const SchoolForm = () => {
 
   return (
     <div className="flex flex-col gap-6">
-      <div className="flex gap-6">
-        <label className="block text-lg font-semibold w-[100px]" htmlFor="schoolEmail">
-          학교 이메일
-        </label>
-        {user?.isValidate ? (
-          <p>{user?.school_email}</p>
-        ) : (
-          <div className="flex items-center">
-            <input
-              className="mr-2 border p-3 rounded-md"
-              name="schoolEmail"
-              id="schoolEmail"
-              type="email"
-              value={schoolEmail}
-              placeholder=""
-              onChange={onChangeInput}
-            />
-            {validationMessages.schoolEmail && (
-              <p className="text-red-500 text-[13px] mt-2">{validationMessages.schoolEmail}</p>
-            )}
-          </div>
-        )}
-      </div>
-      <div className="flex gap-6 items-center">
-        <label className="block text-lg font-semibold w-[100px]" htmlFor="univName">
-          학교명
-        </label>
-        {user?.isValidate ? (
-          <p>{user?.school_name}</p>
-        ) : (
-          <div className="flex items-center">
-            <input
-              className="mr-2 border p-3 rounded-md"
-              name="univName"
-              id="univName"
-              type="text"
-              value={univName}
-              placeholder=""
-              onChange={onChangeInput}
-            />
-            {validationMessages.univName && (
-              <p className="text-red-500 text-[13px] mt-2">{validationMessages.univName}</p>
-            )}
-          </div>
-        )}
-        {user?.isValidate ? (
-          <FaCheckSquare color="#006FEE" />
-        ) : (
-          <button className="text-sm border px-4 py-2 rounded-lg" onClick={onSubmitEmailConfirm} disabled={isCodeSent}>
-            인증
-          </button>
-        )}
-      </div>
+      <button className="text-sm border px-4 py-2 rounded-lg" onClick={onSubmitEmailConfirm} disabled={isCodeSent}>
+        인증
+      </button>
       <Modal isOpen={isOpen} onOpenChange={onOpenChange} placement="auto">
         <ModalContent>
           {(onClose) => (

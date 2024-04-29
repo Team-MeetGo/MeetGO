@@ -58,7 +58,7 @@ const NavBarContents = () => {
 
   return (
     <header className="flex h-20 w-full shrink-0 items-center m-auto sticky z-20 top-0 inset-x-0 backdrop-blur-lg bg-white bg-opacity-70 justify-center ">
-      <div className="max-w-[1280px] w-full flex justify-between p-6">
+      <div className="max-w-[1080px] w-full flex justify-between p-6">
         <div className="flex items-center">
           <Drawer>
             <DrawerTrigger onToggle={handleDrawerToggle}>

@@ -66,3 +66,5 @@ export type UserTypeFromTable = {
   school_name: string | null;
   user_id: string;
 };
+
+export type NicknameType = Pick<UserTypeFromTable, 'nickname'>;

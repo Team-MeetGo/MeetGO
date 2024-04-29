@@ -49,3 +49,46 @@ export const useFavoriteStore = create<FavoriteType>()((set) => ({
   selected: new Set([]),
   setSelected: (newSet: Set<string>) => set({ selected: newSet })
 }));
+
+export const useEditingStore = create<{ isEditing: boolean; setIsEditing: (isEditing: boolean) => void }>((set) => ({
+  isEditing: false,
+  setIsEditing: (isEditing) => set({ isEditing })
+}));
+
+type ProfileOnchangeState = {
+  avatarInputValue: string | null;
+  nicknameInputValue: string;
+  schoolEmailInputValue: string;
+  schoolNameInputValue: string;
+  introInputValue: string;
+  genderInputValue: string;
+  kakaoIdInputValue: string;
+  favoriteInputValue: string[];
+  setAvatarInputValue: (value: string | null) => void;
+  setNicknameInputValue: (value: string) => void;
+  setSchoolEmailInputValue: (value: string) => void;
+  setSchoolNameInputValue: (value: string) => void;
+  setIntroInputValue: (value: string) => void;
+  setGenderInputValue: (value: string) => void;
+  setKakaoIdInputValue: (value: string) => void;
+  setFavoriteInputValue: (value: string[]) => void;
+};
+
+export const useProfileOnchangeStore = create<ProfileOnchangeState>((set) => ({
+  avatarInputValue: null,
+  nicknameInputValue: '',
+  schoolEmailInputValue: '',
+  schoolNameInputValue: '',
+  introInputValue: '',
+  genderInputValue: '',
+  kakaoIdInputValue: '',
+  favoriteInputValue: [],
+  setAvatarInputValue: (value) => set({ avatarInputValue: value }),
+  setNicknameInputValue: (value) => set({ nicknameInputValue: value }),
+  setSchoolEmailInputValue: (value) => set({ schoolEmailInputValue: value }),
+  setSchoolNameInputValue: (value) => set({ schoolNameInputValue: value }),
+  setIntroInputValue: (value) => set({ introInputValue: value }),
+  setGenderInputValue: (value) => set({ genderInputValue: value }),
+  setKakaoIdInputValue: (value) => set({ kakaoIdInputValue: value }),
+  setFavoriteInputValue: (value) => set({ favoriteInputValue: value })
+}));

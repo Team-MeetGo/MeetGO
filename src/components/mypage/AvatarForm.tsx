@@ -76,39 +76,38 @@ const AvatarForm = () => {
       <div className="flex flex-col justify-center items-start gap-2">
         <div className="flex flex-col items-center gap-2 relative">
           <div className="w-[80px] h-[80px] overflow-hidden flex justify-center items-center rounded-full relative">
-            {avatarView ? (
-              <Image
-                src={avatarView}
-                alt="Avatar Preview"
-                style={{ objectFit: 'cover' }}
-                fill={true}
-                sizes="450px"
-                priority={false}
-              />
-            ) : user?.avatar ? (
-              <Image
-                src={`${user.avatar}?${new Date().getTime()}`}
-                alt="Avatar"
-                style={{ objectFit: 'cover' }}
-                fill={true}
-                sizes="450px"
-                priority={true}
-              />
-            ) : (
-              <Avatar
-                classNames={{
-                  base: 'bg-mainColor',
-                  icon: 'text-white'
-                }}
-                className="w-32 h-32"
-              />
-            )}
+            <label htmlFor="file_upload" className="px-3 py-2 border rounded-lg text-sm cursor-pointer">
+              {avatarView ? (
+                <Image
+                  src={avatarView}
+                  alt="Avatar Preview"
+                  style={{ objectFit: 'cover' }}
+                  fill={true}
+                  sizes="450px"
+                  priority={false}
+                />
+              ) : user?.avatar ? (
+                <Image
+                  src={`${user.avatar}?${new Date().getTime()}`}
+                  alt="Avatar"
+                  style={{ objectFit: 'cover' }}
+                  fill={true}
+                  sizes="450px"
+                  priority={true}
+                />
+              ) : (
+                <Avatar
+                  classNames={{
+                    base: 'bg-mainColor',
+                    icon: 'text-white'
+                  }}
+                  className="w-20 h-20"
+                />
+              )}
+            </label>
           </div>
           {isEditing ? (
             <div className="flex flex-col gap-1 items-center">
-              <label htmlFor="file_upload" className="px-3 py-2 border rounded-lg text-sm">
-                사진 선택
-              </label>
               <input
                 type="file"
                 id="file_upload"

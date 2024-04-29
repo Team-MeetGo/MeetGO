@@ -20,7 +20,7 @@ const ProfileHeader = () => {
 
   return (
     <div className="bg-mainColor w-full py-[48px] text-white">
-      <div className="flex flex-col gap-6 max-w-[1280px] m-auto max-md:items-start px-[24px]">
+      <div className="flex flex-col gap-6 max-w-[1080px] m-auto max-md:items-start px-[24px]">
         <h1 className="text-2xl font-medium">마이페이지</h1>
         <div className="flex items-center max-md:items-start md:justify-between max-md:flex-col max-md:gap-6">
           <div className="flex gap-6 items-center">
@@ -46,7 +46,7 @@ const ProfileHeader = () => {
             </div>
             <div className="flex flex-col gap-2">
               <div className="flex items-center max-lg:flex-col max-lg:items-start gap-2">
-                <p className="block text-2xl font-bold">{user?.nickname}</p>
+                <p className="block text-2xl font-bold max-md:text-xl">{user?.nickname}</p>
                 <p className="text-2xl font-thin max-lg:hidden">|</p>
                 <div>
                   <span className="text-sm tracking-wider">카카오톡 ID : </span>
