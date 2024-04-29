@@ -1,12 +1,11 @@
-import MypageBottomBanner from '@/components/mypage/MypageBottomBanner';
+import ThickBanner from '@/utils/banner/ThickBanner';
 import React, { PropsWithChildren } from 'react';
 
 const layout = ({ children }: PropsWithChildren) => {
   return (
     <>
       <div>{children}</div>
-
-      <MypageBottomBanner />
+      <ThickBanner />
     </>
   );
 };
