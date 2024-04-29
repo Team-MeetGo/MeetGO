@@ -156,7 +156,7 @@ const JoinForm = () => {
                 name="nickname"
                 placeholder="닉네임을 입력해주세요."
                 onChange={onChangeInput}
-                maxLength={12}
+                maxLength={10}
                 required
               />
             </label>

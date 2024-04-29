@@ -4,7 +4,7 @@ import { MY_PAST_NOW_ROOM, RECRUTING_ROOMDATA, ROOMLIST } from '@/query/meetingR
 import { useQueryClient } from '@tanstack/react-query';
 import { IoMdRefresh } from 'react-icons/io';
 
-function RefreshButoon() {
+function RefreshButton() {
   const queryClient = useQueryClient();
   const { data: user } = useGetUserDataQuery();
 
@@ -32,4 +32,4 @@ function RefreshButoon() {
   );
 }
 
-export default RefreshButoon;
+export default RefreshButton;

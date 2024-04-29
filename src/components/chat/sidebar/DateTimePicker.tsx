@@ -33,11 +33,11 @@ const DateTimePicker = forwardRef(({ chatRoomId }: { chatRoomId: string }) => {
   }, [chatRoomId, chat]);
 
   return (
-    <div className="relative z-40 w-full py-6">
+    <div className="relative z-30 py-6">
       <DatePicker
         locale={ko} // 한국어
         showPopperArrow={false} // 위에 삼각형 제거
-        wrapperClassName="w-full z-30"
+        wrapperClassName="w-full z-20"
         selected={selectedMeetingTime ? selectedMeetingTime : new Date()}
         onChange={(date) => {
           if (leaderId == userId) {

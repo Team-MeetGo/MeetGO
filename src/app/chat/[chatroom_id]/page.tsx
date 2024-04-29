@@ -16,21 +16,20 @@ const ChatPage = async ({ params }: { params: { chatroom_id: string } }) => {
   const { data } = await supabase.auth.getUser();
   const user = data.user;
   const { from, to } = getFromTo(0, ITEM_INTERVAL);
-  const { data: allMsgs, error } = await supabase
+  const { data: allMsgs } = await supabase
     .from('messages')
     .select('*')
     .eq('chatting_room_id', chatRoomId)
     .range(from, to)
     .order('created_at', { ascending: false });
-  if (error) console.error('fail to select allMsgs');
 
   return (
     <Suspense fallback={<ChatLoading />}>
-      <div className="relative flex felx-row">
+      <div className="relative flex felx-row w-full max-w-[1080px] mx-auto">
         <InitChat user={user} chatRoomId={chatRoomId} allMsgs={allMsgs ?? []} />
-        <div className="flex flex-row w-full justify-center mx-auto">
+        <div className="flex lg:flex-row lg:w-full justify-center mx-auto">
           <SideBar chatRoomId={chatRoomId} />
-          <div className="w-full max-w-2xl max-h-[calc(100vh-90px)] relative">
+          <div className="w-full lg:max-w-xl max-h-[calc(100vh-90px)] relative">
             <div className="absolute top-0 left-0">
               <SideBarButton />
             </div>

@@ -1,9 +1,12 @@
-import Profile from '@/components/mypage/Profile';
+import MypageLayout from '@/components/mypage/MypageLayout';
+import ProfileSetting from '@/components/mypage/ProfileSetting';
 
 const MyPage = () => {
   return (
     <>
-      <Profile />
+      <MypageLayout>
+        <ProfileSetting />
+      </MypageLayout>
     </>
   );
 };

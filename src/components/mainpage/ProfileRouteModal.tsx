@@ -7,13 +7,13 @@ import { useRouter } from 'next/navigation';
 import { useFirstLoginMutation } from '@/hooks/useMutation/useFirstLoginMutation';
 
 const ProfileRouteModal = () => {
-  const { data: user, isSuccess } = useGetUserDataQuery();
+  const { data: user, isLoggedIn } = useGetUserDataQuery();
   const { openModal, closeModal } = useModalStore();
   const router = useRouter();
   const mutateFirstLogin = useFirstLoginMutation();
 
   useEffect(() => {
-    if (isSuccess && user?.first_login) {
+    if (isLoggedIn && user?.first_login) {
       openModal({
         type: 'confirm',
         name: 'Welcome🎉',
@@ -29,13 +29,9 @@ const ProfileRouteModal = () => {
         }
       });
     }
-  }, [isSuccess, user]);
+  }, [isLoggedIn, user]);
 
-  return (
-    <>
-      <ValidationModal />
-    </>
-  );
+  return <></>;
 };
 
 export default ProfileRouteModal;

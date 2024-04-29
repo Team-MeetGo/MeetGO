@@ -1,5 +1,5 @@
 import MeetingRoomForm from '@/components/room/MeetingRoomForm';
-import RefreshButoon from '@/components/room/lobby/RefreshButton';
+import RefreshButton from '@/components/room/lobby/RefreshButton';
 
 function MyRoomsTitle({ children }: { children: React.ReactNode }) {
   return (
@@ -8,7 +8,7 @@ function MyRoomsTitle({ children }: { children: React.ReactNode }) {
         <div className="flex flex-row lg:w-full justify-between lg:pb-[24px] w-[22rem]">
           <p className="lg:text-[40px] text-[1.8rem] font-semibold lg:ml-[56px]">참여 중</p>
           <div className="flex flex-row align-middle justify-center gap-4 lg:mr-[56px]">
-            <RefreshButoon />
+            <RefreshButton />
             <MeetingRoomForm />
           </div>
         </div>
