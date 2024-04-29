@@ -1,5 +1,5 @@
 'use client';
-import { useGetUserDataQuery } from '@/hooks/useQueries/useUserQuery';
+
 import { Message } from '@/types/chatTypes';
 import { Button, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, useDisclosure } from '@nextui-org/react';
 import Image from 'next/image';
@@ -59,17 +59,23 @@ const ChatImg = ({ msg }: { msg: Message }) => {
                     return (
                       <>
                         <ModalHeader className="flex flex-col gap-1"></ModalHeader>
-                        <ModalBody>
-                          <div className="z-10 w-full flex text-3xl my-auto text-[#A1A1AA]">
+                        <ModalBody className="px-2">
+                          <div className="z-10 w-full flex my-auto text-[#1F2937] ">
                             {msg.imgs && slideCount > 0 ? (
-                              <button className="w-10 h-10 mr-auto" onClick={() => downSlideCount(msg.imgs)}>
-                                <IoIosArrowBack />
+                              <button
+                                className="w-10 h-10 mr-auto rounded-full transition-opacity hover:bg-opacity-40 hover:bg-white "
+                                onClick={() => downSlideCount(msg.imgs)}
+                              >
+                                <IoIosArrowBack className="mx-auto" />
                               </button>
                             ) : null}
 
                             {msg.imgs && slideCount < msg.imgs?.length - 1 ? (
-                              <button className="w-10 h-10 rotate-180 ml-auto" onClick={() => UpSlideCount(msg.imgs)}>
-                                <IoIosArrowBack />
+                              <button
+                                className="w-10 h-10 rotate-180 ml-auto rounded-full transition-opacity hover:bg-opacity-40 hover:bg-white "
+                                onClick={() => UpSlideCount(msg.imgs)}
+                              >
+                                <IoIosArrowBack className="mx-auto" />
                               </button>
                             ) : null}
                           </div>

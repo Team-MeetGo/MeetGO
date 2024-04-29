@@ -4,7 +4,7 @@ import RegionSelection from '@/components/room/RegionSelection';
 import { useUpdateRoom } from '@/hooks/useMutation/useMeetingMutation';
 import { useGetUserDataQuery } from '@/hooks/useQueries/useUserQuery';
 import { useRoomStore } from '@/store/roomStore';
-import { favoriteOptions } from '@/utils/FavoriteData';
+import { favoriteOptions } from '@/utils/data/FavoriteData';
 import {
   Button,
   Chip,

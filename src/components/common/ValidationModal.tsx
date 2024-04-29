@@ -28,7 +28,7 @@ export const ValidationModal = () => {
             <div>
               {type === 'confirm' ? (
                 <>
-                  <button className="text-[#8F5DF4] pt-2 px-2" onClick={onFunc}>
+                  <button className="text-mainColor pt-2 px-2" onClick={onFunc}>
                     확인
                   </button>
                   <button className="pt-2 px-2" onClick={onCancelFunc}>
@@ -37,7 +37,7 @@ export const ValidationModal = () => {
                 </>
               ) : (
                 <button
-                  className="pt-2 text-[#8F5DF4] m-auto w-full text-[16px] font-semibold"
+                  className="pt-2 text-mainColor m-auto w-full text-[16px] font-semibold"
                   onClick={(e) => {
                     e.preventDefault();
                     if (type === 'alert' && text === '로그인 되었습니다.') {

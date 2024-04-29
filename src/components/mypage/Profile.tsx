@@ -18,11 +18,10 @@ import ProfileHeader from './ProfileHeader';
 import { deleteUser } from '@/utils/api/authAPI';
 import { ValidationModal } from '../common/ValidationModal';
 import { useModalStore } from '@/store/modalStore';
-import { GENDER } from '@/utils/constant';
 
 const Profile = () => {
   const queryClient = useQueryClient();
-  const { data: user, isPending } = useGetUserDataQuery();
+  const { data: user } = useGetUserDataQuery();
   const [isEditing, setIsEditing] = useState(false);
   const inputNickname = useInputChange('');
   const inputIntro = useInputChange('');
@@ -33,13 +32,15 @@ const Profile = () => {
 
   const { mutate: updateProfileMutate } = useProfileUpdateMutation();
 
+  if (!user) return null;
+
   const toggleEditing = () => {
     setIsEditing(true);
     if (user) {
       inputNickname.setValue(user.nickname);
-      inputIntro.setValue(user?.intro);
-      inputKakaoId.setValue(user?.kakaoId);
-      inputGender.setValue(user?.gender);
+      inputIntro.setValue(user.intro);
+      inputKakaoId.setValue(user.kakaoId);
+      inputGender.setValue(user.gender);
     }
   };
 
@@ -93,7 +94,7 @@ const Profile = () => {
         <div className="flex items-center gap-6">
           <p className="block text-lg font-semibold w-[100px]">닉네임</p>
           {!isEditing ? (
-            <p className="block text-base font-medium">{user?.nickname}</p>
+            <p className="block text-base font-medium">{user.nickname}</p>
           ) : (
             <input
               className="max-w-full p-2 border border-gray-300 rounded-md"
@@ -108,21 +109,21 @@ const Profile = () => {
         </div>
         <div className="flex items-center gap-6">
           <p className="block text-lg font-semibold w-[100px]">이메일</p>
-          <p className="block text-base font-medium">{user?.login_email}</p>
+          <p className="block text-base font-medium">{user.login_email}</p>
         </div>
         <div className={`${isEditing ? 'items-start' : 'items-center'} flex gap-6 w-full`}>
           <p className="block text-lg font-semibold w-[100px]">성별</p>
           <div className="flex flex-col gap-2">
             <p className="block text-base font-medium">
               {user
-                ? user?.gender === 'female'
+                ? user.gender === 'female'
                   ? '여성'
-                  : user?.gender === 'male'
+                  : user.gender === 'male'
                   ? '남성'
                   : '성별을 골라주세요.'
                 : '사용자 정보 없음'}
             </p>
-            {isEditing && !user?.gender && (
+            {isEditing && !user.gender && (
               <Select
                 label="성별"
                 className="min-w-36 max-w-xs"
@@ -144,7 +145,7 @@ const Profile = () => {
         <div className="flex items-center gap-6">
           <label className="block text-lg font-semibold w-[100px]">카카오톡ID</label>
           {!isEditing ? (
-            <p className="block text-sm font-medium mb-1">{user?.kakaoId}</p>
+            <p className="block text-sm font-medium mb-1">{user.kakaoId}</p>
           ) : (
             <input
               className="max-w-full p-2 border border-gray-300 rounded-md"
@@ -163,7 +164,7 @@ const Profile = () => {
             자기소개
           </label>
           {!isEditing ? (
-            <p className="block text-sm font-medium">{user?.intro}</p>
+            <p className="block text-sm font-medium">{user.intro}</p>
           ) : (
             <textarea
               className="p-2 border border-gray-300 rounded-md w-1/2"

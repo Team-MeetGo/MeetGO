@@ -1,7 +1,7 @@
 'use client';
 
 import { useChatDataQuery, useRoomDataQuery } from '@/hooks/useQueries/useChattingQuery';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { Suspense, useEffect, useRef, useState } from 'react';
 import { Card, CardBody, Pagination } from '@nextui-org/react';
 import { HiMiniMagnifyingGlass } from 'react-icons/hi2';
 import DateTimePicker from './DateTimePicker';
@@ -225,9 +225,7 @@ const Map = ({ chatRoomId }: { chatRoomId: string }) => {
       </div>
 
       <div className="border-t border-gray2 "></div>
-
       <DateTimePicker chatRoomId={chatRoomId} />
-
       <h1 className="font-semibold text-2xl mb-2">장소 검색</h1>
       <Card className="h-[60px] border border-gray2 rounded-lg shadow-none mb-4">
         <CardBody className=" flex flex-row justify-start items-center text-lg">
@@ -269,7 +267,7 @@ const Map = ({ chatRoomId }: { chatRoomId: string }) => {
                 }
               }}
             >
-              <div className="flex flex-col items-start justify-start">
+              <div className="flex flex-col items-start justify-start break-all">
                 <h1 className="text-base mb-2.5">{bar.place_name}</h1>
                 <div className="text-sm">
                   <p>{bar.address_name}</p>

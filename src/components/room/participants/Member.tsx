@@ -2,7 +2,7 @@
 
 import GotoChatButton from '@/components/room/participants/GotoChatButton';
 import { useRoomInfoWithRoomIdQuery, useRoomParticipantsQuery } from '@/hooks/useQueries/useMeetingQuery';
-import { GENDER } from '@/utils/MeetingRoomSelector';
+import { GENDER } from '@/utils/data/MeetingRoomSelector';
 import { RoomFemaleAvatar, RoomMaleAvatar } from '@/utils/icons/RoomAvatar';
 import MeetGoLogoPurple from '@/utils/icons/meetgo-logo-purple.png';
 import { clientSupabase } from '@/utils/supabase/client';
@@ -16,12 +16,13 @@ import HollowMaleMemberCard from './HollowMaleMemberCard';
 
 import type { UserType } from '@/types/roomTypes';
 import type { UUID } from 'crypto';
+
 const Member = ({ roomId }: { roomId: UUID }) => {
   const roomInformation = useRoomInfoWithRoomIdQuery(roomId);
   const participants = useRoomParticipantsQuery(roomId);
 
-  const leaderMember = roomInformation?.leader_id;
-  const memberNumber = roomInformation?.member_number;
+  const leaderMember = roomInformation.leader_id;
+  const memberNumber = roomInformation.member_number;
 
   const [members, setMembers] = useState<UserType[]>(participants as UserType[]);
   const [leader, setLeader] = useState(leaderMember as string);

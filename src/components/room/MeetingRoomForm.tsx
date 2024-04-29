@@ -1,7 +1,7 @@
 'use client';
 import { useGetUserDataQuery } from '@/hooks/useQueries/useUserQuery';
 import { useRoomStore } from '@/store/roomStore';
-import { favoriteOptions } from '@/utils/FavoriteData';
+import { favoriteOptions } from '@/utils/data/FavoriteData';
 import {
   Button,
   Chip,

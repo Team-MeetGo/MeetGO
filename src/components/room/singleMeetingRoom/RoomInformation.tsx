@@ -5,7 +5,7 @@ import getmaxGenderMemberNumber from '@/hooks/custom/useGenderMaxNumber';
 import { useMyMsgData } from '@/hooks/useQueries/useChattingQuery';
 import { useAlreadyChatRoomQuery, useRoomParticipantsQuery } from '@/hooks/useQueries/useMeetingQuery';
 import { useGetUserDataQuery } from '@/hooks/useQueries/useUserQuery';
-import { GENDER } from '@/utils/MeetingRoomSelector';
+import { GENDER } from '@/utils/data/MeetingRoomSelector';
 import { useEffect, useRef, useState } from 'react';
 import { BsFire } from 'react-icons/bs';
 import { HiOutlineDotsVertical } from 'react-icons/hi';

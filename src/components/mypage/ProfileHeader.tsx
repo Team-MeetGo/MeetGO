@@ -1,16 +1,15 @@
 'use client';
 import { useGetUserDataQuery } from '@/hooks/useQueries/useUserQuery';
 import { profileCount } from '@/store/userStore';
-import { Avatar } from '@nextui-org/react';
+import { Avatar, Skeleton } from '@nextui-org/react';
 import Image from 'next/image';
 import { BsPostcardHeart } from 'react-icons/bs';
 import { GoPeople } from 'react-icons/go';
 import { IoMdHeartEmpty } from 'react-icons/io';
 
 const ProfileHeader = () => {
-  const { data: user, isPending, isError, error } = useGetUserDataQuery();
+  const { data: user } = useGetUserDataQuery();
   const joinTime = user?.created_at?.toString().slice(0, 10);
-
   const { postCount, likedPostCount, metPeopleCount } = profileCount();
 
   const buttonData = [

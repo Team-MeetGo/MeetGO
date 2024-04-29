@@ -2,7 +2,7 @@
 import { useGetUserDataQuery } from '@/hooks/useQueries/useUserQuery';
 import { chatStore } from '@/store/chatStore';
 import { Message } from '@/types/chatTypes';
-import { getformattedDate, isItMe, isNextDay } from '@/utils';
+import { getformattedDate, isItMe, isNextDay } from '@/utils/utilFns';
 import ChatDeleteDropDown from './ChatDeleteDropDown';
 import { useMsgsQuery, useRoomDataQuery } from '@/hooks/useQueries/useChattingQuery';
 import ChatImg from './ChatImg';
@@ -13,7 +13,7 @@ const MyChat = ({ msg, idx, lastDivRefs }: { msg: Message; idx: number; lastDivR
   const messages = useMsgsQuery(chatRoomId as string);
   const { data: user } = useGetUserDataQuery();
   const room = useRoomDataQuery(chatRoomId as string);
-  const leaderId = room?.leader_id;
+  const leaderId = room && room?.leader_id;
 
   return (
     <>

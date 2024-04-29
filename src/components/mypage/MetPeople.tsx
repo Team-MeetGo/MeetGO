@@ -16,7 +16,7 @@ import { customErrToast, customLoveToast, customSuccessToast } from '../common/c
 
 const MetPeople = () => {
   const queryClient = useQueryClient();
-  const { data: user, isPending, isError, error } = useGetUserDataQuery();
+  const { data: user } = useGetUserDataQuery();
   const userId = user?.user_id ?? '';
   const userGender = user?.gender ?? '';
   const metPeopleList = useMetPeople(userId, userGender);
@@ -153,15 +153,20 @@ const MetPeople = () => {
               </div>
             )}
             {userId === person.response_Id && person.requestStatus === '요청중' && (
-              <div className="flex gap-1">
+              <div className="flex gap-1 relative">
                 <button
-                  className="text-xs border px-4 py-2 rounded-lg"
+                  className="text-xs border px-4 py-2 rounded-lg relative"
                   onClick={() => handleKakaoIdResponse(person.user_id, '수락')}
                 >
                   수락
+                  <span className="absolute flex h-3 w-3 -top-1 -right-1">
+                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-secondary opacity-75"></span>
+                    <span className="relative inline-flex rounded-full h-3 w-3 bg-mainColor"></span>
+                  </span>
                 </button>
+
                 <button
-                  className="text-xs border px-4 py-2 rounded-lg"
+                  className="text-xs border px-4 py-2 rounded-lg bg-gray-100"
                   onClick={() => handleKakaoIdResponse(person.user_id, '거절')}
                 >
                   거절

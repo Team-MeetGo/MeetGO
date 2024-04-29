@@ -14,7 +14,6 @@ const RememberLastChat = () => {
   const room = useRoomDataQuery(chatRoomId as string);
   const lastMsgId = useMyLastMsgs(user?.user_id!, chatRoomId);
   const { mutate: mutateClearUnread } = useClearNewMsgNum();
-  const queryClient = useQueryClient();
 
   const { mutate: mutateToUpdate } = useUpdateLastMsg(
     user?.user_id as string,

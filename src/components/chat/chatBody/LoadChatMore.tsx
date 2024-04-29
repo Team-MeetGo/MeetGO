@@ -2,7 +2,7 @@
 import { useMsgsQuery } from '@/hooks/useQueries/useChattingQuery';
 import { MSGS_QUERY_KEY } from '@/query/chat/chatQueryKeys';
 import { chatStore } from '@/store/chatStore';
-import { getFromTo } from '@/utils';
+import { getFromTo } from '@/utils/utilFns';
 import { ITEM_INTERVAL } from '@/utils/constant';
 import { clientSupabase } from '@/utils/supabase/client';
 import { Button } from '@nextui-org/react';

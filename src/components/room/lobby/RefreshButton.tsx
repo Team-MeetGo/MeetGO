@@ -6,7 +6,7 @@ import { IoMdRefresh } from 'react-icons/io';
 
 function RefreshButoon() {
   const queryClient = useQueryClient();
-  const { data: user, isPending, isError, error } = useGetUserDataQuery();
+  const { data: user } = useGetUserDataQuery();
 
   const onReload = async () => {
     await queryClient.invalidateQueries({
@@ -14,7 +14,7 @@ function RefreshButoon() {
       refetchType: 'all'
     });
     await queryClient.invalidateQueries({
-      queryKey: RECRUTING_ROOMDATA,
+      queryKey: [RECRUTING_ROOMDATA],
       refetchType: 'all'
     });
   };

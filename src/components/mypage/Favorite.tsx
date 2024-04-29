@@ -1,6 +1,6 @@
 import { Chip, Select, SelectItem } from '@nextui-org/react';
 import { useEffect, useState } from 'react';
-import { favoriteOptions } from '@/utils/FavoriteData';
+import { favoriteOptions } from '@/utils/data/FavoriteData';
 import { clientSupabase } from '@/utils/supabase/client';
 import type { IsEditingType } from '@/types/userTypes';
 import { useGetUserDataQuery } from '@/hooks/useQueries/useUserQuery';
