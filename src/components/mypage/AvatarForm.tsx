@@ -72,62 +72,72 @@ const AvatarForm = () => {
   };
 
   return (
-    <div className="flex flex-col justify-center items-start gap-2 relative">
-      <div className="flex flex-col items-center gap-2">
-        <div className="w-[80px] h-[80px] overflow-hidden flex justify-center items-center rounded-full relative">
-          {avatarView ? (
-            <Image
-              src={avatarView}
-              alt="Avatar Preview"
-              style={{ objectFit: 'cover' }}
-              fill={true}
-              sizes="450px"
-              priority={false}
-            />
-          ) : user?.avatar ? (
-            <Image
-              src={`${user.avatar}?${new Date().getTime()}`}
-              alt="Avatar"
-              style={{ objectFit: 'cover' }}
-              fill={true}
-              sizes="450px"
-              priority={true}
-            />
+    <>
+      <div className="flex flex-col justify-center items-start gap-2">
+        <div className="flex flex-col items-center gap-2 relative">
+          <div className="w-[80px] h-[80px] overflow-hidden flex justify-center items-center rounded-full relative">
+            {avatarView ? (
+              <Image
+                src={avatarView}
+                alt="Avatar Preview"
+                style={{ objectFit: 'cover' }}
+                fill={true}
+                sizes="450px"
+                priority={false}
+              />
+            ) : user?.avatar ? (
+              <Image
+                src={`${user.avatar}?${new Date().getTime()}`}
+                alt="Avatar"
+                style={{ objectFit: 'cover' }}
+                fill={true}
+                sizes="450px"
+                priority={true}
+              />
+            ) : (
+              <Avatar
+                classNames={{
+                  base: 'bg-mainColor',
+                  icon: 'text-white'
+                }}
+                className="w-32 h-32"
+              />
+            )}
+          </div>
+          {isEditing ? (
+            <div className="flex flex-col gap-1 items-center">
+              <label htmlFor="file_upload" className="px-3 py-2 border rounded-lg text-sm">
+                사진 선택
+              </label>
+              <input
+                type="file"
+                id="file_upload"
+                onChange={onFileChange}
+                accept="image/*"
+                className="w-0 h-0 opacity-0"
+              />
+              <div className="flex gap-1">
+                <button
+                  className="text-xs bg-purpleThird px-2 py-1 rounded-lg"
+                  onClick={() => handleAvatarUpdate({ userId: user!.user_id, file })}
+                >
+                  저장
+                </button>
+                <button className="text-xs border px-2 py-1 rounded-lg bg-gray-100" onClick={onFileCancel}>
+                  취소
+                </button>
+              </div>
+            </div>
           ) : (
-            <Avatar color="secondary" className="w-32 h-32" />
+            <button className="text-lg rounded-full bg-[#D4D4D8] p-1 right-0 absolute bottom-0" onClick={toggleEdit}>
+              <IoCamera />
+            </button>
           )}
         </div>
-        {isEditing ? (
-          <div className="flex flex-col gap-1 items-center">
-            <label htmlFor="file_upload" className="px-3 py-2 border rounded-lg text-sm">
-              사진 선택
-            </label>
-            <input
-              type="file"
-              id="file_upload"
-              onChange={onFileChange}
-              accept="image/*"
-              className="w-0 h-0 opacity-0"
-            />
-            <div className="flex gap-1">
-              <button
-                className="text-xs bg-purpleThird px-2 py-1 rounded-lg"
-                onClick={() => handleAvatarUpdate({ userId: user!.user_id, file })}
-              >
-                저장
-              </button>
-              <button className="text-xs border px-2 py-1 rounded-lg bg-gray-100" onClick={onFileCancel}>
-                취소
-              </button>
-            </div>
-          </div>
-        ) : (
-          <button className="text-lg rounded-full bg-[#D4D4D8] p-1 right-0 absolute bottom-0" onClick={toggleEdit}>
-            <IoCamera />
-          </button>
-        )}
       </div>
-    </div>
+      <p className="text-sm text-[#A1A1AA] mt-2">프로필 사진의 권장 크기는 100MB입니다.</p>
+      <p className="text-sm text-[#A1A1AA]">지원하는 파일 형식 : jpg, png, gif</p>
+    </>
   );
 };
 

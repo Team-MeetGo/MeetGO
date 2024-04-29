@@ -102,7 +102,6 @@ const CommentCard = ({ comment }: Props) => {
           </div>
         </div>
       </div>
-      <ValidationModal />
     </>
   );
 };

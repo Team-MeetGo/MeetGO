@@ -33,7 +33,8 @@ const config: Config = {
         lightBlue: '#AEE2FF',
         borderSecondary: '#E2E2E2',
         boxSecondary: '#F9FAFB',
-        requiredRed: '#F43F5E'
+        requiredRed: '#F43F5E',
+        warningYellow: '#CA8A04'
       },
       animation: { 'slideTop-animation': 'sildeTop 3s linear' },
       keyframes: {
