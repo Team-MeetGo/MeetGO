@@ -2,8 +2,8 @@ import LoginForm from '@/components/user/LoginForm';
 
 const LoginPage = () => {
   return (
-    <div className="w-full m-auto flex flex-col justify-center items-center min-h-screen absolute top-0 -z-10">
-      <div className="w-full m-auto flex flex-col justify-center items-center">
+    <div className="w-full m-auto flex flex-col justify-center items-center max-h-[calc(100vh-266px)] h-full">
+      <div className="w-full m-auto flex flex-col justify-center items-center h-full">
         <LoginForm />
       </div>
     </div>

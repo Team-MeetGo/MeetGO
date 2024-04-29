@@ -8,7 +8,7 @@ import { GoPeople } from 'react-icons/go';
 import { IoMdHeartEmpty } from 'react-icons/io';
 
 const ProfileHeader = () => {
-  const { data: user, isPending, isError, error } = useGetUserDataQuery();
+  const { data: user } = useGetUserDataQuery();
   const joinTime = user?.created_at?.toString().slice(0, 10);
   const { postCount, likedPostCount, metPeopleCount } = profileCount();
 
@@ -19,8 +19,8 @@ const ProfileHeader = () => {
   ];
 
   return (
-    <div className="bg-mainColor w-full py-[48px] px-[24px] text-white">
-      <div className="flex flex-col gap-6 max-w-[1280px] m-auto max-md:items-start">
+    <div className="bg-mainColor w-full py-[48px] text-white">
+      <div className="flex flex-col gap-6 max-w-[1280px] m-auto max-md:items-start px-[24px]">
         <h1 className="text-2xl font-medium">마이페이지</h1>
         <div className="flex items-center max-md:items-start md:justify-between max-md:flex-col max-md:gap-6">
           <div className="flex gap-6 items-center">
@@ -35,7 +35,13 @@ const ProfileHeader = () => {
                   priority={true}
                 />
               ) : (
-                <Avatar color="default" className="w-32 h-32" />
+                <Avatar
+                  classNames={{
+                    base: 'bg-white',
+                    icon: 'text-mainColor'
+                  }}
+                  className="w-32 h-32"
+                />
               )}
             </div>
             <div className="flex flex-col gap-2">
@@ -53,7 +59,9 @@ const ProfileHeader = () => {
                     대학교 인증회원
                   </p>
                 ) : (
-                  <p></p>
+                  <p className="px-[12px] py-[4px] bg-white rounded-full text-grayBlack text-sm font-semibold">
+                    대학교 미인증회원
+                  </p>
                 )}
                 <p className="block text-sm tracking-wider">{user?.school_email}</p>
               </div>
