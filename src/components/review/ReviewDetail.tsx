@@ -195,7 +195,6 @@ const ReviewDetail = ({ review_id }: Props) => {
           </div>
         </div>
       </div>
-      <ValidationModal />
     </>
   );
 };
