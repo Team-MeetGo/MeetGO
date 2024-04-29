@@ -45,6 +45,9 @@ const config: Config = {
       fontSize: {
         '2xs': '0.7rem'
       }
+    },
+    screens: {
+      sm: '640px'
     }
   },
   darkMode: 'class',
