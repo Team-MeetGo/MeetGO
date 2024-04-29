@@ -24,7 +24,7 @@ const OthersChat = ({ msg, idx, lastDivRefs }: { msg: Message; idx: number; last
       <div id={msg.message_id} ref={lastDivRefs.current[idx]} className="flex gap-[12px]">
         {messages && isItMe(idx, messages) ? (
           !isNextDay(idx, messages) ? (
-            <div className="w-[60px]"></div>
+            <div className="w-16"></div>
           ) : (
             <ParticipantsInfoWrapper showThatUser={showThatUser} msg={msg} leaderId={leaderId} />
           )
