@@ -16,9 +16,9 @@ const MainBottomBanner = () => {
     <section className="w-full h-24 bg-mainColor flex justify-center items-center px-3">
       <div className="w-full max-w-[1080px] flex justify-between gap-6">
         <div className="text-white">
-          <p className="font-thin text-lg">지금 대학생 이메일 인증하면,</p>
+          <p className="font-thin text-lg">MeetGo의 멤버가 되어</p>
           <p className="text-lg">
-            나를 설레게하는 캠퍼스 인연들을 <span className="font-thin text-lg">만날 수 있어요</span>
+            설렘 가득한 미팅을 <span className="font-thin text-lg">경험 해보세요!</span>
           </p>
         </div>
         <Link
@@ -30,6 +30,23 @@ const MainBottomBanner = () => {
         </Link>
       </div>
     </section>
+    //   <section className="w-full h-24 bg-mainColor flex justify-center items-center px-3">
+    //   <div className="w-full max-w-[1080px] flex justify-between gap-6">
+    //     <div className="text-white">
+    //       <p className="font-thin text-lg">지금 대학생 이메일 인증하면,</p>
+    //       <p className="text-lg">
+    //         나를 설레게하는 캠퍼스 인연들을 <span className="font-thin text-lg">만날 수 있어요</span>
+    //       </p>
+    //     </div>
+    //     <Link
+    //       className="bg-white rounded-xl max-w-52 px-7 h-11 text-secondMainColor text-base font-semibold my-auto flex justify-center items-center hover:bg-opacity-90 break-keep"
+    //       href={isLoggedIn ? '/' : '/join'}
+    //       onClick={checkIfMember}
+    //     >
+    //       회원가입 하러가기
+    //     </Link>
+    //   </div>
+    // </section>
   );
 };
 
