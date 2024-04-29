@@ -11,7 +11,6 @@ import {
   RECRUTING_ROOMDATA,
   ROOMDATA,
   ROOMDATA_WITH_ROOMID,
-  ROOMDATA_WITH_ROOMID_1,
   ROOMLIST,
   ROOM_MEMBER
 } from '@/query/meetingRoom/meetingQueryKeys';
