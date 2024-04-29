@@ -75,7 +75,7 @@ function MeetingRoomForm() {
   };
   return (
     <>
-      <Button onPress={roomOpenHandler} className="w-[92px] h-[51px] bg-mainColor text-white">
+      <Button onPress={roomOpenHandler} className="lg:w-[92px] w-[5rem] lg:h-[51px] h-[3rem] bg-mainColor text-white">
         방 만들기
       </Button>
       <Modal

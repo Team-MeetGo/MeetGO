@@ -89,7 +89,7 @@ function MeetingRoomList() {
         <MyRoomsTitle>
           {filteredMyRoomList && filteredMyRoomList.length > 0 ? (
             <>
-              <button onClick={beforePage}>
+              <button onClick={beforePage} className="lg:block hidden">
                 {page !== 1 ? <IoIosArrowBack className="h-[40px] w-[40px] m-[8px]" /> : null}
               </button>
 
@@ -103,7 +103,18 @@ function MeetingRoomList() {
                     <Suspense>
                       {filteredMyRoomList.map((room, index) => {
                         if (index < 3 * page && index >= 3 * (page - 1))
-                          return <div key={room?.room_id}>{room && <MeetingRoom room={room} />}</div>;
+                          return (
+                            <div className="lg:block hidden" key={room?.room_id}>
+                              {room && <MeetingRoom room={room} />}
+                            </div>
+                          );
+                      })}
+                      {filteredMyRoomList.map((room) => {
+                        return (
+                          <div className="block lg:hidden" key={room?.room_id}>
+                            {room && <MeetingRoom room={room} />}
+                          </div>
+                        );
                       })}
                     </Suspense>
                   </li>
