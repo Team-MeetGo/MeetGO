@@ -1,6 +1,18 @@
-import React from 'react';
+'use client';
+
+import 'slick-carousel/slick/slick.css';
+import 'slick-carousel/slick/slick-theme.css';
+import Slider from 'react-slick';
 
 const MainBanner = () => {
+  const settings = {
+    dots: true,
+    infinite: true,
+    speed: 500,
+    slidesToShow: 1,
+    slidesToScroll: 1
+  };
+
   return (
     <main className="max-w-[1000px] w-full flex items-start max-h-[524px]">
       <div className="flex flex-col gap-8 px-6 py-24">
@@ -21,6 +33,29 @@ const MainBanner = () => {
         </button>
       </div>
       <p className="text-mainColor">아아아</p>
+      <div>
+        <h2> Single Item</h2>
+        <Slider {...settings}>
+          <div>
+            <h3>1</h3>
+          </div>
+          <div>
+            <h3>2</h3>
+          </div>
+          <div>
+            <h3>3</h3>
+          </div>
+          <div>
+            <h3>4</h3>
+          </div>
+          <div>
+            <h3>5</h3>
+          </div>
+          <div>
+            <h3>6</h3>
+          </div>
+        </Slider>
+      </div>
     </main>
   );
 };
