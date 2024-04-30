@@ -9,6 +9,7 @@ import { getFromTo } from '@/utils/utilFns';
 import { ITEM_INTERVAL } from '@/utils/constant';
 import ChatList from '@/components/chat/chatBody/ChatList';
 import SideBarButton from '@/components/chat/sidebar/SideBarButton';
+import SideBarModal from '@/components/chat/sidebar/SideBarModal';
 
 const ChatPage = async ({ params }: { params: { chatroom_id: string } }) => {
   const chatRoomId = params.chatroom_id;
@@ -25,15 +26,17 @@ const ChatPage = async ({ params }: { params: { chatroom_id: string } }) => {
 
   return (
     <Suspense fallback={<ChatLoading />}>
-      <div className="relative flex felx-row w-full max-w-[1080px] mx-auto">
+      <div className="relative flex flex-row">
         <InitChat user={user} chatRoomId={chatRoomId} allMsgs={allMsgs ?? []} />
-        <div className="flex w-full justify-center mx-auto">
-          <div className="sm:hidden">
+        <div className="flex lg:flex-row lg:w-full justify-center mx-auto">
+          <div className="lg:flex lg:max-w-96">
             <SideBar chatRoomId={chatRoomId} />
           </div>
-
-          <div className="w-full lg:max-w-xl max-h-[calc(100vh-90px)] min-h-[36rem] relative">
-            <div className="absolute top-0 left-0">
+          <div className="w-full max-w-2xl max-h-[calc(100vh-90px)] relative">
+            {/* <div className="absolute top-0 left-0 lg:hidden">
+              <SideBarModal chatRoomId={chatRoomId} />
+            </div> */}
+            <div className="absolute top-0 left-0 ">
               <SideBarButton />
             </div>
             <div className="h-full border rounded-md flex flex-col relative ">
