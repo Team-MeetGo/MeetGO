@@ -48,7 +48,7 @@ function RoomInformation({ room }: { room: MeetingRoomType }) {
           {`${maleNumber}/${genderMaxNumber}`}
           <div className="mx-[6px] text-[12px]">|</div> {`${room_status}`}
         </section>
-        <section className="lg:pr-[30px] pr-[0rem] flex flex-row justify-center relative">
+        <section className="flex flex-row justify-center relative">
           {alreadyChatRoom && alreadyChatRoom.length > 0 ? (
             <mark className="flex flex-row mr-[6px] p-[4px] bg-white border rounded-lg">
               {myMsgData && myMsgData.find((item) => item.room_id === room.room_id) ? (
