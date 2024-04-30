@@ -26,6 +26,15 @@ const Map = ({ chatRoomId }: { chatRoomId: string }) => {
   const [searchText, setSearchText] = useState<string>('');
   const [selectedMeetingLocation, setSelectedMeetingLocation] = useState<string>();
   const { openModal } = useModalStore();
+  const [isMobile, setIsMobile] = useState<boolean>(false);
+
+  useEffect(() => {
+    const checkIsMobile = () => {
+      setIsMobile(window.innerWidth < 640);
+    };
+    window.addEventListener('resize', checkIsMobile);
+    return () => window.removeEventListener('resize', checkIsMobile);
+  }, []);
 
   // 유저 정보 가져오기
   const { data: userData } = useGetUserDataQuery();
@@ -72,7 +81,7 @@ const Map = ({ chatRoomId }: { chatRoomId: string }) => {
       (pos: GeolocationPosition) => {
         const currentPos = new window.kakao.maps.LatLng(pos.coords.latitude, pos.coords.longitude);
         mapRef.current = currentPos;
-        const mapContainer = document.getElementById('map');
+        const mapContainer = document.getElementById(isMobile ? 'map2' : 'map');
         const kakaoMap = new window.kakao.maps.Map(mapContainer, {
           center: currentPos,
           level: 3
@@ -250,7 +259,12 @@ const Map = ({ chatRoomId }: { chatRoomId: string }) => {
         </CardBody>
       </Card>
 
-      <div id="map" className="w-full lg:h-60 h-80"></div>
+      {isMobile ? (
+        <div id="map2" className="w-full lg:h-60 h-80 z-50"></div>
+      ) : (
+        <div id="map" className="w-full lg:h-60 h-80 z-50"></div>
+      )}
+
       <div className=" flex flex-col justify-start items-start mx-auto">
         {bars.map((bar, index) => (
           <div

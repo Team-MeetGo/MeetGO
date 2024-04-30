@@ -30,18 +30,18 @@ const ReviewCard = ({ review }: { review: ReviewType }) => {
   return (
     <div
       key={review.review_id}
-      className="flex flex-col w-full justify-center item-center border-2 rounded-[8px] pt-[16px] px-[16px] pb-[8px]"
+      className="flex flex-col w-full justify-center item-center border-2 h-[20rem] rounded-[8px] p-[16px]"
     >
       <div className="flex flex-col w-full h-full items-center">
         <Link href={`/review/${review.review_id}`}>
-          <div className="flex w-full flex-col h-full items-start">
+          <div className="flex w-full flex-col h-full items-start h-40">
             {review.image_urls && review.image_urls.length > 0 ? (
               <Image
                 src={review.image_urls[0]}
                 alt="reviewImage"
                 height={400}
                 width={400}
-                className="w-64 h-44 object-cover rounded-[10px]"
+                className="w-64 h-40 object-cover rounded-[10px]"
               />
             ) : (
               <Image
@@ -49,7 +49,7 @@ const ReviewCard = ({ review }: { review: ReviewType }) => {
                 alt="reviewImage"
                 height={400}
                 width={400}
-                className="w-64 h-44 object-cover rounded-[10px]"
+                className="w-64 h-40 object-cover rounded-[10px]"
               />
             )}
             <p className="text-base pt-[16px] pb-[16px] whitespace-nowrap text-ellipsis overflow-hidden">

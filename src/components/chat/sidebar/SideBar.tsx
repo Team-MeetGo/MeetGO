@@ -5,6 +5,7 @@ import { useChatDataQuery } from '@/hooks/useQueries/useChattingQuery';
 import { Card, CardBody } from '@nextui-org/react';
 import { sideBarStore } from '@/store/sideBarStore';
 import { dateOptions } from '@/utils/utilFns';
+import MobileMap from './MobileMap';
 
 const SideBar = ({ chatRoomId }: { chatRoomId: string }) => {
   const { isSidebarOpen } = sideBarStore((state) => state);
@@ -28,6 +29,7 @@ const SideBar = ({ chatRoomId }: { chatRoomId: string }) => {
           </p>
         </CardBody>
       </Card>
+      <MobileMap chatRoomId={chatRoomId} />
       <Map chatRoomId={chatRoomId} />
     </div>
   );

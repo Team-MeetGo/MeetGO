@@ -165,7 +165,7 @@ const ChatList = ({ user, chatRoomId }: { user: User | null; chatRoomId: string 
           messages.map((msg, idx) => (
             <div key={msg.message_id} className="w-full">
               {isNextDay(idx, messages) ? (
-                <div className="flex justify-center my-[16px] bg-[#D4D4D8] mx-auto w-[150px] px-[16px] py-[6px] rounded-full text-white">
+                <div className="flex justify-center my-[16px] bg-[#D4D4D8] mx-auto w-36 px-[16px] py-[6px] rounded-full text-white">
                   <p className="font-extralight tracking-wide text-sm">{showingDate(msg.created_at)}</p>
                 </div>
               ) : null}
