@@ -98,13 +98,13 @@ const ChatSearch = ({ isScrollTop }: { isScrollTop: boolean }) => {
   return (
     <>
       {searchMode ? (
-        <div className={`${isScrollTop ? 'w-full' : 'absolute z-50 w-[94%]'} flex justify-between items-center`}>
+        <div className={`${isScrollTop ? 'w-full' : 'absolute z-50 w-[90%]'} flex items-center gap-2`}>
           <form
             onSubmit={(e) => {
               e.preventDefault();
               handleSearch();
             }}
-            className="flex gap-2 relative items-center"
+            className="flex w-full gap-2 relative items-center"
           >
             <div className="absolute ml-[10px] flex items-center gap-[6px] text-[#A1A1AA]">
               {searchWord ? null : (
@@ -117,15 +117,15 @@ const ChatSearch = ({ isScrollTop }: { isScrollTop: boolean }) => {
             <input
               value={searchWord}
               onChange={(e) => setSearchWord(e.target.value)}
-              className="h-[40px] w-[560px] p-[8px] border-2 border-[#D4D4D8] rounded-md focus:outline-none"
+              className="h-[40px] w-full p-[8px] border-2 border-[#D4D4D8] rounded-md focus:outline-none"
               placeholder="     채팅내용 검색하기"
               autoFocus
             ></input>
             <div className="absolute right-3">{doneSearchDivs?.length ? `(${doneSearchDivs?.length})` : ''}</div>
           </form>
 
-          <div className="flex gap-3">
-            <div>
+          <div className="flex gap-2">
+            <div className="flex flex-col justify-center items-center">
               <button onClick={handleSearchUp}>
                 <FaChevronUp />
               </button>
