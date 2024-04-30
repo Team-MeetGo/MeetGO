@@ -22,7 +22,7 @@ const GetMostLikedReivew = () => {
   const sliceReviews = [...(likedReviews || []), ...(zeroLikedReviews || [])].slice(0, 8);
 
   return (
-    <div className="px-[24px] w-full max-w-[1080px]">
+    <div className="px-[24px] w-full max-w-[1280px]">
       <div className="flex items-center justify-between mb-[12px]">
         <div className="flex items-center">
           <p className="text-2xl font-bold mr-[10px]">베스트 후기</p>

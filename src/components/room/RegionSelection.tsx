@@ -40,7 +40,7 @@ function RegionSelection({ text }: { text: string }) {
     <>
       <article className="relative z-50 bg-white" ref={dropdownRef}>
         <button
-          className="bg-white w-[120px] h-[43px] rounded-lg border-black border-[1px] text-[16px]"
+          className="bg-white w-[120px] h-[43px] rounded-lg border-gray2 border text-[16px]"
           type="button"
           onClick={() => setOpenModal((openModal) => !openModal)}
         >
