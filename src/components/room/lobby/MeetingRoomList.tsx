@@ -98,7 +98,7 @@ function MeetingRoomList() {
               {page !== 1 ? <IoIosArrowBack className="h-[40px] w-[40px] m-[8px]" /> : null}
             </button>
 
-            <div className="lg:w-[1000px] max-sm:w-[22rem]">
+            <div className="lg:w-[1280px] max-sm:w-[22rem]">
               {
                 <li
                   className={`${

@@ -13,9 +13,7 @@ function MyRoomsTitle({ children }: { children: React.ReactNode }) {
           </div>
         </div>
         <div className="flex flex-col justify-center">
-          <section className="lg:w-[1000px] w-[22rem] flex lg:flex-row flex-col items-center justify-center">
-            {children}
-          </section>
+          <section className="flex lg:flex-row flex-col items-center justify-center">{children}</section>
         </div>
       </section>
     </article>
