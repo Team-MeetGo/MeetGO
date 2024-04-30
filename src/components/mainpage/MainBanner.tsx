@@ -4,10 +4,10 @@ import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 import Slider from 'react-slick';
 import Image from 'next/image';
-import HeroBannerImg_01 from '../../../public/HeroBannerImg_01.png';
-import HeroBannerImg_02 from '../../../public/HeroBannerImg_02.png';
-import HeroBannerImg_03 from '../../../public/HeroBannerImg_03.png';
-import HeroBannerImg_04 from '../../../public/HeroBannerImg_04.png';
+import { bannerImgArr } from '@/utils/data/mainPageData';
+import Link from 'next/link';
+
+const innerWidth = window.innerWidth;
 
 export const RtBannerArrow = (props: any) => {
   const { className, style, onClick } = props;
@@ -19,7 +19,7 @@ export const RtBannerArrow = (props: any) => {
         display: 'block',
         right: '20px',
         zIndex: '15',
-        opacity: '1',
+        opacity: innerWidth < 768 ? '0' : '1',
         color: 'White'
       }}
       onClick={onClick}
@@ -28,6 +28,7 @@ export const RtBannerArrow = (props: any) => {
 };
 export const LtBannerArrow = (props: any) => {
   const { className, style, onClick } = props;
+
   return (
     <div
       className={className}
@@ -36,7 +37,7 @@ export const LtBannerArrow = (props: any) => {
         display: 'block',
         left: '20px',
         zIndex: '15',
-        opacity: '1',
+        opacity: innerWidth < 768 ? '0' : '1',
         color: 'White'
       }}
       onClick={onClick}
@@ -45,8 +46,6 @@ export const LtBannerArrow = (props: any) => {
 };
 
 const MainBanner = () => {
-  const bannerImgArr = [HeroBannerImg_01, HeroBannerImg_02, HeroBannerImg_03, HeroBannerImg_04];
-
   const settings = {
     dots: true,
     infinite: true,
@@ -88,16 +87,34 @@ const MainBanner = () => {
       <div className="w-full max-w-[1080px] h-full max-h-[600px] p-[24px]">
         <Slider {...settings}>
           {bannerImgArr.map((img, idx) => (
-            <div className=" w-full max-w-[1080px] h-[18rem] relative" key={idx}>
-              <Image
-                src={img}
-                alt="메인배너"
-                fill={true}
-                style={{ objectFit: 'cover', borderRadius: '3px', cursor: 'pointer' }}
-                sizes="1980px"
-                priority={true}
-              />
-              <p>아아아</p>
+            <div key={idx} className="relative">
+              <div className="flex flex-col gap-4 z-30 sm:absolute text-white max-sm:text-mainColor top-16 left-20">
+                <div className="font-extrabold text-4xl max-sm:text-2xl mb-[8px]">
+                  <h1>{img.title1}</h1>
+                  <h1>{img.title2}</h1>
+                </div>
+                <div className="text-xs leading-5">
+                  <p>{img.sub1}</p>
+                  <p>{img.sub2}</p>
+                </div>
+
+                <Link
+                  href="/mypage"
+                  className="bg-mainColor text-white rounded-lg px-7 max-sm:px-3 h-10 text-base max-sm:text-sm font-semibold my-auto flex justify-center items-center hover:bg-opacity-90 break-keep"
+                >
+                  지금 바로 대학생 인증하러 가기
+                </Link>
+              </div>
+              <div className=" w-full max-w-[1080px] h-80 mb-[10px] relative max-sm:hidden">
+                <Image
+                  src={img.src}
+                  alt="메인배너"
+                  fill={true}
+                  style={{ objectFit: 'cover', borderRadius: '3px', cursor: 'pointer', opacity: '0.9' }}
+                  sizes="1980px"
+                  priority={true}
+                />
+              </div>
             </div>
           ))}
         </Slider>
