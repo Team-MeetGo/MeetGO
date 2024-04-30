@@ -87,7 +87,7 @@ const NavBarContents = () => {
                   </Link>
                   <Link
                     className="flex items-center rounded-md px-3 py-2 text-base font-medium transition-colors"
-                    href="#"
+                    href="/mypage/metpeople"
                     onClick={handleDrawerClose}
                   >
                     스쳐간 인연
@@ -127,7 +127,7 @@ const NavBarContents = () => {
           </Link>
           <Link
             className="inline-flex h-full w-max items-center justify-center rounded-md px-4 py-2 text-base font-medium transition-colors"
-            href="#"
+            href="/mypage/metpeople"
           >
             스쳐간 인연
           </Link>
@@ -162,9 +162,6 @@ const NavBarContents = () => {
                   >
                     <DropdownItem key="mypage" href="/mypage">
                       마이페이지
-                    </DropdownItem>
-                    <DropdownItem key="help" href="/help">
-                      고객센터
                     </DropdownItem>
                     <DropdownItem key="logout" color="danger">
                       LOGOUT
@@ -218,9 +215,6 @@ const NavBarContents = () => {
                   >
                     <DropdownItem key="mypage" href="/mypage">
                       마이페이지
-                    </DropdownItem>
-                    <DropdownItem key="help" href="/help">
-                      고객센터
                     </DropdownItem>
                     <DropdownItem key="logout" color="danger">
                       LOGOUT
