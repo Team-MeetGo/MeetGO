@@ -138,8 +138,9 @@ function MeetingRoomList() {
           </div>
         )}
       </MyRoomsTitle>
+      {/* lg:gap-[24px] lg:grid lg:grid-cols-3 lg:w-[1280px] pt-[24px] pb-[8px] max-sm:flex max-sm:flex-col gap-[1rem] p-6 */}
       <OtherRoomsTitle>
-        <section className="lg:gap-[24px] lg:grid lg:grid-cols-3 lg:w-[1000px] pt-[24px] pb-[8px] max-sm:flex max-sm:flex-col gap-[1rem]">
+        <section className="flex max-w-[1280px] py-6 flex-wrap gap-4">
           <Suspense>
             {filteredOtherRooms.map((room) => (
               <MeetingRoom key={room.room_id} room={room} />
