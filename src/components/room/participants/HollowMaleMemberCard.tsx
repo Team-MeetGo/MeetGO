@@ -7,7 +7,7 @@ function HollowMaleMemberCard({ array }: { array: number[] }) {
       {array.map((h) => (
         <article
           key={h}
-          className={`bg-purpleSecondary flex justify-center lg:w-[506px] max-sm:w-[20rem] lg:h-[166px] max-sm:h-[8rem] rounded-2xl`}
+          className={`bg-purpleSecondary flex justify-center lg:w-[490px] max-sm:w-[20rem] lg:h-[166px] max-sm:h-[8rem] rounded-2xl`}
         >
           <Image
             className="w-[86px] h-[68px] object-center flex justify-center my-auto"

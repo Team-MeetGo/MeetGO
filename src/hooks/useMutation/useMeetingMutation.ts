@@ -99,7 +99,8 @@ export const useDeleteMember = ({ userId, roomId }: { userId: string; roomId: st
   const deleteMemberMutation = useMutation({
     mutationFn: () => deleteMember({ userId, roomId }),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: [ROOM_MEMBER, roomId] });
+      queryClient.invalidateQueries({ queryKey: [ROOMLIST, userId] });
+      queryClient.invalidateQueries({ queryKey: [RECRUTING_ROOMDATA] });
       queryClient.invalidateQueries({ queryKey: [MY_PAST_NOW_ROOM] });
     }
   });

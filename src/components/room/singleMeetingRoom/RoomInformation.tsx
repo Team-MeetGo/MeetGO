@@ -41,7 +41,7 @@ function RoomInformation({ room }: { room: MeetingRoomType }) {
   return (
     <div className="flex flex-row">
       <div className="flex flex-row justify-between w-full items-center">
-        <section className="text-[12px] flex flex-row ">
+        <section className="text-[12px] flex flex-row">
           <IoFemale className="w-[12px] h-[12px] my-auto fill-hotPink" /> {`${femaleNumber}/${genderMaxNumber}`}
           <div className="px-[6px] text-[12px]">|</div>
           <IoMale className="w-[12px] h-[12px] my-auto fill-blue" />
@@ -53,7 +53,7 @@ function RoomInformation({ room }: { room: MeetingRoomType }) {
             <mark className="flex flex-row mr-[6px] p-[4px] bg-white border rounded-lg">
               {myMsgData && myMsgData.find((item) => item.room_id === room.room_id) ? (
                 <figure
-                  className={`w-5 h-5 bg-[#F31260] rounded-full flex justify-center items-center gap-2 absolute top-[-8px] lg:right-[2.7rem] right-[1.5rem] text-white z-[5]`}
+                  className={`w-5 h-5 bg-[#F31260] rounded-full flex justify-center items-center gap-2 absolute top-[-8px] lg:right-[1.4rem] right-[1.5rem] text-white z-[5]`}
                 >
                   <h1>{myMsgData.find((item) => item.room_id === room.room_id)?.newMsgCount}</h1>
                 </figure>
