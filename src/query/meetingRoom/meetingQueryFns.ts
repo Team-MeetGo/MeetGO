@@ -14,12 +14,12 @@ export const fetchRecruitingRoom = async () => {
   }
 };
 
-export const fetchMyRoom = async (userId: string) => {
+export const fetchMyRoom = async (userId: string | undefined) => {
   const { data: myRoom, error } = await clientSupabase
     .from('participants')
     .select(`*`)
     .eq('isDeleted', false)
-    .eq('user_id', userId)
+    .eq('user_id', String(userId))
     .select('user_id, room(*)')
     .order('created_at', { ascending: false });
   if (error) {
