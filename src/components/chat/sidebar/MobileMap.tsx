@@ -15,7 +15,7 @@ declare global {
   }
 }
 
-const Map = ({ chatRoomId }: { chatRoomId: string }) => {
+const MobileMap = ({ chatRoomId }: { chatRoomId: string }) => {
   const mapRef = useRef<string>();
   const [map, setMap] = useState<any>();
   const [markers, setMarkers] = useState<any>();
@@ -26,15 +26,6 @@ const Map = ({ chatRoomId }: { chatRoomId: string }) => {
   const [searchText, setSearchText] = useState<string>('');
   const [selectedMeetingLocation, setSelectedMeetingLocation] = useState<string>();
   const { openModal } = useModalStore();
-  // const [isMobile, setIsMobile] = useState<boolean>(false);
-
-  // useEffect(() => {
-  //   const checkIsMobile = () => {
-  //     setIsMobile(window.innerWidth < 640);
-  //   };
-  //   window.addEventListener('resize', checkIsMobile);
-  //   return () => window.removeEventListener('resize', checkIsMobile);
-  // }, []);
 
   // 유저 정보 가져오기
   const { data: userData } = useGetUserDataQuery();
@@ -81,7 +72,7 @@ const Map = ({ chatRoomId }: { chatRoomId: string }) => {
       (pos: GeolocationPosition) => {
         const currentPos = new window.kakao.maps.LatLng(pos.coords.latitude, pos.coords.longitude);
         mapRef.current = currentPos;
-        const mapContainer = document.getElementById('map');
+        const mapContainer = document.getElementById('mobileMap');
         const kakaoMap = new window.kakao.maps.Map(mapContainer, {
           center: currentPos,
           level: 3
@@ -221,7 +212,7 @@ const Map = ({ chatRoomId }: { chatRoomId: string }) => {
   };
 
   return (
-    <div>
+    <div className="lg:hidden">
       <div className="py-6">
         <h1 className="font-semibold text-2xl mb-2">미팅 장소</h1>
         <Card className="h-14 border border-mainColor rounded-lg shadow-none ">
@@ -259,7 +250,7 @@ const Map = ({ chatRoomId }: { chatRoomId: string }) => {
         </CardBody>
       </Card>
 
-      <div id="map" className="w-full lg:h-60 h-60  "></div>
+      <div id="mobileMap" className="w-full lg:h-60 h-80 z-50"></div>
 
       <div className=" flex flex-col justify-start items-start mx-auto">
         {bars.map((bar, index) => (
@@ -305,4 +296,4 @@ const Map = ({ chatRoomId }: { chatRoomId: string }) => {
   );
 };
 
-export default Map;
+export default MobileMap;
