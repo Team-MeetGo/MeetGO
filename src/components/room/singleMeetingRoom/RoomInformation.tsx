@@ -41,12 +41,12 @@ function RoomInformation({ room }: { room: MeetingRoomType }) {
   return (
     <div className="flex flex-row">
       <div className="flex flex-row justify-between w-full items-center">
-        <section className="text-[16px] flex flex-row text-center">
-          <IoFemale className="w-[14px] h-[14px] my-auto fill-hotPink" /> {`${femaleNumber}/${genderMaxNumber}`}
-          <div className="px-[6px]">|</div>
-          <IoMale className="w-[14px] h-[14px] my-auto fill-blue" />
+        <section className="text-[12px] flex flex-row ">
+          <IoFemale className="w-[12px] h-[12px] my-auto fill-hotPink" /> {`${femaleNumber}/${genderMaxNumber}`}
+          <div className="px-[6px] text-[12px]">|</div>
+          <IoMale className="w-[12px] h-[12px] my-auto fill-blue" />
           {`${maleNumber}/${genderMaxNumber}`}
-          <div className="mx-[6px]">|</div> {`${room_status}`}
+          <div className="mx-[6px] text-[12px]">|</div> {`${room_status}`}
         </section>
         <section className="lg:pr-[30px] pr-[0rem] flex flex-row justify-center relative">
           {alreadyChatRoom && alreadyChatRoom.length > 0 ? (
@@ -72,14 +72,14 @@ function RoomInformation({ room }: { room: MeetingRoomType }) {
             </mark>
           ) : null}
           {user?.user_id === leader_id ? (
-            <mark ref={dropdownRef} className="relative flex flex-row justify-center align-middle">
+            <section ref={dropdownRef} className="relative flex flex-row justify-center align-middle">
               <button
                 className="flex flex-row justify-center align-middle p-[0.2rem]"
                 onClick={() => {
                   setOpen((open) => !open);
                 }}
               >
-                <HiOutlineDotsVertical className="h-[20px] w-[20px] my-auto" />
+                <HiOutlineDotsVertical className="h-[20px] w-[20px] my-auto " />
               </button>
 
               {open && (
@@ -92,7 +92,7 @@ function RoomInformation({ room }: { room: MeetingRoomType }) {
                   </div>
                 </div>
               )}
-            </mark>
+            </section>
           ) : null}
         </section>
       </div>

@@ -87,7 +87,7 @@ function RoomInformation({ roomId }: { roomId: UUID }) {
                 </div>
                 <p className="text-[16px]">{`${roomInformation?.region} ${roomInformation?.location}`}</p>
               </figure>
-              <figure className="flex lg:justify-end justify-start">
+              <figure className="flex lg:items-end justify-start">
                 <div className="lg:text-[14px] text-[1rem] text-center lg:h-[40px] lg:ml-[32px] ml-0 bg-purpleSecondary text-mainColor lg:rounded-[8px] rounded-lg lg:p-[8px] p-[0.5rem]">
                   {roomInformation?.feature && roomInformation?.feature[0]}
                 </div>
