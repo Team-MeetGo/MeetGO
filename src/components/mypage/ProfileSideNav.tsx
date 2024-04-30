@@ -6,7 +6,7 @@ const ProfileSideNav = () => {
   const pathname = usePathname();
 
   return (
-    <nav className="rounded-xl bg-white p-[24px] max-w-[290px] w-full h-full flex flex-col gap-4 text-[#9CA3AF]">
+    <nav className="rounded-xl bg-white p-[24px] min-[400px]:max-w-[290px] w-full h-full flex flex-col gap-4 text-[#9CA3AF]">
       <Link
         href="/mypage"
         className={`hover:text-mainColor ${pathname === '/mypage' ? 'text-mainColor font-bold' : ''}`}

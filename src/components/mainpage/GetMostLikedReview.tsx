@@ -25,7 +25,7 @@ const GetMostLikedReivew = () => {
     <div className="px-[24px] w-full max-w-[1080px]">
       <div className="flex items-center justify-between mb-[12px]">
         <div className="flex items-center">
-          <p className="text-2xl font-bold mr-[10px]">실시간 베스트 후기</p>
+          <p className="text-2xl font-bold mr-[10px]">베스트 후기</p>
         </div>
         <div className="flex items-center">
           <Link href="/review/pageNumber/1" className="text-sm text-gray2">
