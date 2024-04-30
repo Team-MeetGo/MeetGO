@@ -5,13 +5,12 @@ import MeetingRoom from '@/components/room/singleMeetingRoom/MeetingRoom';
 import { useMyPastAndNowRoomQuery, useMyroomQuery, useRecruitingQuery } from '@/hooks/useQueries/useMeetingQuery';
 import { useGetUserDataQuery } from '@/hooks/useQueries/useUserQuery';
 import { useSearchRoomStore } from '@/store/searchRoomStore';
-import ThinBanner from '@/utils/banner/ThinBanner';
 import { REGIONANDMEMBER } from '@/utils/constant';
 import { Suspense, useEffect, useState } from 'react';
 import { IoIosArrowBack, IoIosArrowForward } from 'react-icons/io';
-import LobbyBanner from './LobbyBanner';
 
 import type { MeetingRoomType } from '@/types/roomTypes';
+import LobbyBanner from './LobbyBanner';
 function MeetingRoomList() {
   const [page, setPage] = useState(1);
   const [filteredOtherRooms, setFilteredOtherRooms] = useState<MeetingRoomType[]>([]);
@@ -87,7 +86,6 @@ function MeetingRoomList() {
 
   return (
     <>
-      <LobbyBanner />
       <MyRoomsTitle>
         {filteredMyRoomList && filteredMyRoomList.length > 0 ? (
           <>

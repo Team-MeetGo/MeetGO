@@ -1,4 +1,5 @@
 import LobbySkeleton from '@/components/room/LobbySkeleton';
+import LobbyBanner from '@/components/room/lobby/LobbyBanner';
 import MeetingRoomList from '@/components/room/lobby/MeetingRoomList';
 import ThinBanner from '@/utils/banner/ThinBanner';
 import { serverSupabase } from '@/utils/supabase/server';
@@ -13,7 +14,8 @@ const LobbyPage = async () => {
     <>
       <Suspense fallback={<LobbySkeleton />}>
         <ThinBanner />
-        <main className="flex flex-col items-center justify-content lg:min-w-[1000px] w-full">
+        <main className="flex flex-col items-center justify-content lg:min-w-[1000px] w-full pb-[24px]">
+          <LobbyBanner />
           <MeetingRoomList />
         </main>
       </Suspense>

@@ -72,22 +72,19 @@ function MeetingRoom({ room }: { room: MeetingRoomType }) {
           : `bg-gray1 rounded-xl`
       }
     >
-      <section className="w-[354px] h-[241px] p-6 gap-4 rounded-xl flex flex-col hover:cursor-pointer">
+      <section className="w-[320px] h-[200px] p-6 gap-5 rounded-xl flex flex-col hover:cursor-pointer">
         <RoomInformation room={room} />
         <main className="h-full flex flex-col justify-between" onClick={() => handleAddMemberDebounce({ room_id })}>
           <section>
-            <h1 className="text-[26px]"> {room_title} </h1>
+            <h1 className="text-[16px] font-semibold"> {room_title} </h1>
             <div className="flex flex-row justify-start gap-2">
-              <p className="text-base">{region}</p>
-              <p className="text-base"> {location} </p>
+              <p className="text-[14px]">{region}</p>
+              <p className="text-[14px]"> {location} </p>
             </div>
           </section>
 
           <section>
-            <figure className="flex gap-1 mb-2 items-center">
-              <Image src={MeetGoLogoPurple} alt="MeetGo Logo" className="w-auto h-[20px]" priority={true} />
-              <p className="text-mainColor text-sm font-bold">MEETGO</p>
-            </figure>
+            <figure className="flex gap-1 mb-2 items-center"></figure>
             <figure className="flex flex-row gap-[4px]">
               <div className="bg-purpleSecondary text-mainColor rounded-[8px] p-[8px] text-[14px]">
                 {feature && feature[0]}
