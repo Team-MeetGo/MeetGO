@@ -9,12 +9,10 @@ import { IoIosArrowBack, IoIosArrowForward } from 'react-icons/io';
 const SideBarModal = ({ chatRoomId }: { chatRoomId: string }) => {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const { isSidebarOpen, setIsSidebarOpen } = sideBarStore((state) => state);
-  const [isSidebarVisible, setIsSidebarVisible] = useState(false);
 
   const openModal = () => {
     setIsSidebarOpen(!isSidebarOpen);
-    setIsSidebarVisible(!isSidebarOpen);
-    onOpen(); // 모달 열기
+    onOpen();
   };
 
   return (
