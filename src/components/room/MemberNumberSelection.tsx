@@ -1,35 +1,28 @@
 'use client';
 import { useRoomStore } from '@/store/roomStore';
 import { useSearchRoomStore } from '@/store/searchRoomStore';
-import { MEMBERNUMBER, REGIONANDMEMBER, member_number } from '@/utils/data/MeetingRoomSelector';
+import { regionList } from '@/utils/data/MeetingRoomSelector';
+import { REGIONANDMEMBER } from '@/utils/constant';
 import { useEffect, useRef, useState } from 'react';
 import { IoIosArrowDown } from 'react-icons/io';
 
-function MemberNumberSelection({ text }: { text: string }) {
-  const initialMember = () => {
-    if (text === 'selectMember') {
-      return REGIONANDMEMBER.EVERYMEMBER;
-    }
-    return MEMBERNUMBER.ONE;
-  };
-
-  const [member, setMember] = useState(initialMember);
+function RegionSelection({ text }: { text: string }) {
   const [openModal, setOpenModal] = useState(false);
+  const [region, setRegion] = useState(REGIONANDMEMBER.EVERYWHERE);
 
-  const { setMemberNumber } = useRoomStore();
-  const { setSelectMemberNumber } = useSearchRoomStore();
-
-  const conditionalRef = useRef(text);
   const dropdownRef = useRef<HTMLDivElement>(null);
+  const conditionalRef = useRef(text);
+
+  const { setRoomRegion } = useRoomStore();
+  const { setSelectRegion } = useSearchRoomStore();
 
   useEffect(() => {
-    if (conditionalRef.current === 'selectMember') {
-      setSelectMemberNumber(member);
+    if (conditionalRef.current === 'selectRegion') {
+      setSelectRegion(region);
     }
-    if (conditionalRef.current === 'member') {
-      setMemberNumber(member);
+    if (conditionalRef.current === 'room') {
+      setRoomRegion(region);
     }
-
     const outSideClickHandler = (e: any) => {
       const { target } = e;
       if (openModal && dropdownRef.current && !dropdownRef.current.contains(target)) {
@@ -37,48 +30,42 @@ function MemberNumberSelection({ text }: { text: string }) {
       }
     };
     document.addEventListener('mousedown', outSideClickHandler);
-  }, [member, openModal]);
+  }, [region, openModal]);
 
-  const memberNumberSelectionHandler = (member: string) => {
-    setMember(member);
+  const regionSelectionHandler = (r: string) => {
+    setRegion(r);
     setOpenModal(false);
   };
 
   return (
     <>
-      <div className="relative bg-white z-50" ref={dropdownRef}>
+      <article className="relative z-10 bg-white" ref={dropdownRef}>
         <button
           className="bg-white w-[120px] h-[43px] rounded-lg border-black border-[1px] text-[16px]"
           type="button"
           onClick={() => setOpenModal((openModal) => !openModal)}
         >
-          <div className="flex flex-row justify-center align-middle gap-[8px]">
-            {member}
+          <figure className="flex flex-row justify-center align-middle gap-[8px]">
+            {region}
             <IoIosArrowDown className="my-auto" />
-          </div>
+          </figure>
         </button>
         {openModal && (
-          <ul className="absolute top-full p-[8px] bg-white rounded-md shadow-md mt-1 w-full">
-            {member_number.map((m) => {
-              if (m === REGIONANDMEMBER.EVERYMEMBER && text === 'member') {
-                return;
-              }
-
-              return (
-                <li
-                  key={m}
-                  onClick={() => memberNumberSelectionHandler(m)}
-                  className="px-[16px] py-[8px] cursor-pointer rounded-lg hover:bg-mainColor hover:text-white"
-                >
-                  {m}
-                </li>
-              );
-            })}
-          </ul>
+          <figure className="absolute top-full h-[180px] p-[8px] overflow-y-auto bg-white rounded-md shadow-md mt-1 w-full">
+            {regionList.map((m) => (
+              <li
+                key={m}
+                onClick={() => regionSelectionHandler(m)}
+                className="px-[16px] py-[8px] cursor-pointer rounded-lg hover:bg-mainColor hover:text-white list-none	"
+              >
+                {m}
+              </li>
+            ))}
+          </figure>
         )}
-      </div>
+      </article>
     </>
   );
 }
 
-export default MemberNumberSelection;
+export default RegionSelection;
