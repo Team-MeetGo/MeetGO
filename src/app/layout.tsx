@@ -51,7 +51,6 @@ export default async function RootLayout({
   await queryClient.prefetchQuery({
     queryKey: [USER_DATA_QUERY_KEY],
     queryFn: setUser
-    // revalidateIfStale: true
   });
   return (
     <html lang="ko">
