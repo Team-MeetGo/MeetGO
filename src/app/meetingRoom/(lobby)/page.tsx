@@ -2,7 +2,7 @@ import LobbySkeleton from '@/components/room/LobbySkeleton';
 import MeetingRoomList from '@/components/room/lobby/MeetingRoomList';
 import { Suspense } from 'react';
 
-const LobbyPage = async () => {
+const LobbyPage = () => {
   return (
     <>
       <Suspense fallback={<LobbySkeleton />}>
