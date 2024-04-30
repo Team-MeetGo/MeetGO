@@ -1,11 +1,8 @@
 'use client';
 import MemberNumberSelection from '@/components/room/MemberNumberSelection';
 import RegionSelection from '@/components/room/RegionSelection';
-import { usePathname } from 'next/navigation';
 
 function OtherRoomsTitle({ children }: { children: React.ReactNode }) {
-  const pathname = usePathname();
-
   return (
     <article className="lg:w-[1280px] w-[22rem] flex flex-col items-center justify-content align-middle px-[24px]">
       <header className="pt-6 border-gray2 w-full">

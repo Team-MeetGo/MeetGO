@@ -64,13 +64,13 @@ function MeetingRoom({ room }: { room: MeetingRoomType }) {
 
   return (
     <article
-      className={
+      className={`w-80 mx-auto ${
         room.room_status === ROOMSTATUS.RECRUITING
           ? `bg-white rounded-xl border-[#E5E7EB] border-1`
           : alreadyChatRoom && alreadyChatRoom.length > 0
           ? `bg-purpleThird rounded-xl`
           : `bg-gray1 rounded-xl`
-      }
+      }`}
     >
       <section className="max-w-[420px] w-full h-[200px] p-6 gap-5 rounded-xl flex flex-col hover:cursor-pointer">
         <RoomInformation room={room} />
