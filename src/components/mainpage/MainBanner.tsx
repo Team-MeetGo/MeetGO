@@ -88,7 +88,7 @@ const MainBanner = () => {
       <div className="w-full max-w-[1080px] h-full max-h-[600px] p-[24px]">
         <Slider {...settings}>
           {bannerImgArr.map((img, idx) => (
-            <div className=" w-full max-w-[1080px] h-[300px] relative" key={idx}>
+            <div className=" w-full max-w-[1080px] h-[18rem] relative" key={idx}>
               <Image
                 src={img}
                 alt="메인배너"
