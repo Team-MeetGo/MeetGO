@@ -30,7 +30,7 @@ export const schoolValidation = (name: string, value: string): string | boolean 
       if (!isAcKrDomain) return '대학교 이메일을 입력해주세요.';
       return true;
     }
-    case 'univName': {
+    case 'schoolName': {
       const univNameReg = value.endsWith('대학교');
       if (!univNameReg) return '학교 이름은 "대학교"로 끝나야합니다.';
       return true;

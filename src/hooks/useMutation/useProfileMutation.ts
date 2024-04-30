@@ -6,9 +6,15 @@ import { QueryClient, useMutation } from '@tanstack/react-query';
 const queryClient = new QueryClient();
 
 export const useProfileUpdateMutation = () =>
-  useMutation({
-    mutationFn: ({ userId, inputNickname, inputIntro, inputKakaoId, inputGender, favorite }: UpdateProfileType) =>
-      updateProfile(userId, inputNickname, inputIntro, inputKakaoId, inputGender, favorite)
+  useMutation<void, Error, UpdateProfileType>({
+    mutationFn: async ({ userId, inputNickname, inputIntro, inputKakaoId, inputGender, favorite }) => {
+      await updateProfile(userId, inputNickname, inputIntro, inputKakaoId, inputGender, favorite);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: [USER_DATA_QUERY_KEY]
+      });
+    }
   });
 
 export const useAvatarUpdateMutation = () =>

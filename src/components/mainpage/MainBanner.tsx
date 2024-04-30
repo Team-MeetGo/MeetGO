@@ -122,6 +122,7 @@ const MainBanner = () => {
             </div>
           ))}
         </Slider>
+
       </div>
     </>
   );
