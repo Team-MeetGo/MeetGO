@@ -43,8 +43,8 @@ export const useMyPastAndNowRoomQuery = (user_id: string) => {
 };
 
 //room_id로 하나의 방 얻기
-export const useRoomInfoWithRoomIdQuery = (roomId: string): MeetingRoomType => {
-  const { data: roomInfoWithId } = useSuspenseQuery({
+export const useRoomInfoWithRoomIdQuery = (roomId: string): MeetingRoomType | undefined => {
+  const { data: roomInfoWithId } = useQuery({
     queryKey: [ROOMDATA, roomId],
     queryFn: () => fetchRoomInfoWithRoomId(roomId)
     // staleTime: 0

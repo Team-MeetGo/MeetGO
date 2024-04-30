@@ -123,6 +123,7 @@ const Member = ({ roomId }: { roomId: UUID }) => {
                           alt="유저 아바타"
                           height={86}
                           width={86}
+                          sizes="100px"
                         />
                       ) : (
                         <figure className="lg:w-[86px] w-[5rem] lg:h-[86px] h-[5rem] rounded-full object-center bg-cover object-fill">
@@ -186,6 +187,7 @@ const Member = ({ roomId }: { roomId: UUID }) => {
                           alt="유저 아바타"
                           height={80}
                           width={80}
+                          sizes="100px"
                         />
                       ) : (
                         <figure className="lg:w-[86px] w-[5rem] lg:h-[86px] h-[5rem] rounded-full object-center bg-cover object-fill">
