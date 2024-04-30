@@ -100,7 +100,11 @@ const NewReview = () => {
 
   return (
     <>
-      <Button onPress={onOpen} color="primary" className="text-[16px] p-[16px] bg-mainColor w-[128px] h-[51px]">
+      <Button
+        onPress={onOpen}
+        color="primary"
+        className="bg-mainColor mt-auto rounded-lg px-8 max-sm:px-3 h-10 text-white text-base max-sm:text-sm my-auto flex justify-center items-center hover:bg-opacity-90 break-keep"
+      >
         리뷰 작성하기
       </Button>
       <Modal isOpen={isOpen} onClose={handleClose} placement="top-center">

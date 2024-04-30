@@ -5,7 +5,7 @@ const Footer = () => {
   const iconArr = [<GrMail key="0" />, <FaFacebookF key="1" />, <FaInstagram key="2" />, <FaYoutube key="3" />];
 
   return (
-    <footer className="w-full h-44 flex justify-center items-center px-3 mx-auto">
+    <footer className="w-full h-36 flex justify-center items-center px-3 mx-auto">
       <div className="w-full max-w-[1280px] flex justify-between gap-6">
         <section className="flex flex-col gap-1 text-gray1">
           <p className="flex flex-col leading-tight">
