@@ -24,9 +24,8 @@ export const fetchMyRoom = async (userId: string) => {
     .order('created_at', { ascending: false });
   if (error) {
     throw new Error('Error fetching participating room data');
-  } else {
-    return myRoom;
   }
+  return myRoom;
 };
 
 export const fetchMyPastAndNowRoom = async (userId: string) => {
