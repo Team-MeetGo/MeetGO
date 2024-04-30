@@ -9,7 +9,6 @@ import ThinBanner from '@/utils/banner/ThinBanner';
 import { REGIONANDMEMBER } from '@/utils/constant';
 import { Suspense, useEffect, useState } from 'react';
 import { IoIosArrowBack, IoIosArrowForward } from 'react-icons/io';
-import LobbyBanner from './LobbyBanner';
 
 import type { MeetingRoomType } from '@/types/roomTypes';
 function MeetingRoomList() {
