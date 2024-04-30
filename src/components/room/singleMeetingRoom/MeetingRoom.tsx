@@ -4,7 +4,7 @@ import useGenderMaxNumber from '@/hooks/custom/useGenderMaxNumber';
 import { useAddRoomMemberMutation, useUpdateRoomStatusCloseMutation } from '@/hooks/useMutation/useMeetingMutation';
 import { useAlreadyChatRoomQuery, useRoomParticipantsQuery } from '@/hooks/useQueries/useMeetingQuery';
 import { useGetUserDataQuery } from '@/hooks/useQueries/useUserQuery';
-import { ROOMSTATUS, ROUTERADDRESS } from '@/utils/constant';
+import { ROOMSTATUS } from '@/utils/constant';
 import MeetGoLogoPurple from '@/utils/icons/meetgo-logo-purple.png';
 import { debounce } from '@/utils/utilFns';
 import Image from 'next/image';

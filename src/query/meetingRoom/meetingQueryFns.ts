@@ -23,7 +23,7 @@ export const fetchMyRoom = async (userId: string | undefined) => {
     .select('user_id, room(*)')
     .order('created_at', { ascending: false });
   if (error) {
-    throw new Error('Error fetching participating room data');
+    console.error('participating room data was not founded', error.message);
   }
   return myRoom;
 };
