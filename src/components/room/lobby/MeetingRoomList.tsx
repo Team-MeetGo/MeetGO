@@ -8,6 +8,7 @@ import { useSearchRoomStore } from '@/store/searchRoomStore';
 import { REGIONANDMEMBER } from '@/utils/constant';
 import { Suspense, useEffect, useState } from 'react';
 import { IoIosArrowBack, IoIosArrowForward } from 'react-icons/io';
+import LobbyBanner from './LobbyBanner';
 
 import type { MeetingRoomType } from '@/types/roomTypes';
 function MeetingRoomList() {
@@ -86,6 +87,7 @@ function MeetingRoomList() {
   return (
     <>
       <main className="flex flex-col items-center justify-content lg:min-w-[1000px] w-full">
+        <LobbyBanner />
         <MyRoomsTitle>
           {filteredMyRoomList && filteredMyRoomList.length > 0 ? (
             <>
