@@ -46,7 +46,7 @@ const ProfileHeader = () => {
             </div>
             <div className="flex flex-col gap-2">
               <div className="flex items-center max-lg:flex-col max-lg:items-start gap-2">
-                <p className="block text-2xl font-bold">{user?.nickname}</p>
+                <p className="block text-2xl font-bold max-md:text-xl">{user?.nickname}</p>
                 <p className="text-2xl font-thin max-lg:hidden">|</p>
                 <div>
                   <span className="text-sm tracking-wider">카카오톡 ID : </span>
@@ -68,12 +68,12 @@ const ProfileHeader = () => {
               <p className="font-light text-sm">가입일 : {joinTime}</p>
             </div>
           </div>
-          <div className="flex">
+          <div className="flex max-lg:gap-4">
             {buttonData.map((item, index) => (
-              <button key={index} className="flex flex-col items-start gap-2 w-40 max-lg:w-32">
+              <button key={index} disabled className="flex flex-col items-start gap-2 w-40 max-lg:w-24">
                 <item.icon size={40} />
-                <p>{item.title}</p>
-                <p className="font-bold text-3xl">{item.count}</p>
+                <p className="max-lg:text-sm">{item.title}</p>
+                <p className="font-bold text-3xl max-lg:text-2xl">{item.count}</p>
               </button>
             ))}
           </div>

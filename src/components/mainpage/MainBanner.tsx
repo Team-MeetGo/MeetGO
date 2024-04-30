@@ -1,6 +1,6 @@
 const MainBanner = () => {
   return (
-    <main className="max-w-[1000px] w-full flex items-start max-h-[524px]">
+    <main className="max-w-[1080px] w-full flex items-start max-h-[524px]">
       <div className="flex flex-col gap-8 px-6 py-24">
         <h1 className="font-bold text-6xl text-mainColor">
           벚꽃 축제는
