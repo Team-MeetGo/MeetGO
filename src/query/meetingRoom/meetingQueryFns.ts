@@ -37,9 +37,7 @@ export const fetchMyPastAndNowRoom = async (userId: string) => {
     .select('user_id, room(*)')
     .order('created_at', { ascending: false });
   if (error) throw new Error('Error participated and participating room data');
-  else {
-    return myPastAndNowRoom;
-  }
+  return myPastAndNowRoom;
 };
 
 export const fetchRoomInfoWithRoomId = async (roomId: string): Promise<MeetingRoomType> => {
