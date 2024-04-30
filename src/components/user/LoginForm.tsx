@@ -113,7 +113,7 @@ const LoginForm = () => {
 
   return (
     <>
-      <div className="max-w-[450px] w-full h-full p-6">
+      <div className="max-w-[450px] w-full h-full p-6 py-8">
         <h1 className="text-[40px] font-semibold mb-[40px] text-center">로그인</h1>
         <form className="flex flex-col gap-[8px]" onSubmit={onSubmitForm}>
           <div className="flex flex-col gap-[16px]">

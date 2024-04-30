@@ -27,7 +27,7 @@ const ReviewList: React.FC = () => {
   const currentPageNumber = parseInt(currentPage[0]);
   const [reviewData, setReviewData] = useState<reviewData[]>([]);
   const [totalReviews, setTotalReviews] = useState<number>(0);
-  const reviewsPerPage = 9;
+  const reviewsPerPage = 12;
   const [isOpen, setIsOpen] = useState(false);
   const [selected, setSelected] = React.useState<Selection>(new Set(['최신순']));
   const totalPages = Math.ceil(totalReviews / reviewsPerPage);

@@ -131,7 +131,7 @@ const NewReview = () => {
                       required
                       rows={1}
                       placeholder="제목을 입력해주세요."
-                      className="outline-none border rounded-[8px] resize-none border-borderSecondary py-[8px] pl-[12px] mb-[16px] max-w-[1050px] text-sm bg-boxSecondary"
+                      className="outline-none border rounded-[8px] resize-none border-borderSecondary py-[8px] pl-[12px] mb-[16px] max-w-[1050px] text-sm bg-boxSecondary focus:border-mainColor"
                       maxLength={20}
                     />
                     <div className="flex">
@@ -142,7 +142,7 @@ const NewReview = () => {
                       id="review_contents"
                       required
                       placeholder="내용을 입력해주세요.(200자 이내)"
-                      className="outline-none text-sm resize-none border border-borderSecondary rounded-[8px] py-[8px] pl-[12px] max-w-[1050px] max-h-[280px] "
+                      className="outline-none text-sm resize-none border border-borderSecondary rounded-[8px] py-[8px] pl-[12px] max-w-[1050px] max-h-[280px] bg-boxSecondary focus:border-mainColor"
                       rows={8}
                       maxLength={200}
                     />
