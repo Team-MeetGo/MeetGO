@@ -131,10 +131,6 @@ pre {
   display: flex;
 }
 
-.react-datepicker {
-  width: 320px;
-}
-
 .chatImgRowsOverOne {
   grid-template-rows: 6.25rem 6.25rem;
 }

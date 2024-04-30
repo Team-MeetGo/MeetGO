@@ -260,9 +260,9 @@ const Map = ({ chatRoomId }: { chatRoomId: string }) => {
       </Card>
 
       {isMobile ? (
-        <div id="map2" className="w-full lg:h-60 h-80 z-50"></div>
+        <div id="map2" className="w-full lg:h-60 h-80 "></div>
       ) : (
-        <div id="map" className="w-full lg:h-60 h-80 z-50"></div>
+        <div id="map" className="w-full lg:h-60 h-80 "></div>
       )}
 
       <div className=" flex flex-col justify-start items-start mx-auto">
