@@ -87,7 +87,6 @@ function MeetingRoomList() {
 
   return (
     <>
-      <ThinBanner />
       <LobbyBanner />
       <MyRoomsTitle>
         {filteredMyRoomList && filteredMyRoomList.length > 0 ? (
