@@ -20,7 +20,7 @@ const ProfileHeader = () => {
 
   return (
     <div className="bg-mainColor w-full py-[48px] text-white">
-      <div className="flex flex-col gap-6 max-w-[1080px] m-auto max-md:items-start px-[24px]">
+      <div className="flex flex-col gap-6 max-w-[1280px] m-auto max-md:items-start px-[24px]">
         <h1 className="text-2xl font-medium">마이페이지</h1>
         <div className="flex items-center max-md:items-start md:justify-between max-md:flex-col max-md:gap-6">
           <div className="flex gap-6 items-center">
@@ -68,12 +68,12 @@ const ProfileHeader = () => {
               <p className="font-light text-sm">가입일 : {joinTime}</p>
             </div>
           </div>
-          <div className="flex">
+          <div className="flex max-lg:gap-4">
             {buttonData.map((item, index) => (
-              <button key={index} className="flex flex-col items-start gap-2 w-40 max-lg:w-32">
+              <button key={index} className="flex flex-col items-start gap-2 w-40 max-lg:w-24">
                 <item.icon size={40} />
-                <p>{item.title}</p>
-                <p className="font-bold text-3xl">{item.count}</p>
+                <p className="max-lg:text-sm">{item.title}</p>
+                <p className="font-bold text-3xl max-lg:text-2xl">{item.count}</p>
               </button>
             ))}
           </div>

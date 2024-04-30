@@ -80,10 +80,10 @@ export const updateProfile = async (
 };
 
 /** 학교 업데이트하는 로직 */
-export const updateSchool = async ({ userId, schoolEmail, univName }: UpdateSchoolType) => {
+export const updateSchool = async ({ userId, schoolEmailInputValue, schoolNameInputValue }: UpdateSchoolType) => {
   const { error } = await clientSupabase
     .from('users')
-    .update({ school_email: schoolEmail, school_name: univName, isValidate: true })
+    .update({ school_email: schoolEmailInputValue, school_name: schoolNameInputValue, isValidate: true })
     .eq('user_id', userId);
   if (error) {
     console.error('Error updating school:', error);

@@ -43,8 +43,8 @@ export interface FavoriteType {
 
 export interface UpdateSchoolType {
   userId: string;
-  schoolEmail: string;
-  univName: string;
+  schoolEmailInputValue: string;
+  schoolNameInputValue: string;
 }
 
 export interface UpdateAvatarType {

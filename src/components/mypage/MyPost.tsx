@@ -20,7 +20,7 @@ const MyPost = () => {
             <Link
               href={`/review/${post.review_id}`}
               key={post.review_id}
-              className="border border-[#E5E7EB] p-4 rounded-xl flex flex-col gap-4 flex-grow-0 w-[278px]"
+              className="border border-[#E5E7EB] p-4 rounded-xl flex flex-col gap-4 flex-grow-0 w-[278px] max-sm:w-[240px]"
             >
               <div className="relative w-full h-[150px]">
                 <Image

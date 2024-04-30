@@ -73,7 +73,7 @@ const AvatarForm = () => {
 
   return (
     <>
-      <div className="flex flex-col justify-center items-start gap-2">
+      <div className="flex flex-col justify-center items-start">
         <div className="flex flex-col items-center gap-2 relative">
           <div className="w-[80px] h-[80px] overflow-hidden flex justify-center items-center rounded-full relative">
             <label htmlFor="file_upload" className="px-3 py-2 border rounded-lg text-sm cursor-pointer">
@@ -133,9 +133,9 @@ const AvatarForm = () => {
             </button>
           )}
         </div>
+        <p className="text-sm text-[#A1A1AA] mt-4">프로필 사진의 권장 크기는 100MB입니다.</p>
+        <p className="text-sm text-[#A1A1AA]">지원하는 파일 형식 : jpg, png, gif</p>
       </div>
-      <p className="text-sm text-[#A1A1AA] mt-2">프로필 사진의 권장 크기는 100MB입니다.</p>
-      <p className="text-sm text-[#A1A1AA]">지원하는 파일 형식 : jpg, png, gif</p>
     </>
   );
 };
