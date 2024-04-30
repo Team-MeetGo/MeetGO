@@ -1,3 +1,4 @@
+'use client';
 import { create } from 'zustand';
 import type { FavoriteType, UsersType } from '@/types/userTypes';
 
@@ -48,4 +49,53 @@ export const profileCount = create<ProfileState>()((set) => ({
 export const useFavoriteStore = create<FavoriteType>()((set) => ({
   selected: new Set([]),
   setSelected: (newSet: Set<string>) => set({ selected: newSet })
+}));
+
+export const useEditingStore = create<{
+  isEditing: boolean;
+  setIsEditing: (value: boolean | ((prev: boolean) => boolean)) => void;
+}>((set) => ({
+  isEditing: false,
+  setIsEditing: (value) =>
+    set((prevState) => ({
+      isEditing: typeof value === 'function' ? value(prevState.isEditing) : value
+    }))
+}));
+
+type ProfileOnchangeState = {
+  avatarInputValue: string | null;
+  nicknameInputValue: string;
+  schoolEmailInputValue: string;
+  schoolNameInputValue: string;
+  introInputValue: string;
+  genderInputValue: string;
+  kakaoIdInputValue: string;
+  favoriteInputValue: Set<string>;
+  setAvatarInputValue: (value: string | null) => void;
+  setNicknameInputValue: (value: string) => void;
+  setSchoolEmailInputValue: (value: string) => void;
+  setSchoolNameInputValue: (value: string) => void;
+  setIntroInputValue: (value: string) => void;
+  setGenderInputValue: (value: string) => void;
+  setKakaoIdInputValue: (value: string) => void;
+  setFavoriteInputValue: (newSet: Set<string>) => void;
+};
+
+export const useProfileOnchangeStore = create<ProfileOnchangeState>((set) => ({
+  avatarInputValue: null,
+  nicknameInputValue: '',
+  schoolEmailInputValue: '',
+  schoolNameInputValue: '',
+  introInputValue: '',
+  genderInputValue: '',
+  kakaoIdInputValue: '',
+  favoriteInputValue: new Set([]),
+  setAvatarInputValue: (value) => set({ avatarInputValue: value }),
+  setNicknameInputValue: (value) => set({ nicknameInputValue: value }),
+  setSchoolEmailInputValue: (value) => set({ schoolEmailInputValue: value }),
+  setSchoolNameInputValue: (value) => set({ schoolNameInputValue: value }),
+  setIntroInputValue: (value) => set({ introInputValue: value }),
+  setGenderInputValue: (value) => set({ genderInputValue: value }),
+  setKakaoIdInputValue: (value) => set({ kakaoIdInputValue: value }),
+  setFavoriteInputValue: (newSet: Set<string>) => set({ favoriteInputValue: newSet })
 }));
