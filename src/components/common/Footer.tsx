@@ -9,7 +9,7 @@ const Footer = () => {
 
   return (
     <>
-      {pathname.startsWith('/chat') ?? (
+      {pathname.startsWith('/chat') ? null : (
         <footer className="w-full h-36 flex justify-center items-center px-3 mx-auto">
           <div className="w-full max-w-[1280px] flex justify-between gap-6">
             <section className="flex flex-col gap-1 text-gray1">
