@@ -17,7 +17,7 @@ const ThickBanner = () => {
   return (
     <div className="w-full h-24 bg-mainColor flex justify-center items-center px-3">
       {pathname === '/' ? (
-        <div className="w-full max-w-[1080px] flex justify-between gap-6">
+        <div className="w-full max-w-[1280px] flex justify-between gap-6">
           <div className="text-white">
             <p className="font-thin text-lg max-sm:text-base">MeetGo의 멤버가 되어</p>
             <p className="text-lg max-sm:text-base">
@@ -34,7 +34,7 @@ const ThickBanner = () => {
         </div>
       ) : null}
       {pathname.startsWith('/mypage') ? (
-        <div className="w-full max-w-[1080px] flex justify-between gap-6">
+        <div className="w-full max-w-[1280px] flex justify-between gap-6">
           <div className="text-white">
             <p className="font-thin text-lg max-sm:text-base">아직 미팅룸에 안 가보셨어요?</p>
             <p className="text-lg max-sm:text-base">

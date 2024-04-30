@@ -20,7 +20,7 @@ const ThinBanner = () => {
         <h1 className="text-xl text-thin text-white my-auto">현재 많은 인연들이 기다리고 있어요!</h1>
       ) : null}
       {pathname === '/meetingRoom' ? (
-        <div className="w-full max-w-[1080px] flex justify-between items-center gap-6 px-3">
+        <div className="w-full max-w-[1280px] flex justify-between items-center gap-6 px-3">
           <h2 className="font-thin text-lg max-sm:text-sm text-white">
             다른 회원들의 <span className="text-lg max-sm:text-sm">실시간 미팅후기가</span> 궁금하다면?
           </h2>
@@ -34,7 +34,7 @@ const ThinBanner = () => {
         </div>
       ) : null}
       {pathname.startsWith('/review') ? (
-        <div className="w-full max-w-[1080px] flex justify-between items-center gap-6 px-3">
+        <div className="w-full max-w-[1280px] flex justify-between items-center gap-6 px-3">
           <p className="font-thin text-lg max-sm:text-sm text-white">
             <span className="text-lg max-sm:text-sm">지금 대학교 이메일을 인증하면,</span> 캠퍼스 인연들을 만날 수
             있어요.

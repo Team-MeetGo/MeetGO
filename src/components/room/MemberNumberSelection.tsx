@@ -50,7 +50,7 @@ function MemberNumberSelection({ text }: { text: string }) {
     <>
       <section className="relative bg-white z-10" ref={dropdownRef}>
         <button
-          className="bg-white w-[120px] h-[43px] rounded-lg border-black border-[1px] text-[16px]"
+          className="bg-white w-[120px] h-[43px] rounded-lg border-gray2 border text-[16px]"
           type="button"
           onClick={() => setOpenModal((openModal) => !openModal)}
         >

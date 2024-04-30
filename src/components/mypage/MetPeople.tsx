@@ -126,7 +126,7 @@ const MetPeople = () => {
       <h2 className="text-lg font-semibold mb-4">스쳐간 인연 리스트</h2>
       <div className="flex items-center gap-4 flex-wrap">
         {metPeopleList?.map((person: any, index: any) => (
-          <div key={index} className="flex flex-col items-center p-2 gap-2">
+          <div key={index} className="flex flex-col items-center p-2 gap-2 max-w-40 w-full">
             <div className="w-[80px] h-[80px] overflow-hidden flex justify-center items-center rounded-full relative bg-gray-300">
               {person.avatar && (
                 <Image src={person.avatar} alt="avatar" style={{ objectFit: 'cover' }} fill={true} sizes="400px" />
