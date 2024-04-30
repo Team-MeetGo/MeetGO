@@ -22,7 +22,6 @@ const ProfileSetting = () => {
   const { data: user } = useGetUserDataQuery();
   const resetProfile = useProfileSet(user);
   const { isEditing, setIsEditing } = useEditingStore();
-  const { selected } = useFavoriteStore();
   const { openModal, closeModal } = useModalStore();
   const [validationMessages, setValidationMessages] = useState({
     schoolEmail: '',
@@ -37,30 +36,11 @@ const ProfileSetting = () => {
     introInputValue,
     kakaoIdInputValue,
     genderInputValue,
-    favoriteInputValue
+    favoriteInputValue,
+    setFavoriteInputValue
   } = useProfileOnchangeStore();
 
-  const inputNickname = useInputChange('');
-  const inputEmail = useInputChange('');
-  const inputIntro = useInputChange('');
-  const inputKakaoId = useInputChange('');
-  const inputGender = useInputChange('');
-  const inputSchoolName = useInputChange('');
-  const inputSchoolEmail = useInputChange('');
-
   const { mutate: updateProfileMutate } = useProfileUpdateMutation();
-
-  useEffect(() => {
-    if (user) {
-      inputNickname.setValue(user.nickname);
-      inputEmail.setValue(user.login_email);
-      inputIntro.setValue(user.intro);
-      inputKakaoId.setValue(user.kakaoId);
-      inputGender.setValue(user.gender);
-      inputSchoolName.setValue(user.school_name);
-      inputSchoolEmail.setValue(user.school_email);
-    }
-  }, []);
 
   const toggleEditing = () => {
     setIsEditing((prev) => !prev);
@@ -69,13 +49,6 @@ const ProfileSetting = () => {
   const onCancelHandle = () => {
     setIsEditing(false);
     resetProfile();
-    inputNickname.setValue(user?.nickname);
-    inputEmail.setValue(user?.login_email);
-    inputIntro.setValue(user?.intro);
-    inputKakaoId.setValue(user?.kakaoId);
-    inputGender.setValue(user?.gender);
-    inputSchoolName.setValue(user?.school_name);
-    inputSchoolEmail.setValue(user?.school_email);
   };
 
   /** 수정하고 저장버튼 클릭시 실행될 로직(상태 업데이트 및 갱신) */
@@ -86,7 +59,7 @@ const ProfileSetting = () => {
       inputIntro,
       inputKakaoId,
       inputGender,
-      favorite: Array.from(selected)
+      favorite: Array.from(favoriteInputValue)
     });
     setIsEditing(false);
   };

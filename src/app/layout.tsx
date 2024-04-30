@@ -63,7 +63,7 @@ export default async function RootLayout({
                 <ValidationModal />
                 <NavBar />
                 {children}
-                <ReactQueryDevtools initialIsOpen={true} />
+                <ReactQueryDevtools initialIsOpen={false} />
               </Suspense>
               <Footer />
             </HydrationBoundary>
