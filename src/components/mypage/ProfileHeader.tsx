@@ -70,7 +70,7 @@ const ProfileHeader = () => {
           </div>
           <div className="flex max-lg:gap-4">
             {buttonData.map((item, index) => (
-              <button key={index} className="flex flex-col items-start gap-2 w-40 max-lg:w-24">
+              <button key={index} disabled className="flex flex-col items-start gap-2 w-40 max-lg:w-24">
                 <item.icon size={40} />
                 <p className="max-lg:text-sm">{item.title}</p>
                 <p className="font-bold text-3xl max-lg:text-2xl">{item.count}</p>
