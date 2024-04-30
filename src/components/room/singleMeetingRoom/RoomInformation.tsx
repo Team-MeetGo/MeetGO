@@ -50,10 +50,10 @@ function RoomInformation({ room }: { room: MeetingRoomType }) {
         </section>
         <section className="flex flex-row justify-center relative">
           {alreadyChatRoom && alreadyChatRoom.length > 0 ? (
-            <mark className="flex flex-row mr-[6px] p-[4px] bg-white border rounded-lg">
+            <mark className="flex flex-row mr-[6px] p-[4px] bg-white border rounded-lg relative">
               {myMsgData && myMsgData.find((item) => item.room_id === room.room_id) ? (
                 <figure
-                  className={`w-5 h-5 bg-[#F31260] rounded-full flex justify-center items-center gap-2 absolute top-[-8px] lg:right-[1.4rem] right-[1.5rem] text-white z-[5]`}
+                  className={`w-5 h-5 bg-[#F31260] rounded-full flex justify-center text-sm items-center absolute top-[-12px] right-[-12px] text-white z-[5]`}
                 >
                   <h1>{myMsgData.find((item) => item.room_id === room.room_id)?.newMsgCount}</h1>
                 </figure>

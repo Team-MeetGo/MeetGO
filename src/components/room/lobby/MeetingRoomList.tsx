@@ -7,13 +7,13 @@ import { useGetUserDataQuery } from '@/hooks/useQueries/useUserQuery';
 import { useSearchRoomStore } from '@/store/searchRoomStore';
 import { REGIONANDMEMBER } from '@/utils/constant';
 import { Suspense, useEffect, useState } from 'react';
-import { IoIosArrowBack, IoIosArrowForward } from 'react-icons/io';
+// import { IoIosArrowBack, IoIosArrowForward } from 'react-icons/io';
 
 import type { MeetingRoomType } from '@/types/roomTypes';
-import LobbyBanner from './LobbyBanner';
+// import LobbyBanner from './LobbyBanner';
 import ParticipatingRooms from './ParticipatingRooms';
 function MeetingRoomList() {
-  const [page, setPage] = useState(1);
+  // const [page, setPage] = useState(1);
   const [filteredOtherRooms, setFilteredOtherRooms] = useState<MeetingRoomType[]>([]);
 
   const { data: user } = useGetUserDataQuery();
@@ -21,7 +21,7 @@ function MeetingRoomList() {
   const myRoomList = useMyroomQuery(user?.user_id);
   const myOutList = useMyPastAndNowRoomQuery(user?.user_id as string);
 
-  const filteredMyRoomList = myRoomList?.map((room) => room.room);
+  // const filteredMyRoomList = myRoomList?.map((room) => room.room);
   const filteredMyOutRoomList = myOutList?.map((room) => room.room);
   const { selectRegion, selectMemberNumber } = useSearchRoomStore();
 
@@ -72,18 +72,18 @@ function MeetingRoomList() {
     filteredOtherRoomsHandler();
   }, [myRoomList, selectRegion, selectMemberNumber]);
 
-  const nextPage = () => {
-    if (filteredMyRoomList && filteredMyRoomList.length / 3 <= page) {
-      return setPage(1);
-    }
-    setPage((page) => page + 1);
-  };
-  const beforePage = () => {
-    if (page < 2) {
-      return setPage(1);
-    }
-    setPage((page) => page - 1);
-  };
+  // const nextPage = () => {
+  //   if (filteredMyRoomList && filteredMyRoomList.length / 3 <= page) {
+  //     return setPage(1);
+  //   }
+  //   setPage((page) => page + 1);
+  // };
+  // const beforePage = () => {
+  //   if (page < 2) {
+  //     return setPage(1);
+  //   }
+  //   setPage((page) => page - 1);
+  // };
 
   return (
     <>
@@ -95,7 +95,7 @@ function MeetingRoomList() {
               {page !== 1 ? <IoIosArrowBack className="h-[40px] w-[40px] m-[8px]" /> : null}
             </button>
 
-            <div className="lg:w-[1000px] max-sm:w-[22rem]">
+            <div className="lg:w-[1280px] max-sm:w-[22rem]">
               {
                 <li
                   className={`${

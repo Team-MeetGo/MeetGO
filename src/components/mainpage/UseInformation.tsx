@@ -4,7 +4,7 @@ import { stepArr } from '@/utils/data/mainPageData';
 
 const UseInformation = () => {
   return (
-    <section className="grid max-sm:grid-cols-1 max-lg:grid-cols-2 grid-cols-4 gap-2 mx-auto py-[16px] px-[80px] w-full max-w-[1080px] bg-gray4 rounded-lg">
+    <section className="grid max-sm:grid-cols-1 max-lg:grid-cols-2 grid-cols-4 gap-2 mx-auto py-[16px] px-[80px] w-full max-w-[1280px] bg-gray4 rounded-lg">
       {stepArr.map((step) => (
         <div key={step.stepNum} className="flex flex-col gap-4">
           <div className="flex flex-col gap-1.5 px-[8px]">

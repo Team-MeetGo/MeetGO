@@ -16,7 +16,6 @@ export const RtBannerArrow = (props: any) => {
         style={{
           fontSize: '40px',
           display: 'block',
-          right: '20px',
           top: '45%',
           zIndex: '15',
           opacity: '1',
@@ -38,7 +37,6 @@ export const LtBannerArrow = (props: any) => {
         style={{
           fontSize: '40px',
           display: 'block',
-          //   left: '20px',
           top: '45%',
           zIndex: '15',
           opacity: '1',
@@ -57,7 +55,7 @@ const ParticipatingRooms = () => {
   const filteredMyRoomList = myRoomList?.map((room) => room.room);
 
   const settings = {
-    dots: true,
+    dots: false,
     infinite: true,
     speed: 500,
     slidesToShow: 3,
@@ -97,7 +95,7 @@ const ParticipatingRooms = () => {
       <Slider {...settings}>
         {filteredMyRoomList && filteredMyRoomList.length ? (
           filteredMyRoomList.map((room) => (
-            <div className="block lg:hidden w-full px-[36px]" key={room?.room_id}>
+            <div className="w-full" key={room?.room_id}>
               {room && <MeetingRoom room={room} />}
             </div>
           ))

@@ -89,41 +89,43 @@ const MainBanner = () => {
   };
 
   return (
-    <div className="w-full max-w-[1080px] h-full max-h-[600px] p-[24px]">
-      <Slider {...settings}>
-        {bannerImgArr.map((img, idx) => (
-          <div key={idx} className="relative">
-            <div className="flex flex-col gap-6 z-30 sm:absolute text-white max-sm:text-mainColor top-14 left-20">
-              <div className="font-extrabold text-5xl max-sm:text-4xl mb-[4px]">
-                <h1>{img.title1}</h1>
-                <h1>{img.title2}</h1>
-              </div>
-              <div className="text-xs leading-5">
-                <p>{img.sub1}</p>
-                <p>{img.sub2}</p>
-              </div>
+    <>
+      <div className="w-full max-w-[1280px] h-full max-h-[600px] p-[24px]">
+        <Slider {...settings}>
+          {bannerImgArr.map((img, idx) => (
+            <div key={idx} className="relative">
+              <div className="flex flex-col gap-6 z-30 sm:absolute text-white max-sm:text-mainColor top-14 left-20">
+                <div className="font-extrabold text-5xl max-sm:text-4xl mb-[4px]">
+                  <h1>{img.title1}</h1>
+                  <h1>{img.title2}</h1>
+                </div>
+                <div className="text-xs leading-5">
+                  <p>{img.sub1}</p>
+                  <p>{img.sub2}</p>
+                </div>
 
-              <Link
-                href="/mypage"
-                className="bg-mainColor text-white rounded-lg px-7 max-sm:px-3 h-10 text-base max-sm:text-sm font-semibold my-auto flex justify-center items-center hover:bg-opacity-90 break-keep"
-              >
-                지금 바로 대학생 인증하러 가기
-              </Link>
+                <Link
+                  href="/mypage"
+                  className="bg-mainColor text-white rounded-lg px-7 max-sm:px-3 h-10 text-base max-sm:text-sm font-semibold my-auto flex justify-center items-center hover:bg-opacity-90 break-keep"
+                >
+                  지금 바로 대학생 인증하러 가기
+                </Link>
+              </div>
+              <div className=" w-full max-w-[1280px] h-80 mb-[10px] relative max-sm:hidden">
+                <Image
+                  src={img.src}
+                  alt="메인배너"
+                  fill={true}
+                  style={{ objectFit: 'cover', borderRadius: '3px', cursor: 'pointer', opacity: '0.9' }}
+                  sizes="1980px"
+                  priority={true}
+                />
+              </div>
             </div>
-            <div className=" w-full max-w-[1080px] h-80 mb-[10px] relative max-sm:hidden">
-              <Image
-                src={img.src}
-                alt="메인배너"
-                fill={true}
-                style={{ objectFit: 'cover', borderRadius: '3px', cursor: 'pointer', opacity: '0.9' }}
-                sizes="1980px"
-                priority={true}
-              />
-            </div>
-          </div>
-        ))}
-      </Slider>
-    </div>
+          ))}
+        </Slider>
+      </div>
+    </>
   );
 };
 

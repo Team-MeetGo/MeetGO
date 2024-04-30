@@ -137,7 +137,7 @@ pre {
 
 .slick-prev:before,
 .slick-next:before {
-  color: yellow;
+  color: #7238d2 !important;
 }
 
 .chatImgRowsOverOne {

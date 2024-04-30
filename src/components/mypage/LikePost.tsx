@@ -15,14 +15,14 @@ const LikePost = () => {
       <div>
         <h2 className="font-semibold">좋아요한 글</h2>
         <p className="text-sm text-[#4B5563] mb-6">후기 게시판에서 좋아요한 글을 확인하세요.</p>
-        <div className="max-w-[870px] w-full flex gap-4 flex-wrap justify-start mx-auto">
+        <div className="max-w-[870px] w-full grid max-sm:grid-cols-1 max-lg:grid-cols-2 grid-cols-3 gap-4">
           {likePostData?.map((post: any) => (
             <Link
               href={`/review/${post.review_id}`}
               key={post.review_id}
-              className="border border-[#E5E7EB] p-4 rounded-xl flex flex-col gap-4 flex-grow-0 w-[278px]"
+              className="border border-[#E5E7EB] p-4 rounded-xl flex flex-col gap-4 flex-grow-0"
             >
-              <div className="relative w-full h-[150px]">
+              <div className="relative w-full min-h-[150px]">
                 <Image
                   src={post.image_urls && post.image_urls.length > 0 ? post.image_urls[0] : defaultImg}
                   alt="Post Image"

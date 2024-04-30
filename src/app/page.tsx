@@ -7,7 +7,7 @@ import ThickBanner from '@/utils/banner/ThickBanner';
 
 export default function Home() {
   return (
-    <main className="w-screen flex flex-col items-center gap-12">
+    <main className="flex flex-col items-center gap-12">
       <MainBanner />
       <GetMostLikedReivew />
       <ThinBanner />

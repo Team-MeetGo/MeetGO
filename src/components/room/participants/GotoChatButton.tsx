@@ -52,19 +52,19 @@ const GotoChatButton = ({ roomId, members }: { roomId: UUID; members: UserType[]
   const handleGoChatDebounce = useCallback(debounce(gotoChattingRoom, 1000), []);
 
   return (
-    <main>
+    <main className="max-w-[1080px] w-full">
       {
         <figure
           className="
-        flex flex-col lg:h-[114px] lg:w-[1080px] lg:max-w-[1440px] w-[22rem] mt-[0.5rem] justify-center text-center"
+        flex flex-col mt-[1rem] justify-center text-center max-w-[1080px] w-full"
         >
           <button
             disabled={members.length === maxMember ? false : true}
-            className={`${members.length === maxMember ? 'bg-mainColor' : 'bg-gray1'}`}
+            className={`w-full max-w-[1080px] p-2 ${members.length === maxMember ? 'bg-mainColor' : 'bg-gray1'}`}
             onClick={handleGoChatDebounce}
           >
             <div className="flex flex-row justify-center align-middle gap-[8px]">
-              <h2 className="text-[40px] text-white font-bold">Go to chat</h2>
+              <h2 className="text-[36px] text-white font-semibold">Go to chat</h2>
               <IoPlay className="w-[24px] h-[24px] my-auto fill-white" />
             </div>
             <p className="text-[14px] text-white">인원이 다 차면 이 버튼을 누르세요.</p>
