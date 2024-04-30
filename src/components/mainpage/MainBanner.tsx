@@ -7,41 +7,45 @@ import Image from 'next/image';
 import { bannerImgArr } from '@/utils/data/mainPageData';
 import Link from 'next/link';
 
-const innerWidth = window.innerWidth;
-
 export const RtBannerArrow = (props: any) => {
   const { className, style, onClick } = props;
   return (
-    <div
-      className={className}
-      style={{
-        fontSize: '40px',
-        display: 'block',
-        right: '20px',
-        zIndex: '15',
-        opacity: innerWidth < 768 ? '0' : '1',
-        color: 'White'
-      }}
-      onClick={onClick}
-    />
+    <div className="max-sm:hidden">
+      <div
+        className={`${className} max-sm:hidden`}
+        style={{
+          fontSize: '40px',
+          display: 'block',
+          right: '20px',
+          zIndex: '15',
+          opacity: '1',
+          color: 'White',
+          lineHeight: 1
+        }}
+        onClick={onClick}
+      />
+    </div>
   );
 };
 export const LtBannerArrow = (props: any) => {
   const { className, style, onClick } = props;
 
   return (
-    <div
-      className={className}
-      style={{
-        fontSize: '40px',
-        display: 'block',
-        left: '20px',
-        zIndex: '15',
-        opacity: innerWidth < 768 ? '0' : '1',
-        color: 'White'
-      }}
-      onClick={onClick}
-    />
+    <div className="max-sm:hidden">
+      <div
+        className={className}
+        style={{
+          fontSize: '40px',
+          display: 'block',
+          left: '20px',
+          zIndex: '15',
+          opacity: '1',
+          color: 'White',
+          lineHeight: 1
+        }}
+        onClick={onClick}
+      />
+    </div>
   );
 };
 
