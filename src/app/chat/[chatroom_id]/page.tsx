@@ -9,7 +9,6 @@ import { getFromTo } from '@/utils/utilFns';
 import { ITEM_INTERVAL } from '@/utils/constant';
 import ChatList from '@/components/chat/chatBody/ChatList';
 import SideBarButton from '@/components/chat/sidebar/SideBarButton';
-import SideBarModal from '@/components/chat/sidebar/SideBarModal';
 
 const ChatPage = async ({ params }: { params: { chatroom_id: string } }) => {
   const chatRoomId = params.chatroom_id;
@@ -34,9 +33,6 @@ const ChatPage = async ({ params }: { params: { chatroom_id: string } }) => {
             <SideBar chatRoomId={chatRoomId} />
           </div>
           <div className="w-full max-w-xl max-h-[calc(100vh-90px)] min-h-[36rem]  relative">
-            {/* <div className="absolute top-0 left-0 lg:hidden">
-              <SideBarModal chatRoomId={chatRoomId} />
-            </div> */}
             <div className="absolute top-0 left-0">
               <SideBarButton />
             </div>

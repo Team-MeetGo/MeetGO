@@ -14,7 +14,6 @@ declare global {
     kakao: any;
   }
 }
-
 const Map = ({ chatRoomId }: { chatRoomId: string }) => {
   const mapRef = useRef<string>();
   const [map, setMap] = useState<any>();
@@ -26,15 +25,6 @@ const Map = ({ chatRoomId }: { chatRoomId: string }) => {
   const [searchText, setSearchText] = useState<string>('');
   const [selectedMeetingLocation, setSelectedMeetingLocation] = useState<string>();
   const { openModal } = useModalStore();
-  // const [isMobile, setIsMobile] = useState<boolean>(false);
-
-  // useEffect(() => {
-  //   const checkIsMobile = () => {
-  //     setIsMobile(window.innerWidth < 640);
-  //   };
-  //   window.addEventListener('resize', checkIsMobile);
-  //   return () => window.removeEventListener('resize', checkIsMobile);
-  // }, []);
 
   // 유저 정보 가져오기
   const { data: userData } = useGetUserDataQuery();
