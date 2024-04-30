@@ -1,4 +1,3 @@
-'use client';
 import { Suspense } from 'react';
 import Member from './Member';
 import RoomInformation from './RoomInformation';
@@ -11,9 +10,7 @@ function AcceptanceRoom({ roomId }: { roomId: UUID }) {
       <div>
         <Suspense>
           <RoomInformation roomId={roomId} />
-          <div className="w-100 h-100 flex flex-row justify-evenly">
-            <Member roomId={roomId} />
-          </div>
+          <Member roomId={roomId} />
         </Suspense>
       </div>
     </>

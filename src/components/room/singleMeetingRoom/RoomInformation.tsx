@@ -1,11 +1,11 @@
 'use client';
 import DeleteMeetingRoom from '@/components/room/DeleteMeetingRoom';
 import EditMeetingRoom from '@/components/room/EditMeetingRoom';
-import getmaxGenderMemberNumber from '@/hooks/custom/useGenderMaxNumber';
+import useGenderMaxNumber from '@/hooks/custom/useGenderMaxNumber';
 import { useMyMsgData } from '@/hooks/useQueries/useChattingQuery';
 import { useAlreadyChatRoomQuery, useRoomParticipantsQuery } from '@/hooks/useQueries/useMeetingQuery';
 import { useGetUserDataQuery } from '@/hooks/useQueries/useUserQuery';
-import { GENDER } from '@/utils/data/MeetingRoomSelector';
+import { GENDERFILTER } from '@/utils/constant';
 import { useEffect, useRef, useState } from 'react';
 import { BsFire } from 'react-icons/bs';
 import { HiOutlineDotsVertical } from 'react-icons/hi';
@@ -17,16 +17,16 @@ function RoomInformation({ room }: { room: MeetingRoomType }) {
   const [open, setOpen] = useState(false);
   const { room_id, room_status, member_number, leader_id } = room;
 
+  const roomId = room_id;
   const alreadyChatRoom = useAlreadyChatRoomQuery(room_id);
-  const participants = useRoomParticipantsQuery(room_id);
+  const participants = useRoomParticipantsQuery(roomId);
   const { data: user } = useGetUserDataQuery();
 
-  const genderMaxNumber = getmaxGenderMemberNumber(member_number);
-  const emptySeat = genderMaxNumber! * 2 - participants!.length;
-  const countFemale = participants?.filter((member) => member?.gender === GENDER.FEMALE).length;
-  const countMale = participants.length - countFemale;
-  const user_id = user?.user_id;
-  const myMsgData = useMyMsgData(user_id);
+  const genderMaxNumber = useGenderMaxNumber(member_number);
+  const emptySeatNumber = genderMaxNumber! * 2 - participants.length;
+  const femaleNumber = participants.filter((member) => member?.gender === GENDERFILTER.FEMALE).length;
+  const maleNumber = participants.length - femaleNumber;
+  const myMsgData = useMyMsgData(user?.user_id);
 
   useEffect(() => {
     const outSideClick = (e: any) => {
@@ -42,20 +42,20 @@ function RoomInformation({ room }: { room: MeetingRoomType }) {
     <div className="flex flex-row">
       <div className="flex flex-row justify-between w-full items-center">
         <section className="text-[16px] flex flex-row text-center">
-          <IoFemale className="w-[14px] h-[14px] my-auto fill-hotPink" /> {`${countFemale}/${genderMaxNumber}`}
+          <IoFemale className="w-[14px] h-[14px] my-auto fill-hotPink" /> {`${femaleNumber}/${genderMaxNumber}`}
           <div className="px-[6px]">|</div>
           <IoMale className="w-[14px] h-[14px] my-auto fill-blue" />
-          {`${countMale}/${genderMaxNumber}`}
+          {`${maleNumber}/${genderMaxNumber}`}
           <div className="mx-[6px]">|</div> {`${room_status}`}
         </section>
-        <section className="pr-[16px] flex flex-row justify-center relative">
+        <section className="lg:pr-[30px] pr-[0rem] flex flex-row justify-center relative">
           {alreadyChatRoom && alreadyChatRoom.length > 0 ? (
-            <mark className="flex flex-row gap-[2px] p-[4px] bg-white border rounded-lg">
-              {myMsgData && myMsgData.find((item) => item.room_id === room?.room_id) ? (
+            <mark className="flex flex-row mr-[6px] p-[4px] bg-white border rounded-lg">
+              {myMsgData && myMsgData.find((item) => item.room_id === room.room_id) ? (
                 <figure
-                  className={`w-5 h-5 bg-[#F31260] rounded-full flex justify-center items-center gap-2 absolute top-[-8px] right-0 text-white`}
+                  className={`w-5 h-5 bg-[#F31260] rounded-full flex justify-center items-center gap-2 absolute top-[-8px] lg:right-[2.7rem] right-[1.5rem] text-white z-[5]`}
                 >
-                  <h1>{myMsgData.find((item) => item.room_id === room?.room_id)?.newMsgCount}</h1>
+                  <h1>{myMsgData.find((item) => item.room_id === room.room_id)?.newMsgCount}</h1>
                 </figure>
               ) : null}
               <p className="text-[14px]">채팅중</p>
@@ -63,7 +63,7 @@ function RoomInformation({ room }: { room: MeetingRoomType }) {
                 <IoChatbubblesOutline className="h-[16px] w-[16px] my-auto fill-gray2" />
               </figure>
             </mark>
-          ) : emptySeat === 1 ? (
+          ) : emptySeatNumber === 1 ? (
             <mark className="flex flex-row gap-[2px] p-[4px] bg-white rounded-lg text-[14px]">
               <p className="text-hotPink my-auto">한자리!!</p>
               <figure>
@@ -71,10 +71,10 @@ function RoomInformation({ room }: { room: MeetingRoomType }) {
               </figure>
             </mark>
           ) : null}
-          {user_id === leader_id ? (
+          {user?.user_id === leader_id ? (
             <mark ref={dropdownRef} className="relative flex flex-row justify-center align-middle">
               <button
-                className="flex flex-row justify-center align-middle"
+                className="flex flex-row justify-center align-middle p-[0.2rem]"
                 onClick={() => {
                   setOpen((open) => !open);
                 }}

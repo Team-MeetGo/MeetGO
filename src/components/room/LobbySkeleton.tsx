@@ -6,9 +6,6 @@ import React from 'react';
 function LobbySkeleton() {
   const [isLoaded, setIsLoaded] = React.useState(false);
 
-  const toggleLoad = () => {
-    setIsLoaded((prev) => !prev);
-  };
   return (
     <div className="flex flex-col items-center justify-content">
       <main className="flex flex-col items-center justify-content min-w-[1000px]">

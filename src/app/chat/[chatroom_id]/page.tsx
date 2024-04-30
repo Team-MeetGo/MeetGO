@@ -14,8 +14,9 @@ import SideBarModal from '@/components/chat/sidebar/SideBarModal';
 const ChatPage = async ({ params }: { params: { chatroom_id: string } }) => {
   const chatRoomId = params.chatroom_id;
   const supabase = serverSupabase();
-  const { data } = await supabase.auth.getUser();
-  const user = data.user;
+  const {
+    data: { user }
+  } = await supabase.auth.getUser();
   const { from, to } = getFromTo(0, ITEM_INTERVAL);
   const { data: allMsgs } = await supabase
     .from('messages')
