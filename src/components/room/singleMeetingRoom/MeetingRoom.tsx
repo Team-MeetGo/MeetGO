@@ -33,7 +33,7 @@ function MeetingRoom({ room }: { room: MeetingRoomType }) {
     //수락창: 이미 참여한 방은 바로 입장
     const alreadyParticipants = participants.find((member) => member?.user_id === userId);
     if (alreadyParticipants && alreadyChatRoom?.length === 0) {
-      return router.push(`${ROUTERADDRESS.GOTOLOBBY}/${room_id}`);
+      return router.push(`meetingRoom/${room_id}`);
     }
     //채팅창: 채팅창으로 이동
     if (alreadyParticipants && alreadyChatRoom?.length === 1) {
@@ -56,7 +56,7 @@ function MeetingRoom({ room }: { room: MeetingRoomType }) {
       if (genderMaxNumber && participants.length === genderMaxNumber * 2 - 1) {
         updateRoomStatusCloseMutation();
       }
-      return router.push(`${ROUTERADDRESS.GOTOLOBBY}/${room_id}`);
+      return router.push(`meetingRoom/${room_id}`);
     }
   };
 
