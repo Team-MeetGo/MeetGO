@@ -1,10 +1,11 @@
 'use client';
+import { useAddRoomMutation } from '@/hooks/useMutation/useMeetingMutation';
 import { useGetUserDataQuery } from '@/hooks/useQueries/useUserQuery';
 import { useRoomStore } from '@/store/roomStore';
-import { favoriteOptions } from '@/utils/data/FavoriteData';
+import { ROOMSTATUS, ROUTERADDRESS } from '@/utils/constant';
+import { meetingRoomFeatureData } from '@/utils/data/MeetingRoomFeatureData';
 import {
   Button,
-  Chip,
   Modal,
   ModalBody,
   ModalContent,
@@ -16,12 +17,11 @@ import {
 } from '@nextui-org/react';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
-import { useAddRoomMutation } from '@/hooks/useMutation/useMeetingMutation';
+import { customErrToast, customSuccessToast } from '../common/customToast';
 import MemberNumberSelection from './MemberNumberSelection';
 import RegionSelection from './RegionSelection';
 
 import type { NewRoomType } from '@/types/roomTypes';
-
 function MeetingRoomForm() {
   const router = useRouter();
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
@@ -32,16 +32,8 @@ function MeetingRoomForm() {
   const [location, setLocation] = useState('');
   const [title, setTitle] = useState('');
   const [selected, setSelected] = useState<Set<string>>(new Set([]));
-  const { mutateAsync: addRoomMutation } = useAddRoomMutation();
-
   const userId = user?.user_id!;
-  const cancelMakingMeetingRoom = () => {
-    setTitle('');
-    setLocation('');
-    resetMemberNumber();
-    resetRoomRegion();
-    setSelected(new Set([]));
-  };
+  const { mutateAsync: addRoomMutation } = useAddRoomMutation(userId);
 
   const favoriteArray = Array.from(selected);
   const nextMeetingRoom: NewRoomType = {
@@ -50,40 +42,33 @@ function MeetingRoomForm() {
     location,
     region: String(roomRegion),
     member_number: String(memberNumber),
-    room_status: '모집중',
+    room_status: ROOMSTATUS.RECRUITING,
     room_title: title
   };
 
   const addMeetingRoom = async (e: any) => {
     e.preventDefault();
-    if (!title || !selected || !location || !roomRegion) {
-      alert('모든 항목은 필수입니다.');
-    } else if (title && selected && location && roomRegion) {
+    if (!title || !selected || !location || !roomRegion || !selected) {
+      customErrToast('모든 항목은 필수입니다.');
+    } else if (title && selected && location && roomRegion && selected) {
       const data = await addRoomMutation({ nextMeetingRoom, userId });
-      alert('모임이 생성되었습니다.');
+      customSuccessToast('모임이 생성되었습니다.');
       setSelected(new Set([]));
       resetMemberNumber();
       resetRoomRegion();
-      router.push(`/meetingRoom/${data}`);
+      router.push(`${ROUTERADDRESS.GOTOLOBBY}/${data}`);
     }
   };
+
   //방 컨셉을 선택합니다.
   const roomFeatureSelectHandler = (value: string) => {
-    if (selected.size > 3) {
-      alert('최대 4개까지 선택 가능합니다.');
-      return;
-    }
     setSelected(new Set(value));
   };
-  //방 컨셉을 삭제합니다.
-  const roomFeaturedeleteHandler = (value: string) => {
-    const newSelected = new Set(selected);
-    newSelected.delete(value);
-    setSelected(newSelected);
-  };
+
+  //방만들기 모달을 누릅니다.
   const roomOpenHandler = () => {
     if (!user?.gender) {
-      alert('성별을 선택해주세요');
+      customErrToast('성별을 선택해주세요');
       return router.push('/mypage');
     } else {
       onOpen();
@@ -91,7 +76,7 @@ function MeetingRoomForm() {
   };
   return (
     <>
-      <Button onPress={roomOpenHandler} className="w-[92px] h-[51px] bg-mainColor text-white">
+      <Button onPress={roomOpenHandler} className="lg:w-[92px] w-[5rem] lg:h-[51px] h-[3rem] bg-mainColor text-white">
         방 만들기
       </Button>
       <Modal
@@ -149,39 +134,25 @@ function MeetingRoomForm() {
                   </div>
                   <div className="flex w-full max-w-xs flex-col gap-2">
                     <label>방의 컨셉을 골라주세요!</label>
-                    <div className="flex whitespace-nowrap">
+                    <div className="flex whitespace-nowrap z-[5]">
                       <Select
-                        label="방의 특성(최대 4개)"
-                        selectionMode="multiple"
+                        label="방의 컨셉"
+                        selectionMode="single"
                         variant="bordered"
                         selectedKeys={selected}
                         className="max-w-xs"
                         aria-label="방의 특성"
                         onSelectionChange={(value) => roomFeatureSelectHandler(value as string)}
                       >
-                        {favoriteOptions.map((option) => (
-                          <SelectItem key={option.value} value={option.value}>
-                            {option.value}
-                          </SelectItem>
+                        {meetingRoomFeatureData.map((option: any) => (
+                          <SelectItem key={option}>{option}</SelectItem>
                         ))}
                       </Select>
-                    </div>
-                    <div className="flex flex-wrap gap-2">
-                      {Array.from(selected).map((value) => (
-                        <Chip
-                          key={value}
-                          color="default"
-                          className="bg-purpleSecondary text-mainColor rounded-[8px]"
-                          onClose={() => roomFeaturedeleteHandler(value)}
-                        >
-                          {value}
-                        </Chip>
-                      ))}
                     </div>
                   </div>
                 </ModalBody>
                 <ModalFooter>
-                  <Button color="danger" variant="light" onPress={onClose} onClick={cancelMakingMeetingRoom}>
+                  <Button color="danger" variant="light" onPress={onClose}>
                     취소
                   </Button>
                   <Button

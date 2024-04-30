@@ -2,6 +2,8 @@
 
 import { useDeleteRoom } from '@/hooks/useMutation/useMeetingMutation';
 import { useGetUserDataQuery } from '@/hooks/useQueries/useUserQuery';
+import { useModalStore } from '@/store/modalStore';
+import { ValidationModal } from '@/components/common/ValidationModal';
 
 function DeleteMeetingRoom({
   room_id,
@@ -13,21 +15,35 @@ function DeleteMeetingRoom({
   const { data: user } = useGetUserDataQuery();
   const roomId = room_id;
   const userId = user?.user_id!;
+  const { openModal, closeModal } = useModalStore();
   const { mutate: deleteRoomMutation } = useDeleteRoom({ roomId, userId });
   const DeleteMeetingRoomHandler = () => {
-    if (confirm('정말 삭제하시겠습니까?')) {
-      deleteRoomMutation();
-      setOpen(false);
-    }
+    openModal({
+      type: 'confirm',
+      name: '',
+      text: `정말 삭제하시겠습니까?`,
+      onFunc: () => {
+        deleteRoomMutation();
+        setOpen(false);
+        closeModal();
+      },
+      onCancelFunc: () => {
+        closeModal();
+      }
+    });
+    openModal;
   };
 
   return (
-    <button
-      className="gap-0 p-0 m-0 h-[31px] w-[76px] rounded-xl text-black text-[16px] bg-white hover:bg-mainColor hover:text-white "
-      onClick={DeleteMeetingRoomHandler}
-    >
-      삭제
-    </button>
+    <>
+      <ValidationModal />
+      <button
+        className="gap-0 p-0 m-0 h-[31px] w-[76px] rounded-xl text-black text-[16px] bg-white hover:bg-mainColor hover:text-white "
+        onClick={DeleteMeetingRoomHandler}
+      >
+        삭제
+      </button>
+    </>
   );
 }
 

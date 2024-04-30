@@ -1,5 +1,4 @@
 'use client';
-import { clientSupabase } from '@/utils/supabase/client';
 
 function getmaxGenderMemberNumber(memberNumber: string) {
   if (memberNumber === '1:1') {

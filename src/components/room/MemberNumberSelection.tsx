@@ -1,7 +1,9 @@
 'use client';
 import { useRoomStore } from '@/store/roomStore';
 import { useSearchRoomStore } from '@/store/searchRoomStore';
-import { MEMBERNUMBER, REGIONANDMEMBER, member_number } from '@/utils/data/MeetingRoomSelector';
+import { MEMBERNUMBER, REGIONANDMEMBER } from '@/utils/constant';
+import { member_number } from '@/utils/data/MeetingRoomSelector';
+
 import { useEffect, useRef, useState } from 'react';
 import { IoIosArrowDown } from 'react-icons/io';
 
@@ -46,7 +48,7 @@ function MemberNumberSelection({ text }: { text: string }) {
 
   return (
     <>
-      <div className="relative bg-white z-50" ref={dropdownRef}>
+      <section className="relative bg-white z-10" ref={dropdownRef}>
         <button
           className="bg-white w-[120px] h-[43px] rounded-lg border-black border-[1px] text-[16px]"
           type="button"
@@ -76,7 +78,7 @@ function MemberNumberSelection({ text }: { text: string }) {
             })}
           </ul>
         )}
-      </div>
+      </section>
     </>
   );
 }

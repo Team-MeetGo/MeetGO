@@ -1,29 +1,30 @@
 'use client';
 
+import { customErrToast } from '@/components/common/customToast';
+import useGenderMaxNumber from '@/hooks/custom/useGenderMaxNumber';
 import { useRoomInfoWithRoomIdQuery } from '@/hooks/useQueries/useMeetingQuery';
 import { useGetUserDataQuery } from '@/hooks/useQueries/useUserQuery';
 import { clientSupabase } from '@/utils/supabase/client';
-import { useRouter } from 'next/navigation';
-import { IoPlay } from 'react-icons/io5';
-import getmaxGenderMemberNumber from '@/hooks/custom/useGenderMaxNumber';
-import type { UUID } from 'crypto';
-import type { UserType } from '@/types/roomTypes';
-import { useCallback } from 'react';
 import { debounce } from '@/utils/utilFns';
+import { useRouter } from 'next/navigation';
+import { useCallback } from 'react';
+import { IoPlay } from 'react-icons/io5';
+
+import type { UserType } from '@/types/roomTypes';
+import type { UUID } from 'crypto';
 const GotoChatButton = ({ roomId, members }: { roomId: UUID; members: UserType[] }) => {
   const router = useRouter();
 
   const { data: user } = useGetUserDataQuery();
   const roomInformation = useRoomInfoWithRoomIdQuery(roomId);
 
-  const memberNumber = roomInformation?.member_number;
-  const genderParticipants = getmaxGenderMemberNumber(memberNumber ?? '');
+  const genderParticipants = useGenderMaxNumber(roomInformation?.member_number as string);
   const maxMember = genderParticipants! * 2;
 
   //원하는 인원이 모두 들어오면 위에서 창이 내려온다.
   const gotoChattingRoom = async () => {
     if (!user) {
-      alert('로그인 후에 이용하세요.');
+      customErrToast('로그인 후에 이용하세요.');
       router.push('/login');
     }
     const { data: alreadyChat } = await clientSupabase
@@ -31,7 +32,7 @@ const GotoChatButton = ({ roomId, members }: { roomId: UUID; members: UserType[]
       .select('*')
       .eq('room_id', roomId)
       .eq('isActive', true);
-    if (alreadyChat && alreadyChat?.length > 0) {
+    if (alreadyChat && alreadyChat.length > 0) {
       // 만약 isActive인 채팅방이 이미 있다면 그 방으로 보내기
       router.replace(`/chat/${alreadyChat[0].chatting_room_id}`);
     } else {
@@ -48,19 +49,19 @@ const GotoChatButton = ({ roomId, members }: { roomId: UUID; members: UserType[]
     } // "/chatting_room_id" 로 주소값 변경
   };
 
-  const handleGoChatDebounce = useCallback(debounce(gotoChattingRoom, 1500), []);
+  const handleGoChatDebounce = useCallback(debounce(gotoChattingRoom, 1000), []);
 
   return (
     <main>
       {
         <figure
           className="
-        flex flex-col h-[114px] w-[1116px] justify-center text-center"
+        flex flex-col lg:h-[114px] lg:w-[1080px] lg:max-w-[1440px] w-[22rem] mt-[0.5rem] justify-center text-center"
         >
           <button
-            disabled={genderParticipants ? (members?.length === maxMember ? false : true) : false}
-            className={`${genderParticipants && members?.length === maxMember ? 'bg-mainColor' : 'bg-gray1'}`}
-            onClick={gotoChattingRoom}
+            disabled={members.length === maxMember ? false : true}
+            className={`${members.length === maxMember ? 'bg-mainColor' : 'bg-gray1'}`}
+            onClick={handleGoChatDebounce}
           >
             <div className="flex flex-row justify-center align-middle gap-[8px]">
               <h2 className="text-[40px] text-white font-bold">Go to chat</h2>
