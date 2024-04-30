@@ -24,15 +24,16 @@ export const fetchMyRoom = async (userId: string | undefined) => {
     .order('created_at', { ascending: false });
   if (error) {
     console.error('participating room data was not founded', error.message);
+  } else {
+    return myRoom;
   }
-  return myRoom;
 };
 
-export const fetchMyPastAndNowRoom = async (userId: string) => {
+export const fetchMyPastAndNowRoom = async (userId: string | undefined) => {
   const { data: myPastAndNowRoom, error } = await clientSupabase
     .from('participants')
     .select(`*`)
-    .eq('user_id', userId)
+    .eq('user_id', String(userId))
     .select('user_id, room(*)')
     .order('created_at', { ascending: false });
   if (error) throw new Error('Error participated and participating room data');
