@@ -95,7 +95,7 @@ const MainBanner = () => {
           {bannerImgArr.map((img, idx) => (
             <div key={idx} className="relative">
               <div className="flex flex-col gap-6 z-30 sm:absolute text-white max-sm:text-mainColor top-14 left-20">
-                <div className="font-extrabold text-5xl mb-[4px]">
+                <div className="font-extrabold text-5xl max-sm:text-4xl mb-[4px]">
                   <h1>{img.title1}</h1>
                   <h1>{img.title2}</h1>
                 </div>
