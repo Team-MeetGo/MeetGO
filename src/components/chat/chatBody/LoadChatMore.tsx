@@ -7,7 +7,7 @@ import { ITEM_INTERVAL } from '@/utils/constant';
 import { clientSupabase } from '@/utils/supabase/client';
 import { Button } from '@nextui-org/react';
 import { useQueryClient } from '@tanstack/react-query';
-import { Dispatch, SetStateAction, useEffect } from 'react';
+import { Dispatch, SetStateAction } from 'react';
 
 const LoadChatMore = ({
   chatRoomId,

@@ -5,7 +5,6 @@ import { useChatDataQuery } from '@/hooks/useQueries/useChattingQuery';
 import { Card, CardBody } from '@nextui-org/react';
 import { sideBarStore } from '@/store/sideBarStore';
 import { dateOptions } from '@/utils/utilFns';
-import MobileMap from './MobileMap';
 import { useEffect, useState } from 'react';
 
 const SideBar = ({ chatRoomId }: { chatRoomId: string }) => {
@@ -31,7 +30,7 @@ const SideBar = ({ chatRoomId }: { chatRoomId: string }) => {
   }
 
   return (
-    <div className="max-h-[calc(100vh-90px)] overflow-y-auto pt-8 px-4 ease-in-out duration-1000 w-full lg:w-96 sm:w-80">
+    <div className="max-h-[calc(100vh-90px)] overflow-y-auto pt-8 px-4 ease-in-out duration-1000 w-full lg:w-96 max-sm:w-80">
       <h1 className="font-semibold text-2xl mb-2">미팅 날짜/시간</h1>
       <Card className="h-14 border border-mainColor rounded-lg shadow-none w-full">
         <CardBody className="flex flex-row justify-start items-center text-lg">
@@ -40,7 +39,7 @@ const SideBar = ({ chatRoomId }: { chatRoomId: string }) => {
           </p>
         </CardBody>
       </Card>
-      {isMobile ? <MobileMap chatRoomId={chatRoomId} /> : <Map chatRoomId={chatRoomId} />}
+      <Map chatRoomId={chatRoomId} />
     </div>
   );
 };
