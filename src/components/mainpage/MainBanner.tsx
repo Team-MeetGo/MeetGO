@@ -17,6 +17,7 @@ export const RtBannerArrow = (props: any) => {
           fontSize: '40px',
           display: 'block',
           right: '20px',
+          top: '45%',
           zIndex: '15',
           opacity: '1',
           color: 'White',
@@ -38,6 +39,7 @@ export const LtBannerArrow = (props: any) => {
           fontSize: '40px',
           display: 'block',
           left: '20px',
+          top: '45%',
           zIndex: '15',
           opacity: '1',
           color: 'White',
@@ -92,8 +94,8 @@ const MainBanner = () => {
         <Slider {...settings}>
           {bannerImgArr.map((img, idx) => (
             <div key={idx} className="relative">
-              <div className="flex flex-col gap-6 z-30 sm:absolute text-white max-sm:text-mainColor top-16 left-20">
-                <div className="font-extrabold text-4xl max-sm:text-2xl mb-[4px]">
+              <div className="flex flex-col gap-6 z-30 sm:absolute text-white max-sm:text-mainColor top-14 left-20">
+                <div className="font-extrabold text-5xl max-sm:text-4xl mb-[4px]">
                   <h1>{img.title1}</h1>
                   <h1>{img.title2}</h1>
                 </div>
@@ -122,7 +124,6 @@ const MainBanner = () => {
             </div>
           ))}
         </Slider>
-
       </div>
     </>
   );
