@@ -64,7 +64,7 @@ function MeetingRoom({ room }: { room: MeetingRoomType }) {
 
   return (
     <article
-      className={`w-80 mx-auto ${
+      className={`sm:w-80 mx-auto ${
         room.room_status === ROOMSTATUS.RECRUITING
           ? `bg-white rounded-xl border-[#E5E7EB] border-1`
           : alreadyChatRoom && alreadyChatRoom.length > 0
