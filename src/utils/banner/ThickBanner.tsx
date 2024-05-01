@@ -39,11 +39,11 @@ const ThickBanner = () => {
             <p className="font-thin text-lg max-sm:text-base">아직 미팅룸에 안 가보셨어요?</p>
             <p className="text-lg max-sm:text-base">
               소중한 인연들을
-              <span className="font-thin text-lg max-sm:text-base text-secondMainColor"> 놓치지 마세요.</span>
+              <span className="font-thin text-lg max-sm:text-base"> 놓치지 마세요.</span>
             </p>
           </div>
           <Link
-            className="bg-white rounded-lg px-8 max-sm:px-3 h-10 text-[#6758FF] text-base max-sm:text-sm font-semibold my-auto flex justify-center items-center hover:bg-opacity-90 break-keep"
+            className="bg-white rounded-lg px-8 max-sm:px-3 h-10 text-secondMainColor text-base max-sm:text-sm font-semibold my-auto flex justify-center items-center hover:bg-opacity-90 break-keep"
             href="/meetingRoom"
           >
             미팅하러 가기
