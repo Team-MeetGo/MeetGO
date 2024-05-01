@@ -29,8 +29,6 @@ const UserFavorite = () => {
   // }
   // }, [isEditing]);
 
-  console.log(user?.favorite, 'ㅇㅇ');
-
   return (
     <>
       <ProfileSettingLayout
