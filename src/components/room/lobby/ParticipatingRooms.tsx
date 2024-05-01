@@ -88,8 +88,8 @@ const ParticipatingRooms = () => {
   };
 
   return (
-    <div className="w-full max-w-[1080px] h-full max-h-[600px]">
-      <Slider {...settings} className="px-[24px]">
+    <div className="w-full max-w-[1280px] h-full max-h-[600px] mx-auto">
+      <Slider {...settings}>
         {filteredMyRoomList && filteredMyRoomList.length ? (
           filteredMyRoomList.map((room) => (
             <div className="w-full " key={room?.room_id}>

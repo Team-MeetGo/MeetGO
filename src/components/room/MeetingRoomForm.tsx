@@ -107,7 +107,7 @@ function MeetingRoomForm() {
           }
         }}
       >
-        <ModalContent>
+        <ModalContent className="my-auto">
           {(onClose) => (
             <>
               <ModalHeader className="flex flex-col gap-1">방 만들기</ModalHeader>
