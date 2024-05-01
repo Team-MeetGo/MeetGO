@@ -50,7 +50,8 @@ const ChatList = ({ user, chatRoomId }: { user: User | null; chatRoomId: string 
             if (payload) {
               await queryClient.invalidateQueries({ queryKey: [MSGS_QUERY_KEY, chatRoomId] });
               const includingNew: Message[] | undefined = queryClient.getQueryData([MSGS_QUERY_KEY, chatRoomId]);
-              const lastIdx = messages && includingNew?.map((i) => i.message_id).indexOf(messages[0].message_id);
+              const lastIdx =
+                messages?.length && includingNew?.map((i) => i.message_id).indexOf(messages[0].message_id);
               messages &&
                 includingNew &&
                 (await queryClient.setQueryData(

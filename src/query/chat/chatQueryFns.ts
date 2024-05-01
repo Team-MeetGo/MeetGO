@@ -160,7 +160,8 @@ export const handleSubmit = async (
   imgs: File[]
 ) => {
   const trimmedMessage = message.trim();
-  if (user && chatRoomId && (message.length || imgs.length) && trimmedMessage !== '') {
+  console.log('trimmedMessage =>', [trimmedMessage]);
+  if (user && chatRoomId && ((message.length && trimmedMessage !== '') || imgs.length)) {
     const { error } = await clientSupabase.from('messages').insert({
       send_from: user?.user_id,
       message: message.length ? message : null,
