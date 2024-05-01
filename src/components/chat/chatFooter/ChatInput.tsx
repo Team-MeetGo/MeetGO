@@ -1,7 +1,6 @@
 'use client';
 import { useGetUserDataQuery } from '@/hooks/useQueries/useUserQuery';
 import { chatStore } from '@/store/chatStore';
-import { clientSupabase } from '@/utils/supabase/client';
 import { Input } from '@nextui-org/react';
 import { ChangeEvent, useRef, useState } from 'react';
 import { FaPlus, FaRegArrowAltCircleUp } from 'react-icons/fa';

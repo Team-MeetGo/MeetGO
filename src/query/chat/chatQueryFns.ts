@@ -159,7 +159,8 @@ export const handleSubmit = async (
   message: string,
   imgs: File[]
 ) => {
-  if (user && chatRoomId && (message.length || imgs.length)) {
+  const trimmedMessage = message.trim();
+  if (user && chatRoomId && (message.length || imgs.length) && trimmedMessage !== '') {
     const { error } = await clientSupabase.from('messages').insert({
       send_from: user?.user_id,
       message: message.length ? message : null,
@@ -170,6 +171,8 @@ export const handleSubmit = async (
       console.error(error.message);
       alert('새로운 메세지를 추가하는 데에 실패했습니다.');
     }
+  } else {
+    return;
   }
 };
 
