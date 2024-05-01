@@ -194,7 +194,7 @@ const ChatHeader = ({ chatRoomId }: { chatRoomId: string }) => {
           </DropdownTrigger>
           <DropdownMenu aria-label="Static Actions" onAction={(key) => handleBtn(String(key))}>
             <DropdownItem key="goToLobby" className="text-center">
-              뒤로가기
+              미팅룸으로
             </DropdownItem>
             <DropdownItem key="getOutOfRoom" className="text-danger text-right" color="danger">
               이 방 나가기
