@@ -17,6 +17,7 @@ import UserSchoolForm from './UserSchoolForm';
 import UserKakaoId from './UserKakaoId';
 import UserFavorite from './UserFavorite';
 import UserIntro from './UserIntro';
+import { customErrToast } from '../common/customToast';
 const ProfileSetting = () => {
   const queryClient = useQueryClient();
   const { data: user } = useGetUserDataQuery();
@@ -59,6 +60,23 @@ const ProfileSetting = () => {
     inputKakaoId,
     inputGender
   }: UpdateProfileType) => {
+    if (!inputNickname.trim()) {
+      customErrToast('닉네임을 입력해주세요.');
+      return;
+    }
+    if (inputNickname.includes(' ')) {
+      customErrToast('닉네임에는 공백이 포함될 수 없습니다.');
+      return;
+    }
+    if (!inputKakaoId.trim()) {
+      customErrToast('카카오톡ID를 입력해주세요.');
+      return;
+    }
+    if (inputKakaoId.includes(' ')) {
+      customErrToast('카카오톡ID는 공백이 포함될 수 없습니다.');
+      return;
+    }
+
     await updateProfileMutateAsync({
       userId,
       inputNickname,
