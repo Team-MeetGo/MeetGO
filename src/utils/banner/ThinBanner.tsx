@@ -17,7 +17,7 @@ const ThinBanner = () => {
   return (
     <section className="w-full h-14 bg-mainColor flex justify-center ">
       {pathname === '/' ? (
-        <h1 className="text-xl text-thin text-white my-auto">현재 많은 인연들이 기다리고 있어요!</h1>
+        <h1 className="text-xl text-thin text-white my-auto">베타 기간에는 학교 인증 없이 미팅할 수 있어요!</h1>
       ) : null}
       {pathname === '/meetingRoom' ? (
         <div className="w-full max-w-[1280px] flex justify-between items-center gap-6 px-3">

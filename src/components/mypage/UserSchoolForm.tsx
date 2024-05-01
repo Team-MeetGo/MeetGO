@@ -90,6 +90,9 @@ const UserSchoolForm = () => {
 
   /**인증코드 확인하는 로직 */
   const onSubmitCodeConfirm = async () => {
+    if (!schoolEmailInputValue.includes('대학교')) {
+      customErrToast('학교명은 "대학교" 글자로 끝나도록 입력해주세요.');
+    }
     try {
       const response = await emailCodeAPI(schoolEmailInputValue, schoolNameInputValue, Number(code));
       if (response.success) {
