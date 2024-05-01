@@ -40,7 +40,7 @@ const ProfileSetting = () => {
     setFavoriteInputValue
   } = useProfileOnchangeStore();
 
-  const { mutate: updateProfileMutate } = useProfileUpdateMutation();
+  const { mutateAsync: updateProfileMutateAsync } = useProfileUpdateMutation();
 
   const toggleEditing = () => {
     setIsEditing((prev) => !prev);
@@ -52,8 +52,14 @@ const ProfileSetting = () => {
   };
 
   /** 수정하고 저장버튼 클릭시 실행될 로직(상태 업데이트 및 갱신) */
-  const handleProfileUpdate = ({ userId, inputNickname, inputIntro, inputKakaoId, inputGender }: UpdateProfileType) => {
-    updateProfileMutate({
+  const handleProfileUpdate = async ({
+    userId,
+    inputNickname,
+    inputIntro,
+    inputKakaoId,
+    inputGender
+  }: UpdateProfileType) => {
+    await updateProfileMutateAsync({
       userId,
       inputNickname,
       inputIntro,
