@@ -53,9 +53,9 @@ const ParticipatingRooms = () => {
 
   const settings = {
     dots: false,
-    infinite: true,
+    infinite: false,
     speed: 500,
-    slidesToShow: filteredMyRoomList && filteredMyRoomList.length <= 3 ? filteredMyRoomList?.length : 3,
+    slidesToShow: 3,
     slidesToScroll: 2,
     nextArrow: <RtBannerArrow />,
     prevArrow: <LtBannerArrow />,
