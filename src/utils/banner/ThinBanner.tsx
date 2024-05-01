@@ -24,7 +24,6 @@ const ThinBanner = () => {
           <h2 className="font-thin text-lg max-sm:text-sm text-white">
             다른 회원들의 <span className="text-lg max-sm:text-sm">실시간 미팅후기가</span> 궁금하다면?
           </h2>
-          <p className="text-white">아아아</p>
           <Link
             className="bg-white rounded-md max-w-52 px-7 h-10 text-secondMainColor text-base max-sm:text-sm font-semibold my-auto flex justify-center items-center hover:bg-opacity-90 break-keep"
             href="/review/pageNumber/1"
