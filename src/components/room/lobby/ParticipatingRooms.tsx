@@ -25,25 +25,24 @@ export const RtBannerArrow = (props: any) => {
     />
   );
 };
+
 export const LtBannerArrow = (props: any) => {
   const { className, style, onClick } = props;
 
   return (
-    <div className="max-sm:hidden">
-      <div
-        className={className}
-        style={{
-          fontSize: '40px',
-          display: 'block',
-          top: '45%',
-          zIndex: '15',
-          opacity: '1',
-          color: 'gray',
-          lineHeight: 1
-        }}
-        onClick={onClick}
-      />
-    </div>
+    <div
+      className={className}
+      style={{
+        fontSize: '40px',
+        display: 'block',
+        top: '45%',
+        zIndex: '15',
+        opacity: '1',
+        color: 'gray',
+        lineHeight: 1
+      }}
+      onClick={onClick}
+    />
   );
 };
 
@@ -93,7 +92,7 @@ const ParticipatingRooms = () => {
       <Slider {...settings}>
         {filteredMyRoomList && filteredMyRoomList.length ? (
           filteredMyRoomList.map((room) => (
-            <div className="w-full" key={room?.room_id}>
+            <div className="w-full " key={room?.room_id}>
               {room && <MeetingRoom room={room} />}
             </div>
           ))
