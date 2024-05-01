@@ -62,7 +62,7 @@ const UserFavorite = () => {
                 </div>
               ) : (
                 <div className="flex gap-2 max-w-[342px] w-full border rounded-lg py-2 px-3 mt-2 bg-[#FAFAFA]">
-                  {favoriteInputValue.size === 0 && <p className="text-sm text-[#9CA3AF]">이상형을 선택해주세요.</p>}
+                  {!user?.favorite && <p className="text-sm text-[#9CA3AF]">이상형을 선택해주세요.</p>}
                   {user?.favorite &&
                     user.favorite.map((value) => (
                       <p className="text-sm text-[#9CA3AF]" key={value}>

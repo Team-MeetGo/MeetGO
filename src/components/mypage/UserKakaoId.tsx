@@ -20,7 +20,7 @@ const UserKakaoId = () => {
           required: '*',
           children: (
             <input
-              disabled={!isEditing || !editable}
+              disabled={!isEditing}
               className="flex flex-col items-start text-sm text-[#9CA3AF] max-w-[342px] w-full border rounded-lg py-2 px-3 focus:outline-none focus:border-mainColor relative"
               name="kakaoId"
               value={kakaoIdInputValue}
