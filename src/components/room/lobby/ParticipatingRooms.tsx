@@ -10,21 +10,19 @@ import MeetingRoom from '../singleMeetingRoom/MeetingRoom';
 export const RtBannerArrow = (props: any) => {
   const { className, style, onClick } = props;
   return (
-    <div className="max-sm:hidden">
-      <div
-        className={className}
-        style={{
-          fontSize: '40px',
-          display: 'block',
-          top: '45%',
-          zIndex: '15',
-          opacity: '1',
-          color: 'White',
-          lineHeight: 1
-        }}
-        onClick={onClick}
-      />
-    </div>
+    <div
+      className={className}
+      style={{
+        fontSize: '40px',
+        display: 'block',
+        top: '45%',
+        zIndex: '15',
+        opacity: '1',
+        color: 'White',
+        lineHeight: 1
+      }}
+      onClick={onClick}
+    />
   );
 };
 export const LtBannerArrow = (props: any) => {
@@ -91,7 +89,7 @@ const ParticipatingRooms = () => {
   };
 
   return (
-    <div className="w-full max-w-[1080px] h-full max-h-[600px]">
+    <div className="w-full max-w-[1280px] h-full max-h-[600px] mx-auto">
       <Slider {...settings}>
         {filteredMyRoomList && filteredMyRoomList.length ? (
           filteredMyRoomList.map((room) => (

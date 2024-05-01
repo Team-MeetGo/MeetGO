@@ -64,15 +64,15 @@ function MeetingRoom({ room }: { room: MeetingRoomType }) {
 
   return (
     <article
-      className={`w-80 mx-auto ${
+      className={`flex max-w-[390px] w-full ${
         room.room_status === ROOMSTATUS.RECRUITING
-          ? `bg-white rounded-xl border-[#E5E7EB] border-1`
+          ? 'bg-white rounded-xl border-[#E5E7EB] border-1'
           : alreadyChatRoom && alreadyChatRoom.length > 0
-          ? `bg-purpleThird rounded-xl`
-          : `bg-gray1 rounded-xl`
+          ? 'bg-purpleThird rounded-xl'
+          : 'bg-gray1 rounded-xl'
       }`}
     >
-      <section className="max-w-[420px] w-full h-[200px] p-6 gap-5 rounded-xl flex flex-col hover:cursor-pointer">
+      <section className="w-full h-[200px] p-6 gap-5 rounded-xl flex flex-col hover:cursor-pointer">
         <RoomInformation room={room} />
         <main className="h-full flex flex-col justify-between" onClick={() => handleAddMemberDebounce({ room_id })}>
           <section>
