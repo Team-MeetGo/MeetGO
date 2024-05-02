@@ -59,7 +59,6 @@ export const fetchChatData = async (chatRoomId: string) => {
     .select('*')
     .eq('chatting_room_id', chatRoomId)
     .single();
-  console.log('chatData =>', chatData);
 
   if (chatDataErr || !chatData) {
     throw new Error('없어!! Error fetching chat data');
