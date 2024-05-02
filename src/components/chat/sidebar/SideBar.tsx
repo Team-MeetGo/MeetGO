@@ -8,7 +8,6 @@ import { dateOptions } from '@/utils/utilFns';
 import { useEffect, useState } from 'react';
 
 const SideBar = ({ chatRoomId }: { chatRoomId: string }) => {
-  console.log('chatRoomId =>', chatRoomId);
   const { isSidebarOpen } = sideBarStore((state) => state);
 
   const [isMobile, setIsMobile] = useState<boolean>(false);

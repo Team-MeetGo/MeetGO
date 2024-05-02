@@ -32,7 +32,6 @@ const ChatPage = async ({ params }: { params: { chatroom_id: string } }) => {
     } else {
       return allMsgs;
     }
-    // return;
   };
   const queryClient = new QueryClient();
 

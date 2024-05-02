@@ -45,7 +45,6 @@ export default async function RootLayout({
     } else {
       return userData;
     }
-    return user;
   };
   const queryClient = new QueryClient();
 
