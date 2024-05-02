@@ -11,13 +11,13 @@ import { useQueryClient } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
 
-const InitChat = ({ user, chatRoomId, allMsgs }: { user: User | null; chatRoomId: string; allMsgs: Message[] }) => {
+const InitChat = ({ user, chatRoomId }: { user: User | null; chatRoomId: string }) => {
   const { chatState, isRest, setChatState, setisRest, setChatRoomId, setHasMore } = chatStore((state) => state);
   const room = useRoomDataQuery(chatRoomId);
   const roomId = room?.room_id;
   const router = useRouter();
   const queryClient = useQueryClient();
-  useMsgsQuery(chatRoomId);
+  const allMsgs = useMsgsQuery(chatRoomId);
 
   useEffect(() => {
     // 채팅방 isActive 상태 구독
@@ -56,9 +56,11 @@ const InitChat = ({ user, chatRoomId, allMsgs }: { user: User | null; chatRoomId
       setisRest(true);
     } else {
       // **채팅방에 있는다면
-      queryClient.setQueryData([MSGS_QUERY_KEY, chatRoomId], [...allMsgs].reverse());
-      setHasMore(allMsgs.length >= ITEM_INTERVAL + 1);
       setChatRoomId(chatRoomId);
+      if (allMsgs) {
+        queryClient.setQueryData([MSGS_QUERY_KEY, chatRoomId], [...allMsgs].reverse());
+        setHasMore(allMsgs.length >= ITEM_INTERVAL + 1);
+      }
     }
   }, [chatState, isRest]);
 
