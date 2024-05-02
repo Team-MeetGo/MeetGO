@@ -16,6 +16,7 @@ import {
   PARTICIPANTS_QUERY_KEY,
   ROOMDATA_QUERY_KEY
 } from '@/query/chat/chatQueryKeys';
+import { Message } from '@/types/chatTypes';
 import { useQuery, useSuspenseQuery } from '@tanstack/react-query';
 
 export const useRoomDataQuery = (chatRoomId: string) => {

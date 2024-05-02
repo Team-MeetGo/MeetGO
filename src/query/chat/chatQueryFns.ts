@@ -111,7 +111,7 @@ export const fetchMsgs = async (chatRoomId: string) => {
     .select('*')
     .eq('chatting_room_id', chatRoomId)
     .order('created_at', { ascending: true });
-  if (error) {
+  if (error || !msgs) {
     console.error('fail to load messages', error.message);
   } else {
     return msgs;
@@ -160,7 +160,6 @@ export const handleSubmit = async (
   imgs: File[]
 ) => {
   const trimmedMessage = message.trim();
-  console.log('trimmedMessage =>', [trimmedMessage]);
   if (user && chatRoomId && ((message.length && trimmedMessage !== '') || imgs.length)) {
     const { error } = await clientSupabase.from('messages').insert({
       send_from: user?.user_id,
