@@ -32,7 +32,7 @@ const ChatPage = async ({ params }: { params: { chatroom_id: string } }) => {
     } else {
       return allMsgs;
     }
-    return;
+    // return;
   };
   const queryClient = new QueryClient();
 
@@ -47,7 +47,7 @@ const ChatPage = async ({ params }: { params: { chatroom_id: string } }) => {
         <Suspense fallback={<ChatLoading />}>
           <div className="relative flex flex-row">
             <InitChat user={user} chatRoomId={chatRoomId} />
-            <div className="flex lg:flex-row lg:w-full max-sm:w-full max-sm:flex-col justify-center mx-auto">
+            <div className="flex lg:flex-row w-full max-sm:flex-col justify-center mx-auto">
               <div className="lg:flex lg:max-w-96 max-sm:absolute max-sm:z-50 max-sm:bg-white ">
                 <SideBar chatRoomId={chatRoomId} />
               </div>

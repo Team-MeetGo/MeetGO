@@ -8,6 +8,7 @@ import { dateOptions } from '@/utils/utilFns';
 import { useEffect, useState } from 'react';
 
 const SideBar = ({ chatRoomId }: { chatRoomId: string }) => {
+  console.log('chatRoomId =>', chatRoomId);
   const { isSidebarOpen } = sideBarStore((state) => state);
 
   const [isMobile, setIsMobile] = useState<boolean>(false);
@@ -22,6 +23,7 @@ const SideBar = ({ chatRoomId }: { chatRoomId: string }) => {
 
   //채팅방 정보 가져오기
   const chat = useChatDataQuery(chatRoomId);
+  console.log('chat =>', chat);
   const meetingTime = chat.meeting_time;
   const convertedTime = meetingTime ? new Intl.DateTimeFormat('ko-KR', dateOptions).format(new Date(meetingTime)) : '';
 

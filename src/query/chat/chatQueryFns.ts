@@ -57,9 +57,12 @@ export const fetchChatData = async (chatRoomId: string) => {
   const { data: chatData, error: chatDataErr } = await clientSupabase
     .from('chatting_room')
     .select('*')
-    .eq('chatting_room_id', chatRoomId);
-  if (chatDataErr) {
-    throw new Error('Error fetching chat data');
+    .eq('chatting_room_id', chatRoomId)
+    .single();
+  console.log('chatData =>', chatData);
+
+  if (chatDataErr || !chatData) {
+    throw new Error('없어!! Error fetching chat data');
   } else {
     return chatData;
   }
