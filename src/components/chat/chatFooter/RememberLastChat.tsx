@@ -22,7 +22,7 @@ const RememberLastChat = () => {
   );
   const { mutate: mutateToAdd } = useAddLastMsg(
     chatRoomId as string,
-    room?.room_id as string,
+    room.room_id as string,
     user?.user_id as string,
     messages && messages.length > 0 ? messages[messages.length - 1].message_id : undefined
   );

@@ -9,7 +9,7 @@ const OthersChat = ({ msg, idx, lastDivRefs }: { msg: Message; idx: number; last
   const { chatRoomId } = chatStore((state) => state);
   const messages = useMsgsQuery(chatRoomId as string);
   const room = useRoomDataQuery(chatRoomId as string);
-  const leaderId = room?.leader_id;
+  const leaderId = room.leader_id;
   const participants = useParticipantsQuery(room?.room_id as string);
 
   const showThatUser = (userId: string | null) => {

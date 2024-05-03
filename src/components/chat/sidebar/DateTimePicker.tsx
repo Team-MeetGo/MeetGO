@@ -18,7 +18,7 @@ const DateTimePicker = forwardRef(({ chatRoomId }: { chatRoomId: string }) => {
   const { data: userData } = useGetUserDataQuery();
   const userId = userData?.user_id;
   const room = useRoomDataQuery(chatRoomId);
-  const leaderId = room?.leader_id;
+  const leaderId = room.leader_id;
   const chat = useChatDataQuery(chatRoomId);
   const toggleCalendar = () => {
     setIsCalendarOpen((prev) => !prev);

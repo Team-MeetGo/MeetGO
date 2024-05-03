@@ -14,7 +14,7 @@ const ShowChatMember = ({ person }: { person: UsersType }) => {
         <div className="w-full flex flex-col items-center justify-center gap-4 relative">
           <Avatar src={person.avatar as string} className="w-24 h-24" />
           <p className="text-xl font-medium">{person.nickname as string}</p>
-          {person.user_id === room?.leader_id && (
+          {person.user_id === room.leader_id && (
             <div className="absolute top-[-1.5rem] right-2/5">
               <FaCrown className="fill-mainColor w-8 h-8" />
             </div>

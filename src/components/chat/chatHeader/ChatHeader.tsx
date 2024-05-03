@@ -28,7 +28,7 @@ const ChatHeader = ({ chatRoomId }: { chatRoomId: string }) => {
   const { openModal, closeModal } = useModalStore();
   const { data: user } = useGetUserDataQuery();
   const room = useRoomDataQuery(chatRoomId);
-  const participants = useParticipantsQuery(room?.room_id as string);
+  const participants = useParticipantsQuery(room.room_id as string);
   const queryClient = useQueryClient();
   const router = useRouter();
 
@@ -46,20 +46,20 @@ const ChatHeader = ({ chatRoomId }: { chatRoomId: string }) => {
 
   // room 테이블에서 리더 변경 + room_status: "모집중" + participants 테이블에서 해당 룸에 대한 유저정보 isDeleted: true로
   const getRidOfMe = async () => {
-    if (user?.user_id === room?.leader_id) {
+    if (user?.user_id === room.leader_id) {
       const { error: updateLeaderErr } = await clientSupabase
         .from('room')
         .update({
           leader_id: participants?.find((person) => person.user_id !== user?.user_id)?.user_id,
           room_status: '모집중'
         })
-        .eq('room_id', String(room?.room_id));
+        .eq('room_id', String(room.room_id));
       if (updateLeaderErr) console.error('fail to update leader of room', updateLeaderErr.message);
     }
     const { error: deleteErr } = await clientSupabase
       .from('participants')
       .update({ isDeleted: true })
-      .eq('room_id', String(room?.room_id))
+      .eq('room_id', String(room.room_id))
       .eq('user_id', user?.user_id!);
     if (deleteErr) {
       console.error(deleteErr.message);
@@ -72,7 +72,7 @@ const ChatHeader = ({ chatRoomId }: { chatRoomId: string }) => {
     const { data: restOf, error: getPartErr } = await clientSupabase
       .from('participants')
       .select('user_id')
-      .eq('room_id', String(room?.room_id))
+      .eq('room_id', String(room.room_id))
       .eq('isDeleted', false);
     if (getPartErr) {
       console.error(getPartErr.message);
