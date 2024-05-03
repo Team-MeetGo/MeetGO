@@ -13,7 +13,9 @@ import { useEffect } from 'react';
 
 const InitChat = ({ user, chatRoomId }: { user: User | null; chatRoomId: string }) => {
   const { chatState, isRest, setChatState, setisRest, setChatRoomId, setHasMore } = chatStore((state) => state);
-  const { room_id, leader_id } = useRoomDataQuery(chatRoomId);
+  const {
+    room: { room_id, leader_id }
+  } = useRoomDataQuery(chatRoomId);
   // const roomId = room.room_id;
   const router = useRouter();
   const queryClient = useQueryClient();

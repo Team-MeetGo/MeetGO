@@ -21,12 +21,12 @@ import { UsersType } from '@/types/userTypes';
 import { useQuery, useSuspenseQuery } from '@tanstack/react-query';
 
 export const useRoomDataQuery = (chatRoomId: string) => {
-  const { data: room } = useSuspenseQuery({
+  const { data } = useSuspenseQuery({
     queryKey: [ROOMDATA_QUERY_KEY, chatRoomId],
     queryFn: () => fetchRoomDataWithChatRoomId(chatRoomId),
-    select: (data: RoomData | undefined) => data as RoomData
+    select: (data: { room_id: string | null; room: RoomData | null }) => data as { room_id: string; room: RoomData }
   });
-  return room;
+  return data;
 };
 
 export const useParticipantsQuery = (roomId: string) => {

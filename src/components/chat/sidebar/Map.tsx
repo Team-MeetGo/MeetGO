@@ -31,7 +31,9 @@ const Map = ({ chatRoomId }: { chatRoomId: string }) => {
   const userId = userData?.user_id;
 
   // useRoomDataQuery로 리더 아이디 가져오기
-  const { leader_id } = useRoomDataQuery(chatRoomId);
+  const {
+    room: { leader_id }
+  } = useRoomDataQuery(chatRoomId);
 
   // 채팅방 정보 가져오기
   const chat = useChatDataQuery(chatRoomId);

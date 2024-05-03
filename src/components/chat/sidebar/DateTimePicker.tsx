@@ -6,7 +6,6 @@ import DateCustomeInput from './DateCustomeInput';
 import { ko } from 'date-fns/locale';
 import { getMonth, getYear } from 'date-fns';
 import { IoIosArrowForward, IoIosArrowBack } from 'react-icons/io';
-// import { useChatDataQuery, useRoomDataQuery } from '@/hooks/useQueries/useChattingQuery';
 import { useChatDataQuery, useRoomDataQuery } from '@/hooks/useQueries/useChattingQuery';
 import { useUpdateMeetingTimeMutation } from '@/hooks/useMutation/useMeetingTimeMutation';
 import { useGetUserDataQuery } from '@/hooks/useQueries/useUserQuery';
@@ -17,7 +16,9 @@ const DateTimePicker = forwardRef(({ chatRoomId }: { chatRoomId: string }) => {
   const datePickerRef = useRef<DatePicker>(null);
   const { data: userData } = useGetUserDataQuery();
   const userId = userData?.user_id;
-  const { leader_id } = useRoomDataQuery(chatRoomId);
+  const {
+    room: { leader_id }
+  } = useRoomDataQuery(chatRoomId);
   const chat = useChatDataQuery(chatRoomId);
   const toggleCalendar = () => {
     setIsCalendarOpen((prev) => !prev);

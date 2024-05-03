@@ -27,7 +27,9 @@ const ChatHeader = ({ chatRoomId }: { chatRoomId: string }) => {
   const { onlineUsers, setisRest, setSearchMode } = chatStore((state) => state);
   const { openModal, closeModal } = useModalStore();
   const { data: user } = useGetUserDataQuery();
-  const { room_id, leader_id, room_title } = useRoomDataQuery(chatRoomId);
+  const {
+    room: { room_id, leader_id, room_title }
+  } = useRoomDataQuery(chatRoomId);
   const participants = useParticipantsQuery(room_id as string);
   const queryClient = useQueryClient();
   const router = useRouter();

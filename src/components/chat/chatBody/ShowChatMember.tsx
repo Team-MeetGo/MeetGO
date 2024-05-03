@@ -7,7 +7,9 @@ import { IoFemale, IoMale } from 'react-icons/io5';
 
 const ShowChatMember = ({ person }: { person: UsersType }) => {
   const chatRoomId = chatStore((state) => state.chatRoomId);
-  const { leader_id } = useRoomDataQuery(chatRoomId as string);
+  const {
+    room: { leader_id }
+  } = useRoomDataQuery(chatRoomId as string);
   return (
     <>
       <div className="w-72 h-80 flex flex-col rounded-md p-3 justify-evenly relative">
