@@ -12,8 +12,9 @@ const MyChat = ({ msg, idx, lastDivRefs }: { msg: Message; idx: number; lastDivR
   const { chatRoomId } = chatStore((state) => state);
   const messages = useMsgsQuery(chatRoomId as string);
   const { data: user } = useGetUserDataQuery();
-  const room = useRoomDataQuery(chatRoomId as string);
-  const leaderId = room?.leader_id;
+  const {
+    room: { leader_id }
+  } = useRoomDataQuery(chatRoomId as string);
 
   return (
     <>
@@ -53,10 +54,10 @@ const MyChat = ({ msg, idx, lastDivRefs }: { msg: Message; idx: number; lastDivR
           !isNextDay(idx, messages) ? (
             <div className="w-16"></div>
           ) : (
-            <MyInfoWrapper user={user} leaderId={leaderId} />
+            <MyInfoWrapper user={user} leaderId={leader_id} />
           )
         ) : (
-          <MyInfoWrapper user={user} leaderId={leaderId} />
+          <MyInfoWrapper user={user} leaderId={leader_id} />
         )}
       </div>
     </>

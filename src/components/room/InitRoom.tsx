@@ -1,6 +1,6 @@
 'use client';
 
-import { chatRoomPayloadType } from '@/types/chatTypes';
+import { chatRoomType } from '@/types/chatTypes';
 import { clientSupabase } from '@/utils/supabase/client';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
@@ -8,7 +8,7 @@ import { useEffect, useState } from 'react';
 import type { UUID } from 'crypto';
 
 const InitRoom = ({ roomId }: { roomId: UUID }) => {
-  const [newChatRoom, setNewChatRoom] = useState<chatRoomPayloadType | null>(null);
+  const [newChatRoom, setNewChatRoom] = useState<chatRoomType | null>(null);
   const router = useRouter();
 
   useEffect(() => {
@@ -24,7 +24,7 @@ const InitRoom = ({ roomId }: { roomId: UUID }) => {
           filter: `room_id=eq.${roomId}`
         },
         (payload) => {
-          setNewChatRoom(payload.new as chatRoomPayloadType);
+          setNewChatRoom(payload.new as chatRoomType);
         }
       )
       .subscribe();

@@ -27,8 +27,10 @@ const ChatHeader = ({ chatRoomId }: { chatRoomId: string }) => {
   const { onlineUsers, setisRest, setSearchMode } = chatStore((state) => state);
   const { openModal, closeModal } = useModalStore();
   const { data: user } = useGetUserDataQuery();
-  const room = useRoomDataQuery(chatRoomId);
-  const participants = useParticipantsQuery(room?.room_id as string);
+  const {
+    room: { room_id, leader_id, room_title }
+  } = useRoomDataQuery(chatRoomId);
+  const participants = useParticipantsQuery(room_id as string);
   const queryClient = useQueryClient();
   const router = useRouter();
 
@@ -46,20 +48,20 @@ const ChatHeader = ({ chatRoomId }: { chatRoomId: string }) => {
 
   // room 테이블에서 리더 변경 + room_status: "모집중" + participants 테이블에서 해당 룸에 대한 유저정보 isDeleted: true로
   const getRidOfMe = async () => {
-    if (user?.user_id === room?.leader_id) {
+    if (user?.user_id === leader_id) {
       const { error: updateLeaderErr } = await clientSupabase
         .from('room')
         .update({
           leader_id: participants?.find((person) => person.user_id !== user?.user_id)?.user_id,
           room_status: '모집중'
         })
-        .eq('room_id', String(room?.room_id));
+        .eq('room_id', room_id);
       if (updateLeaderErr) console.error('fail to update leader of room', updateLeaderErr.message);
     }
     const { error: deleteErr } = await clientSupabase
       .from('participants')
       .update({ isDeleted: true })
-      .eq('room_id', String(room?.room_id))
+      .eq('room_id', room_id)
       .eq('user_id', user?.user_id!);
     if (deleteErr) {
       console.error(deleteErr.message);
@@ -72,7 +74,7 @@ const ChatHeader = ({ chatRoomId }: { chatRoomId: string }) => {
     const { data: restOf, error: getPartErr } = await clientSupabase
       .from('participants')
       .select('user_id')
-      .eq('room_id', String(room?.room_id))
+      .eq('room_id', room_id)
       .eq('isDeleted', false);
     if (getPartErr) {
       console.error(getPartErr.message);
@@ -146,7 +148,7 @@ const ChatHeader = ({ chatRoomId }: { chatRoomId: string }) => {
     <div className="h-28 border-b flex pl-[32px] pr-[16px] py-[16px] justify-between items-center">
       <div className="flex gap-2">
         <div className="flex flex-col gap-2">
-          <h1 className="font-bold text-2xl h-9">{room?.room_title}</h1>
+          <h1 className="font-bold text-2xl h-9">{room_title}</h1>
 
           <div className="flex gap-5 items-center">
             <ChatPresence />
@@ -156,14 +158,14 @@ const ChatHeader = ({ chatRoomId }: { chatRoomId: string }) => {
                   <PopoverTrigger>
                     <Avatar
                       as="button"
-                      src={person.avatar as string}
+                      src={person.users.avatar as string}
                       className={`w-[32px] h-[32px] ${
                         !onlineUsers.find((id) => id === person.user_id) ? 'bg-black opacity-30' : ''
                       }`}
                     />
                   </PopoverTrigger>
                   <PopoverContent>
-                    <ShowChatMember person={person} />
+                    <ShowChatMember person={person.users} />
                   </PopoverContent>
                 </Popover>
               ))}

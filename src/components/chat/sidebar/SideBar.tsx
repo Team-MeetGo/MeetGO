@@ -5,7 +5,7 @@ import { Card, CardBody } from '@nextui-org/react';
 import { sideBarStore } from '@/store/sideBarStore';
 import { dateOptions } from '@/utils/utilFns';
 import { useEffect, useState } from 'react';
-import { useChatDataQuery, useRoomDataQuery } from '@/hooks/useQueries/useChattingQuery';
+import { useChatDataQuery } from '@/hooks/useQueries/useChattingQuery';
 
 const SideBar = ({ chatRoomId }: { chatRoomId: string }) => {
   const { isSidebarOpen } = sideBarStore((state) => state);

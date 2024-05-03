@@ -12,4 +12,4 @@ export type UserData =
 
 export type RoomData = Tables<'room'>;
 
-export type chatRoomPayloadType = Tables<'chatting_room'>;
+export type chatRoomType = Tables<'chatting_room'>;
