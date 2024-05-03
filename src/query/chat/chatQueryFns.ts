@@ -8,8 +8,9 @@ export const fetchRoomDataWithChatRoomId = async (chatRoomId: string) => {
     .select('room_id, room(*)')
     .eq('chatting_room_id', chatRoomId)
     .single();
+  console.log(roomIdErr?.message);
   if (roomIdErr) {
-    throw new Error('미팅룸 정보를 불러오는 데에 실패했습니다.');
+    console.error('미팅룸 정보를 불러오는 데에 실패했습니다.');
   } else {
     return room;
   }
@@ -37,7 +38,7 @@ export const fetchChatData = async (chatRoomId: string) => {
     .eq('chatting_room_id', chatRoomId)
     .single();
   if (chatDataErr || !chatData) {
-    throw new Error('채팅방 정보를 불러오는 데 실패했습니다.');
+    console.error('채팅방 정보를 불러오는 데 실패했습니다.');
   } else {
     return chatData;
   }
