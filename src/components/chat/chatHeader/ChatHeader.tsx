@@ -10,8 +10,7 @@ import {
   DropdownTrigger,
   Popover,
   PopoverContent,
-  PopoverTrigger,
-  Tooltip
+  PopoverTrigger
 } from '@nextui-org/react';
 import ShowChatMember from '../chatBody/ShowChatMember';
 import { chatStore } from '@/store/chatStore';
@@ -21,7 +20,6 @@ import ChatPresence from './ChatPresence';
 import { useModalStore } from '@/store/modalStore';
 import { useQueryClient } from '@tanstack/react-query';
 import { MSGS_QUERY_KEY } from '@/query/chat/chatQueryKeys';
-import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { CiMenuKebab } from 'react-icons/ci';
 
