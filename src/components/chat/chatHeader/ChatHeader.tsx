@@ -21,7 +21,6 @@ import ChatPresence from './ChatPresence';
 import { useModalStore } from '@/store/modalStore';
 import { useQueryClient } from '@tanstack/react-query';
 import { MSGS_QUERY_KEY } from '@/query/chat/chatQueryKeys';
-import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { CiMenuKebab } from 'react-icons/ci';
 
@@ -46,12 +45,14 @@ const ChatHeader = ({ chatRoomId }: { chatRoomId: string }) => {
     }
   };
 
-  // participants 테이블에서 해당 룸에 대한 유저정보 삭제
   const getRidOfMe = async () => {
     if (user?.user_id === room?.leader_id) {
       const { error: updateLeaderErr } = await clientSupabase
         .from('room')
-        .update({ leader_id: participants?.find((person) => person.user_id !== user?.user_id)?.user_id })
+        .update({
+          leader_id: participants?.find((person) => person.user_id !== user?.user_id)?.user_id,
+          room_status: '모집중'
+        })
         .eq('room_id', String(room?.room_id));
       if (updateLeaderErr) console.error('fail to update leader of room', updateLeaderErr.message);
     }
@@ -109,15 +110,6 @@ const ChatHeader = ({ chatRoomId }: { chatRoomId: string }) => {
     }
   };
 
-  // room_status 모집완료 -> 모집중으로 변경
-  const updateRoomState = async () => {
-    const { error } = await clientSupabase
-      .from('room')
-      .update({ room_status: '모집중' })
-      .eq('room_id', String(room?.room_id));
-    if (error) console.error('참가자 방 나갈 시 room_status 모집중으로 변경 실패', error.message);
-  };
-
   const getOutOfChatRoom = async () => {
     const message = `한명이라도 나가면 채팅방이 종료됩니다. 
     한 번 나가면 다시 입장하실 수 없습니다. 
@@ -132,7 +124,6 @@ const ChatHeader = ({ chatRoomId }: { chatRoomId: string }) => {
         await updateIsActiveFalse();
         await getRidOfMe();
         await handleIsRest();
-        await updateRoomState();
         deleteLastMsg();
         deleteTheUserImgs();
         queryClient.removeQueries({ queryKey: [MSGS_QUERY_KEY, chatRoomId], exact: true });
