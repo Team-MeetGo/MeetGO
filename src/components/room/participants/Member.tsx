@@ -1,11 +1,11 @@
 'use client';
 
 import GotoChatButton from '@/components/room/participants/GotoChatButton';
-import useGenderMaxNumber from '@/hooks/custom/useGenderMaxNumber';
 import { useRoomInfoWithRoomIdQuery, useRoomParticipantsQuery } from '@/hooks/useQueries/useMeetingQuery';
 import { GENDERFILTER } from '@/utils/constant';
 import { RoomFemaleAvatar, RoomMaleAvatar } from '@/utils/icons/RoomAvatar';
 import { clientSupabase } from '@/utils/supabase/client';
+import { genderMemberNumber } from '@/utils/utilFns';
 import Image from 'next/image';
 import { useEffect, useState } from 'react';
 import { FaCrown } from 'react-icons/fa6';
@@ -23,7 +23,7 @@ const Member = ({ roomId }: { roomId: UUID }) => {
   const [members, setMembers] = useState<UserType[]>(participants as UserType[]);
   const [leader, setLeader] = useState(roomInformation?.leader_id as string);
 
-  const genderMaxNumber = useGenderMaxNumber(roomInformation?.member_number as string);
+  const genderMaxNumber = genderMemberNumber(roomInformation?.member_number as string);
   const femaleMembers = members.filter((member) => member.gender === GENDERFILTER.FEMALE);
   const maleMembers = members.filter((member) => member.gender === GENDERFILTER.MALE);
   const hollowFemaleArray = Array.from({ length: (genderMaxNumber as number) - femaleMembers.length }, (_, i) => i);

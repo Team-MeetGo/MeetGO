@@ -1,6 +1,4 @@
 'use client';
-import { ValidationModal } from '@/components/common/ValidationModal';
-import useGenderMaxNumber from '@/hooks/custom/useGenderMaxNumber';
 import {
   useDeleteMember,
   useDeleteRoom,
@@ -11,6 +9,7 @@ import { useRoomInfoWithRoomIdQuery, useRoomParticipantsQuery } from '@/hooks/us
 import { useGetUserDataQuery } from '@/hooks/useQueries/useUserQuery';
 import { useModalStore } from '@/store/modalStore';
 import { GENDERFILTER, ROUTERADDRESS } from '@/utils/constant';
+import { genderMemberNumber } from '@/utils/utilFns';
 import { useRouter } from 'next/navigation';
 import { IoFemale, IoMale } from 'react-icons/io5';
 
@@ -28,7 +27,7 @@ function RoomInformation({ roomId }: { roomId: UUID }) {
   const roomInformation = useRoomInfoWithRoomIdQuery(roomId);
   const participants = useRoomParticipantsQuery(roomId);
 
-  const genderMaxNumber = useGenderMaxNumber(roomInformation?.member_number as string);
+  const genderMaxNumber = genderMemberNumber(roomInformation?.member_number as string);
   const otherParticipants = participants?.filter(
     (person: UserType | null) => person?.user_id !== roomInformation?.leader_id
   );

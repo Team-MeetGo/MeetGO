@@ -58,3 +58,15 @@ export const dateOptions: Intl.DateTimeFormatOptions = {
   hour12: true,
   timeZone: 'Asia/Seoul'
 };
+
+export const genderMemberNumber = (memberNumber: string) => {
+  if (memberNumber === '1:1') {
+    return 1;
+  } else if (memberNumber === '2:2') {
+    return 2;
+  } else if (memberNumber === '3:3') {
+    return 3;
+  } else if (memberNumber === '4:4') {
+    return 4;
+  }
+};
