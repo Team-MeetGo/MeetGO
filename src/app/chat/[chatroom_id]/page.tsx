@@ -28,7 +28,7 @@ const ChatPage = async ({ params }: { params: { chatroom_id: string } }) => {
       .range(from, to)
       .order('created_at', { ascending: false });
     if (error || !allMsgs) {
-      console.error(error.message);
+      throw new Error(error.message);
     } else {
       return allMsgs;
     }
@@ -39,10 +39,6 @@ const ChatPage = async ({ params }: { params: { chatroom_id: string } }) => {
     queryKey: [MSGS_QUERY_KEY, chatRoomId],
     queryFn: prefetchMsgs
   });
-
-  const abc = 0;
-
-  if (abc === 0) throw new Error('에러!!');
 
   return (
     <main>
