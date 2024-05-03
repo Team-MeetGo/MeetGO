@@ -8,7 +8,6 @@ export const fetchRoomDataWithChatRoomId = async (chatRoomId: string) => {
     .select('room_id, room(*)')
     .eq('chatting_room_id', chatRoomId)
     .single();
-  console.log(roomIdErr?.message);
   if (roomIdErr) {
     console.error('미팅룸 정보를 불러오는 데에 실패했습니다.');
   } else {

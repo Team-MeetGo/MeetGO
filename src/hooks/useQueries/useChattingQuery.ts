@@ -25,7 +25,14 @@ export const useRoomDataQuery = (chatRoomId: string) => {
   const { data } = useSuspenseQuery({
     queryKey: [ROOMDATA_QUERY_KEY, chatRoomId],
     queryFn: () => fetchRoomDataWithChatRoomId(chatRoomId),
-    select: (data: { room_id: string | null; room: RoomData | null }) => data as { room_id: string; room: RoomData }
+    select: (
+      data:
+        | {
+            room_id: string | null;
+            room: RoomData | null;
+          }
+        | undefined
+    ) => data as { room_id: string; room: RoomData }
   });
   return data;
 };
