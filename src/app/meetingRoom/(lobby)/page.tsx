@@ -13,7 +13,6 @@ const LobbyPage = async () => {
   return (
     <>
       <Suspense fallback={<LobbySkeleton />}>
-        <ThinBanner />
         <main className="flex flex-col items-center justify-content lg:min-w-[1000px] w-full pb-[24px]">
           <LobbyBanner />
           <MeetingRoomList />
