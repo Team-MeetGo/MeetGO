@@ -3,7 +3,6 @@ import { clientSupabase } from '@/utils/supabase/client';
 
 // 채팅룸 아이디로 룸 정보 가져오기
 export const fetchRoomDataWithChatRoomId = async (chatRoomId: string) => {
-  // roomId 불러오기
   const { data: room, error: roomIdErr } = await clientSupabase
     .from('chatting_room')
     .select('room_id, room(*)')
