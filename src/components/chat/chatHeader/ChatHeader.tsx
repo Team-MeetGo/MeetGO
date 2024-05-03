@@ -29,8 +29,8 @@ const ChatHeader = ({ chatRoomId }: { chatRoomId: string }) => {
   const { onlineUsers, setisRest, setSearchMode } = chatStore((state) => state);
   const { openModal, closeModal } = useModalStore();
   const { data: user } = useGetUserDataQuery();
-  const room = useRoomDataQuery(chatRoomId);
-  const participants = useParticipantsQuery(room?.room_id as string);
+  const chatNRoom = useRoomDataQuery(chatRoomId);
+  const participants = useParticipantsQuery(chatNRoom?.roomData.room_id as string);
   const queryClient = useQueryClient();
   const router = useRouter();
 
@@ -46,19 +46,22 @@ const ChatHeader = ({ chatRoomId }: { chatRoomId: string }) => {
     }
   };
 
-  // participants 테이블에서 해당 룸에 대한 유저정보 삭제
+  // participants 테이블에서 해당 룸에 대한 유저정보 isDeleted true로 변경
   const getRidOfMe = async () => {
-    if (user?.user_id === room?.leader_id) {
+    if (user?.user_id === chatNRoom?.roomData.leader_id) {
       const { error: updateLeaderErr } = await clientSupabase
         .from('room')
-        .update({ leader_id: participants?.find((person) => person.user_id !== user?.user_id)?.user_id })
-        .eq('room_id', String(room?.room_id));
+        .update({
+          leader_id: participants?.find((person) => person.user_id !== user?.user_id)?.user_id,
+          room_status: '모집중'
+        })
+        .eq('room_id', String(chatNRoom?.roomData?.room_id));
       if (updateLeaderErr) console.error('fail to update leader of room', updateLeaderErr.message);
     }
     const { error: deleteErr } = await clientSupabase
       .from('participants')
       .update({ isDeleted: true })
-      .eq('room_id', String(room?.room_id))
+      .eq('room_id', String(chatNRoom?.roomData?.room_id))
       .eq('user_id', user?.user_id!);
     if (deleteErr) {
       console.error(deleteErr.message);
@@ -71,7 +74,7 @@ const ChatHeader = ({ chatRoomId }: { chatRoomId: string }) => {
     const { data: restOf, error: getPartErr } = await clientSupabase
       .from('participants')
       .select('user_id')
-      .eq('room_id', String(room?.room_id))
+      .eq('room_id', String(chatNRoom?.roomData?.room_id))
       .eq('isDeleted', false);
     if (getPartErr) {
       console.error(getPartErr.message);
@@ -109,14 +112,14 @@ const ChatHeader = ({ chatRoomId }: { chatRoomId: string }) => {
     }
   };
 
-  // room_status 모집완료 -> 모집중으로 변경
-  const updateRoomState = async () => {
-    const { error } = await clientSupabase
-      .from('room')
-      .update({ room_status: '모집중' })
-      .eq('room_id', String(room?.room_id));
-    if (error) console.error('참가자 방 나갈 시 room_status 모집중으로 변경 실패', error.message);
-  };
+  // // room_status 모집완료 -> 모집중으로 변경
+  // const updateRoomState = async () => {
+  //   const { error } = await clientSupabase
+  //     .from('room')
+  //     .update({ room_status: '모집중' })
+  //     .eq('room_id', String(chatNRoom?.roomData?.room_id));
+  //   if (error) console.error('참가자 방 나갈 시 room_status 모집중으로 변경 실패', error.message);
+  // };
 
   const getOutOfChatRoom = async () => {
     const message = `한명이라도 나가면 채팅방이 종료됩니다. 
@@ -132,7 +135,7 @@ const ChatHeader = ({ chatRoomId }: { chatRoomId: string }) => {
         await updateIsActiveFalse();
         await getRidOfMe();
         await handleIsRest();
-        await updateRoomState();
+        // await updateRoomState();
         deleteLastMsg();
         deleteTheUserImgs();
         queryClient.removeQueries({ queryKey: [MSGS_QUERY_KEY, chatRoomId], exact: true });
@@ -155,7 +158,7 @@ const ChatHeader = ({ chatRoomId }: { chatRoomId: string }) => {
     <div className="h-28 border-b flex pl-[32px] pr-[16px] py-[16px] justify-between items-center">
       <div className="flex gap-2">
         <div className="flex flex-col gap-2">
-          <h1 className="font-bold text-2xl h-9">{room?.room_title}</h1>
+          <h1 className="font-bold text-2xl h-9">{chatNRoom?.roomData.room_title}</h1>
 
           <div className="flex gap-5 items-center">
             <ChatPresence />

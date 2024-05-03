@@ -1,11 +1,12 @@
 'use client';
 
 import Map from '@/components/chat/sidebar/Map';
-import { useChatDataQuery } from '@/hooks/useQueries/useChattingQuery';
+// import { useChatDataQuery } from '@/hooks/useQueries/useChattingQuery';
 import { Card, CardBody } from '@nextui-org/react';
 import { sideBarStore } from '@/store/sideBarStore';
 import { dateOptions } from '@/utils/utilFns';
 import { useEffect, useState } from 'react';
+import { useRoomDataQuery } from '@/hooks/useQueries/useChattingQuery';
 
 const SideBar = ({ chatRoomId }: { chatRoomId: string }) => {
   const { isSidebarOpen } = sideBarStore((state) => state);
@@ -21,8 +22,9 @@ const SideBar = ({ chatRoomId }: { chatRoomId: string }) => {
   }, []);
 
   //채팅방 정보 가져오기
-  const chat = useChatDataQuery(chatRoomId);
-  const meetingTime = chat.meeting_time;
+  // const chat = useChatDataQuery(chatRoomId);
+  const chatNRoom = useRoomDataQuery(chatRoomId);
+  const meetingTime = chatNRoom?.chatRoomData.meeting_time;
   const convertedTime = meetingTime ? new Intl.DateTimeFormat('ko-KR', dateOptions).format(new Date(meetingTime)) : '';
 
   if (!isSidebarOpen) {
