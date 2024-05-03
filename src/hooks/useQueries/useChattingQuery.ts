@@ -16,7 +16,7 @@ import {
   PARTICIPANTS_QUERY_KEY,
   ROOMDATA_QUERY_KEY
 } from '@/query/chat/chatQueryKeys';
-import { RoomData, UserData } from '@/types/chatTypes';
+import { RoomData } from '@/types/chatTypes';
 import { UsersType } from '@/types/userTypes';
 import { useQuery, useSuspenseQuery } from '@tanstack/react-query';
 
