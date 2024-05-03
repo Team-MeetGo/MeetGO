@@ -40,6 +40,10 @@ const ChatPage = async ({ params }: { params: { chatroom_id: string } }) => {
     queryFn: prefetchMsgs
   });
 
+  const abc = 0;
+
+  if (abc === 0) throw new Error('에러!!');
+
   return (
     <main>
       <HydrationBoundary state={dehydrate(queryClient)}>
