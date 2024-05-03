@@ -3,7 +3,6 @@
 import React from 'react';
 import { IoIosArrowForward, IoIosArrowBack } from 'react-icons/io';
 import { sideBarStore } from '@/store/sideBarStore';
-import { Button, Dropdown, DropdownItem, DropdownMenu, DropdownTrigger } from '@nextui-org/react';
 
 const SideBarButton = () => {
   const { isSidebarOpen, setIsSidebarOpen } = sideBarStore((state) => state);

@@ -26,15 +26,6 @@ export const useRoomDataQuery = (chatRoomId: string) => {
   if (roomNChatRoom) return roomNChatRoom;
 };
 
-// export const useChatDataQuery = (chatRoomId: string) => {
-//   const { data: chat } = useSuspenseQuery({
-//     queryKey: [CHATDATA_QUERY_KEY, chatRoomId],
-//     queryFn: () => fetchChatData(chatRoomId)
-//   });
-
-//   return chat;
-// };
-
 export const useParticipantsQuery = (roomId: string) => {
   const { data: users } = useSuspenseQuery({
     queryKey: [PARTICIPANTS_QUERY_KEY, roomId],

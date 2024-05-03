@@ -13,8 +13,8 @@ import { useEffect } from 'react';
 
 const InitChat = ({ user, chatRoomId }: { user: User | null; chatRoomId: string }) => {
   const { chatState, isRest, setChatState, setisRest, setChatRoomId, setHasMore } = chatStore((state) => state);
-  const room = useRoomDataQuery(chatRoomId);
-  const roomId = room?.room_id;
+  const chatNRoom = useRoomDataQuery(chatRoomId);
+  const roomId = chatNRoom?.roomData.room_id;
   const router = useRouter();
   const queryClient = useQueryClient();
   const allMsgs = useMsgsQuery(chatRoomId);
@@ -28,7 +28,7 @@ const InitChat = ({ user, chatRoomId }: { user: User | null; chatRoomId: string 
         { event: 'UPDATE', schema: 'public', table: 'chatting_room', filter: `chatting_room_id=eq.${chatRoomId}` },
         (payload) => {
           setChatState((payload.new as chatRoomPayloadType).isActive);
-          if (user?.id !== room?.leader_id) {
+          if (user?.id !== chatNRoom?.roomData.leader_id) {
             queryClient.invalidateQueries({
               queryKey: [CHATDATA_QUERY_KEY]
             });
