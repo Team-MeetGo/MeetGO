@@ -28,26 +28,15 @@ export const fetchRoomDataWithChatRoomId = async (chatRoomId: string) => {
 
 // 채팅방 참여자들 불러오기
 export const fetchParticipants = async (roomId: string) => {
-  const { data: userIds, error: userIdErr } = await clientSupabase
+  const { data: participantsData, error: userIdErr } = await clientSupabase
     .from('participants')
-    .select('user_id')
+    .select('user_id, users(*)')
     .eq('room_id', String(roomId))
     .eq('isDeleted', false);
   if (userIdErr) {
     console.error('채팅방 멤버들 ID를 불러오는 데에 실패했습니다.', userIdErr.message);
   } else {
-    const users = [];
-    for (const id of userIds) {
-      const { data, error: usersDataErr } = await clientSupabase
-        .from('users')
-        .select('*')
-        .eq('user_id', String(id.user_id));
-      if (usersDataErr) console.error('채팅방 멤버들의 유저정보를 불러오는 데에 실패했습니다.', usersDataErr.message);
-      if (data) {
-        users.push(...data);
-      }
-    }
-    return users;
+    return participantsData;
   }
 };
 

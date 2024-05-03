@@ -156,14 +156,14 @@ const ChatHeader = ({ chatRoomId }: { chatRoomId: string }) => {
                   <PopoverTrigger>
                     <Avatar
                       as="button"
-                      src={person.avatar as string}
+                      src={person.users.avatar as string}
                       className={`w-[32px] h-[32px] ${
                         !onlineUsers.find((id) => id === person.user_id) ? 'bg-black opacity-30' : ''
                       }`}
                     />
                   </PopoverTrigger>
                   <PopoverContent>
-                    <ShowChatMember person={person} />
+                    <ShowChatMember person={person.users} />
                   </PopoverContent>
                 </Popover>
               ))}
