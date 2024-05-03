@@ -1,7 +1,7 @@
 'use client';
 
 // import { useChatDataQuery, useRoomDataQuery } from '@/hooks/useQueries/useChattingQuery';
-import { useRoomDataQuery } from '@/hooks/useQueries/useChattingQuery';
+import { useChatDataQuery, useRoomDataQuery } from '@/hooks/useQueries/useChattingQuery';
 import React, { Suspense, useEffect, useRef, useState } from 'react';
 import { Card, CardBody, Pagination } from '@nextui-org/react';
 import { HiMiniMagnifyingGlass } from 'react-icons/hi2';
@@ -32,12 +32,12 @@ const Map = ({ chatRoomId }: { chatRoomId: string }) => {
   const userId = userData?.user_id;
 
   // useRoomDataQuery로 리더 아이디 가져오기
-  const chatNRoom = useRoomDataQuery(chatRoomId);
-  const leaderId = chatNRoom?.roomData.leader_id;
+  const room = useRoomDataQuery(chatRoomId);
+  const leaderId = room?.leader_id;
 
   // 채팅방 정보 가져오기
-  // const chat = useChatDataQuery(chatRoomId);
-  const meetingLocation = chatNRoom?.chatRoomData.meeting_location;
+  const chat = useChatDataQuery(chatRoomId);
+  const meetingLocation = chat.meeting_location;
 
   // useMutation 호출
   const updateMeetingLocationMutation = useUpdateMeetingLocationMutation();

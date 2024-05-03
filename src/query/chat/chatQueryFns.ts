@@ -4,42 +4,25 @@ import { clientSupabase } from '@/utils/supabase/client';
 // 채팅룸 아이디로 룸 정보 가져오기
 export const fetchRoomDataWithChatRoomId = async (chatRoomId: string) => {
   // roomId 불러오기
-  const { data: chatRoomData, error: roomIdErr } = await clientSupabase
+  const { data: roomId, error: roomIdErr } = await clientSupabase
     .from('chatting_room')
-    .select('*')
-    .eq('chatting_room_id', chatRoomId)
-    .single();
+    .select('room_id')
+    .eq('chatting_room_id', chatRoomId);
   if (roomIdErr) {
     throw new Error('roomId 불러오는 중 오류 발생');
   } else {
     // 룸 정보 가져오기
-    if (chatRoomData.room_id) {
+    if (roomId && roomId?.length) {
       const { data: roomData, error: roomDataErr } = await clientSupabase
         .from('room')
         .select('*')
-        .eq('room_id', chatRoomData.room_id)
-        .single();
+        .eq('room_id', String(roomId[0].room_id));
       if (roomDataErr) {
         throw new Error('room 데이터 불러오는 중 오류 발생');
       } else {
-        return { chatRoomData, roomData };
+        return roomData[0];
       }
     }
-  }
-};
-
-// 채팅방 정보 가져오기
-export const fetchChatData = async (chatRoomId: string) => {
-  const { data: chatData, error: chatDataErr } = await clientSupabase
-    .from('chatting_room')
-    .select('*')
-    .eq('chatting_room_id', chatRoomId)
-    .single();
-
-  if (chatDataErr || !chatData) {
-    throw new Error('없어!! Error fetching chat data');
-  } else {
-    return chatData;
   }
 };
 
@@ -65,6 +48,21 @@ export const fetchParticipants = async (roomId: string) => {
       }
     }
     return users;
+  }
+};
+
+// 채팅방 정보 가져오기
+export const fetchChatData = async (chatRoomId: string) => {
+  const { data: chatData, error: chatDataErr } = await clientSupabase
+    .from('chatting_room')
+    .select('*')
+    .eq('chatting_room_id', chatRoomId)
+    .single();
+
+  if (chatDataErr || !chatData) {
+    throw new Error('없어!! Error fetching chat data');
+  } else {
+    return chatData;
   }
 };
 

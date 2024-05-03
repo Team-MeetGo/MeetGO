@@ -7,7 +7,7 @@ import { ko } from 'date-fns/locale';
 import { getMonth, getYear } from 'date-fns';
 import { IoIosArrowForward, IoIosArrowBack } from 'react-icons/io';
 // import { useChatDataQuery, useRoomDataQuery } from '@/hooks/useQueries/useChattingQuery';
-import { useRoomDataQuery } from '@/hooks/useQueries/useChattingQuery';
+import { useChatDataQuery, useRoomDataQuery } from '@/hooks/useQueries/useChattingQuery';
 import { useUpdateMeetingTimeMutation } from '@/hooks/useMutation/useMeetingTimeMutation';
 import { useGetUserDataQuery } from '@/hooks/useQueries/useUserQuery';
 
@@ -17,9 +17,9 @@ const DateTimePicker = forwardRef(({ chatRoomId }: { chatRoomId: string }) => {
   const datePickerRef = useRef<DatePicker>(null);
   const { data: userData } = useGetUserDataQuery();
   const userId = userData?.user_id;
-  const chatNRoom = useRoomDataQuery(chatRoomId);
-  const leaderId = chatNRoom?.roomData.leader_id;
-  // const chat = useChatDataQuery(chatRoomId);
+  const room = useRoomDataQuery(chatRoomId);
+  const leaderId = room?.leader_id;
+  const chat = useChatDataQuery(chatRoomId);
   const toggleCalendar = () => {
     setIsCalendarOpen((prev) => !prev);
   };
@@ -27,11 +27,11 @@ const DateTimePicker = forwardRef(({ chatRoomId }: { chatRoomId: string }) => {
   const { mutate: updateMeetingTime } = useUpdateMeetingTimeMutation();
 
   useEffect(() => {
-    const meetingTime = new Date(String(chatNRoom?.chatRoomData.meeting_time));
+    const meetingTime = new Date(String(chat.meeting_time));
     if (meetingTime instanceof Date && !isNaN(meetingTime.getTime())) {
       setSelectedMeetingTime(meetingTime);
     }
-  }, [chatRoomId, chatNRoom]);
+  }, [chatRoomId, chat]);
 
   return (
     <div className="relative z-30 py-6">

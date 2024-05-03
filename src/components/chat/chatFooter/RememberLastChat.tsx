@@ -11,7 +11,7 @@ const RememberLastChat = () => {
   const { data: user } = useGetUserDataQuery();
   const { chatRoomId } = chatStore((state) => state);
   const messages = useMsgsQuery(chatRoomId as string);
-  const chatNRoom = useRoomDataQuery(chatRoomId as string);
+  const room = useRoomDataQuery(chatRoomId as string);
   const lastMsgId = useMyLastMsgs(user?.user_id!, chatRoomId);
   const { mutate: mutateClearUnread } = useClearNewMsgNum();
 
@@ -22,7 +22,7 @@ const RememberLastChat = () => {
   );
   const { mutate: mutateToAdd } = useAddLastMsg(
     chatRoomId as string,
-    chatNRoom?.roomData.room_id as string,
+    room?.room_id as string,
     user?.user_id as string,
     messages && messages.length > 0 ? messages[messages.length - 1].message_id : undefined
   );

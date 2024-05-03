@@ -20,8 +20,8 @@ const ChatList = ({ user, chatRoomId }: { user: User | null; chatRoomId: string 
   const scrollRef = useRef() as React.MutableRefObject<HTMLDivElement>;
   const { hasMore } = chatStore((state) => state);
   const messages = useMsgsQuery(chatRoomId);
-  const chatNRoom = useRoomDataQuery(chatRoomId);
-  const roomId = chatNRoom?.roomData?.room_id;
+  const room = useRoomDataQuery(chatRoomId);
+  const roomId = room?.room_id;
   const lastMsgId = useMyLastMsgs(String(user?.id), chatRoomId);
   const queryClient = useQueryClient();
   const [isScrolling, setIsScrolling] = useState(false);
