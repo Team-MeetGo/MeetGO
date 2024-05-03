@@ -1,12 +1,11 @@
 import { USER_DATA_QUERY_KEY } from '@/query/user/userQueryKeys';
 import { updateAvatar, updateProfile } from '@/service';
 import { UpdateAvatarType, UpdateProfileType } from '@/types/userTypes';
-import { QueryClient, useMutation } from '@tanstack/react-query';
+import { QueryClient, useMutation, useQueryClient } from '@tanstack/react-query';
 
-const queryClient = new QueryClient();
-
-export const useProfileUpdateMutation = () =>
-  useMutation<void, Error, UpdateProfileType>({
+export const useProfileUpdateMutation = () => {
+  const queryClient = useQueryClient();
+  return useMutation<void, Error, UpdateProfileType>({
     mutationFn: async ({ userId, inputNickname, inputIntro, inputKakaoId, inputGender, favorite }) => {
       await updateProfile(userId, inputNickname, inputIntro, inputKakaoId, inputGender, favorite);
     },
@@ -16,9 +15,11 @@ export const useProfileUpdateMutation = () =>
       });
     }
   });
+};
 
-export const useAvatarUpdateMutation = () =>
-  useMutation({
+export const useAvatarUpdateMutation = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
     mutationFn: ({ userId, file }: UpdateAvatarType) => updateAvatar(userId, file),
     onSuccess: () => {
       queryClient.invalidateQueries({
@@ -26,3 +27,4 @@ export const useAvatarUpdateMutation = () =>
       });
     }
   });
+};

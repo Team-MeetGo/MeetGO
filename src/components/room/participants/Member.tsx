@@ -94,7 +94,7 @@ const Member = ({ roomId }: { roomId: UUID }) => {
   return (
     <div className="w-100 h-100 flex flex-row justify-evenly">
       <div className="flex flex-col items-center justify-content">
-        <section className="w-100%">
+        <section className="w-full max-w-[1080px]">
           <GotoChatButton roomId={roomId} members={members} />
         </section>
         <section className="flex lg:flex-row flex-col lg:gap-[100px] gap-[2rem] lg:min-w-[1080px] w-[22rem] items-center justify-content align-middle ">

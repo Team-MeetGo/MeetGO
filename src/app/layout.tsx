@@ -21,6 +21,7 @@ export const metadata: Metadata = {
   description: '20대 대학생을 위한 미팅 서비스',
   icons: { icon: '/favicon.ico' }
 };
+
 export default async function RootLayout({
   children
 }: Readonly<{
@@ -44,7 +45,6 @@ export default async function RootLayout({
     } else {
       return userData;
     }
-    return user;
   };
   const queryClient = new QueryClient();
 
@@ -63,7 +63,7 @@ export default async function RootLayout({
                 <ValidationModal />
                 <NavBar />
                 {children}
-                <ReactQueryDevtools initialIsOpen={true} />
+                <ReactQueryDevtools initialIsOpen={false} />
               </Suspense>
               <Footer />
             </HydrationBoundary>

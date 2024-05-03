@@ -24,7 +24,14 @@ const UserGender = () => {
               {isEditing && editable ? (
                 <form className="flex gap-2">
                   <label>
-                    <input type="radio" name="gender" value="female" className="mr-1" onChange={handleChange} />
+                    <input
+                      type="radio"
+                      name="gender"
+                      value="female"
+                      className="mr-1"
+                      onChange={handleChange}
+                      required
+                    />
                     여성
                   </label>
                   <label>

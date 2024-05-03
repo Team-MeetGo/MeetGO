@@ -90,7 +90,7 @@ const MainBanner = () => {
 
   return (
     <>
-      <div className="w-full max-w-[1080px] h-full max-h-[600px] p-[24px]">
+      <div className="w-full max-w-[1280px] h-full max-h-[600px] p-[24px]">
         <Slider {...settings}>
           {bannerImgArr.map((img, idx) => (
             <div key={idx} className="relative">
@@ -111,7 +111,7 @@ const MainBanner = () => {
                   지금 바로 대학생 인증하러 가기
                 </Link>
               </div>
-              <div className=" w-full max-w-[1080px] h-80 mb-[10px] relative max-sm:hidden">
+              <div className=" w-full max-w-[1280px] h-80 mb-[10px] relative max-sm:hidden">
                 <Image
                   src={img.src}
                   alt="메인배너"

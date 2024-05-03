@@ -113,7 +113,7 @@ const ReviewList: React.FC = () => {
   const nextPageNumber = currentPageNumber + 1;
 
   return (
-    <div className="w-full flex flex-col justify-center gap-3">
+    <div className="w-full flex flex-col justify-center gap-6">
       <div className="w-full flex justify-between items-center gap-4">
         <Dropdown onOpenChange={setIsOpen} isOpen={isOpen} className="min-w-0 w-auto">
           <DropdownTrigger>

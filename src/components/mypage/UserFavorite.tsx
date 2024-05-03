@@ -12,7 +12,8 @@ const UserFavorite = () => {
   const { isEditing } = useEditingStore();
 
   const handleSelectionChange = (e: any) => {
-    const selectedArray = e.target.value.split(',');
+    let selectedArray = e.target.value.split(',');
+    selectedArray = selectedArray.filter((selected: string) => selected);
     if (selectedArray.length > 5) {
       customErrToast('최대 5개까지 선택 가능합니다.');
       return;
@@ -20,13 +21,13 @@ const UserFavorite = () => {
     setFavoriteInputValue(new Set(selectedArray));
   };
 
-  useEffect(() => {
-    const initialFavorites = new Set(user?.favorite || []);
-    setFavoriteInputValue(initialFavorites);
-    if (!isEditing) {
-      setFavoriteInputValue(new Set(user!.favorite || []));
-    }
-  }, [isEditing]);
+  // useEffect(() => {
+  //   const initialFavorites = new Set(user?.favorite || []);
+  //   setFavoriteInputValue(initialFavorites);
+  // if (!isEditing) {
+  //   setFavoriteInputValue(new Set(user!.favorite || []));
+  // }
+  // }, [isEditing]);
 
   return (
     <>
@@ -61,14 +62,13 @@ const UserFavorite = () => {
                 </div>
               ) : (
                 <div className="flex gap-2 max-w-[342px] w-full border rounded-lg py-2 px-3 mt-2 bg-[#FAFAFA]">
-                  {favoriteInputValue.size === 0 && (
-                    <div className="text-sm text-[#9CA3AF]">이상형을 선택해주세요.</div>
-                  )}
-                  {Array.from(favoriteInputValue).map((value) => (
-                    <div className="text-sm text-[#9CA3AF]" key={value}>
-                      {value}
-                    </div>
-                  ))}
+                  {!user?.favorite && <p className="text-sm text-[#9CA3AF]">이상형을 선택해주세요.</p>}
+                  {user?.favorite &&
+                    user.favorite.map((value) => (
+                      <p className="text-sm text-[#9CA3AF]" key={value}>
+                        {value}
+                      </p>
+                    ))}
                 </div>
               )}
             </div>
