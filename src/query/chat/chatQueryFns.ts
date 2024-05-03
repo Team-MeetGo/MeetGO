@@ -1,4 +1,3 @@
-import { Message } from '@/types/chatTypes';
 import { UsersType } from '@/types/userTypes';
 import { clientSupabase } from '@/utils/supabase/client';
 

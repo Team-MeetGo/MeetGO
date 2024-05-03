@@ -10,8 +10,7 @@ import {
   DropdownTrigger,
   Popover,
   PopoverContent,
-  PopoverTrigger,
-  Tooltip
+  PopoverTrigger
 } from '@nextui-org/react';
 import ShowChatMember from '../chatBody/ShowChatMember';
 import { chatStore } from '@/store/chatStore';
@@ -45,6 +44,7 @@ const ChatHeader = ({ chatRoomId }: { chatRoomId: string }) => {
     }
   };
 
+  // room 테이블에서 리더 변경 + room_status: "모집중" + participants 테이블에서 해당 룸에 대한 유저정보 isDeleted: true로
   const getRidOfMe = async () => {
     if (user?.user_id === room?.leader_id) {
       const { error: updateLeaderErr } = await clientSupabase
