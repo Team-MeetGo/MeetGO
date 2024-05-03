@@ -10,7 +10,7 @@ import { fetchAuthorData, fetchLikedReviewList, fetchReviewData, fetchReviewList
 export const useAuthorDataQuery = (review_id: string) => {
   const { data: userData } = useQuery({
     queryKey: [AUTHOR_QUERY_KEY, review_id],
-    queryFn: async () => await fetchAuthorData(review_id)
+    queryFn: () => fetchAuthorData(review_id)
   });
   return userData;
 };
@@ -18,7 +18,7 @@ export const useAuthorDataQuery = (review_id: string) => {
 export const useReviewDataQuery = (review_id: string) => {
   const { data: reviewDetail } = useQuery({
     queryKey: [REVIEW_QUERY_KEY, review_id],
-    queryFn: async () => await fetchReviewData(review_id)
+    queryFn: () => fetchReviewData(review_id)
   });
   return reviewDetail;
 };
@@ -26,7 +26,7 @@ export const useReviewDataQuery = (review_id: string) => {
 export const useLikedReviewDataQuery = () => {
   const { data: likedReviewList } = useQuery({
     queryKey: [LIKED_REVIEWLIST_QUERY_KEY],
-    queryFn: async () => await fetchLikedReviewList()
+    queryFn: () => fetchLikedReviewList()
   });
   return likedReviewList;
 };
@@ -34,7 +34,7 @@ export const useLikedReviewDataQuery = () => {
 export const useReviewListDataQuery = () => {
   const { data: fetchReviewsData, isLoading } = useQuery({
     queryKey: [REVIEWLIST_QUERY_KEY],
-    queryFn: async () => await fetchReviewList()
+    queryFn: () => fetchReviewList()
   });
   return { data: fetchReviewsData?.data, count: fetchReviewsData?.count, isLoading };
 };

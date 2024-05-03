@@ -145,17 +145,9 @@ const NavBarContents = () => {
                           as="button"
                           className="transition-transform"
                           src={`${user?.avatar}?${new Date().getTime()}`}
-                          aria-label="Avatar"
                         />
                       ) : (
-                        <Avatar
-                          showFallback
-                          as="button"
-                          className="transition-transform"
-                          color="secondary"
-                          size="sm"
-                          aria-label="Avatar"
-                        />
+                        <Avatar showFallback as="button" className="transition-transform" color="secondary" size="sm" />
                       )}
                     </div>
                   </DropdownTrigger>
