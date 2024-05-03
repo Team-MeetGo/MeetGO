@@ -26,7 +26,8 @@ https://meet-go.vercel.app/
 ## 📌 주요 기능
 ![image](https://github.com/Team-MeetGo/MeetGO/assets/154481757/e19a9e7e-f7d5-4993-9d43-476016144c77)
 
-![image](https://github.com/Team-MeetGo/MeetGO/assets/154481757/4259bdf4-117f-472c-9c16-22b7c1bf29fd
+![image](https://github.com/Team-MeetGo/MeetGO/assets/154481757/0d4bf50d-c183-46fb-9282-ad37a875b4f4)
+
 
 ## ✒️ API
 - KakaoMap API: 위치 검색 
