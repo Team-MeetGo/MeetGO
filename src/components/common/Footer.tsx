@@ -29,6 +29,7 @@ const Footer = () => {
                 <button
                   key={idx}
                   className="w-6 h-6 bg-mainColor rounded-md text-white flex items-center justify-center"
+                  aria-label="footerItem"
                 >
                   {icon}
                 </button>

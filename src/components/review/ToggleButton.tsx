@@ -7,9 +7,11 @@ type Props = {
 
 const ToggleButton = ({ toggled, onToggle, onIcon, offIcon }: Props) => {
   return (
-    <div>
-      <button onClick={() => onToggle(!toggled)}>{toggled ? onIcon : offIcon}</button>
-    </div>
+    <>
+      <button onClick={() => onToggle(!toggled)} aria-label="like">
+        {toggled ? onIcon : offIcon}
+      </button>
+    </>
   );
 };
 

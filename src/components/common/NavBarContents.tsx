@@ -137,19 +137,27 @@ const NavBarContents = () => {
             {isLoggedIn ? (
               <div className="flex items-center gap-4">
                 <Dropdown placement="bottom-end">
-                  <p className="cursor-pointer">{user?.nickname}</p>
                   <DropdownTrigger>
-                    {/* <div className="flex items-center gap-2"> */}
-                    {user?.avatar ? (
-                      <Avatar
-                        as="button"
-                        className="transition-transform"
-                        src={`${user?.avatar}?${new Date().getTime()}`}
-                      />
-                    ) : (
-                      <Avatar showFallback as="button" className="transition-transform" color="secondary" size="sm" />
-                    )}
-                    {/* </div> */}
+                    <div className="flex items-center gap-2">
+                      <p className="cursor-pointer">{user?.nickname}</p>
+                      {user?.avatar ? (
+                        <Avatar
+                          as="button"
+                          className="transition-transform"
+                          src={`${user?.avatar}?${new Date().getTime()}`}
+                          aria-label="Avatar"
+                        />
+                      ) : (
+                        <Avatar
+                          showFallback
+                          as="button"
+                          className="transition-transform"
+                          color="secondary"
+                          size="sm"
+                          aria-label="Avatar"
+                        />
+                      )}
+                    </div>
                   </DropdownTrigger>
                   <DropdownMenu
                     aria-label="Profile Actions"
@@ -224,7 +232,7 @@ const NavBarContents = () => {
               </div>
             ) : (
               <div className="flex gap-2">
-                <Link href="/login">
+                <Link href="/login" aria-label="loginButton">
                   <FaRegUser className="h-5 w-5" />
                 </Link>
               </div>
