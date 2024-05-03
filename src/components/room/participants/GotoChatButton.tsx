@@ -46,7 +46,7 @@ const GotoChatButton = ({ roomId, members }: { roomId: UUID; members: UserType[]
         .select('chatting_room_id');
       if (error) console.error('fail tp make new Chatting Room', error.message);
       if (chat_room) router.replace(`/chat/${chat_room[0].chatting_room_id}`);
-    } // "/chatting_room_id" 로 주소값 변경
+    }
   };
 
   const handleGoChatDebounce = useCallback(debounce(gotoChattingRoom, 1000), []);
