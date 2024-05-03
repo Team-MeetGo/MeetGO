@@ -9,7 +9,7 @@ export const fetchRoomDataWithChatRoomId = async (chatRoomId: string) => {
     .eq('chatting_room_id', chatRoomId)
     .single();
   if (roomIdErr) {
-    throw new Error('roomId 불러오는 중 오류 발생');
+    throw new Error('미팅룸 정보를 불러오는 데에 실패했습니다.');
   } else {
     return room;
   }
@@ -23,7 +23,7 @@ export const fetchParticipants = async (roomId: string) => {
     .eq('room_id', String(roomId))
     .eq('isDeleted', false);
   if (userIdErr) {
-    console.error('채팅방 멤버들 ID를 불러오는 데에 실패했습니다.', userIdErr.message);
+    throw new Error('채팅방 멤버들 ID를 불러오는 데에 실패했습니다.');
   } else {
     return participantsData;
   }
@@ -37,7 +37,7 @@ export const fetchChatData = async (chatRoomId: string) => {
     .eq('chatting_room_id', chatRoomId)
     .single();
   if (chatDataErr || !chatData) {
-    throw new Error('없어!! Error fetching chat data');
+    throw new Error('채팅방 정보를 불러오는 데 실패했습니다.');
   } else {
     return chatData;
   }
@@ -48,7 +48,7 @@ export const fetchMyChatRoomIds = async (userId: string) => {
   const myChatRooms = [];
   const { data: myRooms, error } = await clientSupabase.from('participants').select('room_id').eq('user_id', userId);
   if (error) {
-    console.error('fail to select myChatRoomIds', error.message);
+    throw new Error('회원님의 채팅방 데이터를 불러오는 데에 실패했습니다.');
   } else {
     for (let room of myRooms) {
       const { data: myChatRoomId } = await clientSupabase
@@ -72,7 +72,7 @@ export const fetchMyLastMsgs = async (user_id: string, chatRoomId: string | null
     .eq('user_id', user_id)
     .eq('chatting_room_id', String(chatRoomId));
   if (error) {
-    console.error('마지막 메세지가 없습니다.', error.message);
+    throw new Error('마지막 메세지가 없습니다.');
   } else {
     if (lastMsgs.length) {
       return lastMsgs[0].last_msg_id;
@@ -90,7 +90,7 @@ export const fetchMsgs = async (chatRoomId: string) => {
     .eq('chatting_room_id', chatRoomId)
     .order('created_at', { ascending: true });
   if (error || !msgs) {
-    console.error('fail to load messages', error.message);
+    throw new Error('메세지를 불러오는 데에 실패했습니다.');
   } else {
     return msgs;
   }
@@ -103,7 +103,7 @@ export const fetchMyMsgData = async (user_id: string | undefined) => {
     .select('chatting_room_id, room_id, newMsgCount')
     .eq('user_id', String(user_id));
   if (error) {
-    console.error('현재 방 정보 불러오는 데에 실패했습니다.', error.message);
+    throw new Error('현재 방 정보 불러오는 데에 실패했습니다.');
   } else {
     if (msgData.length) {
       return msgData;
@@ -122,7 +122,7 @@ export const makeUrl = async (user: UsersType, imgs: File[], chatRoomId: string)
       upsert: true
     });
     if (error) {
-      console.error('채팅이미지 업로드 실패', error.message);
+      throw new Error('채팅이미지 업로드에 실패하였습니다.');
     } else {
       const { data: imgUrls } = await clientSupabase.storage.from('chatImg').getPublicUrl(imgUrlData.path as string);
       chatImgsUrls.push(imgUrls);
@@ -146,8 +146,8 @@ export const handleSubmit = async (
       imgs: imgs.length ? await makeUrl(user, imgs, chatRoomId) : null
     });
     if (error) {
-      console.error(error.message);
       alert('새로운 메세지를 추가하는 데에 실패했습니다.');
+      throw new Error('새로운 메세지를 추가하는 데에 실패했습니다.');
     }
   } else {
     return;
@@ -178,6 +178,7 @@ export const addNewLastMsg = async (
       .select('*');
     if (error) {
       console.error('마지막 메세지 추가하기 실패 => ', error.message);
+      throw new Error('마지막 메세지를 추가할 수 없습니다');
     } else {
       return addedlastMsg;
     }
@@ -194,6 +195,7 @@ export const updateMyLastMsg = async (user_id: string, chatRoomId: string, msg_i
     .select('*');
   if (error) {
     console.error('마지막 메세지 업데이트 실패 =>', error.message);
+    throw new Error('마지막 메세지 업데이트에 실패했습니다.');
   } else {
     return updatedLastMsg;
   }
@@ -215,6 +217,7 @@ export const updateNewMsgNum = async (chatting_room_id: string) => {
       .select('*');
     if (error) {
       console.error('새로운 메세지 count UP 실패', error.message);
+      throw new Error('새로운 메세지 카운트에 실패했습니다.');
     } else {
       return updatedNewMsgNum;
     }
@@ -230,6 +233,7 @@ export const clearUnReadMsgNum = async (chatting_room_id: string) => {
     .select('*');
   if (error) {
     console.error('안 읽은 메세지 수 초기화 실패', error.message);
+    throw new Error('안 읽은 메세지 수 초기화 실패');
   } else {
     return clearedNewMsgNum;
   }
@@ -253,21 +257,30 @@ export const updateMeetingLocation = async ({ chatRoomId, barName }: { chatRoomI
     .select('meeting_location')
     .eq('chatting_room_id', chatRoomId)
     .eq('meeting_location', barName);
-  if (error) console.error('fail to select meeting_location', error.message);
+  if (error) {
+    console.error('fail to select meeting_location', error.message);
+    throw new Error('미팅 장소를 불러오는 데 실패했습니다.');
+  }
 
   if (DBdata && DBdata[0]) {
     const { data, error } = await clientSupabase
       .from('chatting_room')
       .update({ meeting_location: null })
       .eq('chatting_room_id', chatRoomId);
-    if (error) console.error('fail to update meetingLocation to null', error.message);
+    if (error) {
+      console.error('fail to update meetingLocation to null', error.message);
+      throw new Error('미팅 장소 업데이트에 실패했습니다.');
+    }
     return data;
   } else {
     const { data, error } = await clientSupabase
       .from('chatting_room')
       .update({ meeting_location: barName })
       .eq('chatting_room_id', chatRoomId);
-    if (error) console.error('fail to update meetingLocation to new', error.message);
+    if (error) {
+      console.error('fail to update meetingLocation to new', error.message);
+      throw new Error('미팅 장소 업데이트에 실패했습니다.');
+    }
     return data;
   }
 };

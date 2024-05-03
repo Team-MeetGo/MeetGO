@@ -28,7 +28,7 @@ const ChatPage = async ({ params }: { params: { chatroom_id: string } }) => {
       .range(from, to)
       .order('created_at', { ascending: false });
     if (error || !allMsgs) {
-      console.error(error.message);
+      throw new Error(error.message);
     } else {
       return allMsgs;
     }
