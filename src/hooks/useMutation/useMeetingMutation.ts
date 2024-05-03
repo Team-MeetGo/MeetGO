@@ -88,6 +88,8 @@ export const useAddRoomMemberMutation = ({ userId, roomId }: { userId: string; r
     mutationFn: () => addMember({ userId, roomId }),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: [ROOM_MEMBER, roomId] });
+      queryClient.invalidateQueries({ queryKey: [ROOMLIST, userId] });
+      queryClient.invalidateQueries({ queryKey: [MY_PAST_NOW_ROOM] });
     }
   });
   return roomMemberMutation;

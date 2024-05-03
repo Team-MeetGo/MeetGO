@@ -111,7 +111,7 @@ const Member = ({ roomId }: { roomId: UUID }) => {
                     <figure className="lg:w-[86px] w-[5rem] lg:h-[86px] h-[5rem] lg:mt-[32px] mt-[0.8rem] rounded-full relative">
                       {leader === member.user_id ? (
                         <div>
-                          <FaCrown className="absolute h-[20px] w-[20px] m-[2px] fill-mainColor z-10 top-[-18px] left-[29px]" />
+                          <FaCrown className="absolute h-[20px] w-[20px] m-[2px] fill-mainColor z-5 top-[-18px] left-[29px]" />
                         </div>
                       ) : (
                         ''
@@ -175,7 +175,7 @@ const Member = ({ roomId }: { roomId: UUID }) => {
                     <figure className="lg:w-[86px] w-[5rem] lg:h-[86px] h-[5rem] lg:mt-[32px] mt-[0.8rem] rounded-full relative">
                       {leader === member.user_id ? (
                         <div>
-                          <FaCrown className="absolute h-[20px] w-[20px] m-[2px] fill-mainColor z-10 top-[-20px] left-[30px]" />
+                          <FaCrown className="absolute h-[20px] w-[20px] m-[2px] fill-mainColor z-5 top-[-20px] left-[30px]" />
                         </div>
                       ) : (
                         ''
