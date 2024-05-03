@@ -36,4 +36,5 @@ https://meet-go.vercel.app/
 ## How To 
 ![image](https://github.com/Team-MeetGo/MeetGO/assets/154481757/d7210705-9b56-45d9-8a9c-2d72b6e9c3ee)
 
+## Brochure
 https://teamsparta.notion.site/20-3ce612f66c0f4fc2bbc44508ffa2f816
