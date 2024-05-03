@@ -224,7 +224,7 @@ const NavBarContents = () => {
               </div>
             ) : (
               <div className="flex gap-2">
-                <Link href="/login">
+                <Link href="/login" aria-label="loginButton">
                   <FaRegUser className="h-5 w-5" />
                 </Link>
               </div>
