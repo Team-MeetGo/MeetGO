@@ -3,7 +3,7 @@
 import { useMsgsQuery, useRoomDataQuery } from '@/hooks/useQueries/useChattingQuery';
 import { CHATDATA_QUERY_KEY, MSGS_QUERY_KEY } from '@/query/chat/chatQueryKeys';
 import { chatStore } from '@/store/chatStore';
-import { Message, chatRoomPayloadType } from '@/types/chatTypes';
+import { chatRoomType } from '@/types/chatTypes';
 import { ITEM_INTERVAL } from '@/utils/constant';
 import { clientSupabase } from '@/utils/supabase/client';
 import { User } from '@supabase/supabase-js';
@@ -13,8 +13,8 @@ import { useEffect } from 'react';
 
 const InitChat = ({ user, chatRoomId }: { user: User | null; chatRoomId: string }) => {
   const { chatState, isRest, setChatState, setisRest, setChatRoomId, setHasMore } = chatStore((state) => state);
-  const room = useRoomDataQuery(chatRoomId);
-  const roomId = room.room_id;
+  const { room_id, leader_id } = useRoomDataQuery(chatRoomId);
+  // const roomId = room.room_id;
   const router = useRouter();
   const queryClient = useQueryClient();
   const allMsgs = useMsgsQuery(chatRoomId);
@@ -27,8 +27,8 @@ const InitChat = ({ user, chatRoomId }: { user: User | null; chatRoomId: string 
         'postgres_changes',
         { event: 'UPDATE', schema: 'public', table: 'chatting_room', filter: `chatting_room_id=eq.${chatRoomId}` },
         (payload) => {
-          setChatState((payload.new as chatRoomPayloadType).isActive);
-          if (user?.id !== room.leader_id) {
+          setChatState((payload.new as chatRoomType).isActive);
+          if (user?.id !== leader_id) {
             queryClient.invalidateQueries({
               queryKey: [CHATDATA_QUERY_KEY]
             });
@@ -47,7 +47,7 @@ const InitChat = ({ user, chatRoomId }: { user: User | null; chatRoomId: string 
       // 한 명이 채팅방을 나가서 채팅방 isActive가 false가 되면,
       if (isRest) {
         // 내가 나가기를 누른 사람이 아니라면(남은 사람이면) 다시 수락창으로
-        router.push(`/meetingRoom/${roomId}`);
+        router.push(`/meetingRoom/${room_id}`);
       } else {
         // 내가 나가기를 누른 사람이라면 아예 로비로
         router.push('/meetingRoom');

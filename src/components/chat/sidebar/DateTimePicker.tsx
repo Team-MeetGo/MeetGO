@@ -17,8 +17,7 @@ const DateTimePicker = forwardRef(({ chatRoomId }: { chatRoomId: string }) => {
   const datePickerRef = useRef<DatePicker>(null);
   const { data: userData } = useGetUserDataQuery();
   const userId = userData?.user_id;
-  const room = useRoomDataQuery(chatRoomId);
-  const leaderId = room.leader_id;
+  const { leader_id } = useRoomDataQuery(chatRoomId);
   const chat = useChatDataQuery(chatRoomId);
   const toggleCalendar = () => {
     setIsCalendarOpen((prev) => !prev);
@@ -41,7 +40,7 @@ const DateTimePicker = forwardRef(({ chatRoomId }: { chatRoomId: string }) => {
         wrapperClassName="w-full z-20"
         selected={selectedMeetingTime ? selectedMeetingTime : new Date()}
         onChange={(date) => {
-          if (leaderId == userId) {
+          if (leader_id == userId) {
             setSelectedMeetingTime(date as Date);
             const isoStringMeetingTime = date?.toISOString();
             updateMeetingTime({
