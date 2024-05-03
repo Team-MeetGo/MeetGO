@@ -46,7 +46,7 @@ const ChatHeader = ({ chatRoomId }: { chatRoomId: string }) => {
     }
   };
 
-  // participants 테이블에서 해당 룸에 대한 유저정보 삭제
+  // room 테이블에서 리더 변경 + room_status: "모집중" + participants 테이블에서 해당 룸에 대한 유저정보 isDeleted: true로
   const getRidOfMe = async () => {
     if (user?.user_id === chatNRoom?.roomData.leader_id) {
       const { error: updateLeaderErr } = await clientSupabase
