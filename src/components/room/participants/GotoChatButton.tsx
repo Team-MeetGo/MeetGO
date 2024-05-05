@@ -1,11 +1,10 @@
 'use client';
 
 import { customErrToast } from '@/components/common/customToast';
-import useGenderMaxNumber from '@/hooks/custom/useGenderMaxNumber';
 import { useRoomInfoWithRoomIdQuery } from '@/hooks/useQueries/useMeetingQuery';
 import { useGetUserDataQuery } from '@/hooks/useQueries/useUserQuery';
 import { clientSupabase } from '@/utils/supabase/client';
-import { debounce } from '@/utils/utilFns';
+import { debounce, genderMemberNumber } from '@/utils/utilFns';
 import { useRouter } from 'next/navigation';
 import { useCallback } from 'react';
 import { IoPlay } from 'react-icons/io5';
@@ -18,7 +17,7 @@ const GotoChatButton = ({ roomId, members }: { roomId: UUID; members: UserType[]
   const { data: user } = useGetUserDataQuery();
   const roomInformation = useRoomInfoWithRoomIdQuery(roomId);
 
-  const genderParticipants = useGenderMaxNumber(roomInformation?.member_number as string);
+  const genderParticipants = genderMemberNumber(roomInformation?.member_number as string);
   const maxMember = genderParticipants! * 2;
 
   //원하는 인원이 모두 들어오면 위에서 창이 내려온다.

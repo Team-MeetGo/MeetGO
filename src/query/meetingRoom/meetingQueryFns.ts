@@ -1,4 +1,11 @@
-import { ChattingRoomType, MeetingRoomType, NewRoomType, UpdateRoomType, UserType } from '@/types/roomTypes';
+import {
+  ChattingRoomType,
+  MeetingRoomType,
+  NewRoomType,
+  ParticipantsWithId,
+  UpdateRoomType,
+  UserType
+} from '@/types/roomTypes';
 import { ROOMSTATUS } from '@/utils/constant';
 import { clientSupabase } from '@/utils/supabase/client';
 
@@ -40,12 +47,12 @@ export const fetchMyPastAndNowRoom = async (userId: string | undefined) => {
   return myPastAndNowRoom;
 };
 
-export const fetchRoomInfoWithRoomId = async (roomId: string): Promise<MeetingRoomType> => {
-  const { data: room, error, status } = await clientSupabase.from('room').select(`*`).eq('room_id', roomId);
+export const fetchRoomInfoWithRoomId = async (roomId: string): Promise<MeetingRoomType[]> => {
+  const { data: room, error } = await clientSupabase.from('room').select(`*`).eq('room_id', roomId);
   if (error) {
     throw new Error('방이 존재하지 않습니다.');
   }
-  return room[0];
+  return room;
 };
 
 export const fetchAlreadyChatRoom = async (roomId: string): Promise<ChattingRoomType[]> => {
@@ -80,8 +87,9 @@ export const updateRoomStatusClose = async (roomId: string) => {
     .update({ room_status: ROOMSTATUS.CLOSED })
     .eq('room_id', roomId)
     .select();
-  if (error) console.error('방 닫힘 오류', error.message);
-  else return data;
+  if (error) {
+    throw new Error('Error updating the room status on close');
+  } else return data;
 };
 
 export const updateRoomStatusOpen = async (roomId: string) => {
@@ -90,7 +98,9 @@ export const updateRoomStatusOpen = async (roomId: string) => {
     .update({ room_status: ROOMSTATUS.RECRUITING })
     .eq('room_id', roomId)
     .select();
-  if (error) console.error('방 열림 오류', error.message);
+  if (error) {
+    throw new Error('Error updating the room status on open');
+  }
   return data;
 };
 
@@ -99,12 +109,20 @@ export const updateRoom = async (editedMeetingRoom: UpdateRoomType) => {
     .from('room')
     .update(editedMeetingRoom)
     .eq('room_id', editedMeetingRoom.room_id);
-  if (error) console.error('방 수정 오류', error.message);
+  if (error) {
+    throw new Error('Error updating the room information');
+  }
   return data;
 };
 
 export const deleteRoom = async (room_id: string) => {
-  const { data: deleteRoomData } = await clientSupabase.from('room').delete().eq('room_id', room_id);
+  const { data: deleteRoomData, error: deleteRoomDataError } = await clientSupabase
+    .from('room')
+    .delete()
+    .eq('room_id', room_id);
+  if (deleteRoomDataError) {
+    throw new Error('Error eliminating the room');
+  }
   return deleteRoomData;
 };
 
@@ -139,15 +157,18 @@ export const addMember = async ({ userId, roomId }: { userId: string; roomId: st
 };
 
 export const deleteMember = async ({ userId, roomId }: { userId: string; roomId: string }) => {
-  await clientSupabase
+  const { error: deleteMemberError } = await clientSupabase
     .from('participants')
     .update({ isDeleted: true })
     .eq('user_id', userId)
     .eq('room_id', roomId)
     .select();
+  if (deleteMemberError) {
+    throw new Error('Error eliminating a member in the room data');
+  }
 };
 
-export const fetchRoomParticipants = async (roomId: string) => {
+export const fetchRoomParticipants = async (roomId: string): Promise<ParticipantsWithId[]> => {
   const { data: userInformations, error: userInformatinsError } = await clientSupabase
     .from('participants')
     .select(`*`)
@@ -156,5 +177,5 @@ export const fetchRoomParticipants = async (roomId: string) => {
     .select('user_id, users(*)');
   if (userInformatinsError) {
     throw new Error('Error fetching room participants data');
-  } else return userInformations.map((user) => user.users);
+  } else return userInformations;
 };

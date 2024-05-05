@@ -1,11 +1,11 @@
 'use client';
 import DeleteMeetingRoom from '@/components/room/DeleteMeetingRoom';
 import EditMeetingRoom from '@/components/room/EditMeetingRoom';
-import useGenderMaxNumber from '@/hooks/custom/useGenderMaxNumber';
 import { useMyMsgData } from '@/hooks/useQueries/useChattingQuery';
 import { useAlreadyChatRoomQuery, useRoomParticipantsQuery } from '@/hooks/useQueries/useMeetingQuery';
 import { useGetUserDataQuery } from '@/hooks/useQueries/useUserQuery';
 import { GENDERFILTER } from '@/utils/constant';
+import { genderMemberNumber } from '@/utils/utilFns';
 import { useEffect, useRef, useState } from 'react';
 import { BsFire } from 'react-icons/bs';
 import { HiOutlineDotsVertical } from 'react-icons/hi';
@@ -22,7 +22,7 @@ function RoomInformation({ room }: { room: MeetingRoomType }) {
   const participants = useRoomParticipantsQuery(roomId);
   const { data: user } = useGetUserDataQuery();
 
-  const genderMaxNumber = useGenderMaxNumber(member_number);
+  const genderMaxNumber = genderMemberNumber(member_number);
   const emptySeatNumber = genderMaxNumber! * 2 - participants.length;
   const femaleNumber = participants.filter((member) => member?.gender === GENDERFILTER.FEMALE).length;
   const maleNumber = participants.length - femaleNumber;

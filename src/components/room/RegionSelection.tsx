@@ -38,7 +38,7 @@ function RegionSelection({ text }: { text: string }) {
 
   return (
     <>
-      <article className="relative bg-white" ref={dropdownRef}>
+      <article className="relative z-10 bg-white" ref={dropdownRef}>
         <button
           className="bg-white w-[120px] h-[43px] rounded-lg border-[#E5E7EB] border text-[16px]"
           type="button"

@@ -1,13 +1,10 @@
 'use client';
 import { customErrToast } from '@/components/common/customToast';
-import useGenderMaxNumber from '@/hooks/custom/useGenderMaxNumber';
 import { useAddRoomMemberMutation, useUpdateRoomStatusCloseMutation } from '@/hooks/useMutation/useMeetingMutation';
 import { useAlreadyChatRoomQuery, useRoomParticipantsQuery } from '@/hooks/useQueries/useMeetingQuery';
 import { useGetUserDataQuery } from '@/hooks/useQueries/useUserQuery';
 import { ROOMSTATUS } from '@/utils/constant';
-import MeetGoLogoPurple from '@/utils/icons/meetgo-logo-purple.png';
-import { debounce } from '@/utils/utilFns';
-import Image from 'next/image';
+import { debounce, genderMemberNumber } from '@/utils/utilFns';
 import { useRouter } from 'next/navigation';
 import RoomInformation from './RoomInformation';
 
@@ -23,7 +20,7 @@ function MeetingRoom({ room }: { room: MeetingRoomType }) {
   const alreadyChatRoom = useAlreadyChatRoomQuery(roomId);
   const { mutate: roomMemberMutation } = useAddRoomMemberMutation({ roomId, userId });
   const { mutate: updateRoomStatusCloseMutation } = useUpdateRoomStatusCloseMutation({ roomId, userId });
-  const genderMaxNumber = useGenderMaxNumber(member_number);
+  const genderMaxNumber = genderMemberNumber(member_number);
 
   const addMember = async ({ room_id }: { room_id: string }) => {
     if (!user?.gender && user?.gender === null) {

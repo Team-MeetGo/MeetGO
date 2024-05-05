@@ -14,7 +14,7 @@ import {
   ROOMLIST,
   ROOM_MEMBER
 } from '@/query/meetingRoom/meetingQueryKeys';
-import { ChattingRoomType, MeetingRoomType } from '@/types/roomTypes';
+import { ChattingRoomType, MeetingRoomType, ParticipantsWithId, UserType } from '@/types/roomTypes';
 import { useQuery, useSuspenseQuery } from '@tanstack/react-query';
 
 //현재 모집중인 방
@@ -46,8 +46,8 @@ export const useMyPastAndNowRoomQuery = (user_id: string) => {
 export const useRoomInfoWithRoomIdQuery = (roomId: string): MeetingRoomType | undefined => {
   const { data: roomInfoWithId } = useQuery({
     queryKey: [ROOMDATA, roomId],
-    queryFn: () => fetchRoomInfoWithRoomId(roomId)
-    // staleTime: 0
+    queryFn: () => fetchRoomInfoWithRoomId(roomId),
+    select: (value: MeetingRoomType[]) => value[0]
   });
   return roomInfoWithId;
 };
@@ -62,10 +62,11 @@ export const useAlreadyChatRoomQuery = (roomId: string): ChattingRoomType[] | un
 };
 
 //참가한 사람들의 유저정보
-export const useRoomParticipantsQuery = (roomId: string) => {
-  const { data: users } = useSuspenseQuery({
+export const useRoomParticipantsQuery = (roomId: string): UserType[] => {
+  const { data } = useSuspenseQuery({
     queryKey: [ROOM_MEMBER, roomId],
-    queryFn: () => fetchRoomParticipants(roomId)
+    queryFn: () => fetchRoomParticipants(roomId),
+    select: (value: ParticipantsWithId[]) => value.map((participant) => participant.users) as UserType[]
   });
-  return users;
+  return data;
 };

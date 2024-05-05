@@ -1,11 +1,11 @@
 'use client';
 
 import GotoChatButton from '@/components/room/participants/GotoChatButton';
-import useGenderMaxNumber from '@/hooks/custom/useGenderMaxNumber';
 import { useRoomInfoWithRoomIdQuery, useRoomParticipantsQuery } from '@/hooks/useQueries/useMeetingQuery';
 import { GENDERFILTER } from '@/utils/constant';
 import { RoomFemaleAvatar, RoomMaleAvatar } from '@/utils/icons/RoomAvatar';
 import { clientSupabase } from '@/utils/supabase/client';
+import { genderMemberNumber } from '@/utils/utilFns';
 import Image from 'next/image';
 import { useEffect, useState } from 'react';
 import { FaCrown } from 'react-icons/fa6';
@@ -20,10 +20,10 @@ const Member = ({ roomId }: { roomId: UUID }) => {
   const roomInformation = useRoomInfoWithRoomIdQuery(roomId);
   const participants = useRoomParticipantsQuery(roomId);
 
-  const [members, setMembers] = useState<UserType[]>(participants as UserType[]);
+  const [members, setMembers] = useState<UserType[]>(participants);
   const [leader, setLeader] = useState(roomInformation?.leader_id as string);
 
-  const genderMaxNumber = useGenderMaxNumber(roomInformation?.member_number as string);
+  const genderMaxNumber = genderMemberNumber(roomInformation?.member_number as string);
   const femaleMembers = members.filter((member) => member.gender === GENDERFILTER.FEMALE);
   const maleMembers = members.filter((member) => member.gender === GENDERFILTER.MALE);
   const hollowFemaleArray = Array.from({ length: (genderMaxNumber as number) - femaleMembers.length }, (_, i) => i);
@@ -111,7 +111,7 @@ const Member = ({ roomId }: { roomId: UUID }) => {
                     <figure className="lg:w-[86px] w-[5rem] lg:h-[86px] h-[5rem] lg:mt-[32px] mt-[0.8rem] rounded-full relative">
                       {leader === member.user_id ? (
                         <div>
-                          <FaCrown className="absolute h-[20px] w-[20px] m-[2px] fill-mainColor z-10 top-[-18px] left-[29px]" />
+                          <FaCrown className="absolute h-[20px] w-[20px] m-[2px] fill-mainColor z-5 top-[-18px] left-[29px]" />
                         </div>
                       ) : (
                         ''
@@ -175,7 +175,7 @@ const Member = ({ roomId }: { roomId: UUID }) => {
                     <figure className="lg:w-[86px] w-[5rem] lg:h-[86px] h-[5rem] lg:mt-[32px] mt-[0.8rem] rounded-full relative">
                       {leader === member.user_id ? (
                         <div>
-                          <FaCrown className="absolute h-[20px] w-[20px] m-[2px] fill-mainColor z-10 top-[-20px] left-[30px]" />
+                          <FaCrown className="absolute h-[20px] w-[20px] m-[2px] fill-mainColor z-5 top-[-20px] left-[30px]" />
                         </div>
                       ) : (
                         ''

@@ -5,10 +5,11 @@ export type ParticipantType = Tables<'participants'>;
 export type MeetingRoomType = Tables<'room'>;
 export type MeetingRoomTypes = MeetingRoomType[] | null | undefined;
 export type ChattingRoomType = Tables<'chatting_room'>;
+export type UserTypeNull = Tables<'users'> | null;
 
 export type ParticipantsWithId = {
   user_id: string;
-  users: UserType[];
+  users: UserType | null;
 };
 
 export type UpdateRoomType = {

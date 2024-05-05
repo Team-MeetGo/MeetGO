@@ -137,7 +137,7 @@ function MeetingRoomForm() {
                   </div>
                   <div className="flex w-full max-w-xs flex-col gap-2">
                     <label>방의 컨셉을 골라주세요!</label>
-                    <div className="flex whitespace-nowrap z-[5]">
+                    <div className="flex whitespace-nowrap z-[3]">
                       <Select
                         label="방의 컨셉"
                         selectionMode="single"
