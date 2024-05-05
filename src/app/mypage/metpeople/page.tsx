@@ -3,11 +3,7 @@ import MypageLayout from '@/components/mypage/MypageLayout';
 import React from 'react';
 
 const page = () => {
-  return (
-    <MypageLayout>
-      <MetPeople />
-    </MypageLayout>
-  );
+  return <MetPeople />;
 };
 
 export default page;

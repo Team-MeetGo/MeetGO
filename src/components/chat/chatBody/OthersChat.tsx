@@ -8,15 +8,14 @@ import ParticipantsInfoWrapper from './ParticipantsInfoWrapper';
 const OthersChat = ({ msg, idx, lastDivRefs }: { msg: Message; idx: number; lastDivRefs: any }) => {
   const { chatRoomId } = chatStore((state) => state);
   const messages = useMsgsQuery(chatRoomId as string);
-  const room = useRoomDataQuery(chatRoomId as string);
-  const leaderId = room?.leader_id;
-  const participants = useParticipantsQuery(room?.room_id as string);
+  const {
+    room: { room_id, leader_id }
+  } = useRoomDataQuery(chatRoomId as string);
+  const participants = useParticipantsQuery(room_id);
 
-  const showThatUser = (userId: string | null) => {
-    if (userId) {
-      const thatUserData = participants?.find((p) => p.user_id === userId);
-      return thatUserData;
-    }
+  const showThatUser = (userId: string) => {
+    const thatUserData = participants.find((p) => p.user_id === userId);
+    return thatUserData;
   };
 
   return (
@@ -26,19 +25,19 @@ const OthersChat = ({ msg, idx, lastDivRefs }: { msg: Message; idx: number; last
           !isNextDay(idx, messages) ? (
             <div className="w-16"></div>
           ) : (
-            <ParticipantsInfoWrapper showThatUser={showThatUser} msg={msg} leaderId={leaderId} />
+            <ParticipantsInfoWrapper showThatUser={showThatUser} msg={msg} leaderId={leader_id} />
           )
         ) : (
-          <ParticipantsInfoWrapper showThatUser={showThatUser} msg={msg} leaderId={leaderId} />
+          <ParticipantsInfoWrapper showThatUser={showThatUser} msg={msg} leaderId={leader_id} />
         )}
 
         <div className="flex flex-col gap-1">
           {messages && isItMe(idx, messages) ? (
             !isNextDay(idx, messages) ? null : (
-              <h2 className="font-bold">{showThatUser(msg.send_from)?.nickname}</h2>
+              <h2 className="font-bold">{showThatUser(msg.send_from)?.users.nickname}</h2>
             )
           ) : (
-            <h2 className="font-bold">{showThatUser(msg.send_from)?.nickname}</h2>
+            <h2 className="font-bold">{showThatUser(msg.send_from)?.users.nickname}</h2>
           )}
 
           <div className="flex flex-col gap-2">

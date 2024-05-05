@@ -136,7 +136,6 @@ function MeetingRoomList() {
         )} */}
       </MyRoomsTitle>
       <div className="bg-[#E5E7EB] w-full max-w-[1280px] h-[1px] mt-[48px]"></div>
-      {/* lg:gap-[24px] lg:grid lg:grid-cols-3 lg:w-[1280px] pt-[24px] pb-[8px] max-sm:flex max-sm:flex-col gap-[1rem] p-6 */}
       <OtherRoomsTitle>
         <section className="flex max-w-[1280px] py-6 flex-wrap gap-4 w-full">
           <Suspense>

@@ -4,9 +4,7 @@ import ProfileSetting from '@/components/mypage/ProfileSetting';
 const MyPage = () => {
   return (
     <>
-      <MypageLayout>
-        <ProfileSetting />
-      </MypageLayout>
+      <ProfileSetting />
     </>
   );
 };
