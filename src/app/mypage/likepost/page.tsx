@@ -3,11 +3,7 @@ import MypageLayout from '@/components/mypage/MypageLayout';
 import React from 'react';
 
 const page = () => {
-  return (
-    <MypageLayout>
-      <LikePost />
-    </MypageLayout>
-  );
+  return <LikePost />;
 };
 
 export default page;
