@@ -20,8 +20,7 @@ const ChatList = ({ user, chatRoomId }: { user: User | null; chatRoomId: string 
   const scrollRef = useRef() as React.MutableRefObject<HTMLDivElement>;
   const { hasMore } = chatStore((state) => state);
   const messages = useMsgsQuery(chatRoomId);
-  const room = useRoomDataQuery(chatRoomId);
-  const roomId = room && room?.room_id;
+  const { room_id } = useRoomDataQuery(chatRoomId);
   const lastMsgId = useMyLastMsgs(String(user?.id), chatRoomId);
   const queryClient = useQueryClient();
   const [isScrolling, setIsScrolling] = useState(false);
@@ -35,7 +34,7 @@ const ChatList = ({ user, chatRoomId }: { user: User | null; chatRoomId: string 
 
   // "messages" table Realtime INSERT, DELETE 구독로직
   useEffect(() => {
-    if (roomId && chatRoomId) {
+    if (room_id && chatRoomId) {
       const channel = clientSupabase
         .channel(chatRoomId)
         .on(
@@ -50,7 +49,8 @@ const ChatList = ({ user, chatRoomId }: { user: User | null; chatRoomId: string 
             if (payload) {
               await queryClient.invalidateQueries({ queryKey: [MSGS_QUERY_KEY, chatRoomId] });
               const includingNew: Message[] | undefined = queryClient.getQueryData([MSGS_QUERY_KEY, chatRoomId]);
-              const lastIdx = messages && includingNew?.map((i) => i.message_id).indexOf(messages[0].message_id);
+              const lastIdx =
+                messages?.length && includingNew?.map((i) => i.message_id).indexOf(messages[0].message_id);
               messages &&
                 includingNew &&
                 (await queryClient.setQueryData(
@@ -82,7 +82,7 @@ const ChatList = ({ user, chatRoomId }: { user: User | null; chatRoomId: string 
         clientSupabase.removeChannel(channel);
       };
     }
-  }, [messages, isScrolling, roomId, chatRoomId]);
+  }, [messages, isScrolling, room_id, chatRoomId]);
 
   // 여기까지 읽으셨습니다(처음 마운트 시에만 실행)
   useEffect(() => {

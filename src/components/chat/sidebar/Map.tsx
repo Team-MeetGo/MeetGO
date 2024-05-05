@@ -1,7 +1,7 @@
 'use client';
 
 import { useChatDataQuery, useRoomDataQuery } from '@/hooks/useQueries/useChattingQuery';
-import React, { Suspense, useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Card, CardBody, Pagination } from '@nextui-org/react';
 import { HiMiniMagnifyingGlass } from 'react-icons/hi2';
 import DateTimePicker from './DateTimePicker';
@@ -31,8 +31,9 @@ const Map = ({ chatRoomId }: { chatRoomId: string }) => {
   const userId = userData?.user_id;
 
   // useRoomDataQuery로 리더 아이디 가져오기
-  const room = useRoomDataQuery(chatRoomId);
-  const leaderId = room && room?.leader_id;
+  const {
+    room: { leader_id }
+  } = useRoomDataQuery(chatRoomId);
 
   // 채팅방 정보 가져오기
   const chat = useChatDataQuery(chatRoomId);
@@ -262,7 +263,7 @@ const Map = ({ chatRoomId }: { chatRoomId: string }) => {
             <div
               className="py-4 px-9 cursor-pointer items-center"
               onClick={() => {
-                if (userId === leaderId) {
+                if (userId === leader_id) {
                   handleSelectLocation(bar.place_name);
                 }
               }}

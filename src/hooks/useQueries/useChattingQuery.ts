@@ -16,30 +16,44 @@ import {
   PARTICIPANTS_QUERY_KEY,
   ROOMDATA_QUERY_KEY
 } from '@/query/chat/chatQueryKeys';
+import { RoomData } from '@/types/chatTypes';
+import { ChattingRoomType } from '@/types/roomTypes';
+import { UsersType } from '@/types/userTypes';
 import { useQuery, useSuspenseQuery } from '@tanstack/react-query';
 
 export const useRoomDataQuery = (chatRoomId: string) => {
-  const { data: room } = useSuspenseQuery({
+  const { data } = useSuspenseQuery({
     queryKey: [ROOMDATA_QUERY_KEY, chatRoomId],
-    queryFn: () => fetchRoomDataWithChatRoomId(chatRoomId)
+    queryFn: () => fetchRoomDataWithChatRoomId(chatRoomId),
+    select: (
+      data:
+        | {
+            room_id: string | null;
+            room: RoomData | null;
+          }
+        | undefined
+    ) => data as { room_id: string; room: RoomData }
   });
-  if (room) return room;
+  return data;
 };
 
 export const useParticipantsQuery = (roomId: string) => {
-  const { data: users } = useSuspenseQuery({
+  const { data: participants } = useSuspenseQuery({
     queryKey: [PARTICIPANTS_QUERY_KEY, roomId],
-    queryFn: () => fetchParticipants(roomId)
+    queryFn: () => fetchParticipants(roomId),
+    select: (data: { user_id: string; users: UsersType | null }[] | undefined) =>
+      data as { user_id: string; users: UsersType }[]
   });
-  return users;
+  return participants;
 };
 
 export const useChatDataQuery = (chatRoomId: string) => {
   const { data: chat } = useSuspenseQuery({
-    queryKey: [CHATDATA_QUERY_KEY],
-    queryFn: () => fetchChatData(chatRoomId)
+    queryKey: [CHATDATA_QUERY_KEY, chatRoomId],
+    queryFn: () => fetchChatData(chatRoomId),
+    select: (data) => data as ChattingRoomType
   });
-  return chat[0];
+  return chat;
 };
 
 export const useMyChatRoomIdsQuery = (userId: string) => {

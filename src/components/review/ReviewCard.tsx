@@ -28,7 +28,7 @@ const ReviewCard = ({ review }: { review: ReviewType }) => {
   };
 
   return (
-    <div key={review.review_id} className="flex flex-col w-full justify-center item-center border rounded-xl p-[16px]">
+    <li key={review.review_id} className="flex flex-col w-full justify-center item-center border rounded-xl p-[16px]">
       <Link href={`/review/${review.review_id}`} className="flex flex-col w-full h-full items-start gap-4">
         <div className="flex w-full flex-col items-start h-40">
           <Image
@@ -54,7 +54,7 @@ const ReviewCard = ({ review }: { review: ReviewType }) => {
           <ReviewComment review_id={review.review_id} />
         </div>
       </div>
-    </div>
+    </li>
   );
 };
 

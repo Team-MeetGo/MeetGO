@@ -21,8 +21,8 @@ export const showingDate = (date: string) => {
 };
 
 export const getFromTo = (loadCount: number, idx: number) => {
-  let from = loadCount * (idx + 1);
-  let to = from + idx;
+  const from = loadCount * (idx + 1);
+  const to = from + idx;
 
   return { from, to };
 };
