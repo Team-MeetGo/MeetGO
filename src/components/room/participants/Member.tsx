@@ -20,7 +20,7 @@ const Member = ({ roomId }: { roomId: UUID }) => {
   const roomInformation = useRoomInfoWithRoomIdQuery(roomId);
   const participants = useRoomParticipantsQuery(roomId);
 
-  const [members, setMembers] = useState<UserType[]>(participants as UserType[]);
+  const [members, setMembers] = useState<UserType[]>(participants);
   const [leader, setLeader] = useState(roomInformation?.leader_id as string);
 
   const genderMaxNumber = genderMemberNumber(roomInformation?.member_number as string);

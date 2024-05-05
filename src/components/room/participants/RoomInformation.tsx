@@ -28,13 +28,13 @@ function RoomInformation({ roomId }: { roomId: UUID }) {
   const participants = useRoomParticipantsQuery(roomId);
 
   const genderMaxNumber = genderMemberNumber(roomInformation?.member_number as string);
-  const otherParticipants = participants?.filter(
+  const otherParticipants = participants.filter(
     (person: UserType | null) => person?.user_id !== roomInformation?.leader_id
   );
   const { mutate: updateLeaderMemeberMutation } = useUpdateLeaderMemberMutation({ otherParticipants, roomId });
 
-  const countFemale = participants!.filter((member: any) => member?.gender === GENDERFILTER.FEMALE).length;
-  const countMale = participants!.length - countFemale;
+  const countFemale = participants.filter((member: any) => member?.gender === GENDERFILTER.FEMALE).length;
+  const countMale = participants.length - countFemale;
 
   //나가기: 로비로
   const gotoLobby = () => {
