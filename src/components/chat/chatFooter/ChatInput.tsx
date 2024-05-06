@@ -8,6 +8,9 @@ import Image from 'next/image';
 import { MdCancel } from 'react-icons/md';
 import { useAddNewMsg } from '@/hooks/useMutation/useChattingMutation';
 
+// 낙관적 업데이트
+// useTransition
+
 const ChatInput = () => {
   const { data: user } = useGetUserDataQuery();
   const { chatRoomId, imgs, setImgs } = chatStore((state) => state);
