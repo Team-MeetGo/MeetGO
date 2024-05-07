@@ -48,7 +48,7 @@ const GotoChatButton = ({ roomId, members }: { roomId: UUID; members: UserType[]
     }
   };
 
-  const handleGoChatDebounce = useCallback(debounce(gotoChattingRoom, 1000), []);
+  const handleGoChatDebounce = useCallback(debounce(gotoChattingRoom, 500), []);
 
   return (
     <main className="max-w-[1080px] w-full">
