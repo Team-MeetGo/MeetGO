@@ -3,7 +3,7 @@
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 import Slider from 'react-slick';
-import { useMyroomQuery } from '@/hooks/useQueries/useMeetingQuery';
+import { useRoomConditionDataQuery } from '@/hooks/useQueries/useMeetingQuery';
 import { useGetUserDataQuery } from '@/hooks/useQueries/useUserQuery';
 import MeetingRoom from '../singleMeetingRoom/MeetingRoom';
 
@@ -48,8 +48,8 @@ export const LtBannerArrow = (props: any) => {
 
 const ParticipatingRooms = () => {
   const { data: user } = useGetUserDataQuery();
-  const myRoomList = useMyroomQuery(user?.user_id);
-  const filteredMyRoomList = myRoomList?.map((room) => room.room);
+  const { myRoomData } = useRoomConditionDataQuery(String(user?.user_id));
+  const filteredMyRoomList = myRoomData?.map((room) => room.room);
 
   const settings = {
     dots: false,

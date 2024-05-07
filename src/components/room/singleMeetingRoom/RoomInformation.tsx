@@ -2,7 +2,7 @@
 import DeleteMeetingRoom from '@/components/room/DeleteMeetingRoom';
 import EditMeetingRoom from '@/components/room/EditMeetingRoom';
 import { useMyMsgData } from '@/hooks/useQueries/useChattingQuery';
-import { useAlreadyChatRoomQuery, useRoomParticipantsQuery } from '@/hooks/useQueries/useMeetingQuery';
+import { useAlreadyChatRoomQuery, useRoomInformationQuery } from '@/hooks/useQueries/useMeetingQuery';
 import { useGetUserDataQuery } from '@/hooks/useQueries/useUserQuery';
 import { GENDERFILTER } from '@/utils/constant';
 import { genderMemberNumber } from '@/utils/utilFns';
@@ -19,7 +19,7 @@ function RoomInformation({ room }: { room: MeetingRoomType }) {
 
   const roomId = room_id;
   const alreadyChatRoom = useAlreadyChatRoomQuery(room_id);
-  const participants = useRoomParticipantsQuery(roomId);
+  const { roomMemberWithId: participants } = useRoomInformationQuery(roomId);
   const { data: user } = useGetUserDataQuery();
 
   const genderMaxNumber = genderMemberNumber(member_number);
@@ -37,7 +37,7 @@ function RoomInformation({ room }: { room: MeetingRoomType }) {
     };
     document.addEventListener('mousedown', outSideClick);
     return;
-  });
+  }, [open]);
   return (
     <div className="flex flex-row">
       <div className="flex flex-row justify-between w-full items-center">

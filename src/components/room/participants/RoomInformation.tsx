@@ -5,7 +5,7 @@ import {
   useUpdateLeaderMemberMutation,
   useUpdateRoomStatusOpen
 } from '@/hooks/useMutation/useMeetingMutation';
-import { useRoomInfoWithRoomIdQuery, useRoomParticipantsQuery } from '@/hooks/useQueries/useMeetingQuery';
+import { useRoomInformationQuery } from '@/hooks/useQueries/useMeetingQuery';
 import { useGetUserDataQuery } from '@/hooks/useQueries/useUserQuery';
 import { useModalStore } from '@/store/modalStore';
 import { GENDERFILTER, ROUTERADDRESS } from '@/utils/constant';
@@ -24,11 +24,10 @@ function RoomInformation({ roomId }: { roomId: UUID }) {
   const { mutate: deleteMemberMutation } = useDeleteMember({ userId, roomId });
   const { mutate: updateRoomStatusOpenMutation } = useUpdateRoomStatusOpen({ roomId, userId });
   const { mutate: deleteRoomMutation } = useDeleteRoom({ roomId, userId });
-  const roomInformation = useRoomInfoWithRoomIdQuery(roomId);
-  const participants = useRoomParticipantsQuery(roomId);
+  const { roomMemberWithId: participants, roomInfoWithId: roomInformation } = useRoomInformationQuery(roomId);
 
   const genderMaxNumber = genderMemberNumber(roomInformation?.member_number as string);
-  const otherParticipants = participants.filter(
+  const otherParticipants = participants?.filter(
     (person: UserType | null) => person?.user_id !== roomInformation?.leader_id
   );
   const { mutate: updateLeaderMemeberMutation } = useUpdateLeaderMemberMutation({ otherParticipants, roomId });

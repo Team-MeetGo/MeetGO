@@ -1,7 +1,6 @@
 'use client';
-
 import { customErrToast } from '@/components/common/customToast';
-import { useRoomInfoWithRoomIdQuery } from '@/hooks/useQueries/useMeetingQuery';
+import { useRoomInformationQuery } from '@/hooks/useQueries/useMeetingQuery';
 import { useGetUserDataQuery } from '@/hooks/useQueries/useUserQuery';
 import { clientSupabase } from '@/utils/supabase/client';
 import { debounce, genderMemberNumber } from '@/utils/utilFns';
@@ -15,9 +14,9 @@ const GotoChatButton = ({ roomId, members }: { roomId: UUID; members: UserType[]
   const router = useRouter();
 
   const { data: user } = useGetUserDataQuery();
-  const roomInformation = useRoomInfoWithRoomIdQuery(roomId);
+  const { roomInfoWithId: roomInformation } = useRoomInformationQuery(roomId);
 
-  const genderParticipants = genderMemberNumber(roomInformation?.member_number as string);
+  const genderParticipants = genderMemberNumber(roomInformation.member_number);
   const maxMember = genderParticipants! * 2;
 
   //원하는 인원이 모두 들어오면 위에서 창이 내려온다.
@@ -49,7 +48,6 @@ const GotoChatButton = ({ roomId, members }: { roomId: UUID; members: UserType[]
   };
 
   const handleGoChatDebounce = useCallback(debounce(gotoChattingRoom, 1000), []);
-
   return (
     <main className="max-w-[1080px] w-full">
       {

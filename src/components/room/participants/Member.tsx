@@ -1,7 +1,7 @@
 'use client';
 
 import GotoChatButton from '@/components/room/participants/GotoChatButton';
-import { useRoomInfoWithRoomIdQuery, useRoomParticipantsQuery } from '@/hooks/useQueries/useMeetingQuery';
+import { useRoomInformationQuery } from '@/hooks/useQueries/useMeetingQuery';
 import { GENDERFILTER } from '@/utils/constant';
 import { RoomFemaleAvatar, RoomMaleAvatar } from '@/utils/icons/RoomAvatar';
 import { clientSupabase } from '@/utils/supabase/client';
@@ -17,8 +17,7 @@ import type { UserType } from '@/types/roomTypes';
 import type { UUID } from 'crypto';
 
 const Member = ({ roomId }: { roomId: UUID }) => {
-  const roomInformation = useRoomInfoWithRoomIdQuery(roomId);
-  const participants = useRoomParticipantsQuery(roomId);
+  const { roomMemberWithId: participants, roomInfoWithId: roomInformation } = useRoomInformationQuery(roomId);
 
   const [members, setMembers] = useState<UserType[]>(participants);
   const [leader, setLeader] = useState(roomInformation?.leader_id as string);

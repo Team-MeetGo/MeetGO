@@ -2,7 +2,7 @@
 import MyRoomsTitle from '@/components/room/lobby/MyRoomTitle';
 import OtherRoomsTitle from '@/components/room/lobby/OtherRoomsTitle';
 import MeetingRoom from '@/components/room/singleMeetingRoom/MeetingRoom';
-import { useMyPastAndNowRoomQuery, useMyroomQuery, useRecruitingQuery } from '@/hooks/useQueries/useMeetingQuery';
+import { useMyPastAndNowRoomQuery, useRoomConditionDataQuery } from '@/hooks/useQueries/useMeetingQuery';
 import { useGetUserDataQuery } from '@/hooks/useQueries/useUserQuery';
 import { useSearchRoomStore } from '@/store/searchRoomStore';
 import { REGIONANDMEMBER } from '@/utils/constant';
@@ -17,16 +17,15 @@ function MeetingRoomList() {
   const [filteredOtherRooms, setFilteredOtherRooms] = useState<MeetingRoomType[]>([]);
 
   const { data: user } = useGetUserDataQuery();
-  const { data: meetingRoomList } = useRecruitingQuery(String(user?.user_id));
-  const myRoomList = useMyroomQuery(user?.user_id);
-  const myOutList = useMyPastAndNowRoomQuery(user?.user_id as string);
+  const { recrutingData } = useRoomConditionDataQuery(String(user?.user_id));
+  const myOutList = useMyPastAndNowRoomQuery(String(user?.user_id));
 
   // const filteredMyRoomList = myRoomList?.map((room) => room.room);
   const filteredMyOutRoomList = myOutList?.map((room) => room.room);
   const { selectRegion, selectMemberNumber } = useSearchRoomStore();
 
   // meetingRoomList 중에서 내가 참여한 적도, 참여하지도 않은 방들을 뽑아내기
-  const otherRooms = meetingRoomList?.filter(function (room: MeetingRoomType) {
+  const otherRooms = recrutingData.filter(function (room: MeetingRoomType) {
     const foundItem = filteredMyOutRoomList?.find((r) => r?.room_id === room.room_id);
     if (foundItem) {
       return false;
@@ -70,7 +69,7 @@ function MeetingRoomList() {
 
   useEffect(() => {
     filteredOtherRoomsHandler();
-  }, [myRoomList, selectRegion, selectMemberNumber]);
+  }, [selectRegion, selectMemberNumber]);
 
   // const nextPage = () => {
   //   if (filteredMyRoomList && filteredMyRoomList.length / 3 <= page) {
