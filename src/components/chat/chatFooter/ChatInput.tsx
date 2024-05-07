@@ -84,7 +84,11 @@ const ChatInput = () => {
               <div className="h-[180px] w-full p-[8px] flex overflow-x-auto gap-[8px] relative ">
                 {imgs.map((img) => (
                   <div key={img.name} className="relative w-[150px]">
-                    <button className="absolute top-0 right-0 z-10 text-xl" onClick={() => cancelImgFile(img.name)}>
+                    <button
+                      id="img"
+                      className="absolute top-0 right-0 z-10 text-xl"
+                      onClick={() => cancelImgFile(img.name)}
+                    >
                       <MdCancel />
                     </button>
                     <Image
