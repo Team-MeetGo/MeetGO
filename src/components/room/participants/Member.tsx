@@ -1,7 +1,7 @@
 'use client';
 
 import GotoChatButton from '@/components/room/participants/GotoChatButton';
-import { useRoomInfoWithRoomIdQuery, useRoomParticipantsQuery } from '@/hooks/useQueries/useMeetingQuery';
+import { useRoomInformationQuery } from '@/hooks/useQueries/useMeetingQuery';
 import { GENDERFILTER } from '@/utils/constant';
 import { RoomFemaleAvatar, RoomMaleAvatar } from '@/utils/icons/RoomAvatar';
 import { clientSupabase } from '@/utils/supabase/client';
@@ -17,11 +17,10 @@ import type { UserType } from '@/types/roomTypes';
 import type { UUID } from 'crypto';
 
 const Member = ({ roomId }: { roomId: UUID }) => {
-  const roomInformation = useRoomInfoWithRoomIdQuery(roomId);
-  const participants = useRoomParticipantsQuery(roomId);
+  const { roomMemberWithId: participants, roomInfoWithId: roomInformation } = useRoomInformationQuery(roomId);
 
   const [members, setMembers] = useState<UserType[]>(participants);
-  const [leader, setLeader] = useState(roomInformation?.leader_id as string);
+  const [leader, setLeader] = useState(roomInformation.leader_id as string);
 
   const genderMaxNumber = genderMemberNumber(roomInformation?.member_number as string);
   const femaleMembers = members.filter((member) => member.gender === GENDERFILTER.FEMALE);
@@ -90,7 +89,7 @@ const Member = ({ roomId }: { roomId: UUID }) => {
       clientSupabase.removeChannel(channle);
     };
   }, [members, participants, roomInformation?.leader_id]);
-
+  // console.log(participants);
   return (
     <div className="w-100 h-100 flex flex-row justify-evenly">
       <div className="flex flex-col items-center justify-content">
@@ -123,7 +122,7 @@ const Member = ({ roomId }: { roomId: UUID }) => {
                           alt="유저 아바타"
                           height={86}
                           width={86}
-                          sizes="100px"
+                          sizes="86px"
                         />
                       ) : (
                         <figure className="lg:w-[86px] w-[5rem] lg:h-[86px] h-[5rem] rounded-full object-center bg-cover object-fill">
@@ -187,7 +186,7 @@ const Member = ({ roomId }: { roomId: UUID }) => {
                           alt="유저 아바타"
                           height={80}
                           width={80}
-                          sizes="100px"
+                          sizes="86px"
                         />
                       ) : (
                         <figure className="lg:w-[86px] w-[5rem] lg:h-[86px] h-[5rem] rounded-full object-center bg-cover object-fill">

@@ -1,7 +1,7 @@
 import Image from 'next/image';
 import MeetGoLogoPurple from '@/utils/icons/meetgo-logo-purple.png';
 
-function HollowFemaleMemberCard({ array }: { array: number[] }) {
+const HollowFemaleMemberCard = ({ array }: { array: number[] }) => {
   return (
     <>
       {array.map((h) => (
@@ -15,11 +15,12 @@ function HollowFemaleMemberCard({ array }: { array: number[] }) {
             alt="참여하지 않은 인원"
             height={80}
             width={80}
+            sizes="86px"
           />
         </article>
       ))}
     </>
   );
-}
+};
 
 export default HollowFemaleMemberCard;

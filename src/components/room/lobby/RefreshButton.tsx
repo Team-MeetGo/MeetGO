@@ -4,7 +4,7 @@ import { MY_PAST_NOW_ROOM, RECRUTING_ROOMDATA, ROOMLIST } from '@/query/meetingR
 import { useQueryClient } from '@tanstack/react-query';
 import { IoMdRefresh } from 'react-icons/io';
 
-function RefreshButton() {
+const RefreshButton = () => {
   const queryClient = useQueryClient();
   const { data: user } = useGetUserDataQuery();
 
@@ -24,12 +24,12 @@ function RefreshButton() {
   };
   return (
     <div className="flex flex-col align-middle justify-center text-gray2">
-      <button className="h-full" onClick={onReload}>
+      <button className="h-full" name="refreshButton" onClick={onReload}>
         <IoMdRefresh className="h-[24px] w-[24px] m-2" />
       </button>
       <p className="text-[14px] text-center">New</p>
     </div>
   );
-}
+};
 
 export default RefreshButton;

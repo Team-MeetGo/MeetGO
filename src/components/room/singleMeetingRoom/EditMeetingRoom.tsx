@@ -17,10 +17,10 @@ import {
   useDisclosure
 } from '@nextui-org/react';
 import { useState } from 'react';
-import { customErrToast } from '../common/customToast';
+import { customErrToast } from '../../common/customToast';
 
 import type { MeetingRoomType, UpdateRoomType } from '@/types/roomTypes';
-function EditMeetingRoom({
+const EditMeetingRoom = ({
   room,
   dropdownRef,
   setOpen
@@ -28,7 +28,7 @@ function EditMeetingRoom({
   room: MeetingRoomType;
   dropdownRef: any;
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
-}) {
+}) => {
   const { data: user } = useGetUserDataQuery();
   const userId = user?.user_id;
   const { memberNumber, setMemberNumber, roomRegion, setRoomRegion } = useRoomStore();
@@ -162,6 +162,6 @@ function EditMeetingRoom({
       </Modal>
     </>
   );
-}
+};
 
 export default EditMeetingRoom;

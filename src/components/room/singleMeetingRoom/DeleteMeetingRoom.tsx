@@ -5,13 +5,13 @@ import { useGetUserDataQuery } from '@/hooks/useQueries/useUserQuery';
 import { useModalStore } from '@/store/modalStore';
 import { ValidationModal } from '@/components/common/ValidationModal';
 
-function DeleteMeetingRoom({
+const DeleteMeetingRoom = ({
   room_id,
   setOpen
 }: {
   room_id: string;
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
-}) {
+}) => {
   const { data: user } = useGetUserDataQuery();
   const roomId = room_id;
   const userId = user?.user_id!;
@@ -45,6 +45,6 @@ function DeleteMeetingRoom({
       </button>
     </>
   );
-}
+};
 
 export default DeleteMeetingRoom;
