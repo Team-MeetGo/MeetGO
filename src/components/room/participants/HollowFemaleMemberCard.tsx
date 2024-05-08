@@ -15,6 +15,7 @@ function HollowFemaleMemberCard({ array }: { array: number[] }) {
             alt="참여하지 않은 인원"
             height={80}
             width={80}
+            sizes="86px"
           />
         </article>
       ))}
