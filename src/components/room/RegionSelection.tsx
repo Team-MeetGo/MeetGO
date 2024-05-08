@@ -5,7 +5,7 @@ import { regionList } from '@/utils/data/MeetingRoomSelector';
 import { useEffect, useRef, useState } from 'react';
 import { IoIosArrowDown } from 'react-icons/io';
 
-function RegionSelection({ text }: { text: string }) {
+const RegionSelection = ({ text }: { text: string }) => {
   const [openModal, setOpenModal] = useState(false);
   const [region, setRegion] = useState('전국');
 
@@ -65,6 +65,6 @@ function RegionSelection({ text }: { text: string }) {
       </article>
     </>
   );
-}
+};
 
 export default RegionSelection;

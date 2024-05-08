@@ -1,14 +1,15 @@
 'use client';
 
-import 'slick-carousel/slick/slick.css';
-import 'slick-carousel/slick/slick-theme.css';
-import Slider from 'react-slick';
-import { useMyroomQuery } from '@/hooks/useQueries/useMeetingQuery';
+import { useRoomConditionDataQuery } from '@/hooks/useQueries/useMeetingQuery';
 import { useGetUserDataQuery } from '@/hooks/useQueries/useUserQuery';
+import { Suspense } from 'react';
+import Slider from 'react-slick';
+import 'slick-carousel/slick/slick-theme.css';
+import 'slick-carousel/slick/slick.css';
 import MeetingRoom from '../singleMeetingRoom/MeetingRoom';
 
 export const RtBannerArrow = (props: any) => {
-  const { className, style, onClick } = props;
+  const { className, onClick } = props;
   return (
     <div
       className={className}
@@ -27,7 +28,7 @@ export const RtBannerArrow = (props: any) => {
 };
 
 export const LtBannerArrow = (props: any) => {
-  const { className, style, onClick } = props;
+  const { className, onClick } = props;
 
   return (
     <div
@@ -48,15 +49,15 @@ export const LtBannerArrow = (props: any) => {
 
 const ParticipatingRooms = () => {
   const { data: user } = useGetUserDataQuery();
-  const myRoomList = useMyroomQuery(user?.user_id);
-  const filteredMyRoomList = myRoomList?.map((room) => room.room);
+  const { myRoomData } = useRoomConditionDataQuery(String(user?.user_id));
+  const filteredMyRoomList = myRoomData?.map((room) => room.room);
 
   const settings = {
     dots: false,
     infinite: false,
     speed: 500,
     slidesToShow: filteredMyRoomList && filteredMyRoomList.length <= 3 ? filteredMyRoomList?.length : 3,
-    slidesToScroll: 2,
+    slidesToScroll: 1,
     nextArrow: <RtBannerArrow />,
     prevArrow: <LtBannerArrow />,
     responsive: [
@@ -88,21 +89,17 @@ const ParticipatingRooms = () => {
   };
 
   return (
-    <div className="w-full max-w-[1280px] h-full max-h-[600px] mx-auto">
+    <section className="w-full max-w-[1280px] h-full max-h-[600px] px-auto">
       <Slider {...settings}>
         {filteredMyRoomList && filteredMyRoomList.length ? (
-          filteredMyRoomList.map((room) => (
-            <div className="w-full " key={room?.room_id}>
-              {room && <MeetingRoom room={room} />}
-            </div>
-          ))
+          filteredMyRoomList.map((room) => <div key={room?.room_id}>{room && <MeetingRoom room={room} />}</div>)
         ) : (
           <h2 className="text-[20px] lg:w-[1112px] max-sm:[22rem] text-center">
             아직 만들어진 방이 없습니다! 방을 만들어서 미팅을 시작해 보세요!
           </h2>
         )}
       </Slider>
-    </div>
+    </section>
   );
 };
 

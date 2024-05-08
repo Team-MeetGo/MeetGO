@@ -7,7 +7,7 @@ import { member_number } from '@/utils/data/MeetingRoomSelector';
 import { useEffect, useRef, useState } from 'react';
 import { IoIosArrowDown } from 'react-icons/io';
 
-function MemberNumberSelection({ text }: { text: string }) {
+const MemberNumberSelection = ({ text }: { text: string }) => {
   const initialMember = () => {
     if (text === 'selectMember') {
       return REGIONANDMEMBER.EVERYMEMBER;
@@ -81,6 +81,6 @@ function MemberNumberSelection({ text }: { text: string }) {
       </section>
     </>
   );
-}
+};
 
 export default MemberNumberSelection;

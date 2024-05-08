@@ -1,7 +1,7 @@
 'use client';
 import { customErrToast } from '@/components/common/customToast';
 import { useAddRoomMemberMutation, useUpdateRoomStatusCloseMutation } from '@/hooks/useMutation/useMeetingMutation';
-import { useAlreadyChatRoomQuery, useRoomParticipantsQuery } from '@/hooks/useQueries/useMeetingQuery';
+import { useAlreadyChatRoomQuery, useRoomInformationQuery } from '@/hooks/useQueries/useMeetingQuery';
 import { useGetUserDataQuery } from '@/hooks/useQueries/useUserQuery';
 import { ROOMSTATUS } from '@/utils/constant';
 import { debounce, genderMemberNumber } from '@/utils/utilFns';
@@ -16,7 +16,7 @@ function MeetingRoom({ room }: { room: MeetingRoomType }) {
   const userId = user?.user_id as string;
   const roomId = room_id;
 
-  const participants = useRoomParticipantsQuery(roomId);
+  const { roomMemberWithId: participants } = useRoomInformationQuery(roomId);
   const alreadyChatRoom = useAlreadyChatRoomQuery(roomId);
   const { mutate: roomMemberMutation } = useAddRoomMemberMutation({ roomId, userId });
   const { mutate: updateRoomStatusCloseMutation } = useUpdateRoomStatusCloseMutation({ roomId, userId });
@@ -81,7 +81,6 @@ function MeetingRoom({ room }: { room: MeetingRoomType }) {
           </section>
 
           <section>
-            <figure className="flex gap-1 mb-2 items-center"></figure>
             <figure className="flex flex-row gap-[4px]">
               <div className="bg-purpleSecondary text-mainColor rounded-[8px] p-[8px] text-[14px]">
                 {feature && feature[0]}
