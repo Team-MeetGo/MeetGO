@@ -19,7 +19,7 @@ import { useQuery, useSuspenseQueries, useSuspenseQuery } from '@tanstack/react-
 
 //현재 모집중인 방
 export const useRoomConditionDataQuery = (user_id: string) => {
-  const [{ data: recrutingData }, { data: myRoomData }] = useSuspenseQueries({
+  const [{ data: recruitingData }, { data: myRoomData }, { data: myPastNowRoomData }] = useSuspenseQueries({
     queries: [
       {
         queryKey: [RECRUTING_ROOMDATA],
@@ -28,10 +28,14 @@ export const useRoomConditionDataQuery = (user_id: string) => {
       {
         queryKey: [ROOMLIST, user_id],
         queryFn: () => fetchMyRoom(user_id)
+      },
+      {
+        queryKey: [MY_PAST_NOW_ROOM],
+        queryFn: () => fetchMyPastAndNowRoom(user_id)
       }
     ]
   });
-  return { recrutingData, myRoomData };
+  return { recruitingData, myRoomData, myPastNowRoomData };
 };
 
 export const useRoomInformationQuery = (roomId: string) => {
@@ -50,14 +54,6 @@ export const useRoomInformationQuery = (roomId: string) => {
     ]
   });
   return { roomInfoWithId, roomMemberWithId };
-};
-
-export const useMyPastAndNowRoomQuery = (user_id: string) => {
-  const { data } = useSuspenseQuery({
-    queryKey: [MY_PAST_NOW_ROOM],
-    queryFn: () => fetchMyPastAndNowRoom(user_id)
-  });
-  return data;
 };
 
 //이미 채팅으로 넘어간 목록
@@ -96,4 +92,12 @@ export const useAlreadyChatRoomQuery = (roomId: string): ChattingRoomType[] | un
 //     select: (value: MeetingRoomType[]) => value[0]
 //   });
 //   return roomInfoWithId;
+// };
+
+// export const useMyPastAndNowRoomQuery = (user_id: string) => {
+//   const { data } = useSuspenseQuery({
+//     queryKey: [MY_PAST_NOW_ROOM],
+//     queryFn: () => fetchMyPastAndNowRoom(user_id)
+//   });
+//   return data;
 // };
