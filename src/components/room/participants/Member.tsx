@@ -89,16 +89,16 @@ const Member = ({ roomId }: { roomId: UUID }) => {
       clientSupabase.removeChannel(channle);
     };
   }, [members, participants, roomInformation?.leader_id]);
-  // console.log(participants);
   return (
     <div className="w-100 h-100 flex flex-row justify-evenly">
       <div className="flex flex-col items-center justify-content">
         <section className="w-full max-w-[1080px]">
           <GotoChatButton roomId={roomId} members={members} />
         </section>
+
         <section className="flex lg:flex-row flex-col lg:gap-[100px] gap-[2rem] lg:min-w-[1080px] w-[22rem] items-center justify-content align-middle ">
           <section
-            className={`lg:mt-[40px] mt-[2rem] grid grid-cols-1 grid-rows-${femaleMembers.length} w-100% lg:gap-y-[50px] gap-y-[0.8rem]`}
+            className={`lg:mt-[40px] mt-[2rem] grid grid-cols-1 grid-rows-${femaleMembers.length} w-full lg:gap-y-[50px] gap-y-[0.8rem]`}
           >
             {femaleMembers.map((member) => (
               <div key={member.user_id} className={`grid col-start-1 col-span-1`}>
@@ -136,12 +136,12 @@ const Member = ({ roomId }: { roomId: UUID }) => {
                   </div>
 
                   {/* 카드 오른쪽 */}
-                  <div className="flex flex-col justify-center w-100%">
+                  <div className="flex flex-col justify-center w-full">
                     <div className="flex flex-row text-[16px]">
                       <h2 className="pr-[4px]">{member.school_name}</h2>
                       {<IoFemale className="w-[14px] my-auto fill-hotPink" />}
                     </div>
-                    <figure className="flex flex-row w-100% text-[14px] w-100%">
+                    <figure className="flex flex-row w-full text-[14px]">
                       <div className="lg:my-[16px] my-[0.5rem] flex flex-row gap-[6px]">
                         {member.favorite?.map((tag) => (
                           <div
@@ -162,7 +162,7 @@ const Member = ({ roomId }: { roomId: UUID }) => {
           </section>
 
           <section
-            className={`lg:mt-[40px] mt-[2rem] grid grid-cols-1 grid-rows-${maleMembers.length} w-100% lg:gap-y-[50px] gap-y-[0.8rem] lg:mb-0 mb-[4rem]`}
+            className={`lg:mt-[40px] mt-[2rem] grid grid-cols-1 grid-rows-${maleMembers.length} w-full lg:gap-y-[50px] gap-y-[0.8rem] lg:mb-0 mb-[4rem]`}
           >
             {maleMembers.map((member) => (
               <div key={member.user_id} className={`grid col-start-1 col-span-1`}>

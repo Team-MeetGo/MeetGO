@@ -66,8 +66,6 @@ const RoomInformation = ({ roomId }: { roomId: UUID }) => {
   const gotoBack = () => {
     router.push(ROUTERADDRESS.GOTOLOBBY);
   };
-  console.log(user);
-  console.log(roomInformation);
 
   return (
     <div className="flex flex-col items-center justify-content">

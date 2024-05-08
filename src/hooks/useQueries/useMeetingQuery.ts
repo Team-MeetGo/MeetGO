@@ -61,7 +61,8 @@ export const useRoomInformationQuery = (roomId: string) => {
 export const useAlreadyChatRoomQuery = (roomId: string): ChattingRoomType[] | undefined => {
   const { data } = useQuery({
     queryKey: [ROOMDATA_WITH_ROOMID, roomId],
-    queryFn: () => fetchAlreadyChatRoom(roomId)
+    queryFn: () => fetchAlreadyChatRoom(roomId),
+    enabled: !!roomId
   });
   return data;
 };

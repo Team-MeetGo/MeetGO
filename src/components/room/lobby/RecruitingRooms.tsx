@@ -4,7 +4,7 @@ import { useRoomConditionDataQuery } from '@/hooks/useQueries/useMeetingQuery';
 import { useGetUserDataQuery } from '@/hooks/useQueries/useUserQuery';
 import { useSearchRoomStore } from '@/store/searchRoomStore';
 import { REGIONANDMEMBER } from '@/utils/constant';
-import { Suspense, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import MeetingRoom from '../singleMeetingRoom/MeetingRoom';
 
 import type { MeetingRoomType } from '@/types/roomTypes';
@@ -15,14 +15,8 @@ const RecruitingRooms = () => {
   const { recruitingData, myPastNowRoomData: filteredMyOutRoomList } = useRoomConditionDataQuery(String(user?.user_id));
   const { selectRegion, selectMemberNumber } = useSearchRoomStore();
 
-  // meetingRoomList 중에서 내가 참여한 적도, 참여하지도 않은 방들을 뽑아내기
-  const otherRooms = recruitingData.filter(function (room: MeetingRoomType) {
-    const foundItem = filteredMyOutRoomList?.find((r) => r?.room_id === room.room_id);
-    if (foundItem) {
-      return false;
-    } else {
-      return true;
-    }
+  const otherRooms = recruitingData?.filter((r) => {
+    return filteredMyOutRoomList?.every((m) => m.room_id !== r.room_id);
   });
 
   const allMember = selectMemberNumber === REGIONANDMEMBER.EVERYMEMBER;
@@ -61,14 +55,11 @@ const RecruitingRooms = () => {
   useEffect(() => {
     filteredOtherRoomsHandler();
   }, [selectRegion, selectMemberNumber]);
-
   return (
     <section className="flex max-w-[1280px] py-6 flex-wrap gap-[1.9rem] w-full">
-      <Suspense>
-        {filteredOtherRooms.map((room) => (
-          <MeetingRoom key={room.room_id} room={room} />
-        ))}
-      </Suspense>
+      {filteredOtherRooms.map((room) => (
+        <MeetingRoom key={room.room_id} room={room} />
+      ))}
     </section>
   );
 };
