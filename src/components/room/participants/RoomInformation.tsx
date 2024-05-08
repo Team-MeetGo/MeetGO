@@ -27,12 +27,10 @@ function RoomInformation({ roomId }: { roomId: UUID }) {
   const { roomMemberWithId: participants, roomInfoWithId: roomInformation } = useRoomInformationQuery(roomId);
 
   const genderMaxNumber = genderMemberNumber(roomInformation?.member_number as string);
-  const otherParticipants = participants?.filter(
-    (person: UserType | null) => person?.user_id !== roomInformation?.leader_id
-  );
+  const otherParticipants = participants.filter((person: UserType) => person.user_id !== roomInformation.leader_id);
   const { mutate: updateLeaderMemeberMutation } = useUpdateLeaderMemberMutation({ otherParticipants, roomId });
 
-  const countFemale = participants.filter((member: any) => member?.gender === GENDERFILTER.FEMALE).length;
+  const countFemale = participants.filter((member: UserType) => member.gender === GENDERFILTER.FEMALE).length;
   const countMale = participants.length - countFemale;
 
   //나가기: 로비로
@@ -43,16 +41,16 @@ function RoomInformation({ roomId }: { roomId: UUID }) {
       text: `정말 나가시겠습니까?
         나가면 다시 돌아올 수 없습니다!`,
       onFunc: () => {
-        if (participants && participants.length / 2 === genderMaxNumber) {
+        if (participants.length / 2 === genderMaxNumber) {
           updateRoomStatusOpenMutation();
         }
         deleteMemberMutation();
         //유저가 리더였다면 다른 사람에게 리더 역할이 승계됩니다.
-        if (participants && roomInformation?.leader_id === userId && participants.length > 1) {
+        if (roomInformation.leader_id === userId && participants.length > 1) {
           updateLeaderMemeberMutation();
         }
         //만약 유일한 참여자라면 나감과 동시에 방은 삭제됩니다.
-        if (participants?.length === 1) {
+        if (participants.length === 1) {
           deleteRoomMutation();
         }
         router.push(ROUTERADDRESS.GOTOLOBBY);
@@ -68,6 +66,8 @@ function RoomInformation({ roomId }: { roomId: UUID }) {
   const gotoBack = () => {
     router.push(ROUTERADDRESS.GOTOLOBBY);
   };
+  console.log(user);
+  console.log(roomInformation);
 
   return (
     <div className="flex flex-col items-center justify-content">

@@ -12,9 +12,7 @@ function RecruitingRooms() {
   const [filteredOtherRooms, setFilteredOtherRooms] = useState<MeetingRoomType[]>([]);
 
   const { data: user } = useGetUserDataQuery();
-  const { recruitingData, myPastNowRoomData: myOutList } = useRoomConditionDataQuery(String(user?.user_id));
-
-  const filteredMyOutRoomList = myOutList?.map((room) => room.room);
+  const { recruitingData, myPastNowRoomData: filteredMyOutRoomList } = useRoomConditionDataQuery(String(user?.user_id));
   const { selectRegion, selectMemberNumber } = useSearchRoomStore();
 
   // meetingRoomList 중에서 내가 참여한 적도, 참여하지도 않은 방들을 뽑아내기

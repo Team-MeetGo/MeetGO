@@ -31,7 +31,8 @@ export const useRoomConditionDataQuery = (user_id: string) => {
       },
       {
         queryKey: [MY_PAST_NOW_ROOM],
-        queryFn: () => fetchMyPastAndNowRoom(user_id)
+        queryFn: () => fetchMyPastAndNowRoom(user_id),
+        select: (value: any) => value.map((room: any) => room.room) as MeetingRoomType[]
       }
     ]
   });
@@ -64,40 +65,3 @@ export const useAlreadyChatRoomQuery = (roomId: string): ChattingRoomType[] | un
   });
   return data;
 };
-
-//참가한 사람들의 유저정보
-// export const useRoomParticipantsQuery = (roomId: string): UserType[] => {
-//   const { data } = useSuspenseQuery({
-//     queryKey: [ROOM_MEMBER, roomId],
-//     queryFn: () => fetchRoomParticipants(roomId),
-//     select: (value: ParticipantsWithId[]) => value.map((participant) => participant.users) as UserType[]
-//   });
-//   return data;
-// };
-
-//내가 참가한 방
-// export const useMyroomQuery = (user_id: string | undefined) => {
-//   const { data: myRoomData } = useSuspenseQuery({
-//     queryKey: [ROOMLIST, user_id],
-//     queryFn: () => fetchMyRoom(user_id)
-//   });
-//   return myRoomData;
-// };
-
-//room_id로 하나의 방 얻기
-// export const useRoomInfoWithRoomIdQuery = (roomId: string): MeetingRoomType | undefined => {
-//   const { data: roomInfoWithId } = useQuery({
-//     queryKey: [ROOMDATA, roomId],
-//     queryFn: () => fetchRoomInfoWithRoomId(roomId),
-//     select: (value: MeetingRoomType[]) => value[0]
-//   });
-//   return roomInfoWithId;
-// };
-
-// export const useMyPastAndNowRoomQuery = (user_id: string) => {
-//   const { data } = useSuspenseQuery({
-//     queryKey: [MY_PAST_NOW_ROOM],
-//     queryFn: () => fetchMyPastAndNowRoom(user_id)
-//   });
-//   return data;
-// };
