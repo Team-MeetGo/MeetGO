@@ -7,10 +7,10 @@ function MyRoomsTitle({ children }: { children: React.ReactNode }) {
       <section className="pt-[1rem] border-gray2 w-full">
         <div className="flex flex-row items-center justify-content lg:w-full justify-between pb-[24px]">
           <p className="lg:text-xl font-semibold">참여중인 미팅룸</p>
-          <div className="flex flex-row items-center justify-content gap-4">
+          <section className="flex flex-row items-center justify-content gap-4">
             <RefreshButton />
             <MeetingRoomForm />
-          </div>
+          </section>
         </div>
         <div className="flex flex-col justify-center">
           <section className="flex lg:flex-row flex-col items-center justify-center">{children}</section>

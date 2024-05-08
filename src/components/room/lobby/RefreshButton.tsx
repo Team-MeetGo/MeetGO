@@ -24,7 +24,7 @@ function RefreshButton() {
   };
   return (
     <div className="flex flex-col align-middle justify-center text-gray2">
-      <button className="h-full" onClick={onReload}>
+      <button className="h-full" name="refreshButton" onClick={onReload}>
         <IoMdRefresh className="h-[24px] w-[24px] m-2" />
       </button>
       <p className="text-[14px] text-center">New</p>

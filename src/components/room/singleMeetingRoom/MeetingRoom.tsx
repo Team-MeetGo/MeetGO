@@ -81,7 +81,6 @@ function MeetingRoom({ room }: { room: MeetingRoomType }) {
           </section>
 
           <section>
-            <figure className="flex gap-1 mb-2 items-center"></figure>
             <figure className="flex flex-row gap-[4px]">
               <div className="bg-purpleSecondary text-mainColor rounded-[8px] p-[8px] text-[14px]">
                 {feature && feature[0]}
