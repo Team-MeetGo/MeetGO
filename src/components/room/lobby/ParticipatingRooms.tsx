@@ -92,11 +92,7 @@ const ParticipatingRooms = () => {
     <section className="w-full max-w-[1280px] h-full max-h-[600px] px-auto">
       <Slider {...settings}>
         {filteredMyRoomList && filteredMyRoomList.length ? (
-          filteredMyRoomList.map((room) => (
-            <div key={room?.room_id}>
-              <Suspense>{room && <MeetingRoom room={room} />}</Suspense>
-            </div>
-          ))
+          filteredMyRoomList.map((room) => <div key={room?.room_id}>{room && <MeetingRoom room={room} />}</div>)
         ) : (
           <h2 className="text-[20px] lg:w-[1112px] max-sm:[22rem] text-center">
             아직 만들어진 방이 없습니다! 방을 만들어서 미팅을 시작해 보세요!
