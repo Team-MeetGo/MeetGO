@@ -17,9 +17,9 @@ import { DrawerMenu } from './ui/DrawerMenu';
 import { useState } from 'react';
 
 const NavBarContents = () => {
-  const queryClient = useQueryClient();
-
   const { data: user, isLoggedIn } = useGetUserDataQuery();
+
+  const queryClient = useQueryClient();
   const isValidate = user?.isValidate;
   const [isOpen, setIsOpen] = useState(false);
 

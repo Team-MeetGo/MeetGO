@@ -26,14 +26,19 @@ function MeetingRoomList() {
   const { selectRegion, selectMemberNumber } = useSearchRoomStore();
 
   // meetingRoomList 중에서 내가 참여한 적도, 참여하지도 않은 방들을 뽑아내기
-  const otherRooms = meetingRoomList?.filter(function (room: MeetingRoomType) {
-    const foundItem = filteredMyOutRoomList?.find((r) => r?.room_id === room.room_id);
-    if (foundItem) {
-      return false;
-    } else {
-      return true;
+  const otherRooms = meetingRoomList?.filter(
+    (r) => {
+      myRoomList?.every((m) => m.room?.room_id !== r.room_id);
     }
-  });
+    // function (room: MeetingRoomType) {
+    // const foundItem = filteredMyOutRoomList?.find((r) => r?.room_id === room.room_id);
+    // if (foundItem) {
+    //   return false;
+    // } else {
+    //   return true;
+    // }
+    // }
+  );
 
   const allMember = selectMemberNumber === REGIONANDMEMBER.EVERYMEMBER;
   const someMember = selectMemberNumber !== REGIONANDMEMBER.EVERYMEMBER;

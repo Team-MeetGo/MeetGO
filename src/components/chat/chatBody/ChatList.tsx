@@ -15,6 +15,7 @@ import RememberLastChat from '../chatFooter/RememberLastChat';
 import { isNextDay, showingDate } from '@/utils/utilFns';
 import { useQueryClient } from '@tanstack/react-query';
 import { MSGS_QUERY_KEY } from '@/query/chat/chatQueryKeys';
+import { SCROLL_GAP } from '@/utils/constant';
 
 const ChatList = ({ user, chatRoomId }: { user: User | null; chatRoomId: string }) => {
   const scrollRef = useRef() as React.MutableRefObject<HTMLDivElement>;
@@ -130,8 +131,7 @@ const ChatList = ({ user, chatRoomId }: { user: User | null; chatRoomId: string 
   const handleScroll = () => {
     const scrollBox = scrollRef.current;
     if (scrollBox) {
-      // 5 상수화
-      const isScroll = scrollBox.scrollTop < scrollBox.scrollHeight - scrollBox.clientHeight - 5;
+      const isScroll = scrollBox.scrollTop < scrollBox.scrollHeight - scrollBox.clientHeight - SCROLL_GAP;
       setIsScrolling(isScroll);
       if (!isScroll) {
         setNewAddedMsgNum(0);

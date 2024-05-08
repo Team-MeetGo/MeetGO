@@ -16,7 +16,6 @@ const InitChat = ({ user, chatRoomId }: { user: User | null; chatRoomId: string 
   const {
     room: { room_id, leader_id }
   } = useRoomDataQuery(chatRoomId);
-  // const roomId = room.room_id;
   const router = useRouter();
   const queryClient = useQueryClient();
   const allMsgs = useMsgsQuery(chatRoomId);

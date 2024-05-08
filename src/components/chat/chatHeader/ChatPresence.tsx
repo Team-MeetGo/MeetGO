@@ -20,10 +20,9 @@ const ChatPresence = () => {
           }
           setOnlineUsers([...nowUsers]);
         })
-        // async/await 없어도 되는지 확인해보기
         .subscribe(async (status) => {
           if (status === 'SUBSCRIBED') {
-            await channel.track({ online_at: new Date().toISOString(), user_id: user?.user_id, avatar: user?.avatar });
+            await channel.track({ online_at: new Date().toISOString(), user_id: user?.user_id });
           }
         });
     }
