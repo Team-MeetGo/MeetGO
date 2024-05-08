@@ -19,7 +19,7 @@ const GotoChatButton = ({ roomId, members }: { roomId: UUID; members: UserType[]
   const genderParticipants = genderMemberNumber(roomInformation.member_number);
   const maxMember = genderParticipants! * 2;
 
-  //원하는 인원이 모두 들어오면 위에서 창이 내려온다.
+  //원하는 인원이 모두 들어오면 채팅으로 넘어간다.
   const gotoChattingRoom = async () => {
     if (!user) {
       customErrToast('로그인 후에 이용하세요.');

@@ -8,7 +8,7 @@ import { Suspense, useEffect, useState } from 'react';
 import MeetingRoom from '../singleMeetingRoom/MeetingRoom';
 
 import type { MeetingRoomType } from '@/types/roomTypes';
-function RecruitingRooms() {
+const RecruitingRooms = () => {
   const [filteredOtherRooms, setFilteredOtherRooms] = useState<MeetingRoomType[]>([]);
 
   const { data: user } = useGetUserDataQuery();
@@ -71,6 +71,6 @@ function RecruitingRooms() {
       </Suspense>
     </section>
   );
-}
+};
 
 export default RecruitingRooms;

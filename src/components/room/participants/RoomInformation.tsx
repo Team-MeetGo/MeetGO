@@ -15,7 +15,7 @@ import { IoFemale, IoMale } from 'react-icons/io5';
 
 import type { UserType } from '@/types/roomTypes';
 import type { UUID } from 'crypto';
-function RoomInformation({ roomId }: { roomId: UUID }) {
+const RoomInformation = ({ roomId }: { roomId: UUID }) => {
   const router = useRouter();
   const { openModal, closeModal } = useModalStore();
   const { data: user } = useGetUserDataQuery();
@@ -110,6 +110,6 @@ function RoomInformation({ roomId }: { roomId: UUID }) {
       </main>
     </div>
   );
-}
+};
 
 export default RoomInformation;

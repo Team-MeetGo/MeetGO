@@ -4,13 +4,13 @@ import RoomInformation from './RoomInformation';
 
 import type { UUID } from 'crypto';
 
-function AcceptanceRoom({ roomId }: { roomId: UUID }) {
+const AcceptanceRoom = ({ roomId }: { roomId: UUID }) => {
   return (
     <Suspense>
       <RoomInformation roomId={roomId} />
       <Member roomId={roomId} />
     </Suspense>
   );
-}
+};
 
 export default AcceptanceRoom;

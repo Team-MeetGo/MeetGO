@@ -22,7 +22,7 @@ import MemberNumberSelection from '../MemberNumberSelection';
 import RegionSelection from '../RegionSelection';
 
 import type { NewRoomType } from '@/types/roomTypes';
-function MeetingRoomForm() {
+const MeetingRoomForm = () => {
   const router = useRouter();
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
 
@@ -173,6 +173,6 @@ function MeetingRoomForm() {
       </Modal>
     </>
   );
-}
+};
 
 export default MeetingRoomForm;

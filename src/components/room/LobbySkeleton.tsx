@@ -3,7 +3,7 @@
 import { Card, Skeleton } from '@nextui-org/react';
 import React from 'react';
 
-function LobbySkeleton() {
+const LobbySkeleton = () => {
   const [isLoaded, setIsLoaded] = React.useState(false);
 
   return (
@@ -151,6 +151,6 @@ function LobbySkeleton() {
       </main>
     </div>
   );
-}
+};
 
 export default LobbySkeleton;

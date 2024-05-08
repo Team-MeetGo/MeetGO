@@ -2,7 +2,7 @@ import MyRoomsTitle from '@/components/room/lobby/MyRoomTitle';
 import OtherRoomsTitle from '@/components/room/lobby/OtherRoomsTitle';
 import ParticipatingRooms from './ParticipatingRooms';
 import RecruitingRooms from './RecruitingRooms';
-function MeetingRoomList() {
+const MeetingRoomList = () => {
   return (
     <>
       <MyRoomsTitle>
@@ -13,6 +13,6 @@ function MeetingRoomList() {
       </OtherRoomsTitle>
     </>
   );
-}
+};
 
 export default MeetingRoomList;

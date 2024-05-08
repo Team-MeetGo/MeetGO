@@ -1,7 +1,7 @@
 import MeetingRoomForm from '@/components/room/lobby/MeetingRoomForm';
 import RefreshButton from '@/components/room/lobby/RefreshButton';
 
-function MyRoomsTitle({ children }: { children: React.ReactNode }) {
+const MyRoomsTitle = ({ children }: { children: React.ReactNode }) => {
   return (
     <article className="max-w-[1280px] w-full flex flex-col items-center justify-content align-middle px-[24px]">
       <section className="pt-[1rem] border-gray2 w-full">
@@ -18,6 +18,6 @@ function MyRoomsTitle({ children }: { children: React.ReactNode }) {
       </section>
     </article>
   );
-}
+};
 
 export default MyRoomsTitle;
