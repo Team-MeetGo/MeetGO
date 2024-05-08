@@ -17,9 +17,9 @@ import {
 } from '@nextui-org/react';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
-import { customErrToast, customSuccessToast } from '../common/customToast';
-import MemberNumberSelection from './MemberNumberSelection';
-import RegionSelection from './RegionSelection';
+import { customErrToast, customSuccessToast } from '../../common/customToast';
+import MemberNumberSelection from '../MemberNumberSelection';
+import RegionSelection from '../RegionSelection';
 
 import type { NewRoomType } from '@/types/roomTypes';
 function MeetingRoomForm() {

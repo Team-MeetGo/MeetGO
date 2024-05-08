@@ -1,6 +1,6 @@
 'use client';
-import DeleteMeetingRoom from '@/components/room/DeleteMeetingRoom';
-import EditMeetingRoom from '@/components/room/EditMeetingRoom';
+import DeleteMeetingRoom from '@/components/room/singleMeetingRoom/DeleteMeetingRoom';
+import EditMeetingRoom from '@/components/room/singleMeetingRoom/EditMeetingRoom';
 import { useMyMsgData } from '@/hooks/useQueries/useChattingQuery';
 import { useAlreadyChatRoomQuery, useRoomInformationQuery } from '@/hooks/useQueries/useMeetingQuery';
 import { useGetUserDataQuery } from '@/hooks/useQueries/useUserQuery';
