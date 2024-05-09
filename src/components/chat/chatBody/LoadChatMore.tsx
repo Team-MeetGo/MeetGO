@@ -11,19 +11,19 @@ import { Dispatch, SetStateAction } from 'react';
 
 const LoadChatMore = ({
   chatRoomId,
-  count,
-  setCount
+  loadCount,
+  setLoadCount
 }: {
   chatRoomId: string;
-  count: number;
-  setCount: Dispatch<SetStateAction<number>>;
+  loadCount: number;
+  setLoadCount: Dispatch<SetStateAction<number>>;
 }) => {
   const { setHasMore } = chatStore((state) => state);
   const messages = useMsgsQuery(chatRoomId);
   const queryClient = useQueryClient();
 
   const fetchMoreMsg = async () => {
-    const { from, to } = getFromTo(count, ITEM_INTERVAL);
+    const { from, to } = getFromTo(loadCount, ITEM_INTERVAL);
     const { error, data: newMsgs } = await clientSupabase
       .from('messages')
       .select('*')
@@ -40,7 +40,7 @@ const LoadChatMore = ({
       } else if (!newMsgs.length) {
         alert('더 이상 불러올 메세지가 없습니다.');
       } else {
-        setCount((prev) => prev + 1);
+        setLoadCount((prev) => prev + 1);
       }
     }
   };
