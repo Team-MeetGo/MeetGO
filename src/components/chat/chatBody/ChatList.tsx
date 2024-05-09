@@ -26,12 +26,14 @@ const ChatList = ({ user, chatRoomId }: { user: User | null; chatRoomId: string 
   const queryClient = useQueryClient();
   const [isScrolling, setIsScrolling] = useState(false);
   const [isScrollTop, setIsScrollTop] = useState(true);
-  const [count, setCount] = useState(1);
+  const [loadCount, setLoadCount] = useState(1);
   const [newAddedMsgNum, setNewAddedMsgNum] = useState(0);
   const [lastCheckedDiv, setLastCheckedDiv] = useState<HTMLElement | null>();
   const [checkedLastMsg, setCheckedLastMsg] = useState(false);
   const prevMsgsLengthRef = useRef(messages?.length);
   const lastDivRefs = useRef(messages);
+
+  console.log('messages =>', messages);
 
   // "messages" table Realtime INSERT, DELETE 구독로직
   useEffect(() => {
@@ -119,7 +121,7 @@ const ChatList = ({ user, chatRoomId }: { user: User | null; chatRoomId: string 
           scrollBox.scrollTop = scrollBox.scrollHeight;
           prevMsgsLengthRef.current = messages.length;
         }
-      } else if (prevMsgsLengthRef.current !== messages.length || count === 0) {
+      } else if (prevMsgsLengthRef.current !== messages.length) {
         // 이전 메세지가 화면에 없고 + 새로운 메세지가 추가되면 스크롤 다운이 따라가도록
         scrollBox.scrollTop = scrollBox.scrollHeight;
         prevMsgsLengthRef.current = messages.length;
@@ -160,7 +162,7 @@ const ChatList = ({ user, chatRoomId }: { user: User | null; chatRoomId: string 
         onScroll={handleScroll}
       >
         <ChatSearch isScrollTop={isScrollTop} />
-        {hasMore ? <LoadChatMore chatRoomId={chatRoomId} count={count} setCount={setCount} /> : <></>}
+        {hasMore ? <LoadChatMore chatRoomId={chatRoomId} loadCount={loadCount} setLoadCount={setLoadCount} /> : <></>}
         {messages &&
           messages.map((msg, idx) => (
             <div key={msg.message_id} className="w-full">

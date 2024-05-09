@@ -14,7 +14,7 @@ const OthersChat = ({ msg, idx, lastDivRefs }: { msg: Message; idx: number; last
   const participants = useParticipantsQuery(room_id);
 
   const showThatUser = (userId: string) => {
-    const thatUserData = participants.find((p) => p.user_id === userId);
+    const thatUserData = participants.find((p) => p.users.user_id === userId);
     return thatUserData;
   };
 

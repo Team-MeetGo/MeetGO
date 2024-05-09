@@ -32,9 +32,9 @@ const ParticipantsInfoWrapper = ({
     <>
       <div className="relative flex h-16 w-16 ">
         <div className="h-16 w-16 ml-auto flex justify-center items-center">
-          {showThatUser(msg.send_from)?.avatar ? (
+          {showThatUser(msg.send_from).users.avatar ? (
             <Avatar
-              src={showThatUser(msg.send_from)?.avatar as string}
+              src={showThatUser(msg.send_from).users.avatar as string}
               alt="Avatar"
               className="transition-transform w-14 h-14"
               onClick={showMember}
@@ -44,7 +44,7 @@ const ParticipantsInfoWrapper = ({
           )}
         </div>
 
-        {leaderId && leaderId === showThatUser(msg.send_from)?.user_id ? (
+        {leaderId && leaderId === showThatUser(msg.send_from).users.user_id ? (
           <div className="w-6 h-6 rounded-full absolute bottom-0 right-0 flex justify-center bg-purpleThird border border-gray1 font-extralight">
             <FaCrown className="my-auto fill-mainColor" />
           </div>
@@ -56,11 +56,11 @@ const ParticipantsInfoWrapper = ({
             return (
               <>
                 <ModalHeader className="flex flex-col gap-1 z-40 pointer-events-none">
-                  {showThatUser(msg.send_from)?.nickname}
+                  {showThatUser(msg.send_from).users.nickname}
                 </ModalHeader>
                 <ModalBody>
                   <Image
-                    src={showThatUser(msg.send_from)?.avatar as string}
+                    src={showThatUser(msg.send_from).users.avatar as string}
                     alt="유저 이미지"
                     fill={true}
                     style={{ objectFit: 'contain', borderRadius: '3px', pointerEvents: 'none' }}
