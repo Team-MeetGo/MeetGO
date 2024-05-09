@@ -1,4 +1,5 @@
 export const ITEM_INTERVAL = 10;
+export const SCROLL_GAP = 5;
 
 export const GENDER = {
   male: '남성',

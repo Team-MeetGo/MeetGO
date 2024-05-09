@@ -1,4 +1,5 @@
 import { Message } from '@/types/chatTypes';
+import { UsersType } from '@/types/userTypes';
 
 export const getformattedDate = (date: string) =>
   new Date(date).toLocaleString('ko', {
@@ -69,4 +70,12 @@ export const genderMemberNumber = (memberNumber: string) => {
   } else if (memberNumber === '4:4') {
     return 4;
   }
+};
+
+export const handleGenderList = (genderMaxNumber: number | undefined, participants: UsersType[], gender: string) => {
+  const theGenderList = participants.filter((p) => p.gender === gender);
+  const arr = new Array(genderMaxNumber).fill(null).map((_, idx) => {
+    return idx < theGenderList.length ? theGenderList[idx] : null;
+  });
+  return arr;
 };
