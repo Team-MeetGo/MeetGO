@@ -33,8 +33,6 @@ const ChatList = ({ user, chatRoomId }: { user: User | null; chatRoomId: string 
   const prevMsgsLengthRef = useRef(messages?.length);
   const lastDivRefs = useRef(messages);
 
-  console.log('messages =>', messages);
-
   // "messages" table Realtime INSERT, DELETE 구독로직
   useEffect(() => {
     if (room_id && chatRoomId) {
