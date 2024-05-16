@@ -1,8 +1,9 @@
 'use client';
-import { useGetUserDataQuery } from '@/hooks/useQueries/useUserQuery';
+
 import Link from 'next/link';
 import { customErrToast } from '../../components/common/customToast';
 import { usePathname } from 'next/navigation';
+import { useGetUserDataQuery } from '@/query/useQueries/useUserQuery';
 
 const ThickBanner = () => {
   const { isLoggedIn } = useGetUserDataQuery();

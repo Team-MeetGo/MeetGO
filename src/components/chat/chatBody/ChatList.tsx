@@ -9,13 +9,13 @@ import LoadChatMore from './LoadChatMore';
 import { chatStore } from '@/store/chatStore';
 import OthersChat from './OthersChat';
 import ChatSearch from './ChatSearch';
-import { useMsgsQuery, useMyLastMsgs, useRoomDataQuery } from '@/hooks/useQueries/useChattingQuery';
 import MyChat from './MyChat';
 import RememberLastChat from '../chatFooter/RememberLastChat';
 import { isNextDay, showingDate } from '@/utils/utilFns';
 import { useQueryClient } from '@tanstack/react-query';
 import { MSGS_QUERY_KEY } from '@/query/chat/chatQueryKeys';
 import { SCROLL_GAP } from '@/utils/constant';
+import { useMsgsQuery, useMyLastMsgs, useRoomDataQuery } from '@/query/useQueries/useChattingQuery';
 
 const ChatList = ({ user, chatRoomId }: { user: User | null; chatRoomId: string }) => {
   const scrollRef = useRef() as React.MutableRefObject<HTMLDivElement>;

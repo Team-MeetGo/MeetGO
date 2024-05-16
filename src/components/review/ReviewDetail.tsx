@@ -1,23 +1,22 @@
 'use client';
+
 import Image from 'next/image';
 import ReviewEditModal from './ReviewEditModal';
 import { useRouter } from 'next/navigation';
 import AvatarDefault from '@/utils/icons/AvatarDefault';
 import ImageGallery from './ImageGallery';
 import defaultImg from '../../../public/defaultImg.jpg';
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { Dropdown, DropdownItem, DropdownMenu, DropdownTrigger, useDisclosure } from '@nextui-org/react';
 import { HiOutlineDotsVertical } from 'react-icons/hi';
 import { IoIosList } from 'react-icons/io';
-import { useGetUserDataQuery } from '@/hooks/useQueries/useUserQuery';
 import ReviewComment from './ReviewComment';
 import ReviewLike from './ReviewLike';
-import { useDeleteReviewMutation } from '@/hooks/useMutation/useReviewMutations';
-import { useAuthorDataQuery, useReviewDataQuery, useReviewListDataQuery } from '@/hooks/useQueries/useReviewQuery';
-import { useAsyncNavigation } from '@/hooks/custom/useReviewNavigation';
 import { useModalStore } from '@/store/modalStore';
-import { ValidationModal } from '../common/ValidationModal';
+import { useGetUserDataQuery } from '@/query/useQueries/useUserQuery';
+import { useAuthorDataQuery, useReviewDataQuery } from '@/query/useQueries/useReviewQuery';
+import { useDeleteReviewMutation } from '@/query/useMutation/useReviewMutations';
 
 export type ReviewDetailType = {
   review_title: string | null;

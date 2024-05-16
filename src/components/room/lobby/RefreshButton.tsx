@@ -1,6 +1,7 @@
 'use client';
-import { useGetUserDataQuery } from '@/hooks/useQueries/useUserQuery';
+
 import { MY_PAST_NOW_ROOM, RECRUTING_ROOMDATA, ROOMLIST } from '@/query/meetingRoom/meetingQueryKeys';
+import { useGetUserDataQuery } from '@/query/useQueries/useUserQuery';
 import { useQueryClient } from '@tanstack/react-query';
 import { IoMdRefresh } from 'react-icons/io';
 

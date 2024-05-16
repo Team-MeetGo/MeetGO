@@ -1,10 +1,10 @@
 'use client';
-import { useGetUserDataQuery } from '@/hooks/useQueries/useUserQuery';
-import { ValidationModal } from '@/components/common/ValidationModal';
+
 import { useEffect } from 'react';
 import { useModalStore } from '@/store/modalStore';
 import { useRouter } from 'next/navigation';
-import { useFirstLoginMutation } from '@/hooks/useMutation/useFirstLoginMutation';
+import { useGetUserDataQuery } from '@/query/useQueries/useUserQuery';
+import { useFirstLoginMutation } from '@/query/useMutation/useFirstLoginMutation';
 
 const ProfileRouteModal = () => {
   const { data: user, isLoggedIn } = useGetUserDataQuery();

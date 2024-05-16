@@ -5,12 +5,12 @@ import ReviewCard from './ReviewCard';
 import NewReview from './NewReview';
 import Link from 'next/link';
 import { useParams, useRouter } from 'next/navigation';
-import { Dropdown, DropdownTrigger, DropdownMenu, DropdownItem, Button } from '@nextui-org/react';
+import { Dropdown, DropdownTrigger, DropdownMenu, DropdownItem } from '@nextui-org/react';
 import { Selection } from '@react-types/shared';
 import { IoIosArrowDown, IoIosArrowUp } from 'react-icons/io';
-import { useGetUserDataQuery } from '@/hooks/useQueries/useUserQuery';
-import { useLikedReviewDataQuery, useReviewListDataQuery } from '@/hooks/useQueries/useReviewQuery';
 import { GrNext, GrPrevious } from 'react-icons/gr';
+import { useGetUserDataQuery } from '@/query/useQueries/useUserQuery';
+import { useLikedReviewDataQuery, useReviewListDataQuery } from '@/query/useQueries/useReviewQuery';
 
 export type reviewData = {
   user_id: string | null;

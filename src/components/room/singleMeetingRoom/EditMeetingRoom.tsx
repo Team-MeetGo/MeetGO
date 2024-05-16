@@ -1,8 +1,7 @@
 'use client';
+
 import MemberNumberSelection from '@/components/room/MemberNumberSelection';
 import RegionSelection from '@/components/room/RegionSelection';
-import { useUpdateRoom } from '@/hooks/useMutation/useMeetingMutation';
-import { useGetUserDataQuery } from '@/hooks/useQueries/useUserQuery';
 import { useRoomStore } from '@/store/roomStore';
 import { meetingRoomFeatureData } from '@/utils/data/MeetingRoomFeatureData';
 import {
@@ -20,6 +19,8 @@ import { useState } from 'react';
 import { customErrToast } from '../../common/customToast';
 
 import type { MeetingRoomType, UpdateRoomType } from '@/types/roomTypes';
+import { useGetUserDataQuery } from '@/query/useQueries/useUserQuery';
+import { useUpdateRoom } from '@/query/useMutation/useMeetingMutation';
 const EditMeetingRoom = ({
   room,
   dropdownRef,

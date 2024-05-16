@@ -1,12 +1,13 @@
 'use client';
-import { useGetUserDataQuery } from '@/hooks/useQueries/useUserQuery';
+
 import { chatStore } from '@/store/chatStore';
 import { Message } from '@/types/chatTypes';
 import { getformattedDate, isItMe, isNextDay } from '@/utils/utilFns';
 import ChatDeleteDropDown from './ChatDeleteDropDown';
-import { useMsgsQuery, useRoomDataQuery } from '@/hooks/useQueries/useChattingQuery';
 import ChatImg from './ChatImg';
 import MyInfoWrapper from './MyInfoWrapper';
+import { useMsgsQuery, useRoomDataQuery } from '@/query/useQueries/useChattingQuery';
+import { useGetUserDataQuery } from '@/query/useQueries/useUserQuery';
 
 const MyChat = ({ msg, idx, lastDivRefs }: { msg: Message; idx: number; lastDivRefs: any }) => {
   const { chatRoomId } = chatStore((state) => state);

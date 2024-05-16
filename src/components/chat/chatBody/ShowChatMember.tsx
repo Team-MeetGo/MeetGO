@@ -1,4 +1,4 @@
-import { useRoomDataQuery } from '@/hooks/useQueries/useChattingQuery';
+import { useRoomDataQuery } from '@/query/useQueries/useChattingQuery';
 import { chatStore } from '@/store/chatStore';
 import { UsersType } from '@/types/userTypes';
 import { Avatar } from '@nextui-org/react';

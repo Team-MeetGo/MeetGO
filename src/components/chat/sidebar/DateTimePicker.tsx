@@ -6,9 +6,9 @@ import DateCustomeInput from './DateCustomeInput';
 import { ko } from 'date-fns/locale';
 import { getMonth, getYear } from 'date-fns';
 import { IoIosArrowForward, IoIosArrowBack } from 'react-icons/io';
-import { useChatDataQuery, useRoomDataQuery } from '@/hooks/useQueries/useChattingQuery';
-import { useUpdateMeetingTimeMutation } from '@/hooks/useMutation/useMeetingTimeMutation';
-import { useGetUserDataQuery } from '@/hooks/useQueries/useUserQuery';
+import { useGetUserDataQuery } from '@/query/useQueries/useUserQuery';
+import { useChatDataQuery, useRoomDataQuery } from '@/query/useQueries/useChattingQuery';
+import { useUpdateMeetingTimeMutation } from '@/query/useMutation/useMeetingTimeMutation';
 
 const DateTimePicker = forwardRef(({ chatRoomId }: { chatRoomId: string }) => {
   const [selectedMeetingTime, setSelectedMeetingTime] = useState<Date | null>(new Date());

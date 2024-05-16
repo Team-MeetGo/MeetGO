@@ -1,9 +1,9 @@
-import { useMsgsQuery, useParticipantsQuery, useRoomDataQuery } from '@/hooks/useQueries/useChattingQuery';
 import { chatStore } from '@/store/chatStore';
 import { Message } from '@/types/chatTypes';
 import { getformattedDate, isItMe, isNextDay } from '@/utils/utilFns';
 import ChatImg from './ChatImg';
 import ParticipantsInfoWrapper from './ParticipantsInfoWrapper';
+import { useMsgsQuery, useParticipantsQuery, useRoomDataQuery } from '@/query/useQueries/useChattingQuery';
 
 const OthersChat = ({ msg, idx, lastDivRefs }: { msg: Message; idx: number; lastDivRefs: any }) => {
   const { chatRoomId } = chatStore((state) => state);

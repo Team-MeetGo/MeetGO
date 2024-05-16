@@ -1,6 +1,6 @@
 'use client';
 
-import { useFetchCommentData } from '@/hooks/useQueries/useCommentQuery';
+import { useFetchCommentData } from '@/query/useQueries/useCommentQuery';
 import { BiCommentDetail } from 'react-icons/bi';
 
 type Props = {

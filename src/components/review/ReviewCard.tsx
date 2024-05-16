@@ -3,7 +3,7 @@ import Link from 'next/link';
 import ReviewComment from './ReviewComment';
 import defaultImg from '../../../public/defaultImg.jpg';
 import ReviewLike from './ReviewLike';
-import { useAuthorDataQuery } from '@/hooks/useQueries/useReviewQuery';
+import { useAuthorDataQuery } from '@/query/useQueries/useReviewQuery';
 
 export type ReviewType = {
   user_id: string | null;

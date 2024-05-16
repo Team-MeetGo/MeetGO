@@ -1,12 +1,13 @@
 'use client';
-import { useGetUserDataQuery } from '@/hooks/useQueries/useUserQuery';
+
 import { chatStore } from '@/store/chatStore';
 import { Input } from '@nextui-org/react';
 import { ChangeEvent, useRef, useState } from 'react';
 import { FaPlus, FaRegArrowAltCircleUp } from 'react-icons/fa';
 import Image from 'next/image';
 import { MdCancel } from 'react-icons/md';
-import { useAddNewMsg } from '@/hooks/useMutation/useChattingMutation';
+import { useGetUserDataQuery } from '@/query/useQueries/useUserQuery';
+import { useAddNewMsg } from '@/query/useMutation/useChattingMutation';
 
 // 낙관적 업데이트
 // useTransition

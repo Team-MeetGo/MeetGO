@@ -1,6 +1,6 @@
 'use client';
 import { useAsyncNavigation } from '@/hooks/custom/useReviewNavigation';
-import { useReviewListDataQuery } from '@/hooks/useQueries/useReviewQuery';
+import { useReviewListDataQuery } from '@/query/useQueries/useReviewQuery';
 import Link from 'next/link';
 import React from 'react';
 import { GrNext, GrPrevious } from 'react-icons/gr';

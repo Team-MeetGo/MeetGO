@@ -1,6 +1,6 @@
 'use client';
 import { customErrToast } from '@/components/common/customToast';
-import { useGetUserDataQuery } from '@/hooks/useQueries/useUserQuery';
+import { useGetUserDataQuery } from '@/query/useQueries/useUserQuery';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 

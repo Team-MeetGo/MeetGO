@@ -1,6 +1,5 @@
 'use client';
-import { useAddRoomMutation } from '@/hooks/useMutation/useMeetingMutation';
-import { useGetUserDataQuery } from '@/hooks/useQueries/useUserQuery';
+
 import { useRoomStore } from '@/store/roomStore';
 import { ROOMSTATUS, ROUTERADDRESS } from '@/utils/constant';
 import { meetingRoomFeatureData } from '@/utils/data/MeetingRoomFeatureData';
@@ -22,6 +21,8 @@ import MemberNumberSelection from '../MemberNumberSelection';
 import RegionSelection from '../RegionSelection';
 
 import type { NewRoomType } from '@/types/roomTypes';
+import { useGetUserDataQuery } from '@/query/useQueries/useUserQuery';
+import { useAddRoomMutation } from '@/query/useMutation/useMeetingMutation';
 const MeetingRoomForm = () => {
   const router = useRouter();
   const { isOpen, onOpen, onOpenChange } = useDisclosure();

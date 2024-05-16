@@ -1,6 +1,6 @@
 'use client';
+import { useLikedReviewDataQuery, useReviewListDataQuery } from '@/query/useQueries/useReviewQuery';
 import ReviewCard from '../review/ReviewCard';
-import { useLikedReviewDataQuery, useReviewListDataQuery } from '@/hooks/useQueries/useReviewQuery';
 import Link from 'next/link';
 import { IoIosArrowForward } from 'react-icons/io';
 

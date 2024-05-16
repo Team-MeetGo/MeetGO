@@ -1,13 +1,11 @@
 'use client';
-import useInputChange from '@/hooks/custom/useInputChange';
-import { useProfileUpdateMutation } from '@/hooks/useMutation/useProfileMutation';
-import { useGetUserDataQuery } from '@/hooks/useQueries/useUserQuery';
+
 import { useModalStore } from '@/store/modalStore';
-import { useEditingStore, useFavoriteStore, useProfileOnchangeStore } from '@/store/userStore';
+import { useEditingStore, useProfileOnchangeStore } from '@/store/userStore';
 import { UpdateProfileType } from '@/types/userTypes';
 import { deleteUser } from '@/utils/api/authAPI';
 import { useQueryClient } from '@tanstack/react-query';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import AvatarForm from './AvatarForm';
 import UserNickname from './UserNickname';
 import { useProfileSet } from '@/hooks/custom/useProfileSet';
@@ -18,8 +16,9 @@ import UserKakaoId from './UserKakaoId';
 import UserFavorite from './UserFavorite';
 import UserIntro from './UserIntro';
 import { customErrToast } from '../common/customToast';
+import { useGetUserDataQuery } from '@/query/useQueries/useUserQuery';
+import { useProfileUpdateMutation } from '@/query/useMutation/useProfileMutation';
 const ProfileSetting = () => {
-  const queryClient = useQueryClient();
   const { data: user } = useGetUserDataQuery();
   const resetProfile = useProfileSet(user);
   const { isEditing, setIsEditing } = useEditingStore();

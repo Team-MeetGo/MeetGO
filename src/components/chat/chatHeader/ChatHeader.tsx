@@ -1,6 +1,5 @@
 'use client';
-import { useParticipantsQuery, useRoomDataQuery } from '@/hooks/useQueries/useChattingQuery';
-import { useGetUserDataQuery } from '@/hooks/useQueries/useUserQuery';
+
 import {
   Avatar,
   AvatarGroup,
@@ -22,6 +21,8 @@ import { useQueryClient } from '@tanstack/react-query';
 import { MSGS_QUERY_KEY } from '@/query/chat/chatQueryKeys';
 import { useRouter } from 'next/navigation';
 import { CiMenuKebab } from 'react-icons/ci';
+import { useGetUserDataQuery } from '@/query/useQueries/useUserQuery';
+import { useParticipantsQuery, useRoomDataQuery } from '@/query/useQueries/useChattingQuery';
 
 const ChatHeader = ({ chatRoomId }: { chatRoomId: string }) => {
   const { onlineUsers, setisRest, setSearchMode } = chatStore((state) => state);

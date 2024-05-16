@@ -3,7 +3,6 @@ import { DropdownItem, Dropdown, DropdownTrigger, DropdownMenu, Avatar } from '@
 import MeetGoLogo from '@/utils/icons/meetgo-logo.png';
 import Image from 'next/image';
 import { clientSupabase } from '@/utils/supabase/client';
-import { useGetUserDataQuery } from '@/hooks/useQueries/useUserQuery';
 import { useQueryClient } from '@tanstack/react-query';
 import { USER_DATA_QUERY_KEY } from '@/query/user/userQueryKeys';
 import Link from 'next/link';
@@ -15,6 +14,7 @@ import { Drawer } from './ui/Drawer';
 import { DrawerTrigger } from './ui/DrawerTrigger';
 import { DrawerMenu } from './ui/DrawerMenu';
 import { useState } from 'react';
+import { useGetUserDataQuery } from '@/query/useQueries/useUserQuery';
 
 const NavBarContents = () => {
   const { data: user, isLoggedIn } = useGetUserDataQuery();

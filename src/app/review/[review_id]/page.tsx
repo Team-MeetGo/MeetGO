@@ -1,7 +1,6 @@
 import CommentList from '@/components/review/comment/CommentList';
 import ReviewDetail from '@/components/review/ReviewDetail';
 import ReviewDetailNavigate from '@/components/review/ReviewDetailNavigate';
-import Link from 'next/link';
 
 const ReviewDetailPage = ({ params }: { params: { review_id: string } }) => {
   return (

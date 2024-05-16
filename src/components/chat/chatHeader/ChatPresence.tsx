@@ -1,5 +1,6 @@
 'use client';
-import { useGetUserDataQuery } from '@/hooks/useQueries/useUserQuery';
+
+import { useGetUserDataQuery } from '@/query/useQueries/useUserQuery';
 import { chatStore } from '@/store/chatStore';
 import { clientSupabase } from '@/utils/supabase/client';
 import { useEffect } from 'react';

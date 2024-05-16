@@ -1,18 +1,18 @@
 'use client';
 
-import {
-  useAcceptKakaoIdMutation,
-  useCancelRequestKakaoIdMutation,
-  useMetPeopleMutation
-} from '@/hooks/useMutation/useMetPeopleMutation';
-import { useMetPeople } from '@/hooks/useQueries/useMetPeopleQuery';
-import { useGetUserDataQuery } from '@/hooks/useQueries/useUserQuery';
 import { KAKAOID_REQUEST_QUERY_KEY } from '@/query/user/metPeopleQueryKeys';
 import { clientSupabase } from '@/utils/supabase/client';
 import { useQueryClient } from '@tanstack/react-query';
 import Image from 'next/image';
 import { useEffect } from 'react';
 import { customErrToast, customLoveToast, customSuccessToast } from '../common/customToast';
+import { useGetUserDataQuery } from '@/query/useQueries/useUserQuery';
+import { useMetPeople } from '@/query/useQueries/useMetPeopleQuery';
+import {
+  useAcceptKakaoIdMutation,
+  useCancelRequestKakaoIdMutation,
+  useMetPeopleMutation
+} from '@/query/useMutation/useMetPeopleMutation';
 
 const MetPeople = () => {
   const queryClient = useQueryClient();

@@ -1,9 +1,9 @@
 'use client';
 
-import { useDeleteRoom } from '@/hooks/useMutation/useMeetingMutation';
-import { useGetUserDataQuery } from '@/hooks/useQueries/useUserQuery';
 import { useModalStore } from '@/store/modalStore';
 import { ValidationModal } from '@/components/common/ValidationModal';
+import { useGetUserDataQuery } from '@/query/useQueries/useUserQuery';
+import { useDeleteRoom } from '@/query/useMutation/useMeetingMutation';
 
 const DeleteMeetingRoom = ({
   room_id,

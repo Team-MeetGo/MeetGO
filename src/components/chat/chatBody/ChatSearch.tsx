@@ -1,4 +1,4 @@
-import { useMsgsQuery } from '@/hooks/useQueries/useChattingQuery';
+import { useMsgsQuery } from '@/query/useQueries/useChattingQuery';
 import { chatStore } from '@/store/chatStore';
 import { useEffect, useState } from 'react';
 import { FaChevronDown, FaChevronUp } from 'react-icons/fa';

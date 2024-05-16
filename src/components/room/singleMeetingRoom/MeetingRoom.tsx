@@ -1,14 +1,14 @@
 'use client';
 import { customErrToast } from '@/components/common/customToast';
-import { useAddRoomMemberMutation, useUpdateRoomStatusCloseMutation } from '@/hooks/useMutation/useMeetingMutation';
-import { useAlreadyChatRoomQuery, useRoomInformationQuery } from '@/hooks/useQueries/useMeetingQuery';
-import { useGetUserDataQuery } from '@/hooks/useQueries/useUserQuery';
 import { ROOMSTATUS } from '@/utils/constant';
 import { debounce, genderMemberNumber } from '@/utils/utilFns';
 import { useRouter } from 'next/navigation';
 import RoomInformation from './RoomInformation';
-
 import type { MeetingRoomType } from '@/types/roomTypes';
+import { useGetUserDataQuery } from '@/query/useQueries/useUserQuery';
+import { useAlreadyChatRoomQuery, useRoomInformationQuery } from '@/query/useQueries/useMeetingQuery';
+import { useAddRoomMemberMutation, useUpdateRoomStatusCloseMutation } from '@/query/useMutation/useMeetingMutation';
+
 function MeetingRoom({ room }: { room: MeetingRoomType }) {
   const router = useRouter();
   const { room_id, room_status, room_title, member_number, location, feature, region } = room;

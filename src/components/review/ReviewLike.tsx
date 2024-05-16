@@ -4,10 +4,10 @@ import React, { useEffect, useState } from 'react';
 import ToggleButton from './ToggleButton';
 import HeartFillIcon from '@/utils/icons/HeartFillIcon';
 import HeartIcon from '@/utils/icons/HeartIcon';
-import { useGetUserDataQuery } from '@/hooks/useQueries/useUserQuery';
-import { useLikedReviewCountQuery, useLikedReviewDataQuery } from '@/hooks/useQueries/useLikeQuery';
-import { useToggleLikeMutation } from '@/hooks/useMutation/useLikeMutation';
 import { customErrToast } from '../common/customToast';
+import { useGetUserDataQuery } from '@/query/useQueries/useUserQuery';
+import { useLikedReviewCountQuery, useLikedReviewDataQuery } from '@/query/useQueries/useLikeQuery';
+import { useToggleLikeMutation } from '@/query/useMutation/useLikeMutation';
 
 type Props = {
   review_id: string;
