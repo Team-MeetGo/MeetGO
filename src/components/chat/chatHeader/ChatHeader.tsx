@@ -35,8 +35,6 @@ const ChatHeader = ({ chatRoomId }: { chatRoomId: string }) => {
   const queryClient = useQueryClient();
   const router = useRouter();
 
-  console.log('onlineUsers =>', onlineUsers);
-
   // 채팅방 isActive 상태를 false로 변경
   const updateIsActiveFalse = async () => {
     const { error: updateActiveErr } = await clientSupabase
