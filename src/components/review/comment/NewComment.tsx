@@ -1,7 +1,7 @@
 'use client';
 import { customErrToast, customSuccessToast } from '@/components/common/customToast';
-import { useNewCommentMutation } from '@/hooks/useMutation/useCommentMutations';
-import { useGetUserDataQuery } from '@/hooks/useQueries/useUserQuery';
+import { useNewCommentMutation } from '@/query/useMutation/useCommentMutations';
+import { useGetUserDataQuery } from '@/query/useQueries/useUserQuery';
 import { Button } from '@nextui-org/react';
 import React, { FormEvent, useState } from 'react';
 

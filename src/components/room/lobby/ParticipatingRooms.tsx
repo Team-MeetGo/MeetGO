@@ -1,12 +1,11 @@
 'use client';
 
-import { useRoomConditionDataQuery } from '@/hooks/useQueries/useMeetingQuery';
-import { useGetUserDataQuery } from '@/hooks/useQueries/useUserQuery';
-import { Suspense } from 'react';
 import Slider from 'react-slick';
 import 'slick-carousel/slick/slick-theme.css';
 import 'slick-carousel/slick/slick.css';
 import MeetingRoom from '../singleMeetingRoom/MeetingRoom';
+import { useGetUserDataQuery } from '@/query/useQueries/useUserQuery';
+import { useRoomConditionDataQuery } from '@/query/useQueries/useMeetingQuery';
 
 export const RtBannerArrow = (props: any) => {
   const { className, onClick } = props;

@@ -1,13 +1,12 @@
 import Image from 'next/image';
 import AvatarDefault from '@/utils/icons/AvatarDefault';
 import { CommentListType } from './CommentList';
-import { useCommentAuthorDataQuery } from '@/hooks/useQueries/useCommentQuery';
 import { Button } from '@nextui-org/react';
-import { useGetUserDataQuery } from '@/hooks/useQueries/useUserQuery';
-import { useDeleteCommentMutation } from '@/hooks/useMutation/useCommentMutations';
 import { IoFemale, IoMale } from 'react-icons/io5';
-import { ValidationModal } from '@/components/common/ValidationModal';
 import { useModalStore } from '@/store/modalStore';
+import { useGetUserDataQuery } from '@/query/useQueries/useUserQuery';
+import { useDeleteCommentMutation } from '@/query/useMutation/useCommentMutations';
+import { useCommentAuthorDataQuery } from '@/query/useQueries/useCommentQuery';
 
 type Props = {
   comment: CommentListType;

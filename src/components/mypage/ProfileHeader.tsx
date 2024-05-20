@@ -1,5 +1,6 @@
 'use client';
-import { useGetUserDataQuery } from '@/hooks/useQueries/useUserQuery';
+
+import { useGetUserDataQuery } from '@/query/useQueries/useUserQuery';
 import { profileCount } from '@/store/userStore';
 import { Avatar, Skeleton } from '@nextui-org/react';
 import Image from 'next/image';

@@ -1,13 +1,13 @@
 'use client';
 
-import { useRoomConditionDataQuery } from '@/hooks/useQueries/useMeetingQuery';
-import { useGetUserDataQuery } from '@/hooks/useQueries/useUserQuery';
 import { useSearchRoomStore } from '@/store/searchRoomStore';
 import { REGIONANDMEMBER } from '@/utils/constant';
 import { useEffect, useState } from 'react';
 import MeetingRoom from '../singleMeetingRoom/MeetingRoom';
 
 import type { MeetingRoomType } from '@/types/roomTypes';
+import { useGetUserDataQuery } from '@/query/useQueries/useUserQuery';
+import { useRoomConditionDataQuery } from '@/query/useQueries/useMeetingQuery';
 const RecruitingRooms = () => {
   const [filteredOtherRooms, setFilteredOtherRooms] = useState<MeetingRoomType[]>([]);
 

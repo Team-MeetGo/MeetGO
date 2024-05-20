@@ -1,17 +1,17 @@
 'use client';
 import DeleteMeetingRoom from '@/components/room/singleMeetingRoom/DeleteMeetingRoom';
 import EditMeetingRoom from '@/components/room/singleMeetingRoom/EditMeetingRoom';
-import { useMyMsgData } from '@/hooks/useQueries/useChattingQuery';
-import { useAlreadyChatRoomQuery, useRoomInformationQuery } from '@/hooks/useQueries/useMeetingQuery';
-import { useGetUserDataQuery } from '@/hooks/useQueries/useUserQuery';
 import { GENDERFILTER } from '@/utils/constant';
 import { genderMemberNumber } from '@/utils/utilFns';
 import { useEffect, useRef, useState } from 'react';
 import { BsFire } from 'react-icons/bs';
 import { HiOutlineDotsVertical } from 'react-icons/hi';
 import { IoChatbubblesOutline, IoFemale, IoMale } from 'react-icons/io5';
-
 import type { MeetingRoomType } from '@/types/roomTypes';
+import { useAlreadyChatRoomQuery, useRoomInformationQuery } from '@/query/useQueries/useMeetingQuery';
+import { useGetUserDataQuery } from '@/query/useQueries/useUserQuery';
+import { useMyMsgData } from '@/query/useQueries/useChattingQuery';
+
 function RoomInformation({ room }: { room: MeetingRoomType }) {
   const dropdownRef = useRef<HTMLDivElement>(null);
   const [open, setOpen] = useState(false);

@@ -1,8 +1,9 @@
 'use client';
-import { useGetUserDataQuery, useGetUserPostQuery } from '@/hooks/useQueries/useUserQuery';
+
 import Image from 'next/image';
 import Link from 'next/link';
 import defaultImg from '@/utils/icons/defaultImg.jpg';
+import { useGetUserDataQuery, useGetUserPostQuery } from '@/query/useQueries/useUserQuery';
 
 const MyPost = () => {
   const { data: user } = useGetUserDataQuery();

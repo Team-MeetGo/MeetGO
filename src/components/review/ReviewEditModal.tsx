@@ -4,13 +4,12 @@ import { Modal, ModalContent, ModalBody, Button, ModalHeader } from '@nextui-org
 import Image from 'next/image';
 import { ChangeEvent, FormEvent, useEffect, useState } from 'react';
 import { MdCancel } from 'react-icons/md';
-import { LuImagePlus } from 'react-icons/lu';
 import type { UseDisclosureReturn } from '@nextui-org/use-disclosure';
-import { useEditImgsMutation, useEditReviewMutation } from '@/hooks/useMutation/useReviewMutations';
-import { useReviewDataQuery } from '@/hooks/useQueries/useReviewQuery';
 import { FaCamera } from 'react-icons/fa';
 import { FaPlus } from 'react-icons/fa6';
 import { customSuccessToast } from '../common/customToast';
+import { useReviewDataQuery } from '@/query/useQueries/useReviewQuery';
+import { useEditImgsMutation, useEditReviewMutation } from '@/query/useMutation/useReviewMutations';
 
 type Props = {
   review_id: string;

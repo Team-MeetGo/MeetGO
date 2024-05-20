@@ -1,6 +1,6 @@
+import { useGetUserDataQuery } from '@/query/useQueries/useUserQuery';
 import ProfileSettingLayout from './ProfileSettingLayout';
 import { useEditingStore, useProfileOnchangeStore } from '@/store/userStore';
-import { useGetUserDataQuery } from '@/hooks/useQueries/useUserQuery';
 
 const UserIntro = () => {
   const { data: user } = useGetUserDataQuery();

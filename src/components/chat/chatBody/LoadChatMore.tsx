@@ -1,5 +1,5 @@
 'use client';
-import { useMsgsQuery } from '@/hooks/useQueries/useChattingQuery';
+
 import { MSGS_QUERY_KEY } from '@/query/chat/chatQueryKeys';
 import { chatStore } from '@/store/chatStore';
 import { getFromTo } from '@/utils/utilFns';
@@ -8,6 +8,7 @@ import { clientSupabase } from '@/utils/supabase/client';
 import { Button } from '@nextui-org/react';
 import { useQueryClient } from '@tanstack/react-query';
 import { Dispatch, SetStateAction } from 'react';
+import { useMsgsQuery } from '@/query/useQueries/useChattingQuery';
 
 const LoadChatMore = ({
   chatRoomId,

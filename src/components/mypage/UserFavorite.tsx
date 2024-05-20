@@ -1,10 +1,10 @@
 import ProfileSettingLayout from './ProfileSettingLayout';
 import { useEditingStore, useProfileOnchangeStore } from '@/store/userStore';
-import { useGetUserDataQuery } from '@/hooks/useQueries/useUserQuery';
 import { favoriteOptions } from '@/utils/data/FavoriteData';
 import { Select, SelectItem } from '@nextui-org/react';
 import { customErrToast } from '../common/customToast';
 import { useEffect } from 'react';
+import { useGetUserDataQuery } from '@/query/useQueries/useUserQuery';
 
 const UserFavorite = () => {
   const { data: user } = useGetUserDataQuery();

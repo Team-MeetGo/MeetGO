@@ -1,20 +1,21 @@
 'use client';
-import {
-  useDeleteMember,
-  useDeleteRoom,
-  useUpdateLeaderMemberMutation,
-  useUpdateRoomStatusOpen
-} from '@/hooks/useMutation/useMeetingMutation';
-import { useRoomInformationQuery } from '@/hooks/useQueries/useMeetingQuery';
-import { useGetUserDataQuery } from '@/hooks/useQueries/useUserQuery';
+
 import { useModalStore } from '@/store/modalStore';
 import { GENDERFILTER, ROUTERADDRESS } from '@/utils/constant';
 import { genderMemberNumber } from '@/utils/utilFns';
 import { useRouter } from 'next/navigation';
 import { IoFemale, IoMale } from 'react-icons/io5';
-
 import type { UserType } from '@/types/roomTypes';
 import type { UUID } from 'crypto';
+import { useGetUserDataQuery } from '@/query/useQueries/useUserQuery';
+import {
+  useDeleteMember,
+  useDeleteRoom,
+  useUpdateLeaderMemberMutation,
+  useUpdateRoomStatusOpen
+} from '@/query/useMutation/useMeetingMutation';
+import { useRoomInformationQuery } from '@/query/useQueries/useMeetingQuery';
+
 const RoomInformation = ({ roomId }: { roomId: UUID }) => {
   const router = useRouter();
   const { openModal, closeModal } = useModalStore();
