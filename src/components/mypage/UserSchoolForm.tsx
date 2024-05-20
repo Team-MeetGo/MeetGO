@@ -1,6 +1,5 @@
 import { useEditingStore, useProfileOnchangeStore } from '@/store/userStore';
 import ProfileSettingLayout from './ProfileSettingLayout';
-import { useGetUserDataQuery } from '@/hooks/useQueries/useUserQuery';
 import { FaCheckSquare } from 'react-icons/fa';
 import {
   Button,
@@ -15,8 +14,9 @@ import {
 import { customErrToast, customSuccessToast } from '../common/customToast';
 import { emailCodeAPI, emailConfirmAPI, schoolConfirmAPI } from '@/utils/api/emailConfirmAPI';
 import { useState } from 'react';
-import { useSchoolUpdateMutation } from '@/hooks/useMutation/useSchoolMutation';
 import { schoolValidation } from '@/utils/Validation';
+import { useGetUserDataQuery } from '@/query/useQueries/useUserQuery';
+import { useSchoolUpdateMutation } from '@/query/useMutation/useSchoolMutation';
 
 const UserSchoolForm = () => {
   const { data: user } = useGetUserDataQuery();

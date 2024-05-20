@@ -1,5 +1,5 @@
+import { useGetUserDataQuery } from '@/query/useQueries/useUserQuery';
 import ProfileSettingLayout from './ProfileSettingLayout';
-import { useGetUserDataQuery } from '@/hooks/useQueries/useUserQuery';
 
 const UserLoginEmail = () => {
   const { data: user } = useGetUserDataQuery();

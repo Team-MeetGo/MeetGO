@@ -1,15 +1,16 @@
 'use client';
+
 import { customErrToast } from '@/components/common/customToast';
-import { useRoomInformationQuery } from '@/hooks/useQueries/useMeetingQuery';
-import { useGetUserDataQuery } from '@/hooks/useQueries/useUserQuery';
 import { clientSupabase } from '@/utils/supabase/client';
 import { debounce, genderMemberNumber } from '@/utils/utilFns';
 import { useRouter } from 'next/navigation';
 import { useCallback } from 'react';
 import { IoPlay } from 'react-icons/io5';
-
 import type { UserType } from '@/types/roomTypes';
 import type { UUID } from 'crypto';
+import { useGetUserDataQuery } from '@/query/useQueries/useUserQuery';
+import { useRoomInformationQuery } from '@/query/useQueries/useMeetingQuery';
+
 const GotoChatButton = ({ roomId, members }: { roomId: UUID; members: UserType[] }) => {
   const router = useRouter();
 

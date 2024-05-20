@@ -5,11 +5,11 @@ import Image from 'next/image';
 import { Button, Checkbox, Modal, ModalBody, ModalContent, ModalHeader, useDisclosure } from '@nextui-org/react';
 import { MdCancel } from 'react-icons/md';
 import { FaCheck, FaPlus } from 'react-icons/fa6';
-import { useGetUserDataQuery } from '@/hooks/useQueries/useUserQuery';
-import { useNewReviewMutation, useUploadImgsMutation } from '@/hooks/useMutation/useReviewMutations';
 import { FaCamera } from 'react-icons/fa';
 import { customSuccessToast } from '../common/customToast';
 import _ from 'lodash';
+import { useGetUserDataQuery } from '@/query/useQueries/useUserQuery';
+import { useNewReviewMutation, useUploadImgsMutation } from '@/query/useMutation/useReviewMutations';
 
 const NewReview = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();

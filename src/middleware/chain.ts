@@ -9,7 +9,7 @@ export const chain = (functions: MiddlewareFactory[], index = 0): CustomMiddlewa
   if (current) {
     const next = chain(functions, index + 1);
     return current(next);
-    // current(chain(functions, 1)) => current(current(chain(functions,2))) => current(current(chain(functions,3)))
+    // current(chain(functions, 1)) => current(current(chain(functions,2))) => current(current(chain(functions,3))) ...
   }
 
   // 마지막 순서일 때

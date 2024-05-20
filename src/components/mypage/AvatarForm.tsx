@@ -1,7 +1,7 @@
 'use client';
 
-import { useAvatarUpdateMutation } from '@/hooks/useMutation/useProfileMutation';
-import { useGetUserDataQuery } from '@/hooks/useQueries/useUserQuery';
+import { useAvatarUpdateMutation } from '@/query/useMutation/useProfileMutation';
+import { useGetUserDataQuery } from '@/query/useQueries/useUserQuery';
 import { USER_DATA_QUERY_KEY } from '@/query/user/userQueryKeys';
 import { Avatar } from '@nextui-org/react';
 import { useQueryClient } from '@tanstack/react-query';
