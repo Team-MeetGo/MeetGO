@@ -69,11 +69,14 @@ const ChatList = ({ user, chatRoomId }: { user: User | null; chatRoomId: string 
           { event: 'DELETE', schema: 'public', table: 'messages', filter: `chatting_room_id=eq.${chatRoomId}` },
           async (payload) => {
             if (payload) {
-              await queryClient.invalidateQueries({ queryKey: [MSGS_QUERY_KEY, chatRoomId] });
+              // await queryClient.invalidateQueries({ queryKey: [MSGS_QUERY_KEY, chatRoomId] });
               messages &&
-                queryClient.setQueryData(
+                queryClient.setQueryData<Message[]>(
                   [MSGS_QUERY_KEY, chatRoomId],
-                  messages.filter((msg) => msg.message_id !== payload.old.message_id)
+                  (oldData = []) => {
+                    return oldData.filter((msg) => msg.message_id !== payload.old.message_id);
+                  }
+                  // messages.filter((msg) => msg.message_id !== payload.old.message_id)
                 );
             }
           }
