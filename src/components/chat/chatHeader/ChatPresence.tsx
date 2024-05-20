@@ -14,6 +14,7 @@ const ChatPresence = () => {
       const channel = clientSupabase.channel(chatRoomId);
       channel
         .on('presence', { event: 'sync' }, () => {
+          console.log('payload');
           const nowUsers = [];
           for (const id in channel.presenceState()) {
             // @ts-ignore
