@@ -165,7 +165,7 @@ const ChatList = ({ user, chatRoomId }: { user: User | null; chatRoomId: string 
       >
         <ChatSearch isScrollTop={isScrollTop} />
         {hasMore ? <LoadChatMore chatRoomId={chatRoomId} loadCount={loadCount} setLoadCount={setLoadCount} /> : <></>}
-        {messages &&
+        {messages.length ? (
           messages.map((msg, idx) => (
             <div key={msg.message_id} className="w-full">
               {isNextDay(idx, messages) ? (
@@ -189,7 +189,13 @@ const ChatList = ({ user, chatRoomId }: { user: User | null; chatRoomId: string 
                 </div>
               ) : null}
             </div>
-          ))}
+          ))
+        ) : (
+          <div className="mx-auto my-auto">
+            <ul className="text-center">아직 대화내용이 없습니다.</ul>
+            <ul>대화를 통해 서로에 대해 알아보세요!</ul>
+          </div>
+        )}
       </div>
       {isScrolling ? (
         newAddedMsgNum === 0 ? (
