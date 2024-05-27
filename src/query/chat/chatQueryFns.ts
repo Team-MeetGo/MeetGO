@@ -1,5 +1,7 @@
 import { UsersType } from '@/types/userTypes';
 import { clientSupabase } from '@/utils/supabase/client';
+import { serverSupabase } from '@/utils/supabase/server';
+// import { serverSupabase } from '@/utils/supabase/server';
 
 // 채팅룸 아이디로 룸 정보 가져오기
 export const fetchRoomDataWithChatRoomId = async (chatRoomId: string) => {
@@ -9,7 +11,7 @@ export const fetchRoomDataWithChatRoomId = async (chatRoomId: string) => {
     .eq('chatting_room_id', chatRoomId)
     .single();
   if (roomIdErr) {
-    console.error('미팅룸 정보를 불러오는 데에 실패했습니다.');
+    throw new Error('미팅룸 정보를 불러오는 데에 실패했습니다.');
   } else {
     return room;
   }
@@ -29,6 +31,15 @@ export const fetchParticipants = async (roomId: string) => {
   }
 };
 
+// const getSupabase = () => {
+//   if (typeof window === undefined) {
+//     const supabase = serverSupabase();
+//     return supabase;
+//   } else {
+//     return clientSupabase;
+//   }
+// };
+
 // 채팅방 정보 가져오기
 export const fetchChatData = async (chatRoomId: string) => {
   const { data: chatData, error: chatDataErr } = await clientSupabase
@@ -36,8 +47,8 @@ export const fetchChatData = async (chatRoomId: string) => {
     .select('*')
     .eq('chatting_room_id', chatRoomId)
     .single();
-  if (chatDataErr || !chatData) {
-    console.error('채팅방 정보를 불러오는 데 실패했습니다.');
+  if (chatDataErr) {
+    throw chatDataErr;
   } else {
     return chatData;
   }

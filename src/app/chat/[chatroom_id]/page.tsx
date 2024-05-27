@@ -1,16 +1,22 @@
 import { Suspense } from 'react';
 import { serverSupabase } from '@/utils/supabase/server';
-import ChatHeader from '@/components/chat/chatHeader/ChatHeader';
-import InitChat from '@/components/chat/chatHeader/InitChat';
-import SideBar from '@/components/chat/sidebar/SideBar';
+// import ChatHeader from '@/components/chat/chatHeader/ChatHeader';
+// import InitChat from '@/components/chat/chatHeader/InitChat';
 import ChatInput from '@/components/chat/chatFooter/ChatInput';
 import ChatLoading from '@/components/chat/ChatLoading';
 import { getFromTo } from '@/utils/utilFns';
 import { ITEM_INTERVAL } from '@/utils/constant';
-import ChatList from '@/components/chat/chatBody/ChatList';
+// import ChatList from '@/components/chat/chatBody/ChatList';
 import SideBarButton from '@/components/chat/sidebar/SideBarButton';
 import { HydrationBoundary, QueryClient, dehydrate } from '@tanstack/react-query';
 import { MSGS_QUERY_KEY } from '@/query/chat/chatQueryKeys';
+import dynamic from 'next/dynamic';
+import SideBar from '@/components/chat/sidebar/SideBar';
+
+const ChatListWrapper = dynamic(() => import('@/components/chat/chatBody/ChatList'), { ssr: false });
+const ChatHeaderWrapper = dynamic(() => import('@/components/chat/chatHeader/ChatHeader'), { ssr: false });
+const InitChatWrapper = dynamic(() => import('@/components/chat/chatHeader/InitChat'), { ssr: false });
+const SideBarWrapper = dynamic(() => import('@/components/chat/sidebar/SideBar'), { ssr: false });
 
 const ChatPage = async ({ params }: { params: { chatroom_id: string } }) => {
   const chatRoomId = params.chatroom_id;
@@ -45,19 +51,19 @@ const ChatPage = async ({ params }: { params: { chatroom_id: string } }) => {
       <HydrationBoundary state={dehydrate(queryClient)}>
         <Suspense fallback={<ChatLoading />}>
           <div className="relative flex flex-row">
-            <InitChat user={user} chatRoomId={chatRoomId} />
+            <InitChatWrapper user={user} chatRoomId={chatRoomId} />
             <div className="flex lg:flex-row w-full max-sm:flex-col justify-center mx-auto">
               <section className="lg:flex lg:max-w-96 max-sm:absolute max-sm:z-40 max-sm:bg-white min-h-[36rem] ">
-                <SideBar chatRoomId={chatRoomId} />
+                <SideBarWrapper chatRoomId={chatRoomId} />
               </section>
               <section className="w-full max-w-xl max-h-[calc(100vh-90px)] min-h-[36rem] relative">
                 <div className="absolute top-0 left-0">
                   <SideBarButton />
                 </div>
                 <div className="h-full border rounded-md flex flex-col relative ">
-                  <ChatHeader chatRoomId={chatRoomId} />
+                  <ChatHeaderWrapper chatRoomId={chatRoomId} />
                   <Suspense>
-                    <ChatList user={user} chatRoomId={chatRoomId} />
+                    <ChatListWrapper user={user} chatRoomId={chatRoomId} />
                     <ChatInput />
                   </Suspense>
                 </div>

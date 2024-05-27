@@ -1,4 +1,5 @@
 'use client';
+
 import { Message } from '@/types/chatTypes';
 import { clientSupabase } from '@/utils/supabase/client';
 import { useEffect, useRef, useState } from 'react';
