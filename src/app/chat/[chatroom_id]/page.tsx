@@ -12,6 +12,7 @@ import { HydrationBoundary, QueryClient, dehydrate } from '@tanstack/react-query
 import { MSGS_QUERY_KEY } from '@/query/chat/chatQueryKeys';
 import dynamic from 'next/dynamic';
 import SideBar from '@/components/chat/sidebar/SideBar';
+import ChatLoadingSkeleton from '@/components/chat/ChatLoadingSkeleton';
 
 const ChatListWrapper = dynamic(() => import('@/components/chat/chatBody/ChatList'), { ssr: false });
 const ChatHeaderWrapper = dynamic(() => import('@/components/chat/chatHeader/ChatHeader'), { ssr: false });
@@ -62,7 +63,7 @@ const ChatPage = async ({ params }: { params: { chatroom_id: string } }) => {
                 </div>
                 <div className="h-full border rounded-md flex flex-col relative ">
                   <ChatHeaderWrapper chatRoomId={chatRoomId} />
-                  <Suspense>
+                  <Suspense fallback={<ChatLoadingSkeleton />}>
                     <ChatListWrapper user={user} chatRoomId={chatRoomId} />
                     <ChatInput />
                   </Suspense>
