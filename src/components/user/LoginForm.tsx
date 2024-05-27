@@ -5,12 +5,9 @@ import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { Button, Checkbox } from '@nextui-org/react';
 import { googleLogin, kakaoLogin } from '@/utils/api/authAPI';
-import { ValidationModal } from '../common/ValidationModal';
 import { useModalStore } from '@/store/modalStore';
 import { authValidation } from '@/utils/Validation';
 import type { IsValidateShow, LoginDataType } from '@/types/userTypes';
-import { useQueryClient } from '@tanstack/react-query';
-import { USER_DATA_QUERY_KEY } from '@/query/user/userQueryKeys';
 import Link from 'next/link';
 import Image from 'next/image';
 import kakaoLoginLogo from '@/utils/icons/login_kakao.png';
@@ -115,6 +112,7 @@ const LoginForm = () => {
     <>
       <div className="max-w-[450px] w-full h-full p-6 py-8">
         <h1 className="text-[40px] font-semibold mb-[40px] text-center">로그인</h1>
+        <div>test용 Id: test@test.com / pw: 123456</div>
         <form className="flex flex-col gap-[8px]" onSubmit={onSubmitForm}>
           <div className="flex flex-col gap-[16px]">
             {LOGIN_FORM_LIST.map(({ type, name, placeholder, error }) => (
