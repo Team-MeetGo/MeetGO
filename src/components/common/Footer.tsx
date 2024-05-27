@@ -1,11 +1,12 @@
 'use client';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import { FaFacebookF, FaInstagram, FaYoutube } from 'react-icons/fa6';
 import { GrMail } from 'react-icons/gr';
 
 const Footer = () => {
   const iconArr = [<GrMail key="0" />, <FaFacebookF key="1" />, <FaInstagram key="2" />, <FaYoutube key="3" />];
   const pathname = usePathname();
+  const router = useRouter();
 
   return (
     <>
@@ -30,6 +31,13 @@ const Footer = () => {
                   key={idx}
                   className="w-6 h-6 bg-mainColor rounded-md text-white flex items-center justify-center"
                   aria-label="footerItem"
+                  onClick={() => {
+                    if (idx === 3) {
+                      router.push('https://www.youtube.com/watch?v=PrvWiv2nURU');
+                      return;
+                    }
+                    alert('준비중입니다.');
+                  }}
                 >
                   {icon}
                 </button>
