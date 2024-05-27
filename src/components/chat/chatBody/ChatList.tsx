@@ -165,7 +165,7 @@ const ChatList = ({ user, chatRoomId }: { user: User | null; chatRoomId: string 
       >
         <ChatSearch isScrollTop={isScrollTop} />
         {hasMore ? <LoadChatMore chatRoomId={chatRoomId} loadCount={loadCount} setLoadCount={setLoadCount} /> : <></>}
-        {messages.length ? (
+        {messages?.length ? (
           messages.map((msg, idx) => (
             <div key={msg.message_id} className="w-full">
               {isNextDay(idx, messages) ? (
