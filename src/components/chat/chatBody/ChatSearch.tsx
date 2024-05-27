@@ -37,6 +37,8 @@ const ChatSearch = ({ isScrollTop }: { isScrollTop: boolean }) => {
           setUpDownCount((prev) => prev + 1);
           // upDownCount는 지금까지 search한 것을 기반으로 되어야 하니까 여기에 종속되어서 +
         }
+      } else if (!idsDivs) {
+        alert('찾으시는 내용이 없습니다.');
       } else {
         alert('더 이상 찾을 내용이 없습니다.');
       }
