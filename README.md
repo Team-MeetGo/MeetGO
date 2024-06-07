@@ -25,6 +25,9 @@ https://meet-go.vercel.app/
 
 ## 📌 주요 기능
 ![image](https://github.com/Team-MeetGo/MeetGO/assets/154481757/e19a9e7e-f7d5-4993-9d43-476016144c77)
+![image](https://github.com/Team-MeetGo/MeetGO/assets/131341172/7852996f-a8d5-421d-832b-34948d8ebe81)
+![image](https://github.com/Team-MeetGo/MeetGO/assets/131341172/fd0b06e1-1af0-4008-9d01-5db37471c264)
+![image](https://github.com/Team-MeetGo/MeetGO/assets/131341172/8dd497c5-87f4-4398-8edf-f67b392db11b)
 
 ![image](https://github.com/Team-MeetGo/MeetGO/assets/154481757/0d4bf50d-c183-46fb-9282-ad37a875b4f4)
 
